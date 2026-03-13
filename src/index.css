@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #38ff14;
+  --color-background-light: #f6f8f5;
+  --color-background-dark: #12230f;
+  --color-neutral-dark: #1a2e16;
+  --color-accent-red: #ff3814;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@layer utilities {
+  .crt-glow {
+    text-shadow: 0 0 5px rgba(56, 255, 20, 0.7);
+  }
+  .border-neon {
+    border: 1px solid var(--color-primary);
+    box-shadow: inset 0 0 10px rgba(56, 255, 20, 0.1), 0 0 5px rgba(56, 255, 20, 0.1);
+  }
+  .scanline {
+    width: 100%;
+    height: 100px;
+    z-index: 99;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(56, 255, 20, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
+    opacity: 0.1;
+    position: absolute;
+    pointer-events: none;
+  }
+  .scanline-thin {
+    width: 100%;
+    height: 2px;
+    background: rgba(56, 255, 20, 0.1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+  }
+  .terminal-grid {
+    background-image: radial-gradient(circle, var(--color-neutral-dark) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+body {
+  text-transform: uppercase;
+}
