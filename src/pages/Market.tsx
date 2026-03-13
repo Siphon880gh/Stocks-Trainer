@@ -1,13 +1,34 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Link } from "react-router-dom";
+import MarketChart from "../components/MarketChart";
+import HistoryModal from "../components/HistoryModal";
+import ScanPatternsModal from "../components/ScanPatternsModal";
+import IndicatorGlossary from "../components/IndicatorGlossary";
+import IndicatorPopover from "../components/IndicatorPopover";
+import FinancialsPanel from "../components/FinancialsPanel";
+import { MARKETS, getMarket } from "../lib/markets";
+import { getOverlay, type OverlayDef } from "../lib/overlays";
+import { scanPatterns } from "../lib/patternScan";
+import IndicatorDetailModal from "../components/IndicatorDetailModal";
 
 export default function Market() {
+  const [marketId, setMarketId] = useState("btc");
   const [controls, setControls] = useState({
     sma: true,
     ema: false,
     rsi: true,
     macd: false,
+    bollinger: false,
   });
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [scanOpen, setScanOpen] = useState(false);
+  const [showGlossary, setShowGlossary] = useState(false);
+  const [popover, setPopover] = useState<{ overlayId: string; x: number; y: number } | null>(null);
+  const [selectedOverlay, setSelectedOverlay] = useState<OverlayDef | null>(null);
+
+  const market = getMarket(marketId) ?? MARKETS[0];
+  const ohlcData = market.data;
+  const detectedPatterns = useMemo(() => scanPatterns(ohlcData), [ohlcData]);
 
   const toggleControl = (key: keyof typeof controls) => {
     setControls((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -19,13 +40,13 @@ export default function Market() {
 
       {/* Header Section */}
       <header className="border-b border-primary/20 bg-background-dark p-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+        <Link to="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity cursor-pointer">
           <span className="material-symbols-outlined text-primary">terminal</span>
           <div>
             <h1 className="text-xs font-bold tracking-widest text-primary/60 uppercase">System_Core_v4.2</h1>
             <p className="text-lg font-bold leading-tight">MARKET_ANALYTICS_PRO</p>
           </div>
-        </div>
+        </Link>
         <div className="flex gap-4">
           <div className="text-right hidden sm:block">
             <p className="text-[10px] text-primary/40 uppercase">Latency</p>
@@ -39,100 +60,89 @@ export default function Market() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col p-4 gap-4 overflow-hidden relative">
+        {/* Financials */}
+        <FinancialsPanel data={ohlcData} />
+
         {/* Stats Bar */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-neutral-dark/40 border border-primary/20 p-3 rounded">
-            <p className="text-[10px] text-primary/50 uppercase">Asset_Pair</p>
-            <p className="text-xl font-bold">BTC/USDT</p>
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <label className="text-[10px] text-primary/50 uppercase">Market</label>
+            <select
+              value={marketId}
+              onChange={(e) => setMarketId(e.target.value)}
+              className="bg-background-dark border border-primary/40 text-primary px-3 py-2 rounded font-mono text-sm"
+            >
+              {MARKETS.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.pair}
+                </option>
+              ))}
+            </select>
           </div>
-          <div className="bg-neutral-dark/40 border border-primary/20 p-3 rounded">
-            <p className="text-[10px] text-primary/50 uppercase">Current_Price</p>
-            <p className="text-xl font-bold text-primary tracking-tighter">$64,281.92</p>
-          </div>
-          <div className="bg-neutral-dark/40 border border-primary/20 p-3 rounded">
-            <p className="text-[10px] text-primary/50 uppercase">24H_Delta</p>
-            <p className="text-xl font-bold text-primary">+4.12%</p>
-          </div>
-          <div className="bg-neutral-dark/40 border border-primary/20 p-3 rounded">
-            <p className="text-[10px] text-primary/50 uppercase">Volatility_Index</p>
-            <p className="text-xl font-bold text-accent-red">HIGH</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1">
+            <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
+              <p className="text-[10px] text-primary/50 uppercase">Asset_Pair</p>
+              <p className="text-xl font-bold">{market.pair}</p>
+            </div>
+            <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
+              <p className="text-[10px] text-primary/50 uppercase">Current_Price</p>
+              <p className="text-xl font-bold text-primary tracking-tighter">{market.price}</p>
+            </div>
+            <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
+              <p className="text-[10px] text-primary/50 uppercase">24H_Delta</p>
+              <p className="text-xl font-bold text-primary">{market.delta}</p>
+            </div>
+            <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
+              <p className="text-[10px] text-primary/50 uppercase">Volatility_Index</p>
+              <p className="text-xl font-bold text-accent-red">{market.volatility}</p>
+            </div>
           </div>
         </div>
 
         {/* Chart Container */}
-        <div className="flex-1 bg-background-dark border border-primary/30 rounded-lg relative overflow-hidden terminal-grid p-6 min-h-[300px]">
-          <div className="absolute top-4 right-4 flex gap-2">
-            <span className="flex items-center gap-1 text-[10px] text-primary/60 bg-primary/5 px-2 py-1 rounded border border-primary/10">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary"></span> LIVE_FEED
+        <div className="flex-1 bg-background-dark border-2 border-primary/40 rounded-lg relative overflow-hidden terminal-grid p-4 min-h-[350px]">
+          <div className="absolute top-4 right-4 flex gap-2 z-10">
+            <span className="flex items-center gap-1 text-[10px] text-primary bg-neutral-dark/80 px-2 py-1 rounded border border-primary/30">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> LIVE_FEED
             </span>
           </div>
-
-          {/* Candlestick Visual Representation */}
-          <div className="w-full h-full flex items-end justify-around gap-1 md:gap-4 pb-8 pt-12">
-            {/* Data Points (Static Simulation) */}
-            <div className="flex flex-col items-center flex-1">
-              <div className="w-1 bg-primary h-24 relative">
-                <div className="absolute top-4 -left-1 w-3 h-12 bg-primary"></div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center flex-1">
-              <div className="w-1 bg-accent-red h-32 relative">
-                <div className="absolute top-8 -left-1 w-3 h-16 bg-accent-red"></div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center flex-1">
-              <div className="w-1 bg-primary h-40 relative">
-                <div className="absolute top-10 -left-1 w-3 h-20 bg-primary"></div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center flex-1">
-              <div className="w-1 bg-primary h-20 relative">
-                <div className="absolute top-2 -left-1 w-3 h-10 bg-primary"></div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center flex-1">
-              <div className="w-1 bg-accent-red h-28 relative">
-                <div className="absolute top-6 -left-1 w-3 h-14 bg-accent-red"></div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center flex-1">
-              <div className="w-1 bg-primary h-48 relative">
-                <div className="absolute top-12 -left-1 w-3 h-24 bg-primary"></div>
-              </div>
-            </div>
-            <div className="flex flex-col items-center flex-1">
-              <div className="w-1 bg-primary h-36 relative">
-                <div className="absolute top-8 -left-1 w-3 h-18 bg-primary shadow-[0_0_10px_rgba(56,255,20,0.5)]"></div>
-              </div>
-            </div>
-
-            {/* RSI Overlay simulation */}
-            {controls.rsi && (
-              <div className="absolute inset-0 pointer-events-none opacity-40">
-                <svg className="w-full h-full" preserveAspectRatio="none">
-                  <path d="M0,150 Q100,100 200,180 T400,120 T600,200 T800,140 T1000,170" fill="none" stroke="#38ff14" strokeDasharray="4" strokeWidth="1.5"></path>
-                </svg>
-              </div>
-            )}
-          </div>
-
-          {/* Chart Axes Labels */}
-          <div className="absolute left-2 top-0 h-full flex flex-col justify-between py-6 text-[10px] text-primary/40 font-mono">
-            <span>70,000</span><span>65,000</span><span>60,000</span><span>55,000</span><span>50,000</span>
-          </div>
-          <div className="absolute bottom-1 w-full flex justify-around px-6 text-[10px] text-primary/40 font-mono">
-            <span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>00:00</span>
+          <div className="h-[350px] w-full">
+            <MarketChart
+              data={ohlcData}
+              showSMA={controls.sma}
+              showEMA={controls.ema}
+              showRSI={controls.rsi}
+              showMACD={controls.macd}
+              showBollinger={controls.bollinger}
+              height={350}
+            />
           </div>
         </div>
 
         {/* Overlays & Controls */}
-        <div className="bg-neutral-dark/60 border border-primary/20 rounded-lg p-4">
+        <div className="bg-neutral-dark/80 border border-primary/30 rounded-lg p-4 space-y-4">
           <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
             <div className="w-full md:w-auto">
-              <h3 className="text-[10px] font-bold text-primary/60 uppercase mb-3 tracking-[0.2em]">Layer_Controls</h3>
+              <div className="flex items-center gap-2 mb-3">
+                <h3 className="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em]">Layer_Controls</h3>
+                <button
+                  onClick={() => setShowGlossary(!showGlossary)}
+                  className="p-1 rounded hover:bg-primary/10 text-primary/70 hover:text-primary transition-colors"
+                  title="How indicators help"
+                >
+                  <span className="material-symbols-outlined text-sm">info</span>
+                </button>
+              </div>
               <div className="flex flex-wrap gap-4">
                 {(Object.keys(controls) as Array<keyof typeof controls>).map((key) => (
-                  <label key={key} className="flex items-center gap-3 cursor-pointer group">
+                  <label
+                    key={key}
+                    className="flex items-center gap-3 cursor-pointer group"
+                    onContextMenu={(e) => {
+                      e.preventDefault();
+                      setPopover({ overlayId: key, x: e.clientX, y: e.clientY });
+                    }}
+                  >
                     <div className="relative">
                       <input
                         type="checkbox"
@@ -149,21 +159,54 @@ export default function Market() {
               </div>
             </div>
             <div className="flex gap-3 w-full md:w-auto">
-              <button className="flex-1 md:flex-none border border-primary/40 text-primary px-6 py-3 rounded font-bold hover:bg-primary/10 transition-all uppercase text-sm tracking-widest flex items-center justify-center gap-2">
+              <button
+                onClick={() => setHistoryOpen(true)}
+                className="flex-1 md:flex-none border border-primary/40 text-primary px-6 py-3 rounded font-bold hover:bg-primary/10 transition-all uppercase text-sm tracking-widest flex items-center justify-center gap-2"
+              >
                 <span className="material-symbols-outlined text-sm">history</span>
                 History
               </button>
-              <button className="flex-1 md:flex-none bg-primary text-background-dark px-8 py-3 rounded font-bold hover:bg-primary/90 transition-all uppercase text-sm tracking-widest flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(56,255,20,0.3)]">
+              <button
+                onClick={() => setScanOpen(true)}
+                className="flex-1 md:flex-none bg-primary text-background-dark px-8 py-3 rounded font-bold hover:bg-primary/90 transition-all uppercase text-sm tracking-widest flex items-center justify-center gap-2 shadow-[0_0_20px_rgba(56,255,20,0.3)]"
+              >
                 <span className="material-symbols-outlined">radar</span>
                 Scan_Patterns
               </button>
             </div>
           </div>
+          {showGlossary && (
+            <div className="pt-4 border-t border-primary/20">
+              <IndicatorGlossary compact onClose={() => setShowGlossary(false)} />
+            </div>
+          )}
         </div>
+
+        {historyOpen && <HistoryModal data={ohlcData} onClose={() => setHistoryOpen(false)} />}
+        {scanOpen && <ScanPatternsModal patterns={detectedPatterns} onClose={() => setScanOpen(false)} />}
+        {popover && (
+          <IndicatorPopover
+            overlayId={popover.overlayId}
+            x={popover.x}
+            y={popover.y}
+            onClose={() => setPopover(null)}
+            onLearnMore={() => {
+              const overlay = getOverlay(popover.overlayId);
+              setPopover(null);
+              if (overlay) setSelectedOverlay(overlay);
+            }}
+          />
+        )}
+        {selectedOverlay && (
+          <IndicatorDetailModal
+            overlay={selectedOverlay}
+            onClose={() => setSelectedOverlay(null)}
+          />
+        )}
       </main>
 
       {/* Bottom Navigation Bar */}
-      <nav className="border-t border-primary/20 bg-background-dark px-4 pb-6 pt-2">
+      <nav className="border-t border-primary/30 bg-background-dark px-4 pb-6 pt-2">
         <div className="flex gap-2 max-w-lg mx-auto">
           <Link to="/market" className="flex flex-1 flex-col items-center justify-center gap-1 text-primary">
             <span className="material-symbols-outlined">monitoring</span>

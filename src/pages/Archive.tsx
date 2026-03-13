@@ -1,13 +1,50 @@
-import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
+import { PATTERNS, type PatternDef } from "../lib/patterns";
+import { OVERLAYS, getOverlaysByCategory, type OverlayDef, type OverlayCategory } from "../lib/overlays";
+import PatternDetailModal from "../components/PatternDetailModal";
+import IndicatorDetailModal from "../components/IndicatorDetailModal";
+
+type FilterType = "all" | "bullish" | "bearish" | "neutral";
+type ArchiveTab = "patterns" | "indicators";
 
 export default function Archive() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get("tab") as ArchiveTab | null;
+  const openOverlayId = searchParams.get("open");
+
+  const [tab, setTab] = useState<ArchiveTab>(tabParam === "indicators" ? "indicators" : "patterns");
+  const [selectedPattern, setSelectedPattern] = useState<PatternDef | null>(null);
+  const [selectedOverlay, setSelectedOverlay] = useState<OverlayDef | null>(null);
+  const [filter, setFilter] = useState<FilterType>("all");
+  const [indicatorFilter, setIndicatorFilter] = useState<OverlayCategory | "all">("all");
+
+  useEffect(() => {
+    if (tabParam === "indicators") setTab("indicators");
+  }, [tabParam]);
+
+  useEffect(() => {
+    if (openOverlayId) {
+      const overlay = OVERLAYS.find((o) => o.id === openOverlayId);
+      if (overlay) setSelectedOverlay(overlay);
+    }
+  }, [openOverlayId]);
+
+  const filteredPatterns = PATTERNS.filter((p) => {
+    if (filter === "all") return true;
+    const sentiment = p.sentiment ?? (p.type === "neutral" ? "neutral" : "bullish");
+    return sentiment === filter;
+  });
+
+  const filteredOverlays = getOverlaysByCategory(indicatorFilter);
+
   return (
     <div className="flex-1 flex flex-col">
-      <header className="sticky top-0 z-10 bg-background-light/95 dark:bg-background-dark/95 border-b border-primary/20 backdrop-blur-sm">
+      <header className="sticky top-0 z-10 bg-background-dark/95 border-b border-primary/30 backdrop-blur-sm">
         <div className="flex items-center p-4 justify-between">
-          <div className="text-primary flex size-10 shrink-0 items-center justify-center">
+          <Link to="/" className="text-primary flex size-10 shrink-0 items-center justify-center hover:opacity-90 transition-opacity cursor-pointer">
             <span className="material-symbols-outlined text-3xl">terminal</span>
-          </div>
+          </Link>
           <h2 className="text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 ml-3 font-mono">
             Accessing Database...<span className="animate-pulse">_</span>
           </h2>
@@ -19,7 +56,7 @@ export default function Archive() {
         </div>
         <div className="px-4 pb-4">
           <label className="flex flex-col w-full">
-            <div className="flex w-full items-stretch rounded-lg bg-primary/5 border border-primary/20 h-11">
+            <div className="flex w-full items-stretch rounded-lg bg-neutral-dark/80 border border-primary/30 h-11">
               <div className="text-primary/60 flex items-center justify-center px-3">
                 <span className="material-symbols-outlined text-xl">search</span>
               </div>
@@ -33,140 +70,188 @@ export default function Archive() {
             </div>
           </label>
         </div>
+        <div className="flex gap-2 px-4 pb-2">
+          <button
+            type="button"
+            onClick={() => {
+              setTab("patterns");
+              setSearchParams((p) => {
+                const n = new URLSearchParams(p);
+                n.delete("tab");
+                n.delete("open");
+                return n;
+              }, { replace: true });
+            }}
+            className={`flex h-9 shrink-0 items-center gap-2 rounded-lg px-4 font-bold text-sm transition-colors ${
+              tab === "patterns" ? "bg-primary text-background-dark" : "bg-primary/10 text-primary hover:bg-primary/20"
+            }`}
+          >
+            <span className="material-symbols-outlined text-lg">candlestick_chart</span>
+            Patterns
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              setTab("indicators");
+              setSearchParams({ tab: "indicators" }, { replace: true });
+            }}
+            className={`flex h-9 shrink-0 items-center gap-2 rounded-lg px-4 font-bold text-sm transition-colors ${
+              tab === "indicators" ? "bg-primary text-background-dark" : "bg-primary/10 text-primary hover:bg-primary/20"
+            }`}
+          >
+            <span className="material-symbols-outlined text-lg">show_chart</span>
+            Indicators
+          </button>
+        </div>
         <div className="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
-          <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded bg-primary text-background-dark px-4 cursor-pointer">
-            <p className="text-xs font-bold uppercase tracking-wider">All Patterns</p>
-          </div>
-          <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded bg-primary/10 border border-primary/20 text-primary px-4 cursor-pointer hover:bg-primary/20">
-            <p className="text-xs font-bold uppercase tracking-wider">Bullish</p>
-          </div>
-          <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded bg-primary/10 border border-primary/20 text-primary px-4 cursor-pointer hover:bg-primary/20">
-            <p className="text-xs font-bold uppercase tracking-wider">Bearish</p>
-          </div>
-          <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded bg-primary/10 border border-primary/20 text-primary px-4 cursor-pointer hover:bg-primary/20">
-            <p className="text-xs font-bold uppercase tracking-wider">Neutral</p>
-          </div>
+          {tab === "patterns"
+            ? (["all", "bullish", "bearish", "neutral"] as const).map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setFilter(f)}
+              className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded px-4 cursor-pointer transition-colors ${
+                filter === f
+                  ? "bg-primary text-background-dark"
+                  : "bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20"
+              }`}
+            >
+              <p className="text-xs font-bold uppercase tracking-wider">
+                {f === "all" ? "All Patterns" : f.charAt(0).toUpperCase() + f.slice(1)}
+              </p>
+            </button>
+          ))
+            : (["all", "trend", "oscillator", "volatility"] as const).map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setIndicatorFilter(f)}
+              className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded px-4 cursor-pointer transition-colors ${
+                indicatorFilter === f
+                  ? "bg-primary text-background-dark"
+                  : "bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20"
+              }`}
+            >
+              <p className="text-xs font-bold uppercase tracking-wider">
+                {f === "all" ? "All Indicators" : f.charAt(0).toUpperCase() + f.slice(1)}
+              </p>
+            </button>
+          ))}
         </div>
       </header>
 
       <main className="flex-1 px-4 py-6 space-y-6 max-w-7xl mx-auto w-full">
         <div className="flex items-center justify-between">
-          <h3 className="text-primary text-sm font-bold uppercase tracking-[0.2em] font-mono">Pattern Library / root</h3>
-          <span className="text-primary/40 text-xs font-mono">Total: 128 entries</span>
+          <h3 className="text-primary text-sm font-bold uppercase tracking-[0.2em] font-mono">
+            {tab === "patterns" ? "Pattern Library / root" : "Indicator Library / root"}
+          </h3>
+          <span className="text-primary/40 text-xs font-mono">
+            Total: {tab === "patterns" ? filteredPatterns.length : filteredOverlays.length} entries
+          </span>
         </div>
 
         <div className="space-y-4">
-          {/* Bullish Engulfing */}
-          <div className="group flex flex-col rounded-xl border border-primary/10 bg-primary/5 p-4 hover:border-primary/40 hover:bg-primary/10 transition-all cursor-pointer">
-            <div className="flex gap-4">
-              <div className="h-24 w-24 shrink-0 rounded bg-slate-800 overflow-hidden border border-primary/20">
-                <img
-                  className="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCSwPBT69N9gyHODv6wEk3TxIBc4-3ay_gCPqpysgpE_Giwi6IgnB6HnrDgTqGuEqsf3sU40XocSlLdDsDRsCfLIQzGu0QWRVpF5sqEZnCAkxA4KsBZ2EQGrJ0yV0zRqjms1MNEwq6he1uPeKKbQso4qlKhzlp1wwV_90lmJqy7LrDUoXQADwu_DN_Jq4ho68EYHb0-btzgGQLu6pYVMMNC4-Wny4e7idcmwYYN97QjyGza4uqUYFFUZaOF14hXB5NUKWUqhjD4aMQ"
-                  alt="Bullish Engulfing pattern"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <div className="flex flex-col justify-between py-1">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-sm">arrow_upward</span>
-                    <h4 className="text-slate-100 font-bold text-base font-display">Bullish Engulfing</h4>
+          {tab === "patterns"
+            ? filteredPatterns.map((pattern) => (
+            <button
+              key={pattern.id}
+              type="button"
+              onClick={() => setSelectedPattern(pattern)}
+              className="group w-full text-left flex flex-col rounded-xl border border-primary/30 bg-neutral-dark/60 p-4 hover:border-primary hover:bg-neutral-dark/80 transition-all cursor-pointer"
+              title={`${pattern.type.toUpperCase()}_PATTERN | CONFIRMATION: ${pattern.confirmation.toUpperCase()} — ${pattern.description}`}
+            >
+              <div className="flex gap-4">
+                <div className="h-24 w-24 shrink-0 rounded bg-background-dark overflow-hidden border border-primary/30 flex items-center justify-center">
+                  {pattern.image ? (
+                    <img
+                      className="h-full w-full object-contain opacity-80 group-hover:opacity-100 transition-opacity p-2"
+                      src={pattern.image}
+                      alt={`${pattern.name} pattern`}
+                    />
+                  ) : (
+                    <span className="material-symbols-outlined text-5xl text-primary/60">
+                      {pattern.id === "doji" ? "trending_flat" : pattern.id === "hammer" ? "vertical_align_bottom" : "compare_arrows"}
+                    </span>
+                  )}
+                </div>
+                <div className="flex flex-col justify-between py-1">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`material-symbols-outlined text-sm ${
+                          pattern.id === "head-shoulders" ? "text-accent-red" : pattern.type === "reversal" ? "text-primary" : pattern.type === "continuation" ? "text-primary/70" : "text-primary/60"
+                        }`}
+                      >
+                        {pattern.id === "head-shoulders" ? "arrow_downward" : pattern.type === "reversal" ? "arrow_upward" : pattern.type === "continuation" ? "trending_flat" : "remove"}
+                      </span>
+                      <h4 className="text-slate-100 font-bold text-base font-display">{pattern.name}</h4>
+                    </div>
+                    <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
+                      &gt; {pattern.type.toUpperCase()}_PATTERN<br />
+                      &gt; CONFIRMATION: {pattern.confirmation.toUpperCase().replace("_", " ")}<br />
+                      {pattern.description}
+                    </p>
                   </div>
-                  <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
-                    &gt; REVERSAL_PATTERN<br />
-                    &gt; CONFIRMATION: HIGH<br />
-                    A large green candle completely overlaps the previous small red candle.
-                  </p>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Head and Shoulders */}
-          <div className="group flex flex-col rounded-xl border border-primary/10 bg-primary/5 p-4 hover:border-primary/40 hover:bg-primary/10 transition-all cursor-pointer">
-            <div className="flex gap-4">
-              <div className="h-24 w-24 shrink-0 rounded bg-slate-800 overflow-hidden border border-primary/20">
-                <img
-                  className="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZpguSJwYPDQQ1qUjaL0m7CBDYZ__dnEhXVjP6bo3fb6Z4ZgBtb5CPChpXMtYOG3MjVyHXeG87nFnQ0CRvEhhIfK9j_t5NvzE3CMPlZDTpPSDmlzgiokDWkscJHusKVa3zhBf88LmhOyGMeyKEZonwcZAsm2cRJiYxz-xoOaT3avHL89xNaM5Ml3L-zKVhwo6m7bFFw22YxtiymIc3k6QTIRZYisU2s1tRppzvrq8-S8KRdV67VnOx9uOQArQRkOZhNU6pHaqi66o"
-                  alt="Head and Shoulders pattern"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <div className="flex flex-col justify-between py-1">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-red-500 text-sm">arrow_downward</span>
-                    <h4 className="text-slate-100 font-bold text-base font-display">Head and Shoulders</h4>
+            </button>
+          ))
+            : filteredOverlays.map((overlay) => (
+            <button
+              key={overlay.id}
+              type="button"
+              onClick={() => setSelectedOverlay(overlay)}
+              className="group w-full text-left flex flex-col rounded-xl border border-primary/30 bg-neutral-dark/60 p-4 hover:border-primary hover:bg-neutral-dark/80 transition-all cursor-pointer"
+              title={`${overlay.category.toUpperCase()} — ${overlay.description}`}
+            >
+              <div className="flex gap-4">
+                <div className="h-24 w-24 shrink-0 rounded bg-background-dark overflow-hidden border border-primary/30 flex items-center justify-center">
+                  <span className="material-symbols-outlined text-5xl text-primary/60">
+                    {overlay.id === "sma" || overlay.id === "ema" ? "trending_up" : overlay.id === "rsi" || overlay.id === "macd" ? "show_chart" : "bar_chart"}
+                  </span>
+                </div>
+                <div className="flex flex-col justify-between py-1">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="material-symbols-outlined text-sm text-primary">
+                        {overlay.category === "trend" ? "trending_up" : overlay.category === "oscillator" ? "show_chart" : "bar_chart"}
+                      </span>
+                      <h4 className="text-slate-100 font-bold text-base font-display">{overlay.name}</h4>
+                    </div>
+                    <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
+                      &gt; {overlay.category.toUpperCase()}<br />
+                      &gt; {overlay.fullName}<br />
+                      {overlay.description}
+                    </p>
                   </div>
-                  <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
-                    &gt; REVERSAL_PATTERN<br />
-                    &gt; CONFIRMATION: VERY_HIGH<br />
-                    Three peaks: center peak (head) is highest, flanked by two lower peaks.
-                  </p>
                 </div>
               </div>
-            </div>
-          </div>
-
-          {/* Falling Wedge */}
-          <div className="group flex flex-col rounded-xl border border-primary/10 bg-primary/5 p-4 hover:border-primary/40 hover:bg-primary/10 transition-all cursor-pointer">
-            <div className="flex gap-4">
-              <div className="h-24 w-24 shrink-0 rounded bg-slate-800 overflow-hidden border border-primary/20">
-                <img
-                  className="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgLmQ-EPA5nTTlgInw2ijC6mS1jqzIIX5e6KBWyyX93tMRrzkPMsBqjJeokq5w122trRHnwowD5Dvd5VoSyKzsH6KD167bHM_PB8LnLXBkpfsA_QrxDUiXqOqz5DnuYfg3fsr2i-QZPmiZNNrjV6TlttntMZPayFCx6EmWwAAmy1NDlszHba-n6WP-eS2rscXgVsWIIpuHB_RIFm8MjSykwYgnBu_tZ3_Eu1pSmlwmFXs3gKNi1kqzC0TeoYpnL2Sp5PACwdVLQ2s"
-                  alt="Falling Wedge pattern"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <div className="flex flex-col justify-between py-1">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-sm">trending_flat</span>
-                    <h4 className="text-slate-100 font-bold text-base font-display">Falling Wedge</h4>
-                  </div>
-                  <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
-                    &gt; CONTINUATION_PATTERN<br />
-                    &gt; CONFIRMATION: MEDIUM<br />
-                    Price consolidates between two downward sloping, converging trendlines.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Morning Star */}
-          <div className="group flex flex-col rounded-xl border border-primary/10 bg-primary/5 p-4 hover:border-primary/40 hover:bg-primary/10 transition-all cursor-pointer">
-            <div className="flex gap-4">
-              <div className="h-24 w-24 shrink-0 rounded bg-slate-800 overflow-hidden border border-primary/20">
-                <img
-                  className="h-full w-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCubf4b2aqAAnqX_z1aucWOJQNj0U2-f-M0leSTw8ke0Qhyt-BbmYrR8qGeFZhI7UM-L6oHAiDY-pHggtYMtMWAQBNG7_mPkO4WWW6HzwZ3jnzG9_h956vubEG6K_94vTAWo09ja8cVSDmn2QZZX6rm5TChY7gaGSqC2KuccAtpkA9eY0FQz3fXTlM0eJISQfCA5VIXSvfzEa2-CCSRSqP7Qv1aJ7Hp9Br0N_DQ2S3aYqrodiCHULXYWsYcUO9FGYv67E6MNUNFP9o"
-                  alt="Morning Star pattern"
-                  referrerPolicy="no-referrer"
-                />
-              </div>
-              <div className="flex flex-col justify-between py-1">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <span className="material-symbols-outlined text-primary text-sm">star</span>
-                    <h4 className="text-slate-100 font-bold text-base font-display">Morning Star</h4>
-                  </div>
-                  <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
-                    &gt; REVERSAL_PATTERN<br />
-                    &gt; CONFIRMATION: HIGH<br />
-                    A three-candle bullish reversal pattern occurring at the bottom of a downtrend.
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+            </button>
+          ))}
         </div>
       </main>
 
-      <nav className="sticky bottom-0 bg-background-light dark:bg-background-dark border-t border-primary/20 pb-6 pt-2">
+      {selectedPattern && (
+        <PatternDetailModal
+          pattern={selectedPattern}
+          onClose={() => setSelectedPattern(null)}
+        />
+      )}
+      {selectedOverlay && (
+        <IndicatorDetailModal
+          overlay={selectedOverlay}
+          onClose={() => {
+            setSelectedOverlay(null);
+            if (searchParams.has("open")) {
+              const next = new URLSearchParams(searchParams);
+              next.delete("open");
+              setSearchParams(next, { replace: true });
+            }
+          }}
+        />
+      )}
+
+      <nav className="sticky bottom-0 bg-background-dark border-t border-primary/30 pb-6 pt-2">
         <div className="flex gap-2 px-4">
           <Link to="/" className="flex flex-1 flex-col items-center justify-end gap-1 text-primary/40 hover:text-primary transition-colors">
             <span className="material-symbols-outlined">terminal</span>

@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Market from "./pages/Market";
 import Training from "./pages/Training";
 import Archive from "./pages/Archive";
+import PracticeDraw from "./pages/PracticeDraw";
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
           <Route path="market" element={<Market />} />
           <Route path="training" element={<Training />} />
           <Route path="archive" element={<Archive />} />
+          <Route path="practice-draw" element={<PracticeDraw />} />
         </Route>
       </Routes>
     </BrowserRouter>
