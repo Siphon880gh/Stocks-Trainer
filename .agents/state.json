@@ -1,0 +1,126 @@
+{
+  "current_epic_id": "E1",
+  "current_milestone_id": "E1.M1",
+  "status": "execution_option_a_locked_ready_to_implement",
+  "last_updated_iso": "2026-07-15T06:10:00Z",
+  "council": {
+    "curriculum": {
+      "report": "council-report-epics-milestones.md",
+      "option_selected": "A",
+      "option_name": "literacy-then-cases + soft chart gate + MVP freeze",
+      "rationale": "Best teaching spine for skill and theory application; post-P0 scales case modes and library"
+    },
+    "execution": {
+      "report": "council-report-p0-execute.md",
+      "option_selected": "A",
+      "option_name": "contracts-first balanced",
+      "rationale": "Freeze IDs at E3.M1; reuse Training/QuizModal; content floors; GO/NO-GO per milestone; SAMPLE labels; start at E1.M1.S1"
+    }
+  },
+  "app": {
+    "name": "Stock Trainer (ANALYSIS_CORE)",
+    "one_liner": "Beginner-first equities path: market basics → financial snapshot → candles/indicators → decide-and-reveal cases → then broader markets and deeper case library.",
+    "platform": "web"
+  },
+  "decisions": {
+    "platform": "web (React + Vite + TypeScript, existing stack)",
+    "epic_map_confirmed": true,
+    "epics_finalized": true,
+    "council_option": "A",
+    "execution_option": "A",
+    "execution_approach": "contracts-first: Instrument/SamplePack → ProgressStore+frozen IDs → QuizModal literacy → E4.M0 Training soft-gate → CaseStudy player → floors 3+3 → path/unlock → live Dashboard → freeze",
+    "learner_persona_primary": "beginner picking up stocks",
+    "curriculum_principle": "Equities-first, concrete before abstract: vocabulary + risk/horizon → company numbers → chart soft-gate → decide-and-see-outcome cases; options/futures/crypto after core stock fluency",
+    "mvp_scope": "Beginner Equities Path wired end-to-end: literacy + statement basics + chart soft-gate + case engine with earnings + thin company news + progress unlock + dashboard; freeze before case volume / goal picker / multi-asset UI",
+    "mvp_freeze_after": ["E1.M1", "E3.M1", "E4.M1", "E4.M2", "E4.M0", "E5.M1", "E5.M3", "E5.M2", "E2.M1", "E3.M2", "E6.M1"],
+    "case_study_priority": "Ship E5 engine early; first content packs are equity earnings/financials and thin company news; macro/combined/scale after MVP freeze",
+    "case_study_mechanics": "Context (news and/or statements + pre-reaction chart) → buy/sell/hold (short soft-gated) → reveal → grade + process debrief",
+    "financials_coverage": "E4.M2 lite ratios + key lines before deep statements; E5 applies via earnings/statement cases",
+    "chart_gate": "E4.M0 soft-gate wires existing candle/indicator Training onto Beginner path before graded cases",
+    "short_soft_gate": true,
+    "content_floors": {
+      "equity_packs": 3,
+      "literacy_quizzes_per_group": 8,
+      "earnings_cases": 3,
+      "company_news_cases": 3
+    },
+    "execution_rules": [
+      "Freeze Beginner Equities milestone IDs at E3.M1 before E4 content writeback",
+      "One milestone in_progress at a time; GO/NO-GO before next",
+      "Reuse QuizModal/Training; do not rewrite chart stack in P0",
+      "Anti-hindsight: hide postOhlc until decision submitted",
+      "SAMPLE/STYLIZED labels; strip LIVE/REAL_TIME theater on path surfaces",
+      "Deny post-P0 until MVP freeze checklist green"
+    ]
+  },
+  "beginner_learning_order": [
+    "What a stock/market is (equities vocabulary) + risk/horizon",
+    "Read a simple company financial snapshot",
+    "Candles + basic indicator lines (path soft-gate before cases)",
+    "Decision cases: earnings & company news (buy/sell/hold → reveal; short soft-gated)",
+    "Decision cases: broader macro/news thinking (post-MVP)",
+    "Combined news + statements cases (post-MVP)",
+    "Scaled library + Decision Maker path (post-MVP)",
+    "Then: futures/options/crypto literacy and multi-asset drills (post-MVP)"
+  ],
+  "milestones": {
+    "implementation_order": [
+      "E1.M1",
+      "E3.M1",
+      "E4.M1",
+      "E4.M2",
+      "E4.M0",
+      "E5.M1",
+      "E5.M3",
+      "E5.M2",
+      "E2.M1",
+      "E3.M2",
+      "E6.M1"
+    ],
+    "post_mvp_order": [
+      "E5.M2b",
+      "E5.M4",
+      "E5.M5",
+      "E5.M6",
+      "E2.M2",
+      "E4.M3",
+      "E1.M2"
+    ],
+    "rationale": "P0: packs + path IDs → vocab/risk → statements → chart soft-gate → case engine → earnings then thin company news → fixed path template → unlock + dashboard; freeze for credential. Post-P0: macro, combined, scale library, Decision Maker, richer TA, multi-asset UI for skill depth.",
+    "by_epic": {
+      "E1": ["E1.M1", "E1.M2"],
+      "E2": ["E2.M1", "E2.M2"],
+      "E3": ["E3.M1", "E3.M2"],
+      "E4": ["E4.M1", "E4.M2", "E4.M0", "E4.M3"],
+      "E5": ["E5.M1", "E5.M3", "E5.M2", "E5.M2b", "E5.M4", "E5.M5", "E5.M6"],
+      "E6": ["E6.M1"]
+    }
+  },
+  "identified_epics": [
+    { "id": "E0", "name": "Planning & Decisions", "priority": "Mandatory", "status": "complete" },
+    { "id": "E1", "name": "Equities Sample Universe", "priority": "MVP", "status": "next" },
+    { "id": "E2", "name": "Learning Milestone Planner (AI Context)", "priority": "MVP", "status": "planned_thin" },
+    { "id": "E3", "name": "Milestone Tracker & Progress Persistence", "priority": "MVP", "status": "planned" },
+    { "id": "E4", "name": "Equities Literacy & Chart Fluency", "priority": "MVP", "status": "planned" },
+    { "id": "E5", "name": "Interactive Decision Case Studies (News + Financials)", "priority": "MVP", "status": "priority_after_beginner_foundation" },
+    { "id": "E6", "name": "Dashboard Path Integration & Coach Surfaces", "priority": "MVP", "status": "planned" },
+    { "id": "E7", "name": "Practice Draw Completion", "priority": "Later", "status": "deferred" },
+    { "id": "E8", "name": "Live/Delayed Market Data & Accounts", "priority": "Later", "status": "deferred" }
+  ],
+  "completed": [
+    "E0.discovery",
+    "E0.scope_expansion_breadth_case_studies",
+    "E0.epic_map_confirmed",
+    "E0.financials_added",
+    "E0.beginner_path_locked",
+    "E0.council_option_a_finalized",
+    "E0.council_execution_option_a_locked"
+  ],
+  "docs": {
+    "epic_map": "EPIC_MAP.md",
+    "implementation_stories": "IMPLEMENTATION_STORIES.md",
+    "council_report": "council-report-epics-milestones.md",
+    "council_execution_report": "council-report-p0-execute.md"
+  },
+  "next_action": "Implement E1.M1.S1 (Instrument + SamplePack types in src/lib) when user says go"
+}
