@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { useEffect, useMemo, useRef } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { canStartCasePack, isChartGateComplete } from "../lib/beginnerPath";
 import {
   CASE_LIBRARY_COUNT,
@@ -8,10 +9,31 @@ import {
 } from "../lib/caseStudies";
 import { DECISION_MAKER_PATH_ID, getPathId } from "../lib/progressStore";
 
+const VALID_PACKS = new Set(CASE_PACKS.map((p) => p.id));
+
 export default function Cases() {
+  const [searchParams] = useSearchParams();
+  const packParam = searchParams.get("pack");
+  const focusPack =
+    packParam && VALID_PACKS.has(packParam as CasePackId)
+      ? (packParam as CasePackId)
+      : null;
+  const focusRef = useRef<HTMLElement | null>(null);
   const chartOk = isChartGateComplete();
   const pathId = getPathId();
   const beginnerOnly = pathId !== DECISION_MAKER_PATH_ID;
+
+  const orderedPacks = useMemo(() => {
+    if (!focusPack) return CASE_PACKS;
+    const focused = CASE_PACKS.filter((p) => p.id === focusPack);
+    const rest = CASE_PACKS.filter((p) => p.id !== focusPack);
+    return [...focused, ...rest];
+  }, [focusPack]);
+
+  useEffect(() => {
+    if (!focusPack || !focusRef.current) return;
+    focusRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [focusPack, orderedPacks]);
 
   return (
     <div className="bg-background-dark text-slate-100 min-h-screen flex flex-col font-display">
@@ -32,6 +54,11 @@ export default function Cases() {
             {CASE_LIBRARY_COUNT} (E5.M5 target ≥20).
             {beginnerOnly ? " Beginner path: beginner difficulty only." : null}
           </p>
+          {focusPack ? (
+            <p className="text-[11px] font-mono text-primary/70 mt-2">
+              FOCUS_PACK · {focusPack}
+            </p>
+          ) : null}
         </div>
 
         {!chartOk ? (
@@ -44,17 +71,26 @@ export default function Cases() {
           </div>
         ) : null}
 
-        {CASE_PACKS.map((meta) => {
+        {orderedPacks.map((meta) => {
           const packId = meta.id as CasePackId;
           const unlocked = canStartCasePack(packId);
           const pack = listCaseStudies(packId).filter((c) =>
             beginnerOnly ? c.difficulty === "beginner" : true
           );
           if (pack.length === 0) return null;
+          const isFocus = focusPack === packId;
           return (
-            <section key={packId} className="space-y-3">
+            <section
+              key={packId}
+              id={`pack-${packId}`}
+              ref={isFocus ? focusRef : undefined}
+              className={`space-y-3 ${
+                isFocus ? "rounded-xl border border-primary/50 p-4 bg-primary/5" : ""
+              }`}
+            >
               <h2 className="text-sm font-bold text-primary/80 uppercase tracking-widest">
                 {meta.name} ({pack.length})
+                {isFocus ? " · PATH_FOCUS" : ""}
               </h2>
               <p className="text-xs text-slate-500 font-mono">{meta.description}</p>
               {!unlocked ? (

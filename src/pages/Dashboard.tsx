@@ -392,7 +392,7 @@ export default function Dashboard() {
                 RESET_PATH
               </button>
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
               <Link to="/archive" className="p-3 border border-primary/20 bg-primary/5 flex flex-col items-center text-center gap-2 hover:bg-primary/10 transition-colors cursor-pointer">
                 <span className="material-symbols-outlined text-primary/70">menu_book</span>
                 <span className="text-[10px]">READ_THEORY</span>
@@ -400,6 +400,13 @@ export default function Dashboard() {
               <Link to="/market" className="p-3 border border-primary/20 bg-primary/5 flex flex-col items-center text-center gap-2 hover:bg-primary/10 transition-colors cursor-pointer">
                 <span className="material-symbols-outlined text-primary/70">visibility</span>
                 <span className="text-[10px]">IDENTIFY_CANDLE</span>
+              </Link>
+              <Link
+                to="/cases"
+                className="p-3 border border-primary/20 bg-primary/5 flex flex-col items-center text-center gap-2 hover:bg-primary/10 transition-colors cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-primary/70">gavel</span>
+                <span className="text-[10px]">CASE_STUDIES</span>
               </Link>
               <Link
                 to="/practice-draw"
@@ -454,6 +461,16 @@ export default function Dashboard() {
                 <div>
                   <p className="font-bold tracking-widest">QUIZ_CENTER</p>
                   <p className="text-[10px] opacity-70">VALIDATE_KNOWLEDGE</p>
+                </div>
+              </div>
+              <span className="material-symbols-outlined">chevron_right</span>
+            </Link>
+            <Link to="/cases" className="border-neon p-4 flex items-center justify-between group cursor-pointer hover:bg-primary hover:text-background-dark transition-all">
+              <div className="flex items-center gap-4">
+                <span className="material-symbols-outlined text-3xl">gavel</span>
+                <div>
+                  <p className="font-bold tracking-widest">CASE_STUDIES</p>
+                  <p className="text-[10px] opacity-70">DECIDE_AND_REVEAL</p>
                 </div>
               </div>
               <span className="material-symbols-outlined">chevron_right</span>
