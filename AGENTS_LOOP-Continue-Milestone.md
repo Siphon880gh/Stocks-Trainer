@@ -1,0 +1,132 @@
+# AGENTS_LOOP — Continue Milestone
+
+Reusable loop prompt for advancing Stock Trainer (ANALYSIS_CORE) through the milestone system until MVP freeze (then post-P0 when freeze is green).
+
+Companions: [`.agents/state.json`](./.agents/state.json) · [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [`EPIC_MAP.md`](./EPIC_MAP.md) · [`AGENTS_CODE_REFERENCE.md`](./AGENTS_CODE_REFERENCE.md)
+
+---
+
+## How to run
+
+**Preferred (dynamic loop — agent self-paces after each tick):**
+
+```text
+/loop continue milestones using AGENTS_LOOP-Continue-Milestone.md
+```
+
+Or paste the full prompt body below after `/loop` with no interval:
+
+```text
+/loop <paste everything under "Loop prompt" below>
+```
+
+**Fixed interval (only if you want heartbeat ticks even while idle):**
+
+```text
+/loop 5m continue milestones using AGENTS_LOOP-Continue-Milestone.md
+```
+
+Prefer **no interval** for implementation work so each wake continues the next story instead of waiting on a timer.
+
+**Before starting**
+1. Confirm `.agents/state.json` points at the story you want (`current_milestone_id`, `next_action`).
+2. Is your current server working? If you already have `npm run dev` up, leave it alone; the loop uses `npm run lint` + `npm run build` for auto-verify, not the dev server.
+3. Stop the loop yourself when you want (outer iterations are infinite). The agent also hard-stops on the error budget or human-verification cases below.
+
+**On each tick the agent should**
+- Read this file + `.agents/state.json` + the current milestone in `IMPLEMENTATION_STORIES.md`
+- Implement one story, auto-verify, update state, continue
+- Create/adapt skills under `.agents/skills/*` when work repeats
+
+**Stop the loop**
+- Tell the agent to stop / cancel the loop, or stop the Cursor agent process
+- If it hits the 10-round error budget, it stops with an Error Handoff Summary for you
+
+---
+
+## Loop prompt
+
+```markdown
+# OBJECTIVE
+Advance Stock Trainer (ANALYSIS_CORE) through P0 milestones until MVP freeze is complete, then continue post-P0 only if freeze checklist is green.
+
+**Done (global):** All milestones in `.agents/state.json` → `milestones.implementation_order` (then `post_mvp_order` only after MVP freeze) are `done`, with stories meeting acceptance in `IMPLEMENTATION_STORIES.md`.
+
+**Done (per tick):** Exactly one story advanced to acceptance-pass, or one error-recovery round completed with a clear next action.
+
+# CONTEXT
+- State of record: `.agents/state.json` (`current_epic_id`, `current_milestone_id`, `next_action`, `status`)
+- Story + acceptance source: `IMPLEMENTATION_STORIES.md`
+- Product map / constraints: `EPIC_MAP.md`, `AGENTS_CODE_REFERENCE.md` (+ feature companions as needed)
+- Execution rules already locked in state: one milestone `in_progress` at a time; follow `milestones.implementation_order`; do not start post-P0 until MVP freeze checklist is green
+- Auto-verify commands (this repo): `npm run lint` and `npm run build`
+- Optional local skills: `.agents/skills/*` (create/adapt when a task repeats)
+
+# STEP-BY-STEP CADENCE
+1. **Orient**
+   - Read `.agents/state.json` and the current milestone section in `IMPLEMENTATION_STORIES.md`.
+   - Identify the single next unfinished story (e.g. `E1.M1.S1`). Do not skip ahead in `implementation_order`.
+
+2. **Implement the current story only**
+   - Minimal changes that satisfy that story’s Acceptance column.
+   - Prefer extending registries / existing patterns per `AGENTS_CODE_REFERENCE.md`.
+   - Do not rewrite the chart stack in P0; reuse Training/QuizModal where stories say so.
+
+3. **Automatic verification (required before marking progress)**
+   - Run `npm run lint` then `npm run build`.
+   - Mentally check the story Acceptance criteria + global definition of done in `IMPLEMENTATION_STORIES.md` (regression to Market/Training/Archive happy paths; progress keys stable; terminal tone; no LIVE/REAL_TIME theater on path surfaces).
+
+4. **On PASS**
+   - Update `.agents/state.json`: story/milestone progress, `next_action`, `last_updated_iso`, status fields as appropriate.
+   - Update Status columns in `IMPLEMENTATION_STORIES.md` when a milestone flips.
+   - Immediately continue to the next story in the same milestone; when the milestone is complete, GO to the next id in `implementation_order` (treat GO as automatic if auto-verify passed).
+   - Do **not** pause for human review unless a stop condition below applies.
+
+5. **On FAIL (lint/build/acceptance)**
+   - Enter **error-fix mode** (see Error budget).
+   - Read stderr / type errors; patch with minimal changes; re-run lint+build.
+   - Count every failed verify → fix → re-verify cycle as one round, including new errors introduced by a fix.
+
+6. **Skills (efficiency / self-heal)**
+   - If the same workflow repeats (e.g. “add equity pack”, “wire quiz group writeback”, “GO milestone + state update”), create or update a skill under `.agents/skills/<skill-name>/SKILL.md`.
+   - Skills may be self-learning: on failure, try a plausible fix, then rewrite the skill once the approach works.
+   - If a skill is reused for a different purpose, create a new skill instead of overloading the old one.
+
+# VERIFICATION RUBRIC
+Return **PASS** for the current story only if ALL are true:
+- [ ] Story Acceptance criteria in `IMPLEMENTATION_STORIES.md` are met
+- [ ] `npm run lint` exits 0
+- [ ] `npm run build` exits 0
+- [ ] No intentional scope creep beyond the current story (unless required to unblock acceptance)
+- [ ] `.agents/state.json` reflects the new truth (`next_action` points at the real next story)
+
+Return **CONTINUE** after PASS (start next story same tick if time remains; otherwise end turn ready for next loop wake).
+
+Return **STOP** only under Stop Conditions.
+
+# STOP CONDITIONS / ESCAPE HATCHES
+- **Maximum outer iterations:** Infinite. Human stops the process when desired.
+- **Error budget (hard stop):** If the same blocking failure (or the chain of new errors spawned while fixing it) is not resolved within **10** fix rounds, STOP immediately.
+  - Emit an **Error Handoff Summary** for human takeover:
+    - Current `epic` / `milestone` / `story` ids
+    - Original error + subsequent errors (chronological)
+    - Files touched and approaches tried
+    - Last command outputs (lint/build excerpts)
+    - Suspected root cause and what a human should try next
+    - Whether a skill was involved and what it claimed vs what failed
+- **Human verification required (hard stop):** STOP and ask the human only when automatic verification cannot decide, e.g.:
+  - Ambiguous product/UX choice not already locked in `.agents/state.json` / EPIC_MAP / council reports
+  - Need for real visual/UX judgment that lint+build cannot catch AND acceptance criteria explicitly require human taste
+  - Credential/secret/external account or paid API decisions
+  - Conflicting instructions between docs that block a single correct implementation
+- **Abort immediately (hard stop):** About to alter unexpected third-party dependency surface in a risky way (unrelated major upgrades, removing unused package.json deps “for cleanup”, adding live market APIs, auth, or server stack) unless the current story explicitly requires it — STOP and hand off instead of improvising.
+- **MVP freeze gate:** After `E6.M1` / freeze checklist items, do not enter `post_mvp_order` until the MVP freeze checklist in `IMPLEMENTATION_STORIES.md` is green; if checklist cannot be auto-confirmed, STOP for human GO.
+
+# TICK OUTPUT (keep short)
+Each loop tick ends with:
+1. `milestone/story` worked
+2. PASS | FIXING (round n/10) | STOP
+3. Commands run + exit status
+4. `next_action` (copied from updated state)
+5. Skills created/updated (paths only), if any
+```
