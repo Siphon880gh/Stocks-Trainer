@@ -2,33 +2,42 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { PATTERNS, type PatternDef } from "../lib/patterns";
 import { OVERLAYS, getOverlaysByCategory, type OverlayDef, type OverlayCategory } from "../lib/overlays";
+import { LITERACY_TERMS, getLiteracyTerm, type LiteracyTerm } from "../lib/literacyTerms";
 import PatternDetailModal from "../components/PatternDetailModal";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 
 type FilterType = "all" | "bullish" | "bearish" | "neutral";
-type ArchiveTab = "patterns" | "indicators";
+type ArchiveTab = "patterns" | "indicators" | "literacy";
 
 export default function Archive() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get("tab") as ArchiveTab | null;
-  const openOverlayId = searchParams.get("open");
+  const openId = searchParams.get("open");
 
-  const [tab, setTab] = useState<ArchiveTab>(tabParam === "indicators" ? "indicators" : "patterns");
+  const [tab, setTab] = useState<ArchiveTab>(
+    tabParam === "indicators" || tabParam === "literacy" ? tabParam : "patterns"
+  );
   const [selectedPattern, setSelectedPattern] = useState<PatternDef | null>(null);
   const [selectedOverlay, setSelectedOverlay] = useState<OverlayDef | null>(null);
+  const [selectedTerm, setSelectedTerm] = useState<LiteracyTerm | null>(null);
   const [filter, setFilter] = useState<FilterType>("all");
   const [indicatorFilter, setIndicatorFilter] = useState<OverlayCategory | "all">("all");
 
   useEffect(() => {
-    if (tabParam === "indicators") setTab("indicators");
+    if (tabParam === "indicators" || tabParam === "literacy") setTab(tabParam);
+    else if (!tabParam) setTab("patterns");
   }, [tabParam]);
 
   useEffect(() => {
-    if (openOverlayId) {
-      const overlay = OVERLAYS.find((o) => o.id === openOverlayId);
-      if (overlay) setSelectedOverlay(overlay);
+    if (!openId) return;
+    if (tab === "literacy" || tabParam === "literacy") {
+      const term = getLiteracyTerm(openId);
+      if (term) setSelectedTerm(term);
+      return;
     }
-  }, [openOverlayId]);
+    const overlay = OVERLAYS.find((o) => o.id === openId);
+    if (overlay) setSelectedOverlay(overlay);
+  }, [openId, tab, tabParam]);
 
   const filteredPatterns = PATTERNS.filter((p) => {
     if (filter === "all") return true;
@@ -102,6 +111,19 @@ export default function Archive() {
             <span className="material-symbols-outlined text-lg">show_chart</span>
             Indicators
           </button>
+          <button
+            type="button"
+            onClick={() => {
+              setTab("literacy");
+              setSearchParams({ tab: "literacy" }, { replace: true });
+            }}
+            className={`flex h-9 shrink-0 items-center gap-2 rounded-lg px-4 font-bold text-sm transition-colors ${
+              tab === "literacy" ? "bg-primary text-background-dark" : "bg-primary/10 text-primary hover:bg-primary/20"
+            }`}
+          >
+            <span className="material-symbols-outlined text-lg">menu_book</span>
+            Literacy
+          </button>
         </div>
         <div className="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
           {tab === "patterns"
@@ -121,7 +143,8 @@ export default function Archive() {
               </p>
             </button>
           ))
-            : (["all", "trend", "oscillator", "volatility"] as const).map((f) => (
+            : tab === "indicators"
+            ? (["all", "trend", "oscillator", "volatility"] as const).map((f) => (
             <button
               key={f}
               type="button"
@@ -136,22 +159,56 @@ export default function Archive() {
                 {f === "all" ? "All Indicators" : f.charAt(0).toUpperCase() + f.slice(1)}
               </p>
             </button>
-          ))}
+          ))
+            : (
+              <p className="text-xs text-primary/50 font-mono uppercase tracking-wider py-1">
+                Beginner equities glossary (SAMPLE)
+              </p>
+            )}
         </div>
       </header>
 
       <main className="flex-1 px-4 py-6 space-y-6 max-w-7xl mx-auto w-full">
         <div className="flex items-center justify-between">
           <h3 className="text-primary text-sm font-bold uppercase tracking-[0.2em] font-mono">
-            {tab === "patterns" ? "Pattern Library / root" : "Indicator Library / root"}
+            {tab === "patterns"
+              ? "Pattern Library / root"
+              : tab === "indicators"
+                ? "Indicator Library / root"
+                : "Literacy Glossary / root"}
           </h3>
           <span className="text-primary/40 text-xs font-mono">
-            Total: {tab === "patterns" ? filteredPatterns.length : filteredOverlays.length} entries
+            Total:{" "}
+            {tab === "patterns"
+              ? filteredPatterns.length
+              : tab === "indicators"
+                ? filteredOverlays.length
+                : LITERACY_TERMS.length}{" "}
+            entries
           </span>
         </div>
 
         <div className="space-y-4">
-          {tab === "patterns"
+          {tab === "literacy"
+            ? LITERACY_TERMS.map((term) => (
+            <button
+              key={term.id}
+              type="button"
+              onClick={() => {
+                setSelectedTerm(term);
+                setSearchParams({ tab: "literacy", open: term.id }, { replace: true });
+              }}
+              className="group w-full text-left flex flex-col rounded-xl border border-primary/30 bg-neutral-dark/60 p-4 hover:border-primary hover:bg-neutral-dark/80 transition-all cursor-pointer"
+            >
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-sm text-primary">menu_book</span>
+                <h4 className="text-slate-100 font-bold text-base font-display">{term.name}</h4>
+                <span className="text-[10px] font-mono text-primary/50 uppercase">{term.category}</span>
+              </div>
+              <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">{term.summary}</p>
+            </button>
+          ))
+          : tab === "patterns"
             ? filteredPatterns.map((pattern) => (
             <button
               key={pattern.id}
@@ -249,6 +306,53 @@ export default function Archive() {
             }
           }}
         />
+      )}
+      {selectedTerm && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/70 p-4"
+          role="dialog"
+          aria-modal="true"
+          onClick={() => {
+            setSelectedTerm(null);
+            const next = new URLSearchParams(searchParams);
+            next.delete("open");
+            setSearchParams(next, { replace: true });
+          }}
+        >
+          <div
+            className="w-full max-w-lg border-neon bg-neutral-dark p-6 space-y-3"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-mono text-primary/50 uppercase tracking-widest">
+                  Literacy · {selectedTerm.category}
+                </p>
+                <h3 className="text-xl font-bold text-primary crt-glow">{selectedTerm.name}</h3>
+              </div>
+              <button
+                type="button"
+                className="text-primary hover:bg-primary/10 p-1 rounded"
+                aria-label="Close"
+                onClick={() => {
+                  setSelectedTerm(null);
+                  const next = new URLSearchParams(searchParams);
+                  next.delete("open");
+                  setSearchParams(next, { replace: true });
+                }}
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            <p className="text-sm text-slate-300">{selectedTerm.detail}</p>
+            <Link
+              to="/training?group=equity-literacy&start=1"
+              className="inline-flex text-xs font-bold text-primary underline"
+            >
+              Practice Equities Literacy quiz
+            </Link>
+          </div>
+        </div>
       )}
 
       <nav className="sticky bottom-0 bg-background-dark border-t border-primary/30 pb-6 pt-2">

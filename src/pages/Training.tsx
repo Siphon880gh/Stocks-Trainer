@@ -3,6 +3,14 @@ import { Link, useSearchParams } from "react-router-dom";
 import QuizModal from "../components/QuizModal";
 import AnswerSheetModal from "../components/AnswerSheetModal";
 import { QUIZ_GROUPS, getQuestionsForGroup, type QuizGroupId } from "../lib/quizData";
+import {
+  CHART_GATE_MILESTONE_ID,
+  CHART_GATE_PREREQ_TIP,
+  CHART_GATE_TRAINING_GROUP,
+  canStartQuizGroup,
+  isChartGateComplete,
+} from "../lib/beginnerPath";
+import { getMilestoneStatus, loadProgress } from "../lib/progressStore";
 
 export default function Training() {
   const [searchParams] = useSearchParams();
@@ -12,9 +20,16 @@ export default function Training() {
   const [isQuizOpen, setIsQuizOpen] = useState(false);
   const [quizStartIndex, setQuizStartIndex] = useState<number | undefined>(undefined);
   const [answerSheetOpen, setAnswerSheetOpen] = useState(false);
-  const [points, setPoints] = useState(0);
-  const [streak, setStreak] = useState(0);
-  const [accuracy, setAccuracy] = useState(0);
+  const [points, setPoints] = useState(() => loadProgress().state.scores.totalPoints);
+  const [streak, setStreak] = useState(() => loadProgress().state.streaks.current);
+  const [accuracy, setAccuracy] = useState(() => loadProgress().state.scores.accuracy);
+  const chartGateOpen =
+    !isChartGateComplete() &&
+    (getMilestoneStatus(CHART_GATE_MILESTONE_ID) === "available" ||
+      getMilestoneStatus(CHART_GATE_MILESTONE_ID) === "in_progress" ||
+      getMilestoneStatus(CHART_GATE_MILESTONE_ID) === "locked");
+  const showChartGateBanner = chartGateOpen && !isChartGateComplete();
+  const groupLocked = !canStartQuizGroup(selectedGroup);
 
   useEffect(() => {
     if (groupParam && QUIZ_GROUPS.some((g) => g.id === groupParam)) {
@@ -23,10 +38,10 @@ export default function Training() {
   }, [groupParam]);
 
   useEffect(() => {
-    if (startParam === "1") {
+    if (startParam === "1" && canStartQuizGroup(selectedGroup)) {
       setIsQuizOpen(true);
     }
-  }, [startParam]);
+  }, [startParam, selectedGroup]);
 
   return (
     <div className="bg-background-dark font-display text-slate-100 min-h-screen flex flex-col">
@@ -59,6 +74,48 @@ export default function Training() {
       </nav>
 
       <main className="max-w-5xl mx-auto px-4 py-8 flex-1 flex flex-col items-center justify-center">
+        {showChartGateBanner ? (
+          <div className="w-full max-w-xl mb-4 border border-primary/40 bg-primary/5 rounded-lg p-4 font-mono text-xs space-y-2">
+            <p className="text-primary font-bold uppercase tracking-widest">
+              Beginner Path · {CHART_GATE_MILESTONE_ID} Chart Soft-Gate
+            </p>
+            <p className="text-slate-300">{CHART_GATE_PREREQ_TIP}</p>
+            <button
+              type="button"
+              className="text-primary underline"
+              onClick={() => setSelectedGroup(CHART_GATE_TRAINING_GROUP)}
+            >
+              Select Indicators group (path gate)
+            </button>
+          </div>
+        ) : (
+          <div className="w-full max-w-xl mb-4 border border-primary/30 bg-neutral-dark/40 rounded-lg p-4 font-mono text-xs space-y-2">
+            <p className="text-primary/80 font-bold uppercase tracking-widest">
+              Decision Cases · Packs A–C
+            </p>
+            <p className="text-slate-400">
+              After the chart gate: earnings, company news, macro intro, and
+              combined news+statements (SAMPLE).
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <Link to="/cases?pack=earnings" className="text-primary underline">
+                Earnings pack
+              </Link>
+              <Link to="/cases?pack=company-news" className="text-primary underline">
+                Company news pack
+              </Link>
+              <Link to="/cases?pack=macro-news" className="text-primary underline">
+                Macro intro pack
+              </Link>
+              <Link to="/cases?pack=combined" className="text-primary underline">
+                Combined pack
+              </Link>
+              <Link to="/practice-draw?template=doji" className="text-primary underline">
+                Practice Draw
+              </Link>
+            </div>
+          </div>
+        )}
         {/* Quiz Launch Card */}
         <div className="w-full max-w-xl border-neon p-8 bg-neutral-dark/60 rounded-xl space-y-6">
           <div className="flex items-center gap-4">
@@ -75,7 +132,11 @@ export default function Training() {
             <h3 className="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em]">Test Group</h3>
             <div className="flex flex-wrap gap-2">
               {QUIZ_GROUPS.map((g) => {
-                const isIndicators = g.id === "indicators";
+                const isFeatured =
+                  g.id === "indicators" ||
+                  g.id === "equity-patterns" ||
+                  g.id === "equity-literacy" ||
+                  g.id === "financial-literacy";
                 return (
                   <button
                     key={g.id}
@@ -83,7 +144,7 @@ export default function Training() {
                     className={`px-4 py-2 rounded-lg font-mono text-sm font-bold transition-all flex items-center gap-2 ${
                       selectedGroup === g.id
                         ? "bg-primary text-background-dark"
-                        : isIndicators
+                        : isFeatured
                           ? "border-2 border-primary bg-primary/10 text-primary hover:bg-primary/20 shadow-[0_0_12px_rgba(56,255,20,0.2)]"
                           : "border border-primary/40 text-primary hover:bg-primary/10"
                     }`}
@@ -100,6 +161,11 @@ export default function Training() {
             <p className="text-primary/50 text-xs">
               {QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.description}
             </p>
+            {groupLocked ? (
+              <p className="text-accent-red text-xs font-mono">
+                LOCKED: complete prior Beginner Path milestone first (unlockFrom rule).
+              </p>
+            ) : null}
           </div>
 
           <div className="grid grid-cols-3 gap-4">
@@ -123,13 +189,15 @@ export default function Training() {
           <div className="flex gap-3">
             <button
               onClick={() => {
+                if (groupLocked) return;
                 setQuizStartIndex(undefined);
                 setIsQuizOpen(true);
               }}
-              className="flex-1 bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-transform active:scale-[0.98]"
+              disabled={groupLocked}
+              className="flex-1 bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-transform active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <span className="material-symbols-outlined">play_arrow</span>
-              START QUIZ
+              {groupLocked ? "LOCKED" : "START QUIZ"}
             </button>
             {!isQuizOpen && (
               <button

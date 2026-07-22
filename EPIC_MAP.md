@@ -226,6 +226,13 @@ E5.M2b (macro) → E5.M4 (combined) → E5.M5 (scale library) → E5.M6 (Decisio
   → E2.M2 (goal intake) → E4.M3 (richer TA / multi-asset drills) → E1.M2 (Market asset-class UI)
 ```
 
+### Later — Practice Draw & data/accounts (`milestones.later_order`)
+
+```
+E7.M1 (draw + grade) → E7.M2 (path link)
+  → E8.M1 (market data adapter mock/delayed) → E8.M2 (account shell) → E8.M3 (export/import + sync stub)
+```
+
 ---
 
 ## Verification checklist
@@ -245,6 +252,7 @@ E5.M2b (macro) → E5.M4 (combined) → E5.M5 (scale library) → E5.M6 (Decisio
 
 - Do **not** skip ahead of the P0 order without updating `.agents/state.json`
 - Do **not** start post-P0 (E5.M4+, E2.M2, E4.M3, E1.M2) until MVP freeze criteria are met
+- After post-P0, continue `later_order` (E7/E8) via `AGENTS_LOOP-Continue-Milestone.md` — prefer SAMPLE/mock/delayed over paid keys
 - Prefer equities content until Beginner Equities Path is playable end-to-end
 - When adding case studies, tag **thinking mode** and **context type** (`news` | `financials` | `combined`) for the planner
 - Soft-gate `short` until literacy covers long vs short and a coach tip has been shown

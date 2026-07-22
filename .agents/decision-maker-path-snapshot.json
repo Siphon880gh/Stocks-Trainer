@@ -1,0 +1,54 @@
+{
+  "pathId": "decision-maker",
+  "title": "Decision Maker Path",
+  "milestoneOrder": [
+    "E5.M3",
+    "E5.M2",
+    "E5.M2b",
+    "E5.M4"
+  ],
+  "milestones": [
+    {
+      "id": "E5.M3",
+      "title": "Earnings Cases",
+      "contentRefs": [
+        "cases:earnings"
+      ],
+      "unlockFrom": [],
+      "coachTip": "Start with filings: beat/miss and statement red flags before headlines."
+    },
+    {
+      "id": "E5.M2",
+      "title": "Company News Cases",
+      "contentRefs": [
+        "cases:company-news"
+      ],
+      "unlockFrom": [
+        "E5.M3"
+      ],
+      "coachTip": "Headline modes on equities: chase vs fade without macro yet."
+    },
+    {
+      "id": "E5.M2b",
+      "title": "Macro Intro Cases",
+      "contentRefs": [
+        "cases:macro-news"
+      ],
+      "unlockFrom": [
+        "E5.M2"
+      ],
+      "coachTip": "Risk-off, prints, and supply shocks — still decide before reveal."
+    },
+    {
+      "id": "E5.M4",
+      "title": "Combined Cases",
+      "contentRefs": [
+        "cases:combined"
+      ],
+      "unlockFrom": [
+        "E5.M2b"
+      ],
+      "coachTip": "News + statements together. Horizon mismatch can earn partial credit."
+    }
+  ]
+}

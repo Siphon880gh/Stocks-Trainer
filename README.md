@@ -52,7 +52,7 @@ npm install
 npm run dev
 ```
 
-Runs at [http://localhost:3000](http://localhost:3000) (host `0.0.0.0` for LAN access).
+Runs at [http://localhost:3001](http://localhost:3001) (host `0.0.0.0` for LAN access).
 
 ### Build
 
@@ -72,7 +72,7 @@ npm run preview
 
 | Script   | Description              |
 |----------|--------------------------|
-| `dev`    | Start dev server (port 3000) |
+| `dev`    | Start dev server (port 3001) |
 | `build`  | Production build        |
 | `preview`| Preview production build|
 | `clean`  | Remove `dist/`          |

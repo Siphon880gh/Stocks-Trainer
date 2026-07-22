@@ -6,13 +6,42 @@ import ScanPatternsModal from "../components/ScanPatternsModal";
 import IndicatorGlossary from "../components/IndicatorGlossary";
 import IndicatorPopover from "../components/IndicatorPopover";
 import FinancialsPanel from "../components/FinancialsPanel";
-import { MARKETS, getMarket } from "../lib/markets";
+import {
+  getMarket,
+  listMarketsByAssetClass,
+  type MarketAssetFilter,
+} from "../lib/markets";
+import {
+  getMarketDataProvider,
+  getStoredProviderId,
+  listMarketDataProviders,
+  setStoredProviderId,
+  type MarketDataProviderId,
+} from "../lib/marketDataProvider";
+import { ASSET_CLASSES, type AssetClass } from "../lib/samplePacks";
 import { getOverlay, type OverlayDef } from "../lib/overlays";
 import { scanPatterns } from "../lib/patternScan";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
+import { CHART_GATE_TRAINING_GROUP, isChartGateComplete } from "../lib/beginnerPath";
+
+const CLASS_LABELS: Record<AssetClass, string> = {
+  equity: "Equities",
+  crypto: "Crypto",
+  future: "Futures",
+  option_context: "Options context",
+};
 
 export default function Market() {
-  const [marketId, setMarketId] = useState("btc");
+  const [assetFilter, setAssetFilter] = useState<MarketAssetFilter>("all");
+  const [providerId, setProviderId] = useState<MarketDataProviderId>(() =>
+    getStoredProviderId(),
+  );
+  const dataProvider = useMemo(() => getMarketDataProvider(providerId), [providerId]);
+  const filteredMarkets = useMemo(
+    () => listMarketsByAssetClass(assetFilter),
+    [assetFilter]
+  );
+  const [marketId, setMarketId] = useState(() => listMarketsByAssetClass("all")[0]?.id ?? "btc");
   const [controls, setControls] = useState({
     sma: true,
     ema: false,
@@ -26,9 +55,18 @@ export default function Market() {
   const [popover, setPopover] = useState<{ overlayId: string; x: number; y: number } | null>(null);
   const [selectedOverlay, setSelectedOverlay] = useState<OverlayDef | null>(null);
 
-  const market = getMarket(marketId) ?? MARKETS[0];
-  const ohlcData = market.data;
-  const detectedPatterns = useMemo(() => scanPatterns(ohlcData), [ohlcData]);
+  const marketInFilter = filteredMarkets.find((m) => m.id === marketId);
+  const market = marketInFilter ?? filteredMarkets[0] ?? getMarket(marketId);
+  const emptyClass =
+    filteredMarkets.length === 0 && assetFilter !== "all";
+  const ohlcData = useMemo(
+    () => (market ? dataProvider.getOhlc(market.id) ?? [] : []),
+    [market, dataProvider],
+  );
+  const detectedPatterns = useMemo(
+    () => (ohlcData.length ? scanPatterns(ohlcData) : []),
+    [ohlcData]
+  );
 
   const toggleControl = (key: keyof typeof controls) => {
     setControls((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -47,63 +85,131 @@ export default function Market() {
             <p className="text-lg font-bold leading-tight">MARKET_ANALYTICS_PRO</p>
           </div>
         </Link>
-        <div className="flex gap-4">
-          <div className="text-right hidden sm:block">
-            <p className="text-[10px] text-primary/40 uppercase">Latency</p>
-            <p className="text-xs font-mono text-primary">14ms</p>
+        <div className="flex gap-4 items-center">
+          <div className="text-right">
+            <p className="text-[10px] text-primary/40 uppercase">Feed_Mode</p>
+            <p className="text-xs font-mono text-primary">{dataProvider.label}</p>
           </div>
-          <button className="bg-primary/10 border border-primary/30 p-2 rounded hover:bg-primary/20 transition-colors">
-            <span className="material-symbols-outlined text-primary">settings_input_component</span>
-          </button>
+          <label className="flex flex-col text-right gap-0.5">
+            <span className="text-[10px] text-primary/40 uppercase">Provider</span>
+            <select
+              value={providerId}
+              onChange={(e) => {
+                const next = e.target.value as MarketDataProviderId;
+                setProviderId(next);
+                setStoredProviderId(next);
+              }}
+              className="bg-background-dark border border-primary/40 text-primary px-2 py-1 rounded font-mono text-xs"
+            >
+              {listMarketDataProviders().map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       </header>
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col p-4 gap-4 overflow-hidden relative">
         {/* Financials */}
-        <FinancialsPanel data={ohlcData} />
+        {market && !emptyClass ? <FinancialsPanel data={ohlcData} /> : null}
+
+        {market?.pack.assetClass === "equity" && !isChartGateComplete() ? (
+          <div className="border border-primary/30 bg-primary/5 rounded px-3 py-2 font-mono text-[11px] text-primary/80 flex flex-wrap items-center gap-2">
+            <span>SAMPLE equity pack · Chart soft-gate still open on Beginner path.</span>
+            <Link
+              to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
+              className="underline text-primary"
+            >
+              Run Indicators quiz (E4.M0)
+            </Link>
+          </div>
+        ) : null}
 
         {/* Stats Bar */}
         <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
-            <label className="text-[10px] text-primary/50 uppercase">Market</label>
+            <label className="text-[10px] text-primary/50 uppercase">Class</label>
             <select
-              value={marketId}
-              onChange={(e) => setMarketId(e.target.value)}
+              value={assetFilter}
+              onChange={(e) => {
+                const next = e.target.value as MarketAssetFilter;
+                setAssetFilter(next);
+                const list = listMarketsByAssetClass(next);
+                if (list[0]) setMarketId(list[0].id);
+              }}
               className="bg-background-dark border border-primary/40 text-primary px-3 py-2 rounded font-mono text-sm"
             >
-              {MARKETS.map((m) => (
-                <option key={m.id} value={m.id}>
-                  {m.pair}
+              <option value="all">All</option>
+              {ASSET_CLASSES.map((cls) => (
+                <option key={cls} value={cls}>
+                  {CLASS_LABELS[cls]}
                 </option>
               ))}
             </select>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1">
-            <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
-              <p className="text-[10px] text-primary/50 uppercase">Asset_Pair</p>
-              <p className="text-xl font-bold">{market.pair}</p>
-            </div>
-            <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
-              <p className="text-[10px] text-primary/50 uppercase">Current_Price</p>
-              <p className="text-xl font-bold text-primary tracking-tighter">{market.price}</p>
-            </div>
-            <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
-              <p className="text-[10px] text-primary/50 uppercase">24H_Delta</p>
-              <p className="text-xl font-bold text-primary">{market.delta}</p>
-            </div>
-            <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
-              <p className="text-[10px] text-primary/50 uppercase">Volatility_Index</p>
-              <p className="text-xl font-bold text-accent-red">{market.volatility}</p>
-            </div>
+          <div className="flex items-center gap-2">
+            <label className="text-[10px] text-primary/50 uppercase">Market</label>
+            <select
+              value={marketInFilter?.id ?? ""}
+              onChange={(e) => setMarketId(e.target.value)}
+              disabled={emptyClass}
+              className="bg-background-dark border border-primary/40 text-primary px-3 py-2 rounded font-mono text-sm disabled:opacity-40"
+            >
+              {filteredMarkets.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.pack.assetClass === "equity" ? `${m.pair} · SAMPLE` : m.pair}
+                </option>
+              ))}
+            </select>
           </div>
+          {!emptyClass && market ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1">
+              <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
+                <p className="text-[10px] text-primary/50 uppercase">Asset_Pair</p>
+                <p className="text-xl font-bold">{market.pair}</p>
+              </div>
+              <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
+                <p className="text-[10px] text-primary/50 uppercase">Current_Price</p>
+                <p className="text-xl font-bold text-primary tracking-tighter">{market.price}</p>
+              </div>
+              <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
+                <p className="text-[10px] text-primary/50 uppercase">24H_Delta</p>
+                <p className="text-xl font-bold text-primary">{market.delta}</p>
+              </div>
+              <div className="bg-neutral-dark/80 border border-primary/30 p-3 rounded">
+                <p className="text-[10px] text-primary/50 uppercase">Volatility_Index</p>
+                <p className="text-xl font-bold text-accent-red">{market.volatility}</p>
+              </div>
+            </div>
+          ) : null}
         </div>
 
+        {emptyClass ? (
+          <div className="flex-1 border border-primary/30 rounded-lg p-8 font-mono text-sm text-slate-400 space-y-2">
+            <p className="text-primary font-bold">
+              EMPTY_CLASS · {CLASS_LABELS[assetFilter as AssetClass] ?? assetFilter}
+            </p>
+            <p>
+              No SAMPLE packs in this asset class yet. Switch to Equities or Crypto, or
+              leave Class = All.
+            </p>
+          </div>
+        ) : null}
+
         {/* Chart Container */}
+        {!emptyClass && market ? (
         <div className="flex-1 bg-background-dark border-2 border-primary/40 rounded-lg relative overflow-hidden terminal-grid p-4 min-h-[350px]">
           <div className="absolute top-4 right-4 flex gap-2 z-10">
-            <span className="flex items-center gap-1 text-[10px] text-primary bg-neutral-dark/80 px-2 py-1 rounded border border-primary/30">
-              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> LIVE_FEED
+            <span className="flex items-center gap-1 text-[10px] text-primary bg-neutral-dark/80 px-2 py-1 rounded border border-primary/30 font-mono">
+              <span
+                className={`w-1.5 h-1.5 rounded-full ${
+                  dataProvider.mode === "delayed" ? "bg-primary/50" : "bg-primary"
+                }`}
+              />
+              {dataProvider.label}_FEED
             </span>
           </div>
           <div className="h-[350px] w-full">
@@ -118,8 +224,10 @@ export default function Market() {
             />
           </div>
         </div>
+        ) : null}
 
         {/* Overlays & Controls */}
+        {!emptyClass && market ? (
         <div className="bg-neutral-dark/80 border border-primary/30 rounded-lg p-4 space-y-4">
           <div className="flex flex-col md:flex-row gap-6 items-center justify-between">
             <div className="w-full md:w-auto">
@@ -181,9 +289,14 @@ export default function Market() {
             </div>
           )}
         </div>
+        ) : null}
 
-        {historyOpen && <HistoryModal data={ohlcData} onClose={() => setHistoryOpen(false)} />}
-        {scanOpen && <ScanPatternsModal patterns={detectedPatterns} onClose={() => setScanOpen(false)} />}
+        {historyOpen && market ? (
+          <HistoryModal data={ohlcData} onClose={() => setHistoryOpen(false)} />
+        ) : null}
+        {scanOpen && market ? (
+          <ScanPatternsModal patterns={detectedPatterns} onClose={() => setScanOpen(false)} />
+        ) : null}
         {popover && (
           <IndicatorPopover
             overlayId={popover.overlayId}

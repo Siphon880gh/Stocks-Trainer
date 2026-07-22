@@ -28,7 +28,7 @@ AI-oriented codebase map for safe modification, feature tracing, and implementat
 | Layer | Choice |
 |--------|--------|
 | UI | React 19 + TypeScript |
-| Build | Vite 6 (`npm run dev` → port **3000**, host `0.0.0.0`) |
+| Build | Vite 6 (`npm run dev` → port **3001**, host `0.0.0.0`) |
 | Styling | Tailwind CSS 4 (`@tailwindcss/vite`), CRT/terminal theme in `src/index.css` (~60 lines) |
 | Routing | `react-router-dom` v7 |
 | Charts | Recharts (`MarketChart`); custom SVG (`CandlestickChart`) |

@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, type MouseEvent } from "react";
 import type { OHLC } from "../lib/ohlcData";
 
 interface CandlestickChartProps {
@@ -41,7 +41,7 @@ export default function CandlestickChart({
     padding.top + innerHeight - ((value - yMin) / yRange) * innerHeight;
   const x = (i: number) => padding.left + i * step + step / 2;
 
-  const handleMouseMove = (e: React.MouseEvent, i: number) => {
+  const handleMouseMove = (e: MouseEvent, i: number) => {
     setHoveredIndex(i);
     const rect = containerRef.current?.getBoundingClientRect();
     if (rect) setTooltipPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });

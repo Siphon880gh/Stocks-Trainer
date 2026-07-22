@@ -1,3 +1,5 @@
+import type { AssetClass } from "./samplePacks";
+
 export type PatternId =
   | "doji"
   | "hammer"
@@ -24,6 +26,14 @@ export interface QuizQuestion {
   patternKey?: string;
   overlayId?: string;
   highlightIndex?: number;
+  /** Optional Archive literacy term id for glossary deep-link */
+  glossaryTermId?: string;
+  /** Optional structured financial snapshot id (E4.M2 card) */
+  snapshotId?: string;
+  /** Planner filter tag (E4.M3.S2) */
+  assetClass?: AssetClass;
+  /** Optional E1 sample pack id for equity-backed drills */
+  samplePackId?: string;
 }
 
 const OPTIONS_3: QuizOption[] = [
@@ -187,6 +197,8 @@ export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: INDICATOR_OPTIONS,
     explanation: "SMA averages closing prices over a period; price above SMA = bullish bias.",
     overlayId: "sma",
+    assetClass: "equity",
+    samplePackId: "eq-mega-tech",
   },
   {
     id: "IN-02",
@@ -195,6 +207,8 @@ export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: INDICATOR_OPTIONS,
     explanation: "EMA reacts faster to new data; popular for swing trading.",
     overlayId: "ema",
+    assetClass: "equity",
+    samplePackId: "eq-index-proxy",
   },
   {
     id: "IN-03",
@@ -203,6 +217,8 @@ export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: INDICATOR_OPTIONS,
     explanation: "RSI above 70 = overbought; below 30 = oversold.",
     overlayId: "rsi",
+    assetClass: "equity",
+    samplePackId: "eq-cyclical",
   },
   {
     id: "IN-04",
@@ -211,6 +227,8 @@ export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: INDICATOR_OPTIONS,
     explanation: "MACD crossovers signal potential trend changes.",
     overlayId: "macd",
+    assetClass: "equity",
+    samplePackId: "eq-mega-tech",
   },
   {
     id: "IN-05",
@@ -219,11 +237,325 @@ export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
     options: INDICATOR_OPTIONS,
     explanation: "Bollinger Bands: squeeze = low volatility before breakout.",
     overlayId: "bollinger",
+    assetClass: "equity",
+    samplePackId: "eq-index-proxy",
+  },
+];
+
+/** Equity-pack-backed candle/indicator drills beyond the E4.M0 indicators gate (E4.M3). */
+export const EQUITY_PATTERN_QUIZ_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "EQ-PAT-01",
+    prompt:
+      "SAMPLE mega-cap tech pack: after a mid-session dip, which candle pattern best matches a long lower wick reclaim near the lows?",
+    correctAnswer: "B",
+    options: OPTIONS_3,
+    explanation:
+      "A hammer-like reclaim after a dip is a process cue: sellers pushed, buyers absorbed. Tied to eq-mega-tech SAMPLE pack.",
+    patternKey: "hammer",
+    highlightIndex: 2,
+    assetClass: "equity",
+    samplePackId: "eq-mega-tech",
+  },
+  {
+    id: "EQ-PAT-02",
+    prompt:
+      "SAMPLE index proxy pack: tight range, small bodies. Which indicator family best describes a middle band with volatility envelopes?",
+    correctAnswer: "E",
+    options: INDICATOR_OPTIONS,
+    explanation:
+      "Bollinger-style bands suit calm index ranges—watch squeezes before breakouts. Tied to eq-index-proxy SAMPLE pack.",
+    overlayId: "bollinger",
+    assetClass: "equity",
+    samplePackId: "eq-index-proxy",
+  },
+  {
+    id: "EQ-PAT-03",
+    prompt:
+      "SAMPLE cyclical energy pack: sharp selloff then bounce. Which oscillator (0–100) flags oversold extremes after a washout?",
+    correctAnswer: "C",
+    options: INDICATOR_OPTIONS,
+    explanation:
+      "RSI-style oscillators help label oversold after a cyclical dump—not a buy signal alone. Tied to eq-cyclical SAMPLE pack.",
+    overlayId: "rsi",
+    assetClass: "equity",
+    samplePackId: "eq-cyclical",
+  },
+  {
+    id: "EQ-PAT-04",
+    prompt:
+      "On the SAMPLE mega-cap grind, which smoother shows trend direction by averaging closes equally across the window?",
+    correctAnswer: "A",
+    options: INDICATOR_OPTIONS,
+    explanation:
+      "SMA is the equal-weight smoother. Equity pack context: trend bias vs noise on eq-mega-tech.",
+    overlayId: "sma",
+    assetClass: "equity",
+    samplePackId: "eq-mega-tech",
   },
 ];
 
 export const POINTS_PER_CORRECT = 50;
 export const STREAK_BONUS = 10;
+
+/** Equities literacy + risk/horizon (E4.M1) — text quizzes, SAMPLE teaching copy. */
+export const EQUITY_LITERACY_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "EL-01",
+    prompt: "What is a share of stock?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "A loan to a company", description: "That describes a bond, not equity." },
+      { id: "B", label: "Ownership slice of a company", description: "Equity stake in the business." },
+      { id: "C", label: "A government IOU", description: "Treasury instruments are debt, not stock." },
+    ],
+    explanation:
+      "A share is a unit of ownership in a company. You own a claim on residual value and (often) voting rights—not a loan.",
+    glossaryTermId: "stock-share",
+  },
+  {
+    id: "EL-02",
+    prompt: "Where do most U.S. listed stocks trade?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Exchanges / regulated markets", description: "e.g. NYSE, Nasdaq (SAMPLE context)." },
+      { id: "B", label: "Only private chat rooms", description: "Public listings use formal markets." },
+      { id: "C", label: "Company break rooms", description: "Not a market venue." },
+    ],
+    explanation:
+      "Listed equities trade on exchanges (and related venues) with public quotes. SAMPLE teaching—not a brokerage recommendation.",
+    glossaryTermId: "exchange",
+  },
+  {
+    id: "EL-03",
+    prompt: "Going long a stock means you expect the price to…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Rise (or stay valuable long-term)", description: "You benefit if value increases." },
+      { id: "B", label: "Fall immediately", description: "That is the short thesis." },
+      { id: "C", label: "Become a bond", description: "Asset class does not change." },
+    ],
+    explanation:
+      "A long position profits if the stock’s value rises (or you collect ownership benefits over time). Shorting bets on a decline.",
+    glossaryTermId: "long-vs-short",
+  },
+  {
+    id: "EL-04",
+    prompt: "Going short a stock (when available) generally bets that price will…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Rise sharply", description: "That favors longs." },
+      { id: "B", label: "Fall", description: "Shorts profit from declines (with extra risk)." },
+      { id: "C", label: "Stay exactly flat forever", description: "Flat markets are not the short thesis." },
+    ],
+    explanation:
+      "Shorting borrows shares to sell now and buy back later cheaper if price falls. Losses can exceed the initial stake—treat as advanced.",
+    glossaryTermId: "long-vs-short",
+  },
+  {
+    id: "EL-05",
+    prompt: "Owning shares means you own…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "The CEO’s personal house", description: "Personal assets ≠ company equity." },
+      { id: "B", label: "A guaranteed paycheck from the Fed", description: "No government wage for shareholders." },
+      { id: "C", label: "A stake in the company itself", description: "Equity ownership in the business entity." },
+    ],
+    explanation:
+      "Shares = ownership in the company (claims on residual earnings/assets after debts), not random personal property of executives.",
+    glossaryTermId: "stock-share",
+  },
+  {
+    id: "EL-06",
+    prompt: "An exchange’s main job for equities is to…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Match buyers and sellers with public prices", description: "Price discovery + liquidity." },
+      { id: "B", label: "Guarantee every trade is profitable", description: "Markets do not remove risk." },
+      { id: "C", label: "Print money for traders", description: "Not an exchange function." },
+    ],
+    explanation:
+      "Exchanges (and market systems) help discover prices and match orders. They do not guarantee profits.",
+    glossaryTermId: "exchange",
+  },
+  {
+    id: "EL-07",
+    prompt: "“Hold” as a decision often fits best when…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "You need adrenaline this minute", description: "Trading for thrills is not a plan." },
+      { id: "B", label: "Your thesis and horizon still look intact", description: "No edge to chase noise." },
+      { id: "C", label: "You forgot what you bought", description: "Amnesia is not a strategy." },
+    ],
+    explanation:
+      "Hold is often correct when nothing material changed vs your plan and time horizon—avoid trading just to feel active.",
+    glossaryTermId: "investing-vs-trading",
+  },
+  {
+    id: "EL-08",
+    prompt: "Investing vs trading — which statement is more accurate?",
+    correctAnswer: "A",
+    options: [
+      {
+        id: "A",
+        label: "Investing usually uses longer horizons; trading shorter ones",
+        description: "Horizon and process differ.",
+      },
+      { id: "B", label: "They are identical words", description: "Different time and process norms." },
+      { id: "C", label: "Trading always has zero risk", description: "False—trading can be riskier." },
+    ],
+    explanation:
+      "Investing typically emphasizes multi-month/year ownership theses; trading emphasizes shorter moves. Match tools to horizon.",
+    glossaryTermId: "investing-vs-trading",
+  },
+  {
+    id: "EL-09",
+    prompt: "Higher expected return usually comes with…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Zero risk by definition", description: "No free lunch." },
+      { id: "B", label: "A government guarantee", description: "Listed equities are not risk-free." },
+      { id: "C", label: "Higher risk / uncertainty", description: "Risk–return tradeoff." },
+    ],
+    explanation:
+      "Risk and expected return travel together. Equities can lose value; SAMPLE lessons never erase that.",
+    glossaryTermId: "risk-horizon",
+  },
+  {
+    id: "EL-10",
+    prompt: "If your goal is multi-year compounding, a useful first filter is…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Does this fit my risk and time horizon?", description: "Process before ticker chase." },
+      { id: "B", label: "Can I double money before lunch?", description: "Lottery thinking." },
+      { id: "C", label: "Is the chart neon green right now?", description: "Color alone is not a thesis." },
+    ],
+    explanation:
+      "Start with horizon and risk capacity, then instruments. Short-horizon thrills often fight a long-horizon plan.",
+    glossaryTermId: "risk-horizon",
+  },
+];
+
+/** Financial statement literacy (E4.M2) — uses SAMPLE snapshot cards. */
+export const FINANCIAL_LITERACY_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "FL-01",
+    prompt: "On the SAMPLE snapshot, which line best captures total sales before expenses?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Revenue", description: "Top-line sales." },
+      { id: "B", label: "Net income", description: "Bottom line after expenses." },
+      { id: "C", label: "Liabilities", description: "Balance sheet claim, not sales." },
+    ],
+    explanation: "Revenue is the top line—sales before costs. Net income is what remains after expenses.",
+    snapshotId: "snap-mega-tech",
+  },
+  {
+    id: "FL-02",
+    prompt: "Net income is best described as…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Cash sitting in the bank", description: "Cash is a balance/cash-flow idea." },
+      { id: "B", label: "Profit after expenses (accounting)", description: "Bottom-line earnings." },
+      { id: "C", label: "Total assets", description: "Balance sheet stock of resources." },
+    ],
+    explanation:
+      "Net income is accounting profit after expenses. It is not the same as cash in the bank.",
+    snapshotId: "snap-mega-tech",
+  },
+  {
+    id: "FL-03",
+    prompt: "Cash from operations vs net income — which is true?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "They are always identical", description: "Timing and accruals differ." },
+      { id: "B", label: "Cash flow never matters", description: "Cash keeps the business alive." },
+      { id: "C", label: "They can diverge; cash ≠ profit", description: "Accruals vs cash timing." },
+    ],
+    explanation:
+      "Profit can include non-cash items and timing differences. Operating cash flow tracks cash generated by the business.",
+    snapshotId: "snap-mega-tech",
+  },
+  {
+    id: "FL-04",
+    prompt: "Assets on the balance sheet roughly mean…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Resources the company controls", description: "What it owns/controls." },
+      { id: "B", label: "Only tomorrow’s revenue", description: "Revenue is income statement." },
+      { id: "C", label: "Money owed to lenders only", description: "That is liabilities." },
+    ],
+    explanation: "Assets are resources controlled by the company (cash, inventory, PP&E, etc.).",
+    snapshotId: "snap-cyclical",
+  },
+  {
+    id: "FL-05",
+    prompt: "Liabilities are…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Owner’s residual claim", description: "That is equity." },
+      { id: "B", label: "Obligations / claims by others", description: "Debt, payables, etc." },
+      { id: "C", label: "Marketing slogans", description: "Not a financial statement line." },
+    ],
+    explanation: "Liabilities are obligations—what the company owes. Equity is the residual claim after liabilities.",
+    snapshotId: "snap-cyclical",
+  },
+  {
+    id: "FL-06",
+    prompt: "Simple P/E on the SAMPLE card is closest to…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Price ÷ earnings", description: "How many $ of price per $ of earnings." },
+      { id: "B", label: "Revenue ÷ assets", description: "Different ratio." },
+      { id: "C", label: "Cash ÷ liabilities", description: "Liquidity-style idea, not P/E." },
+    ],
+    explanation:
+      "P/E = price per share ÷ earnings per share (here shown as price / earnings on the SAMPLE card).",
+    snapshotId: "snap-mega-tech",
+  },
+  {
+    id: "FL-07",
+    prompt: "Net margin on the snapshot is…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Assets ÷ liabilities", description: "Leverage-style ratio." },
+      { id: "B", label: "Price ÷ revenue", description: "Not net margin." },
+      { id: "C", label: "Net income ÷ revenue", description: "Profitability percent." },
+    ],
+    explanation: "Net margin = net income / revenue. Higher means more of each sales dollar kept as profit.",
+    snapshotId: "snap-mega-tech",
+  },
+  {
+    id: "FL-08",
+    prompt: "Free cash flow is useful because it approximates…",
+    correctAnswer: "A",
+    options: [
+      {
+        id: "A",
+        label: "Cash left after operating needs / reinvestment",
+        description: "Cash available after sustaining the business.",
+      },
+      { id: "B", label: "Marketing budget only", description: "Too narrow." },
+      { id: "C", label: "Share count", description: "Equity structure, not cash flow." },
+    ],
+    explanation:
+      "Free cash flow approximates cash generated after operating cash needs and sustaining investment—useful for flexibility (SAMPLE teaching).",
+    snapshotId: "snap-cyclical",
+  },
+  {
+    id: "FL-09",
+    prompt: "If net income is positive but operating cash flow is weak, a careful reader…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Ignores cash forever", description: "Cash stress can sink a firm." },
+      { id: "B", label: "Asks why cash and profit diverge", description: "Process check." },
+      { id: "C", label: "Assumes fraud automatically", description: "Investigate, don’t jump." },
+    ],
+    explanation:
+      "Divergence invites questions (working capital, accruals, one-offs)—not an automatic conclusion. Read both statements.",
+    snapshotId: "snap-cyclical",
+  },
+];
 
 export type QuizGroupId =
   | "all"
@@ -235,7 +567,10 @@ export type QuizGroupId =
   | "shooting-star"
   | "inverted-hammer"
   | "morning-star"
-  | "indicators";
+  | "indicators"
+  | "equity-patterns"
+  | "equity-literacy"
+  | "financial-literacy";
 
 export interface QuizGroup {
   id: QuizGroupId;
@@ -245,7 +580,25 @@ export interface QuizGroup {
 }
 
 export const QUIZ_GROUPS: QuizGroup[] = [
+  {
+    id: "equity-literacy",
+    name: "Equities Literacy",
+    description: "Stocks, exchanges, long/short, risk & horizon (SAMPLE beginner path)",
+    icon: "account_balance",
+  },
+  {
+    id: "financial-literacy",
+    name: "Statements Literacy",
+    description: "Revenue, profit vs cash, balance sheet basics, P/E & margin (SAMPLE snapshots)",
+    icon: "table_chart",
+  },
   { id: "indicators", name: "Indicators", description: "Identify SMA, EMA, RSI, MACD, Bollinger Bands", icon: "show_chart" },
+  {
+    id: "equity-patterns",
+    name: "Equity Pack Drills",
+    description: "Candle/indicator drills tagged to E1 equity SAMPLE packs (post-P0)",
+    icon: "candlestick_chart",
+  },
   { id: "all", name: "All Patterns", description: "Mix of all candlestick patterns", icon: "shuffle" },
   { id: "hammer", name: "Hammer Family", description: "Long lower shadow, small body at top—bullish reversal", icon: "vertical_align_bottom" },
   { id: "doji", name: "Doji Family", description: "Open ≈ close, long wicks—indecision", icon: "trending_flat" },
@@ -257,16 +610,36 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   { id: "morning-star", name: "Morning Star", description: "Three-candle bullish reversal", icon: "nightlight" },
 ];
 
+function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
+  if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
+  if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
+  if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
+  if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
+  return QUIZ_QUESTIONS;
+}
+
 export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
+  if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
+  if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
+  if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
   if (groupId === "all") return QUIZ_QUESTIONS;
   return QUIZ_QUESTIONS.filter((q) => q.patternKey === groupId);
+}
+
+/** Planner helper: filter questions by asset class tag. */
+export function getQuestionsByAssetClass(assetClass: AssetClass): QuizQuestion[] {
+  return [
+    ...INDICATOR_QUIZ_QUESTIONS,
+    ...EQUITY_PATTERN_QUIZ_QUESTIONS,
+    ...QUIZ_QUESTIONS,
+  ].filter((q) => q.assetClass === assetClass);
 }
 
 export function getQuestionIndexInGroup(globalIndex: number, groupId: QuizGroupId): number {
   if (groupId === "all") return globalIndex;
   const groupQuestions = getQuestionsForGroup(groupId);
-  const q = groupId === "indicators" ? INDICATOR_QUIZ_QUESTIONS[globalIndex] : QUIZ_QUESTIONS[globalIndex];
+  const q = questionsArrayForGroup(groupId)[globalIndex];
   return groupQuestions.findIndex((gq) => gq.id === q?.id);
 }
 
@@ -274,6 +647,5 @@ export function getGlobalIndexFromGroup(groupIndex: number, groupId: QuizGroupId
   if (groupId === "all") return groupIndex;
   const groupQuestions = getQuestionsForGroup(groupId);
   const q = groupQuestions[groupIndex];
-  const arr = groupId === "indicators" ? INDICATOR_QUIZ_QUESTIONS : QUIZ_QUESTIONS;
-  return arr.findIndex((gq) => gq.id === q?.id);
+  return questionsArrayForGroup(groupId).findIndex((gq) => gq.id === q?.id);
 }

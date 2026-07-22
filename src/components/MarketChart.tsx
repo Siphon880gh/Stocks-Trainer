@@ -134,10 +134,12 @@ export default function MarketChart({
               y1={Math.min(entry.open, entry.close)}
               y2={Math.max(entry.open, entry.close)}
               yAxisId="price"
-              fill={entry.close >= entry.open ? BULLISH : BEARISH}
-              fillOpacity={0.95}
-              stroke={entry.close >= entry.open ? BULLISH : BEARISH}
-              strokeWidth={1}
+              {...({
+                fill: entry.close >= entry.open ? BULLISH : BEARISH,
+                fillOpacity: 0.95,
+                stroke: entry.close >= entry.open ? BULLISH : BEARISH,
+                strokeWidth: 1,
+              } as Record<string, string | number>)}
             />
             <ReferenceLine
               yAxisId="price"

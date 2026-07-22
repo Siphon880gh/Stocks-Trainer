@@ -25,17 +25,17 @@ Parent map: [`EPIC_MAP.md`](./EPIC_MAP.md) · Runtime state: [`.agents/state.jso
 
 | # | Milestone | Epic | Tier | Status |
 |---|-----------|------|------|--------|
-| 1 | E1.M1 | E1 | P0 | todo |
-| 2 | E3.M1 | E3 | P0 | todo |
-| 3 | E4.M1 | E4 | P0 | todo |
-| 4 | E4.M2 | E4 | P0 | todo |
-| 5 | E4.M0 | E4 | P0 | todo |
-| 6 | E5.M1 | E5 | P0 | todo |
-| 7 | E5.M3 | E5 | P0 | todo |
-| 8 | E5.M2 | E5 | P0 (thin) | todo |
-| 9 | E2.M1 | E2 | P0 (thin) | todo |
-| 10 | E3.M2 | E3 | P0 | todo |
-| 11 | E6.M1 | E6 | P0 | todo |
+| 1 | E1.M1 | E1 | P0 | done |
+| 2 | E3.M1 | E3 | P0 | done |
+| 3 | E4.M1 | E4 | P0 | done |
+| 4 | E4.M2 | E4 | P0 | done |
+| 5 | E4.M0 | E4 | P0 | done |
+| 6 | E5.M1 | E5 | P0 | done |
+| 7 | E5.M3 | E5 | P0 | done |
+| 8 | E5.M2 | E5 | P0 (thin) | done |
+| 9 | E2.M1 | E2 | P0 (thin) | done |
+| 10 | E3.M2 | E3 | P0 | done |
+| 11 | E6.M1 | E6 | P0 | done |
 
 **MVP freeze:** Beginner Equities Path completable — literacy + chart gate + case engine + earnings pack + thin company news + unlock + live dashboard + path-complete credential.
 
@@ -43,13 +43,23 @@ Parent map: [`EPIC_MAP.md`](./EPIC_MAP.md) · Runtime state: [`.agents/state.jso
 
 | # | Milestone | Epic | Tier | Status |
 |---|-----------|------|------|--------|
-| 12 | E5.M2b | E5 | Post | todo |
-| 13 | E5.M4 | E5 | Post | todo |
-| 14 | E5.M5 | E5 | Post | todo |
-| 15 | E5.M6 | E5 | Post | todo |
-| 16 | E2.M2 | E2 | Post | todo |
-| 17 | E4.M3 | E4 | Post | todo |
-| 18 | E1.M2 | E1 | Post | todo |
+| 12 | E5.M2b | E5 | Post | done |
+| 13 | E5.M4 | E5 | Post | done |
+| 14 | E5.M5 | E5 | Post | done |
+| 15 | E5.M6 | E5 | Post | done |
+| 16 | E2.M2 | E2 | Post | done |
+| 17 | E4.M3 | E4 | Post | done |
+| 18 | E1.M2 | E1 | Post | done |
+
+### Later — Practice Draw & data/accounts
+
+| # | Milestone | Epic | Tier | Status |
+|---|-----------|------|------|--------|
+| 19 | E7.M1 | E7 | Later | done |
+| 20 | E7.M2 | E7 | Later | done |
+| 21 | E8.M1 | E8 | Later | done |
+| 22 | E8.M2 | E8 | Later | done |
+| 23 | E8.M3 | E8 | Later | done |
 
 ---
 
@@ -190,7 +200,7 @@ Parent map: [`EPIC_MAP.md`](./EPIC_MAP.md) · Runtime state: [`.agents/state.jso
 
 | ID | Story | Acceptance |
 |----|--------|------------|
-| E5.M5.S1 | Grow toward “many” cases across packs (target: ≥20 total) | Count documented in this file when shipped |
+| E5.M5.S1 | Grow toward “many” cases across packs (target: ≥20 total) | Shipped: **20** cases (`CASE_LIBRARY_COUNT` in `src/lib/caseStudies.ts`) |
 | E5.M5.S2 | Consistent tags for planner (`thinkingMode`, `contextType`, difficulty) | All cases tagged |
 | E5.M5.S3 | Difficulty: `beginner` \| `intermediate` | Beginner path only pulls `beginner` by default |
 
@@ -242,13 +252,53 @@ Parent map: [`EPIC_MAP.md`](./EPIC_MAP.md) · Runtime state: [`.agents/state.jso
 
 ---
 
-## Later epics (stories deferred)
+## Later — E7 Practice Draw & E8 Data/Accounts
 
-### E7 — Practice Draw
-- Graded sketch vs pattern templates; optional milestone link
+Enter only after `post_mvp_order` is complete (see `milestones.later_order` in `.agents/state.json`). Prefer SAMPLE / mock / delayed adapters; do not require paid API keys for acceptance.
 
-### E8 — Live data & accounts
-- Provider adapter, auth, cloud sync of progress
+### E7.M1 — Practice Draw canvas + grade vs template *(Later)*
+**Outcome:** Learner sketches a candlestick pattern and gets a grade against a template.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E7.M1.S1 | Drawable canvas on `/practice-draw` (pointer/touch) with clear / undo | User can draw strokes; not a static placeholder |
+| E7.M1.S2 | Pattern template picker (Doji, Hammer, Engulfing minimum) | Selecting a template shows reference silhouette or guide |
+| E7.M1.S3 | Grade sketch vs template (coarse similarity / checklist score) | Submit yields correct / partial / incorrect + short process tip |
+| E7.M1.S4 | Persist last attempt in ProgressStore (or dedicated key) | Survives refresh |
+
+### E7.M2 — Practice Draw path link *(Later)*
+**Outcome:** Draw practice can feed a milestone or Dashboard CTA.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E7.M2.S1 | Optional contentRef / Dashboard link into Practice Draw | Reachable from Dashboard or Training without orphan route |
+| E7.M2.S2 | Completing a graded draw can mark a progress flag or tip state | Visible writeback (badge, tip, or milestone note) |
+
+### E8.M1 — Market data adapter (mock / delayed) *(Later)*
+**Outcome:** Pluggable feed behind Market charts; default stays SAMPLE.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E8.M1.S1 | `MarketDataProvider` interface + SAMPLE/mock implementation | Market page can load OHLC via provider, not only static import |
+| E8.M1.S2 | UI label distinguishes SAMPLE vs DELAYED (never fake LIVE) | Copy matches provider mode |
+| E8.M1.S3 | Swap provider via config/flag without rewriting chart stack | One mock + one alternate (e.g. delayed replay) selectable |
+
+### E8.M2 — Account shell *(Later)*
+**Outcome:** Local identity shell; no paid IdP required for acceptance.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E8.M2.S1 | Local display-name / learner id in ProgressStore | Editable; persists |
+| E8.M2.S2 | Signed-out vs signed-in-local states in UI chrome | Clear terminal-tone status; no real OAuth required |
+
+### E8.M3 — Progress export / sync stub *(Later)*
+**Outcome:** Learner can export/import progress JSON; cloud sync stubbed.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E8.M3.S1 | Export progress JSON download | File matches ProgressStore schema |
+| E8.M3.S2 | Import progress JSON with schema validation + corrupt reject | Happy path restore; bad file shows recovery message |
+| E8.M3.S3 | Cloud sync interface stub (`noop` or local queue) | Typed module; UI shows “sync stub / local only” — no silent fake cloud |
 
 ---
 
@@ -265,13 +315,13 @@ Parent map: [`EPIC_MAP.md`](./EPIC_MAP.md) · Runtime state: [`.agents/state.jso
 
 ## MVP freeze checklist
 
-- [ ] E1.M1 equity packs live  
-- [ ] E3.M1 path IDs + progress persist  
-- [ ] E4.M1 + E4.M2 + E4.M0 complete on path  
-- [ ] E5.M1 engine + E5.M3 (≥3) + E5.M2 thin company news  
-- [ ] E2.M1 Beginner template + E3.M2 unlocks + E6.M1 live CTA  
-- [ ] Path-complete credential visible  
-- [ ] Soft-gate short in force for beginner cases  
+- [x] E1.M1 equity packs live  
+- [x] E3.M1 path IDs + progress persist  
+- [x] E4.M1 + E4.M2 + E4.M0 complete on path  
+- [x] E5.M1 engine + E5.M3 (≥3) + E5.M2 thin company news  
+- [x] E2.M1 Beginner template + E3.M2 unlocks + E6.M1 live CTA  
+- [x] Path-complete credential visible  
+- [x] Soft-gate short in force for beginner cases  
 
 **Only then:** post-P0 skill depth (E5.M2b → E5.M4 → E5.M5 → E5.M6 → E2.M2 → E4.M3 → E1.M2)
 
@@ -279,4 +329,4 @@ Parent map: [`EPIC_MAP.md`](./EPIC_MAP.md) · Runtime state: [`.agents/state.jso
 
 ## Next action
 
-Start **E1.M1.S1** when implementing. Update the Status column in the build-order tables as work proceeds.
+**All queues complete** (`implementation_order`, `post_mvp_order`, `later_order`). Global Done.

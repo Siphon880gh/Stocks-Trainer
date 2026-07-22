@@ -1,0 +1,242 @@
+import {
+  BEGINNER_EQUITIES_MILESTONE_IDS,
+  BEGINNER_EQUITIES_PATH_ID,
+  DECISION_MAKER_MILESTONE_IDS,
+  DECISION_MAKER_PATH_ID,
+  getMilestoneStatus,
+  getPathId,
+  isDecisionMakerPathComplete,
+  loadProgress,
+  milestoneOrderForPathId,
+  type BeginnerEquitiesMilestoneId,
+  type MilestoneStatus,
+} from "./progressStore";
+import {
+  BEGINNER_EQUITIES_PATH,
+  DECISION_MAKER_PATH,
+  getPathMilestoneNode,
+  getPathTemplate,
+  type PathMilestoneNode,
+} from "./learningPaths";
+import type { QuizGroupId } from "./quizData";
+
+export interface PathMilestoneDef {
+  id: string;
+  title: string;
+  summary: string;
+  contentRefs: string[];
+  unlockFrom: string[];
+  coachTip: string;
+  /** Training deep-link group when this step is a quiz gate */
+  trainingGroup?: QuizGroupId;
+  /** True for graded decision case packs (soft-gated by E4.M0) */
+  isGradedCasePack: boolean;
+  casesPack?: "earnings" | "company-news" | "macro-news" | "combined";
+}
+
+function nodeToDef(
+  node: PathMilestoneNode,
+  extras: Pick<
+    PathMilestoneDef,
+    "summary" | "trainingGroup" | "isGradedCasePack" | "casesPack"
+  >
+): PathMilestoneDef {
+  return {
+    id: node.id,
+    title: node.title,
+    contentRefs: node.contentRefs,
+    unlockFrom: node.unlockFrom,
+    coachTip: node.coachTip,
+    ...extras,
+  };
+}
+
+/** UI + gate view of Beginner Equities (backed by E2.M1 template). */
+export const BEGINNER_PATH_MILESTONES: PathMilestoneDef[] =
+  BEGINNER_EQUITIES_PATH.milestones.map((node) => {
+    if (node.id === "E4.M1") {
+      return nodeToDef(node, {
+        summary: "Stocks, exchanges, long/short, risk & horizon",
+        trainingGroup: "equity-literacy",
+        isGradedCasePack: false,
+      });
+    }
+    if (node.id === "E4.M2") {
+      return nodeToDef(node, {
+        summary: "Revenue, profit vs cash, P/E & margin (SAMPLE cards)",
+        trainingGroup: "financial-literacy",
+        isGradedCasePack: false,
+      });
+    }
+    if (node.id === "E4.M0") {
+      return nodeToDef(node, {
+        summary: "Candle/indicator fluency via existing Training (required before cases)",
+        trainingGroup: "indicators",
+        isGradedCasePack: false,
+      });
+    }
+    if (node.id === "E5.M3") {
+      return nodeToDef(node, {
+        summary: "Graded decide-and-reveal (earnings / financials)",
+        isGradedCasePack: true,
+        casesPack: "earnings",
+      });
+    }
+    return nodeToDef(node, {
+      summary: "Thin company-news decide-and-reveal packs",
+      isGradedCasePack: true,
+      casesPack: "company-news",
+    });
+  });
+
+/** Decision Maker spine UI defs (E5.M6). */
+export const DECISION_MAKER_PATH_MILESTONES: PathMilestoneDef[] =
+  DECISION_MAKER_PATH.milestones.map((node) => {
+    if (node.id === "E5.M3") {
+      return nodeToDef(node, {
+        summary: "Earnings / financials decide-and-reveal",
+        isGradedCasePack: true,
+        casesPack: "earnings",
+      });
+    }
+    if (node.id === "E5.M2") {
+      return nodeToDef(node, {
+        summary: "Company-news decide-and-reveal",
+        isGradedCasePack: true,
+        casesPack: "company-news",
+      });
+    }
+    if (node.id === "E5.M2b") {
+      return nodeToDef(node, {
+        summary: "Macro / geopolitics intro cases",
+        isGradedCasePack: true,
+        casesPack: "macro-news",
+      });
+    }
+    return nodeToDef(node, {
+      summary: "Combined news + statements; horizon partial credit",
+      isGradedCasePack: true,
+      casesPack: "combined",
+    });
+  });
+
+export const CHART_GATE_MILESTONE_ID: BeginnerEquitiesMilestoneId = "E4.M0";
+export const CHART_GATE_TRAINING_GROUP: QuizGroupId = "indicators";
+
+export function activePathDefs(): PathMilestoneDef[] {
+  return getPathId() === DECISION_MAKER_PATH_ID
+    ? DECISION_MAKER_PATH_MILESTONES
+    : BEGINNER_PATH_MILESTONES;
+}
+
+export function getPathMilestone(id: string): PathMilestoneDef | undefined {
+  return (
+    BEGINNER_PATH_MILESTONES.find((m) => m.id === id) ??
+    DECISION_MAKER_PATH_MILESTONES.find((m) => m.id === id)
+  );
+}
+
+/** Chart soft-gate: E5 graded packs stay locked until E4.M0 is complete. */
+export function isChartGateComplete(): boolean {
+  return getMilestoneStatus(CHART_GATE_MILESTONE_ID) === "complete";
+}
+
+export function isGradedCasePackLocked(milestoneId: string): boolean {
+  const def = getPathMilestone(milestoneId);
+  if (!def?.isGradedCasePack) return false;
+  return !isChartGateComplete();
+}
+
+/** Prior milestones in unlockFrom must be complete (E3.M2). */
+export function isMilestoneUnlocked(milestoneId: string): boolean {
+  const pathId = getPathId();
+  const node = getPathMilestoneNode(milestoneId, pathId);
+  if (!node) return false;
+  if (node.unlockFrom.length === 0) return true;
+  return node.unlockFrom.every((id) => getMilestoneStatus(id) === "complete");
+}
+
+export function canStartQuizGroup(groupId: string): boolean {
+  if (getPathId() === DECISION_MAKER_PATH_ID) {
+    // Decision Maker: literacy quizzes free; chart gate always startable
+    return true;
+  }
+  const def = BEGINNER_PATH_MILESTONES.find((m) => m.trainingGroup === groupId);
+  if (!def) return true;
+  return isMilestoneUnlocked(def.id) || getMilestoneStatus(def.id) === "complete";
+}
+
+export function canStartCasePack(packId: string): boolean {
+  if (!isChartGateComplete()) return false;
+  const def = activePathDefs().find((m) => m.casesPack === packId);
+  if (!def) {
+    // Pack outside active path spine: chart gate only
+    return true;
+  }
+  return isMilestoneUnlocked(def.id) || getMilestoneStatus(def.id) === "complete";
+}
+
+export const CHART_GATE_PREREQ_TIP =
+  "CHART_GATE_REQUIRED: Complete the Indicators Training quiz (E4.M0) before graded decision cases unlock.";
+
+export function trainingHrefForMilestone(id: string): string | null {
+  const def = getPathMilestone(id);
+  if (!def?.trainingGroup) return null;
+  return `/training?group=${def.trainingGroup}&start=1`;
+}
+
+export function listPathStatuses(): Array<PathMilestoneDef & { status: MilestoneStatus }> {
+  return activePathDefs().map((m) => ({
+    ...m,
+    status: getMilestoneStatus(m.id),
+  }));
+}
+
+export function activePathMilestoneId(): string | null {
+  const order = milestoneOrderForPathId(getPathId());
+  for (const id of order) {
+    const status = getMilestoneStatus(id);
+    if (status === "available" || status === "in_progress") return id;
+  }
+  return null;
+}
+
+export function isPathComplete(): boolean {
+  const pathId = getPathId();
+  if (pathId === DECISION_MAKER_PATH_ID) {
+    return isDecisionMakerPathComplete();
+  }
+  return BEGINNER_EQUITIES_MILESTONE_IDS.every(
+    (id) => getMilestoneStatus(id) === "complete"
+  );
+}
+
+/** Ensure pathId exists (E2.M1.S3). Goal picker may still be pending (E2.M2). */
+export function ensureDefaultPathSeeded(): string {
+  const { state } = loadProgress();
+  if (!state.pathId) {
+    return BEGINNER_EQUITIES_PATH_ID;
+  }
+  return getPathId();
+}
+
+export function coachTipForActive(): string {
+  const id = activePathMilestoneId();
+  const pathId = getPathId();
+  const template = getPathTemplate(pathId);
+  if (!id) {
+    if (isPathComplete()) {
+      return pathId === DECISION_MAKER_PATH_ID
+        ? "Credential unlocked: Decision Maker segment complete. Reset or switch path to practice again."
+        : "Credential unlocked: Beginner Equities Path complete. Review cases or reset to practice again.";
+    }
+    return "Open the next available milestone when ready.";
+  }
+  return (
+    getPathMilestone(id)?.coachTip ??
+    template?.milestones.find((m) => m.id === id)?.coachTip ??
+    "Continue your learning path."
+  );
+}
+
+export { DECISION_MAKER_MILESTONE_IDS, DECISION_MAKER_PATH_ID };

@@ -1,14 +1,19 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, type ReactElement } from "react";
+import { Link } from "react-router-dom";
 import { cn } from "../lib/utils";
 import {
   getQuestionsForGroup,
   POINTS_PER_CORRECT,
   STREAK_BONUS,
   type QuizGroupId,
+  type QuizOption,
 } from "../lib/quizData";
 import { PATTERN_OHLC, SAMPLE_OHLC } from "../lib/ohlcData";
+import { getLiteracyTerm } from "../lib/literacyTerms";
+import { completeMilestoneFromQuiz } from "../lib/progressStore";
 import CandlestickChart from "./CandlestickChart";
 import MarketChart from "./MarketChart";
+import FinancialSnapshotCard from "./FinancialSnapshotCard";
 
 interface QuizModalProps {
   isOpen: boolean;
@@ -68,9 +73,15 @@ export default function QuizModal({
       setSelectedOption(null);
       setSubmitted(false);
     } else {
+      completeMilestoneFromQuiz({
+        groupId,
+        points,
+        streak,
+        accuracy,
+      });
       onClose();
     }
-  }, [currentIndex, questions.length, onClose]);
+  }, [currentIndex, questions.length, onClose, groupId, points, streak, accuracy]);
 
   const handleClose = useCallback(() => {
     onClose();
@@ -149,38 +160,57 @@ export default function QuizModal({
             <p className="text-slate-400">{question.prompt}</p>
           </div>
 
-          {/* Chart Snippet */}
-          <div className="bg-background-dark border-2 border-primary/40 rounded-xl overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2 border-b border-primary/30 bg-neutral-dark/80">
-              <div className="flex gap-2">
-                <div className="w-2 h-2 rounded-full bg-red-500/50" />
-                <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-                <div className="w-2 h-2 rounded-full bg-green-500/50" />
+          {/* Chart, snapshot card, or literacy context */}
+          {question.snapshotId ? (
+            <FinancialSnapshotCard snapshotId={question.snapshotId} />
+          ) : question.overlayId || question.patternKey ? (
+            <div className="bg-background-dark border-2 border-primary/40 rounded-xl overflow-hidden">
+              <div className="flex items-center justify-between px-4 py-2 border-b border-primary/30 bg-neutral-dark/80">
+                <div className="flex gap-2">
+                  <div className="w-2 h-2 rounded-full bg-red-500/50" />
+                  <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
+                  <div className="w-2 h-2 rounded-full bg-green-500/50" />
+                </div>
+                <span className="text-[10px] font-mono text-primary/50 tracking-widest uppercase">
+                  SAMPLE_Chart // Educational
+                </span>
               </div>
-              <span className="text-[10px] font-mono text-primary/50 tracking-widest uppercase">
-                Live_Chart_Feed // BTCUSD_1H
-              </span>
+              <div className="relative h-[300px] w-full bg-background-dark p-4">
+                {question.overlayId ? (
+                  <MarketChart
+                    data={SAMPLE_OHLC}
+                    height={260}
+                    showSMA={question.overlayId === "sma"}
+                    showEMA={question.overlayId === "ema"}
+                    showRSI={question.overlayId === "rsi"}
+                    showMACD={question.overlayId === "macd"}
+                    showBollinger={question.overlayId === "bollinger"}
+                  />
+                ) : (
+                  <CandlestickChart
+                    data={PATTERN_OHLC[question.patternKey ?? "hammer"] ?? PATTERN_OHLC.hammer}
+                    height={260}
+                    highlightIndex={question.highlightIndex ?? 2}
+                  />
+                )}
+              </div>
             </div>
-            <div className="relative h-[300px] w-full bg-background-dark p-4">
-              {question.overlayId ? (
-                <MarketChart
-                  data={SAMPLE_OHLC}
-                  height={260}
-                  showSMA={question.overlayId === "sma"}
-                  showEMA={question.overlayId === "ema"}
-                  showRSI={question.overlayId === "rsi"}
-                  showMACD={question.overlayId === "macd"}
-                  showBollinger={question.overlayId === "bollinger"}
-                />
-              ) : (
-                <CandlestickChart
-                  data={PATTERN_OHLC[question.patternKey ?? "hammer"] ?? PATTERN_OHLC.hammer}
-                  height={260}
-                  highlightIndex={question.highlightIndex ?? 2}
-                />
-              )}
+          ) : (
+            <div className="bg-background-dark border-2 border-primary/40 rounded-xl p-6 space-y-2">
+              <p className="text-[10px] font-mono text-primary/50 tracking-widest uppercase">
+                SAMPLE_Literacy_Context
+              </p>
+              <p className="text-slate-300 text-sm">
+                Equities vocabulary drill — no chart required. Answer from definitions, then read the
+                process debrief.
+              </p>
+              {question.glossaryTermId && getLiteracyTerm(question.glossaryTermId) ? (
+                <p className="text-primary/70 text-xs font-mono">
+                  Related term: {getLiteracyTerm(question.glossaryTermId)!.name}
+                </p>
+              ) : null}
             </div>
-          </div>
+          )}
 
           {/* Options */}
           <div className={cn(
@@ -188,14 +218,15 @@ export default function QuizModal({
             question.options.length <= 3 ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 md:grid-cols-5"
           )}>
             {question.options.map((opt) => (
-              <QuizOptionButton
-                key={opt.id}
-                option={opt}
-                selected={selectedOption === opt.id}
-                submitted={submitted}
-                correctAnswer={question.correctAnswer}
-                onSelect={() => !submitted && setSelectedOption(opt.id)}
-              />
+              <span key={opt.id} className="contents">
+                <QuizOptionButton
+                  option={opt}
+                  selected={selectedOption === opt.id}
+                  submitted={Boolean(submitted)}
+                  correctAnswer={question.correctAnswer}
+                  onSelect={() => !submitted && setSelectedOption(opt.id)}
+                />
+              </span>
             ))}
           </div>
 
@@ -216,6 +247,18 @@ export default function QuizModal({
                 <span className="text-primary opacity-50">&gt;</span>
                 <p className="text-slate-300 italic">"{question.explanation}"</p>
               </div>
+              {question.glossaryTermId ? (
+                <div className="flex gap-2">
+                  <span className="text-primary opacity-50">&gt;</span>
+                  <Link
+                    to={`/archive?tab=literacy&open=${question.glossaryTermId}`}
+                    className="text-primary underline hover:opacity-90"
+                    onClick={handleClose}
+                  >
+                    Open glossary: {getLiteracyTerm(question.glossaryTermId)?.name ?? question.glossaryTermId}
+                  </Link>
+                </div>
+              ) : null}
               {selectedOption === question.correctAnswer && (
                 <div className="flex gap-2">
                   <span className="text-primary opacity-50">&gt;</span>
@@ -265,12 +308,12 @@ function QuizOptionButton({
   correctAnswer,
   onSelect,
 }: {
-  option: { id: "A" | "B" | "C" | "D" | "E"; label: string; description: string };
+  option: QuizOption;
   selected: boolean;
   submitted: boolean;
-  correctAnswer: "A" | "B" | "C" | "D" | "E";
+  correctAnswer: QuizOption["id"];
   onSelect: () => void;
-}) {
+}): ReactElement {
   const isCorrect = option.id === correctAnswer;
   const showCorrect = submitted && isCorrect;
   const showIncorrect = submitted && selected && !isCorrect;
