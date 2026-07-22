@@ -6,9 +6,13 @@ import { SAMPLE_OHLC } from "../lib/ohlcData";
 import {
   DECISION_MAKER_PATH_ID,
   isDecisionMakerPathComplete,
+  countCoachingSessionsComplete,
+  isFinancialDrillsComplete,
+  isNewsLiteracyComplete,
   isPathConfirmed,
   isSignedInLocal,
   loadProgress,
+  MARKET_EXPLORER_PATH_ID,
   resetProgress,
   setDisplayName,
   signInLocal,
@@ -26,6 +30,7 @@ import {
   getPathMilestone,
   isGradedCasePackLocked,
   isPathComplete,
+  MARKET_EXPLORER_PATH_MILESTONES,
   trainingHrefForMilestone,
   type PathMilestoneDef,
 } from "../lib/beginnerPath";
@@ -63,7 +68,12 @@ export default function Dashboard() {
   const pathDefs =
     progress.pathId === DECISION_MAKER_PATH_ID
       ? DECISION_MAKER_PATH_MILESTONES
-      : BEGINNER_PATH_MILESTONES;
+      : progress.pathId === MARKET_EXPLORER_PATH_ID
+        ? MARKET_EXPLORER_PATH_MILESTONES
+        : BEGINNER_PATH_MILESTONES;
+  const newsLitDone = isNewsLiteracyComplete(progress);
+  const finDrillsDone = isFinancialDrillsComplete(progress);
+  const coachingDoneCount = countCoachingSessionsComplete(progress);
   const pathDone = isPathComplete();
   const dmDone = isDecisionMakerPathComplete(progress);
   const goalPending = !isPathConfirmed(progress);
@@ -107,7 +117,9 @@ export default function Dashboard() {
   const pathCompleteLabel =
     progress.pathId === DECISION_MAKER_PATH_ID
       ? "DECISION_MAKER_SEGMENT_COMPLETE"
-      : "BEGINNER_EQUITIES_PATH_COMPLETE";
+      : progress.pathId === MARKET_EXPLORER_PATH_ID
+        ? "MARKET_EXPLORER_SEGMENT_COMPLETE"
+        : "BEGINNER_EQUITIES_PATH_COMPLETE";
 
   const signedIn = isSignedInLocal(progress);
   const accountLine = signedIn
@@ -298,6 +310,41 @@ export default function Dashboard() {
                 <span>VIEW_CHARTS_AND_FINANCIALS</span>
               </div>
             </Link>
+            <Link
+              to="/market?nav=1"
+              className="border-neon p-4 bg-neutral-dark/80 flex flex-col gap-1 relative overflow-hidden hover:bg-primary/5 transition-colors sm:col-span-2 lg:col-span-1"
+            >
+              <div className="absolute top-0 right-0 p-1 opacity-20">
+                <span className="material-symbols-outlined text-4xl">explore</span>
+              </div>
+              <p className="text-xs text-primary/70">MARKET_NAV</p>
+              <p className="text-xl font-bold tracking-tight text-primary">
+                Equities · Futures · FX · Crypto
+              </p>
+              <div className="flex items-center gap-1 text-[10px] font-bold text-primary/70">
+                <span>OPEN_NAVIGATOR · CHARTS_LITERACY_DECIDE</span>
+              </div>
+            </Link>
+            <Link
+              to="/coach"
+              className="border-neon p-4 bg-neutral-dark/80 flex flex-col gap-1 relative overflow-hidden hover:bg-primary/5 transition-colors sm:col-span-2 lg:col-span-1"
+            >
+              <div className="absolute top-0 right-0 p-1 opacity-20">
+                <span className="material-symbols-outlined text-4xl">account_tree</span>
+              </div>
+              <p className="text-xs text-primary/70">COACH</p>
+              <p className="text-xl font-bold tracking-tight text-primary">
+                Step Coaching
+              </p>
+              <div className="flex items-center gap-1 text-[10px] font-bold text-primary/70">
+                <span>
+                  FAIL_REWIND_LEARN ·{" "}
+                  {coachingDoneCount > 0
+                    ? `${coachingDoneCount}_DONE`
+                    : "NO_LLM"}
+                </span>
+              </div>
+            </Link>
           </div>
         </section>
 
@@ -340,6 +387,55 @@ export default function Dashboard() {
                   <p className="text-[11px] font-mono text-primary/60 mt-1">
                     COACH: {coachTip}
                   </p>
+                  {coachingDoneCount === 0 ? (
+                    <p className="text-[11px] font-mono text-primary/50 mt-1">
+                      TIP:{" "}
+                      <Link to="/coach" className="underline text-primary">
+                        STEP_COACHING
+                      </Link>{" "}
+                      · fail / rewind / learn (no LLM)
+                    </p>
+                  ) : (
+                    <p className="text-[11px] font-mono text-primary/40 mt-1">
+                      COACHING_FLAG · {coachingDoneCount} session
+                      {coachingDoneCount === 1 ? "" : "s"} reached success
+                    </p>
+                  )}
+                  {!newsLitDone ? (
+                    <p className="text-[11px] font-mono text-primary/50 mt-1">
+                      TIP:{" "}
+                      <Link
+                        to="/training?group=news-literacy"
+                        className="underline text-primary"
+                      >
+                        NEWS_LITERACY
+                      </Link>{" "}
+                      · headline skill (optional drill)
+                    </p>
+                  ) : (
+                    <p className="text-[11px] font-mono text-primary/40 mt-1">
+                      DRILL_FLAG · NEWS_LITERACY complete
+                    </p>
+                  )}
+                  {progress.milestones["E4.M2"]?.status === "complete" &&
+                  !finDrillsDone ? (
+                    <p className="text-[11px] font-mono text-primary/50 mt-1">
+                      TIP:{" "}
+                      <Link
+                        to="/training?group=financial-drills"
+                        className="underline text-primary"
+                      >
+                        STATEMENTS_DRILLS
+                      </Link>{" "}
+                      · extra SAMPLE snapshot practice
+                    </p>
+                  ) : null}
+                  {progress.pathId === MARKET_EXPLORER_PATH_ID ? (
+                    <p className="text-[11px] font-mono text-primary/50 mt-1">
+                      TIP: Equities paths remain for traditional stocks · Explorer =
+                      SAMPLE multi-market
+                    </p>
+                  ) : null}
                 </div>
                 <p className="text-2xl font-bold">{progress.scores.totalPoints} PTS</p>
               </div>
@@ -471,6 +567,16 @@ export default function Dashboard() {
                 <div>
                   <p className="font-bold tracking-widest">CASE_STUDIES</p>
                   <p className="text-[10px] opacity-70">DECIDE_AND_REVEAL</p>
+                </div>
+              </div>
+              <span className="material-symbols-outlined">chevron_right</span>
+            </Link>
+            <Link to="/coach" className="border-neon p-4 flex items-center justify-between group cursor-pointer hover:bg-primary hover:text-background-dark transition-all">
+              <div className="flex items-center gap-4">
+                <span className="material-symbols-outlined text-3xl">account_tree</span>
+                <div>
+                  <p className="font-bold tracking-widest">STEP_COACHING</p>
+                  <p className="text-[10px] opacity-70">DECISION_TREE_WIZARD</p>
                 </div>
               </div>
               <span className="material-symbols-outlined">chevron_right</span>

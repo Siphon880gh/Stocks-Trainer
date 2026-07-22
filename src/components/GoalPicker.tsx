@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   BEGINNER_EQUITIES_PATH,
   DECISION_MAKER_PATH,
+  MARKET_EXPLORER_PATH,
   PATH_TEMPLATES,
   type LearningPathTemplate,
 } from "../lib/learningPaths";
@@ -59,6 +60,12 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
         {selected.id === DECISION_MAKER_PATH.id ? (
           <p className="text-[10px] text-yellow-400/80">
             Chart soft-gate (Indicators quiz) still required before graded cases.
+          </p>
+        ) : null}
+        {selected.id === MARKET_EXPLORER_PATH.id ? (
+          <p className="text-[10px] text-yellow-400/80">
+            SAMPLE multi-market practice only. Traditional stocks stay on Beginner
+            Equities / Decision Maker — Explorer does not replace stock literacy.
           </p>
         ) : null}
       </div>

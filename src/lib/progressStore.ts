@@ -38,6 +38,12 @@ export interface LocalAccount {
   signedInLocal: boolean;
 }
 
+/** Optional drill completions that do not unlock the Equities spine (E10). */
+export interface ProgressDrillFlags {
+  newsLiteracy?: boolean;
+  financialDrills?: boolean;
+}
+
 export interface ProgressState {
   schemaVersion: number;
   pathId: string;
@@ -49,6 +55,10 @@ export interface ProgressState {
   caseResults: Record<string, CaseResultRecord>;
   /** Optional local account; missing → signed-out. */
   account?: LocalAccount;
+  /** Extra Training drills (news / statements) — not path unlock keys */
+  drillFlags?: ProgressDrillFlags;
+  /** Step coaching sessions that reached success (E11 tip flags only — not unlocks) */
+  coachingCompleted?: Record<string, boolean>;
   updatedAt: string;
 }
 
@@ -66,6 +76,9 @@ export const BEGINNER_EQUITIES_PATH_ID = "beginner-equities";
 
 /** Decision Maker path id (E2.M2 / E5.M6). */
 export const DECISION_MAKER_PATH_ID = "decision-maker";
+
+/** Market Explorer — SAMPLE multi-market decide path (E10.M8). */
+export const MARKET_EXPLORER_PATH_ID = "market-explorer";
 
 /**
  * Frozen Beginner Equities milestone IDs (content keys).
@@ -93,8 +106,20 @@ export const DECISION_MAKER_MILESTONE_IDS = [
 export type DecisionMakerMilestoneId =
   (typeof DECISION_MAKER_MILESTONE_IDS)[number];
 
+/** Market Explorer spine: chart gate → futures → forex → crypto. */
+export const MARKET_EXPLORER_MILESTONE_IDS = [
+  "E4.M0",
+  "E10.M5",
+  "E10.M6",
+  "E10.M7",
+] as const;
+
+export type MarketExplorerMilestoneId =
+  (typeof MARKET_EXPLORER_MILESTONE_IDS)[number];
+
 export function milestoneOrderForPathId(pathId: string): readonly string[] {
   if (pathId === DECISION_MAKER_PATH_ID) return DECISION_MAKER_MILESTONE_IDS;
+  if (pathId === MARKET_EXPLORER_PATH_ID) return MARKET_EXPLORER_MILESTONE_IDS;
   return BEGINNER_EQUITIES_MILESTONE_IDS;
 }
 
@@ -148,6 +173,7 @@ export function createProgressForPath(pathId: string): ProgressState {
     scores: emptyScores(),
     streaks: emptyStreaks(),
     caseResults: {},
+    drillFlags: {},
     updatedAt: new Date().toISOString(),
   };
 }
@@ -169,6 +195,8 @@ export function confirmPathSelection(pathId: string): ProgressState {
     streaks: prev.streaks,
     caseResults: prev.caseResults,
     account: prev.account,
+    drillFlags: prev.drillFlags,
+    coachingCompleted: prev.coachingCompleted,
   });
 }
 
@@ -395,13 +423,36 @@ export function completeMilestoneFromQuiz(opts: {
   streak: number;
   accuracy: number;
 }): ProgressState | null {
+  const { state } = loadProgress();
+  const normalized = normalizeProgress(state);
+
+  // E10 drills: persist flags + scores without touching Equities unlock graph
+  if (opts.groupId === "news-literacy" || opts.groupId === "financial-drills") {
+    const drillFlags: ProgressDrillFlags = {
+      ...normalized.drillFlags,
+      ...(opts.groupId === "news-literacy" ? { newsLiteracy: true } : {}),
+      ...(opts.groupId === "financial-drills" ? { financialDrills: true } : {}),
+    };
+    return saveProgress({
+      ...normalized,
+      drillFlags,
+      scores: {
+        totalPoints: opts.points,
+        accuracy: opts.accuracy,
+      },
+      streaks: {
+        current: opts.streak,
+        best: Math.max(normalized.streaks.best, opts.streak),
+      },
+    });
+  }
+
   const milestoneId = QUIZ_GROUP_MILESTONE[opts.groupId];
   if (!milestoneId) return null;
 
-  const { state } = loadProgress();
-  const order = milestoneOrderForPathId(state.pathId);
+  const order = milestoneOrderForPathId(normalized.pathId);
   const idx = order.indexOf(milestoneId);
-  const milestones = { ...state.milestones };
+  const milestones = { ...normalized.milestones };
   milestones[milestoneId] = {
     ...milestones[milestoneId],
     status: "complete",
@@ -417,17 +468,24 @@ export function completeMilestoneFromQuiz(opts: {
     }
   }
 
-  // Decision Maker: chart gate unlocks first case pack
+  // Decision Maker / Market Explorer: chart gate unlocks first case pack on spine
   if (
-    state.pathId === DECISION_MAKER_PATH_ID &&
     milestoneId === "E4.M0" &&
+    normalized.pathId === DECISION_MAKER_PATH_ID &&
     milestones["E5.M3"]?.status === "locked"
   ) {
     milestones["E5.M3"] = { ...milestones["E5.M3"], status: "available" };
   }
+  if (
+    milestoneId === "E4.M0" &&
+    normalized.pathId === MARKET_EXPLORER_PATH_ID &&
+    milestones["E10.M5"]?.status === "locked"
+  ) {
+    milestones["E10.M5"] = { ...milestones["E10.M5"], status: "available" };
+  }
 
   return saveProgress({
-    ...normalizeProgress(state),
+    ...normalized,
     milestones,
     scores: {
       totalPoints: opts.points,
@@ -435,9 +493,51 @@ export function completeMilestoneFromQuiz(opts: {
     },
     streaks: {
       current: opts.streak,
-      best: Math.max(state.streaks.best, opts.streak),
+      best: Math.max(normalized.streaks.best, opts.streak),
     },
   });
+}
+
+export function isNewsLiteracyComplete(state?: ProgressState): boolean {
+  return (state ?? loadProgress().state).drillFlags?.newsLiteracy === true;
+}
+
+export function isFinancialDrillsComplete(state?: ProgressState): boolean {
+  return (state ?? loadProgress().state).drillFlags?.financialDrills === true;
+}
+
+export function isCoachingSessionComplete(
+  slug: string,
+  state?: ProgressState
+): boolean {
+  return (state ?? loadProgress().state).coachingCompleted?.[slug] === true;
+}
+
+export function countCoachingSessionsComplete(state?: ProgressState): number {
+  const map = (state ?? loadProgress().state).coachingCompleted ?? {};
+  return Object.values(map).filter(Boolean).length;
+}
+
+/** Tip flag only — does not alter Beginner unlock graph. */
+export function markCoachingSessionComplete(slug: string): ProgressState {
+  const { state } = loadProgress();
+  if (!slug.trim()) return state;
+  if (state.coachingCompleted?.[slug]) return state;
+  return saveProgress({
+    ...state,
+    coachingCompleted: {
+      ...state.coachingCompleted,
+      [slug]: true,
+    },
+  });
+}
+
+export function isMarketExplorerPathComplete(state?: ProgressState): boolean {
+  const s = state ?? loadProgress().state;
+  if (s.pathId !== MARKET_EXPLORER_PATH_ID) return false;
+  return MARKET_EXPLORER_MILESTONE_IDS.every(
+    (id) => s.milestones[id]?.status === "complete",
+  );
 }
 
 export function recordCaseResult(opts: {

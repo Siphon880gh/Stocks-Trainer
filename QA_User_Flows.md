@@ -159,6 +159,19 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ---
 
+## Flow UF-08b — Market class filters (multi-asset SAMPLE)
+
+**Precondition:** E9 market-types packs shipped (futures / options-context / crypto / forex).
+
+1. Open `/market`. Confirm helper copy: traditional retail = **Equities (stocks)**.
+2. **Class → Equities** → chart for an equity SAMPLE pack.
+3. **Class → Futures** (or Forex / Crypto / Options context) → list non-empty; pick one; chart renders.
+4. Provider remains SAMPLE or DELAYED — no LIVE/REAL_TIME.
+
+**Pass:** At least one non-equity class lists packs; equities path messaging unchanged.
+
+---
+
 ## Flow UF-09 — Archive theory (G8)
 
 1. Dashboard **READ_THEORY** or bottom **CONFIG** → `/archive`.
@@ -237,6 +250,57 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ---
 
+## Flow UF-15 — Market Navigator (E10)
+
+1. Dashboard tile **MARKET_NAV** → `/market?nav=1`.
+2. **MARKET_NAVIGATOR** shows Equities · Futures · Forex · Crypto · Options context.
+3. Select **Forex** → **VIEW_CHARTS** → Class filter Forex + SAMPLE FX packs.
+4. **READ_LITERACY** → Archive literacy term (or Training for Equities).
+5. With chart gate complete: **DECIDE_CASES** → `/cases?market=…` focused packs.
+
+**Pass:** Helper copy states traditional retail = Equities (stocks); no LIVE desk claims.
+
+---
+
+## Flow UF-16 — News literacy quiz (E10)
+
+1. Dashboard tip **NEWS_LITERACY** or Training → group **News Literacy**.
+2. Finish ≥6 questions via QuizModal; glossary links open Archive terms (rumor/priced-in/chase).
+3. Return to Dashboard → tip becomes **DRILL_FLAG · NEWS_LITERACY complete**.
+4. Beginner Equities unlock graph unchanged (E4.M1 etc. not auto-advanced by this drill).
+
+**Pass:** Optional drill; SAMPLE-only copy.
+
+---
+
+## Flow UF-17 — Multi-market SAMPLE case (E10)
+
+**Precondition:** Indicators chart soft-gate complete.
+
+1. Navigator → **Futures** → **DECIDE_CASES** (or `/cases?market=future`).
+2. Open a Futures SAMPLE case → **BUY/SELL/HOLD** → **LOCK DECISION · REVEAL**.
+3. Debrief shows process text (not direction-only).
+4. Optional: GoalPicker **Market Explorer Path** → confirm → spine gate → futures → forex → crypto.
+
+**Pass:** Anti-hindsight; SHORT soft-gated when locked; SAMPLE labels; Equities paths still available via RESET_PATH.
+
+---
+
+## Flow UF-18 — Step coaching (E11)
+
+1. Dashboard tile **COACH** (or side rail **STEP_COACHING**) → `/coach`.
+2. Catalog shows ≥4 sessions with topic + tags; optional **TOPIC_FILTER**.
+3. Open **Chase vs fade a company headline** → `/coach/chase-vs-fade`.
+4. Pick a wrong path (e.g. chase confirmed) → **OUTCOME · WRONG · REVIEW** → **REWIND_TO_DECISION**.
+5. Complete success path → **OUTCOME · SUCCESS** → **RESTART_SESSION** clears trail.
+6. Mid-session: refresh browser → nav state restores from `sessionStorage` (path trail matches).
+7. Collapse/expand **PATH_TRAIL**; optional **DEBUG_NODE_ID**.
+8. Return Dashboard → tip shows **COACHING_FLAG · N session(s) reached success** after a success finish.
+
+**Pass:** No LLM; Beginner unlock graph unchanged; SAMPLE/educational copy only.
+
+---
+
 ## Flow matrix (goal → primary flow)
 
 | Goal | Primary flow | Secondary |
@@ -253,6 +317,9 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 | G10 | UF-11 | UF-05–06 |
 | G11 | UF-12 | — |
 | G12 | UF-13 | UF-04 negative |
+| G13 Navigator / multi-market | UF-15 | UF-17 |
+| G14 News literacy | UF-16 | UF-06 |
+| G15 Step coaching | UF-18 | UF-06 |
 
 ---
 

@@ -1,7 +1,12 @@
 import type { OHLC } from "./ohlcData";
 
 /** Asset class slots for sample universe (UI may ignore empty classes). */
-export type AssetClass = "equity" | "crypto" | "future" | "option_context";
+export type AssetClass =
+  | "equity"
+  | "crypto"
+  | "future"
+  | "option_context"
+  | "forex";
 
 /** Named tradeable / educational instrument identity. */
 export interface Instrument {
@@ -121,21 +126,179 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
 ];
 
 /**
- * Non-equity class slots (E1.M1.S4).
- * `future` / `option_context` stay empty so UI can ignore them — no multi-asset product promise.
- * Crypto holds minimal SAMPLE packs (also exposed via Market adapter).
+ * Non-equity class slots.
+ * Crypto: seeded via markets.ts. Futures E9.M1 · options-context E9.M2 · forex E9.M4.
  */
 export const CRYPTO_SAMPLE_PACKS: SamplePack[] = [];
 
-export const FUTURE_SAMPLE_PACKS: SamplePack[] = [];
+/** Index-style future: stair-step grind with a mid-session pause (≠ equity mega-cap shape). */
+const INDEX_FUTURE_OHLC: OHLC[] = [
+  bar("08:00", 5180, 5195, 5174, 5190),
+  bar("10:00", 5190, 5210, 5186, 5204),
+  bar("12:00", 5204, 5208, 5192, 5196),
+  bar("14:00", 5196, 5222, 5190, 5218),
+  bar("16:00", 5218, 5230, 5210, 5224),
+  bar("18:00", 5224, 5228, 5208, 5212),
+  bar("20:00", 5212, 5240, 5206, 5236),
+  bar("22:00", 5236, 5250, 5230, 5244),
+  bar("00:00", 5244, 5252, 5238, 5248),
+  bar("02:00", 5248, 5266, 5242, 5260),
+  bar("04:00", 5260, 5264, 5246, 5250),
+  bar("06:00", 5250, 5272, 5248, 5268),
+];
 
-export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [];
+/** Energy-style future: sharp dump then partial reclaim (≠ index future grind). */
+const ENERGY_FUTURE_OHLC: OHLC[] = [
+  bar("08:00", 78.4, 79.1, 77.9, 78.8),
+  bar("10:00", 78.8, 79.6, 78.2, 79.2),
+  bar("12:00", 79.2, 79.4, 76.5, 76.9),
+  bar("14:00", 76.9, 77.2, 74.8, 75.1),
+  bar("16:00", 75.1, 75.8, 73.9, 74.4),
+  bar("18:00", 74.4, 75.6, 74.0, 75.2),
+  bar("20:00", 75.2, 76.8, 74.9, 76.4),
+  bar("22:00", 76.4, 77.0, 75.6, 76.1),
+  bar("00:00", 76.1, 76.5, 74.8, 75.0),
+  bar("02:00", 75.0, 75.9, 74.6, 75.6),
+  bar("04:00", 75.6, 76.2, 75.1, 75.8),
+  bar("06:00", 75.8, 76.9, 75.4, 76.6),
+];
+
+/** E9.M1 — Futures SAMPLE packs (≥2 distinct shapes). */
+export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
+  {
+    id: "fut-index",
+    symbol: "ES.F",
+    assetClass: "future",
+    displayName: "Index Future (SAMPLE)",
+    ohlc: INDEX_FUTURE_OHLC,
+    educationalNotes:
+      "SAMPLE index-style future: stair-step grind with a midday pause. STYLIZED educational tape — not a live contract.",
+  },
+  {
+    id: "fut-energy",
+    symbol: "CL.F",
+    assetClass: "future",
+    displayName: "Energy Future (SAMPLE)",
+    ohlc: ENERGY_FUTURE_OHLC,
+    educationalNotes:
+      "SAMPLE energy-style future: sharp midday dump then partial reclaim. Distinct from index-future grind. STYLIZED — not a live contract.",
+  },
+];
+
+/** Underlying grind into an event window — options *context* (not a chain). */
+const OPT_CTX_EVENT_OHLC: OHLC[] = [
+  bar("08:00", 142.0, 143.2, 141.6, 142.8),
+  bar("10:00", 142.8, 143.5, 142.2, 142.6),
+  bar("12:00", 142.6, 143.0, 141.8, 142.2),
+  bar("14:00", 142.2, 142.8, 141.4, 141.9),
+  bar("16:00", 141.9, 142.4, 141.2, 141.6),
+  bar("18:00", 141.6, 142.0, 140.8, 141.2),
+  bar("20:00", 141.2, 141.8, 140.6, 141.0),
+  bar("22:00", 141.0, 141.5, 140.4, 140.9),
+  bar("00:00", 140.9, 141.6, 140.5, 141.4),
+  bar("02:00", 141.4, 142.2, 141.0, 141.8),
+  bar("04:00", 141.8, 142.6, 141.5, 142.4),
+  bar("06:00", 142.4, 143.8, 142.0, 143.5),
+];
+
+/** Underlying after a volatility spike — wide range, then settle. */
+const OPT_CTX_VOL_OHLC: OHLC[] = [
+  bar("08:00", 88.5, 89.2, 87.8, 88.9),
+  bar("10:00", 88.9, 90.5, 88.0, 90.1),
+  bar("12:00", 90.1, 92.8, 89.4, 91.6),
+  bar("14:00", 91.6, 93.2, 88.5, 89.0),
+  bar("16:00", 89.0, 90.2, 86.8, 87.4),
+  bar("18:00", 87.4, 88.6, 86.2, 88.0),
+  bar("20:00", 88.0, 89.4, 87.5, 89.1),
+  bar("22:00", 89.1, 89.8, 88.2, 88.6),
+  bar("00:00", 88.6, 89.0, 87.9, 88.4),
+  bar("02:00", 88.4, 88.9, 87.6, 88.1),
+  bar("04:00", 88.1, 88.7, 87.8, 88.3),
+  bar("06:00", 88.3, 89.2, 88.0, 88.8),
+];
+
+/** E9.M2 — Options-context SAMPLE packs (underlying education; not LIVE chains / Greeks). */
+export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
+  {
+    id: "opt-ctx-event",
+    symbol: "UND.OPT",
+    assetClass: "option_context",
+    displayName: "Underlying · Event Window (SAMPLE)",
+    ohlc: OPT_CTX_EVENT_OHLC,
+    educationalNotes:
+      "SAMPLE options *context*: underlying tape into an event. Educational chart only — not a LIVE options chain, quotes, or Greeks engine.",
+  },
+  {
+    id: "opt-ctx-vol",
+    symbol: "VOL.OPT",
+    assetClass: "option_context",
+    displayName: "Underlying · Vol Spike (SAMPLE)",
+    ohlc: OPT_CTX_VOL_OHLC,
+    educationalNotes:
+      "SAMPLE options *context*: wide underlying range after a volatility spike, then settle. Not a LIVE chain / pricing product.",
+  },
+];
+
+/** Major FX: slow drift higher (≠ cross pair shape). STYLIZED quote levels. */
+const FX_MAJOR_OHLC: OHLC[] = [
+  bar("08:00", 1.0842, 1.0855, 1.0836, 1.0850),
+  bar("10:00", 1.0850, 1.0868, 1.0844, 1.0862),
+  bar("12:00", 1.0862, 1.0866, 1.0848, 1.0852),
+  bar("14:00", 1.0852, 1.0874, 1.0849, 1.0870),
+  bar("16:00", 1.0870, 1.0882, 1.0864, 1.0876),
+  bar("18:00", 1.0876, 1.0880, 1.0858, 1.0864),
+  bar("20:00", 1.0864, 1.0890, 1.0860, 1.0886),
+  bar("22:00", 1.0886, 1.0898, 1.0878, 1.0892),
+  bar("00:00", 1.0892, 1.0900, 1.0884, 1.0896),
+  bar("02:00", 1.0896, 1.0912, 1.0890, 1.0908),
+  bar("04:00", 1.0908, 1.0914, 1.0896, 1.0902),
+  bar("06:00", 1.0902, 1.0920, 1.0898, 1.0916),
+];
+
+/** Cross FX: sharp risk-off drop then partial bounce. */
+const FX_CROSS_OHLC: OHLC[] = [
+  bar("08:00", 157.2, 157.8, 156.9, 157.5),
+  bar("10:00", 157.5, 158.1, 157.0, 157.8),
+  bar("12:00", 157.8, 158.0, 155.4, 155.8),
+  bar("14:00", 155.8, 156.2, 154.1, 154.6),
+  bar("16:00", 154.6, 155.5, 153.8, 155.0),
+  bar("18:00", 155.0, 156.4, 154.7, 156.1),
+  bar("20:00", 156.1, 156.8, 155.5, 156.0),
+  bar("22:00", 156.0, 156.5, 155.2, 155.6),
+  bar("00:00", 155.6, 156.0, 154.9, 155.2),
+  bar("02:00", 155.2, 155.9, 154.8, 155.5),
+  bar("04:00", 155.5, 156.2, 155.1, 155.9),
+  bar("06:00", 155.9, 156.6, 155.4, 156.3),
+];
+
+/** E9.M4 — Forex SAMPLE packs (spot FX browse after equities fluency). */
+export const FOREX_SAMPLE_PACKS: SamplePack[] = [
+  {
+    id: "fx-eurusd",
+    symbol: "EURUSD",
+    assetClass: "forex",
+    displayName: "EUR/USD Major (SAMPLE)",
+    ohlc: FX_MAJOR_OHLC,
+    educationalNotes:
+      "SAMPLE spot FX major: slow upward drift. STYLIZED — not a LIVE quote. Equities (stocks) remain the traditional retail path in this app.",
+  },
+  {
+    id: "fx-usdjpy",
+    symbol: "USDJPY",
+    assetClass: "forex",
+    displayName: "USD/JPY Cross (SAMPLE)",
+    ohlc: FX_CROSS_OHLC,
+    educationalNotes:
+      "SAMPLE spot FX cross: risk-off dump then partial reclaim (distinct from EURUSD drift). Not LIVE. Traditional retail stocks = Equities class.",
+  },
+];
 
 export const SAMPLE_PACKS_BY_CLASS: Record<AssetClass, SamplePack[]> = {
   equity: EQUITY_SAMPLE_PACKS,
   crypto: CRYPTO_SAMPLE_PACKS,
   future: FUTURE_SAMPLE_PACKS,
   option_context: OPTION_CONTEXT_SAMPLE_PACKS,
+  forex: FOREX_SAMPLE_PACKS,
 };
 
 export const ASSET_CLASSES: AssetClass[] = [
@@ -143,6 +306,7 @@ export const ASSET_CLASSES: AssetClass[] = [
   "crypto",
   "future",
   "option_context",
+  "forex",
 ];
 
 export function instrumentFromPack(pack: SamplePack): Instrument {

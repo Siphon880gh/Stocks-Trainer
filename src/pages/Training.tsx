@@ -136,7 +136,9 @@ export default function Training() {
                   g.id === "indicators" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
-                  g.id === "financial-literacy";
+                  g.id === "financial-literacy" ||
+                  g.id === "news-literacy" ||
+                  g.id === "financial-drills";
                 return (
                   <button
                     key={g.id}
@@ -160,6 +162,17 @@ export default function Training() {
             </div>
             <p className="text-primary/50 text-xs">
               {QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.description}
+            </p>
+            <p className="text-[11px] font-mono text-primary/60">
+              After Statements Literacy:{" "}
+              <button
+                type="button"
+                className="underline text-primary"
+                onClick={() => setSelectedGroup("financial-drills")}
+              >
+                Statements drills
+              </button>{" "}
+              · optional SAMPLE snapshot pack
             </p>
             {groupLocked ? (
               <p className="text-accent-red text-xs font-mono">

@@ -557,6 +557,177 @@ export const FINANCIAL_LITERACY_QUESTIONS: QuizQuestion[] = [
   },
 ];
 
+export const NEWS_LITERACY_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "NL-01",
+    prompt: "A viral social post claims a buyout with no company filing. Best first move?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Buy immediately", description: "Chase unverified noise." },
+      { id: "B", label: "Treat as rumor until confirmed", description: "Source humility." },
+      { id: "C", label: "Ignore all future news forever", description: "Overreaction." },
+    ],
+    explanation:
+      "SAMPLE: rumor ≠ filing. Raise confidence only when a disclosure or reputable primary source confirms.",
+    glossaryTermId: "rumor-vs-filing",
+  },
+  {
+    id: "NL-02",
+    prompt: "Everyone expected a rate hold and the headline matches. The first spike often…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Fades if it was already priced in", description: "Expectations matter." },
+      { id: "B", label: "Guarantees a trend day", description: "Nothing is guaranteed." },
+      { id: "C", label: "Means filings are fake", description: "Non sequitur." },
+    ],
+    explanation: "If widely expected, much of the move may already be in the tape (priced in).",
+    glossaryTermId: "priced-in",
+  },
+  {
+    id: "NL-03",
+    prompt: "Chase vs fade — which statement is most accurate?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Always chase breakouts", description: "Blind rule." },
+      { id: "B", label: "Always fade every spike", description: "Blind rule." },
+      {
+        id: "C",
+        label: "Choose using evidence quality + horizon",
+        description: "Process match.",
+      },
+    ],
+    explanation: "Neither chase nor fade is always right — match to evidence and your time horizon.",
+    glossaryTermId: "chase-vs-fade",
+  },
+  {
+    id: "NL-04",
+    prompt: "Source humility means…",
+    correctAnswer: "A",
+    options: [
+      {
+        id: "A",
+        label: "Weight claims by how primary/verifiable the source is",
+        description: "Process.",
+      },
+      { id: "B", label: "Trust the loudest account", description: "Noise bias." },
+      { id: "C", label: "Never read headlines", description: "Avoidance, not skill." },
+    ],
+    explanation: "Primary filings and official releases outrank anonymous chatter for decision confidence.",
+    glossaryTermId: "rumor-vs-filing",
+  },
+  {
+    id: "NL-05",
+    prompt: "A stock gaps up on a rumor then asks for a decision. Process-first choice?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Market buy, no plan", description: "FOMO." },
+      {
+        id: "B",
+        label: "Ask what is new vs already priced; size for being wrong",
+        description: "Process.",
+      },
+      { id: "C", label: "Short 10x because gaps always fail", description: "Dogma." },
+    ],
+    explanation: "Separate novelty from priced-in expectations; size risk to uncertainty.",
+    glossaryTermId: "priced-in",
+  },
+  {
+    id: "NL-06",
+    prompt: "Company-news cases in this app hide the aftermath until you decide. Why?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Anti-hindsight: practice deciding with only the brief", description: "Skill." },
+      { id: "B", label: "To simulate LIVE brokerage fills", description: "Out of scope." },
+      { id: "C", label: "Because SAMPLE data is random noise", description: "Still structured teaching." },
+    ],
+    explanation: "Anti-hindsight forces process under incomplete information — SAMPLE teaching design.",
+    glossaryTermId: "chase-vs-fade",
+  },
+];
+
+export const FINANCIAL_DRILLS_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "FD-01",
+    prompt: "On the SAMPLE card, strong net income with weak operating cash most invites…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Ignore cash forever", description: "Dangerous." },
+      { id: "B", label: "Questions about accruals / working capital", description: "Process." },
+      { id: "C", label: "Automatic buy", description: "No process." },
+    ],
+    explanation: "Cash vs profit divergence is a cue to investigate, not a slogan trade.",
+    snapshotId: "snap-mega-tech",
+  },
+  {
+    id: "FD-02",
+    prompt: "Net margin falling while revenue rises can mean…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Costs or mix are eating profitability", description: "Margin compression cue." },
+      { id: "B", label: "Assets disappeared", description: "Wrong statement." },
+      { id: "C", label: "P/E is cash", description: "Category error." },
+    ],
+    explanation: "Margin = profit / revenue. Rising sales with falling margin = watch costs/mix.",
+    snapshotId: "snap-mega-tech",
+  },
+  {
+    id: "FD-03",
+    prompt: "High liabilities vs equity on a SAMPLE cyclical card is a cue about…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Guaranteed bankruptcy tomorrow", description: "Jumping." },
+      { id: "B", label: "Marketing spend only", description: "Too narrow." },
+      { id: "C", label: "Leverage / cushion under stress", description: "Balance-sheet process." },
+    ],
+    explanation: "Leverage amplifies outcomes. Ask if the cushion fits your horizon.",
+    snapshotId: "snap-cyclical",
+  },
+  {
+    id: "FD-04",
+    prompt: "Free cash flow on the card approximates cash after…",
+    correctAnswer: "A",
+    options: [
+      {
+        id: "A",
+        label: "Operating needs and sustaining reinvestment",
+        description: "Flexibility cue.",
+      },
+      { id: "B", label: "Only interest expense", description: "Incomplete." },
+      { id: "C", label: "Share count changes", description: "Equity structure." },
+    ],
+    explanation: "FCF is a flexibility/sustainability cue in SAMPLE teaching — not a price target.",
+    snapshotId: "snap-cyclical",
+  },
+  {
+    id: "FD-05",
+    prompt: "Simple P/E rising solely because earnings fell (price flat) means…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "The company printed cash", description: "Unrelated." },
+      { id: "B", label: "You are paying more per unit of earnings", description: "Multiple math." },
+      { id: "C", label: "Liabilities vanished", description: "Wrong statement." },
+    ],
+    explanation: "P/E = price / earnings. Lower earnings → higher P/E if price unchanged.",
+    snapshotId: "snap-mega-tech",
+  },
+  {
+    id: "FD-06",
+    prompt: "Before an earnings case, reading the snapshot helps you…",
+    correctAnswer: "A",
+    options: [
+      {
+        id: "A",
+        label: "Form a thesis from numbers, then decide on the print",
+        description: "Process.",
+      },
+      { id: "B", label: "Skip the chart soft-gate forever", description: "Gates still apply." },
+      { id: "C", label: "Pull LIVE filings automatically", description: "SAMPLE only." },
+    ],
+    explanation: "Statements literacy feeds decide-and-reveal — still SAMPLE snapshots, not LIVE EDGAR.",
+    snapshotId: "snap-cyclical",
+  },
+];
+
 export type QuizGroupId =
   | "all"
   | "hammer"
@@ -570,7 +741,9 @@ export type QuizGroupId =
   | "indicators"
   | "equity-patterns"
   | "equity-literacy"
-  | "financial-literacy";
+  | "financial-literacy"
+  | "news-literacy"
+  | "financial-drills";
 
 export interface QuizGroup {
   id: QuizGroupId;
@@ -591,6 +764,18 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Statements Literacy",
     description: "Revenue, profit vs cash, balance sheet basics, P/E & margin (SAMPLE snapshots)",
     icon: "table_chart",
+  },
+  {
+    id: "news-literacy",
+    name: "News Literacy",
+    description: "Rumor vs filing, priced-in, chase vs fade, source humility (SAMPLE)",
+    icon: "newspaper",
+  },
+  {
+    id: "financial-drills",
+    name: "Statements Drills",
+    description: "Extra SAMPLE snapshot practice — cash vs profit, margin, leverage cues",
+    icon: "finance_mode",
   },
   { id: "indicators", name: "Indicators", description: "Identify SMA, EMA, RSI, MACD, Bollinger Bands", icon: "show_chart" },
   {
@@ -615,6 +800,8 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
+  if (groupId === "news-literacy") return NEWS_LITERACY_QUESTIONS;
+  if (groupId === "financial-drills") return FINANCIAL_DRILLS_QUESTIONS;
   return QUIZ_QUESTIONS;
 }
 
@@ -623,6 +810,8 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
+  if (groupId === "news-literacy") return NEWS_LITERACY_QUESTIONS;
+  if (groupId === "financial-drills") return FINANCIAL_DRILLS_QUESTIONS;
   if (groupId === "all") return QUIZ_QUESTIONS;
   return QUIZ_QUESTIONS.filter((q) => q.patternKey === groupId);
 }

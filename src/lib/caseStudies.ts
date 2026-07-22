@@ -1,6 +1,13 @@
 import type { OHLC } from "./ohlcData";
 import type { FinancialSnapshot } from "./financialSnapshots";
 import { FINANCIAL_SNAPSHOTS } from "./financialSnapshots";
+import type { AssetClass } from "./samplePacks";
+import {
+  CRYPTO_CASES,
+  FOREX_CASES,
+  FUTURES_CASES,
+  OPTIONS_CONTEXT_CASES,
+} from "./multiAssetCases";
 
 export type CaseContextType = "news" | "financials" | "combined";
 export type CaseThinkingMode =
@@ -19,7 +26,16 @@ export type CaseThinkingMode =
 
 export type CaseAction = "buy" | "sell" | "hold" | "short";
 export type CaseGrade = "correct" | "incorrect" | "partial";
-export type CasePackId = "demo" | "earnings" | "company-news" | "macro-news" | "combined";
+export type CasePackId =
+  | "demo"
+  | "earnings"
+  | "company-news"
+  | "macro-news"
+  | "combined"
+  | "futures"
+  | "forex"
+  | "crypto"
+  | "options-context";
 
 export interface CaseDebrief {
   /** Process + theory — not direction-only */
@@ -47,6 +63,8 @@ export interface CaseStudy {
   difficulty: "beginner" | "intermediate";
   /** When true, partial credit can apply if thesis ok but horizon mismatched (E5.M4) */
   partialOnHorizonMismatch?: boolean;
+  /** Market type for Navigator / Cases filter; defaults to equity */
+  assetClass?: AssetClass;
 }
 
 function bar(
@@ -756,6 +774,10 @@ export const CASE_STUDIES: CaseStudy[] = [
   ...MACRO_NEWS_CASES,
   ...COMBINED_CASES,
   ...SCALE_CASES,
+  ...FUTURES_CASES,
+  ...FOREX_CASES,
+  ...CRYPTO_CASES,
+  ...OPTIONS_CONTEXT_CASES,
 ];
 
 /** Documented library size for E5.M5 (≥20 target). */
@@ -791,6 +813,30 @@ export const CASE_PACKS: {
     description: "News + statement snapshots together; horizon partial credit (SAMPLE)",
     milestoneId: "E5.M4",
   },
+  {
+    id: "futures",
+    name: "Pack F · Futures (SAMPLE)",
+    description: "Index/commodity-style decide-and-reveal — SAMPLE tape only",
+    milestoneId: "E10.M5",
+  },
+  {
+    id: "forex",
+    name: "Pack FX · Forex (SAMPLE)",
+    description: "Spot FX SAMPLE decisions — not a LIVE FX desk",
+    milestoneId: "E10.M6",
+  },
+  {
+    id: "crypto",
+    name: "Pack C+ · Crypto (SAMPLE)",
+    description: "Chase/fade, dump/reclaim, chop-break on SAMPLE crypto",
+    milestoneId: "E10.M7",
+  },
+  {
+    id: "options-context",
+    name: "Pack O · Options context (SAMPLE)",
+    description: "Underlying into event / after vol spike — no chain or Greeks",
+    milestoneId: "E10.M7",
+  },
 ];
 
 export function getCaseStudy(id: string): CaseStudy | undefined {
@@ -800,6 +846,12 @@ export function getCaseStudy(id: string): CaseStudy | undefined {
 export function listCaseStudies(packId?: CaseStudy["packId"]): CaseStudy[] {
   if (!packId) return [...CASE_STUDIES];
   return CASE_STUDIES.filter((c) => c.packId === packId);
+}
+
+export function listCaseStudiesByAssetClass(
+  assetClass: AssetClass,
+): CaseStudy[] {
+  return CASE_STUDIES.filter((c) => (c.assetClass ?? "equity") === assetClass);
 }
 
 export function gradeCaseAction(

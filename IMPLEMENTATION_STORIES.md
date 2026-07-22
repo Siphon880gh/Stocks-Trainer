@@ -61,6 +61,53 @@ Parent map: [`EPIC_MAP.md`](./EPIC_MAP.md) · Runtime state: [`.agents/state.jso
 | 22 | E8.M2 | E8 | Later | done |
 | 23 | E8.M3 | E8 | Later | done |
 
+### Market types — multi-asset SAMPLE expansion (`market_types_order`)
+
+Retail **traditional market** (stocks) stays **Equities**. These milestones fill other Market class slots with SAMPLE packs + thin literacy—no LIVE feeds, no order routing, no Greeks engine.
+
+| # | Milestone | Epic | Tier | Status |
+|---|-----------|------|------|--------|
+| 24 | E9.M1 | E9 | Market types | done |
+| 25 | E9.M2 | E9 | Market types | done |
+| 26 | E9.M3 | E9 | Market types | done |
+| 27 | E9.M4 | E9 | Market types | done |
+| 28 | E9.M5 | E9 | Market types | done |
+
+Loop: [`AGENTS_LOOP-Market-Types.md`](./AGENTS_LOOP-Market-Types.md) (also queue 4 in Continue-Milestone).
+
+### Market learning coverage (`market_learning_order`)
+
+Close curriculum gaps: **navigate markets**, **news literacy**, **deeper financials drills**, and **SAMPLE decide-and-reveal** per market type (mock data only). Equities remains the traditional retail spine; other markets get learn-by-decision packs after chart soft-gate.
+
+| # | Milestone | Epic | Tier | Status |
+|---|-----------|------|------|--------|
+| 29 | E10.M1 | E10 | Coverage | done |
+| 30 | E10.M2 | E10 | Coverage | done |
+| 31 | E10.M3 | E10 | Coverage | done |
+| 32 | E10.M4 | E10 | Coverage | done |
+| 33 | E10.M5 | E10 | Coverage | done |
+| 34 | E10.M6 | E10 | Coverage | done |
+| 35 | E10.M7 | E10 | Coverage | done |
+| 36 | E10.M8 | E10 | Coverage | done |
+| 37 | E10.M9 | E10 | Coverage | done |
+
+Loop: [`AGENTS_LOOP-Market-Learning-Coverage.md`](./AGENTS_LOOP-Market-Learning-Coverage.md) (queue 5 in Continue-Milestone).
+
+### Step coaching (`step_coaching_order`)
+
+Deterministic decision-tree coaching (fail → explain → rewind → succeed). No runtime LLM. Complements quizzes (MCQ) and cases (decide→reveal OHLC)—does not replace them.
+
+| # | Milestone | Epic | Tier | Status |
+|---|-----------|------|------|--------|
+| 38 | E11.M1 | E11 | Coaching | done |
+| 39 | E11.M2 | E11 | Coaching | done |
+| 40 | E11.M3 | E11 | Coaching | done |
+| 41 | E11.M4 | E11 | Coaching | done |
+| 42 | E11.M5 | E11 | Coaching | done |
+| 43 | E11.M6 | E11 | Coaching | done |
+
+Loop: [`AGENTS_LOOP-Step-Coaching.md`](./AGENTS_LOOP-Step-Coaching.md) (queue 6 in Continue-Milestone).
+
 ---
 
 ## E1 — Equities Sample Universe
@@ -302,6 +349,245 @@ Enter only after `post_mvp_order` is complete (see `milestones.later_order` in `
 
 ---
 
+## Market types — E9 Multi-Asset SAMPLE Expansion
+
+Enter only after `later_order` is complete (see `milestones.market_types_order` in `.agents/state.json`).  
+**Constraint:** SAMPLE / STYLIZED educational packs only; never invent LIVE/REAL_TIME; options = context education only (no pricing/Greeks product).
+
+### E9.M1 — Futures SAMPLE packs *(Market types)*
+**Outcome:** Market **Class → Futures** lists ≥2 distinct SAMPLE future underlyings (e.g. index + energy style).
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E9.M1.S1 | Add `future` SamplePacks (≥2) with distinct OHLC shapes + educationalNotes | Packs in `SAMPLE_PACKS_BY_CLASS.future`; selectable on Market |
+| E9.M1.S2 | Wire futures into Market adapter (`MARKETS` / `listMarketsByAssetClass`) | Class filter **Futures** shows instruments; charts render |
+| E9.M1.S3 | Empty-state regression: other empty classes still clear | No crash; equity/crypto paths unchanged |
+
+### E9.M2 — Options-context SAMPLE packs *(Market types)*
+**Outcome:** Market **Class → Options context** shows educational underlying packs (not a live chain).
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E9.M2.S1 | Add `option_context` SamplePacks (≥2) with notes that this is context/education, not chain data | Packs selectable; copy denies LIVE chain / Greeks engine |
+| E9.M2.S2 | Wire into Market filter + chart | Filter lists packs; OHLC chart works |
+| E9.M2.S3 | Optional Archive or Training tip link “Options context (SAMPLE)” | Discoverable without promising brokerage options trading |
+
+### E9.M3 — Crypto SAMPLE deepen *(Market types)*
+**Outcome:** Crypto class feels intentional (≥3 packs or richer notes), still SAMPLE browse-only (not Beginner path replacement).
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E9.M3.S1 | Ensure ≥3 crypto SAMPLE packs with distinct shapes (extend BTC/ETH; add one more) | Class **Crypto** lists ≥3; charts differ |
+| E9.M3.S2 | UI copy: crypto is browse/drill, not the equities Beginner spine | No GoalPicker claim that crypto replaces stocks path |
+| E9.M3.S3 | Provider SAMPLE/DELAYED still honest on crypto markets | No LIVE/REAL_TIME labels |
+
+### E9.M4 — Forex SAMPLE packs *(Market types)*
+**Outcome:** Spot FX as a Market class for retail FX curiosity after equities fluency.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E9.M4.S1 | Extend `AssetClass` with `forex`; Market Class filter label **Forex** | Type + filter work; empty state until packs land in same milestone |
+| E9.M4.S2 | Seed ≥2 forex SAMPLE packs (e.g. major + cross) with distinct OHLC | Selectable; charts render |
+| E9.M4.S3 | README / in-app empty-or-help copy names Forex vs Equities (stocks = traditional retail) | Learner can tell stocks vs FX |
+
+### E9.M5 — Cross-market literacy bridge *(Market types)*
+**Outcome:** Thin literacy so learners know what each market type is—without a full second path.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E9.M5.S1 | Archive **Literacy** terms (or quiz group) covering equities vs futures vs options-context vs crypto vs forex at definition level | ≥1 term or ≥3 quiz items per new class touched in E9 |
+| E9.M5.S2 | Dashboard or Market helper line: traditional retail track = **Equities (stocks)**; other classes = SAMPLE expansion | Visible without cluttering GoalPicker |
+| E9.M5.S3 | QA note or UF stub in `QA_User_Flows.md` for Market class filters (equities + one non-equity) | Documented click path for agents/humans |
+
+---
+
+## Market learning coverage — E10 Navigate + Decide (SAMPLE)
+
+Enter only after `market_types_order` (E9) is complete.  
+**Constraints:** SAMPLE/mock OHLC + stylized headlines/snapshots only; reuse CasePlayer decide→reveal; chart soft-gate still required before graded cases; no LIVE feeds, no order routing, no Greeks engine; Equities = traditional retail stocks spine.
+
+### Coverage map (what E10 closes)
+
+| Gap | Milestone |
+|-----|-----------|
+| Hard to jump between market types / related learning | E10.M1 Navigator |
+| No dedicated news-reading quiz | E10.M2 |
+| Statements only “lite”; little drill after path | E10.M3 |
+| Futures/FX/crypto/options = browse only, no decisions | E10.M4–M7 |
+| No GoalPicker track for multi-market practice | E10.M8 |
+| Progress/CTAs don’t surface market tracks | E10.M9 |
+
+### E10.M1 — Market Navigator hub *(Coverage)*
+**Outcome:** Learner picks a market type and reaches charts + literacy + cases for that type in ≤2 clicks from Dashboard or Market.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E10.M1.S1 | Market Navigator UI (Dashboard tile and/or Market header): Equities · Futures · Forex · Crypto · Options context | Selecting a type navigates with clear query/state (e.g. `/market?class=forex` or `/cases?market=future`) |
+| E10.M1.S2 | Per-type action row: **VIEW_CHARTS** · **READ_LITERACY** · **DECIDE_CASES** (cases link disabled/locked copy until chart gate + pack exists) | Each control lands on the right surface; locked state explains gate |
+| E10.M1.S3 | Helper copy: traditional retail = **Equities (stocks)**; other types = SAMPLE decide/browse expansion | Visible on Navigator without burying GoalPicker |
+
+### E10.M2 — News literacy quiz *(Coverage)*
+**Outcome:** Training group teaches how to read headlines before/alongside company-news cases.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E10.M2.S1 | Add quiz group `news-literacy` (≥6 SAMPLE questions): rumor vs filing, priced-in, chase vs fade, source humility | Group appears on Training; finishable via QuizModal |
+| E10.M2.S2 | Archive literacy terms or deep-links for ≥3 news concepts | Terms open from quiz glossary links |
+| E10.M2.S3 | Optional writeback flag or tip on Dashboard after first completion (not required to unlock equities path) | Progress visible; does not break Beginner unlock graph |
+
+### E10.M3 — Financial statements drill pack *(Coverage)*
+**Outcome:** Extra statement practice beyond E4.M2 lite (still SAMPLE snapshots—not a full accounting course).
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E10.M3.S1 | Add quiz group `financial-drills` (≥6 Q) or extend financial-literacy with a second pack using ≥2 snapshot ids | Snapshot cards render; questions cover cash vs profit, margin, leverage/cushion cues |
+| E10.M3.S2 | Cases list / Training banner link “Statements drills” after E4.M2 complete | Discoverable from Learn or Navigator Equities row |
+| E10.M3.S3 | Reuse FinancialSnapshotCard; no live filings | SAMPLE/STYLIZED labels only |
+
+### E10.M4 — Case engine: `assetClass` on studies *(Coverage)*
+**Outcome:** CaseStudy model + Cases UI can filter by market type; CasePlayer unchanged mechanically.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E10.M4.S1 | Add `assetClass` (default `equity`) on `CaseStudy`; pack ids may include `futures` / `forex` / `crypto` / `options-context` | Types compile; equity cases default correctly |
+| E10.M4.S2 | Cases page honors `?market=` or `?class=` (and Navigator links) | Filter focuses the right pack section |
+| E10.M4.S3 | Chart soft-gate still blocks graded play for all asset classes | Direct URL to locked case shows gate tip |
+
+### E10.M5 — Futures SAMPLE decide-and-reveal *(Coverage)*
+**Outcome:** ≥3 futures cases (mock tape + brief); learn by BUY/SELL/HOLD/(SHORT soft-gate).
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E10.M5.S1 | Seed ≥3 `future` cases with distinct thinking modes (e.g. trend continuation, risk-off dump, roll/contango *literacy-light*) | Cases list under Futures; pre/post OHLC anti-hindsight |
+| E10.M5.S2 | Process debriefs; SHORT soft-gated when `allowShort` false | Same CasePlayer UX as equities |
+| E10.M5.S3 | Navigator **DECIDE_CASES** for Futures opens filtered list | End-to-end click path works |
+
+### E10.M6 — Forex SAMPLE decide-and-reveal *(Coverage)*
+**Outcome:** ≥3 FX cases on SAMPLE spot pairs.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E10.M6.S1 | Seed ≥3 `forex` cases (major + cross); briefs about risk-on/off / data print *stylized* | Playable after chart gate |
+| E10.M6.S2 | Copy clarifies FX browse/decide is SAMPLE—not a LIVE FX desk | No LIVE/REAL_TIME |
+| E10.M6.S3 | Navigator Forex **DECIDE_CASES** wired | Filter + player work |
+
+### E10.M7 — Crypto + options-context SAMPLE decisions *(Coverage)*
+**Outcome:** Crypto gets ≥3 decide cases; options-context gets ≥2 underlying-context cases (no chain/Greeks).
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E10.M7.S1 | ≥3 `crypto` SAMPLE cases (chase/fade, dump/reclaim, chop-break) | Graded decide→reveal |
+| E10.M7.S2 | ≥2 `option_context` cases: underlying into event / after vol spike; debrief denies chain trading | Educational only |
+| E10.M7.S3 | Navigator rows for Crypto + Options context | Charts + cases reachable |
+
+### E10.M8 — Market Explorer path (GoalPicker) *(Coverage)*
+**Outcome:** Optional third path for multi-market SAMPLE decisions after chart fluency—does not replace Beginner Equities.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E10.M8.S1 | Add path template `market-explorer` (or similar): gate → futures cases → forex → crypto (options-context optional tip) | Appears in GoalPicker with preview |
+| E10.M8.S2 | ProgressStore supports path id + milestone order; unlock graph for explorer milestones | Persist/resume works |
+| E10.M8.S3 | Confirm copy: Equities paths remain for traditional stocks; Explorer is SAMPLE multi-market practice | No claim Explorer replaces stock literacy |
+
+### E10.M9 — Dashboard CTAs + QA flows *(Coverage)*
+**Outcome:** Home surfaces Navigator; QA scripts cover news quiz + one non-equity decide flow.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E10.M9.S1 | Dashboard quick tile **MARKET_NAV** (or equivalent) → Navigator | One click from `/` |
+| E10.M9.S2 | Coach tip when explorer/news-literacy available | Terminal tone; not clutter |
+| E10.M9.S3 | Add/extend `QA_User_Flows.md`: UF for Navigator; UF for news-literacy; UF for one futures or forex case | Agents can regression-QA |
+
+---
+
+## Step coaching — E11 Decision-tree wizard
+
+Enter only after `market_learning_order` (E10) is complete.  
+**Constraints:** Deterministic graphs only — no LLM, no randomness, no external content APIs at session runtime. Wrong nodes teach + `rewind_to`. Reuse Layout / terminal tokens. Do not rewrite CasePlayer or QuizModal. New sessions auto-discover from the content folder (no hand-maintained registry unless Vite glob needs an index export).
+
+### Placement map (where code lives)
+
+| Layer | Location |
+|-------|----------|
+| Types + outcomes | `src/lib/coaching/types.ts` |
+| Validate graph | `src/lib/coaching/validate.ts` |
+| Session content | `src/lib/coaching/sessions/<slug>.ts` (meta + tree) |
+| Discovery / load | `src/lib/coaching/index.ts` (`import.meta.glob` or equivalent) |
+| Nav engine + history | `src/lib/coaching/navigate.ts` |
+| Path trail labels | `src/lib/coaching/pathTrail.ts` |
+| Persist adapter | `src/lib/coaching/persist.ts` (`sessionStorage` default) |
+| Catalog UI | `src/pages/Coach.tsx` → `/coach` |
+| Session UI | `src/pages/CoachSession.tsx` → `/coach/:slug` |
+| Routes | `src/App.tsx` |
+| Optional CTAs | Dashboard · Training · Navigator deep-links by `topic` / tags |
+
+### Coverage map (what E11 closes)
+
+| Gap | Milestone |
+|-----|-----------|
+| No fail-and-rewind guided reasoning across topics | E11.M1–M3 |
+| Refresh loses mid-session progress; no path trail | E11.M4 |
+| Only one sample topic; not wired into app navigation | E11.M5 |
+| No automated nav/validate tests or QA scripts | E11.M6 |
+
+### E11.M1 — Content contract, validation, discovery, sample *(Coaching)*
+**Outcome:** One valid sample coaching session loads from structured content; invalid graphs are rejected before play.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E11.M1.S1 | Define session meta (`title`, `summary`, `topic`, `tags`, `slug`) + graph (`start`, `nodes` with `message`, `outcome`, `choices`, optional `rewind_to`) | Types exported from `src/lib/coaching`; used by validate + at least one session |
+| E11.M1.S2 | Validator: `start` exists; every `next` / `rewind_to` exists; `wrong` requires `rewind_to`; ≥1 `success`; sample has ≥1 `wrong`; non-empty choice labels | Invalid session not listed (or load returns typed errors) |
+| E11.M1.S3 | Discover sessions from content folder; `listSessions()` / `loadSession(slug)` | Sample slug loadable without a separate manual registry file beyond folder exports |
+| E11.M1.S4 | Seed sample session (equities decision thinking, e.g. chase-vs-fade) with ≥2 wrong branches + ≥1 success path | Graph validates; readable labels for buttons and path trail |
+
+### E11.M2 — Navigation engine *(Coaching)*
+**Outcome:** Pure runtime advances/backs/rewinds/restarts using an ordered history stack of node IDs.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E11.M2.S1 | `choose(choice)`: verify choice on current node + `next` exists; push current; go to target | Invalid transition rejected; history grows |
+| E11.M2.S2 | Normal step-back pops one history entry; wrong-node step-back jumps to `rewind_to` and truncates history after that node | Rewind lands on intended decision; trail matches stack |
+| E11.M2.S3 | `restart()` clears history and returns to `start`; unknown node recovers to `start` (or safe error state) | Restart + unknown-node behavior covered |
+
+### E11.M3 — Catalog + session presentation *(Coaching)*
+**Outcome:** Learner browses sessions and plays one node at a time with outcome styling and controls.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E11.M3.S1 | Routes `/coach` (catalog: title, summary, topic, tags) and `/coach/:slug` (session) | Missing slug shows clear not-found; terminal tone |
+| E11.M3.S2 | Session view: header, message panel, choice buttons (keyboard accessible), step-back when available, restart on terminal `wrong`/`success` | Choices hidden on terminal nodes; focus usable after nav |
+| E11.M3.S3 | Outcome presentation: `continue` / `wrong` / `success` visually distinct **and** labeled (not color-only); `aria`/text for assistive tech | Wrong shows warning treatment + rewind control; success offers restart |
+
+### E11.M4 — Persistence + path visualizer *(Coaching)*
+**Outcome:** Mid-session state survives refresh; collapsible path trail derives from history + current node.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E11.M4.S1 | Persist adapter: current node + history stack (default `sessionStorage` keyed by slug); clear on restart | Refresh restores; adapter boundary so URL/localStorage can swap later |
+| E11.M4.S2 | Path visualizer: ordered steps, message preview, choice label between nodes (resolved from source `choices`), current-step marker | No separate breadcrumb content authored by hand |
+| E11.M4.S3 | Collapsible trail with accessible expanded/collapsed state; optional debug node id toggle | Works on desktop + mobile widths used by Layout |
+
+### E11.M5 — Topic sessions + app CTAs *(Coaching)*
+**Outcome:** Coaching covers major app topics; discoverable from Dashboard (and optional Training/Navigator links).
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E11.M5.S1 | Add ≥3 more sessions spanning topics: statements/snapshot reasoning; chart/indicator gate thinking; multi-market (futures or FX) SAMPLE framing | Each validates; catalog lists ≥4 sessions total (incl. sample) |
+| E11.M5.S2 | Tag sessions so catalog can filter or group by topic; labels stay durable for path trail | Tags visible on catalog cards |
+| E11.M5.S3 | Dashboard **COACH** (or equivalent) CTA → `/coach`; optional deep-link from Training/Cases/Navigator for one tagged session | One-click from `/`; does not alter Beginner unlock graph |
+| E11.M5.S4 | Optional ProgressStore flag per completed session slug (success reached) for tip copy only | No fake cloud sync; Beginner path unlocks unchanged |
+
+### E11.M6 — Tests + QA + README *(Coaching)*
+**Outcome:** Navigation/validation covered by automated checks; QA flows and README list coaching as a learning objective.
+
+| ID | Story | Acceptance |
+|----|--------|------------|
+| E11.M6.S1 | Automated tests (e.g. `tsx` + `node:test` or equivalent—no new heavy test stack unless needed): start load, valid choice, reject invalid, step-back, rewind+truncate, restart, success, missing session, unknown node, path labels, validate broken refs | `npm` script runs green in CI-local (`npm run test:coaching` or documented equivalent) |
+| E11.M6.S2 | Extend `QA_User_Flows.md`: catalog → play → wrong rewind → success restart; refresh restore | Agents can regression-QA |
+| E11.M6.S3 | README: objective row + route in app map; skill stub `.agents/skills/add-coaching-session/SKILL.md` for authoring new graphs | Discoverable for humans + loop agents |
+
+---
+
 ## Definition of done (per story)
 
 1. Meets acceptance criteria  
@@ -329,4 +615,4 @@ Enter only after `post_mvp_order` is complete (see `milestones.later_order` in `
 
 ## Next action
 
-**All queues complete** (`implementation_order`, `post_mvp_order`, `later_order`). Global Done.
+**Done(step_coaching) / Done(global):** `step_coaching_order` (E11) complete. All milestone queues finished.

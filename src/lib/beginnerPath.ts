@@ -6,7 +6,10 @@ import {
   getMilestoneStatus,
   getPathId,
   isDecisionMakerPathComplete,
+  isMarketExplorerPathComplete,
   loadProgress,
+  MARKET_EXPLORER_MILESTONE_IDS,
+  MARKET_EXPLORER_PATH_ID,
   milestoneOrderForPathId,
   type BeginnerEquitiesMilestoneId,
   type MilestoneStatus,
@@ -16,9 +19,11 @@ import {
   DECISION_MAKER_PATH,
   getPathMilestoneNode,
   getPathTemplate,
+  MARKET_EXPLORER_PATH,
   type PathMilestoneNode,
 } from "./learningPaths";
 import type { QuizGroupId } from "./quizData";
+import type { CasePackId } from "./caseStudies";
 
 export interface PathMilestoneDef {
   id: string;
@@ -31,7 +36,7 @@ export interface PathMilestoneDef {
   trainingGroup?: QuizGroupId;
   /** True for graded decision case packs (soft-gated by E4.M0) */
   isGradedCasePack: boolean;
-  casesPack?: "earnings" | "company-news" | "macro-news" | "combined";
+  casesPack?: CasePackId;
 }
 
 function nodeToDef(
@@ -120,19 +125,52 @@ export const DECISION_MAKER_PATH_MILESTONES: PathMilestoneDef[] =
     });
   });
 
+/** Market Explorer spine UI defs (E10.M8). */
+export const MARKET_EXPLORER_PATH_MILESTONES: PathMilestoneDef[] =
+  MARKET_EXPLORER_PATH.milestones.map((node) => {
+    if (node.id === "E4.M0") {
+      return nodeToDef(node, {
+        summary: "Indicators soft-gate before multi-market SAMPLE cases",
+        trainingGroup: "indicators",
+        isGradedCasePack: false,
+      });
+    }
+    if (node.id === "E10.M5") {
+      return nodeToDef(node, {
+        summary: "Futures SAMPLE decide-and-reveal",
+        isGradedCasePack: true,
+        casesPack: "futures",
+      });
+    }
+    if (node.id === "E10.M6") {
+      return nodeToDef(node, {
+        summary: "Forex SAMPLE decide-and-reveal",
+        isGradedCasePack: true,
+        casesPack: "forex",
+      });
+    }
+    return nodeToDef(node, {
+      summary: "Crypto SAMPLE cases (+ options-context tip packs)",
+      isGradedCasePack: true,
+      casesPack: "crypto",
+    });
+  });
+
 export const CHART_GATE_MILESTONE_ID: BeginnerEquitiesMilestoneId = "E4.M0";
 export const CHART_GATE_TRAINING_GROUP: QuizGroupId = "indicators";
 
 export function activePathDefs(): PathMilestoneDef[] {
-  return getPathId() === DECISION_MAKER_PATH_ID
-    ? DECISION_MAKER_PATH_MILESTONES
-    : BEGINNER_PATH_MILESTONES;
+  const pathId = getPathId();
+  if (pathId === DECISION_MAKER_PATH_ID) return DECISION_MAKER_PATH_MILESTONES;
+  if (pathId === MARKET_EXPLORER_PATH_ID) return MARKET_EXPLORER_PATH_MILESTONES;
+  return BEGINNER_PATH_MILESTONES;
 }
 
 export function getPathMilestone(id: string): PathMilestoneDef | undefined {
   return (
     BEGINNER_PATH_MILESTONES.find((m) => m.id === id) ??
-    DECISION_MAKER_PATH_MILESTONES.find((m) => m.id === id)
+    DECISION_MAKER_PATH_MILESTONES.find((m) => m.id === id) ??
+    MARKET_EXPLORER_PATH_MILESTONES.find((m) => m.id === id)
   );
 }
 
@@ -157,8 +195,9 @@ export function isMilestoneUnlocked(milestoneId: string): boolean {
 }
 
 export function canStartQuizGroup(groupId: string): boolean {
-  if (getPathId() === DECISION_MAKER_PATH_ID) {
-    // Decision Maker: literacy quizzes free; chart gate always startable
+  const pathId = getPathId();
+  if (pathId === DECISION_MAKER_PATH_ID || pathId === MARKET_EXPLORER_PATH_ID) {
+    // Non-beginner spines: literacy/drills free; chart gate startable
     return true;
   }
   const def = BEGINNER_PATH_MILESTONES.find((m) => m.trainingGroup === groupId);
@@ -206,6 +245,9 @@ export function isPathComplete(): boolean {
   if (pathId === DECISION_MAKER_PATH_ID) {
     return isDecisionMakerPathComplete();
   }
+  if (pathId === MARKET_EXPLORER_PATH_ID) {
+    return isMarketExplorerPathComplete();
+  }
   return BEGINNER_EQUITIES_MILESTONE_IDS.every(
     (id) => getMilestoneStatus(id) === "complete"
   );
@@ -226,9 +268,13 @@ export function coachTipForActive(): string {
   const template = getPathTemplate(pathId);
   if (!id) {
     if (isPathComplete()) {
-      return pathId === DECISION_MAKER_PATH_ID
-        ? "Credential unlocked: Decision Maker segment complete. Reset or switch path to practice again."
-        : "Credential unlocked: Beginner Equities Path complete. Review cases or reset to practice again.";
+      if (pathId === DECISION_MAKER_PATH_ID) {
+        return "Credential unlocked: Decision Maker segment complete. Reset or switch path to practice again.";
+      }
+      if (pathId === MARKET_EXPLORER_PATH_ID) {
+        return "Market Explorer SAMPLE segment complete. Equities paths remain for traditional stocks.";
+      }
+      return "Credential unlocked: Beginner Equities Path complete. Review cases or reset to practice again.";
     }
     return "Open the next available milestone when ready.";
   }
@@ -239,4 +285,9 @@ export function coachTipForActive(): string {
   );
 }
 
-export { DECISION_MAKER_MILESTONE_IDS, DECISION_MAKER_PATH_ID };
+export {
+  DECISION_MAKER_MILESTONE_IDS,
+  DECISION_MAKER_PATH_ID,
+  MARKET_EXPLORER_MILESTONE_IDS,
+  MARKET_EXPLORER_PATH_ID,
+};

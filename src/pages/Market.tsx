@@ -1,11 +1,12 @@
-import { useState, useMemo } from "react";
-import { Link } from "react-router-dom";
+import { useState, useMemo, useEffect } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import MarketChart from "../components/MarketChart";
 import HistoryModal from "../components/HistoryModal";
 import ScanPatternsModal from "../components/ScanPatternsModal";
 import IndicatorGlossary from "../components/IndicatorGlossary";
 import IndicatorPopover from "../components/IndicatorPopover";
 import FinancialsPanel from "../components/FinancialsPanel";
+import MarketNavigator from "../components/MarketNavigator";
 import {
   getMarket,
   listMarketsByAssetClass,
@@ -23,16 +24,22 @@ import { getOverlay, type OverlayDef } from "../lib/overlays";
 import { scanPatterns } from "../lib/patternScan";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import { CHART_GATE_TRAINING_GROUP, isChartGateComplete } from "../lib/beginnerPath";
+import { parseMarketClassParam } from "../lib/marketNavigator";
 
 const CLASS_LABELS: Record<AssetClass, string> = {
   equity: "Equities",
   crypto: "Crypto",
   future: "Futures",
   option_context: "Options context",
+  forex: "Forex",
 };
 
 export default function Market() {
-  const [assetFilter, setAssetFilter] = useState<MarketAssetFilter>("all");
+  const [searchParams] = useSearchParams();
+  const classFromUrl = parseMarketClassParam(searchParams.get("class"));
+  const [assetFilter, setAssetFilter] = useState<MarketAssetFilter>(
+    () => classFromUrl ?? "all",
+  );
   const [providerId, setProviderId] = useState<MarketDataProviderId>(() =>
     getStoredProviderId(),
   );
@@ -41,7 +48,17 @@ export default function Market() {
     () => listMarketsByAssetClass(assetFilter),
     [assetFilter]
   );
-  const [marketId, setMarketId] = useState(() => listMarketsByAssetClass("all")[0]?.id ?? "btc");
+  const [marketId, setMarketId] = useState(() => {
+    const cls = classFromUrl ?? "all";
+    return listMarketsByAssetClass(cls)[0]?.id ?? "btc";
+  });
+
+  useEffect(() => {
+    if (!classFromUrl) return;
+    setAssetFilter(classFromUrl);
+    const list = listMarketsByAssetClass(classFromUrl);
+    if (list[0]) setMarketId(list[0].id);
+  }, [classFromUrl]);
   const [controls, setControls] = useState({
     sma: true,
     ema: false,
@@ -112,7 +129,9 @@ export default function Market() {
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col p-4 gap-4 overflow-hidden relative">
+      <main className="flex-1 flex flex-col p-4 gap-4 overflow-y-auto relative">
+        <MarketNavigator initialClass={classFromUrl} compact />
+
         {/* Financials */}
         {market && !emptyClass ? <FinancialsPanel data={ohlcData} /> : null}
 
@@ -126,6 +145,41 @@ export default function Market() {
               Run Indicators quiz (E4.M0)
             </Link>
           </div>
+        ) : null}
+
+        {market?.pack.assetClass === "option_context" ? (
+          <div className="border border-primary/30 bg-primary/5 rounded px-3 py-2 font-mono text-[11px] text-primary/80 flex flex-wrap items-center gap-2">
+            <span>
+              OPTIONS_CONTEXT · SAMPLE underlying tape only — not a LIVE chain / Greeks engine.
+            </span>
+            <Link
+              to="/archive?tab=literacy&open=options-context"
+              className="underline text-primary"
+            >
+              Options context (SAMPLE)
+            </Link>
+          </div>
+        ) : null}
+
+        {market?.pack.assetClass === "crypto" ? (
+          <div className="border border-primary/30 bg-primary/5 rounded px-3 py-2 font-mono text-[11px] text-primary/80">
+            CRYPTO_BROWSE · SAMPLE chart drills only — does not replace the Equities (stocks)
+            Beginner path.
+          </div>
+        ) : null}
+
+        {market?.pack.assetClass === "forex" ? (
+          <div className="border border-primary/30 bg-primary/5 rounded px-3 py-2 font-mono text-[11px] text-primary/80">
+            FOREX_BROWSE · SAMPLE spot FX — traditional retail stocks track remains{" "}
+            <span className="text-primary">Equities</span> (Class filter).
+          </div>
+        ) : null}
+
+        {assetFilter === "all" || assetFilter === "equity" ? (
+          <p className="font-mono text-[10px] text-primary/45">
+            Traditional retail market type = Equities (stocks). Other classes are SAMPLE
+            expansion.
+          </p>
         ) : null}
 
         {/* Stats Bar */}
@@ -193,8 +247,9 @@ export default function Market() {
               EMPTY_CLASS · {CLASS_LABELS[assetFilter as AssetClass] ?? assetFilter}
             </p>
             <p>
-              No SAMPLE packs in this asset class yet. Switch to Equities or Crypto, or
-              leave Class = All.
+              No SAMPLE packs in this asset class yet. Switch to Equities (stocks —
+              traditional retail), Futures, Options context, Forex, or Crypto — or leave
+              Class = All.
             </p>
           </div>
         ) : null}

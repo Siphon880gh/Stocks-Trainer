@@ -1,8 +1,8 @@
 # AGENTS_LOOP — Continue Milestone
 
-Reusable loop prompt for advancing Stock Trainer (ANALYSIS_CORE) through **all** milestone queues: P0 → post-P0 → later (E7/E8), until every ordered milestone is `done`.
+Reusable loop prompt for advancing Stock Trainer (ANALYSIS_CORE) through **all** milestone queues: P0 → post-P0 → later (E7/E8) → market types (E9) → market learning coverage (E10) → step coaching (E11), until every ordered milestone is `done`.
 
-Companions: [`.agents/state.json`](./.agents/state.json) · [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [`EPIC_MAP.md`](./EPIC_MAP.md) · [`AGENTS_CODE_REFERENCE.md`](./AGENTS_CODE_REFERENCE.md)
+Companions: [`.agents/state.json`](./.agents/state.json) · [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [`EPIC_MAP.md`](./EPIC_MAP.md) · [`AGENTS_CODE_REFERENCE.md`](./AGENTS_CODE_REFERENCE.md) · market-types: [`AGENTS_LOOP-Market-Types.md`](./AGENTS_LOOP-Market-Types.md) · coverage: [`AGENTS_LOOP-Market-Learning-Coverage.md`](./AGENTS_LOOP-Market-Learning-Coverage.md) · coaching: [`AGENTS_LOOP-Step-Coaching.md`](./AGENTS_LOOP-Step-Coaching.md)
 
 ---
 
@@ -53,8 +53,13 @@ Read from `.agents/state.json` → `milestones`:
 | `implementation_order` | First | P0 through MVP freeze |
 | `post_mvp_order` | After MVP freeze checklist is green (or human GO) | Skill-depth milestones |
 | `later_order` | After `post_mvp_order` is fully done | E7 Practice Draw, E8 data/accounts |
+| `market_types_order` | After `later_order` is fully done | E9 futures / options-context / crypto / forex SAMPLE |
+| `market_learning_order` | After `market_types_order` is fully done | E10 Navigator + news/statements drills + multi-market decide packs |
+| `step_coaching_order` | After `market_learning_order` is fully done | E11 deterministic decision-tree coaching (fail/rewind/learn) |
 
 **Never skip a queue.** Finish every id in the current queue before starting the next.
+
+Traditional retail market type = **Equities (stocks)**. E9 expands other SAMPLE classes; E10 makes them navigable and learnable via decide-and-reveal; E11 adds step-by-step coaching graphs across topics (no runtime LLM).
 
 ---
 
@@ -68,17 +73,20 @@ Work queues (strict order), from `.agents/state.json` → `milestones`:
 1. `implementation_order` (P0 → MVP freeze)
 2. `post_mvp_order` (only after MVP freeze checklist green, or human GO already recorded)
 3. `later_order` (E7 / E8 — after post-P0 complete)
+4. `market_types_order` (E9 — after later complete; see also `AGENTS_LOOP-Market-Types.md`)
+5. `market_learning_order` (E10 — after E9 complete; see also `AGENTS_LOOP-Market-Learning-Coverage.md`)
+6. `step_coaching_order` (E11 — after E10 complete; see also `AGENTS_LOOP-Step-Coaching.md`)
 
-**Done (global):** Every milestone id in all three queues is complete, with stories meeting acceptance in `IMPLEMENTATION_STORIES.md`.
+**Done (global):** Every milestone id in all six queues is complete, with stories meeting acceptance in `IMPLEMENTATION_STORIES.md`.
 
 **Done (per tick):** Exactly one story advanced to acceptance-pass, or one error-recovery round completed with a clear next action.
 
 # CONTEXT
 - State of record: `.agents/state.json` (`current_epic_id`, `current_milestone_id`, `next_action`, `status`)
-- Story + acceptance source: `IMPLEMENTATION_STORIES.md` (including Later / E7 / E8 sections)
+- Story + acceptance source: `IMPLEMENTATION_STORIES.md` (including Later / E7 / E8 / E9 / E10 / E11 sections)
 - Product map / constraints: `EPIC_MAP.md`, `AGENTS_CODE_REFERENCE.md` (+ feature companions as needed)
 - Execution rules: one milestone `in_progress` at a time; follow the active queue in order; do not invent milestones outside the queues
-- Auto-verify commands (this repo): `npm run lint` and `npm run build`
+- Auto-verify commands (this repo): `npm run lint` and `npm run build` (plus coaching tests when E11.M6 script exists)
 - Optional local skills: `.agents/skills/*` (create/adapt when a task repeats)
 
 # STEP-BY-STEP CADENCE
@@ -88,14 +96,20 @@ Work queues (strict order), from `.agents/state.json` → `milestones`:
      - If any id in `implementation_order` unfinished → that queue
      - Else if any id in `post_mvp_order` unfinished → that queue (respect MVP freeze gate)
      - Else if any id in `later_order` unfinished → that queue
+     - Else if any id in `market_types_order` unfinished → that queue (E9 SAMPLE multi-asset)
+     - Else if any id in `market_learning_order` unfinished → that queue (E10 coverage)
+     - Else if any id in `step_coaching_order` unfinished → that queue (E11 coaching)
      - Else → Done(global) → STOP
-   - Identify the single next unfinished story (e.g. `E7.M1.S1`). Do not skip ahead inside a queue.
+   - Identify the single next unfinished story (e.g. `E11.M1.S1`). Do not skip ahead inside a queue.
 
 2. **Implement the current story only**
    - Minimal changes that satisfy that story’s Acceptance column.
    - Prefer extending registries / existing patterns per `AGENTS_CODE_REFERENCE.md`.
    - Do not rewrite the chart stack unless the current story requires it; reuse Training/QuizModal/CasePlayer where stories say so.
    - For E8: prefer **adapter + mock/delayed SAMPLE providers** that satisfy acceptance without paid keys. STOP (human verification) only if a story truly requires a real credential/API key the agent cannot invent.
+   - For E9: SAMPLE packs + Market class filters only; options-context is educational (no Greeks/LIVE chain); do not replace the Equities Beginner path.
+   - For E10: Navigator deep-links; news/statements quiz packs; `assetClass` on cases; SAMPLE decide packs per market; Market Explorer path optional—Equities paths must keep working.
+   - For E11: decision graphs in `src/lib/coaching/`; nav engine + history; `/coach` UI; `sessionStorage` persist adapter; no runtime LLM; do not replace CasePlayer/QuizModal or Beginner unlocks.
 
 3. **Automatic verification (required before marking progress)**
    - Run `npm run lint` then `npm run build`.
@@ -105,7 +119,7 @@ Work queues (strict order), from `.agents/state.json` → `milestones`:
    - Update `.agents/state.json`: story/milestone progress, `next_action`, `last_updated_iso`, status fields as appropriate.
    - Update Status columns in `IMPLEMENTATION_STORIES.md` when a milestone flips.
    - Immediately continue to the next story in the same milestone; when the milestone is complete, GO to the next id in the **active queue** (treat GO as automatic if auto-verify passed).
-   - When a queue finishes, enter the next queue automatically (P0 → post-P0 → later).
+   - When a queue finishes, enter the next queue automatically (P0 → post-P0 → later → market_types → market_learning → step_coaching).
    - Do **not** pause for human review unless a stop condition below applies.
 
 5. **On FAIL (lint/build/acceptance)**
@@ -114,7 +128,7 @@ Work queues (strict order), from `.agents/state.json` → `milestones`:
    - Count every failed verify → fix → re-verify cycle as one round, including new errors introduced by a fix.
 
 6. **Skills (efficiency / self-heal)**
-   - If the same workflow repeats (e.g. “add equity pack”, “wire quiz group writeback”, “GO milestone + state update”, “practice-draw grade”), create or update a skill under `.agents/skills/<skill-name>/SKILL.md`.
+   - If the same workflow repeats (e.g. “add equity pack”, “wire quiz group writeback”, “GO milestone + state update”, “practice-draw grade”, “add case pack by assetClass”, “add coaching session”), create or update a skill under `.agents/skills/<skill-name>/SKILL.md`.
    - Skills may be self-learning: on failure, try a plausible fix, then rewrite the skill once the approach works.
    - If a skill is reused for a different purpose, create a new skill instead of overloading the old one.
 
@@ -132,7 +146,7 @@ Return **STOP** only under Stop Conditions (including Done(global)).
 
 # STOP CONDITIONS / ESCAPE HATCHES
 - **Maximum outer iterations:** Infinite. Human stops the process when desired.
-- **Done(global):** All queues (`implementation_order`, `post_mvp_order`, `later_order`) complete → STOP with status reflecting full milestone completion.
+- **Done(global):** All queues (`implementation_order`, `post_mvp_order`, `later_order`, `market_types_order`, `market_learning_order`, `step_coaching_order`) complete → STOP with status reflecting full milestone completion.
 - **Error budget (hard stop):** If the same blocking failure (or the chain of new errors spawned while fixing it) is not resolved within **10** fix rounds, STOP immediately.
   - Emit an **Error Handoff Summary** for human takeover:
     - Current `epic` / `milestone` / `story` ids
@@ -151,7 +165,7 @@ Return **STOP** only under Stop Conditions (including Done(global)).
 
 # TICK OUTPUT (keep short)
 Each loop tick ends with:
-1. `milestone/story` worked (+ which queue: P0 / post-P0 / later)
+1. `milestone/story` worked (+ which queue: P0 / post-P0 / later / market_types / market_learning / step_coaching)
 2. PASS | FIXING (round n/10) | STOP
 3. Commands run + exit status
 4. `next_action` (copied from updated state)

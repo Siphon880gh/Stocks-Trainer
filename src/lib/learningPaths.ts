@@ -7,6 +7,8 @@ import {
   BEGINNER_EQUITIES_PATH_ID,
   DECISION_MAKER_MILESTONE_IDS,
   DECISION_MAKER_PATH_ID,
+  MARKET_EXPLORER_MILESTONE_IDS,
+  MARKET_EXPLORER_PATH_ID,
 } from "./progressStore";
 
 export interface PathMilestoneNode {
@@ -109,9 +111,48 @@ export const DECISION_MAKER_PATH: LearningPathTemplate = {
   ],
 };
 
+/** Market Explorer — SAMPLE multi-market practice after chart fluency (E10.M8). */
+export const MARKET_EXPLORER_PATH: LearningPathTemplate = {
+  id: MARKET_EXPLORER_PATH_ID,
+  title: "Market Explorer Path",
+  description:
+    "SAMPLE multi-market decide practice: chart gate → futures → forex → crypto. Does not replace Beginner Equities (stocks).",
+  milestones: [
+    {
+      id: "E4.M0",
+      title: "Chart Soft-Gate",
+      contentRefs: ["quiz:indicators"],
+      unlockFrom: [],
+      coachTip: "Same Indicators soft-gate before any graded SAMPLE decide packs.",
+    },
+    {
+      id: "E10.M5",
+      title: "Futures SAMPLE Cases",
+      contentRefs: ["cases:futures"],
+      unlockFrom: ["E4.M0"],
+      coachTip: "Index/commodity-style SAMPLE decisions — still decide before reveal.",
+    },
+    {
+      id: "E10.M6",
+      title: "Forex SAMPLE Cases",
+      contentRefs: ["cases:forex"],
+      unlockFrom: ["E10.M5"],
+      coachTip: "Spot FX SAMPLE — not a LIVE FX desk.",
+    },
+    {
+      id: "E10.M7",
+      title: "Crypto SAMPLE Cases",
+      contentRefs: ["cases:crypto", "cases:options-context"],
+      unlockFrom: ["E10.M6"],
+      coachTip: "Crypto decide packs; options-context tip is educational only (no chain).",
+    },
+  ],
+};
+
 export const PATH_TEMPLATES: LearningPathTemplate[] = [
   BEGINNER_EQUITIES_PATH,
   DECISION_MAKER_PATH,
+  MARKET_EXPLORER_PATH,
 ];
 
 export function getPathTemplate(pathId: string): LearningPathTemplate | undefined {
@@ -127,6 +168,7 @@ export function getPathMilestoneNode(
 
 export function milestoneOrderForPath(pathId: string): readonly string[] {
   if (pathId === DECISION_MAKER_PATH_ID) return DECISION_MAKER_MILESTONE_IDS;
+  if (pathId === MARKET_EXPLORER_PATH_ID) return MARKET_EXPLORER_MILESTONE_IDS;
   return BEGINNER_EQUITIES_MILESTONE_IDS;
 }
 

@@ -7,6 +7,8 @@ import Archive from "./pages/Archive";
 import PracticeDraw from "./pages/PracticeDraw";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
+import Coach from "./pages/Coach";
+import CoachSession from "./pages/CoachSession";
 
 export default function App() {
   return (
@@ -20,6 +22,8 @@ export default function App() {
           <Route path="practice-draw" element={<PracticeDraw />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />
+          <Route path="coach" element={<Coach />} />
+          <Route path="coach/:slug" element={<CoachSession />} />
         </Route>
       </Routes>
     </BrowserRouter>

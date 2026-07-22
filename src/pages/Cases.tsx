@@ -7,13 +7,29 @@ import {
   listCaseStudies,
   type CasePackId,
 } from "../lib/caseStudies";
+import {
+  NAVIGATOR_CLASS_LABELS,
+  parseMarketClassParam,
+} from "../lib/marketNavigator";
 import { DECISION_MAKER_PATH_ID, getPathId } from "../lib/progressStore";
+import type { AssetClass } from "../lib/samplePacks";
 
 const VALID_PACKS = new Set(CASE_PACKS.map((p) => p.id));
+
+const CLASS_TO_PACKS: Partial<Record<AssetClass, CasePackId[]>> = {
+  equity: ["earnings", "company-news", "macro-news", "combined"],
+  future: ["futures"],
+  forex: ["forex"],
+  crypto: ["crypto"],
+  option_context: ["options-context"],
+};
 
 export default function Cases() {
   const [searchParams] = useSearchParams();
   const packParam = searchParams.get("pack");
+  const marketClass =
+    parseMarketClassParam(searchParams.get("market")) ??
+    parseMarketClassParam(searchParams.get("class"));
   const focusPack =
     packParam && VALID_PACKS.has(packParam as CasePackId)
       ? (packParam as CasePackId)
@@ -24,16 +40,21 @@ export default function Cases() {
   const beginnerOnly = pathId !== DECISION_MAKER_PATH_ID;
 
   const orderedPacks = useMemo(() => {
-    if (!focusPack) return CASE_PACKS;
-    const focused = CASE_PACKS.filter((p) => p.id === focusPack);
-    const rest = CASE_PACKS.filter((p) => p.id !== focusPack);
+    let packs = CASE_PACKS;
+    if (marketClass) {
+      const allowed = new Set(CLASS_TO_PACKS[marketClass] ?? []);
+      packs = CASE_PACKS.filter((p) => allowed.has(p.id as CasePackId));
+    }
+    if (!focusPack) return packs;
+    const focused = packs.filter((p) => p.id === focusPack);
+    const rest = packs.filter((p) => p.id !== focusPack);
     return [...focused, ...rest];
-  }, [focusPack]);
+  }, [focusPack, marketClass]);
 
   useEffect(() => {
-    if (!focusPack || !focusRef.current) return;
+    if ((!focusPack && !marketClass) || !focusRef.current) return;
     focusRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [focusPack, orderedPacks]);
+  }, [focusPack, marketClass, orderedPacks]);
 
   return (
     <div className="bg-background-dark text-slate-100 min-h-screen flex flex-col font-display">
@@ -59,6 +80,16 @@ export default function Cases() {
               FOCUS_PACK · {focusPack}
             </p>
           ) : null}
+          {marketClass ? (
+            <p className="text-[11px] font-mono text-primary/70 mt-2">
+              FOCUS_MARKET · {NAVIGATOR_CLASS_LABELS[marketClass]} (SAMPLE)
+              {marketClass === "forex"
+                ? " · not a LIVE FX desk"
+                : marketClass === "option_context"
+                  ? " · no chain / Greeks"
+                  : ""}
+            </p>
+          ) : null}
         </div>
 
         {!chartOk ? (
@@ -67,9 +98,17 @@ export default function Cases() {
             <Link to="/training" className="text-primary underline">
               Training
             </Link>{" "}
-            first.
+            first. Direct case URLs stay locked until the gate clears.
           </div>
         ) : null}
+
+        <p className="text-[11px] font-mono text-primary/60">
+          TIP:{" "}
+          <Link to="/coach/chase-vs-fade" className="underline text-primary">
+            STEP_COACH · chase-vs-fade
+          </Link>{" "}
+          before company-news cases (fail / rewind / learn · no LLM)
+        </p>
 
         {orderedPacks.map((meta) => {
           const packId = meta.id as CasePackId;
