@@ -4,17 +4,12 @@ import type { CoachingNavState } from "./navigate";
 export interface PathTrailStep {
   index: number;
   nodeId: string;
+  /** Full node message (wrap in UI; not truncated). */
   messagePreview: string;
   outcome: CoachingOutcome;
   /** Choice taken from this node to the next; null on current step */
   choiceLabel: string | null;
   isCurrent: boolean;
-}
-
-function previewMessage(message: string, max = 96): string {
-  const oneLine = message.replace(/\s+/g, " ").trim();
-  if (oneLine.length <= max) return oneLine;
-  return `${oneLine.slice(0, max - 1)}…`;
 }
 
 /** Resolve the choice label used when moving from `fromId` to `toId`. */
@@ -45,7 +40,7 @@ export function buildPathTrail(
     return {
       index: index + 1,
       nodeId,
-      messagePreview: node ? previewMessage(node.message) : "(missing node)",
+      messagePreview: node?.message?.trim() || "(missing node)",
       outcome: node?.outcome ?? "continue",
       choiceLabel:
         !isCurrent && nextId ? choiceLabelBetween(tree, nodeId, nextId) : null,

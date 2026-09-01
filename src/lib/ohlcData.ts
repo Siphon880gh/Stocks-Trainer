@@ -16,21 +16,60 @@ function ohlc(
   return { name, open, high, low, close };
 }
 
-/** Generic trend data for Market page */
+/** Generic trend data for Market page — labeled as US cash RTH (not extended hours). */
 export const SAMPLE_OHLC: OHLC[] = [
-  ohlc("08:00", 63200, 63800, 63000, 63600),
+  ohlc("09:30", 63200, 63800, 63000, 63600),
   ohlc("10:00", 63600, 64200, 63400, 63800),
-  ohlc("12:00", 63800, 64100, 63400, 63500), // Red candle
-  ohlc("14:00", 63200, 63900, 62800, 63800), // Bullish Engulfing: green engulfs prev red
-  ohlc("16:00", 63650, 64000, 63200, 63650), // Doji: open≈close, long wicks
-  ohlc("18:00", 63800, 64400, 63600, 64000),
-  ohlc("20:00", 64000, 64800, 63800, 64200),
-  ohlc("22:00", 64200, 65000, 64000, 64600),
-  ohlc("00:00", 64600, 65200, 64400, 64800),
-  ohlc("02:00", 64800, 65400, 64600, 65000),
-  ohlc("04:00", 65000, 65600, 64800, 65200),
-  ohlc("06:00", 65200, 65800, 65000, 65500),
+  ohlc("10:30", 63800, 64100, 63400, 63500), // Red candle
+  ohlc("11:00", 63200, 63900, 62800, 63800), // Bullish Engulfing: green engulfs prev red
+  ohlc("11:30", 63650, 64000, 63200, 63650), // Doji: open≈close, long wicks
+  ohlc("12:00", 63800, 64400, 63600, 64000),
+  ohlc("12:30", 64000, 64800, 63800, 64200),
+  ohlc("13:00", 64200, 65000, 64000, 64600),
+  ohlc("13:30", 64600, 65200, 64400, 64800),
+  ohlc("14:00", 64800, 65400, 64600, 65000),
+  ohlc("14:30", 65000, 65600, 64800, 65200),
+  ohlc("15:00", 65200, 65800, 65000, 65500),
 ];
+
+/** 12 half-hour labels across a US equity regular session (09:30–15:00). */
+export const RTH_BAR_LABELS_12 = [
+  "09:30",
+  "10:00",
+  "10:30",
+  "11:00",
+  "11:30",
+  "12:00",
+  "12:30",
+  "13:00",
+  "13:30",
+  "14:00",
+  "14:30",
+  "15:00",
+] as const;
+
+/** Continuous 24h session labels (crypto / futures SAMPLE packs). */
+export const SESSION_24H_LABELS_12 = [
+  "00:00",
+  "02:00",
+  "04:00",
+  "06:00",
+  "08:00",
+  "10:00",
+  "12:00",
+  "14:00",
+  "16:00",
+  "18:00",
+  "20:00",
+  "22:00",
+] as const;
+
+export function withBarLabels(
+  data: OHLC[],
+  labels: readonly string[]
+): OHLC[] {
+  return data.map((d, i) => ({ ...d, name: labels[i] ?? d.name }));
+}
 
 /** Hammer pattern: long lower shadow, small body at top */
 export const HAMMER_OHLC: OHLC[] = [
@@ -95,6 +134,22 @@ export const MORNING_STAR_OHLC: OHLC[] = [
   ohlc("5", 64100, 64400, 63900, 64200),
 ];
 
+/** Single green candle with readable wicks — anatomy quiz */
+export const CANDLE_GREEN_OHLC: OHLC[] = [
+  ohlc("1", 63600, 64000, 63400, 63800),
+  ohlc("2", 63800, 64100, 63600, 63700),
+  ohlc("3", 63700, 64800, 63500, 64600), // green: open 63700, close 64600, high 64800, low 63500
+  ohlc("4", 64600, 64900, 64400, 64700),
+];
+
+/** Single red candle with readable wicks — anatomy quiz */
+export const CANDLE_RED_OHLC: OHLC[] = [
+  ohlc("1", 64600, 65000, 64400, 64800),
+  ohlc("2", 64800, 65100, 64600, 64900),
+  ohlc("3", 64900, 65100, 63600, 63800), // red: open 64900, close 63800, high 65100, low 63600
+  ohlc("4", 63800, 64100, 63500, 63700),
+];
+
 /** Head and Shoulders (simplified): three peaks */
 export const HEAD_SHOULDERS_OHLC: OHLC[] = [
   ohlc("1", 63000, 63500, 62800, 63200),
@@ -126,6 +181,51 @@ export const PATTERN_OHLC: Record<string, OHLC[]> = {
   "shooting-star": SHOOTING_STAR_OHLC,
   "inverted-hammer": INVERTED_HAMMER_OHLC,
   "morning-star": MORNING_STAR_OHLC,
+  "candle-green": CANDLE_GREEN_OHLC,
+  "candle-red": CANDLE_RED_OHLC,
   "head-shoulders": HEAD_SHOULDERS_OHLC,
   "falling-wedge": FALLING_WEDGE_OHLC,
 };
+
+/** High/low span across candles (and optional overlay values). */
+export function ohlcPriceExtent(
+  data: OHLC[],
+  extras: Array<number | null | undefined> = []
+): { min: number; max: number } {
+  let min = Infinity;
+  let max = -Infinity;
+  for (const d of data) {
+    if (d.low < min) min = d.low;
+    if (d.high > max) max = d.high;
+  }
+  for (const v of extras) {
+    if (v == null || Number.isNaN(v)) continue;
+    if (v < min) min = v;
+    if (v > max) max = v;
+  }
+  if (!Number.isFinite(min) || !Number.isFinite(max)) {
+    return { min: 0, max: 1 };
+  }
+  if (min === max) {
+    const pad = Math.max(Math.abs(min) * 0.01, 1);
+    return { min: min - pad, max: max + pad };
+  }
+  return { min, max };
+}
+
+/**
+ * Fit a Y domain to price action. `zoom` > 1 zooms in; < 1 zooms out.
+ * Default pad is ~12% of the data span (not a fixed dollar amount).
+ */
+export function paddedPriceDomain(
+  min: number,
+  max: number,
+  zoom = 1
+): [number, number] {
+  const mid = (min + max) / 2;
+  const span = Math.max(max - min, Math.abs(mid) * 0.001, 1e-6);
+  const pad = span * 0.12;
+  const z = Math.max(0.25, Math.min(zoom, 8));
+  const half = (span / 2 + pad) / z;
+  return [mid - half, mid + half];
+}

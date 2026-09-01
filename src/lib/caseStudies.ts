@@ -106,11 +106,11 @@ const cyclicalSnap = FINANCIAL_SNAPSHOTS[1]!;
 export const EARNINGS_CASES: CaseStudy[] = [
   {
     id: "case-earn-beat-miss",
-    title: "SAMPLE Earnings Miss · Mega-Cap Tech",
+    title: "Earnings miss at a big tech company",
     contextType: "financials",
     thinkingMode: "beat_miss",
     brief:
-      "Pre-event chart is firm into the print. SAMPLE snapshot looked clean heading in. Print: revenue in-line, EPS soft vs quiet expectations. Decide before the aftermath tape.",
+      "This practice company looked healthy going into earnings. Sales met expectations, but profit per share came in weaker than people had hoped. The stock had been rising. Buy, sell, or hold before you see what happened next.",
     statementSnapshot: {
       ...megaSnap,
       id: "snap-earn-miss",
@@ -119,7 +119,7 @@ export const EARNINGS_CASES: CaseStudy[] = [
         netIncome: 78_000,
         netMarginPct: 20.5,
       },
-      notes: "SAMPLE print: EPS soft vs prior run-rate — STYLIZED teaching numbers.",
+      notes: "Practice numbers: profit per share came in weaker than the recent run rate.",
     },
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
@@ -131,11 +131,11 @@ export const EARNINGS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Separate the prior uptrend from new evidence. A miss can invalidate a momentum long even if the company remains profitable.",
+        "A company can still be profitable and still disappoint. If you owned it because you expected a strong report, a miss is a reason to rethink, not to ignore.",
       whyMarketMoved:
-        "SAMPLE tape sells the multiple: buyers who priced perfection step aside when the print disappoints.",
+        "Buyers who assumed a clean beat stepped back. The stock sold off.",
       evidence:
-        "EPS soft vs expectations while the chart had already priced a clean beat. Grade the thesis update, not only the candle color.",
+        "Profit per share was weaker than expected, and the chart had already priced in good news.",
     },
     allowShort: false,
     packId: "earnings",
@@ -143,11 +143,11 @@ export const EARNINGS_CASES: CaseStudy[] = [
   },
   {
     id: "case-earn-margin-compression",
-    title: "SAMPLE Margin Compression · Mega-Cap Tech",
+    title: "Sales up, profit margin down",
     contextType: "financials",
     thinkingMode: "margin_compression",
     brief:
-      "Revenue still growing on the SAMPLE card, but net margin fell hard as costs caught up. Pre-tape is choppy near highs. How do you respond before seeing the reaction?",
+      "Sales are still growing, but the company keeps less profit from each dollar of sales. Costs caught up. The stock has been choppy near its highs. What do you do?",
     statementSnapshot: {
       ...megaSnap,
       id: "snap-margin-comp",
@@ -156,7 +156,7 @@ export const EARNINGS_CASES: CaseStudy[] = [
         netIncome: 58_000,
         netMarginPct: 14.9,
       },
-      notes: "SAMPLE: revenue up, margin down — classic compression drill.",
+      notes: "Practice numbers: sales up, profit margin down.",
     },
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
@@ -168,11 +168,11 @@ export const EARNINGS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Ask whether growth still earns its multiple when each sales dollar keeps less profit. Margin is a quality check on the revenue story.",
+        "Growing sales is not enough if each sale is less profitable. Check the margin, not just the top line.",
       whyMarketMoved:
-        "SAMPLE reaction discounts richer multiples when profitability per dollar of sales deteriorates.",
+        "Investors pay less for a business that is getting less efficient.",
       evidence:
-        "Snapshot shows revenue resilience with a clear margin step-down—process: re-rate quality, not celebrate top-line alone.",
+        "Revenue held up, but net margin dropped sharply.",
     },
     allowShort: false,
     packId: "earnings",
@@ -180,11 +180,11 @@ export const EARNINGS_CASES: CaseStudy[] = [
   },
   {
     id: "case-earn-cash-flow-flag",
-    title: "SAMPLE Cash-Flow Red Flag · Cyclical",
+    title: "Profit on paper, cash missing",
     contextType: "financials",
     thinkingMode: "cash_flow_red_flag",
     brief:
-      "Net income still positive on the SAMPLE snapshot, but operating and free cash flow collapsed. Pre-chart already soft. Decide before aftermath.",
+      "The income statement still shows a profit, but cash from running the business collapsed. The stock was already weak. Buy, sell, or hold?",
     statementSnapshot: {
       ...cyclicalSnap,
       id: "snap-cf-flag",
@@ -197,7 +197,7 @@ export const EARNINGS_CASES: CaseStudy[] = [
         operatingCashFlow: 4_000,
         freeCashFlow: -3_500,
       },
-      notes: "SAMPLE: profits without cash — working-capital / quality drill.",
+      notes: "Practice numbers: reported profit, but cash from operations is weak.",
     },
     preOhlc: CYCLICAL_PRE,
     postOhlc: withAftermath(CYCLICAL_PRE, [
@@ -209,11 +209,11 @@ export const EARNINGS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Treat cash as the reality check on accrual profit. Positive net income with broken FCF deserves skepticism, not automatic buy-the-dip.",
+        "Reported profit can look fine while cash is not actually arriving. Check cash flow before you treat earnings as proof the business is healthy.",
       whyMarketMoved:
-        "SAMPLE sellers focus on funding risk: if cash is not arriving, the earnings print is less comforting.",
+        "Sellers focused on cash, not the accounting profit.",
       evidence:
-        "OCF/FCF divergence vs still-green net income is the tell. Process: reconcile income statement to cash flow before acting.",
+        "Net income is still positive. Operating cash and free cash flow are not.",
     },
     allowShort: false,
     packId: "earnings",
@@ -221,11 +221,11 @@ export const EARNINGS_CASES: CaseStudy[] = [
   },
   {
     id: "case-earn-guidance-cut",
-    title: "SAMPLE Guidance Cut · Mega-Cap Tech",
+    title: "Decent quarter, weaker outlook",
     contextType: "financials",
     thinkingMode: "guidance_cut",
     brief:
-      "Trailing print was acceptable, but management cut next-year guidance. Pre-tape had bid into the call. Decide with the snapshot + brief only.",
+      "The latest quarter was acceptable, but management lowered what they expect next year. The stock had been bid up into the report. Decide with this snapshot only.",
     statementSnapshot: {
       ...megaSnap,
       id: "snap-guidance",
@@ -234,7 +234,7 @@ export const EARNINGS_CASES: CaseStudy[] = [
         netIncome: 90_000,
         netMarginPct: 23.4,
       },
-      notes: "SAMPLE: trailing OK, forward guide cut — horizon mismatch drill.",
+      notes: "Practice numbers: last quarter was fine. Next-year outlook was cut.",
     },
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
@@ -246,11 +246,11 @@ export const EARNINGS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Markets price the future. Trailing beat/meet can still fail if the guide resets the path. Match action to your horizon.",
+        "Markets care about what comes next. A decent quarter can still disappoint if the company lowers its forecast. Match your action to how long you planned to hold.",
       whyMarketMoved:
-        "SAMPLE reaction sells the new trajectory: lower guide compresses expected growth in the multiple.",
+        "The stock sold off on the weaker outlook, not on last quarter's profit.",
       evidence:
-        "Brief flag is the guide cut, not a collapse in trailing profit. Process: update forward thesis first.",
+        "Trailing results look okay. The warning is the cut in next-year guidance.",
     },
     allowShort: false,
     packId: "earnings",
@@ -258,11 +258,11 @@ export const EARNINGS_CASES: CaseStudy[] = [
   },
   {
     id: "case-earn-balance-stress",
-    title: "SAMPLE Balance-Sheet Stress · Cyclical",
+    title: "Earnings thin, debt jumped",
     contextType: "financials",
     thinkingMode: "balance_sheet_stress",
     brief:
-      "Liabilities jumped vs equity on the SAMPLE card while earnings stayed thin. Pre-chart is weak. How do you size the risk before reveal?",
+      "Debt jumped relative to the company's equity, and earnings are thin. The chart is already weak. How much risk are you willing to take?",
     statementSnapshot: {
       ...cyclicalSnap,
       id: "snap-bs-stress",
@@ -276,7 +276,7 @@ export const EARNINGS_CASES: CaseStudy[] = [
         liabilities: 360_000,
         equity: 70_000,
       },
-      notes: "SAMPLE: leverage up, cushion down — solvency/flexibility drill.",
+      notes: "Practice numbers: more debt, thinner equity cushion.",
     },
     preOhlc: CYCLICAL_PRE,
     postOhlc: withAftermath(CYCLICAL_PRE, [
@@ -288,11 +288,11 @@ export const EARNINGS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Thin equity cushions leave less room for error when cycles turn. Pair income quality with balance-sheet flexibility.",
+        "A thin equity cushion leaves less room for error when the business cycle turns. Pair the earnings picture with the balance sheet.",
       whyMarketMoved:
-        "SAMPLE tape prices higher distress risk: more liabilities vs equity raise the cost of being wrong.",
+        "The stock priced in more distress risk as liabilities rose versus equity.",
       evidence:
-        "Snapshot leverage shift + soft earnings is the stress signal. Process: ask what breaks if cash gets tighter.",
+        "Leverage went up while earnings stayed weak.",
     },
     allowShort: false,
     packId: "earnings",
@@ -304,12 +304,13 @@ export const EARNINGS_CASES: CaseStudy[] = [
 export const COMPANY_NEWS_CASES: CaseStudy[] = [
   {
     id: "case-news-chase-fade",
-    title: "SAMPLE Momentum Chase vs Fade · Mega-Cap Tech",
+    title: "Stock already ran, then a product headline",
     contextType: "news",
     thinkingMode: "momentum_chase_vs_fade",
     brief:
-      "Equity already ran hard into a product-launch headline. Crowd chat screams chase. Pre-tape is extended. Decide before the aftermath — is this chase or fade?",
-    newsHeadline: "SAMPLE: Mega-cap unveils incremental product refresh; influencers call for moonshot.",
+      "The stock already rallied hard. Then a product-refresh headline hits and social media tells you to buy. The chart looks stretched. Is this a reason to buy, or a reason to wait?",
+    newsHeadline:
+      "Big tech announces a small product refresh. Social posts call it a moonshot.",
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
       bar("+1", 179.5, 180.2, 177.0, 177.6),
@@ -320,11 +321,11 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Ask what is already priced. A loud headline after a run often invites fade/hold over blind chase—unless you have a fresh edge.",
+        "Ask what is already in the price. A loud headline after a big run is often a reason to wait or take profits, unless you have a new fact the crowd missed.",
       whyMarketMoved:
-        "SAMPLE tape fades the crowded chase: late buyers meet sellers who used the headline as exit liquidity.",
+        "Late buyers met sellers who used the headline as a chance to exit.",
       evidence:
-        "Extended pre-tape + incremental (not transformative) headline. Process: separate narrative volume from new information.",
+        "The chart was already extended. The product news was incremental, not a new business.",
     },
     allowShort: false,
     packId: "company-news",
@@ -332,12 +333,13 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
   },
   {
     id: "case-news-supplier-win",
-    title: "SAMPLE Company Headline · Supplier Win",
+    title: "New multi-year supply contract",
     contextType: "news",
     thinkingMode: "company_headline",
     brief:
-      "Cyclical equity dips into a SAMPLE headline: multi-year supply contract with a large OEM. Chart was soft. Decide before reveal — does the contract change the path?",
-    newsHeadline: "SAMPLE: Energy/materials name wins multi-year OEM supply contract (stylized).",
+      "This industrial stock has been slipping. Then the company wins a multi-year supply contract with a large manufacturer. Does that change the story enough to buy, or do you wait?",
+    newsHeadline:
+      "Industrial company wins a multi-year supply contract with a large manufacturer.",
     preOhlc: CYCLICAL_PRE,
     postOhlc: withAftermath(CYCLICAL_PRE, [
       bar("+1", 108.5, 110.2, 108.0, 109.6),
@@ -348,11 +350,11 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Weigh whether the contract is material vs noise and whether the soft tape already discounted fear. New durable demand can justify buy/hold over panic selling.",
+        "Ask whether the contract is big enough and long enough to matter, and whether the weak chart already baked in bad news. Durable new demand can justify buying or holding instead of panic selling.",
       whyMarketMoved:
-        "SAMPLE reaction re-rates the path: visible multi-year volume reduces near-term demand uncertainty.",
+        "A visible multi-year order book reduced near-term demand worry.",
       evidence:
-        "Company-specific headline (not macro). Process: map contract size/duration to thesis before chasing or dumping.",
+        "This is company news, not a market-wide event. Map the contract to the business before you chase or dump.",
     },
     allowShort: false,
     packId: "company-news",
@@ -360,12 +362,12 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
   },
   {
     id: "case-news-ceo-exit",
-    title: "SAMPLE Company Headline · CEO Exit",
+    title: "CEO resigns, no scandal alleged",
     contextType: "news",
     thinkingMode: "company_headline",
     brief:
-      "Mega-cap equity is near highs when a SAMPLE headline hits: sudden CEO resignation, interim leadership named. No fraud alleged. Decide before aftermath.",
-    newsHeadline: "SAMPLE: CEO resigns unexpectedly; board names interim CEO (stylized).",
+      "The stock is near highs. The CEO resigns suddenly. The board names an interim leader. Nobody alleges fraud. What do you do?",
+    newsHeadline: "CEO resigns unexpectedly. Board names an interim CEO.",
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
       bar("+1", 178.0, 178.6, 175.8, 176.4),
@@ -376,11 +378,11 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Leadership gaps raise execution uncertainty even without fraud. Size risk to your horizon: hold if thesis is multi-year and board is credible; trim if you needed certainty near-term.",
+        "A leadership gap raises execution risk even without fraud. Hold if your thesis is years out and you trust the board. Trim if you needed certainty soon.",
       whyMarketMoved:
-        "SAMPLE tape prices uncertainty: key-person risk widens the range of outcomes until a permanent plan is clear.",
+        "The stock priced in uncertainty until a permanent plan is clear.",
       evidence:
-        "Company headline, equity-only decision. Process: uncertainty ≠ automatic short; it does argue against aggressive chase.",
+        "Company news only. Uncertainty is not an automatic short. It is a reason not to chase.",
     },
     allowShort: false,
     packId: "company-news",
@@ -392,12 +394,13 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
 export const MACRO_NEWS_CASES: CaseStudy[] = [
   {
     id: "case-macro-risk-off",
-    title: "SAMPLE Risk-Off Tape · Mega-Cap Tech",
+    title: "Market-wide fear, stock already ran",
     contextType: "news",
     thinkingMode: "risk_off",
     brief:
-      "Broad SAMPLE risk-off: credit spreads widen, defensives bid, high-beta tech softens into the open. Your mega-cap was extended. Decide before aftermath.",
-    newsHeadline: "SAMPLE: Global risk appetite fades; investors rotate toward cash and defensives.",
+      "Investors are selling risky assets: credit spreads widen, defensive stocks hold up, high-growth tech weakens at the open. Your big-tech name had already run. What do you do?",
+    newsHeadline:
+      "Risk appetite fades. Money rotates toward cash and defensive stocks.",
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
       bar("+1", 177.0, 177.8, 174.5, 175.2),
@@ -408,11 +411,11 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Risk-off is about portfolio beta and liquidity preference, not one ticker story. Trim or hold sized exposure; chasing high-beta into the scare is usually process-breaking.",
+        "This is about how much market risk you want, not one company's story. Cutting or holding a sized position is process. Buying more into the scare usually is not.",
       whyMarketMoved:
-        "SAMPLE tape sells duration/risk assets together as investors demand cash safety.",
+        "Risky assets sold together as investors wanted cash.",
       evidence:
-        "Macro headline + extended pre-tape. Process: ask how much equity beta you wanted into a risk-off impulse.",
+        "Market-wide headline plus a stock that had already run.",
     },
     allowShort: false,
     packId: "macro-news",
@@ -420,12 +423,13 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
   },
   {
     id: "case-macro-print",
-    title: "SAMPLE Macro Print · Index Proxy Equity",
+    title: "Inflation comes in hotter than expected",
     contextType: "news",
     thinkingMode: "macro_print",
     brief:
-      "A SAMPLE CPI-style print lands hotter than quiet expectations. Rates chatter jumps. Your equity proxy had been grinding higher. Decide before reveal.",
-    newsHeadline: "SAMPLE: Inflation print hotter than consensus; rate-cut odds fall (stylized).",
+      "Inflation comes in hotter than expected. Rate-cut hopes fade. This stock, used here as a stand-in for the broader market, had been grinding higher.",
+    newsHeadline:
+      "Inflation hotter than expected. Odds of a rate cut fall.",
     preOhlc: TECH_PRE.map((r) => ({
       ...r,
       open: r.open * 2.9,
@@ -451,11 +455,11 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Hot prints reprice discount rates. Even “good companies” can sell when the risk-free path shifts—match action to horizon, not cheerleading.",
+        "Hot inflation can reprice interest rates. Even a good company can fall when discount rates rise. Match your action to how long you planned to hold.",
       whyMarketMoved:
-        "SAMPLE reaction discounts higher-for-longer rates: multiples compress when the print surprises hotter.",
+        "Higher-for-longer rates compressed what people would pay for the stock.",
       evidence:
-        "Macro print headline, not a company filing. Process: separate firm quality from rate sensitivity.",
+        "This is economic data, not a company filing. Separate how good the company is from how sensitive it is to rates.",
     },
     allowShort: false,
     packId: "macro-news",
@@ -463,12 +467,13 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
   },
   {
     id: "case-macro-supply",
-    title: "SAMPLE Geopolitics / Supply · Cyclical",
+    title: "Shipping lane disrupted",
     contextType: "news",
     thinkingMode: "geopolitics_supply",
     brief:
-      "SAMPLE supply-shock headline: shipping lane disruption; energy/materials complex jumps in overnight futures. Your cyclical was already soft. Decide before tape.",
-    newsHeadline: "SAMPLE: Key shipping lane disruption raises energy/freight cost fears (intro level).",
+      "A key shipping lane is disrupted. Energy and freight costs jump overnight. Your industrial/energy-linked stock was already weak. Who benefits?",
+    newsHeadline:
+      "Shipping-lane disruption raises energy and freight cost fears.",
     preOhlc: CYCLICAL_PRE,
     postOhlc: withAftermath(CYCLICAL_PRE, [
       bar("+1", 109.0, 112.5, 108.5, 111.8),
@@ -479,11 +484,11 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
     acceptablePartial: ["hold"],
     debrief: {
       process:
-        "Supply shocks can help producers and hurt consumers. Map which side of the chain your equity sits on before reflexively selling “uncertainty.”",
+        "A supply shock can help producers and hurt companies that buy the commodity. Figure out which side this stock sits on before you sell because the news sounds scary.",
       whyMarketMoved:
-        "SAMPLE tape bids the commodity-linked name as scarcity fears lift near-term pricing power.",
+        "The commodity-linked name rallied as scarcity fears lifted near-term pricing power.",
       evidence:
-        "Geopolitics/supply headline + cyclical underlying. Process: transmission path > scary words.",
+        "Supply-shock headline on a cyclical company. Follow how the shock reaches this business, not just the scary words.",
     },
     allowShort: false,
     packId: "macro-news",
@@ -495,17 +500,17 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
 export const COMBINED_CASES: CaseStudy[] = [
   {
     id: "case-comb-earn-headline",
-    title: "SAMPLE Combined · Beat + Weak Guidance Headline",
+    title: "Beat the quarter, cut the outlook",
     contextType: "combined",
     thinkingMode: "combined_earnings_headline",
     brief:
-      "Trailing SAMPLE print beats, but the headline blares a guidance cut. Snapshot still looks solid on trailing margins. Horizon mismatch drill: near-term vs multi-year.",
+      "The latest quarter beat estimates, but the headline is a guidance cut. Last quarter's margins still look solid. Are you deciding for the next few weeks, or for years?",
     statementSnapshot: {
       ...megaSnap,
       id: "snap-comb-beat",
-      notes: "SAMPLE trailing beat; forward guide soft — combined context.",
+      notes: "Practice: last quarter beat. Forward outlook is weaker.",
     },
-    newsHeadline: "SAMPLE: Beats estimates but slashes next-year outlook (stylized).",
+    newsHeadline: "Beats estimates but cuts next-year outlook.",
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
       bar("+1", 178.5, 179.0, 175.0, 175.8),
@@ -517,11 +522,11 @@ export const COMBINED_CASES: CaseStudy[] = [
     partialOnHorizonMismatch: true,
     debrief: {
       process:
-        "Trailing beat can still fail a short-horizon thesis if the guide resets the path. Hold may be partial credit if your horizon is multi-year and quality is intact.",
+        "A beat can still fail a short-term thesis if the outlook resets the path. Hold can be fair if you are a long-term owner and quality is intact.",
       whyMarketMoved:
-        "SAMPLE sellers weight the guide over the beat—markets price the future.",
+        "Sellers cared more about next year's outlook than last quarter's beat.",
       evidence:
-        "Snapshot (trailing) + headline (forward). Process: which time scale is your decision on?",
+        "The snapshot is the past. The headline is the future. Which clock is your decision on?",
     },
     allowShort: false,
     packId: "combined",
@@ -529,18 +534,19 @@ export const COMBINED_CASES: CaseStudy[] = [
   },
   {
     id: "case-comb-rumor-filing",
-    title: "SAMPLE Combined · Restatement Rumor + Filing",
+    title: "Restatement rumor, then a filing",
     contextType: "combined",
     thinkingMode: "combined_rumor_filing",
     brief:
-      "Chat rumor claims a restatement. Minutes later a SAMPLE 8-K-style note clarifies a narrow classification change, not fraud. Snapshot cash still healthy. Decide.",
+      "Chat claims the company will restate results. Minutes later a filing says it is a narrow classification change, not fraud. Cash flow still looks healthy.",
     statementSnapshot: {
       ...megaSnap,
       id: "snap-comb-clarify",
       cashFlow: { operatingCashFlow: 105_000, freeCashFlow: 88_000 },
-      notes: "SAMPLE: rumor noise vs narrow filing clarification.",
+      notes: "Practice: rumor vs a narrow filing clarification.",
     },
-    newsHeadline: "SAMPLE: Company clarifies accounting classification; denies fraud rumor.",
+    newsHeadline:
+      "Company clarifies an accounting classification and denies a fraud rumor.",
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
       bar("+1", 179.0, 181.0, 178.5, 180.5),
@@ -552,11 +558,11 @@ export const COMBINED_CASES: CaseStudy[] = [
     partialOnHorizonMismatch: true,
     debrief: {
       process:
-        "Separate rumor severity from filing facts. Panic-selling a clarified classification change is often a horizon/process error if cash quality is intact.",
+        "Separate rumor volume from what the filing actually says. Panic-selling a classification change is often a mistake if cash quality is intact.",
       whyMarketMoved:
-        "SAMPLE tape squeezes fear once the filing bounds the issue.",
+        "Fear eased once the filing bounded the issue.",
       evidence:
-        "Headline clarification + healthy SAMPLE cash flow. Process: evidence hierarchy over chat volume.",
+        "Headline clarification plus healthy cash flow. Filed facts outrank chat.",
     },
     allowShort: false,
     packId: "combined",
@@ -564,18 +570,18 @@ export const COMBINED_CASES: CaseStudy[] = [
   },
   {
     id: "case-comb-margin-news",
-    title: "SAMPLE Combined · Margin Slip + Cost Headline",
+    title: "Thinner margins plus sector cost news",
     contextType: "combined",
     thinkingMode: "combined_earnings_headline",
     brief:
-      "SAMPLE snapshot shows margin compression; same day a headline cites rising input costs industry-wide. Pre-tape choppy. Decide before aftermath.",
+      "The snapshot shows thinner margins. The same day, a headline says input costs are rising across the industry. The chart is choppy.",
     statementSnapshot: {
       ...megaSnap,
       id: "snap-comb-margin",
       incomeStatement: { revenue: 388_000, netIncome: 62_000, netMarginPct: 16 },
-      notes: "SAMPLE margin slip with industry cost headline.",
+      notes: "Practice: margin slip with an industry cost headline.",
     },
-    newsHeadline: "SAMPLE: Sector input costs spike; peers warn on margins.",
+    newsHeadline: "Sector input costs spike. Peers warn on margins.",
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
       bar("+1", 178.0, 178.5, 175.5, 176.0),
@@ -587,11 +593,11 @@ export const COMBINED_CASES: CaseStudy[] = [
     partialOnHorizonMismatch: true,
     debrief: {
       process:
-        "Confirm the snapshot with the sector headline. If costs are industry-wide, ask whether your name has pricing power—or just hope.",
+        "If costs are industry-wide, ask whether this company can raise prices, or whether you are hoping it can.",
       whyMarketMoved:
-        "SAMPLE tape discounts margin risk when company numbers and sector news agree.",
+        "The stock discounted margin risk when company numbers and sector news agreed.",
       evidence:
-        "Dual signal: filing-like snapshot + cost headline. Process: congruence raises conviction.",
+        "Two matching signals: the snapshot and the cost headline.",
     },
     allowShort: false,
     packId: "combined",
@@ -599,18 +605,18 @@ export const COMBINED_CASES: CaseStudy[] = [
   },
   {
     id: "case-comb-cash-contract",
-    title: "SAMPLE Combined · Soft Cash + Contract Win",
+    title: "Weak cash now, big contract later",
     contextType: "combined",
     thinkingMode: "combined_rumor_filing",
     brief:
-      "Cyclical SAMPLE snapshot shows weak FCF, but a headline announces a large multi-year contract. Near-term cash vs long-horizon demand—horizon partial-credit case.",
+      "Cash from the business is weak right now, but the company just won a large multi-year contract that ramps next year. Near-term cash vs longer-term demand.",
     statementSnapshot: {
       ...cyclicalSnap,
       id: "snap-comb-cash",
       cashFlow: { operatingCashFlow: 8_000, freeCashFlow: -2_000 },
-      notes: "SAMPLE: cash soft now; contract may help later.",
+      notes: "Practice: cash is soft now; the contract may help later.",
     },
-    newsHeadline: "SAMPLE: Wins multi-year OEM contract; ramp starts next year.",
+    newsHeadline: "Wins a multi-year contract. Ramp starts next year.",
     preOhlc: CYCLICAL_PRE,
     postOhlc: withAftermath(CYCLICAL_PRE, [
       bar("+1", 108.0, 109.5, 107.0, 108.8),
@@ -622,11 +628,11 @@ export const COMBINED_CASES: CaseStudy[] = [
     partialOnHorizonMismatch: true,
     debrief: {
       process:
-        "Near-term cash stress argues caution; multi-year contract argues patience. Hold is the clean process answer; buy/sell can be partial if your horizon is explicit.",
+        "Near-term cash stress argues for caution. A multi-year contract argues for patience. Hold is the clean answer unless you are explicit about your time frame.",
       whyMarketMoved:
-        "SAMPLE tape chops as traders argue timing of the ramp vs cash reality.",
+        "The stock chopped as traders argued timing of the ramp versus cash today.",
       evidence:
-        "Snapshot cash vs headline contract. Process: state your horizon before picking a side.",
+        "Snapshot cash versus the contract headline. State your time frame before picking a side.",
     },
     allowShort: false,
     packId: "combined",
@@ -638,11 +644,12 @@ export const COMBINED_CASES: CaseStudy[] = [
 export const SCALE_CASES: CaseStudy[] = [
   {
     id: "case-scale-buyback",
-    title: "SAMPLE Company Headline · Buyback",
+    title: "Large buyback after a weak stretch",
     contextType: "news",
     thinkingMode: "company_headline",
-    brief: "SAMPLE: board authorizes large buyback after a soft tape. Decide before reveal.",
-    newsHeadline: "SAMPLE: Authorizes multi-billion buyback; starts immediately (stylized).",
+    brief:
+      "The board authorizes a large buyback after a soft stretch in the stock. Decide before you see the reaction.",
+    newsHeadline: "Authorizes a large buyback and starts buying immediately.",
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
       bar("+1", 181.0, 183.0, 180.5, 182.4),
@@ -652,9 +659,10 @@ export const SCALE_CASES: CaseStudy[] = [
     correctActions: ["buy", "hold"],
     acceptablePartial: ["hold"],
     debrief: {
-      process: "Buybacks can support price but do not fix a broken thesis. Size to whether capital return was the missing piece.",
-      whyMarketMoved: "SAMPLE tape bids the mechanical bid from buybacks.",
-      evidence: "Company headline, equity-only. Process: capital return vs operating outlook.",
+      process:
+        "Buybacks can support the stock. They do not fix a broken business. Ask whether returning cash was the missing piece.",
+      whyMarketMoved: "The stock bid as the company itself became a buyer.",
+      evidence: "Company news. Capital return vs the operating outlook.",
     },
     allowShort: false,
     packId: "company-news",
@@ -662,11 +670,12 @@ export const SCALE_CASES: CaseStudy[] = [
   },
   {
     id: "case-scale-dividend-cut",
-    title: "SAMPLE Company Headline · Dividend Cut",
+    title: "Dividend cut to preserve cash",
     contextType: "news",
     thinkingMode: "company_headline",
-    brief: "SAMPLE: cyclical cuts dividend citing cash preservation. Pre-tape already weak.",
-    newsHeadline: "SAMPLE: Cuts dividend 40%; cites balance-sheet flexibility.",
+    brief:
+      "This industrial company cuts its dividend 40% to preserve cash. The stock was already weak.",
+    newsHeadline: "Cuts the dividend 40%, citing balance-sheet flexibility.",
     preOhlc: CYCLICAL_PRE,
     postOhlc: withAftermath(CYCLICAL_PRE, [
       bar("+1", 104.0, 104.8, 101.5, 102.2),
@@ -676,9 +685,10 @@ export const SCALE_CASES: CaseStudy[] = [
     correctActions: ["sell", "hold"],
     acceptablePartial: ["hold"],
     debrief: {
-      process: "Dividend cuts signal capital stress or priority shift. Income buyers often sell; long-horizon owners reassess coverage.",
-      whyMarketMoved: "SAMPLE income-oriented selling pressure after the cut.",
-      evidence: "Company headline on equity. Process: who owned it for the yield?",
+      process:
+        "A dividend cut often means cash is tighter or priorities changed. Income buyers often sell. Long-term owners reassess whether the payout was the reason they owned it.",
+      whyMarketMoved: "Income-oriented selling after the cut.",
+      evidence: "Company headline. Who owned this for the yield?",
     },
     allowShort: false,
     packId: "company-news",
@@ -686,10 +696,11 @@ export const SCALE_CASES: CaseStudy[] = [
   },
   {
     id: "case-scale-beat-hold",
-    title: "SAMPLE Earnings Quiet Beat",
+    title: "Quiet earnings beat",
     contextType: "financials",
     thinkingMode: "beat_miss",
-    brief: "SAMPLE print modestly beats with in-line guide. Pre-tape already rich. Decide.",
+    brief:
+      "Earnings modestly beat, guidance is in line, and the stock already looks expensive. Decide.",
     statementSnapshot: megaSnap,
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
@@ -700,9 +711,10 @@ export const SCALE_CASES: CaseStudy[] = [
     correctActions: ["hold"],
     acceptablePartial: ["buy", "sell"],
     debrief: {
-      process: "Quiet beats into rich tape often mean hold: not enough new info to chase or dump.",
-      whyMarketMoved: "SAMPLE tape meanders—event priced, surprise small.",
-      evidence: "In-line guide + modest beat. Process: size of surprise vs positioning.",
+      process:
+        "A small beat into a rich stock often means hold: not enough new information to chase or dump.",
+      whyMarketMoved: "The event was mostly priced in. The surprise was small.",
+      evidence: "In-line guide plus a modest beat.",
     },
     allowShort: false,
     packId: "earnings",
@@ -710,11 +722,12 @@ export const SCALE_CASES: CaseStudy[] = [
   },
   {
     id: "case-scale-risk-on",
-    title: "SAMPLE Macro · Soft Landing Chatter",
+    title: "Jobs cool without collapsing",
     contextType: "news",
     thinkingMode: "macro_print",
-    brief: "SAMPLE: softer labor print; soft-landing chatter rises. Equity was consolidating.",
-    newsHeadline: "SAMPLE: Labor cooling without collapse; soft-landing odds rise.",
+    brief:
+      "A jobs report cools without collapsing. Talk of a soft landing picks up. This stock had been consolidating.",
+    newsHeadline: "Labor market cools without collapsing. Soft-landing odds rise.",
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
       bar("+1", 181.5, 183.2, 181.0, 182.8),
@@ -724,9 +737,10 @@ export const SCALE_CASES: CaseStudy[] = [
     correctActions: ["buy", "hold"],
     acceptablePartial: ["hold"],
     debrief: {
-      process: "Macro relief can lift beta. Still ask whether you are early or late vs the narrative.",
-      whyMarketMoved: "SAMPLE risk assets bid as rate-cut hopes return.",
-      evidence: "Macro print tone, not company filing.",
+      process:
+        "Easier macro news can lift riskier stocks. Still ask whether you are early or late to that story.",
+      whyMarketMoved: "Risk assets bid as rate-cut hopes returned.",
+      evidence: "Economic data tone, not a company filing.",
     },
     allowShort: false,
     packId: "macro-news",
@@ -734,17 +748,18 @@ export const SCALE_CASES: CaseStudy[] = [
   },
   {
     id: "case-scale-combined-lawsuit",
-    title: "SAMPLE Combined · Lawsuit Headline + Cash Cushion",
+    title: "Lawsuit headline, large cash pile",
     contextType: "combined",
     thinkingMode: "combined_rumor_filing",
-    brief: "SAMPLE lawsuit headline hits; snapshot still shows large cash. Horizon/process drill.",
+    brief:
+      "A consumer lawsuit hits the headlines. The snapshot still shows a large cash pile. Can you live with the uncertainty?",
     statementSnapshot: {
       ...megaSnap,
       id: "snap-scale-lawsuit",
       balanceSheet: { assets: 400_000, liabilities: 200_000, equity: 200_000 },
-      notes: "SAMPLE: legal headline vs cash cushion.",
+      notes: "Practice: legal headline vs cash cushion.",
     },
-    newsHeadline: "SAMPLE: Faces consumer lawsuit; damages uncertain.",
+    newsHeadline: "Faces a consumer lawsuit. Damages are uncertain.",
     preOhlc: TECH_PRE,
     postOhlc: withAftermath(TECH_PRE, [
       bar("+1", 178.0, 178.8, 176.0, 176.8),
@@ -755,9 +770,10 @@ export const SCALE_CASES: CaseStudy[] = [
     acceptablePartial: ["sell"],
     partialOnHorizonMismatch: true,
     debrief: {
-      process: "Legal headlines create uncertainty bands. Hold if cash covers plausible outcomes; sell if your horizon cannot tolerate the range.",
-      whyMarketMoved: "SAMPLE tape discounts uncertainty, not proven damages.",
-      evidence: "Headline + balance-sheet cushion. Process: range of outcomes vs time.",
+      process:
+        "Legal headlines widen the range of outcomes. Hold if cash covers plausible damages. Sell if you cannot sit through that range.",
+      whyMarketMoved: "The stock discounted uncertainty, not proven damages.",
+      evidence: "Headline plus a strong cash and equity cushion.",
     },
     allowShort: false,
     packId: "combined",
@@ -791,50 +807,55 @@ export const CASE_PACKS: {
 }[] = [
   {
     id: "earnings",
-    name: "Pack B · Earnings / Financials",
-    description: "Beat/miss, margins, cash flow, guidance, balance-sheet stress (SAMPLE)",
+    name: "Earnings",
+    description:
+      "Practice after an earnings report: beats, misses, margins, cash, and outlook.",
     milestoneId: "E5.M3",
   },
   {
     id: "company-news",
-    name: "Pack A · Company News",
-    description: "Momentum chase vs fade + simple company headlines on equities (SAMPLE)",
+    name: "Company news",
+    description:
+      "Practice on headlines: product news, contracts, leadership, buybacks.",
     milestoneId: "E5.M2",
   },
   {
     id: "macro-news",
-    name: "Pack A+ · Macro Intro",
-    description: "Risk-off, macro print, geopolitics/supply (SAMPLE, post-P0)",
+    name: "Market-wide news",
+    description:
+      "Inflation, fear, and supply shocks that move many stocks at once.",
     milestoneId: "E5.M2b",
   },
   {
     id: "combined",
-    name: "Pack C · Combined",
-    description: "News + statement snapshots together; horizon partial credit (SAMPLE)",
+    name: "News plus financials",
+    description:
+      "Use both the headline and the snapshot. Your time frame can change the answer.",
     milestoneId: "E5.M4",
   },
   {
     id: "futures",
-    name: "Pack F · Futures (SAMPLE)",
-    description: "Index/commodity-style decide-and-reveal — SAMPLE tape only",
+    name: "Futures",
+    description: "Index and commodity practice. Not live futures.",
     milestoneId: "E10.M5",
   },
   {
     id: "forex",
-    name: "Pack FX · Forex (SAMPLE)",
-    description: "Spot FX SAMPLE decisions — not a LIVE FX desk",
+    name: "Forex",
+    description: "Currency practice. Not a live FX desk.",
     milestoneId: "E10.M6",
   },
   {
     id: "crypto",
-    name: "Pack C+ · Crypto (SAMPLE)",
-    description: "Chase/fade, dump/reclaim, chop-break on SAMPLE crypto",
+    name: "Crypto",
+    description: "Bitcoin and ether practice charts.",
     milestoneId: "E10.M7",
   },
   {
     id: "options-context",
-    name: "Pack O · Options context (SAMPLE)",
-    description: "Underlying into event / after vol spike — no chain or Greeks",
+    name: "Options context",
+    description:
+      "How event risk and volatility affect the stock. No options chain here.",
     milestoneId: "E10.M7",
   },
 ];

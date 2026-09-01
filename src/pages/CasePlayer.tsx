@@ -3,9 +3,11 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import CandlestickChart from "../components/CandlestickChart";
 import FinancialSnapshotCard from "../components/FinancialSnapshotCard";
 import {
-  CHART_GATE_PREREQ_TIP,
   CHART_GATE_TRAINING_GROUP,
+  isChartGateCleared,
   isChartGateComplete,
+  isChartGateTemporarilyBypassed,
+  setChartGateTemporaryBypass,
 } from "../lib/beginnerPath";
 import {
   CASE_PACKS,
@@ -15,7 +17,10 @@ import {
   type CaseGrade,
 } from "../lib/caseStudies";
 import { recordCaseResult } from "../lib/progressStore";
-import { coachTipForThinkingMode } from "../lib/thinkingModeTips";
+import {
+  coachTipForThinkingMode,
+  thinkingModeLabel,
+} from "../lib/thinkingModeTips";
 
 const ACTIONS: { id: CaseAction; label: string }[] = [
   { id: "buy", label: "BUY" },
@@ -28,7 +33,9 @@ export default function CasePlayer() {
   const { caseId = "case-earn-beat-miss" } = useParams();
   const navigate = useNavigate();
   const study = useMemo(() => getCaseStudy(caseId), [caseId]);
-  const gateOk = isChartGateComplete();
+  const [tempBypass, setTempBypass] = useState(isChartGateTemporarilyBypassed);
+  const gateDone = isChartGateComplete();
+  const gateOk = gateDone || tempBypass || isChartGateCleared();
 
   const [selected, setSelected] = useState<CaseAction | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -47,17 +54,33 @@ export default function CasePlayer() {
 
   if (!gateOk) {
     return (
-      <div className="max-w-xl mx-auto p-6 space-y-4 font-mono text-sm">
-        <p className="text-accent-red">{CHART_GATE_PREREQ_TIP}</p>
-        <Link
-          to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
-          className="inline-block text-primary underline"
-        >
-          Complete Indicators quiz (E4.M0)
-        </Link>
+      <div className="max-w-xl mx-auto p-6 space-y-4">
+        <p className="text-sm text-slate-200 leading-relaxed">
+          This case is clearer after the Indicators quiz on Training. You can
+          still open it for this browser session only — that peek is temporary
+          and does not save as path progress.
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <Link
+            to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
+            className="inline-flex rounded-lg bg-primary px-3 py-2 text-sm font-bold text-background-dark"
+          >
+            Take Indicators quiz
+          </Link>
+          <button
+            type="button"
+            className="inline-flex rounded-lg border border-primary/50 px-3 py-2 text-sm font-mono text-primary hover:bg-primary/10"
+            onClick={() => {
+              setChartGateTemporaryBypass(true);
+              setTempBypass(true);
+            }}
+          >
+            Open this case this session
+          </button>
+        </div>
         <button
           type="button"
-          className="block text-primary/60"
+          className="block text-sm text-primary/60 font-mono"
           onClick={() => navigate(-1)}
         >
           Go back
@@ -91,7 +114,7 @@ export default function CasePlayer() {
           <span className="font-mono text-xs tracking-widest">CASES</span>
         </Link>
         <p className="font-mono text-[10px] text-primary/50 uppercase">
-          {study.contextType} · {study.thinkingMode} · SAMPLE
+          {thinkingModeLabel(study.thinkingMode)} · practice
         </p>
       </header>
 
@@ -99,11 +122,13 @@ export default function CasePlayer() {
         <div className="border-neon p-4 bg-neutral-dark/60 space-y-2">
           <h1 className="text-xl font-bold text-primary crt-glow">{study.title}</h1>
           <p className="text-sm text-slate-300">{study.brief}</p>
-          <p className="font-mono text-[11px] text-primary/60">
-            COACH · {study.thinkingMode}: {coachTipForThinkingMode(study.thinkingMode)}
+          <p className="text-[13px] text-slate-400 leading-relaxed">
+            Tip: {coachTipForThinkingMode(study.thinkingMode)}
           </p>
           {study.newsHeadline ? (
-            <p className="font-mono text-xs text-primary/80">HEADLINE: {study.newsHeadline}</p>
+            <p className="text-sm text-primary/90">
+              Headline: {study.newsHeadline}
+            </p>
           ) : null}
         </div>
 
@@ -114,10 +139,12 @@ export default function CasePlayer() {
         <div className="bg-background-dark border-2 border-primary/40 rounded-xl overflow-hidden">
           <div className="px-4 py-2 border-b border-primary/30 bg-neutral-dark/80 flex justify-between">
             <span className="text-[10px] font-mono text-primary/50 tracking-widest uppercase">
-              {submitted ? "SAMPLE_Aftermath // Revealed" : "SAMPLE_Pre_Reaction // Decide first"}
+              {submitted ? "What happened after" : "Price so far"}
             </span>
             {!submitted ? (
-              <span className="text-[10px] font-mono text-primary/40">post tape hidden</span>
+              <span className="text-[10px] font-mono text-primary/40">
+                aftermath hidden until you decide
+              </span>
             ) : null}
           </div>
           <div className="p-4">
@@ -139,7 +166,7 @@ export default function CasePlayer() {
                   disabled={submitted || lockedShort}
                   title={
                     lockedShort
-                      ? "Short soft-gated until long/hold fluency (beginner path)"
+                      ? "Short selling is locked until you are comfortable with buy, sell, and hold"
                       : a.label
                   }
                   onClick={() => !submitted && !lockedShort && setSelected(a.id)}
@@ -152,7 +179,7 @@ export default function CasePlayer() {
                   }`}
                 >
                   {a.label}
-                  {lockedShort ? " · LOCKED" : ""}
+                  {lockedShort ? " (locked)" : ""}
                 </button>
               );
             })}
@@ -164,7 +191,7 @@ export default function CasePlayer() {
               onClick={onSubmit}
               className="w-full bg-primary text-background-dark font-bold py-3 rounded disabled:opacity-40"
             >
-              LOCK DECISION · REVEAL
+              Lock in and see what happened
             </button>
           ) : null}
         </div>
@@ -180,29 +207,34 @@ export default function CasePlayer() {
                     : "text-accent-red"
               }
             >
-              GRADE: {grade.toUpperCase()} · action={selected}
+              {grade === "correct"
+                ? "Correct"
+                : grade === "partial"
+                  ? "Partial credit"
+                  : "Incorrect"}
+              {selected ? ` · you chose ${selected}` : ""}
             </p>
             <p className="text-slate-300">
-              <span className="text-primary/50">&gt; process </span>
+              <span className="text-primary/50">How to think about it: </span>
               {study.debrief.process}
             </p>
             <p className="text-slate-300">
-              <span className="text-primary/50">&gt; why_moved </span>
+              <span className="text-primary/50">Why the price moved: </span>
               {study.debrief.whyMarketMoved}
             </p>
             <p className="text-slate-300">
-              <span className="text-primary/50">&gt; evidence </span>
+              <span className="text-primary/50">What the numbers showed: </span>
               {study.debrief.evidence}
             </p>
             {grade === "partial" && study.partialOnHorizonMismatch ? (
               <p className="text-yellow-400/90 text-xs">
-                Partial credit: horizon / process mismatch — direction may be
-                defensible but sizing or time frame diverged from the model
-                answer.
+                Partial credit: your direction can make sense, but the time
+                frame did not match the teaching answer.
               </p>
             ) : null}
             <p className="text-[10px] text-primary/40">
-              Decision locked (anti-hindsight). Refresh or reopen case to retry.
+              This decision is locked so you cannot peek and change it. Refresh
+              or reopen the case to try again.
             </p>
             <Link to="/cases" className="inline-block text-primary underline text-xs">
               Back to case list

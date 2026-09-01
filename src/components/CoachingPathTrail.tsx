@@ -64,19 +64,23 @@ export default function CoachingPathTrail({
                 {step.isCurrent ? (
                   <span className="font-bold">NOW</span>
                 ) : (
-                  <span className="normal-case text-slate-300">{step.messagePreview}</span>
+                  <span className="normal-case text-slate-300 whitespace-pre-wrap break-words">
+                    {step.messagePreview}
+                  </span>
                 )}
                 {showNodeIds ? (
                   <span className="ml-2 text-slate-600">[{step.nodeId}]</span>
                 ) : null}
               </p>
               {!step.isCurrent && step.choiceLabel ? (
-                <p className="pl-4 normal-case text-slate-500">
+                <p className="pl-4 normal-case text-slate-500 break-words">
                   You chose: {step.choiceLabel}
                 </p>
               ) : null}
               {step.isCurrent ? (
-                <p className="pl-4 normal-case text-slate-300">{step.messagePreview}</p>
+                <p className="pl-4 normal-case text-slate-300 whitespace-pre-wrap break-words">
+                  {step.messagePreview}
+                </p>
               ) : null}
             </li>
           ))}

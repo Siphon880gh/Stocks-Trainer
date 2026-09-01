@@ -8,7 +8,7 @@ description: >-
 # Practice Draw
 
 ## Sources
-- `src/lib/practiceDraw.ts` — templates (`doji`/`hammer`/`engulfing`), `gradeSketch`, `loadLastDrawAttempt` / `saveLastDrawAttempt`
+- `src/lib/practiceDraw.ts` — templates (`doji`/`hammer`/`bullish-engulfing`/`bearish-engulfing`; legacy `engulfing` aliases bullish), `gradeSketch`, `loadLastDrawAttempt` / `saveLastDrawAttempt`
 - `src/pages/PracticeDraw.tsx` — canvas UI (undo/clear/submit + template picker)
 - Storage key: `analysis_core_practice_draw_v1` (dedicated; not ProgressStore schema)
 

@@ -89,7 +89,31 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                               </span>
                             </div>
                             <div className="p-4">
-                              {q.overlayId ? (
+                              {q.optionsAreCharts ? (
+                                <div className="grid grid-cols-5 gap-2">
+                                  {q.options.map((o) => (
+                                    <div
+                                      key={o.id}
+                                      className={`rounded border p-1 ${
+                                        o.id === q.correctAnswer
+                                          ? "border-primary bg-primary/10"
+                                          : "border-primary/20"
+                                      }`}
+                                    >
+                                      <CandlestickChart
+                                        data={PATTERN_OHLC[o.chartKey ?? "hammer"] ?? PATTERN_OHLC.hammer}
+                                        height={90}
+                                        highlightIndex={o.chartHighlightIndex ?? 2}
+                                        compact
+                                      />
+                                      <p className="text-center text-xs font-mono text-primary mt-1">
+                                        {o.label}
+                                        {o.id === q.correctAnswer ? " ✓" : ""}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              ) : q.overlayId ? (
                                 <MarketChart
                                   data={SAMPLE_OHLC}
                                   height={180}
@@ -98,12 +122,14 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                                   showRSI={q.overlayId === "rsi"}
                                   showMACD={q.overlayId === "macd"}
                                   showBollinger={q.overlayId === "bollinger"}
+                                  showScaleControls={false}
                                 />
                               ) : (
                                 <CandlestickChart
                                   data={PATTERN_OHLC[q.patternKey ?? "hammer"] ?? PATTERN_OHLC.hammer}
                                   height={180}
                                   highlightIndex={q.highlightIndex ?? 2}
+                                  showScaleControls={false}
                                 />
                               )}
                             </div>
@@ -134,7 +160,31 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                       </span>
                     </div>
                     <div className="p-4">
-                      {q.overlayId ? (
+                      {q.optionsAreCharts ? (
+                        <div className="grid grid-cols-5 gap-2">
+                          {q.options.map((o) => (
+                            <div
+                              key={o.id}
+                              className={`rounded border p-1 ${
+                                o.id === q.correctAnswer
+                                  ? "border-primary bg-primary/10"
+                                  : "border-primary/20"
+                              }`}
+                            >
+                              <CandlestickChart
+                                data={PATTERN_OHLC[o.chartKey ?? "hammer"] ?? PATTERN_OHLC.hammer}
+                                height={90}
+                                highlightIndex={o.chartHighlightIndex ?? 2}
+                                compact
+                              />
+                              <p className="text-center text-xs font-mono text-primary mt-1">
+                                {o.label}
+                                {o.id === q.correctAnswer ? " ✓" : ""}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : q.overlayId ? (
                         <MarketChart
                           data={SAMPLE_OHLC}
                           height={180}
@@ -143,12 +193,14 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                           showRSI={q.overlayId === "rsi"}
                           showMACD={q.overlayId === "macd"}
                           showBollinger={q.overlayId === "bollinger"}
+                          showScaleControls={false}
                         />
                       ) : (
                         <CandlestickChart
                           data={PATTERN_OHLC[q.patternKey ?? "hammer"] ?? PATTERN_OHLC.hammer}
                           height={180}
                           highlightIndex={q.highlightIndex ?? 2}
+                          showScaleControls={false}
                         />
                       )}
                     </div>

@@ -75,7 +75,7 @@ export const BEGINNER_PATH_MILESTONES: PathMilestoneDef[] =
     }
     if (node.id === "E4.M0") {
       return nodeToDef(node, {
-        summary: "Candle/indicator fluency via existing Training (required before cases)",
+        summary: "Candle/indicator fluency via Training (required before cases)",
         trainingGroup: "indicators",
         isGradedCasePack: false,
       });
@@ -130,7 +130,7 @@ export const MARKET_EXPLORER_PATH_MILESTONES: PathMilestoneDef[] =
   MARKET_EXPLORER_PATH.milestones.map((node) => {
     if (node.id === "E4.M0") {
       return nodeToDef(node, {
-        summary: "Indicators soft-gate before multi-market SAMPLE cases",
+        summary: "Indicators quiz before multi-market SAMPLE cases",
         trainingGroup: "indicators",
         isGradedCasePack: false,
       });
@@ -179,10 +179,35 @@ export function isChartGateComplete(): boolean {
   return getMilestoneStatus(CHART_GATE_MILESTONE_ID) === "complete";
 }
 
+const CHART_GATE_TEMP_BYPASS_KEY = "analysis_core_chart_gate_temp_bypass_v1";
+
+/** Session-only peek past the chart gate — not written to ProgressStore. */
+export function isChartGateTemporarilyBypassed(): boolean {
+  try {
+    return sessionStorage.getItem(CHART_GATE_TEMP_BYPASS_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function setChartGateTemporaryBypass(enabled: boolean): void {
+  try {
+    if (enabled) sessionStorage.setItem(CHART_GATE_TEMP_BYPASS_KEY, "1");
+    else sessionStorage.removeItem(CHART_GATE_TEMP_BYPASS_KEY);
+  } catch {
+    /* private mode / blocked storage */
+  }
+}
+
+/** Progress complete OR temporary session bypass. */
+export function isChartGateCleared(): boolean {
+  return isChartGateComplete() || isChartGateTemporarilyBypassed();
+}
+
 export function isGradedCasePackLocked(milestoneId: string): boolean {
   const def = getPathMilestone(milestoneId);
   if (!def?.isGradedCasePack) return false;
-  return !isChartGateComplete();
+  return !isChartGateCleared();
 }
 
 /** Prior milestones in unlockFrom must be complete (E3.M2). */
@@ -206,7 +231,7 @@ export function canStartQuizGroup(groupId: string): boolean {
 }
 
 export function canStartCasePack(packId: string): boolean {
-  if (!isChartGateComplete()) return false;
+  if (!isChartGateCleared()) return false;
   const def = activePathDefs().find((m) => m.casesPack === packId);
   if (!def) {
     // Pack outside active path spine: chart gate only
@@ -216,7 +241,7 @@ export function canStartCasePack(packId: string): boolean {
 }
 
 export const CHART_GATE_PREREQ_TIP =
-  "CHART_GATE_REQUIRED: Complete the Indicators Training quiz (E4.M0) before graded decision cases unlock.";
+  "Cases are easier after the Indicators quiz on Training. You can still peek for this browser session only — that skip is temporary and does not save as path progress.";
 
 export function trainingHrefForMilestone(id: string): string | null {
   const def = getPathMilestone(id);

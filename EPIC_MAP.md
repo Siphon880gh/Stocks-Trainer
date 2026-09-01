@@ -305,7 +305,7 @@ E11.M1 (schema + validate + sample) → E11.M2 (nav engine) → E11.M3 (catalog 
 - [x] Financial statements covered (literacy + cases)
 - [x] Case studies are priority content spine (E5)
 - [x] Council Option A applied (literacy-then-cases + soft chart gate + MVP freeze)
-- [ ] User said **go** to start implementing E1.M1
+- [x] User said **go** to start implementing E1.M1
 
 ---
 

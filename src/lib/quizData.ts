@@ -15,6 +15,9 @@ export interface QuizOption {
   patternId?: PatternId;
   label: string;
   description: string;
+  /** When set, this option is a selectable mini chart (pick-the-chart questions). */
+  chartKey?: string;
+  chartHighlightIndex?: number;
 }
 
 export interface QuizQuestion {
@@ -26,6 +29,8 @@ export interface QuizQuestion {
   patternKey?: string;
   overlayId?: string;
   highlightIndex?: number;
+  /** Options are mini charts; hide the single hero chart above choices. */
+  optionsAreCharts?: boolean;
   /** Optional Archive literacy term id for glossary deep-link */
   glossaryTermId?: string;
   /** Optional structured financial snapshot id (E4.M2 card) */
@@ -34,6 +39,20 @@ export interface QuizQuestion {
   assetClass?: AssetClass;
   /** Optional E1 sample pack id for equity-backed drills */
   samplePackId?: string;
+}
+
+/** Build numbered chart choices (1…n) for “which chart is the pattern?” questions. */
+function chartPickOptions(
+  entries: Array<{ id: "A" | "B" | "C" | "D" | "E"; chartKey: string; highlightIndex?: number }>
+): QuizOption[] {
+  return entries.map((e, i) => ({
+    id: e.id,
+    label: String(i + 1),
+    description: "Select this chart",
+    chartKey: e.chartKey,
+    chartHighlightIndex: e.highlightIndex ?? 2,
+    patternId: e.chartKey as PatternId,
+  }));
 }
 
 const OPTIONS_3: QuizOption[] = [
@@ -56,6 +75,105 @@ const INDICATOR_OPTIONS: QuizOption[] = [
   { id: "C", label: "RSI", description: "Relative Strength Index" },
   { id: "D", label: "MACD", description: "Moving Average Convergence Divergence" },
   { id: "E", label: "Bollinger Bands", description: "Volatility bands around SMA" },
+];
+
+const HAMMER_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "doji", label: "Doji", description: "Open ≈ close, indecision." },
+  { id: "B", patternId: "hammer", label: "Hammer", description: "Long lower shadow, small body at top." },
+  { id: "C", patternId: "shooting-star", label: "Shooting Star", description: "Long upper shadow after a rally." },
+];
+
+const DESC_HINT = "Pick the matching definition.";
+
+const HAMMER_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Open and close nearly equal, wicks both ways — indecision", description: DESC_HINT },
+  { id: "B", label: "Long lower shadow, small body near the high — buyers reclaimed a selloff", description: DESC_HINT },
+  { id: "C", label: "Long upper shadow after a rally — rejection of higher prices", description: DESC_HINT },
+];
+
+const DOJI_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Open and close nearly equal, often with wicks — buyers and sellers in balance", description: DESC_HINT },
+  { id: "B", label: "Long lower shadow, small body at the top — bullish reclaim", description: DESC_HINT },
+  { id: "C", label: "The current body fully covers the prior body — momentum shift", description: DESC_HINT },
+];
+
+const ENGULFING_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Open ≈ close with long wicks — indecision", description: DESC_HINT },
+  { id: "B", label: "Long lower shadow, small body at the top", description: DESC_HINT },
+  { id: "C", label: "The current candle's body completely covers the previous candle's body", description: DESC_HINT },
+];
+
+const SHOOTING_STAR_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "hammer", label: "Hammer", description: "Long lower shadow at a bottom." },
+  { id: "B", patternId: "shooting-star", label: "Shooting Star", description: "Long upper shadow at a top." },
+  { id: "C", patternId: "inverted-hammer", label: "Inverted Hammer", description: "Same shape at a bottom; bullish." },
+];
+
+const SHOOTING_STAR_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Long lower shadow after a decline — bullish reclaim", description: DESC_HINT },
+  { id: "B", label: "Long upper shadow after a rally — rejection at the highs", description: DESC_HINT },
+  { id: "C", label: "Open ≈ close with balanced wicks — indecision", description: DESC_HINT },
+];
+
+const INVERTED_HAMMER_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "shooting-star", label: "Shooting Star", description: "Same shape, but at a top — bearish." },
+  { id: "B", patternId: "hammer", label: "Hammer", description: "Long lower shadow, body at top." },
+  { id: "C", patternId: "inverted-hammer", label: "Inverted Hammer", description: "Long upper shadow at a bottom — bullish." },
+];
+
+const INVERTED_HAMMER_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Long upper shadow at a top after a rally — bearish rejection", description: DESC_HINT },
+  { id: "B", label: "Long lower shadow, small body at the top — bullish reclaim", description: DESC_HINT },
+  { id: "C", label: "Long upper shadow at a bottom after a decline — bullish probe", description: DESC_HINT },
+];
+
+const BULLISH_ENGULFING_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "bullish-engulfing", label: "Bullish Engulfing", description: "Green body covers prior red." },
+  { id: "B", patternId: "bearish-engulfing", label: "Bearish Engulfing", description: "Red body covers prior green." },
+  { id: "C", patternId: "hammer", label: "Hammer", description: "One-candle lower-wick reclaim." },
+];
+
+const BULLISH_ENGULFING_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "A green body completely covers the prior red body — buyers take over", description: DESC_HINT },
+  { id: "B", label: "A red body completely covers the prior green body — sellers take over", description: DESC_HINT },
+  { id: "C", label: "Single candle with a long lower wick after a selloff", description: DESC_HINT },
+];
+
+const BEARISH_ENGULFING_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "bullish-engulfing", label: "Bullish Engulfing", description: "Green body covers prior red." },
+  { id: "B", patternId: "bearish-engulfing", label: "Bearish Engulfing", description: "Red body covers prior green." },
+  { id: "C", patternId: "shooting-star", label: "Shooting Star", description: "Long upper wick at a top." },
+];
+
+const BEARISH_ENGULFING_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "A green body completely covers the prior red body — buyers take over", description: DESC_HINT },
+  { id: "B", label: "A red body completely covers the prior green body — sellers take over", description: DESC_HINT },
+  { id: "C", label: "Long upper shadow after a rally — rejection of higher prices", description: DESC_HINT },
+];
+
+const MORNING_STAR_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "doji", label: "Doji", description: "One indecision candle." },
+  { id: "B", patternId: "hammer", label: "Hammer", description: "One-candle lower-wick reclaim." },
+  { id: "C", patternId: "morning-star", label: "Morning Star", description: "Three-candle bullish reversal." },
+];
+
+const MORNING_STAR_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Open ≈ close on a single bar — indecision only", description: DESC_HINT },
+  { id: "B", label: "One candle with a long lower wick after a selloff", description: DESC_HINT },
+  { id: "C", label: "Large red, small middle, then large green — three-bar bullish reversal", description: DESC_HINT },
+];
+
+const OHLC_PART_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Open", description: "Price when the period started." },
+  { id: "B", label: "High", description: "Highest price in the period." },
+  { id: "C", label: "Low", description: "Lowest price in the period." },
+  { id: "D", label: "Close", description: "Price when the period ended." },
+];
+
+const CANDLE_COLOR_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Close is above open", description: "Buyers finished higher — typically green." },
+  { id: "B", label: "Close is below open", description: "Sellers finished lower — typically red." },
+  { id: "C", label: "High equals the low", description: "A flat range, not a color rule." },
 ];
 
 export const QUIZ_OPTIONS = OPTIONS_3;
@@ -186,6 +304,527 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     explanation: "Morning Star: three-candle bullish reversal at bottom of downtrend.",
     patternKey: "morning-star",
     highlightIndex: 3,
+  },
+  {
+    id: "PR-H-PICK",
+    prompt: "Which chart shows a Hammer?",
+    correctAnswer: "C",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "doji" },
+      { id: "B", chartKey: "shooting-star" },
+      { id: "C", chartKey: "hammer" },
+      { id: "D", chartKey: "engulfing", highlightIndex: 3 },
+      { id: "E", chartKey: "inverted-hammer" },
+    ]),
+    explanation:
+      "Hammer: long lower wick, small body near the high. Chart 3 matches that shape; the others are different families.",
+    patternKey: "hammer",
+  },
+  {
+    id: "PR-H-DESC",
+    prompt: "Which description matches a Hammer?",
+    correctAnswer: "B",
+    options: HAMMER_DESC_OPTIONS,
+    explanation:
+      "A Hammer has a long lower shadow and a small body near the high — sellers pushed down, buyers reclaimed.",
+    patternKey: "hammer",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-D-PICK",
+    prompt: "Which chart shows a Doji?",
+    correctAnswer: "A",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "doji" },
+      { id: "B", chartKey: "hammer" },
+      { id: "C", chartKey: "shooting-star" },
+      { id: "D", chartKey: "bullish-engulfing" },
+      { id: "E", chartKey: "morning-star", highlightIndex: 3 },
+    ]),
+    explanation: "Doji: open ≈ close (tiny body). Chart 1 is the Doji; the others have clear directional bodies or multi-candle shapes.",
+    patternKey: "doji",
+  },
+  {
+    id: "PR-D-DESC",
+    prompt: "Which description matches a Doji?",
+    correctAnswer: "A",
+    options: DOJI_DESC_OPTIONS,
+    explanation: "A Doji prints open ≈ close. Wicks can be long; the tell is the tiny body.",
+    patternKey: "doji",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-E-PICK",
+    prompt: "Which chart shows an Engulfing pattern?",
+    correctAnswer: "D",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "hammer" },
+      { id: "B", chartKey: "doji" },
+      { id: "C", chartKey: "shooting-star" },
+      { id: "D", chartKey: "engulfing", highlightIndex: 3 },
+      { id: "E", chartKey: "inverted-hammer" },
+    ]),
+    explanation: "Engulfing is two candles where the later body fully covers the prior body. Chart 4 shows that overlap.",
+    patternKey: "engulfing",
+  },
+  {
+    id: "PR-E-DESC",
+    prompt: "Which description matches an Engulfing candle?",
+    correctAnswer: "C",
+    options: ENGULFING_DESC_OPTIONS,
+    explanation: "Engulfing is a two-candle pattern: the new body completely covers the prior body.",
+    patternKey: "engulfing",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-BU-PICK",
+    prompt: "Which chart shows Bullish Engulfing?",
+    correctAnswer: "B",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "bearish-engulfing" },
+      { id: "B", chartKey: "bullish-engulfing" },
+      { id: "C", chartKey: "hammer" },
+      { id: "D", chartKey: "doji" },
+      { id: "E", chartKey: "shooting-star" },
+    ]),
+    explanation: "Bullish Engulfing: a green body swallows the prior red body. Chart 2 is that pair; Chart 1 is the bearish color flip.",
+    patternKey: "bullish-engulfing",
+  },
+  {
+    id: "PR-BU-DESC",
+    prompt: "Which description matches Bullish Engulfing?",
+    correctAnswer: "A",
+    options: BULLISH_ENGULFING_DESC_OPTIONS,
+    explanation: "Green body completely covers the prior red body. Color pair matters: the inverse is Bearish Engulfing.",
+    patternKey: "bullish-engulfing",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-SS-PICK",
+    prompt: "Which chart shows a Shooting Star?",
+    correctAnswer: "B",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "hammer" },
+      { id: "B", chartKey: "shooting-star" },
+      { id: "C", chartKey: "doji" },
+      { id: "D", chartKey: "inverted-hammer" },
+      { id: "E", chartKey: "engulfing", highlightIndex: 3 },
+    ]),
+    explanation:
+      "Shooting Star: long upper wick, small body at the bottom (after a rally). Chart 2 matches; Hammer is the flipped lower-wick cousin.",
+    patternKey: "shooting-star",
+  },
+  {
+    id: "PR-SS-DESC",
+    prompt: "Which description matches a Shooting Star?",
+    correctAnswer: "B",
+    options: SHOOTING_STAR_DESC_OPTIONS,
+    explanation: "Shooting Star: long upper shadow after a rally; the market rejected higher prices.",
+    patternKey: "shooting-star",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-IH-PICK",
+    prompt: "Which chart shows an Inverted Hammer?",
+    correctAnswer: "D",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "shooting-star" },
+      { id: "B", chartKey: "hammer" },
+      { id: "C", chartKey: "doji" },
+      { id: "D", chartKey: "inverted-hammer" },
+      { id: "E", chartKey: "morning-star", highlightIndex: 3 },
+    ]),
+    explanation:
+      "Inverted Hammer: long upper wick after a decline (bullish probe). Same silhouette as Shooting Star — Chart 4 is the inverted-hammer pack.",
+    patternKey: "inverted-hammer",
+  },
+  {
+    id: "PR-IH-DESC",
+    prompt: "Which description matches an Inverted Hammer?",
+    correctAnswer: "C",
+    options: INVERTED_HAMMER_DESC_OPTIONS,
+    explanation: "Long upper shadow at a bottom after a decline. Context (where it prints) separates it from Shooting Star.",
+    patternKey: "inverted-hammer",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-BE-PICK",
+    prompt: "Which chart shows Bearish Engulfing?",
+    correctAnswer: "A",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "bearish-engulfing" },
+      { id: "B", chartKey: "bullish-engulfing" },
+      { id: "C", chartKey: "shooting-star" },
+      { id: "D", chartKey: "hammer" },
+      { id: "E", chartKey: "doji" },
+    ]),
+    explanation: "Bearish Engulfing: a red body swallows the prior green. Chart 1 is that pair; Chart 2 flips the colors.",
+    patternKey: "bearish-engulfing",
+  },
+  {
+    id: "PR-BE-DESC",
+    prompt: "Which description matches Bearish Engulfing?",
+    correctAnswer: "B",
+    options: BEARISH_ENGULFING_DESC_OPTIONS,
+    explanation: "A red body completely covers the prior green body — sellers take the session.",
+    patternKey: "bearish-engulfing",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-MS-PICK",
+    prompt: "Which chart shows a Morning Star?",
+    correctAnswer: "E",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "doji" },
+      { id: "B", chartKey: "hammer" },
+      { id: "C", chartKey: "bullish-engulfing" },
+      { id: "D", chartKey: "shooting-star" },
+      { id: "E", chartKey: "morning-star", highlightIndex: 3 },
+    ]),
+    explanation: "Morning Star is three candles: large red, small middle, large green. Chart 5 is that formation — not a single-bar Doji or Hammer.",
+    patternKey: "morning-star",
+  },
+  {
+    id: "PR-MS-DESC",
+    prompt: "Which description matches a Morning Star?",
+    correctAnswer: "C",
+    options: MORNING_STAR_DESC_OPTIONS,
+    explanation: "Three-bar bullish reversal: wide red, tight middle, then a wide green reclaim.",
+    patternKey: "morning-star",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-H-MOVE",
+    prompt:
+      "SAMPLE: after a selloff, a Hammer prints at the lows. What move should a process-first trader lean toward?",
+    correctAnswer: "A",
+    options: [
+      {
+        id: "A",
+        label: "Lean long / prepare to buy (with risk plan)",
+        description: "Bullish reclaim bias — still size for being wrong.",
+      },
+      {
+        id: "B",
+        label: "Market short immediately — hammers always fail",
+        description: "Dogma, not process.",
+      },
+      {
+        id: "C",
+        label: "Ignore risk and max long with no stop",
+        description: "No plan.",
+      },
+    ],
+    explanation:
+      "A Hammer after a decline is a bullish reclaim cue. Lean long only with a defined risk plan — SAMPLE teaching, not a guaranteed bounce. In other words, you are getting ready to buy because price fell hard and then bounced back — but you still decide ahead of time how much you can afford to lose if the bounce fails.",
+    patternKey: "hammer",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-H-MOVE2",
+    prompt: "A Hammer just printed. Which action is least consistent with good process?",
+    correctAnswer: "C",
+    options: [
+      {
+        id: "A",
+        label: "Wait for a bit of follow-through before sizing up",
+        description: "Confirmation can improve odds.",
+      },
+      {
+        id: "B",
+        label: "Place a stop below the hammer low if you go long",
+        description: "Invalidation under the wick.",
+      },
+      {
+        id: "C",
+        label: "Double size because one hammer means free money",
+        description: "One candle is not a license to oversize.",
+      },
+    ],
+    explanation:
+      "Process keeps risk defined. Oversizing on a single SAMPLE candle is the mistake — confirmation and stops matter more than certainty. In other words, you are not treating one lucky-looking candle like a jackpot; you keep the amount you risk small enough to survive being wrong.",
+    patternKey: "hammer",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-D-MOVE",
+    prompt: "A Doji prints after a run. What is the best first move?",
+    correctAnswer: "B",
+    options: [
+      {
+        id: "A",
+        label: "Chase the prior trend with max size",
+        description: "Doji is indecision, not a green light.",
+      },
+      {
+        id: "B",
+        label: "Wait — no edge until the next candle confirms direction",
+        description: "Indecision → patience.",
+      },
+      {
+        id: "C",
+        label: "Short 10x because dojis always reverse",
+        description: "Blind rule.",
+      },
+    ],
+    explanation:
+      "Doji = open ≈ close = indecision. The process move is wait for confirmation, not invent a forced trade from one bar. In other words, you are pausing because the market could not decide up or down — you wait for the next candle before you buy or sell.",
+    patternKey: "doji",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-E-MOVE",
+    prompt:
+      "You see an Engulfing candle. How should you choose the trade direction?",
+    correctAnswer: "A",
+    options: [
+      {
+        id: "A",
+        label: "Match the engulfing candle’s color / direction (green→long bias, red→short bias)",
+        description: "The second body shows who won the fight.",
+      },
+      {
+        id: "B",
+        label: "Always buy engulfings no matter the color",
+        description: "Color/direction matters.",
+      },
+      {
+        id: "C",
+        label: "Flip a coin — engulfing has no directional meaning",
+        description: "False.",
+      },
+    ],
+    explanation:
+      "Engulfing is a momentum handoff: the later body covers the prior one. Lean with that later candle’s direction, still with risk rules. In other words, you are following whoever just took control — if the big new candle finished higher, you lean toward buying; if it finished lower, you lean toward selling or sitting out.",
+    patternKey: "engulfing",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-BU-MOVE",
+    prompt:
+      "SAMPLE: Bullish Engulfing after a dip. What move fits the signal?",
+    correctAnswer: "A",
+    options: [
+      {
+        id: "A",
+        label: "Lean long / buy the reclaim (with a stop under the pattern)",
+        description: "Buyers took the prior red body.",
+      },
+      {
+        id: "B",
+        label: "Short into the green engulfing",
+        description: "Fights the signal.",
+      },
+      {
+        id: "C",
+        label: "Close the chart and guess from headlines only",
+        description: "Skips the tape.",
+      },
+    ],
+    explanation:
+      "Bullish Engulfing = buyers covered the prior sell candle. Process lean is long with invalidation under the structure — SAMPLE, not a promise. In other words, you are getting ready to buy because a strong up candle wiped out the prior down candle — and you still pick a price where you will quit if it falls back through.",
+    patternKey: "bullish-engulfing",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-BE-MOVE",
+    prompt:
+      "SAMPLE: Bearish Engulfing after a rally. What move fits the signal?",
+    correctAnswer: "B",
+    options: [
+      {
+        id: "A",
+        label: "Add to longs because red candles are discounts",
+        description: "Fights the signal.",
+      },
+      {
+        id: "B",
+        label: "Lean short / fade or tighten/exit longs",
+        description: "Sellers covered the prior green body.",
+      },
+      {
+        id: "C",
+        label: "Ignore the engulfing and average up blindly",
+        description: "No process.",
+      },
+    ],
+    explanation:
+      "Bearish Engulfing = sellers swallowed the prior buy candle. Lean short or protect longs; still use a plan and SAMPLE humility. In other words, you are getting ready to sell, or cash out what you already own, because a strong down candle wiped out the prior up candle.",
+    patternKey: "bearish-engulfing",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-SS-MOVE",
+    prompt:
+      "SAMPLE: Shooting Star after an uptrend. What move should you lean toward?",
+    correctAnswer: "B",
+    options: [
+      {
+        id: "A",
+        label: "Chase higher — long upper wicks mean breakouts",
+        description: "Misreads rejection.",
+      },
+      {
+        id: "B",
+        label: "Lean short / fade the high or tighten long stops",
+        description: "Rejection at the highs.",
+      },
+      {
+        id: "C",
+        label: "All-in long because stars are lucky",
+        description: "Not a process.",
+      },
+    ],
+    explanation:
+      "Shooting Star after a rally rejects higher prices. Process lean is fade/defend longs — not chase the wick. In other words, you are not buying the spike; price tried to go higher and got shoved back down, so you either sell / bet on a drop, or move your “get out” price closer so a fall does not erase your gains.",
+    patternKey: "shooting-star",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-IH-MOVE",
+    prompt:
+      "An Inverted Hammer prints after a decline. Best process move?",
+    correctAnswer: "C",
+    options: [
+      {
+        id: "A",
+        label: "Short hard — long upper wicks are always bearish",
+        description: "Context: this one is at a bottom.",
+      },
+      {
+        id: "B",
+        label: "Market buy 5x with no confirmation",
+        description: "Overtrades a probe.",
+      },
+      {
+        id: "C",
+        label: "Treat as a bullish probe — wait for follow-through before sizing a long",
+        description: "Needs confirmation more than a Hammer.",
+      },
+    ],
+    explanation:
+      "Inverted Hammer is a bullish probe after a decline, but it often wants the next bar to confirm. Wait/confirm beats blind size. In other words, you are interested in buying after a drop, but you wait for the next candle to prove buyers are still there before you risk more money.",
+    patternKey: "inverted-hammer",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-MS-MOVE",
+    prompt:
+      "SAMPLE: Morning Star completes at the lows (red → small → strong green). What move fits?",
+    correctAnswer: "A",
+    options: [
+      {
+        id: "A",
+        label: "Lean long / buy the reversal with risk under the star low",
+        description: "Three-bar bullish handoff.",
+      },
+      {
+        id: "B",
+        label: "Short the green candle — three bars mean exhaustion",
+        description: "Fights the pattern.",
+      },
+      {
+        id: "C",
+        label: "Do nothing forever; multi-candle patterns never matter",
+        description: "Avoidance, not skill.",
+      },
+    ],
+    explanation:
+      "Morning Star is a structured bullish reversal. Lean long with invalidation under the pattern low — SAMPLE process, not certainty. In other words, you are getting ready to buy because the drop stalled and a strong up candle took over — and you still pick a low point where you admit you were wrong and get out.",
+    patternKey: "morning-star",
+    highlightIndex: 3,
+  },
+];
+
+/** Candlestick anatomy — OHLC parts and red/green (no pattern ID). */
+export const CANDLE_ANATOMY_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "CA-01",
+    prompt: "On the marked candle, the tip of the upper wick is which price?",
+    correctAnswer: "B",
+    options: OHLC_PART_OPTIONS,
+    explanation: "High is the highest trade in the period — the top of the upper wick.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "CA-02",
+    prompt: "On the marked candle, the tip of the lower wick is which price?",
+    correctAnswer: "C",
+    options: OHLC_PART_OPTIONS,
+    explanation: "Low is the lowest trade in the period — the bottom of the lower wick.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "CA-03",
+    prompt: "This marked candle is green. The top of the solid body is which price?",
+    correctAnswer: "D",
+    options: OHLC_PART_OPTIONS,
+    explanation: "Green means close > open, so the top of the body is the close.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "CA-04",
+    prompt: "This marked candle is green. The bottom of the solid body is which price?",
+    correctAnswer: "A",
+    options: OHLC_PART_OPTIONS,
+    explanation: "On a green candle the body runs up from open to close — the bottom of the body is the open.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "CA-05",
+    prompt: "This marked candle is red. The top of the solid body is which price?",
+    correctAnswer: "A",
+    options: OHLC_PART_OPTIONS,
+    explanation: "Red means close < open, so the top of the body is the open.",
+    patternKey: "candle-red",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "CA-06",
+    prompt: "This marked candle is red. The bottom of the solid body is which price?",
+    correctAnswer: "D",
+    options: OHLC_PART_OPTIONS,
+    explanation: "On a red candle the body runs down from open to close — the bottom of the body is the close.",
+    patternKey: "candle-red",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "CA-07",
+    prompt: "Why is the marked candle green?",
+    correctAnswer: "A",
+    options: CANDLE_COLOR_OPTIONS,
+    explanation: "Green (up close) means the period finished above where it started: close > open.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "candle-color",
+  },
+  {
+    id: "CA-08",
+    prompt: "Why is the marked candle red?",
+    correctAnswer: "B",
+    options: CANDLE_COLOR_OPTIONS,
+    explanation: "Red (down close) means the period finished below where it started: close < open.",
+    patternKey: "candle-red",
+    highlightIndex: 2,
+    glossaryTermId: "candle-color",
   },
 ];
 
@@ -720,7 +1359,7 @@ export const FINANCIAL_DRILLS_QUESTIONS: QuizQuestion[] = [
         label: "Form a thesis from numbers, then decide on the print",
         description: "Process.",
       },
-      { id: "B", label: "Skip the chart soft-gate forever", description: "Gates still apply." },
+      { id: "B", label: "Skip Indicators forever", description: "Indicators still come first." },
       { id: "C", label: "Pull LIVE filings automatically", description: "SAMPLE only." },
     ],
     explanation: "Statements literacy feeds decide-and-reveal — still SAMPLE snapshots, not LIVE EDGAR.",
@@ -730,6 +1369,7 @@ export const FINANCIAL_DRILLS_QUESTIONS: QuizQuestion[] = [
 
 export type QuizGroupId =
   | "all"
+  | "candle-anatomy"
   | "hammer"
   | "doji"
   | "engulfing"
@@ -779,6 +1419,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   },
   { id: "indicators", name: "Indicators", description: "Identify SMA, EMA, RSI, MACD, Bollinger Bands", icon: "show_chart" },
   {
+    id: "candle-anatomy",
+    name: "Candlestick Basics",
+    description: "Where high / low / open / close sit, and what red vs green means",
+    icon: "candlestick_chart",
+  },
+  {
     id: "equity-patterns",
     name: "Equity Pack Drills",
     description: "Candle/indicator drills tagged to E1 equity SAMPLE packs (post-P0)",
@@ -795,8 +1441,14 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   { id: "morning-star", name: "Morning Star", description: "Three-candle bullish reversal", icon: "nightlight" },
 ];
 
+function patternKeysForGroup(groupId: QuizGroupId): string[] {
+  if (groupId === "engulfing") return ["engulfing", "bullish-engulfing", "bearish-engulfing"];
+  return [groupId];
+}
+
 function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
+  if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
@@ -807,13 +1459,23 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
 
 export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
+  if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
   if (groupId === "news-literacy") return NEWS_LITERACY_QUESTIONS;
   if (groupId === "financial-drills") return FINANCIAL_DRILLS_QUESTIONS;
   if (groupId === "all") return QUIZ_QUESTIONS;
-  return QUIZ_QUESTIONS.filter((q) => q.patternKey === groupId);
+  const keys = patternKeysForGroup(groupId);
+  const filtered = QUIZ_QUESTIONS.filter((q) => q.patternKey != null && keys.includes(q.patternKey));
+  // Chart-pick first → identify/describe → trade-move last
+  return [...filtered].sort((a, b) => familyDrillOrder(a) - familyDrillOrder(b));
+}
+
+function familyDrillOrder(q: QuizQuestion): number {
+  if (q.optionsAreCharts) return 0;
+  if (/-MOVE\d*$/.test(q.id)) return 2;
+  return 1;
 }
 
 /** Planner helper: filter questions by asset class tag. */

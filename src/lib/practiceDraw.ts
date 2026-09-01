@@ -1,9 +1,25 @@
 /** Practice Draw templates, grading, and last-attempt persistence (E7.M1). */
 
 export type Point = { x: number; y: number };
-export type Stroke = Point[];
 
-export type DrawTemplateId = "doji" | "hammer" | "engulfing";
+/** Matches chart candles: green close>open, red close<open. */
+export type BrushColor = "bullish" | "bearish";
+
+export const BRUSH_HEX: Record<BrushColor, string> = {
+  bullish: "#38ff14",
+  bearish: "#ff3814",
+};
+
+export interface Stroke {
+  points: Point[];
+  color: BrushColor;
+}
+
+export type DrawTemplateId =
+  | "doji"
+  | "hammer"
+  | "bullish-engulfing"
+  | "bearish-engulfing";
 
 export type DrawGrade = "correct" | "partial" | "incorrect";
 
@@ -13,6 +29,10 @@ export interface DrawTemplate {
   /** Normalized polyline guides (0–1 in canvas space). */
   guides: Stroke[];
   tip: string;
+  /** Short picker caption under the silhouette. */
+  hint?: string;
+  /** Brush to start with (first candle of a two-candle pattern). */
+  openingBrush: BrushColor;
 }
 
 export interface DrawAttempt {
@@ -26,66 +46,119 @@ export interface DrawAttempt {
 
 export const PRACTICE_DRAW_STORAGE_KEY = "analysis_core_practice_draw_v1";
 
+/** Body outline + upper/lower wicks in canvas y (0 = top). */
+function candleGuide(opts: {
+  cx: number;
+  halfW: number;
+  high: number;
+  bodyTop: number;
+  bodyBottom: number;
+  low: number;
+  color: BrushColor;
+}): Stroke[] {
+  const left = opts.cx - opts.halfW;
+  const right = opts.cx + opts.halfW;
+  const strokes: Stroke[] = [];
+  if (opts.high < opts.bodyTop) {
+    strokes.push({
+      color: opts.color,
+      points: [
+        { x: opts.cx, y: opts.high },
+        { x: opts.cx, y: opts.bodyTop },
+      ],
+    });
+  }
+  strokes.push({
+    color: opts.color,
+    points: [
+      { x: left, y: opts.bodyTop },
+      { x: right, y: opts.bodyTop },
+      { x: right, y: opts.bodyBottom },
+      { x: left, y: opts.bodyBottom },
+      { x: left, y: opts.bodyTop },
+    ],
+  });
+  if (opts.low > opts.bodyBottom) {
+    strokes.push({
+      color: opts.color,
+      points: [
+        { x: opts.cx, y: opts.bodyBottom },
+        { x: opts.cx, y: opts.low },
+      ],
+    });
+  }
+  return strokes;
+}
+
+function engulfingGuides(first: BrushColor, second: BrushColor): Stroke[] {
+  return [
+    ...candleGuide({
+      cx: 0.34,
+      halfW: 0.07,
+      high: 0.28,
+      bodyTop: 0.4,
+      bodyBottom: 0.6,
+      low: 0.72,
+      color: first,
+    }),
+    ...candleGuide({
+      cx: 0.62,
+      halfW: 0.12,
+      high: 0.08,
+      bodyTop: 0.22,
+      bodyBottom: 0.78,
+      low: 0.94,
+      color: second,
+    }),
+  ];
+}
+
 export const DRAW_TEMPLATES: DrawTemplate[] = [
   {
     id: "doji",
     name: "Doji",
+    openingBrush: "bullish",
     tip: "Keep the body tiny (open≈close) and balance upper/lower shadows.",
-    guides: [
-      // vertical wick
-      [
-        { x: 0.5, y: 0.12 },
-        { x: 0.5, y: 0.88 },
-      ],
-      // thin cross body
-      [
-        { x: 0.38, y: 0.5 },
-        { x: 0.62, y: 0.5 },
-      ],
-    ],
+    guides: candleGuide({
+      cx: 0.5,
+      halfW: 0.06,
+      high: 0.12,
+      bodyTop: 0.46,
+      bodyBottom: 0.54,
+      low: 0.88,
+      color: "bullish",
+    }),
   },
   {
     id: "hammer",
     name: "Hammer",
-    tip: "Small body near the top; long lower shadow at least 2× the body.",
-    guides: [
-      // long lower wick
-      [
-        { x: 0.5, y: 0.22 },
-        { x: 0.5, y: 0.9 },
-      ],
-      // small body near top
-      [
-        { x: 0.4, y: 0.22 },
-        { x: 0.6, y: 0.22 },
-        { x: 0.6, y: 0.38 },
-        { x: 0.4, y: 0.38 },
-        { x: 0.4, y: 0.22 },
-      ],
-    ],
+    openingBrush: "bullish",
+    tip: "Small body near the top; long lower shadow at least 2× the body. Tiny (or no) upper wick.",
+    guides: candleGuide({
+      cx: 0.5,
+      halfW: 0.1,
+      high: 0.16,
+      bodyTop: 0.2,
+      bodyBottom: 0.36,
+      low: 0.9,
+      color: "bullish",
+    }),
   },
   {
-    id: "engulfing",
-    name: "Engulfing",
-    tip: "Second candle body should fully cover the first candle body.",
-    guides: [
-      // small prior body
-      [
-        { x: 0.28, y: 0.42 },
-        { x: 0.42, y: 0.42 },
-        { x: 0.42, y: 0.58 },
-        { x: 0.28, y: 0.58 },
-        { x: 0.28, y: 0.42 },
-      ],
-      // large engulfing body
-      [
-        { x: 0.48, y: 0.28 },
-        { x: 0.72, y: 0.28 },
-        { x: 0.72, y: 0.72 },
-        { x: 0.48, y: 0.72 },
-        { x: 0.48, y: 0.28 },
-      ],
-    ],
+    id: "bullish-engulfing",
+    name: "Bullish Engulfing",
+    openingBrush: "bearish",
+    hint: "small red then large green",
+    tip: "Small red body, then a larger green body that fully covers it. Include wicks.",
+    guides: engulfingGuides("bearish", "bullish"),
+  },
+  {
+    id: "bearish-engulfing",
+    name: "Bearish Engulfing",
+    openingBrush: "bullish",
+    hint: "small green then large red",
+    tip: "Small green body, then a larger red body that fully covers it. Include wicks.",
+    guides: engulfingGuides("bullish", "bearish"),
   },
 ];
 
@@ -98,7 +171,7 @@ export function getDrawTemplate(id: DrawTemplateId): DrawTemplate {
 const GRID_W = 24;
 const GRID_H = 16;
 
-function stampStroke(grid: Uint8Array, stroke: Stroke, thickness = 1): void {
+function stampStroke(grid: Uint8Array, stroke: Point[], thickness = 1): void {
   if (stroke.length === 0) return;
   for (let i = 0; i < stroke.length; i++) {
     const p = stroke[i];
@@ -143,7 +216,7 @@ function stampStroke(grid: Uint8Array, stroke: Stroke, thickness = 1): void {
 
 function occupancy(strokes: Stroke[], thickness = 1): Uint8Array {
   const grid = new Uint8Array(GRID_W * GRID_H);
-  for (const stroke of strokes) stampStroke(grid, stroke, thickness);
+  for (const stroke of strokes) stampStroke(grid, stroke.points, thickness);
   return grid;
 }
 
@@ -177,13 +250,44 @@ export function gradeSketch(
   return { grade, score, tip: template.tip };
 }
 
+function isPoint(v: unknown): v is Point {
+  return (
+    !!v &&
+    typeof v === "object" &&
+    typeof (v as Point).x === "number" &&
+    typeof (v as Point).y === "number"
+  );
+}
+
+function normalizeStroke(raw: unknown): Stroke | null {
+  if (Array.isArray(raw)) {
+    const points = raw.filter(isPoint);
+    if (points.length === 0) return null;
+    return { points, color: "bullish" };
+  }
+  if (!raw || typeof raw !== "object") return null;
+  const obj = raw as { points?: unknown; color?: unknown };
+  if (!Array.isArray(obj.points)) return null;
+  const points = obj.points.filter(isPoint);
+  if (points.length === 0) return null;
+  return {
+    points,
+    color: obj.color === "bearish" ? "bearish" : "bullish",
+  };
+}
+
 export function loadLastDrawAttempt(): DrawAttempt | null {
   try {
     const raw = localStorage.getItem(PRACTICE_DRAW_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as DrawAttempt;
     if (!parsed || !parsed.templateId || !Array.isArray(parsed.strokes)) return null;
-    return parsed;
+    const templateId = parseDrawTemplateId(parsed.templateId);
+    if (!templateId) return null;
+    const strokes = parsed.strokes
+      .map(normalizeStroke)
+      .filter((s): s is Stroke => s != null);
+    return { ...parsed, templateId, strokes };
   } catch {
     return null;
   }
@@ -205,6 +309,13 @@ export function practiceDrawTipLine(attempt?: DrawAttempt | null): string | null
   return `PRACTICE_DRAW · last ${last.templateId} → ${label} (${Math.round(last.score * 100)}%)`;
 }
 
+/** Accepts live ids plus legacy `engulfing` → bullish-engulfing. */
+export function parseDrawTemplateId(value: string): DrawTemplateId | null {
+  if (value === "engulfing") return "bullish-engulfing";
+  if (DRAW_TEMPLATES.some((t) => t.id === value)) return value as DrawTemplateId;
+  return null;
+}
+
 export function isDrawTemplateId(value: string): value is DrawTemplateId {
-  return DRAW_TEMPLATES.some((t) => t.id === value);
+  return parseDrawTemplateId(value) != null;
 }

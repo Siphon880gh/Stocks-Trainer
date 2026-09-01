@@ -1,17 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
+  BRUSH_HEX,
   DRAW_TEMPLATES,
+  type BrushColor,
   type DrawGrade,
   type DrawTemplateId,
   type Point,
   type Stroke,
   getDrawTemplate,
   gradeSketch,
-  isDrawTemplateId,
   loadLastDrawAttempt,
+  parseDrawTemplateId,
   saveLastDrawAttempt,
 } from "../lib/practiceDraw";
+
+function hexAlpha(hex: string, alpha: number): string {
+  const n = Number.parseInt(hex.slice(1), 16);
+  const r = (n >> 16) & 255;
+  const g = (n >> 8) & 255;
+  const b = n & 255;
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
 
 function pointerToNorm(
   el: HTMLCanvasElement,
@@ -58,17 +68,19 @@ function drawScene(
 
   if (templateId) {
     const template = getDrawTemplate(templateId);
-    ctx.strokeStyle = "rgba(56, 255, 20, 0.35)";
     ctx.lineWidth = Math.max(2, width * 0.01);
-    ctx.setLineDash([8, 6]);
+    const dashOn = Math.max(3, Math.round(width * 0.01));
+    const dashOff = Math.max(2, Math.round(width * 0.008));
+    ctx.setLineDash([dashOn, dashOff]);
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     for (const guide of template.guides) {
-      if (guide.length === 0) continue;
+      if (guide.points.length === 0) continue;
+      ctx.strokeStyle = hexAlpha(BRUSH_HEX[guide.color], 0.4);
       ctx.beginPath();
-      ctx.moveTo(guide[0].x * width, guide[0].y * height);
-      for (let i = 1; i < guide.length; i++) {
-        ctx.lineTo(guide[i].x * width, guide[i].y * height);
+      ctx.moveTo(guide.points[0].x * width, guide.points[0].y * height);
+      for (let i = 1; i < guide.points.length; i++) {
+        ctx.lineTo(guide.points[i].x * width, guide.points[i].y * height);
       }
       ctx.stroke();
     }
@@ -76,16 +88,16 @@ function drawScene(
   }
 
   const all = active ? [...strokes, active] : strokes;
-  ctx.strokeStyle = "#38ff14";
   ctx.lineWidth = Math.max(2.5, width * 0.012);
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
   for (const stroke of all) {
-    if (stroke.length === 0) continue;
+    if (stroke.points.length === 0) continue;
+    ctx.strokeStyle = BRUSH_HEX[stroke.color];
     ctx.beginPath();
-    ctx.moveTo(stroke[0].x * width, stroke[0].y * height);
-    for (let i = 1; i < stroke.length; i++) {
-      ctx.lineTo(stroke[i].x * width, stroke[i].y * height);
+    ctx.moveTo(stroke.points[0].x * width, stroke.points[0].y * height);
+    for (let i = 1; i < stroke.points.length; i++) {
+      ctx.lineTo(stroke.points[i].x * width, stroke.points[i].y * height);
     }
     ctx.stroke();
   }
@@ -103,6 +115,7 @@ export default function PracticeDraw() {
   const drawingRef = useRef(false);
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const [activeStroke, setActiveStroke] = useState<Stroke | null>(null);
+  const [brushColor, setBrushColor] = useState<BrushColor>("bullish");
   const [templateId, setTemplateId] = useState<DrawTemplateId>("doji");
   const [result, setResult] = useState<{
     grade: DrawGrade;
@@ -114,13 +127,16 @@ export default function PracticeDraw() {
 
   useEffect(() => {
     const ref = searchParams.get("template") ?? searchParams.get("contentRef");
-    if (ref && isDrawTemplateId(ref)) {
-      setTemplateId(ref);
+    const fromQuery = ref ? parseDrawTemplateId(ref) : null;
+    if (fromQuery) {
+      setTemplateId(fromQuery);
+      setBrushColor(getDrawTemplate(fromQuery).openingBrush);
     }
     const last = loadLastDrawAttempt();
     if (!last) return;
-    if (!(ref && isDrawTemplateId(ref))) {
+    if (!fromQuery) {
       setTemplateId(last.templateId);
+      setBrushColor(getDrawTemplate(last.templateId).openingBrush);
     }
     setStrokes(last.strokes);
     setResult({ grade: last.grade, score: last.score, tip: last.tip });
@@ -164,7 +180,10 @@ export default function PracticeDraw() {
     drawingRef.current = true;
     setResult(null);
     setRestoredNote(null);
-    setActiveStroke([pointerToNorm(canvas, clientX, clientY)]);
+    setActiveStroke({
+      points: [pointerToNorm(canvas, clientX, clientY)],
+      color: brushColor,
+    });
   };
 
   const extendStroke = (clientX: number, clientY: number) => {
@@ -172,14 +191,18 @@ export default function PracticeDraw() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const p = pointerToNorm(canvas, clientX, clientY);
-    setActiveStroke((prev) => (prev ? [...prev, p] : [p]));
+    setActiveStroke((prev) =>
+      prev
+        ? { ...prev, points: [...prev.points, p] }
+        : { points: [p], color: brushColor },
+    );
   };
 
   const endStroke = () => {
     if (!drawingRef.current) return;
     drawingRef.current = false;
     setActiveStroke((prev) => {
-      if (prev && prev.length > 0) {
+      if (prev && prev.points.length > 0) {
         setStrokes((s) => [...s, prev]);
       }
       return null;
@@ -253,6 +276,7 @@ export default function PracticeDraw() {
                   setTemplateId(t.id);
                   setResult(null);
                   setRestoredNote(null);
+                  setBrushColor(t.openingBrush);
                 }}
                 className={`px-3 py-2 text-xs font-mono rounded border transition-colors ${
                   templateId === t.id
@@ -266,15 +290,36 @@ export default function PracticeDraw() {
           </div>
           <p className="mt-2 text-[10px] font-mono text-primary/50">
             Guide silhouette shown as dashed lines · {template.name}
+            {template.hint ? ` · ${template.hint}` : ""}
           </p>
         </section>
 
         <section className="border-neon p-3 bg-neutral-dark/60 rounded-xl space-y-3">
-          <div className="flex items-center justify-between gap-2">
+          <div className="flex items-center justify-between gap-2 flex-wrap">
             <h2 className="text-[10px] font-bold tracking-widest text-primary/70 font-mono">
               CANVAS_AREA
             </h2>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="flex items-center gap-1.5" role="group" aria-label="Brush color">
+                <span className="text-[9px] font-mono text-primary/50 tracking-widest">BRUSH</span>
+                {(["bullish", "bearish"] as const).map((c) => (
+                  <button
+                    key={c}
+                    type="button"
+                    aria-label={c === "bullish" ? "Bullish green brush" : "Bearish red brush"}
+                    aria-pressed={brushColor === c}
+                    onClick={() => setBrushColor(c)}
+                    className={`w-6 h-6 rounded-sm border-2 ${
+                      brushColor === c
+                        ? c === "bullish"
+                          ? "border-primary shadow-[0_0_8px_#38ff14]"
+                          : "border-accent-red shadow-[0_0_8px_#ff3814]"
+                        : "border-primary/30 opacity-70"
+                    }`}
+                    style={{ backgroundColor: BRUSH_HEX[c] }}
+                  />
+                ))}
+              </div>
               <button
                 type="button"
                 onClick={handleUndo}
@@ -307,6 +352,7 @@ export default function PracticeDraw() {
           >
             <canvas
               ref={canvasRef}
+              aria-label="Practice draw canvas"
               className="w-full h-full cursor-crosshair block"
               onPointerDown={(e) => {
                 e.preventDefault();
@@ -325,7 +371,8 @@ export default function PracticeDraw() {
           </div>
           <p className="text-[10px] font-mono text-primary/40">
             Pointer / touch · strokes: {strokes.length}
-            {activeStroke ? " · drawing…" : ""}
+            {activeStroke ? " · drawing…" : ""} · brush:{" "}
+            {brushColor === "bullish" ? "GREEN" : "RED"}
           </p>
         </section>
 
@@ -355,7 +402,8 @@ export default function PracticeDraw() {
 
         <section className="border-neon p-4 bg-neutral-dark/80 rounded-xl font-mono text-[11px] space-y-1">
           <p className="text-primary/40">&gt; PRACTICE_DRAW ready</p>
-          <p className="text-primary/40">&gt; Templates: Doji · Hammer · Engulfing</p>
+          <p className="text-primary/40">&gt; Templates: Doji · Hammer · Bullish Engulfing · Bearish Engulfing</p>
+          <p className="text-primary/40">&gt; Brush GREEN / RED — match the dashed candle colors</p>
           <p className="text-primary/80">&gt; Sketch the guide, then SUBMIT for a coarse grade</p>
           <p className="text-primary/40 animate-pulse">_</p>
         </section>

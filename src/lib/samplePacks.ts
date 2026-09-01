@@ -1,4 +1,9 @@
-import type { OHLC } from "./ohlcData";
+import {
+  RTH_BAR_LABELS_12,
+  SESSION_24H_LABELS_12,
+  withBarLabels,
+  type OHLC,
+} from "./ohlcData";
 
 /** Asset class slots for sample universe (UI may ignore empty classes). */
 export type AssetClass =
@@ -43,56 +48,65 @@ function bar(
  * Mega-cap tech — grind higher with a mid-session dip (distinct from index/cyclical shapes).
  * STYLIZED levels inspired by large-cap tech, not a live ticker.
  */
-const MEGA_CAP_TECH_OHLC: OHLC[] = [
-  bar("08:00", 178.2, 179.4, 177.8, 179.0),
-  bar("10:00", 179.0, 180.6, 178.6, 180.2),
-  bar("12:00", 180.2, 180.8, 179.4, 179.6),
-  bar("14:00", 179.6, 179.9, 176.8, 177.4),
-  bar("16:00", 177.4, 178.8, 177.0, 178.5),
-  bar("18:00", 178.5, 180.1, 178.2, 179.8),
-  bar("20:00", 179.8, 181.4, 179.5, 181.0),
-  bar("22:00", 181.0, 182.2, 180.6, 181.6),
-  bar("00:00", 181.6, 183.0, 181.2, 182.4),
-  bar("02:00", 182.4, 183.5, 181.8, 182.0),
-  bar("04:00", 182.0, 183.8, 181.9, 183.2),
-  bar("06:00", 183.2, 184.6, 182.8, 184.1),
-];
+const MEGA_CAP_TECH_OHLC: OHLC[] = withBarLabels(
+  [
+    bar("t0", 178.2, 179.4, 177.8, 179.0),
+    bar("t1", 179.0, 180.6, 178.6, 180.2),
+    bar("t2", 180.2, 180.8, 179.4, 179.6),
+    bar("t3", 179.6, 179.9, 176.8, 177.4),
+    bar("t4", 177.4, 178.8, 177.0, 178.5),
+    bar("t5", 178.5, 180.1, 178.2, 179.8),
+    bar("t6", 179.8, 181.4, 179.5, 181.0),
+    bar("t7", 181.0, 182.2, 180.6, 181.6),
+    bar("t8", 181.6, 183.0, 181.2, 182.4),
+    bar("t9", 182.4, 183.5, 181.8, 182.0),
+    bar("t10", 182.0, 183.8, 181.9, 183.2),
+    bar("t11", 183.2, 184.6, 182.8, 184.1),
+  ],
+  RTH_BAR_LABELS_12
+);
 
 /**
  * Broad index proxy — tight range, low wick drama (visually flatter than mega-cap).
  */
-const INDEX_PROXY_OHLC: OHLC[] = [
-  bar("08:00", 518.4, 519.2, 517.8, 518.9),
-  bar("10:00", 518.9, 520.1, 518.5, 519.6),
-  bar("12:00", 519.6, 520.0, 518.9, 519.2),
-  bar("14:00", 519.2, 519.8, 518.4, 519.5),
-  bar("16:00", 519.5, 520.6, 519.1, 520.2),
-  bar("18:00", 520.2, 520.8, 519.6, 520.0),
-  bar("20:00", 520.0, 521.2, 519.8, 520.9),
-  bar("22:00", 520.9, 521.4, 520.4, 521.0),
-  bar("00:00", 521.0, 521.6, 520.5, 521.3),
-  bar("02:00", 521.3, 521.8, 520.7, 521.1),
-  bar("04:00", 521.1, 522.0, 520.9, 521.7),
-  bar("06:00", 521.7, 522.4, 521.2, 522.1),
-];
+const INDEX_PROXY_OHLC: OHLC[] = withBarLabels(
+  [
+    bar("t0", 518.4, 519.2, 517.8, 518.9),
+    bar("t1", 518.9, 520.1, 518.5, 519.6),
+    bar("t2", 519.6, 520.0, 518.9, 519.2),
+    bar("t3", 519.2, 519.8, 518.4, 519.5),
+    bar("t4", 519.5, 520.6, 519.1, 520.2),
+    bar("t5", 520.2, 520.8, 519.6, 520.0),
+    bar("t6", 520.0, 521.2, 519.8, 520.9),
+    bar("t7", 520.9, 521.4, 520.4, 521.0),
+    bar("t8", 521.0, 521.6, 520.5, 521.3),
+    bar("t9", 521.3, 521.8, 520.7, 521.1),
+    bar("t10", 521.1, 522.0, 520.9, 521.7),
+    bar("t11", 521.7, 522.4, 521.2, 522.1),
+  ],
+  RTH_BAR_LABELS_12
+);
 
 /**
  * Cyclical energy — sharp selloff then bounce (opposite contour to mega-cap grind).
  */
-const CYCLICAL_OHLC: OHLC[] = [
-  bar("08:00", 112.5, 113.8, 111.9, 113.2),
-  bar("10:00", 113.2, 114.0, 112.4, 112.8),
-  bar("12:00", 112.8, 113.1, 110.2, 110.6),
-  bar("14:00", 110.6, 111.0, 107.8, 108.4),
-  bar("16:00", 108.4, 109.6, 107.2, 109.0),
-  bar("18:00", 109.0, 110.8, 108.6, 110.4),
-  bar("20:00", 110.4, 111.5, 109.8, 110.0),
-  bar("22:00", 110.0, 110.4, 108.1, 108.6),
-  bar("00:00", 108.6, 109.2, 106.5, 107.0),
-  bar("02:00", 107.0, 108.8, 106.8, 108.5),
-  bar("04:00", 108.5, 110.2, 108.2, 109.8),
-  bar("06:00", 109.8, 111.4, 109.4, 111.0),
-];
+const CYCLICAL_OHLC: OHLC[] = withBarLabels(
+  [
+    bar("t0", 112.5, 113.8, 111.9, 113.2),
+    bar("t1", 113.2, 114.0, 112.4, 112.8),
+    bar("t2", 112.8, 113.1, 110.2, 110.6),
+    bar("t3", 110.6, 111.0, 107.8, 108.4),
+    bar("t4", 108.4, 109.6, 107.2, 109.0),
+    bar("t5", 109.0, 110.8, 108.6, 110.4),
+    bar("t6", 110.4, 111.5, 109.8, 110.0),
+    bar("t7", 110.0, 110.4, 108.1, 108.6),
+    bar("t8", 108.6, 109.2, 106.5, 107.0),
+    bar("t9", 107.0, 108.8, 106.8, 108.5),
+    bar("t10", 108.5, 110.2, 108.2, 109.8),
+    bar("t11", 109.8, 111.4, 109.4, 111.0),
+  ],
+  RTH_BAR_LABELS_12
+);
 
 /** P0 equity floor: ≥3 packs with distinct OHLC shapes (not scaled clones). */
 export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
@@ -132,7 +146,7 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
 export const CRYPTO_SAMPLE_PACKS: SamplePack[] = [];
 
 /** Index-style future: stair-step grind with a mid-session pause (≠ equity mega-cap shape). */
-const INDEX_FUTURE_OHLC: OHLC[] = [
+const INDEX_FUTURE_OHLC: OHLC[] = withBarLabels([
   bar("08:00", 5180, 5195, 5174, 5190),
   bar("10:00", 5190, 5210, 5186, 5204),
   bar("12:00", 5204, 5208, 5192, 5196),
@@ -145,10 +159,10 @@ const INDEX_FUTURE_OHLC: OHLC[] = [
   bar("02:00", 5248, 5266, 5242, 5260),
   bar("04:00", 5260, 5264, 5246, 5250),
   bar("06:00", 5250, 5272, 5248, 5268),
-];
+], SESSION_24H_LABELS_12)
 
 /** Energy-style future: sharp dump then partial reclaim (≠ index future grind). */
-const ENERGY_FUTURE_OHLC: OHLC[] = [
+const ENERGY_FUTURE_OHLC: OHLC[] = withBarLabels([
   bar("08:00", 78.4, 79.1, 77.9, 78.8),
   bar("10:00", 78.8, 79.6, 78.2, 79.2),
   bar("12:00", 79.2, 79.4, 76.5, 76.9),
@@ -161,7 +175,7 @@ const ENERGY_FUTURE_OHLC: OHLC[] = [
   bar("02:00", 75.0, 75.9, 74.6, 75.6),
   bar("04:00", 75.6, 76.2, 75.1, 75.8),
   bar("06:00", 75.8, 76.9, 75.4, 76.6),
-];
+], SESSION_24H_LABELS_12)
 
 /** E9.M1 — Futures SAMPLE packs (≥2 distinct shapes). */
 export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
@@ -186,7 +200,7 @@ export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
 ];
 
 /** Underlying grind into an event window — options *context* (not a chain). */
-const OPT_CTX_EVENT_OHLC: OHLC[] = [
+const OPT_CTX_EVENT_OHLC: OHLC[] = withBarLabels([
   bar("08:00", 142.0, 143.2, 141.6, 142.8),
   bar("10:00", 142.8, 143.5, 142.2, 142.6),
   bar("12:00", 142.6, 143.0, 141.8, 142.2),
@@ -199,10 +213,10 @@ const OPT_CTX_EVENT_OHLC: OHLC[] = [
   bar("02:00", 141.4, 142.2, 141.0, 141.8),
   bar("04:00", 141.8, 142.6, 141.5, 142.4),
   bar("06:00", 142.4, 143.8, 142.0, 143.5),
-];
+], RTH_BAR_LABELS_12)
 
 /** Underlying after a volatility spike — wide range, then settle. */
-const OPT_CTX_VOL_OHLC: OHLC[] = [
+const OPT_CTX_VOL_OHLC: OHLC[] = withBarLabels([
   bar("08:00", 88.5, 89.2, 87.8, 88.9),
   bar("10:00", 88.9, 90.5, 88.0, 90.1),
   bar("12:00", 90.1, 92.8, 89.4, 91.6),
@@ -215,7 +229,7 @@ const OPT_CTX_VOL_OHLC: OHLC[] = [
   bar("02:00", 88.4, 88.9, 87.6, 88.1),
   bar("04:00", 88.1, 88.7, 87.8, 88.3),
   bar("06:00", 88.3, 89.2, 88.0, 88.8),
-];
+], RTH_BAR_LABELS_12)
 
 /** E9.M2 — Options-context SAMPLE packs (underlying education; not LIVE chains / Greeks). */
 export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
@@ -240,7 +254,7 @@ export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
 ];
 
 /** Major FX: slow drift higher (≠ cross pair shape). STYLIZED quote levels. */
-const FX_MAJOR_OHLC: OHLC[] = [
+const FX_MAJOR_OHLC: OHLC[] = withBarLabels([
   bar("08:00", 1.0842, 1.0855, 1.0836, 1.0850),
   bar("10:00", 1.0850, 1.0868, 1.0844, 1.0862),
   bar("12:00", 1.0862, 1.0866, 1.0848, 1.0852),
@@ -253,10 +267,10 @@ const FX_MAJOR_OHLC: OHLC[] = [
   bar("02:00", 1.0896, 1.0912, 1.0890, 1.0908),
   bar("04:00", 1.0908, 1.0914, 1.0896, 1.0902),
   bar("06:00", 1.0902, 1.0920, 1.0898, 1.0916),
-];
+], SESSION_24H_LABELS_12)
 
 /** Cross FX: sharp risk-off drop then partial bounce. */
-const FX_CROSS_OHLC: OHLC[] = [
+const FX_CROSS_OHLC: OHLC[] = withBarLabels([
   bar("08:00", 157.2, 157.8, 156.9, 157.5),
   bar("10:00", 157.5, 158.1, 157.0, 157.8),
   bar("12:00", 157.8, 158.0, 155.4, 155.8),
@@ -269,7 +283,7 @@ const FX_CROSS_OHLC: OHLC[] = [
   bar("02:00", 155.2, 155.9, 154.8, 155.5),
   bar("04:00", 155.5, 156.2, 155.1, 155.9),
   bar("06:00", 155.9, 156.6, 155.4, 156.3),
-];
+], SESSION_24H_LABELS_12)
 
 /** E9.M4 — Forex SAMPLE packs (spot FX browse after equities fluency). */
 export const FOREX_SAMPLE_PACKS: SamplePack[] = [

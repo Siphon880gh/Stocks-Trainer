@@ -137,12 +137,12 @@ export default function Market() {
 
         {market?.pack.assetClass === "equity" && !isChartGateComplete() ? (
           <div className="border border-primary/30 bg-primary/5 rounded px-3 py-2 font-mono text-[11px] text-primary/80 flex flex-wrap items-center gap-2">
-            <span>SAMPLE equity pack · Chart soft-gate still open on Beginner path.</span>
+            <span>SAMPLE equity pack · Indicators quiz still open on Beginner path.</span>
             <Link
               to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
               className="underline text-primary"
             >
-              Run Indicators quiz (E4.M0)
+              Run Indicators quiz
             </Link>
           </div>
         ) : null}
@@ -267,7 +267,7 @@ export default function Market() {
               {dataProvider.label}_FEED
             </span>
           </div>
-          <div className="h-[350px] w-full">
+          <div className="w-full">
             <MarketChart
               data={ohlcData}
               showSMA={controls.sma}
@@ -275,7 +275,7 @@ export default function Market() {
               showRSI={controls.rsi}
               showMACD={controls.macd}
               showBollinger={controls.bollinger}
-              height={350}
+              height={320}
             />
           </div>
         </div>

@@ -31,7 +31,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "position",
     summary: "Long benefits if value rises; short bets on a decline.",
     detail:
-      "Long = own (or intend to own) with upside if price/value rises. Short = borrow/sell hoping to repurchase cheaper. Shorting has asymmetric loss risk—soft-gated on the beginner path.",
+      "Long = own (or intend to own) with upside if price/value rises. Short = borrow/sell hoping to repurchase cheaper. Shorting has asymmetric loss risk—held until later on the beginner path.",
   },
   {
     id: "investing-vs-trading",
@@ -104,6 +104,22 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     summary: "Markets may already reflect widely expected news before the headline hits.",
     detail:
       "If everyone expected the print, the first move after the headline can fade. SAMPLE training asks: what was already known vs what is new?",
+  },
+  {
+    id: "ohlc-anatomy",
+    name: "OHLC (Open High Low Close)",
+    category: "markets",
+    summary: "Four prices that draw one candlestick: open, high, low, close.",
+    detail:
+      "High is the tip of the upper wick. Low is the tip of the lower wick. The body runs from open to close: on a green candle the top of the body is close; on a red candle the top of the body is open. SAMPLE teaching — not a live quote.",
+  },
+  {
+    id: "candle-color",
+    name: "Green vs Red candles",
+    category: "markets",
+    summary: "Green = close above open; red = close below open.",
+    detail:
+      "Color encodes the period’s direction, not volume or certainty. SAMPLE charts paint green when close > open and red when close < open.",
   },
   {
     id: "chase-vs-fade",

@@ -38,9 +38,9 @@ export interface FinancialSnapshot {
 export const FINANCIAL_SNAPSHOTS: FinancialSnapshot[] = [
   {
     id: "snap-mega-tech",
-    label: "Mega-Cap Tech (SAMPLE)",
+    label: "Big tech company",
     symbol: "AAPL.S",
-    notes: "STYLIZED annual-ish highlights for literacy drills — not a live filing.",
+    notes: "Practice numbers for teaching. Not a live filing.",
     incomeStatement: {
       revenue: 380_000,
       netIncome: 95_000,
@@ -60,9 +60,9 @@ export const FINANCIAL_SNAPSHOTS: FinancialSnapshot[] = [
   },
   {
     id: "snap-cyclical",
-    label: "Cyclical Energy (SAMPLE)",
+    label: "Energy company",
     symbol: "XOM.S",
-    notes: "STYLIZED snapshot: thinner margins, heavier assets vs mega-cap tech.",
+    notes: "Practice snapshot: thinner margins and heavier assets than the tech example.",
     incomeStatement: {
       revenue: 210_000,
       netIncome: 18_000,
