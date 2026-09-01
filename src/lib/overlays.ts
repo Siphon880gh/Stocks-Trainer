@@ -6,6 +6,8 @@ export interface OverlayDef {
   name: string;
   fullName: string;
   description: string;
+  /** Longer learner-facing definition for the detail modal. */
+  detail?: string;
   useCase: string;
   category: OverlayCategory;
 }
@@ -27,6 +29,8 @@ export const OVERLAYS: OverlayDef[] = [
     fullName: "Exponential Moving Average",
     description:
       "Like SMA but gives more weight to recent prices. Reacts faster to new data. Useful for short-term momentum.",
+    detail:
+      "An Exponential Moving Average (EMA) is calculated by applying a percentage of the current price and combining it with the previous period's EMA, giving more weight to recent data points than a Simple Moving Average (SMA).",
     useCase: "Faster signals than SMA; popular for swing trading.",
   },
   {
@@ -65,4 +69,27 @@ export function getOverlay(id: string): OverlayDef | undefined {
 export function getOverlaysByCategory(category: OverlayCategory | "all"): OverlayDef[] {
   if (category === "all") return OVERLAYS;
   return OVERLAYS.filter((o) => o.category === category);
+}
+
+const HINT_TERM_RE = /\b(Bollinger Bands|SMA|EMA|RSI|MACD|Bollinger)\b/gi;
+
+export function overlayIdForHintTerm(term: string): string | undefined {
+  const t = term.toLowerCase();
+  if (t === "bollinger bands" || t === "bollinger") return "bollinger";
+  return OVERLAYS.find((o) => o.name.toLowerCase() === t)?.id;
+}
+
+export function splitHintTerms(text: string): Array<{ text: string; overlayId?: string }> {
+  const parts: Array<{ text: string; overlayId?: string }> = [];
+  const re = new RegExp(HINT_TERM_RE.source, HINT_TERM_RE.flags);
+  let last = 0;
+  let match: RegExpExecArray | null;
+  while ((match = re.exec(text)) !== null) {
+    if (match.index > last) parts.push({ text: text.slice(last, match.index) });
+    parts.push({ text: match[0], overlayId: overlayIdForHintTerm(match[0]) });
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) parts.push({ text: text.slice(last) });
+  if (parts.length === 0) parts.push({ text });
+  return parts;
 }

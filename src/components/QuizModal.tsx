@@ -11,9 +11,11 @@ import {
 import { PATTERN_OHLC, SAMPLE_OHLC } from "../lib/ohlcData";
 import { getLiteracyTerm } from "../lib/literacyTerms";
 import { completeMilestoneFromQuiz } from "../lib/progressStore";
+import { getOverlay, splitHintTerms } from "../lib/overlays";
 import CandlestickChart from "./CandlestickChart";
 import MarketChart from "./MarketChart";
 import FinancialSnapshotCard from "./FinancialSnapshotCard";
+import IndicatorDetailModal from "./IndicatorDetailModal";
 
 interface QuizModalProps {
   isOpen: boolean;
@@ -42,6 +44,7 @@ export default function QuizModal({
   const [streak, setStreak] = useState(initialStreak);
   const [correctCount, setCorrectCount] = useState(0);
   const [totalAnswered, setTotalAnswered] = useState(0);
+  const [hintOverlayId, setHintOverlayId] = useState<string | null>(null);
 
   const question = questions[currentIndex];
   const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
@@ -72,6 +75,7 @@ export default function QuizModal({
       setCurrentIndex((i) => i + 1);
       setSelectedOption(null);
       setSubmitted(false);
+      setHintOverlayId(null);
     } else {
       completeMilestoneFromQuiz({
         groupId,
@@ -98,12 +102,18 @@ export default function QuizModal({
       setStreak(initialStreak);
       setCorrectCount(0);
       setTotalAnswered(0);
+      setHintOverlayId(null);
     }
   }, [isOpen, startIndex, groupId]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") handleClose();
+      if (e.key !== "Escape") return;
+      if (hintOverlayId) {
+        setHintOverlayId(null);
+        return;
+      }
+      handleClose();
     };
     if (isOpen) {
       window.addEventListener("keydown", handleEscape);
@@ -113,7 +123,7 @@ export default function QuizModal({
       window.removeEventListener("keydown", handleEscape);
       document.body.style.overflow = "";
     };
-  }, [isOpen, handleClose]);
+  }, [isOpen, handleClose, hintOverlayId]);
 
   if (!isOpen) return null;
 
@@ -133,7 +143,7 @@ export default function QuizModal({
         {/* Modal Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-primary/20 bg-background-dark/95 backdrop-blur-sm">
           <h2 id="quiz-modal-title" className="text-sm font-bold text-primary uppercase tracking-widest">
-            Pattern Recognition Quiz
+            Training Quiz
           </h2>
           <div className="flex items-center gap-4">
             <span className="text-xs font-mono text-primary/70">
@@ -156,12 +166,12 @@ export default function QuizModal({
           {/* Question */}
           <div className="bg-neutral-dark/80 border border-primary/30 rounded-xl p-6">
             <span className="text-xs font-mono text-primary/40">MODULE_ID: {question.id}</span>
-            <h3 className="text-xl font-bold mt-2 mb-2">Identify the Signal</h3>
+            <h3 className="text-xl font-bold mt-2 mb-2">Question</h3>
             <p className="text-slate-400">{question.prompt}</p>
           </div>
 
-          {/* Chart, snapshot card, or literacy context */}
-          {question.snapshotId ? (
+          {/* Chart, snapshot card, or literacy context — skip hero chart when options are charts */}
+          {question.optionsAreCharts ? null : question.snapshotId ? (
             <FinancialSnapshotCard snapshotId={question.snapshotId} />
           ) : question.overlayId || question.patternKey ? (
             <div className="bg-background-dark border-2 border-primary/40 rounded-xl overflow-hidden">
@@ -185,12 +195,14 @@ export default function QuizModal({
                     showRSI={question.overlayId === "rsi"}
                     showMACD={question.overlayId === "macd"}
                     showBollinger={question.overlayId === "bollinger"}
+                    showScaleControls={false}
                   />
                 ) : (
                   <CandlestickChart
                     data={PATTERN_OHLC[question.patternKey ?? "hammer"] ?? PATTERN_OHLC.hammer}
                     height={260}
                     highlightIndex={question.highlightIndex ?? 2}
+                    showScaleControls={false}
                   />
                 )}
               </div>
@@ -212,11 +224,19 @@ export default function QuizModal({
             </div>
           )}
 
-          {/* Options */}
-          <div className={cn(
-            "grid gap-4",
-            question.options.length <= 3 ? "grid-cols-1 md:grid-cols-3" : "grid-cols-1 md:grid-cols-5"
-          )}>
+          {/* Options — text cards or numbered mini charts */}
+          <div
+            className={cn(
+              "grid gap-3",
+              question.optionsAreCharts
+                ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-5"
+                : question.options.length <= 3
+                  ? "grid-cols-1 md:grid-cols-3"
+                  : question.options.length === 4
+                    ? "grid-cols-1 md:grid-cols-2"
+                    : "grid-cols-1 md:grid-cols-5"
+            )}
+          >
             {question.options.map((opt) => (
               <span key={opt.id} className="contents">
                 <QuizOptionButton
@@ -224,6 +244,7 @@ export default function QuizModal({
                   selected={selectedOption === opt.id}
                   submitted={Boolean(submitted)}
                   correctAnswer={question.correctAnswer}
+                  asChart={Boolean(question.optionsAreCharts && opt.chartKey)}
                   onSelect={() => !submitted && setSelectedOption(opt.id)}
                 />
               </span>
@@ -245,7 +266,27 @@ export default function QuizModal({
               </div>
               <div className="flex gap-2">
                 <span className="text-primary opacity-50">&gt;</span>
-                <p className="text-slate-300 italic">"{question.explanation}"</p>
+                <p className="text-slate-300 italic">
+                  "
+                  {splitHintTerms(question.explanation).map((part, i) =>
+                    part.overlayId ? (
+                      <span key={i} className="inline whitespace-nowrap not-italic">
+                        {part.text}
+                        <button
+                          type="button"
+                          className="inline-flex align-middle ml-0.5 text-primary hover:text-primary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                          aria-label={`About ${part.text}`}
+                          onClick={() => setHintOverlayId(part.overlayId!)}
+                        >
+                          <span className="material-symbols-outlined text-[16px] leading-none">info</span>
+                        </button>
+                      </span>
+                    ) : (
+                      <span key={i}>{part.text}</span>
+                    )
+                  )}
+                  "
+                </p>
               </div>
               {question.glossaryTermId ? (
                 <div className="flex gap-2">
@@ -297,6 +338,13 @@ export default function QuizModal({
           </div>
         </div>
       </div>
+      {hintOverlayId && getOverlay(hintOverlayId) ? (
+        <IndicatorDetailModal
+          overlay={getOverlay(hintOverlayId)!}
+          hidePracticeLink
+          onClose={() => setHintOverlayId(null)}
+        />
+      ) : null}
     </div>
   );
 }
@@ -306,58 +354,101 @@ function QuizOptionButton({
   selected,
   submitted,
   correctAnswer,
+  asChart,
   onSelect,
 }: {
   option: QuizOption;
   selected: boolean;
   submitted: boolean;
   correctAnswer: QuizOption["id"];
+  asChart?: boolean;
   onSelect: () => void;
 }): ReactElement {
   const isCorrect = option.id === correctAnswer;
   const showCorrect = submitted && isCorrect;
   const showIncorrect = submitted && selected && !isCorrect;
+  const chartData =
+    asChart && option.chartKey
+      ? (PATTERN_OHLC[option.chartKey] ?? PATTERN_OHLC.hammer)
+      : null;
 
   return (
     <button
       onClick={onSelect}
       disabled={submitted}
-      title={option.description}
+      title={asChart ? `Chart ${option.label}` : option.description}
+      aria-label={asChart ? `Chart ${option.label}` : undefined}
       className={cn(
-        "group relative flex flex-col items-start p-6 rounded-lg transition-all text-left",
+        "group relative flex flex-col transition-all text-left",
+        asChart ? "items-center p-2 rounded-lg" : "items-start p-6 rounded-lg",
         showCorrect && "bg-primary/20 border-2 border-primary",
         showIncorrect && "bg-accent-red/10 border-2 border-accent-red",
         !submitted && selected && "bg-primary/10 border-2 border-primary shadow-[0_0_15px_rgba(56,255,20,0.1)]",
         !submitted && !selected && "bg-neutral-dark/60 border border-primary/30 hover:border-primary hover:bg-neutral-dark/80"
       )}
     >
-      <span
-        className={cn(
-          "text-xs font-mono mb-2",
-          selected ? "text-primary" : "text-primary/40"
-        )}
-      >
-        OPTION_{option.id} {selected && "[SELECTED]"}
-      </span>
-      <span className={cn("text-lg font-bold", selected && "text-primary")}>{option.label}</span>
-      <p
-        className={cn(
-          "text-sm mt-1 transition-opacity",
-          selected ? "text-primary/60" : "text-slate-400 opacity-0 group-hover:opacity-100"
-        )}
-      >
-        {option.description}
-      </p>
-      <div
-        className={cn(
-          "absolute bottom-4 right-4 transition-all",
-          selected ? "text-primary" : "text-primary opacity-20 group-hover:opacity-100"
-        )}
-      >
-        {showCorrect && <span className="material-symbols-outlined text-primary">check_circle</span>}
-        {showIncorrect && <span className="material-symbols-outlined text-accent-red">cancel</span>}
-        {!submitted && <span className="material-symbols-outlined">{selected ? "check_circle" : "chevron_right"}</span>}
-      </div>
+      {chartData ? (
+        <>
+          <div className="w-full h-[120px] pointer-events-none">
+            <CandlestickChart
+              data={chartData}
+              height={120}
+              highlightIndex={option.chartHighlightIndex ?? 2}
+              compact
+            />
+          </div>
+          <span
+            className={cn(
+              "mt-1 text-lg font-bold font-mono",
+              selected || showCorrect ? "text-primary" : "text-primary/70"
+            )}
+          >
+            {option.label}
+          </span>
+          {showCorrect && (
+            <span className="absolute top-2 right-2 material-symbols-outlined text-primary text-base">
+              check_circle
+            </span>
+          )}
+          {showIncorrect && (
+            <span className="absolute top-2 right-2 material-symbols-outlined text-accent-red text-base">
+              cancel
+            </span>
+          )}
+        </>
+      ) : (
+        <>
+          <span
+            className={cn(
+              "text-xs font-mono mb-2",
+              selected ? "text-primary" : "text-primary/40"
+            )}
+          >
+            OPTION_{option.id} {selected && "[SELECTED]"}
+          </span>
+          <span className={cn("text-lg font-bold", selected && "text-primary")}>{option.label}</span>
+          <p
+            className={cn(
+              "text-sm mt-1 transition-opacity",
+              selected ? "text-primary/60" : "text-slate-400 opacity-0 group-hover:opacity-100"
+            )}
+          >
+            {option.description}
+          </p>
+          <div
+            className={cn(
+              "absolute bottom-4 right-4 transition-all",
+              selected ? "text-primary" : "text-primary opacity-20 group-hover:opacity-100"
+            )}
+          >
+            {showCorrect && <span className="material-symbols-outlined text-primary">check_circle</span>}
+            {showIncorrect && <span className="material-symbols-outlined text-accent-red">cancel</span>}
+            {!submitted && (
+              <span className="material-symbols-outlined">{selected ? "check_circle" : "chevron_right"}</span>
+            )}
+          </div>
+        </>
+      )}
     </button>
   );
 }
