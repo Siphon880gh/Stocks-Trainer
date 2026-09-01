@@ -27,7 +27,7 @@ export const futuresFramingSession: CoachingSession = {
             next: "process",
           },
           {
-            label: "Skip the chart gate because futures are advanced",
+            label: "Skip Indicators because futures are advanced",
             next: "wrong_skip_gate",
           },
         ],
@@ -41,7 +41,7 @@ export const futuresFramingSession: CoachingSession = {
       },
       wrong_skip_gate: {
         message:
-          "Chart soft-gate still applies across asset classes. Advanced topic ≠ skip fluency.\n\nReturn to framing.",
+          "Chart fluency still applies across asset classes. Advanced topic ≠ skip fluency.\n\nReturn to framing.",
         outcome: "wrong",
         choices: [],
         rewind_to: "start",

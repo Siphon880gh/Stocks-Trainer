@@ -4,7 +4,7 @@ import type { CoachingSession } from "../types";
 export const chartSoftGateSession: CoachingSession = {
   meta: {
     slug: "chart-soft-gate",
-    title: "Why the chart soft-gate exists",
+    title: "Why Indicators come before cases",
     summary:
       "Decide when candles + indicators are ready enough for graded decide-and-reveal cases.",
     topic: "Chart fluency",
@@ -15,7 +15,7 @@ export const chartSoftGateSession: CoachingSession = {
     nodes: {
       start: {
         message:
-          "You finished equities vocabulary. Graded Cases want a chart soft-gate first.\n\nWhy block cases until Indicators literacy is done?",
+          "You finished equities vocabulary. Cases wait until you can read candles and indicator lines.\n\nWhy finish Indicators literacy first?",
         outcome: "continue",
         choices: [
           {
@@ -27,28 +27,28 @@ export const chartSoftGateSession: CoachingSession = {
             next: "overlays",
           },
           {
-            label: "The gate exists to unlock LIVE quotes",
+            label: "This step exists to unlock LIVE quotes",
             next: "wrong_live",
           },
         ],
       },
       wrong_skip_charts: {
         message:
-          "Cases show pre-reaction OHLC. Without chart language, debriefs collapse into direction-only guesses.\n\nReturn to the purpose of the gate.",
+          "Cases show pre-reaction OHLC. Without chart language, debriefs collapse into direction-only guesses.\n\nReturn to why Indicators come first.",
         outcome: "wrong",
         choices: [],
         rewind_to: "start",
       },
       wrong_live: {
         message:
-          "This app uses SAMPLE / DELAYED labels — the soft-gate is educational, not a LIVE feed unlock.\n\nReturn to the purpose of the gate.",
+          "This app uses SAMPLE / DELAYED labels — this step is educational, not a LIVE feed unlock.\n\nReturn to why Indicators come first.",
         outcome: "wrong",
         choices: [],
         rewind_to: "start",
       },
       overlays: {
         message:
-          "On Market you can toggle SMA/EMA/RSI/MACD/Bollinger on SAMPLE packs.\n\nBefore Cases, which practice habit matches the gate?",
+          "On Market you can toggle SMA/EMA/RSI/MACD/Bollinger on SAMPLE packs.\n\nBefore Cases, which practice habit matches?",
         outcome: "continue",
         choices: [
           {
@@ -63,14 +63,14 @@ export const chartSoftGateSession: CoachingSession = {
       },
       wrong_indicator_only: {
         message:
-          "Indicators without candle context are incomplete fluency. The gate wants both.\n\nRevisit the practice habit.",
+          "Indicators without candle context are incomplete fluency. You need both.\n\nRevisit the practice habit.",
         outcome: "wrong",
         choices: [],
         rewind_to: "overlays",
       },
       success: {
         message:
-          "Session complete. Soft-gate = chart language before graded reveals.\n\nNext: Training → Indicators (path gate), then Cases.",
+          "Session complete. Chart language first, then graded reveals.\n\nNext: Training → Indicators, then Cases.",
         outcome: "success",
         choices: [],
       },

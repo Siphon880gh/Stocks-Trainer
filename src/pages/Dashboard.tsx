@@ -361,7 +361,7 @@ export default function Dashboard() {
                     {pathDone
                       ? pathCompleteLabel
                       : activeDef
-                        ? `${activeDef.id} · ${activeDef.title}`
+                        ? activeDef.title
                         : pathTemplate?.title ?? "Learning Path"}
                   </h2>
                   {pathDone ? (
@@ -455,14 +455,10 @@ export default function Dashboard() {
                   const lockedCase = isGradedCasePackLocked(m.id);
                   return (
                     <li key={m.id} className="flex flex-wrap items-baseline gap-2 text-primary/70">
-                      <span className="text-primary/40">{m.id}</span>
                       <span>{m.title}</span>
                       <span className="uppercase text-primary/50">[{status}]</span>
-                      {m.id === "E4.M0" ? (
-                        <span className="text-primary/40">← chart gate before cases</span>
-                      ) : null}
                       {lockedCase ? (
-                        <span className="text-accent-red/80">LOCKED · chart gate</span>
+                        <span className="text-accent-red/80">LOCKED · finish Indicators first</span>
                       ) : null}
                     </li>
                   );
@@ -521,7 +517,7 @@ export default function Dashboard() {
                 className="p-3 border border-primary/20 bg-primary/5 flex flex-col items-center text-center gap-2 hover:bg-primary/10 transition-colors cursor-pointer"
               >
                 <span className="material-symbols-outlined text-primary/70">show_chart</span>
-                <span className="text-[10px]">CHART_GATE</span>
+                <span className="text-[10px]">INDICATORS</span>
               </Link>
               <Link
                 to={nextHref}
@@ -530,7 +526,7 @@ export default function Dashboard() {
                 <span className="material-symbols-outlined">play_arrow</span>
                 <span className="text-[10px]">
                   {activeDef?.isGradedCasePack && caseGateLocked
-                    ? "UNLOCK_GATE"
+                    ? "INDICATORS"
                     : activeDef?.isGradedCasePack
                       ? "OPEN_CASES"
                       : "NEXT_STEP"}
@@ -624,7 +620,7 @@ export default function Dashboard() {
             {pathDefs
               .map(
                 (m) =>
-                  `${m.id}:${progress.milestones[m.id]?.status ?? "missing"}`
+                  `${m.title}:${progress.milestones[m.id]?.status ?? "missing"}`
               )
               .join(" · ")}
           </p>

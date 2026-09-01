@@ -81,7 +81,7 @@ export function decideLockReason(assetClass: AssetClass): DecideLockReason {
 
 export function decideLockCopy(reason: DecideLockReason): string {
   if (reason === "chart_gate") {
-    return "LOCKED · finish Indicators chart soft-gate first";
+    return "LOCKED · finish Indicators first";
   }
   if (reason === "no_pack") {
     return "LOCKED · SAMPLE decide pack not seeded for this class yet";

@@ -77,7 +77,7 @@ export const chaseVsFadeSession: CoachingSession = {
       },
       wrong_blind_short: {
         message:
-          "Blind shorts on every gap skip soft-gated short literacy and ignore that some rumors escalate into filings.\n\nRevisit the stance choice—fade or hold for clarity is the process answer here.",
+          "Blind shorts on every gap skip short literacy (held until later) and ignore that some rumors escalate into filings.\n\nRevisit the stance choice—fade or hold for clarity is the process answer here.",
         outcome: "wrong",
         choices: [],
         rewind_to: "priced_in",

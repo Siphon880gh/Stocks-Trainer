@@ -33,7 +33,7 @@ export const BEGINNER_EQUITIES_PATH: LearningPathTemplate = {
   id: BEGINNER_EQUITIES_PATH_ID,
   title: "Beginner Equities Path",
   description:
-    "Literacy → statements → chart soft-gate → earnings cases → company news cases (SAMPLE).",
+    "Literacy → statements → Indicators → earnings cases → company news cases (SAMPLE).",
   milestones: [
     {
       id: "E4.M1",
@@ -51,7 +51,7 @@ export const BEGINNER_EQUITIES_PATH: LearningPathTemplate = {
     },
     {
       id: "E4.M0",
-      title: "Chart Soft-Gate",
+      title: "Chart Fluency",
       contentRefs: ["quiz:indicators", "pack:equity-sample"],
       unlockFrom: ["E4.M2"],
       coachTip: "Prove candle/indicator fluency before graded decide-and-reveal cases.",
@@ -116,14 +116,14 @@ export const MARKET_EXPLORER_PATH: LearningPathTemplate = {
   id: MARKET_EXPLORER_PATH_ID,
   title: "Market Explorer Path",
   description:
-    "SAMPLE multi-market decide practice: chart gate → futures → forex → crypto. Does not replace Beginner Equities (stocks).",
+    "SAMPLE multi-market decide practice: Indicators → futures → forex → crypto. Does not replace Beginner Equities (stocks).",
   milestones: [
     {
       id: "E4.M0",
-      title: "Chart Soft-Gate",
+      title: "Chart Fluency",
       contentRefs: ["quiz:indicators"],
       unlockFrom: [],
-      coachTip: "Same Indicators soft-gate before any graded SAMPLE decide packs.",
+      coachTip: "Finish the Indicators quiz before any graded SAMPLE decide packs.",
     },
     {
       id: "E10.M5",

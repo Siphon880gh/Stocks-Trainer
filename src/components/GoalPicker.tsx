@@ -53,13 +53,13 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
         <ol className="space-y-1 text-xs text-primary/80">
           {selected.milestones.map((m, i) => (
             <li key={m.id}>
-              {i + 1}. {m.id} · {m.title}
+              {i + 1}. {m.title}
             </li>
           ))}
         </ol>
         {selected.id === DECISION_MAKER_PATH.id ? (
           <p className="text-[10px] text-yellow-400/80">
-            Chart soft-gate (Indicators quiz) still required before graded cases.
+            Indicators quiz still required before graded cases.
           </p>
         ) : null}
         {selected.id === MARKET_EXPLORER_PATH.id ? (

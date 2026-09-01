@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import QuizModal from "../components/QuizModal";
 import AnswerSheetModal from "../components/AnswerSheetModal";
+import PathMapPanel from "../components/PathMapPanel";
 import { QUIZ_GROUPS, getQuestionsForGroup, type QuizGroupId } from "../lib/quizData";
 import {
   CHART_GATE_MILESTONE_ID,
@@ -23,6 +24,7 @@ export default function Training() {
   const [points, setPoints] = useState(() => loadProgress().state.scores.totalPoints);
   const [streak, setStreak] = useState(() => loadProgress().state.streaks.current);
   const [accuracy, setAccuracy] = useState(() => loadProgress().state.scores.accuracy);
+  const [pathMapTick, setPathMapTick] = useState(0);
   const chartGateOpen =
     !isChartGateComplete() &&
     (getMilestoneStatus(CHART_GATE_MILESTONE_ID) === "available" ||
@@ -73,11 +75,16 @@ export default function Training() {
         </div>
       </nav>
 
-      <main className="max-w-5xl mx-auto px-4 py-8 flex-1 flex flex-col items-center justify-center">
+      <main className="max-w-5xl mx-auto px-4 py-8 flex-1 flex flex-col items-center gap-6">
+        <PathMapPanel
+          selectedGroup={selectedGroup}
+          onSelectTrainingGroup={setSelectedGroup}
+          refreshKey={pathMapTick}
+        />
         {showChartGateBanner ? (
-          <div className="w-full max-w-xl mb-4 border border-primary/40 bg-primary/5 rounded-lg p-4 font-mono text-xs space-y-2">
+          <div className="w-full max-w-xl border border-primary/40 bg-primary/5 rounded-lg p-4 font-mono text-xs space-y-2">
             <p className="text-primary font-bold uppercase tracking-widest">
-              Beginner Path · {CHART_GATE_MILESTONE_ID} Chart Soft-Gate
+              Beginner Path · Indicators
             </p>
             <p className="text-slate-300">{CHART_GATE_PREREQ_TIP}</p>
             <button
@@ -85,16 +92,16 @@ export default function Training() {
               className="text-primary underline"
               onClick={() => setSelectedGroup(CHART_GATE_TRAINING_GROUP)}
             >
-              Select Indicators group (path gate)
+              Select Indicators group
             </button>
           </div>
         ) : (
-          <div className="w-full max-w-xl mb-4 border border-primary/30 bg-neutral-dark/40 rounded-lg p-4 font-mono text-xs space-y-2">
+          <div className="w-full max-w-xl border border-primary/30 bg-neutral-dark/40 rounded-lg p-4 font-mono text-xs space-y-2">
             <p className="text-primary/80 font-bold uppercase tracking-widest">
               Decision Cases · Packs A–C
             </p>
             <p className="text-slate-400">
-              After the chart gate: earnings, company news, macro intro, and
+              After Indicators: earnings, company news, macro intro, and
               combined news+statements (SAMPLE).
             </p>
             <div className="flex flex-wrap gap-3">
@@ -133,6 +140,7 @@ export default function Training() {
             <div className="flex flex-wrap gap-2">
               {QUIZ_GROUPS.map((g) => {
                 const isFeatured =
+                  g.id === "candle-anatomy" ||
                   g.id === "indicators" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
@@ -176,7 +184,7 @@ export default function Training() {
             </p>
             {groupLocked ? (
               <p className="text-accent-red text-xs font-mono">
-                LOCKED: complete prior Beginner Path milestone first (unlockFrom rule).
+                LOCKED: finish the earlier path step first.
               </p>
             ) : null}
           </div>
@@ -252,7 +260,10 @@ export default function Training() {
 
       <QuizModal
         isOpen={isQuizOpen}
-        onClose={() => setIsQuizOpen(false)}
+        onClose={() => {
+          setIsQuizOpen(false);
+          setPathMapTick((n) => n + 1);
+        }}
         initialPoints={points}
         initialStreak={streak}
         startIndex={quizStartIndex}
@@ -261,6 +272,7 @@ export default function Training() {
           setPoints(p);
           setStreak(s);
           setAccuracy(a);
+          setPathMapTick((n) => n + 1);
         }}
       />
       <AnswerSheetModal
