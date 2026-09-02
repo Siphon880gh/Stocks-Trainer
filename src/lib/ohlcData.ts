@@ -323,6 +323,21 @@ export function ohlcPriceExtent(
 }
 
 /**
+ * Scale-up grows the price pane so candles stay in view.
+ * Scale-down keeps pane height and widens the Y domain.
+ */
+export function chartVerticalScale(
+  baseHeight: number,
+  zoom: number,
+): { paneHeight: number; domainZoom: number } {
+  const z = Math.max(0.25, Math.min(zoom, 8));
+  return {
+    paneHeight: Math.round(baseHeight * Math.max(1, z)),
+    domainZoom: Math.min(1, z),
+  };
+}
+
+/**
  * Fit a Y domain to price action. `zoom` > 1 zooms in; < 1 zooms out.
  * Default pad is ~12% of the data span (not a fixed dollar amount).
  */

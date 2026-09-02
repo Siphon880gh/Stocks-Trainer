@@ -2,6 +2,7 @@ import { useState, useRef, type MouseEvent } from "react";
 import {
   ohlcPriceExtent,
   paddedPriceDomain,
+  chartVerticalScale,
   type OHLC,
 } from "../lib/ohlcData";
 import { CHART, chartPaneClass } from "../lib/chartTheme";
@@ -53,11 +54,12 @@ export default function CandlestickChart({
     : { top: 12, right: 52, bottom: 24, left: 8 };
   const chartWidth = compact ? 160 : 400;
   const innerWidth = chartWidth - padding.left - padding.right;
-  const innerHeight = height - padding.top - padding.bottom;
 
   const { min: dataMin, max: dataMax } = ohlcPriceExtent(data);
-  const [yMin, yMax] = paddedPriceDomain(dataMin, dataMax, zoom);
+  const { paneHeight, domainZoom } = chartVerticalScale(height, zoom);
+  const [yMin, yMax] = paddedPriceDomain(dataMin, dataMax, domainZoom);
   const yRange = yMax - yMin;
+  const innerHeight = paneHeight - padding.top - padding.bottom;
 
   const candleCount = data.length;
   const gap = compact ? 1.5 : 2;
@@ -147,8 +149,8 @@ export default function CandlestickChart({
       ) : null}
       <svg
         width="100%"
-        height={height}
-        viewBox={`0 0 ${chartWidth} ${height}`}
+        height={paneHeight}
+        viewBox={`0 0 ${chartWidth} ${paneHeight}`}
         preserveAspectRatio="xMidYMid meet"
         style={{ background: CHART.bg, cursor: onSelectPrice ? "crosshair" : undefined }}
         onClick={(e) => {

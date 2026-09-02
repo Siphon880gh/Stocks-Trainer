@@ -297,7 +297,7 @@ export default function Market() {
 
         {/* Chart Container */}
         {!emptyClass && market ? (
-        <div className="flex-1 relative min-h-[350px]">
+        <div className="relative min-h-[350px] shrink-0">
           <MarketChart
             data={ohlcData}
             showSMA={controls.sma}

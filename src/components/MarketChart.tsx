@@ -18,6 +18,7 @@ import {
   formatBarFrequency,
   ohlcPriceExtent,
   paddedPriceDomain,
+  chartVerticalScale,
   type OHLC,
 } from "../lib/ohlcData";
 import { sma, ema, rsi, macd, bollingerBands } from "../lib/indicators";
@@ -626,7 +627,8 @@ export default function MarketChart({
   if (showEMA) extras.push(...ema12);
   if (showBollinger) extras.push(...bbMid, ...bbUpper, ...bbLower);
   const { min: priceMin, max: priceMax } = ohlcPriceExtent(data, extras);
-  const priceDomain = paddedPriceDomain(priceMin, priceMax, zoom);
+  const { paneHeight, domainZoom } = chartVerticalScale(height, zoom);
+  const priceDomain = paddedPriceDomain(priceMin, priceMax, domainZoom);
 
   const nudgeZoom = (delta: number) => {
     setZoom((z) =>
@@ -827,7 +829,7 @@ export default function MarketChart({
 
       <div ref={chartWrapRef} className="relative">
         {priceLegend.length > 0 ? <PaneLegend items={priceLegend} /> : null}
-        <ResponsiveContainer width="100%" height={height}>
+        <ResponsiveContainer width="100%" height={paneHeight}>
           <ComposedChart
             data={chartData}
             margin={{ top: 8, right: 8, left: 4, bottom: 0 }}
