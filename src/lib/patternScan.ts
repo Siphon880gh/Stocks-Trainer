@@ -134,20 +134,54 @@ export function scanPatterns(data: OHLC[]): DetectedPattern[] {
   return results;
 }
 
+export type ChartProgressionAnchor =
+  | "high"
+  | "sma"
+  | "ema"
+  | "bbMid"
+  | "rsi"
+  | "macd";
+
 export interface ChartProgressionNote {
+  id: string;
   index: number;
   step: number;
   of: number;
   barName: string;
   headline: string;
   detail: string;
+  anchor: ChartProgressionAnchor;
+  y: number;
 }
 
 export interface ProgressionOverlayValues {
   sma?: Array<number | null>;
   ema?: Array<number | null>;
   rsi?: Array<number | null>;
+  macd?: Array<number | null>;
+  macdSignal?: Array<number | null>;
+  macdHist?: Array<number | null>;
+  bbMid?: Array<number | null>;
+  bbUpper?: Array<number | null>;
+  bbLower?: Array<number | null>;
 }
+
+const ANCHOR_RANK: Record<ChartProgressionAnchor, number> = {
+  high: 0,
+  sma: 1,
+  ema: 2,
+  bbMid: 3,
+  rsi: 4,
+  macd: 5,
+};
+
+type OverlayDraft = {
+  index: number;
+  anchor: Exclude<ChartProgressionAnchor, "high">;
+  y: number;
+  headline: string;
+  bits: string[];
+};
 
 function displayBarName(name: string): string {
   return name.replace(/^D-/, "");
@@ -158,6 +192,237 @@ function pctFrom(base: number, value: number): string {
   const pct = ((value - base) / Math.abs(base)) * 100;
   const sign = pct > 0 ? "+" : "";
   return `${sign}${pct.toFixed(1)}% vs the first open`;
+}
+
+function pushOverlay(drafts: OverlayDraft[], next: OverlayDraft): void {
+  const existing = drafts.find(
+    (d) => d.index === next.index && d.anchor === next.anchor,
+  );
+  if (existing) {
+    existing.bits.push(...next.bits);
+    if (!/turns|cross|recapture|loses|stretch|band/i.test(existing.headline)) {
+      existing.headline = next.headline;
+    }
+    return;
+  }
+  drafts.push({ ...next, bits: [...next.bits] });
+}
+
+function movingAverageEvents(
+  data: OHLC[],
+  series: Array<number | null> | undefined,
+  spec: { anchor: "sma" | "ema"; label: string; startDetail: string },
+  drafts: OverlayDraft[],
+): void {
+  if (!series) return;
+  let started = false;
+  for (let i = 0; i < data.length; i++) {
+    const v = series[i];
+    if (v == null) continue;
+    const bits: string[] = [];
+    let headline = `${spec.label} on this SAMPLE window`;
+    if (!started) {
+      started = true;
+      bits.push(spec.startDetail);
+      headline = `${spec.label} begins on this SAMPLE window`;
+    }
+    const prev = i > 0 ? series[i - 1] : null;
+    const prev2 = i > 1 ? series[i - 2] : null;
+    if (prev != null && prev2 != null) {
+      const d0 = prev - prev2;
+      const d1 = v - prev;
+      if (d0 < 0 && d1 > 0) {
+        bits.push(
+          `${spec.label} turns higher — the average is starting to rise.`,
+        );
+        headline = `${spec.label} turns higher`;
+      } else if (d0 > 0 && d1 < 0) {
+        bits.push(
+          `${spec.label} turns lower — the average is starting to fall.`,
+        );
+        headline = `${spec.label} turns lower`;
+      }
+    }
+    const c = data[i]!;
+    const p = i > 0 ? data[i - 1] : undefined;
+    if (prev != null && p) {
+      const wasAbove = p.close >= prev;
+      const nowAbove = c.close >= v;
+      if (!wasAbove && nowAbove) {
+        bits.push(`Close crossed back above ${spec.label}.`);
+        headline = `Close recaptures ${spec.label}`;
+      } else if (wasAbove && !nowAbove) {
+        bits.push(`Close crossed under ${spec.label}.`);
+        headline = `Close loses ${spec.label}`;
+      }
+    }
+    if (bits.length === 0) continue;
+    pushOverlay(drafts, {
+      index: i,
+      anchor: spec.anchor,
+      y: v,
+      headline,
+      bits,
+    });
+  }
+}
+
+function overlayEvents(
+  data: OHLC[],
+  overlays: ProgressionOverlayValues,
+): OverlayDraft[] {
+  const drafts: OverlayDraft[] = [];
+  movingAverageEvents(
+    data,
+    overlays.sma,
+    {
+      anchor: "sma",
+      label: "SMA(5)",
+      startDetail: "SMA(5) starts here — five-bar average of closes.",
+    },
+    drafts,
+  );
+  movingAverageEvents(
+    data,
+    overlays.ema,
+    {
+      anchor: "ema",
+      label: "EMA(4)",
+      startDetail:
+        "EMA(4) starts here — recent closes weigh more than older ones.",
+    },
+    drafts,
+  );
+
+  const { bbMid, bbUpper, bbLower } = overlays;
+  if (bbMid) {
+    let started = false;
+    for (let i = 0; i < data.length; i++) {
+      const mid = bbMid[i];
+      if (mid == null) continue;
+      const bits: string[] = [];
+      let headline = "Bollinger mid on this SAMPLE window";
+      if (!started) {
+        started = true;
+        bits.push(
+          "Bollinger mid starts here — SMA of closes, with bands for stretch.",
+        );
+        headline = "Bollinger mid begins on this SAMPLE window";
+      }
+      const upper = bbUpper?.[i];
+      const lower = bbLower?.[i];
+      const prevUpper = i > 0 ? bbUpper?.[i - 1] : null;
+      const prevLower = i > 0 ? bbLower?.[i - 1] : null;
+      const c = data[i]!;
+      const p = i > 0 ? data[i - 1] : undefined;
+      if (upper != null && (p == null || prevUpper == null || p.close < prevUpper) && c.close >= upper) {
+        bits.push(
+          "Close prints at or above the upper band — stretched vs the recent average.",
+        );
+        headline = "Close reaches the upper Bollinger band";
+      }
+      if (lower != null && (p == null || prevLower == null || p.close > prevLower) && c.close <= lower) {
+        bits.push(
+          "Close prints at or below the lower band — stretched vs the recent average.",
+        );
+        headline = "Close reaches the lower Bollinger band";
+      }
+      if (bits.length === 0) continue;
+      pushOverlay(drafts, {
+        index: i,
+        anchor: "bbMid",
+        y: mid,
+        headline,
+        bits,
+      });
+    }
+  }
+
+  if (overlays.rsi) {
+    for (let i = 0; i < data.length; i++) {
+      const v = overlays.rsi[i];
+      if (v == null) continue;
+      const prev = i > 0 ? overlays.rsi[i - 1] : null;
+      const bits: string[] = [];
+      let headline = "RSI(5) on this SAMPLE oscillator";
+      if (v >= 70 && (prev == null || prev < 70)) {
+        bits.push(
+          `RSI(5) is ${v.toFixed(0)} — stretched high on this SAMPLE oscillator.`,
+        );
+        headline = "RSI(5) stretches high";
+      } else if (v <= 30 && (prev == null || prev > 30)) {
+        bits.push(
+          `RSI(5) is ${v.toFixed(0)} — stretched low on this SAMPLE oscillator.`,
+        );
+        headline = "RSI(5) stretches low";
+      } else if (prev != null && prev >= 70 && v < 70) {
+        bits.push("RSI(5) leaves the stretched-high zone.");
+        headline = "RSI(5) leaves the high stretch";
+      } else if (prev != null && prev <= 30 && v > 30) {
+        bits.push("RSI(5) leaves the stretched-low zone.");
+        headline = "RSI(5) leaves the low stretch";
+      }
+      if (bits.length === 0) continue;
+      pushOverlay(drafts, {
+        index: i,
+        anchor: "rsi",
+        y: v,
+        headline,
+        bits,
+      });
+    }
+  }
+
+  const { macd, macdSignal, macdHist } = overlays;
+  if (macd) {
+    for (let i = 0; i < data.length; i++) {
+      const line = macd[i];
+      if (line == null) continue;
+      const bits: string[] = [];
+      let headline = "MACD on this SAMPLE oscillator";
+      const prevLine = i > 0 ? macd[i - 1] : null;
+      const sig = macdSignal?.[i];
+      const prevSig = i > 0 ? macdSignal?.[i - 1] : null;
+      const hist = macdHist?.[i];
+      const prevHist = i > 0 ? macdHist?.[i - 1] : null;
+      if (hist != null && prevHist != null && prevHist < 0 && hist >= 0) {
+        bits.push("MACD histogram crosses up through zero — momentum flipped positive.");
+        headline = "MACD histogram turns positive";
+      } else if (hist != null && prevHist != null && prevHist > 0 && hist <= 0) {
+        bits.push("MACD histogram crosses down through zero — momentum flipped negative.");
+        headline = "MACD histogram turns negative";
+      }
+      if (
+        sig != null &&
+        prevLine != null &&
+        prevSig != null &&
+        prevLine < prevSig &&
+        line >= sig
+      ) {
+        bits.push("MACD line crossed above its signal line.");
+        headline = "MACD crosses above signal";
+      } else if (
+        sig != null &&
+        prevLine != null &&
+        prevSig != null &&
+        prevLine > prevSig &&
+        line <= sig
+      ) {
+        bits.push("MACD line crossed below its signal line.");
+        headline = "MACD crosses below signal";
+      }
+      if (bits.length === 0) continue;
+      pushOverlay(drafts, {
+        index: i,
+        anchor: "macd",
+        y: line,
+        headline,
+        bits,
+      });
+    }
+  }
+
+  return drafts;
 }
 
 /** SAMPLE walk-through of the tape so far — not a live call. */
@@ -176,7 +441,7 @@ export function explainChartProgression(
   const first = data[0]!;
   const n = data.length;
 
-  return data.map((c, i) => {
+  const barNotes: ChartProgressionNote[] = data.map((c, i) => {
     const prev = i > 0 ? data[i - 1] : undefined;
     const range = c.high - c.low;
     const body = Math.abs(c.close - c.open);
@@ -237,40 +502,41 @@ export function explainChartProgression(
       bits.push(`${p.name}: ${p.description}`);
     }
 
-    const sma = overlays.sma?.[i];
-    const smaPrev = i > 0 ? overlays.sma?.[i - 1] : null;
-    if (sma != null) {
-      if (smaPrev != null && prev) {
-        const wasAbove = prev.close >= smaPrev;
-        const nowAbove = c.close >= sma;
-        if (!wasAbove && nowAbove) bits.push("Close crossed back above SMA(5).");
-        else if (wasAbove && !nowAbove) bits.push("Close crossed under SMA(5).");
-        else bits.push(nowAbove ? "Close remains above SMA(5)." : "Close remains below SMA(5).");
-      } else {
-        bits.push(c.close >= sma ? "Close is above SMA(5)." : "Close is below SMA(5).");
-      }
-    } else if (overlays.ema?.[i] != null) {
-      const ema = overlays.ema[i]!;
-      bits.push(c.close >= ema ? "Close is above EMA(4)." : "Close is below EMA(4).");
-    }
-
-    const rsi = overlays.rsi?.[i];
-    if (rsi != null) {
-      if (rsi >= 70) bits.push(`RSI(5) is ${rsi.toFixed(0)} — stretched high on this SAMPLE oscillator.`);
-      else if (rsi <= 30) bits.push(`RSI(5) is ${rsi.toFixed(0)} — stretched low on this SAMPLE oscillator.`);
-    }
-
     if (i === n - 1 && n > 1) {
       bits.push("Last bar in this window: later frequencies or markets will tell a different SAMPLE path.");
     }
 
     return {
+      id: `bar-${i}`,
       index: i,
-      step: i + 1,
-      of: n,
+      step: 0,
+      of: 0,
       barName: label,
       headline,
       detail: bits.join(" "),
+      anchor: "high",
+      y: c.high,
     };
   });
+
+  const overlayNotes: ChartProgressionNote[] = overlayEvents(data, overlays).map(
+    (d) => ({
+      id: `${d.anchor}-${d.index}`,
+      index: d.index,
+      step: 0,
+      of: 0,
+      barName: displayBarName(data[d.index]?.name ?? ""),
+      headline: d.headline,
+      detail: d.bits.join(" "),
+      anchor: d.anchor,
+      y: d.y,
+    }),
+  );
+
+  const notes = [...barNotes, ...overlayNotes].sort((a, b) => {
+    if (a.index !== b.index) return a.index - b.index;
+    return ANCHOR_RANK[a.anchor] - ANCHOR_RANK[b.anchor];
+  });
+  const of = notes.length;
+  return notes.map((note, i) => ({ ...note, step: i + 1, of }));
 }

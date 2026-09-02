@@ -23,6 +23,7 @@ import {
 import { sma, ema, rsi, macd, bollingerBands } from "../lib/indicators";
 import {
   explainChartProgression,
+  type ChartProgressionAnchor,
   type ChartProgressionNote,
 } from "../lib/patternScan";
 import { CHART, chartPaneClass } from "../lib/chartTheme";
@@ -68,25 +69,97 @@ type ChartRow = OHLC & {
   bbMid: number | null;
   bbUpper: number | null;
   bbLower: number | null;
-  explainY: number | null;
+  explainHighY: number | null;
+  explainSmaY: number | null;
+  explainEmaY: number | null;
+  explainBbY: number | null;
+  explainRsiY: number | null;
+  explainMacdY: number | null;
+};
+
+const ANCHOR_LABEL: Record<ChartProgressionAnchor, string> = {
+  high: "",
+  sma: "SMA",
+  ema: "EMA",
+  bbMid: "BB",
+  rsi: "RSI",
+  macd: "MACD",
+};
+
+const ANCHOR_DOT: Record<ChartProgressionAnchor, string> = {
+  high: CHART.highlight,
+  sma: CHART.sma,
+  ema: CHART.ema,
+  bbMid: CHART.bb,
+  rsi: CHART.rsi,
+  macd: CHART.macd,
 };
 
 function neighborNote(
   notes: ChartProgressionNote[],
-  index: number,
+  id: string,
   dir: -1 | 1,
 ): ChartProgressionNote | null {
-  if (dir < 0) {
-    for (let i = notes.length - 1; i >= 0; i--) {
-      const n = notes[i];
-      if (n && n.index < index) return n;
-    }
-    return null;
+  const i = notes.findIndex((n) => n.id === id);
+  if (i < 0) return null;
+  return notes[i + dir] ?? null;
+}
+
+function explainDotEl(
+  props: {
+    cx?: number;
+    cy?: number;
+    payload?: ChartRow;
+    index?: number;
+  },
+  opts: {
+    dataKey: keyof ChartRow;
+    anchor: ChartProgressionAnchor;
+    notes: ChartProgressionNote[];
+    activeId: string | null;
+    store: Map<string, { id: string; cx: number; cy: number }>;
+  },
+) {
+  const cx = Number(props.cx);
+  const cy = Number(props.cy);
+  const payload = props.payload;
+  const y = payload?.[opts.dataKey];
+  if (!Number.isFinite(cx) || !Number.isFinite(cy) || y == null) {
+    return <g key={`${opts.anchor}-${String(props.index)}`} />;
   }
-  for (const n of notes) {
-    if (n.index > index) return n;
-  }
-  return null;
+  const note = opts.notes.find(
+    (n) => n.index === payload.index && n.anchor === opts.anchor,
+  );
+  if (!note) return <g key={`${opts.anchor}-${payload.index}`} />;
+  opts.store.set(note.id, { id: note.id, cx, cy });
+  const active = opts.activeId === note.id;
+  const fill = ANCHOR_DOT[opts.anchor];
+  return (
+    <g key={note.id}>
+      <circle
+        data-explain-dot={note.id}
+        cx={cx}
+        cy={cy}
+        r={active ? 7 : 5.5}
+        fill={fill}
+        stroke="#ffffff"
+        strokeWidth={2}
+        pointerEvents="none"
+      />
+      <text
+        x={cx}
+        y={cy - 11}
+        textAnchor="middle"
+        fill={fill}
+        fontSize={9}
+        fontWeight={700}
+        fontFamily={CHART.font}
+        pointerEvents="none"
+      >
+        {note.step}
+      </text>
+    </g>
+  );
 }
 
 function svgPointToViewport(
@@ -202,7 +275,10 @@ function ExplanationPopover({
           </span>
         </button>
         <p className="flex-1 min-w-0 text-center text-[10px] uppercase tracking-wide text-[#787b86]">
-          Step {note.step} of {note.of} · {note.barName}
+          Step {note.step} of {note.of}
+          {ANCHOR_LABEL[note.anchor] ? ` · ${ANCHOR_LABEL[note.anchor]}` : ""}
+          {" · "}
+          {note.barName}
         </p>
         <button
           type="button"
@@ -305,17 +381,19 @@ export default function MarketChart({
 }: MarketChartProps) {
   const [zoom, setZoom] = useState(1);
   const [explanationsOn, setExplanationsOn] = useState(false);
-  const [hoverExplain, setHoverExplain] = useState<number | null>(null);
-  const [pinnedExplain, setPinnedExplain] = useState<number | null>(null);
+  const [explainHelpOn, setExplainHelpOn] = useState(false);
+  const [hoverExplain, setHoverExplain] = useState<string | null>(null);
+  const [pinnedExplain, setPinnedExplain] = useState<string | null>(null);
   const [popoverAnchor, setPopoverAnchor] = useState<{ x: number; y: number } | null>(
     null,
   );
   const [dotHits, setDotHits] = useState<
-    Array<{ index: number; left: number; top: number }>
+    Array<{ id: string; left: number; top: number }>
   >([]);
   const chartWrapRef = useRef<HTMLDivElement>(null);
-  const explainDotsRef = useRef<Array<{ index: number; cx: number; cy: number }>>(
-    [],
+  const explainHelpRef = useRef<HTMLDivElement>(null);
+  const explainDotsRef = useRef<Map<string, { id: string; cx: number; cy: number }>>(
+    new Map(),
   );
 
   const closes = data.map((d) => d.close);
@@ -340,8 +418,30 @@ export default function MarketChart({
         sma: showSMA ? sma20 : undefined,
         ema: showEMA ? ema12 : undefined,
         rsi: showRSI ? rsi14 : undefined,
+        macd: showMACD ? macdLine : undefined,
+        macdSignal: showMACD ? macdSignal : undefined,
+        macdHist: showMACD ? macdHist : undefined,
+        bbMid: showBollinger ? bbMid : undefined,
+        bbUpper: showBollinger ? bbUpper : undefined,
+        bbLower: showBollinger ? bbLower : undefined,
       }),
-    [data, showSMA, showEMA, showRSI, sma20, ema12, rsi14],
+    [
+      data,
+      showSMA,
+      showEMA,
+      showRSI,
+      showMACD,
+      showBollinger,
+      sma20,
+      ema12,
+      rsi14,
+      macdLine,
+      macdSignal,
+      macdHist,
+      bbMid,
+      bbUpper,
+      bbLower,
+    ],
   );
 
   useEffect(() => {
@@ -349,12 +449,37 @@ export default function MarketChart({
     setPinnedExplain(null);
   }, [data]);
 
+  useEffect(() => {
+    if (pinnedExplain && !notes.some((n) => n.id === pinnedExplain)) {
+      setPinnedExplain(null);
+    }
+  }, [notes, pinnedExplain]);
+
+  useEffect(() => {
+    if (!explainHelpOn) return;
+    const onDown = (e: MouseEvent) => {
+      const t = e.target;
+      if (!(t instanceof Node)) return;
+      if (explainHelpRef.current?.contains(t)) return;
+      setExplainHelpOn(false);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setExplainHelpOn(false);
+    };
+    window.addEventListener("mousedown", onDown);
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("mousedown", onDown);
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [explainHelpOn]);
+
   const activeExplain = explanationsOn
     ? (pinnedExplain ?? hoverExplain)
     : null;
   const pinnedNote =
     explanationsOn && pinnedExplain != null
-      ? notes.find((n) => n.index === pinnedExplain) ?? null
+      ? notes.find((n) => n.id === pinnedExplain) ?? null
       : null;
   const prevNote =
     pinnedExplain != null ? neighborNote(notes, pinnedExplain, -1) : null;
@@ -367,14 +492,14 @@ export default function MarketChart({
       return;
     }
     const wrap = chartWrapRef.current;
-    const hit = wrap?.querySelector(`[data-explain-hit="${pinnedExplain}"]`);
+    const hit = wrap?.querySelector(`[data-explain-hit="${CSS.escape(pinnedExplain)}"]`);
     if (hit instanceof Element) {
       const r = hit.getBoundingClientRect();
       setPopoverAnchor({ x: r.left + r.width / 2, y: r.top });
       return;
     }
     const svg = wrap?.querySelector("svg.recharts-surface");
-    const pt = explainDotsRef.current.find((d) => d.index === pinnedExplain);
+    const pt = explainDotsRef.current.get(pinnedExplain);
     if (svg instanceof SVGSVGElement && pt) {
       setPopoverAnchor(svgPointToViewport(svg, pt.cx, pt.cy));
     }
@@ -387,31 +512,31 @@ export default function MarketChart({
       return;
     }
     const wrapR = wrap.getBoundingClientRect();
-    const byIndex = new Map<number, { index: number; left: number; top: number }>();
+    const byId = new Map<string, { id: string; left: number; top: number }>();
     wrap.querySelectorAll("[data-explain-dot]").forEach((node) => {
-      const i = Number(node.getAttribute("data-explain-dot"));
-      if (!Number.isFinite(i)) return;
+      const id = node.getAttribute("data-explain-dot");
+      if (!id) return;
       const r = node.getBoundingClientRect();
-      byIndex.set(i, {
-        index: i,
+      byId.set(id, {
+        id,
         left: r.left - wrapR.left + r.width / 2,
         top: r.top - wrapR.top + r.height / 2,
       });
     });
-    if (byIndex.size === 0) {
+    if (byId.size === 0) {
       const svg = wrap.querySelector("svg.recharts-surface");
       if (svg instanceof SVGSVGElement) {
-        for (const d of explainDotsRef.current) {
+        for (const d of explainDotsRef.current.values()) {
           const vp = svgPointToViewport(svg, d.cx, d.cy);
-          byIndex.set(d.index, {
-            index: d.index,
+          byId.set(d.id, {
+            id: d.id,
             left: vp.x - wrapR.left,
             top: vp.y - wrapR.top,
           });
         }
       }
     }
-    setDotHits(Array.from(byIndex.values()));
+    setDotHits(Array.from(byId.values()));
   }, [explanationsOn]);
 
   useLayoutEffect(() => {
@@ -443,6 +568,8 @@ export default function MarketChart({
     showSMA,
     showEMA,
     showBollinger,
+    showRSI,
+    showMACD,
   ]);
 
   useEffect(() => {
@@ -461,32 +588,38 @@ export default function MarketChart({
     setHoverExplain(null);
   }, []);
 
-  const chartData: ChartRow[] = data.map((d, i) => {
-    const smaV = sma20[i];
-    const emaV = ema12[i];
-    const bbV = bbMid[i];
-    let explainY: number | null = null;
-    if (explanationsOn) {
-      if (showSMA && smaV != null) explainY = smaV;
-      else if (showEMA && emaV != null) explainY = emaV;
-      else if (showBollinger && bbV != null) explainY = bbV;
-      else explainY = d.high;
+  const chartData: ChartRow[] = data.map((d, i) => ({
+    ...d,
+    index: i,
+    sma: sma20[i],
+    ema: ema12[i],
+    rsi: rsi14[i],
+    macd: macdLine[i],
+    signal: macdSignal[i],
+    histogram: macdHist[i],
+    bbMid: bbMid[i],
+    bbUpper: bbUpper[i],
+    bbLower: bbLower[i],
+    explainHighY: null,
+    explainSmaY: null,
+    explainEmaY: null,
+    explainBbY: null,
+    explainRsiY: null,
+    explainMacdY: null,
+  }));
+
+  if (explanationsOn) {
+    for (const note of notes) {
+      const row = chartData[note.index];
+      if (!row) continue;
+      if (note.anchor === "high") row.explainHighY = note.y;
+      else if (note.anchor === "sma") row.explainSmaY = note.y;
+      else if (note.anchor === "ema") row.explainEmaY = note.y;
+      else if (note.anchor === "bbMid") row.explainBbY = note.y;
+      else if (note.anchor === "rsi") row.explainRsiY = note.y;
+      else if (note.anchor === "macd") row.explainMacdY = note.y;
     }
-    return {
-      ...d,
-      index: i,
-      sma: smaV,
-      ema: emaV,
-      rsi: rsi14[i],
-      macd: macdLine[i],
-      signal: macdSignal[i],
-      histogram: macdHist[i],
-      bbMid: bbV,
-      bbUpper: bbUpper[i],
-      bbLower: bbLower[i],
-      explainY,
-    };
-  });
+  }
 
   const extras: Array<number | null | undefined> = [];
   if (showSMA) extras.push(...sma20);
@@ -626,28 +759,69 @@ export default function MarketChart({
             Fit
           </button>
           <span>{zoom.toFixed(2)}×</span>
-          <button
-            type="button"
-            className={scaleBtn}
-            aria-pressed={explanationsOn}
-            onClick={() => {
-              setExplanationsOn((on) => {
-                if (on) {
-                  setHoverExplain(null);
-                  setPinnedExplain(null);
-                }
-                return !on;
-              });
-            }}
-          >
-            {explanationsOn ? "Hide explanations" : "Show explanations"}
-          </button>
-          {statusLabel ? (
-            <span className="ml-auto flex items-center gap-1 text-[10px] px-2 py-0.5 rounded border border-[#d1d4dc] bg-white text-[#131722] normal-case">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#089981]" />
-              {statusLabel}
-            </span>
-          ) : null}
+          <div className="ml-auto flex items-center gap-2">
+            <div ref={explainHelpRef} className="relative">
+            <div className="inline-flex items-stretch overflow-hidden rounded-md border border-[#2962ff]">
+              <button
+                type="button"
+                className={`px-3 py-1 text-[12px] text-[#2962ff] ${
+                  explanationsOn
+                    ? "bg-[#e8f0ff] font-semibold hover:bg-[#d6e4ff]"
+                    : "bg-white font-medium hover:bg-[#e8f0ff]"
+                }`}
+                aria-pressed={explanationsOn}
+                onClick={() => {
+                  setExplainHelpOn(false);
+                  setExplanationsOn((on) => {
+                    if (on) {
+                      setHoverExplain(null);
+                      setPinnedExplain(null);
+                    }
+                    return !on;
+                  });
+                }}
+              >
+                {explanationsOn ? "Hide explanations" : "Show explanations"}
+              </button>
+              <button
+                type="button"
+                aria-label="What are chart explanations?"
+                aria-expanded={explainHelpOn}
+                title="What are chart explanations?"
+                className={`border-l border-[#2962ff] px-1.5 text-[#2962ff] ${
+                  explanationsOn
+                    ? "bg-[#e8f0ff] hover:bg-[#d6e4ff]"
+                    : "bg-white hover:bg-[#e8f0ff]"
+                }`}
+                onClick={() => setExplainHelpOn((open) => !open)}
+              >
+                <span
+                  aria-hidden
+                  className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-current text-[10px] font-semibold leading-none"
+                >
+                  i
+                </span>
+              </button>
+            </div>
+            {explainHelpOn ? (
+              <div
+                role="tooltip"
+                className="absolute right-0 top-full z-30 mt-1.5 w-[280px] rounded border border-[#d1d4dc] bg-white px-3 py-2 text-[12px] leading-relaxed text-[#131722] shadow-md"
+              >
+                Numbered dots appear on the candles and on any overlays you have
+                on, such as SMA. Each dot marks a specific area — what is
+                happening there, and what changed from the previous dot to this
+                one.
+              </div>
+            ) : null}
+            </div>
+            {statusLabel ? (
+              <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded border border-[#d1d4dc] bg-white text-[#131722] normal-case">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#089981]" />
+                {statusLabel}
+              </span>
+            ) : null}
+          </div>
         </div>
       ) : null}
 
@@ -793,102 +967,42 @@ export default function MarketChart({
               </>
             )}
             {explanationsOn ? (
-              <Line
-                yAxisId="price"
-                type="linear"
-                dataKey="explainY"
-                stroke="none"
-                isAnimationActive={false}
-                legendType="none"
-                tooltipType="none"
-                activeDot={false}
-                dot={(props) => {
-                  const cx = Number(props.cx);
-                  const cy = Number(props.cy);
-                  const payload = props.payload as ChartRow | undefined;
-                  if (
-                    !Number.isFinite(cx) ||
-                    !Number.isFinite(cy) ||
-                    payload?.explainY == null
-                  ) {
-                    return <g key={String(props.index)} />;
-                  }
-                  const i = payload.index;
-                  const active = activeExplain === i;
-                  if (i === 0) explainDotsRef.current = [];
-                  explainDotsRef.current.push({ index: i, cx, cy });
-                  return (
-                    <g key={i}>
-                      <circle
-                        data-explain-dot={i}
-                        cx={cx}
-                        cy={cy}
-                        r={active ? 7 : 5.5}
-                        fill={CHART.highlight}
-                        stroke="#ffffff"
-                        strokeWidth={2}
-                        pointerEvents="none"
-                      />
-                      <text
-                        x={cx}
-                        y={cy - 11}
-                        textAnchor="middle"
-                        fill={CHART.highlight}
-                        fontSize={9}
-                        fontWeight={700}
-                        fontFamily={CHART.font}
-                        pointerEvents="none"
-                      >
-                        {i + 1}
-                      </text>
-                    </g>
-                  );
-                }}
-              />
+              <>
+                {(
+                  [
+                    ["explainHighY", "high"],
+                    ...(showSMA ? ([["explainSmaY", "sma"]] as const) : []),
+                    ...(showEMA ? ([["explainEmaY", "ema"]] as const) : []),
+                    ...(showBollinger
+                      ? ([["explainBbY", "bbMid"]] as const)
+                      : []),
+                  ] as Array<[keyof ChartRow, ChartProgressionAnchor]>
+                ).map(([dataKey, anchor]) => (
+                  <Line
+                    key={dataKey}
+                    yAxisId="price"
+                    type="linear"
+                    dataKey={dataKey}
+                    stroke="none"
+                    isAnimationActive={false}
+                    legendType="none"
+                    tooltipType="none"
+                    activeDot={false}
+                    dot={(props) =>
+                      explainDotEl(props, {
+                        dataKey,
+                        anchor,
+                        notes,
+                        activeId: activeExplain,
+                        store: explainDotsRef.current,
+                      })
+                    }
+                  />
+                ))}
+              </>
             ) : null}
           </ComposedChart>
         </ResponsiveContainer>
-        {explanationsOn ? (
-          <div
-            data-explain-hits
-            className="absolute inset-0 z-[5] pointer-events-none"
-          >
-            {Array.from(
-              new Map(dotHits.map((h) => [h.index, h])).values(),
-            ).map((hit) => (
-              <button
-                key={`explain-hit-${hit.index}`}
-                type="button"
-                data-explain-hit={hit.index}
-                aria-label={`Bar ${hit.index + 1} explanation`}
-                aria-pressed={pinnedExplain === hit.index}
-                className="absolute z-[5] h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full border-0 bg-transparent p-0 cursor-pointer pointer-events-auto"
-                style={{ left: hit.left, top: hit.top }}
-                onMouseEnter={() => setHoverExplain(hit.index)}
-                onMouseLeave={() => setHoverExplain(null)}
-                onClick={() =>
-                  setPinnedExplain((p) => (p === hit.index ? null : hit.index))
-                }
-              />
-            ))}
-          </div>
-        ) : null}
-        {pinnedNote && popoverAnchor ? (
-          <ExplanationPopover
-            note={pinnedNote}
-            anchor={popoverAnchor}
-            hasPrev={prevNote != null}
-            hasNext={nextNote != null}
-            onPrev={() => {
-              if (prevNote) setPinnedExplain(prevNote.index);
-            }}
-            onNext={() => {
-              if (nextNote) setPinnedExplain(nextNote.index);
-            }}
-            onClose={closeExplain}
-          />
-        ) : null}
-      </div>
 
       {showRSI ? (
         <div className="border-t border-[#e0e3eb]">
@@ -941,6 +1055,26 @@ export default function MarketChart({
                 name="RSI(5)"
                 legendType="none"
               />
+              {explanationsOn ? (
+                <Line
+                  type="linear"
+                  dataKey="explainRsiY"
+                  stroke="none"
+                  isAnimationActive={false}
+                  legendType="none"
+                  tooltipType="none"
+                  activeDot={false}
+                  dot={(props) =>
+                    explainDotEl(props, {
+                      dataKey: "explainRsiY",
+                      anchor: "rsi",
+                      notes,
+                      activeId: activeExplain,
+                      store: explainDotsRef.current,
+                    })
+                  }
+                />
+              ) : null}
             </ComposedChart>
           </ResponsiveContainer>
         </div>
@@ -1011,10 +1145,77 @@ export default function MarketChart({
                 name="Signal"
                 legendType="none"
               />
+              {explanationsOn ? (
+                <Line
+                  type="linear"
+                  dataKey="explainMacdY"
+                  stroke="none"
+                  isAnimationActive={false}
+                  legendType="none"
+                  tooltipType="none"
+                  activeDot={false}
+                  dot={(props) =>
+                    explainDotEl(props, {
+                      dataKey: "explainMacdY",
+                      anchor: "macd",
+                      notes,
+                      activeId: activeExplain,
+                      store: explainDotsRef.current,
+                    })
+                  }
+                />
+              ) : null}
             </ComposedChart>
           </ResponsiveContainer>
         </div>
       ) : null}
+
+        {explanationsOn ? (
+          <div
+            data-explain-hits
+            className="absolute inset-0 z-[5] pointer-events-none"
+          >
+            {dotHits.map((hit) => {
+                const note = notes.find((n) => n.id === hit.id);
+                return (
+                  <button
+                    key={`explain-hit-${hit.id}`}
+                    type="button"
+                    data-explain-hit={hit.id}
+                    aria-label={
+                      note
+                        ? `Step ${note.step} of ${note.of} explanation`
+                        : "Chart explanation"
+                    }
+                    aria-pressed={pinnedExplain === hit.id}
+                    className="absolute z-[5] h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full border-0 bg-transparent p-0 cursor-pointer pointer-events-auto"
+                    style={{ left: hit.left, top: hit.top }}
+                    onMouseEnter={() => setHoverExplain(hit.id)}
+                    onMouseLeave={() => setHoverExplain(null)}
+                    onClick={() =>
+                      setPinnedExplain((p) => (p === hit.id ? null : hit.id))
+                    }
+                  />
+                );
+              })}
+          </div>
+        ) : null}
+        {pinnedNote && popoverAnchor ? (
+          <ExplanationPopover
+            note={pinnedNote}
+            anchor={popoverAnchor}
+            hasPrev={prevNote != null}
+            hasNext={nextNote != null}
+            onPrev={() => {
+              if (prevNote) setPinnedExplain(prevNote.id);
+            }}
+            onNext={() => {
+              if (nextNote) setPinnedExplain(nextNote.id);
+            }}
+            onClose={closeExplain}
+          />
+        ) : null}
+      </div>
     </div>
   );
 }
