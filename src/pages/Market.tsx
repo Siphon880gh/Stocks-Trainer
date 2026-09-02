@@ -24,6 +24,11 @@ import { getOverlay, type OverlayDef } from "../lib/overlays";
 import { scanPatterns } from "../lib/patternScan";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import { CHART_GATE_TRAINING_GROUP, isChartGateComplete } from "../lib/beginnerPath";
+import {
+  chartFrequenciesForSeries,
+  inferNativeBarMinutes,
+  ohlcAtFrequency,
+} from "../lib/ohlcData";
 import { parseMarketClassParam } from "../lib/marketNavigator";
 
 const CLASS_LABELS: Record<AssetClass, string> = {
@@ -35,7 +40,7 @@ const CLASS_LABELS: Record<AssetClass, string> = {
 };
 
 export default function Market() {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const classFromUrl = parseMarketClassParam(searchParams.get("class"));
   const [assetFilter, setAssetFilter] = useState<MarketAssetFilter>(
     () => classFromUrl ?? "all",
@@ -52,6 +57,21 @@ export default function Market() {
     const cls = classFromUrl ?? "all";
     return listMarketsByAssetClass(cls)[0]?.id ?? "btc";
   });
+
+  const applyAssetFilter = (next: MarketAssetFilter) => {
+    setAssetFilter(next);
+    const list = listMarketsByAssetClass(next);
+    if (list[0]) setMarketId(list[0].id);
+    setSearchParams(
+      (prev) => {
+        const p = new URLSearchParams(prev);
+        if (next === "all") p.delete("class");
+        else p.set("class", next);
+        return p;
+      },
+      { replace: true },
+    );
+  };
 
   useEffect(() => {
     if (!classFromUrl) return;
@@ -71,14 +91,45 @@ export default function Market() {
   const [showGlossary, setShowGlossary] = useState(false);
   const [popover, setPopover] = useState<{ overlayId: string; x: number; y: number } | null>(null);
   const [selectedOverlay, setSelectedOverlay] = useState<OverlayDef | null>(null);
+  const [freqMinutes, setFreqMinutes] = useState<number | null>(null);
 
   const marketInFilter = filteredMarkets.find((m) => m.id === marketId);
   const market = marketInFilter ?? filteredMarkets[0] ?? getMarket(marketId);
   const emptyClass =
     filteredMarkets.length === 0 && assetFilter !== "all";
-  const ohlcData = useMemo(
+  const sourceOhlc = useMemo(
     () => (market ? dataProvider.getOhlc(market.id) ?? [] : []),
     [market, dataProvider],
+  );
+  const nativeMinutes = useMemo(
+    () => inferNativeBarMinutes(sourceOhlc),
+    [sourceOhlc],
+  );
+  const frequencies = useMemo(
+    () => chartFrequenciesForSeries(sourceOhlc),
+    [sourceOhlc],
+  );
+
+  useEffect(() => {
+    if (nativeMinutes == null || freqMinutes == null) return;
+    if (
+      !frequencies.some(
+        (f) => f.minutes === freqMinutes && f.enabled,
+      )
+    ) {
+      setFreqMinutes(nativeMinutes);
+    }
+  }, [nativeMinutes, freqMinutes, frequencies]);
+
+  const resolvedFreq =
+    freqMinutes != null &&
+    frequencies.some((f) => f.minutes === freqMinutes && f.enabled)
+      ? freqMinutes
+      : nativeMinutes;
+
+  const ohlcData = useMemo(
+    () => ohlcAtFrequency(sourceOhlc, resolvedFreq),
+    [sourceOhlc, resolvedFreq],
   );
   const detectedPatterns = useMemo(
     () => (ohlcData.length ? scanPatterns(ohlcData) : []),
@@ -118,7 +169,12 @@ export default function Market() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col p-4 gap-4 overflow-y-auto relative">
-        <MarketNavigator initialClass={classFromUrl} compact />
+        <MarketNavigator
+          compact
+          initialClass={classFromUrl}
+          selectedClass={assetFilter === "all" ? null : assetFilter}
+          onSelectClass={applyAssetFilter}
+        />
 
         {/* Financials */}
         {market && !emptyClass ? <FinancialsPanel data={ohlcData} /> : null}
@@ -177,10 +233,7 @@ export default function Market() {
             <select
               value={assetFilter}
               onChange={(e) => {
-                const next = e.target.value as MarketAssetFilter;
-                setAssetFilter(next);
-                const list = listMarketsByAssetClass(next);
-                if (list[0]) setMarketId(list[0].id);
+                applyAssetFilter(e.target.value as MarketAssetFilter);
               }}
               className="bg-surface border border-line text-ink px-3 py-2 rounded-md text-sm"
             >
@@ -254,6 +307,10 @@ export default function Market() {
             showBollinger={controls.bollinger}
             height={320}
             statusLabel={`${dataProvider.label} feed`}
+            frequencies={frequencies}
+            frequencyMinutes={resolvedFreq}
+            nativeMinutes={nativeMinutes}
+            onFrequencyMinutes={setFreqMinutes}
           />
         </div>
         ) : null}
@@ -349,18 +406,6 @@ export default function Market() {
           />
         )}
       </main>
-
-      <nav className="shrink-0 border-t border-line bg-surface px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-        <div className="flex justify-center">
-          <Link
-            to="/practice-draw"
-            aria-label="Practice draw"
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-white shadow-sm hover:bg-primary-dim"
-          >
-            <span className="material-symbols-outlined text-[22px] leading-none">add</span>
-          </Link>
-        </div>
-      </nav>
     </div>
   );
 }

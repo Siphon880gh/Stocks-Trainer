@@ -1,11 +1,21 @@
 import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import MarketNavigator from "../components/MarketNavigator";
 import { listSessions } from "../lib/coaching";
+import {
+  coachSessionMatchesClass,
+  parseMarketClassParam,
+} from "../lib/marketNavigator";
 import { isCoachingSessionComplete } from "../lib/progressStore";
+import type { AssetClass } from "../lib/samplePacks";
 
 export default function Coach() {
   const [searchParams, setSearchParams] = useSearchParams();
   const topicParam = searchParams.get("topic") ?? "";
+  const classFromUrl = parseMarketClassParam(
+    searchParams.get("class") ?? searchParams.get("market"),
+  );
+  const classFilter = classFromUrl ?? "equity";
   const sessions = listSessions();
   const topics = useMemo(
     () => Array.from(new Set(sessions.map((s) => s.topic))).sort(),
@@ -13,14 +23,28 @@ export default function Coach() {
   );
   const [topicFilter, setTopicFilter] = useState(topicParam);
 
-  const filtered = sessions.filter(
-    (s) => !topicFilter || s.topic === topicFilter
-  );
+  const filtered = sessions.filter((s) => {
+    if (topicFilter && s.topic !== topicFilter) return false;
+    if (!coachSessionMatchesClass(s.tags, classFilter)) return false;
+    return true;
+  });
 
   const onTopicChange = (topic: string) => {
     setTopicFilter(topic);
-    if (topic) setSearchParams({ topic });
-    else setSearchParams({});
+    setSearchParams((prev) => {
+      const p = new URLSearchParams(prev);
+      if (topic) p.set("topic", topic);
+      else p.delete("topic");
+      return p;
+    });
+  };
+
+  const onSelectClass = (assetClass: AssetClass) => {
+    setSearchParams((prev) => {
+      const p = new URLSearchParams(prev);
+      p.set("class", assetClass);
+      return p;
+    });
   };
 
   return (
@@ -35,6 +59,13 @@ export default function Coach() {
             path. SAMPLE / educational only.
           </p>
         </div>
+
+        <MarketNavigator
+          compact
+          initialClass={classFilter}
+          selectedClass={classFilter}
+          onSelectClass={onSelectClass}
+        />
 
         <div className="flex flex-wrap items-center gap-3">
           <label className="text-[12px] text-muted">
@@ -58,7 +89,11 @@ export default function Coach() {
         </div>
 
         {filtered.length === 0 ? (
-          <p className="text-sm text-accent-red">No sessions in this topic.</p>
+          <p className="text-sm text-muted">
+            {classFromUrl
+              ? "No step-coaching sessions seeded for this market type yet. Equities (stocks) has the beginner trees; Futures has a SAMPLE framing session."
+              : "No sessions in this topic."}
+          </p>
         ) : (
           <ul className="space-y-4" aria-label="Coaching session catalog">
             {filtered.map((meta) => {

@@ -1,5 +1,5 @@
 import type { AssetClass } from "./samplePacks";
-import { isChartGateComplete } from "./beginnerPath";
+import { isChartGateCleared } from "./beginnerPath";
 import { CASE_STUDIES } from "./caseStudies";
 
 export const NAVIGATOR_CLASSES: AssetClass[] = [
@@ -65,6 +65,26 @@ export function marketDecideHref(assetClass: AssetClass): string {
   return `/cases?market=${assetClass}`;
 }
 
+export function marketCoachHref(assetClass: AssetClass): string {
+  return `/coach?class=${assetClass}`;
+}
+
+const CLASS_SESSION_TAGS: Record<AssetClass, string[]> = {
+  equity: ["equities", "equity"],
+  future: ["futures", "future"],
+  forex: ["forex", "fx"],
+  crypto: ["crypto"],
+  option_context: ["options", "option_context", "options-context", "options_context"],
+};
+
+export function coachSessionMatchesClass(
+  tags: string[],
+  assetClass: AssetClass,
+): boolean {
+  const needles = new Set(CLASS_SESSION_TAGS[assetClass]);
+  return tags.some((t) => needles.has(t.trim().toLowerCase()));
+}
+
 export function hasDecidePackForClass(assetClass: AssetClass): boolean {
   return CASE_STUDIES.some(
     (c) => (c.assetClass ?? "equity") === assetClass,
@@ -73,8 +93,11 @@ export function hasDecidePackForClass(assetClass: AssetClass): boolean {
 
 export type DecideLockReason = "chart_gate" | "no_pack" | null;
 
-export function decideLockReason(assetClass: AssetClass): DecideLockReason {
-  if (!isChartGateComplete()) return "chart_gate";
+export function decideLockReason(
+  assetClass: AssetClass,
+  chartGateCleared: boolean = isChartGateCleared(),
+): DecideLockReason {
+  if (!chartGateCleared) return "chart_gate";
   if (!hasDecidePackForClass(assetClass)) return "no_pack";
   return null;
 }

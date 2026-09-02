@@ -1,10 +1,17 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import type { AssetClass } from "../lib/samplePacks";
+import {
+  CHART_GATE_TRAINING_GROUP,
+  isChartGateComplete,
+  isChartGateTemporarilyBypassed,
+  setChartGateTemporaryBypass,
+} from "../lib/beginnerPath";
 import {
   decideLockCopy,
   decideLockReason,
   marketChartsHref,
+  marketCoachHref,
   marketDecideHref,
   marketLiteracyHref,
   NAVIGATOR_CLASS_LABELS,
@@ -14,20 +21,36 @@ import {
 interface MarketNavigatorProps {
   /** Pre-select from URL `class` */
   initialClass?: AssetClass | null;
+  /** Charts page Class filter — when set, highlight follows it */
+  selectedClass?: AssetClass | null;
+  /** Charts page: update Class + chart when a market type is chosen */
+  onSelectClass?: (assetClass: AssetClass) => void;
   compact?: boolean;
 }
 
 export default function MarketNavigator({
   initialClass = null,
+  selectedClass = null,
+  onSelectClass,
   compact = false,
 }: MarketNavigatorProps) {
-  const [selected, setSelected] = useState<AssetClass | null>(
+  const location = useLocation();
+  const onCoach =
+    location.pathname === "/coach" || location.pathname.startsWith("/coach/");
+  const [internalSelected, setInternalSelected] = useState<AssetClass>(
     initialClass && NAVIGATOR_CLASSES.includes(initialClass)
       ? initialClass
       : "equity",
   );
-
-  const lock = selected ? decideLockReason(selected) : null;
+  const selected =
+    selectedClass && NAVIGATOR_CLASSES.includes(selectedClass)
+      ? selectedClass
+      : internalSelected;
+  const [tempBypass, setTempBypass] = useState(isChartGateTemporarilyBypassed);
+  const gateDone = isChartGateComplete();
+  const lock = selected
+    ? decideLockReason(selected, gateDone || tempBypass)
+    : null;
 
   return (
     <section
@@ -41,7 +64,7 @@ export default function MarketNavigator({
           Market navigator
         </h2>
         <p className="text-[12px] text-muted">
-          Charts · literacy · decide (SAMPLE)
+          Charts · literacy · decide · step (SAMPLE)
         </p>
       </div>
 
@@ -56,7 +79,10 @@ export default function MarketNavigator({
           <button
             key={cls}
             type="button"
-            onClick={() => setSelected(cls)}
+            onClick={() => {
+              setInternalSelected(cls);
+              onSelectClass?.(cls);
+            }}
             className={`px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors ${
               selected === cls
                 ? "bg-primary text-white"
@@ -82,7 +108,28 @@ export default function MarketNavigator({
           >
             Literacy
           </Link>
-          {lock ? (
+          <Link
+            to={marketCoachHref(selected)}
+            className={
+              onCoach
+                ? "px-3 py-2 rounded-md bg-primary text-white text-[13px] font-semibold hover:bg-primary-dim"
+                : "px-3 py-2 rounded-md border border-line text-ink text-[13px] hover:bg-canvas"
+            }
+          >
+            Step by step
+          </Link>
+          {lock === "chart_gate" ? (
+            <button
+              type="button"
+              onClick={() => {
+                setChartGateTemporaryBypass(true);
+                setTempBypass(true);
+              }}
+              className="px-3 py-2 rounded-md border border-line text-primary text-[13px] hover:bg-canvas"
+            >
+              Browse cases this session
+            </button>
+          ) : lock ? (
             <span
               className="px-3 py-2 rounded-md border border-line text-muted text-[13px] cursor-not-allowed"
               title={decideLockCopy(lock)}
@@ -92,7 +139,11 @@ export default function MarketNavigator({
           ) : (
             <Link
               to={marketDecideHref(selected)}
-              className="px-3 py-2 rounded-md bg-primary text-white text-[13px] font-semibold hover:bg-primary-dim"
+              className={
+                onCoach
+                  ? "px-3 py-2 rounded-md border border-line text-ink text-[13px] hover:bg-canvas"
+                  : "px-3 py-2 rounded-md bg-primary text-white text-[13px] font-semibold hover:bg-primary-dim"
+              }
             >
               Decide cases
             </Link>
@@ -100,8 +151,45 @@ export default function MarketNavigator({
         </div>
       ) : null}
 
-      {selected && lock ? (
+      {selected && lock === "chart_gate" ? (
+        <div className="space-y-2">
+          <p className="text-[13px] text-muted leading-relaxed">
+            Cases make more sense after Indicators on Training. You can open
+            them for this browser session only.
+          </p>
+          <p className="text-[12px] text-muted">
+            Temporary — clears when you close the tab. Does not mark Indicators
+            complete in your saved progress.
+          </p>
+          <Link
+            to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
+            className="inline-block text-[13px] text-primary hover:underline"
+          >
+            Take Indicators quiz
+          </Link>
+        </div>
+      ) : null}
+
+      {selected && lock && lock !== "chart_gate" ? (
         <p className="text-[13px] text-muted">{decideLockCopy(lock)}</p>
+      ) : null}
+
+      {selected && tempBypass && !gateDone && !lock ? (
+        <div className="space-y-1">
+          <p className="text-[13px] text-muted">
+            Temporary session peek is on — Indicators progress is not saved.
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              setChartGateTemporaryBypass(false);
+              setTempBypass(false);
+            }}
+            className="text-[13px] text-primary underline"
+          >
+            Turn off temporary peek
+          </button>
+        </div>
       ) : null}
     </section>
   );
