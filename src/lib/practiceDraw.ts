@@ -1,13 +1,15 @@
 /** Practice Draw templates, grading, and last-attempt persistence (E7.M1). */
 
+import { CHART } from "./chartTheme";
+
 export type Point = { x: number; y: number };
 
 /** Matches chart candles: green close>open, red close<open. */
 export type BrushColor = "bullish" | "bearish";
 
 export const BRUSH_HEX: Record<BrushColor, string> = {
-  bullish: "#38ff14",
-  bearish: "#ff3814",
+  bullish: CHART.up,
+  bearish: CHART.down,
 };
 
 export interface Stroke {
@@ -305,8 +307,7 @@ export function hasGradedPracticeDraw(): boolean {
 export function practiceDrawTipLine(attempt?: DrawAttempt | null): string | null {
   const last = attempt ?? loadLastDrawAttempt();
   if (!last) return null;
-  const label = last.grade.toUpperCase();
-  return `PRACTICE_DRAW · last ${last.templateId} → ${label} (${Math.round(last.score * 100)}%)`;
+  return `Practice draw · last ${last.templateId} → ${last.grade} (${Math.round(last.score * 100)}%)`;
 }
 
 /** Accepts live ids plus legacy `engulfing` → bullish-engulfing. */

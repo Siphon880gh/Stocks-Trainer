@@ -19,6 +19,8 @@ import {
   type OHLC,
 } from "../lib/ohlcData";
 import { sma, ema, rsi, macd, bollingerBands } from "../lib/indicators";
+import { CHART, chartPaneClass } from "../lib/chartTheme";
+import { cn } from "../lib/utils";
 
 interface MarketChartProps {
   data?: OHLC[];
@@ -31,18 +33,19 @@ interface MarketChartProps {
   height?: number;
   /** Show zoom in/out controls for the price axis. */
   showScaleControls?: boolean;
+  /** Optional feed/status chip in the scale toolbar (Market page). */
+  statusLabel?: string;
 }
-
-const BULLISH = "#38ff14";
-const BEARISH = "#ff3814";
-const RSI_COLOR = "#a78bfa";
-const MACD_COLOR = "#38bdf8";
-const SIGNAL_COLOR = "#818cf8";
 
 const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 4;
 const ZOOM_STEP = 0.25;
 const OSC_PANEL_H = 120;
+
+const scaleBtn =
+  "rounded border border-[#d1d4dc] bg-white px-2 py-0.5 text-[#131722] hover:bg-[#f0f3fa] disabled:opacity-40";
+
+const axisTick = { fill: CHART.textMuted, fontSize: 10, fontFamily: CHART.font };
 
 type ChartRow = OHLC & {
   index: number;
@@ -69,23 +72,26 @@ function PriceTooltip({
   if (!d) return null;
   const fmt = (v: number) =>
     v.toLocaleString(undefined, { maximumFractionDigits: 2 });
+  const up = d.close >= d.open;
   return (
-    <div className="font-mono text-sm space-y-1 bg-neutral-dark border-2 border-primary/60 rounded-lg px-4 py-3 shadow-[0_0_20px_rgba(0,0,0,0.8)] min-w-[140px]">
-      <p className="text-primary font-bold border-b border-primary/40 pb-1.5 mb-2">
-        {d.name}
-      </p>
-      <div className="space-y-1 text-slate-100">
+    <div
+      className="text-[12px] space-y-0.5 bg-white border border-[#d1d4dc] rounded shadow-md px-3 py-2 min-w-[128px]"
+      style={{ fontFamily: CHART.font, color: CHART.text }}
+    >
+      <p className="font-semibold border-b border-[#e0e3eb] pb-1 mb-1.5">{d.name}</p>
+      <div className="tabular-nums space-y-0.5">
         <p>
-          <span className="text-primary/80 w-4 inline-block">O</span> {fmt(d.open)}
+          <span className="text-[#787b86] w-4 inline-block">O</span> {fmt(d.open)}
         </p>
         <p>
-          <span className="text-primary/80 w-4 inline-block">H</span> {fmt(d.high)}
+          <span className="text-[#787b86] w-4 inline-block">H</span> {fmt(d.high)}
         </p>
         <p>
-          <span className="text-primary/80 w-4 inline-block">L</span> {fmt(d.low)}
+          <span className="text-[#787b86] w-4 inline-block">L</span> {fmt(d.low)}
         </p>
         <p>
-          <span className="text-primary/80 w-4 inline-block">C</span> {fmt(d.close)}
+          <span className="text-[#787b86] w-4 inline-block">C</span>{" "}
+          <span style={{ color: up ? CHART.up : CHART.down }}>{fmt(d.close)}</span>
         </p>
       </div>
     </div>
@@ -98,9 +104,12 @@ function PaneLegend({
   items: Array<{ color: string; label: string; dashed?: boolean }>;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-3 gap-y-1 px-1 pb-1 font-mono text-[10px]">
+    <div
+      className="flex flex-wrap items-center gap-x-3 gap-y-1 px-2 py-1 text-[11px]"
+      style={{ fontFamily: CHART.font, color: CHART.textMuted }}
+    >
       {items.map((item) => (
-        <span key={item.label} className="inline-flex items-center gap-1.5 text-slate-300">
+        <span key={item.label} className="inline-flex items-center gap-1.5">
           <span
             className="inline-block w-3 h-0.5 shrink-0"
             style={{
@@ -125,6 +134,7 @@ export default function MarketChart({
   showBollinger = false,
   height = 400,
   showScaleControls = true,
+  statusLabel,
 }: MarketChartProps) {
   const [zoom, setZoom] = useState(1);
 
@@ -183,17 +193,25 @@ export default function MarketChart({
 
   const priceLegend: Array<{ color: string; label: string; dashed?: boolean }> =
     [];
-  if (showSMA) priceLegend.push({ color: "#fbbf24", label: "SMA(5)" });
+  if (showSMA) priceLegend.push({ color: CHART.sma, label: "SMA(5)" });
   if (showEMA)
-    priceLegend.push({ color: "#f59e0b", label: "EMA(4)", dashed: true });
+    priceLegend.push({ color: CHART.ema, label: "EMA(4)", dashed: true });
   if (showBollinger) {
-    priceLegend.push({ color: "#94a3b8", label: "BB Mid" });
+    priceLegend.push({ color: CHART.bb, label: "BB Mid" });
     priceLegend.push({
-      color: "#64748b",
+      color: CHART.bb,
       label: "BB Upper/Lower",
       dashed: true,
     });
   }
+
+  const oscTooltip = {
+    backgroundColor: CHART.tooltipBg,
+    border: `1px solid ${CHART.tooltipBorder}`,
+    color: CHART.text,
+    fontFamily: CHART.font,
+    fontSize: 12,
+  };
 
   const sharedXAxis = (showTicks: boolean) => (
     <XAxis
@@ -204,22 +222,26 @@ export default function MarketChart({
       tickFormatter={
         showTicks ? (_, i) => chartData[i]?.name ?? "" : () => ""
       }
-      stroke="rgba(56,255,20,0.5)"
-      tick={{ fill: "rgba(56,255,20,0.7)", fontSize: 10 }}
-      tickLine={{ stroke: "rgba(56,255,20,0.3)" }}
+      stroke={CHART.grid}
+      tick={axisTick}
+      tickLine={{ stroke: CHART.grid }}
+      axisLine={{ stroke: CHART.border }}
       height={showTicks ? 28 : 8}
     />
   );
 
   return (
-    <div className="space-y-2">
+    <div className={cn(chartPaneClass, "space-y-0")} style={{ fontFamily: CHART.font }}>
       {showScaleControls ? (
-        <div className="flex flex-wrap items-center gap-2 font-mono text-[10px] text-primary/80">
-          <span className="uppercase tracking-wider text-primary/50">Y scale</span>
+        <div
+          className="flex flex-wrap items-center gap-2 px-2 py-1.5 text-[11px] border-b border-[#e0e3eb] bg-[#f8f9fd]"
+          style={{ color: CHART.textMuted }}
+        >
+          <span>Scale</span>
           <button
             type="button"
             aria-label="Zoom out vertical scale"
-            className="rounded border border-primary/40 px-2 py-0.5 hover:bg-primary/10 disabled:opacity-40"
+            className={scaleBtn}
             disabled={zoom <= ZOOM_MIN}
             onClick={() => nudgeZoom(-ZOOM_STEP)}
           >
@@ -232,46 +254,52 @@ export default function MarketChart({
             step={ZOOM_STEP}
             value={zoom}
             aria-label="Vertical zoom"
-            className="w-24 accent-primary"
+            className="w-24"
             onChange={(e) => setZoom(Number(e.target.value))}
           />
           <button
             type="button"
             aria-label="Zoom in vertical scale"
-            className="rounded border border-primary/40 px-2 py-0.5 hover:bg-primary/10 disabled:opacity-40"
+            className={scaleBtn}
             disabled={zoom >= ZOOM_MAX}
             onClick={() => nudgeZoom(ZOOM_STEP)}
           >
             +
           </button>
-          <button
-            type="button"
-            className="rounded border border-primary/40 px-2 py-0.5 hover:bg-primary/10"
-            onClick={() => setZoom(1)}
-          >
+          <button type="button" className={scaleBtn} onClick={() => setZoom(1)}>
             Fit
           </button>
-          <span className="text-primary/45">{zoom.toFixed(2)}×</span>
+          <span>{zoom.toFixed(2)}×</span>
+          {statusLabel ? (
+            <span className="ml-auto flex items-center gap-1 text-[10px] px-2 py-0.5 rounded border border-[#d1d4dc] bg-white text-[#131722] normal-case">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#089981]" />
+              {statusLabel}
+            </span>
+          ) : null}
         </div>
       ) : null}
 
-      {/* Price pane — overlays that share price scale live here */}
       <div>
         {priceLegend.length > 0 ? <PaneLegend items={priceLegend} /> : null}
         <ResponsiveContainer width="100%" height={height}>
           <ComposedChart
             data={chartData}
-            margin={{ top: 8, right: 12, left: 0, bottom: 0 }}
+            margin={{ top: 8, right: 8, left: 4, bottom: 0 }}
           >
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(56,255,20,0.1)" />
+            <CartesianGrid
+              stroke={CHART.grid}
+              vertical={false}
+            />
             {sharedXAxis(!showRSI && !showMACD)}
             <YAxis
               yAxisId="price"
+              orientation="right"
               domain={priceDomain}
               allowDataOverflow
-              stroke="rgba(56,255,20,0.5)"
-              tick={{ fill: "rgba(56,255,20,0.7)", fontSize: 10 }}
-              tickLine={{ stroke: "rgba(56,255,20,0.3)" }}
+              stroke={CHART.grid}
+              tick={axisTick}
+              tickLine={{ stroke: CHART.grid }}
+              axisLine={{ stroke: CHART.border }}
               width={56}
               tickFormatter={(v) =>
                 Number(v).toLocaleString(undefined, {
@@ -284,7 +312,7 @@ export default function MarketChart({
               const bodyLow = Math.min(entry.open, entry.close);
               const bodyHigh = Math.max(entry.open, entry.close);
               const span = priceDomain[1] - priceDomain[0];
-              const minBody = span * 0.008;
+              const minBody = span * 0.004;
               const paddedHigh =
                 bodyHigh - bodyLow < minBody
                   ? (bodyLow + bodyHigh) / 2 + minBody / 2
@@ -293,22 +321,9 @@ export default function MarketChart({
                 bodyHigh - bodyLow < minBody
                   ? (bodyLow + bodyHigh) / 2 - minBody / 2
                   : bodyLow;
-              const color = entry.close >= entry.open ? BULLISH : BEARISH;
+              const color = entry.close >= entry.open ? CHART.up : CHART.down;
               return (
                 <g key={entry.name}>
-                  <ReferenceArea
-                    x1={i - 0.4}
-                    x2={i + 0.4}
-                    y1={paddedLow}
-                    y2={paddedHigh}
-                    yAxisId="price"
-                    {...({
-                      fill: color,
-                      fillOpacity: 0.95,
-                      stroke: color,
-                      strokeWidth: 1,
-                    } as Record<string, string | number>)}
-                  />
                   <ReferenceLine
                     yAxisId="price"
                     segment={[
@@ -316,8 +331,21 @@ export default function MarketChart({
                       { x: i, y: entry.high },
                     ]}
                     stroke={color}
-                    strokeWidth={2.5}
+                    strokeWidth={1.25}
                     strokeOpacity={1}
+                  />
+                  <ReferenceArea
+                    x1={i - 0.32}
+                    x2={i + 0.32}
+                    y1={paddedLow}
+                    y2={paddedHigh}
+                    yAxisId="price"
+                    {...({
+                      fill: color,
+                      fillOpacity: 1,
+                      stroke: color,
+                      strokeWidth: 0.5,
+                    } as Record<string, string | number>)}
                   />
                 </g>
               );
@@ -327,8 +355,8 @@ export default function MarketChart({
                 yAxisId="price"
                 type="monotone"
                 dataKey="sma"
-                stroke="#fbbf24"
-                strokeWidth={2}
+                stroke={CHART.sma}
+                strokeWidth={1.5}
                 dot={false}
                 connectNulls
                 name="SMA(5)"
@@ -340,8 +368,8 @@ export default function MarketChart({
                 yAxisId="price"
                 type="monotone"
                 dataKey="ema"
-                stroke="#f59e0b"
-                strokeWidth={2}
+                stroke={CHART.ema}
+                strokeWidth={1.5}
                 strokeDasharray="4 4"
                 dot={false}
                 connectNulls
@@ -355,8 +383,8 @@ export default function MarketChart({
                   yAxisId="price"
                   type="monotone"
                   dataKey="bbMid"
-                  stroke="#94a3b8"
-                  strokeWidth={1.5}
+                  stroke={CHART.bb}
+                  strokeWidth={1.25}
                   dot={false}
                   connectNulls
                   name="BB Mid"
@@ -366,7 +394,7 @@ export default function MarketChart({
                   yAxisId="price"
                   type="monotone"
                   dataKey="bbUpper"
-                  stroke="#64748b"
+                  stroke={CHART.bb}
                   strokeWidth={1}
                   strokeDasharray="2 2"
                   dot={false}
@@ -378,7 +406,7 @@ export default function MarketChart({
                   yAxisId="price"
                   type="monotone"
                   dataKey="bbLower"
-                  stroke="#64748b"
+                  stroke={CHART.bb}
                   strokeWidth={1}
                   strokeDasharray="2 2"
                   dot={false}
@@ -392,44 +420,39 @@ export default function MarketChart({
         </ResponsiveContainer>
       </div>
 
-      {/* RSI pane — separate oscillator (TradingView-style) */}
       {showRSI ? (
-        <div className="border-t border-primary/20 pt-2">
-          <PaneLegend items={[{ color: RSI_COLOR, label: "RSI(5)" }]} />
+        <div className="border-t border-[#e0e3eb]">
+          <PaneLegend items={[{ color: CHART.rsi, label: "RSI(5)" }]} />
           <ResponsiveContainer width="100%" height={OSC_PANEL_H}>
             <ComposedChart
               data={chartData}
-              margin={{ top: 4, right: 12, left: 0, bottom: 0 }}
+              margin={{ top: 4, right: 8, left: 4, bottom: 0 }}
             >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(56,255,20,0.08)"
-              />
+              <CartesianGrid stroke={CHART.grid} vertical={false} />
               {sharedXAxis(!showMACD)}
               <YAxis
+                orientation="right"
                 domain={[0, 100]}
                 ticks={[30, 50, 70]}
-                stroke="rgba(56,255,20,0.4)"
-                tick={{ fill: "rgba(56,255,20,0.6)", fontSize: 9 }}
+                stroke={CHART.grid}
+                tick={{ ...axisTick, fontSize: 9 }}
                 width={56}
+                axisLine={{ stroke: CHART.border }}
               />
               <ReferenceLine
                 y={70}
-                stroke="rgba(248,113,113,0.45)"
+                stroke={CHART.overbought}
+                strokeOpacity={0.45}
                 strokeDasharray="4 4"
               />
               <ReferenceLine
                 y={30}
-                stroke="rgba(56,255,20,0.35)"
+                stroke={CHART.oversold}
+                strokeOpacity={0.45}
                 strokeDasharray="4 4"
               />
               <Tooltip
-                contentStyle={{
-                  backgroundColor: "#0f1810",
-                  border: "1px solid rgba(56,255,20,0.5)",
-                  fontFamily: "monospace",
-                  fontSize: 11,
-                }}
+                contentStyle={oscTooltip}
                 formatter={(v) => [
                   typeof v === "number" ? v.toFixed(1) : v,
                   "RSI",
@@ -441,7 +464,7 @@ export default function MarketChart({
               <Line
                 type="monotone"
                 dataKey="rsi"
-                stroke={RSI_COLOR}
+                stroke={CHART.rsi}
                 strokeWidth={1.5}
                 dot={false}
                 connectNulls
@@ -453,41 +476,34 @@ export default function MarketChart({
         </div>
       ) : null}
 
-      {/* MACD pane — histogram + MACD + signal */}
       {showMACD ? (
-        <div className="border-t border-primary/20 pt-2">
+        <div className="border-t border-[#e0e3eb]">
           <PaneLegend
             items={[
-              { color: MACD_COLOR, label: "MACD" },
-              { color: SIGNAL_COLOR, label: "Signal", dashed: true },
-              { color: "rgba(56,255,20,0.7)", label: "Hist" },
+              { color: CHART.macd, label: "MACD" },
+              { color: CHART.signal, label: "Signal", dashed: true },
+              { color: CHART.up, label: "Hist" },
             ]}
           />
           <ResponsiveContainer width="100%" height={OSC_PANEL_H}>
             <ComposedChart
               data={chartData}
-              margin={{ top: 4, right: 12, left: 0, bottom: 0 }}
+              margin={{ top: 4, right: 8, left: 4, bottom: 0 }}
             >
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="rgba(56,255,20,0.08)"
-              />
+              <CartesianGrid stroke={CHART.grid} vertical={false} />
               {sharedXAxis(true)}
               <YAxis
+                orientation="right"
                 domain={["auto", "auto"]}
-                stroke="rgba(56,255,20,0.4)"
-                tick={{ fill: "rgba(56,255,20,0.6)", fontSize: 9 }}
+                stroke={CHART.grid}
+                tick={{ ...axisTick, fontSize: 9 }}
                 width={56}
                 tickFormatter={(v) => Number(v).toFixed(0)}
+                axisLine={{ stroke: CHART.border }}
               />
-              <ReferenceLine y={0} stroke="rgba(56,255,20,0.25)" />
+              <ReferenceLine y={0} stroke={CHART.border} />
               <Tooltip
-                contentStyle={{
-                  backgroundColor: "#0f1810",
-                  border: "1px solid rgba(56,255,20,0.5)",
-                  fontFamily: "monospace",
-                  fontSize: 11,
-                }}
+                contentStyle={oscTooltip}
                 labelFormatter={(_, payload) =>
                   (payload?.[0]?.payload as ChartRow | undefined)?.name ?? ""
                 }
@@ -498,8 +514,8 @@ export default function MarketChart({
                     key={`hist-${i}`}
                     fill={
                       (entry.histogram ?? 0) >= 0
-                        ? "rgba(56,255,20,0.55)"
-                        : "rgba(255,56,20,0.55)"
+                        ? `${CHART.up}99`
+                        : `${CHART.down}99`
                     }
                   />
                 ))}
@@ -507,7 +523,7 @@ export default function MarketChart({
               <Line
                 type="monotone"
                 dataKey="macd"
-                stroke={MACD_COLOR}
+                stroke={CHART.macd}
                 strokeWidth={1.5}
                 dot={false}
                 connectNulls
@@ -517,7 +533,7 @@ export default function MarketChart({
               <Line
                 type="monotone"
                 dataKey="signal"
-                stroke={SIGNAL_COLOR}
+                stroke={CHART.signal}
                 strokeWidth={1.5}
                 strokeDasharray="4 4"
                 dot={false}
