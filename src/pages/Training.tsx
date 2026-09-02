@@ -46,47 +46,35 @@ export default function Training() {
   }, [startParam, selectedGroup]);
 
   return (
-    <div className="bg-background-dark font-display text-slate-100 min-h-screen flex flex-col">
-      {/* Top Navigation / Progress Bar */}
-      <nav className="border-b border-primary/30 bg-background-dark/95 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-primary rounded flex items-center justify-center">
-              <span className="material-symbols-outlined text-background-dark text-sm">psychology</span>
-            </div>
-            <h1 className="text-xl font-bold tracking-tight">
-              TRAINING<span className="text-primary">TERMINAL</span>
-            </h1>
-          </Link>
-          <div className="flex items-center gap-6">
+    <div className="flex-1 flex flex-col">
+      <div className="border-b border-line bg-surface">
+        <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <h1 className="text-lg font-semibold tracking-tight">Learn</h1>
+          <div className="flex items-center gap-4">
             <div className="hidden md:flex flex-col items-end">
-              <span className="text-[10px] uppercase tracking-widest text-primary/60 font-bold">
-                Session Progress
-              </span>
-              <div className="w-48 h-1.5 bg-primary/10 rounded-full mt-1 overflow-hidden">
-                <div className="h-full bg-primary shadow-[0_0_10px_#38ff14]" style={{ width: `${accuracy}%` }} />
+              <span className="text-[12px] text-muted">Accuracy</span>
+              <div className="w-40 h-1.5 bg-canvas rounded-full mt-1 overflow-hidden">
+                <div className="h-full bg-primary rounded-full" style={{ width: `${accuracy}%` }} />
               </div>
             </div>
-            <div className="flex items-center gap-2 bg-primary/10 border border-primary/30 px-3 py-1.5 rounded">
-              <span className="material-symbols-outlined text-primary text-sm">stars</span>
-              <span className="font-bold text-primary">{points} PTS</span>
+            <div className="flex items-center gap-1.5 text-sm tabular-nums">
+              <span className="text-muted">Pts</span>
+              <span className="font-semibold">{points}</span>
             </div>
           </div>
         </div>
-      </nav>
+      </div>
 
-      <main className="max-w-5xl mx-auto px-4 py-8 flex-1 flex flex-col items-center gap-6">
+      <main className="max-w-5xl mx-auto px-4 py-8 flex-1 flex flex-col items-center gap-6 w-full">
         <PathMapPanel
           selectedGroup={selectedGroup}
           onSelectTrainingGroup={setSelectedGroup}
           refreshKey={pathMapTick}
         />
         {showChartGateBanner ? (
-          <div className="w-full max-w-xl border border-primary/40 bg-primary/5 rounded-lg p-4 font-mono text-xs space-y-2">
-            <p className="text-primary font-bold uppercase tracking-widest">
-              Beginner Path · Indicators
-            </p>
-            <p className="text-slate-300">{CHART_GATE_PREREQ_TIP}</p>
+          <div className="w-full max-w-xl panel p-4 text-sm space-y-2">
+            <p className="font-semibold">Beginner path · Indicators</p>
+            <p className="text-muted">{CHART_GATE_PREREQ_TIP}</p>
             <button
               type="button"
               className="text-primary underline"
@@ -96,11 +84,9 @@ export default function Training() {
             </button>
           </div>
         ) : (
-          <div className="w-full max-w-xl border border-primary/30 bg-neutral-dark/40 rounded-lg p-4 font-mono text-xs space-y-2">
-            <p className="text-primary/80 font-bold uppercase tracking-widest">
-              Decision Cases · Packs A–C
-            </p>
-            <p className="text-slate-400">
+          <div className="w-full max-w-xl panel p-4 text-sm space-y-2">
+            <p className="font-semibold">Decision cases · Packs A–C</p>
+            <p className="text-muted">
               After Indicators: earnings, company news, macro intro, and
               combined news+statements (SAMPLE).
             </p>
@@ -124,19 +110,19 @@ export default function Training() {
           </div>
         )}
         {/* Quiz Launch Card */}
-        <div className="w-full max-w-xl border-neon p-8 bg-neutral-dark/60 rounded-xl space-y-6">
+        <div className="w-full max-w-xl panel p-8 space-y-6">
           <div className="flex items-center gap-4">
-            <span className="material-symbols-outlined text-5xl text-primary">quiz</span>
+            <span className="material-symbols-outlined text-4xl text-primary">quiz</span>
             <div>
-              <h2 className="text-2xl font-bold text-primary crt-glow">Pattern Recognition Quiz</h2>
-              <p className="text-slate-400 text-sm mt-1">
+              <h2 className="text-xl font-semibold">Pattern recognition quiz</h2>
+              <p className="text-muted text-sm mt-1">
                 Identify candlestick patterns on historical chart snapshots to earn points.
               </p>
             </div>
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em]">Test Group</h3>
+            <h3 className="text-[12px] font-semibold text-muted">Test group</h3>
             <div className="flex flex-wrap gap-2">
               {QUIZ_GROUPS.map((g) => {
                 const isFeatured =
@@ -151,12 +137,12 @@ export default function Training() {
                   <button
                     key={g.id}
                     onClick={() => setSelectedGroup(g.id)}
-                    className={`px-4 py-2 rounded-lg font-mono text-sm font-bold transition-all flex items-center gap-2 ${
+                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
                       selectedGroup === g.id
-                        ? "bg-primary text-background-dark"
+                        ? "bg-primary text-white"
                         : isFeatured
-                          ? "border-2 border-primary bg-primary/10 text-primary hover:bg-primary/20 shadow-[0_0_12px_rgba(56,255,20,0.2)]"
-                          : "border border-primary/40 text-primary hover:bg-primary/10"
+                          ? "border border-line bg-primary/5 text-ink hover:bg-primary/10"
+                          : "border border-line text-ink hover:bg-canvas"
                     }`}
                   >
                     {g.icon && <span className="material-symbols-outlined text-lg">{g.icon}</span>}
@@ -168,10 +154,10 @@ export default function Training() {
                 );
               })}
             </div>
-            <p className="text-primary/50 text-xs">
+            <p className="text-muted text-sm">
               {QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.description}
             </p>
-            <p className="text-[11px] font-mono text-primary/60">
+            <p className="text-[13px] text-muted">
               After Statements Literacy:{" "}
               <button
                 type="button"
@@ -183,27 +169,27 @@ export default function Training() {
               · optional SAMPLE snapshot pack
             </p>
             {groupLocked ? (
-              <p className="text-accent-red text-xs font-mono">
-                LOCKED: finish the earlier path step first.
+              <p className="text-accent-red text-sm">
+                Locked: finish the earlier path step first.
               </p>
             ) : null}
           </div>
 
           <div className="grid grid-cols-3 gap-4">
-            <div className="bg-neutral-dark/80 border border-primary/30 rounded-lg p-4 text-center">
-              <p className="text-[10px] text-primary/60 uppercase tracking-widest mb-1">Points</p>
-              <p className="text-2xl font-bold text-primary">{points}</p>
+            <div className="border border-line rounded-lg p-4 text-center bg-canvas">
+              <p className="text-[12px] text-muted mb-1">Points</p>
+              <p className="text-2xl font-semibold tabular-nums">{points}</p>
             </div>
-            <div className="bg-neutral-dark/80 border border-primary/30 rounded-lg p-4 text-center">
-              <p className="text-[10px] text-primary/60 uppercase tracking-widest mb-1">Streak</p>
-              <p className="text-2xl font-bold text-primary flex items-center justify-center gap-1">
-                <span className="material-symbols-outlined text-primary text-xl">local_fire_department</span>
+            <div className="border border-line rounded-lg p-4 text-center bg-canvas">
+              <p className="text-[12px] text-muted mb-1">Streak</p>
+              <p className="text-2xl font-semibold tabular-nums flex items-center justify-center gap-1">
+                <span className="material-symbols-outlined text-accent-red text-xl">local_fire_department</span>
                 {streak}
               </p>
             </div>
-            <div className="bg-neutral-dark/80 border border-primary/30 rounded-lg p-4 text-center">
-              <p className="text-[10px] text-primary/60 uppercase tracking-widest mb-1">Accuracy</p>
-              <p className="text-2xl font-bold text-primary">{accuracy}%</p>
+            <div className="border border-line rounded-lg p-4 text-center bg-canvas">
+              <p className="text-[12px] text-muted mb-1">Accuracy</p>
+              <p className="text-2xl font-semibold tabular-nums">{accuracy}%</p>
             </div>
           </div>
 
@@ -215,47 +201,39 @@ export default function Training() {
                 setIsQuizOpen(true);
               }}
               disabled={groupLocked}
-              className="flex-1 bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-transform active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
+              className="flex-1 bg-primary hover:bg-primary-dim text-white font-semibold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-transform active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
             >
               <span className="material-symbols-outlined">play_arrow</span>
-              {groupLocked ? "LOCKED" : "START QUIZ"}
+              {groupLocked ? "Locked" : "Start quiz"}
             </button>
             {!isQuizOpen && (
               <button
                 onClick={() => setAnswerSheetOpen(true)}
-                className="border border-primary/40 text-primary px-6 py-4 rounded-lg font-bold hover:bg-primary/10 flex items-center justify-center gap-2 transition-colors"
+                className="border border-line text-ink px-6 py-3.5 rounded-lg font-medium hover:bg-canvas flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined">assignment</span>
-                ANSWER SHEET
+                Answer sheet
               </button>
             )}
           </div>
         </div>
       </main>
 
-      <footer className="max-w-5xl mx-auto px-4 py-8 flex items-center justify-between border-t border-primary/10 mt-12 opacity-60 w-full">
+      <footer className="max-w-5xl mx-auto px-4 py-8 flex items-center justify-between border-t border-line mt-8 w-full text-sm text-muted">
         <div className="flex gap-6">
-          <Link to="/archive" className="text-xs font-mono hover:text-primary transition-colors uppercase tracking-widest">
-            Documentation
+          <Link to="/archive" className="hover:text-ink">
+            Reference
           </Link>
           {!isQuizOpen && (
             <button
               onClick={() => setAnswerSheetOpen(true)}
-              className="text-xs font-mono hover:text-primary transition-colors uppercase tracking-widest"
+              className="hover:text-ink"
             >
-              Answer Sheet
+              Answer sheet
             </button>
           )}
-          <button className="text-xs font-mono hover:text-primary transition-colors uppercase tracking-widest">
-            Shortcuts
-          </button>
-          <button className="text-xs font-mono hover:text-primary transition-colors uppercase tracking-widest">
-            Support
-          </button>
         </div>
-        <div className="text-[10px] font-mono uppercase tracking-tighter text-right">
-          V 2.0.4 // SECURE CONNECTION STABLE
-        </div>
+        <p className="text-[12px]">SAMPLE · educational</p>
       </footer>
 
       <QuizModal

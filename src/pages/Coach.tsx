@@ -24,35 +24,25 @@ export default function Coach() {
   };
 
   return (
-    <div className="bg-background-dark text-slate-100 min-h-screen flex flex-col font-display">
-      <header className="border-b border-primary/30 p-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 text-primary hover:opacity-90">
-          <span className="material-symbols-outlined">arrow_back</span>
-          <span className="font-mono text-xs tracking-widest">DASHBOARD</span>
-        </Link>
-        <p className="font-mono text-[10px] text-primary/50 uppercase">
-          Step Coaching · No LLM
-        </p>
-      </header>
-
-      <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-10 space-y-8">
+    <div className="flex-1 flex flex-col">
+      <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-8 space-y-8">
         <div>
-          <h1 className="text-2xl font-bold text-primary tracking-tight crt-glow">
-            Step Coaching
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Step coaching
           </h1>
-          <p className="text-slate-400 text-sm mt-2 font-mono normal-case">
+          <p className="text-muted text-sm mt-2">
             Deterministic decision trees. Fail, read the correction, rewind, then finish a success
             path. SAMPLE / educational only.
           </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <label className="font-mono text-[10px] tracking-widest text-primary/60">
-            TOPIC_FILTER
+          <label className="text-[12px] text-muted">
+            Topic
             <select
               value={topicFilter}
               onChange={(e) => onTopicChange(e.target.value)}
-              className="ml-2 bg-neutral-dark border border-primary/40 text-primary text-xs px-2 py-1"
+              className="ml-2 bg-surface border border-line text-ink text-sm px-2 py-1 rounded-md"
             >
               <option value="">All topics</option>
               {topics.map((t) => (
@@ -68,7 +58,7 @@ export default function Coach() {
         </div>
 
         {filtered.length === 0 ? (
-          <p className="font-mono text-sm text-accent-red">NO_SESSIONS · catalog empty</p>
+          <p className="text-sm text-accent-red">No sessions in this topic.</p>
         ) : (
           <ul className="space-y-4" aria-label="Coaching session catalog">
             {filtered.map((meta) => {
@@ -77,21 +67,21 @@ export default function Coach() {
                 <li key={meta.slug}>
                   <Link
                     to={`/coach/${meta.slug}`}
-                    className="block border-neon bg-neutral-dark/60 p-4 hover:bg-primary/5 transition-colors space-y-2"
+                    className="block panel p-4 hover:border-primary/40 transition-colors space-y-2"
                   >
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <h2 className="text-lg font-bold text-primary">{meta.title}</h2>
-                      <span className="font-mono text-[10px] text-primary/50 tracking-widest">
+                      <h2 className="text-lg font-semibold">{meta.title}</h2>
+                      <span className="text-[12px] text-muted">
                         {meta.topic}
-                        {done ? " · DONE" : ""}
+                        {done ? " · done" : ""}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-300 font-mono normal-case">{meta.summary}</p>
+                    <p className="text-sm text-muted">{meta.summary}</p>
                     <div className="flex flex-wrap gap-2">
                       {meta.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="font-mono text-[10px] border border-primary/30 px-2 py-0.5 text-primary/70"
+                          className="text-[11px] border border-line px-2 py-0.5 rounded text-muted"
                         >
                           {tag}
                         </span>

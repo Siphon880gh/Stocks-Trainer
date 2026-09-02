@@ -44,7 +44,7 @@ export default function CasePlayer() {
   if (!study) {
     return (
       <div className="p-6 font-mono text-sm space-y-3">
-        <p className="text-accent-red">CASE_NOT_FOUND: {caseId}</p>
+        <p className="text-sm text-accent-red">Case not found: {caseId}</p>
         <Link to="/cases" className="text-primary underline">
           Back to cases
         </Link>
@@ -63,13 +63,13 @@ export default function CasePlayer() {
         <div className="flex flex-wrap gap-3">
           <Link
             to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
-            className="inline-flex rounded-lg bg-primary px-3 py-2 text-sm font-bold text-background-dark"
+            className="inline-flex rounded-lg bg-primary px-3 py-2 text-sm font-bold text-white"
           >
             Take Indicators quiz
           </Link>
           <button
             type="button"
-            className="inline-flex rounded-lg border border-primary/50 px-3 py-2 text-sm font-mono text-primary hover:bg-primary/10"
+            className="inline-flex rounded-lg border border-line px-3 py-2 text-sm font-mono text-primary hover:bg-primary/10"
             onClick={() => {
               setChartGateTemporaryBypass(true);
               setTempBypass(true);
@@ -107,22 +107,21 @@ export default function CasePlayer() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background-dark text-slate-100">
-      <header className="border-b border-primary/30 p-4 flex items-center justify-between">
-        <Link to="/cases" className="flex items-center gap-2 text-primary hover:opacity-90">
-          <span className="material-symbols-outlined">arrow_back</span>
-          <span className="font-mono text-xs tracking-widest">CASES</span>
+    <div className="flex-1 flex flex-col">
+      <div className="border-b border-line bg-surface px-4 py-3 flex items-center justify-between">
+        <Link to="/cases" className="text-sm text-primary hover:underline">
+          ← Cases
         </Link>
-        <p className="font-mono text-[10px] text-primary/50 uppercase">
+        <p className="text-[12px] text-muted">
           {thinkingModeLabel(study.thinkingMode)} · practice
         </p>
-      </header>
+      </div>
 
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 space-y-4">
-        <div className="border-neon p-4 bg-neutral-dark/60 space-y-2">
-          <h1 className="text-xl font-bold text-primary crt-glow">{study.title}</h1>
-          <p className="text-sm text-slate-300">{study.brief}</p>
-          <p className="text-[13px] text-slate-400 leading-relaxed">
+        <div className="panel p-4 space-y-2">
+          <h1 className="text-xl font-semibold">{study.title}</h1>
+          <p className="text-sm">{study.brief}</p>
+          <p className="text-[13px] text-muted leading-relaxed">
             Tip: {coachTipForThinkingMode(study.thinkingMode)}
           </p>
           {study.newsHeadline ? (
@@ -136,24 +135,18 @@ export default function CasePlayer() {
           <FinancialSnapshotCard snapshot={study.statementSnapshot} />
         ) : null}
 
-        <div className="bg-background-dark border-2 border-primary/40 rounded-xl overflow-hidden">
-          <div className="px-4 py-2 border-b border-primary/30 bg-neutral-dark/80 flex justify-between">
-            <span className="text-[10px] font-mono text-primary/50 tracking-widest uppercase">
-              {submitted ? "What happened after" : "Price so far"}
-            </span>
+        <div className="space-y-2">
+          <div className="flex justify-between text-[12px] text-muted">
+            <span>{submitted ? "What happened after" : "Price so far"}</span>
             {!submitted ? (
-              <span className="text-[10px] font-mono text-primary/40">
-                aftermath hidden until you decide
-              </span>
+              <span>Aftermath hidden until you decide</span>
             ) : null}
           </div>
-          <div className="p-4">
-            <CandlestickChart data={chartData} height={280} />
-          </div>
+          <CandlestickChart data={chartData} height={280} />
         </div>
 
         <div className="space-y-3">
-          <p className="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em]">
+          <p className="text-[12px] font-semibold text-muted">
             Decision
           </p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -172,10 +165,10 @@ export default function CasePlayer() {
                   onClick={() => !submitted && !lockedShort && setSelected(a.id)}
                   className={`py-3 rounded font-bold font-mono text-sm border transition-colors ${
                     lockedShort
-                      ? "opacity-40 border-primary/20 cursor-not-allowed"
+                      ? "opacity-40 border-line cursor-not-allowed"
                       : selected === a.id
-                        ? "bg-primary text-background-dark border-primary"
-                        : "border-primary/40 text-primary hover:bg-primary/10"
+                        ? "bg-primary text-white border-primary"
+                        : "border-line text-primary hover:bg-primary/10"
                   }`}
                 >
                   {a.label}
@@ -189,7 +182,7 @@ export default function CasePlayer() {
               type="button"
               disabled={!selected}
               onClick={onSubmit}
-              className="w-full bg-primary text-background-dark font-bold py-3 rounded disabled:opacity-40"
+              className="w-full bg-primary text-white font-bold py-3 rounded disabled:opacity-40"
             >
               Lock in and see what happened
             </button>
@@ -197,7 +190,7 @@ export default function CasePlayer() {
         </div>
 
         {submitted && grade ? (
-          <div className="border border-primary/30 rounded-xl p-4 font-mono text-sm space-y-2 bg-neutral-dark/80">
+          <div className="border border-line rounded-xl p-4 font-mono text-sm space-y-2 bg-surface">
             <p
               className={
                 grade === "correct"

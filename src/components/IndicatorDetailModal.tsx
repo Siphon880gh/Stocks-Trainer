@@ -36,12 +36,12 @@ export default function IndicatorDetailModal({ overlay, onClose, hidePracticeLin
       aria-labelledby="indicator-modal-title"
     >
       <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40"
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative w-full max-w-lg bg-background-dark border-2 border-primary/50 rounded-xl shadow-2xl shadow-primary/20 overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-primary/30 bg-neutral-dark/80">
+      <div className="relative w-full max-w-lg bg-surface border border-line rounded-xl shadow-lg overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-surface">
           <h2 id="indicator-modal-title" className="text-lg font-bold text-primary">
             {overlay.name}
           </h2>
@@ -54,7 +54,7 @@ export default function IndicatorDetailModal({ overlay, onClose, hidePracticeLin
           </button>
         </div>
         <div className="p-6 space-y-4">
-          <div className="h-32 w-full rounded-lg bg-background-dark border border-primary/30 overflow-hidden">
+          <div className="h-32 w-full overflow-hidden">
             <MarketChart
               data={SAMPLE_OHLC}
               height={128}
@@ -80,7 +80,7 @@ export default function IndicatorDetailModal({ overlay, onClose, hidePracticeLin
               <Link
                 to="/training?group=indicators&start=1"
                 onClick={onClose}
-                className="flex-1 bg-primary hover:bg-primary/90 text-background-dark font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                className="flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
               >
                 <span className="material-symbols-outlined">quiz</span>
                 Practice in Quiz
@@ -88,7 +88,7 @@ export default function IndicatorDetailModal({ overlay, onClose, hidePracticeLin
             )}
             <button
               onClick={onClose}
-              className={`${hidePracticeLink ? "flex-1" : ""} px-6 py-3 border border-primary/40 text-primary rounded-lg font-bold hover:bg-primary/10 transition-colors`}
+              className={`${hidePracticeLink ? "flex-1" : ""} px-6 py-3 border border-line text-primary rounded-lg font-bold hover:bg-primary/10 transition-colors`}
             >
               Close
             </button>

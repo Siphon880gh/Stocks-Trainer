@@ -32,22 +32,22 @@ export default function MarketNavigator({
   return (
     <section
       id="market-navigator"
-      className={`border border-primary/40 rounded-lg bg-primary/5 font-mono ${
+      className={`panel ${
         compact ? "p-3 space-y-2" : "p-4 space-y-3"
       }`}
     >
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-xs font-bold text-primary tracking-widest uppercase">
-          MARKET_NAVIGATOR
+        <h2 className="text-sm font-semibold">
+          Market navigator
         </h2>
-        <p className="text-[10px] text-primary/50">
+        <p className="text-[12px] text-muted">
           Charts · literacy · decide (SAMPLE)
         </p>
       </div>
 
-      <p className="text-[11px] text-slate-400 leading-relaxed">
+      <p className="text-[13px] text-muted leading-relaxed">
         Traditional retail ={" "}
-        <span className="text-primary">Equities (stocks)</span>. Other types =
+        <span className="text-ink font-medium">Equities (stocks)</span>. Other types =
         SAMPLE browse / decide expansion — not a LIVE desk.
       </p>
 
@@ -57,10 +57,10 @@ export default function MarketNavigator({
             key={cls}
             type="button"
             onClick={() => setSelected(cls)}
-            className={`px-3 py-1.5 rounded text-[11px] font-bold uppercase tracking-wide transition-colors ${
+            className={`px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors ${
               selected === cls
-                ? "bg-primary text-background-dark"
-                : "border border-primary/40 text-primary hover:bg-primary/10"
+                ? "bg-primary text-white"
+                : "border border-line text-ink hover:bg-canvas"
             }`}
           >
             {NAVIGATOR_CLASS_LABELS[cls]}
@@ -69,39 +69,39 @@ export default function MarketNavigator({
       </div>
 
       {selected ? (
-        <div className="flex flex-wrap gap-2 pt-1 border-t border-primary/20">
+        <div className="flex flex-wrap gap-2 pt-1 border-t border-line">
           <Link
             to={marketChartsHref(selected)}
-            className="px-3 py-2 rounded border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10"
+            className="px-3 py-2 rounded-md border border-line text-ink text-[13px] hover:bg-canvas"
           >
-            VIEW_CHARTS
+            View charts
           </Link>
           <Link
             to={marketLiteracyHref(selected)}
-            className="px-3 py-2 rounded border border-primary/50 text-primary text-[11px] font-bold hover:bg-primary/10"
+            className="px-3 py-2 rounded-md border border-line text-ink text-[13px] hover:bg-canvas"
           >
-            READ_LITERACY
+            Literacy
           </Link>
           {lock ? (
             <span
-              className="px-3 py-2 rounded border border-white/10 text-slate-500 text-[11px] font-bold cursor-not-allowed"
+              className="px-3 py-2 rounded-md border border-line text-muted text-[13px] cursor-not-allowed"
               title={decideLockCopy(lock)}
             >
-              DECIDE_CASES · LOCKED
+              Cases locked
             </span>
           ) : (
             <Link
               to={marketDecideHref(selected)}
-              className="px-3 py-2 rounded bg-primary text-background-dark text-[11px] font-bold hover:bg-primary/90"
+              className="px-3 py-2 rounded-md bg-primary text-white text-[13px] font-semibold hover:bg-primary-dim"
             >
-              DECIDE_CASES
+              Decide cases
             </Link>
           )}
         </div>
       ) : null}
 
       {selected && lock ? (
-        <p className="text-[10px] text-yellow-400/80">{decideLockCopy(lock)}</p>
+        <p className="text-[13px] text-muted">{decideLockCopy(lock)}</p>
       ) : null}
     </section>
   );

@@ -24,8 +24,8 @@ export default function CoachingPathTrail({
   const panelId = "coaching-path-trail-panel";
 
   return (
-    <section className="border border-primary/25 rounded-xl bg-neutral-dark/40 overflow-hidden">
-      <div className="flex flex-wrap items-center gap-2 px-3 py-2 border-b border-primary/20">
+    <section className="border border-line rounded-xl bg-canvas overflow-hidden">
+      <div className="flex flex-wrap items-center gap-2 px-3 py-2 border-b border-line">
         <button
           type="button"
           className="flex-1 min-w-[10rem] text-left font-mono text-[10px] tracking-widest text-primary flex items-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
@@ -36,7 +36,7 @@ export default function CoachingPathTrail({
           <span className="material-symbols-outlined text-sm" aria-hidden>
             {expanded ? "expand_less" : "expand_more"}
           </span>
-          PATH_TRAIL · {steps.length} STEP{steps.length === 1 ? "" : "S"}
+          Path · {steps.length} step{steps.length === 1 ? "" : "s"}
         </button>
         <label className="inline-flex items-center gap-1.5 font-mono text-[10px] text-slate-500 cursor-pointer">
           <input
@@ -45,7 +45,7 @@ export default function CoachingPathTrail({
             onChange={(e) => onShowNodeIdsChange(e.target.checked)}
             className="accent-primary"
           />
-          DEBUG_NODE_ID
+          Show node ids
         </label>
       </div>
 

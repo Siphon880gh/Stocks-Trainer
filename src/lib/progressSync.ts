@@ -16,7 +16,7 @@ export type SyncMode = "local_only" | "noop_cloud";
 
 export interface ProgressSyncAdapter {
   mode: SyncMode;
-  /** Terminal-tone status for UI. */
+  /** Status shown in the account panel. */
   statusLabel: string;
   /** No-op cloud push; returns local acknowledgment only. */
   push(state: ProgressState): Promise<{ ok: true; stub: true }>;
@@ -26,7 +26,7 @@ export interface ProgressSyncAdapter {
 
 export const localOnlySyncAdapter: ProgressSyncAdapter = {
   mode: "local_only",
-  statusLabel: "SYNC_STUB / LOCAL_ONLY",
+  statusLabel: "Saved on this device",
   async push(state: ProgressState) {
     saveProgress(state);
     return { ok: true as const, stub: true as const };
@@ -87,7 +87,7 @@ export function importProgressJson(raw: string): ImportProgressResult {
       return {
         ok: false,
         recoveryMessage:
-          "IMPORT_REJECTED: Corrupt or outdated progress JSON. Local store unchanged.",
+          "Import rejected: corrupt or outdated progress file. Local store unchanged.",
       };
     }
     const saved = saveProgress({
@@ -99,7 +99,7 @@ export function importProgressJson(raw: string): ImportProgressResult {
     return {
       ok: false,
       recoveryMessage:
-        "IMPORT_REJECTED: Invalid JSON. Local store unchanged.",
+        "Import rejected: invalid JSON. Local store unchanged.",
     };
   }
 }

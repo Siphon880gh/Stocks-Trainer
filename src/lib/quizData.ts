@@ -181,7 +181,7 @@ export const QUIZ_OPTIONS = OPTIONS_3;
 export const QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: "PR-042",
-    prompt: "Analyze the price action highlighted in the terminal window below. Which candlestick pattern is currently forming at the resistance level?",
+    prompt: "Analyze the price action highlighted on the chart below. Which candlestick pattern is currently forming at the resistance level?",
     correctAnswer: "B",
     options: OPTIONS_3,
     explanation:

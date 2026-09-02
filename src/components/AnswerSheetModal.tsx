@@ -35,9 +35,9 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
       aria-modal="true"
       aria-labelledby="answer-sheet-title"
     >
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
-      <div className="relative w-full max-w-2xl max-h-[85vh] overflow-hidden bg-background-dark border-2 border-primary/50 rounded-xl shadow-2xl shadow-primary/20">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-primary/30 bg-neutral-dark/80 sticky top-0">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} aria-hidden="true" />
+      <div className="relative w-full max-w-2xl max-h-[85vh] overflow-hidden bg-surface border border-line rounded-xl shadow-lg">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-surface sticky top-0">
           <h2 id="answer-sheet-title" className="text-lg font-bold text-primary flex items-center gap-2">
             <span className="material-symbols-outlined">assignment</span>
             Quiz Answer Sheet
@@ -77,9 +77,9 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                             key={q.id}
                             type="button"
                             onClick={() => onPracticeQuestion?.(i, group.id as QuizGroupId)}
-                            className="w-full text-left border border-primary/30 rounded-xl overflow-hidden bg-neutral-dark/40 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group"
+                            className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group"
                           >
-                            <div className="flex items-center justify-between px-4 py-2 border-b border-primary/20 bg-neutral-dark/60 group-hover:bg-primary/10">
+                            <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
                               <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>
                               <span className="font-bold text-primary flex items-center gap-2">
                                 {q.correctAnswer}: {label}
@@ -97,7 +97,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                                       className={`rounded border p-1 ${
                                         o.id === q.correctAnswer
                                           ? "border-primary bg-primary/10"
-                                          : "border-primary/20"
+                                          : "border-line"
                                       }`}
                                     >
                                       <CandlestickChart
@@ -148,9 +148,9 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                     key={q.id}
                     type="button"
                     onClick={() => onPracticeQuestion?.(i, groupId)}
-                    className="w-full text-left border border-primary/30 rounded-xl overflow-hidden bg-neutral-dark/40 hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group"
+                    className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group"
                   >
-                    <div className="flex items-center justify-between px-4 py-2 border-b border-primary/20 bg-neutral-dark/60 group-hover:bg-primary/10">
+                    <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
                       <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>
                       <span className="font-bold text-primary flex items-center gap-2">
                         {q.correctAnswer}: {label}
@@ -168,7 +168,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                               className={`rounded border p-1 ${
                                 o.id === q.correctAnswer
                                   ? "border-primary bg-primary/10"
-                                  : "border-primary/20"
+                                  : "border-line"
                               }`}
                             >
                               <CandlestickChart

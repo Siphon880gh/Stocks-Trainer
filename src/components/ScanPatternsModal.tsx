@@ -27,9 +27,9 @@ export default function ScanPatternsModal({ patterns, onClose }: ScanPatternsMod
       aria-modal="true"
       aria-labelledby="scan-modal-title"
     >
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
-      <div className="relative w-full max-w-lg bg-background-dark border-2 border-primary/50 rounded-xl shadow-2xl shadow-primary/20 overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-primary/30 bg-neutral-dark/80">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} aria-hidden="true" />
+      <div className="relative w-full max-w-lg bg-surface border border-line rounded-xl shadow-lg overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-surface">
           <h2 id="scan-modal-title" className="text-lg font-bold text-primary flex items-center gap-2">
             <span className="material-symbols-outlined">radar</span>
             Pattern Scan Results
@@ -56,7 +56,7 @@ export default function ScanPatternsModal({ patterns, onClose }: ScanPatternsMod
                 {patterns.map((p, i) => (
                   <div
                     key={i}
-                    className="p-4 rounded-lg border border-primary/30 bg-neutral-dark/60 hover:border-primary/50 transition-colors"
+                    className="p-4 rounded-lg border border-line bg-surface hover:border-line transition-colors"
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-bold text-primary">{p.name}</span>
@@ -72,7 +72,7 @@ export default function ScanPatternsModal({ patterns, onClose }: ScanPatternsMod
             <Link
               to="/archive"
               onClick={onClose}
-              className="flex-1 border border-primary/40 text-primary py-3 rounded-lg font-bold hover:bg-primary/10 flex items-center justify-center gap-2 transition-colors"
+              className="flex-1 border border-line text-primary py-3 rounded-lg font-bold hover:bg-primary/10 flex items-center justify-center gap-2 transition-colors"
             >
               <span className="material-symbols-outlined">menu_book</span>
               Learn Patterns
@@ -80,7 +80,7 @@ export default function ScanPatternsModal({ patterns, onClose }: ScanPatternsMod
             <Link
               to="/training"
               onClick={onClose}
-              className="flex-1 bg-primary hover:bg-primary/90 text-background-dark py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors"
+              className="flex-1 bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors"
             >
               <span className="material-symbols-outlined">quiz</span>
               Quiz

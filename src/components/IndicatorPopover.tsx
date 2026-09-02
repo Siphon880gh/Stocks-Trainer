@@ -51,7 +51,7 @@ export default function IndicatorPopover({ overlayId, x, y, onClose, onLearnMore
   return (
     <div
       ref={ref}
-      className="fixed z-[200] w-72 p-4 rounded-lg border-2 border-primary/50 bg-background-dark shadow-2xl shadow-primary/20"
+      className="fixed z-[200] w-72 p-4 rounded-lg border-2 border-line bg-background-dark shadow-lg"
       style={{ left: position.left, top: position.top }}
     >
       <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-1">{overlay.name}</h4>
@@ -64,7 +64,7 @@ export default function IndicatorPopover({ overlayId, x, y, onClose, onLearnMore
             onClose();
             onLearnMore();
           }}
-          className="w-full py-2 rounded border border-primary/40 text-primary text-xs font-bold hover:bg-primary/10 transition-colors flex items-center justify-center gap-1"
+          className="w-full py-2 rounded border border-line text-primary text-xs font-bold hover:bg-primary/10 transition-colors flex items-center justify-center gap-1"
         >
           <span className="material-symbols-outlined text-sm">menu_book</span>
           Learn more

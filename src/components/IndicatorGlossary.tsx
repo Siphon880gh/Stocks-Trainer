@@ -48,7 +48,7 @@ export default function IndicatorGlossary({ onClose, compact = false }: Indicato
       {OVERLAYS.map((ind) => (
         <div
           key={ind.id}
-          className="border border-primary/20 rounded-lg overflow-hidden bg-neutral-dark/40"
+          className="border border-line rounded-lg overflow-hidden bg-canvas"
         >
           <button
             onClick={() => setExpanded(expanded === ind.id ? null : ind.id)}
@@ -71,7 +71,7 @@ export default function IndicatorGlossary({ onClose, compact = false }: Indicato
       {onClose && (
         <button
           onClick={onClose}
-          className="w-full py-2 border border-primary/40 text-primary rounded-lg text-sm font-bold hover:bg-primary/10"
+          className="w-full py-2 border border-line text-primary rounded-lg text-sm font-bold hover:bg-primary/10"
         >
           Close
         </button>

@@ -28,12 +28,12 @@ export default function PatternDetailModal({ pattern, onClose }: PatternDetailMo
       aria-labelledby="pattern-modal-title"
     >
       <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40"
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className="relative w-full max-w-lg bg-background-dark border-2 border-primary/50 rounded-xl shadow-2xl shadow-primary/20 overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-primary/30 bg-neutral-dark/80">
+      <div className="relative w-full max-w-lg bg-surface border border-line rounded-xl shadow-lg overflow-hidden">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-surface">
           <h2 id="pattern-modal-title" className="text-lg font-bold text-primary">
             {pattern.name}
           </h2>
@@ -47,7 +47,7 @@ export default function PatternDetailModal({ pattern, onClose }: PatternDetailMo
         </div>
         <div className="p-6 space-y-6">
           <div className="flex gap-6">
-            <div className="h-32 w-32 shrink-0 rounded-lg bg-background-dark border border-primary/30 flex items-center justify-center overflow-hidden">
+            <div className="h-32 w-32 shrink-0 rounded-lg bg-background-dark border border-line flex items-center justify-center overflow-hidden">
               {pattern.image ? (
                 <img
                   className="h-full w-full object-contain p-2"
@@ -73,14 +73,14 @@ export default function PatternDetailModal({ pattern, onClose }: PatternDetailMo
             <Link
               to="/training"
               onClick={onClose}
-              className="flex-1 bg-primary hover:bg-primary/90 text-background-dark font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
+              className="flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
             >
               <span className="material-symbols-outlined">quiz</span>
               Practice in Quiz
             </Link>
             <button
               onClick={onClose}
-              className="px-6 py-3 border border-primary/40 text-primary rounded-lg font-bold hover:bg-primary/10 transition-colors"
+              className="px-6 py-3 border border-line text-primary rounded-lg font-bold hover:bg-primary/10 transition-colors"
             >
               Close
             </button>

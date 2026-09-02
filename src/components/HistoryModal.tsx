@@ -28,9 +28,9 @@ export default function HistoryModal({ data, onClose }: HistoryModalProps) {
       aria-modal="true"
       aria-labelledby="history-modal-title"
     >
-      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
-      <div className="relative w-full max-w-2xl max-h-[85vh] overflow-hidden bg-background-dark border-2 border-primary/50 rounded-xl shadow-2xl shadow-primary/20">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-primary/30 bg-neutral-dark/80 sticky top-0">
+      <div className="absolute inset-0 bg-black/40" onClick={onClose} aria-hidden="true" />
+      <div className="relative w-full max-w-2xl max-h-[85vh] overflow-hidden bg-surface border border-line rounded-xl shadow-lg">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-surface sticky top-0">
           <h2 id="history-modal-title" className="text-lg font-bold text-primary">
             OHLC History
           </h2>
@@ -49,7 +49,7 @@ export default function HistoryModal({ data, onClose }: HistoryModalProps) {
           <div className="overflow-x-auto">
             <table className="w-full font-mono text-sm">
               <thead>
-                <tr className="border-b border-primary/30">
+                <tr className="border-b border-line">
                   <th className="text-left py-2 px-3 text-primary/80">Time</th>
                   <th className="text-right py-2 px-3 text-primary/80">O</th>
                   <th className="text-right py-2 px-3 text-primary/80">H</th>

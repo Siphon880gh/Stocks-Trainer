@@ -60,19 +60,17 @@ export default function PathMapPanel({
   };
 
   return (
-    <section className="w-full border-neon rounded-xl bg-neutral-dark/60 overflow-hidden">
-      <header className="flex flex-wrap items-end justify-between gap-2 px-4 py-3 border-b border-primary/25">
+    <section className="w-full panel overflow-hidden">
+      <header className="flex flex-wrap items-end justify-between gap-2 px-4 py-3 border-b border-line">
         <div className="space-y-0.5">
-          <p className="text-[10px] font-mono tracking-[0.2em] text-primary/60">
-            PATH_MAP · {pathId.replace(/-/g, "_").toUpperCase()}
-          </p>
-          <h2 className="text-sm font-bold text-primary crt-glow tracking-tight">
+          <p className="text-[12px] text-muted">Path</p>
+          <h2 className="text-sm font-semibold tracking-tight">
             {template?.title ?? "Learning Path"}
           </h2>
         </div>
-        <p className="font-mono text-[11px] text-primary/70">
-          STEP_{completedCount}/{items.length}
-          {pathDone ? " · COMPLETE" : null}
+        <p className="text-[13px] text-muted tabular-nums">
+          {completedCount}/{items.length}
+          {pathDone ? " complete" : ""}
         </p>
       </header>
 
@@ -91,26 +89,26 @@ export default function PathMapPanel({
               <span
                 className={`material-symbols-outlined text-xl ${
                   shownStatus === "complete"
-                    ? "text-primary"
+                    ? "text-up"
                     : isActive
-                      ? "text-primary crt-glow"
+                      ? "text-primary"
                       : shownStatus === "locked"
-                        ? "text-primary/25"
-                        : "text-primary/70"
+                        ? "text-muted/40"
+                        : "text-muted"
                 }`}
                 aria-hidden
               >
                 {STATUS_MARK[shownStatus]}
               </span>
-              <span className="text-[10px] tracking-widest text-primary/50">{i + 1}</span>
+              <span className="text-[10px] text-muted">{i + 1}</span>
               <span
-                className={`text-[11px] font-bold leading-tight ${
-                  isActive ? "text-primary" : shownStatus === "locked" ? "text-slate-500" : "text-slate-200"
+                className={`text-[11px] font-semibold leading-tight ${
+                  isActive ? "text-ink" : shownStatus === "locked" ? "text-muted" : "text-ink"
                 }`}
               >
                 {m.title}
               </span>
-              <span className="text-[9px] tracking-widest text-primary/45 uppercase">
+              <span className="text-[10px] text-muted">
                 {shownStatus}
               </span>
             </>
@@ -127,7 +125,7 @@ export default function PathMapPanel({
               {i > 0 ? (
                 <div
                   className={`mt-[0.85rem] h-px w-6 sm:w-10 shrink-0 ${
-                    prevComplete ? "bg-primary" : "bg-primary/20"
+                    prevComplete ? "bg-up" : "bg-line"
                   }`}
                   aria-hidden
                 />
@@ -156,18 +154,18 @@ export default function PathMapPanel({
         })}
       </ol>
 
-      <div className="px-4 pb-4 space-y-2 font-mono text-xs border-t border-primary/15 pt-3">
+      <div className="px-4 pb-4 space-y-2 text-sm border-t border-line pt-3">
         {pathDone ? (
-          <p className="text-primary">
+          <p>
             Credential: {template?.title ?? "Path"} complete (SAMPLE progress, not attested).
           </p>
         ) : active ? (
           <>
-            <p className="text-primary/80 tracking-widest">
-              NOW · {active.title}
+            <p className="font-medium">
+              Now · {active.title}
             </p>
-            <p className="text-slate-400 normal-case">{active.summary}</p>
-            <p className="text-primary/55 normal-case">COACH: {coachTip}</p>
+            <p className="text-muted">{active.summary}</p>
+            <p className="text-muted">Coach: {coachTip}</p>
             {active.trainingGroup ? (
               <button
                 type="button"
@@ -187,7 +185,7 @@ export default function PathMapPanel({
             ) : null}
           </>
         ) : (
-          <p className="text-slate-400">Open the next available milestone when ready.</p>
+              <p className="text-muted">Open the next available milestone when ready.</p>
         )}
       </div>
     </section>

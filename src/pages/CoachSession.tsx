@@ -23,19 +23,19 @@ const OUTCOME_UI: Record<
   { label: string; panel: string; badge: string; icon: string }
 > = {
   continue: {
-    label: "CONTINUE",
-    panel: "border-primary/40 bg-neutral-dark/60",
-    badge: "text-primary border-primary/40",
+    label: "Continue",
+    panel: "border-line bg-surface",
+    badge: "text-primary border-line",
     icon: "play_arrow",
   },
   wrong: {
-    label: "WRONG · REVIEW",
+    label: "Wrong · review",
     panel: "border-accent-red/50 bg-accent-red/10",
     badge: "text-accent-red border-accent-red/50",
     icon: "warning",
   },
   success: {
-    label: "SUCCESS",
+    label: "Success",
     panel: "border-primary bg-primary/10",
     badge: "text-primary border-primary",
     icon: "check_circle",
@@ -87,11 +87,11 @@ export default function CoachSession() {
   if (loaded.ok === false) {
     const fail = loaded;
     return (
-      <div className="min-h-screen bg-background-dark p-6 font-mono text-sm space-y-3">
+      <div className="p-6 text-sm space-y-3">
         <p className="text-accent-red" role="alert">
           {fail.error === "invalid"
-            ? `SESSION_INVALID: ${slug}`
-            : `SESSION_NOT_FOUND: ${slug}`}
+            ? `This coaching session is invalid: ${slug}`
+            : `Coaching session not found: ${slug}`}
         </p>
         {fail.error === "invalid" && fail.issues ? (
           <ul className="text-slate-400 text-xs space-y-1">
@@ -117,7 +117,7 @@ export default function CoachSession() {
     return (
       <div className="p-6 font-mono text-sm space-y-3">
         <p className="text-accent-red" role="alert">
-          NODE_RECOVERY_FAILED
+          Couldn’t restore this coaching step.
         </p>
         <Link to="/coach" className="text-primary underline">
           Back to catalog
@@ -152,21 +152,20 @@ export default function CoachSession() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-background-dark text-slate-100 font-display">
-      <header className="border-b border-primary/30 p-4 flex items-center justify-between gap-3">
-        <Link to="/coach" className="flex items-center gap-2 text-primary hover:opacity-90 shrink-0">
-          <span className="material-symbols-outlined">arrow_back</span>
-          <span className="font-mono text-xs tracking-widest">CATALOG</span>
+    <div className="flex-1 flex flex-col">
+      <div className="border-b border-line bg-surface px-4 py-3 flex items-center justify-between gap-3">
+        <Link to="/coach" className="text-sm text-primary hover:underline shrink-0">
+          ← Coach
         </Link>
         <div className="text-right min-w-0">
-          <p className="font-mono text-[10px] text-primary/50 uppercase truncate">
+          <p className="text-[12px] text-muted truncate">
             {session.meta.topic}
           </p>
-          <h1 className="text-sm md:text-base font-bold text-primary truncate">
+          <h1 className="text-sm md:text-base font-semibold truncate">
             {session.meta.title}
           </h1>
         </div>
-      </header>
+      </div>
 
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 space-y-4">
         <CoachingPathTrail
@@ -191,7 +190,7 @@ export default function CoachSession() {
               <span className="material-symbols-outlined text-sm" aria-hidden>
                 {outcomeUi.icon}
               </span>
-              OUTCOME · {outcomeUi.label}
+              {outcomeUi.label}
             </span>
             {showNodeIds ? (
               <span className="font-mono text-[10px] text-slate-500">
@@ -201,7 +200,7 @@ export default function CoachSession() {
           </div>
           <p
             id={messageId}
-            className="text-sm md:text-base text-slate-100 font-mono normal-case whitespace-pre-wrap leading-relaxed"
+            className="text-sm md:text-base whitespace-pre-wrap leading-relaxed"
           >
             {node.message}
           </p>
@@ -218,7 +217,7 @@ export default function CoachSession() {
                   <button
                     type="button"
                     onClick={() => onChoose(choice)}
-                    className="w-full text-left border border-primary/40 bg-neutral-dark/40 hover:bg-primary/10 hover:border-primary px-4 py-3 font-mono text-sm normal-case transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                    className="w-full text-left border border-line bg-canvas hover:bg-primary/10 hover:border-primary px-4 py-3 font-mono text-sm normal-case transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                   >
                     {choice.label}
                   </button>
@@ -233,25 +232,25 @@ export default function CoachSession() {
             <button
               type="button"
               onClick={onBack}
-              className="border border-primary/40 px-4 py-2 font-mono text-xs tracking-widest text-primary hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+              className="border border-line px-4 py-2 font-mono text-xs tracking-widest text-primary hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
             >
-              {node.outcome === "wrong" ? "REWIND_TO_DECISION" : "STEP_BACK"}
+              {node.outcome === "wrong" ? "Rewind to decision" : "Step back"}
             </button>
           ) : null}
           {terminal ? (
             <button
               type="button"
               onClick={onRestart}
-              className="border border-primary px-4 py-2 font-mono text-xs tracking-widest bg-primary/15 text-primary hover:bg-primary/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+              className="border border-primary px-4 py-2 text-sm bg-primary/10 text-primary hover:bg-primary/20 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
             >
-              RESTART_SESSION
+              Restart session
             </button>
           ) : null}
           <Link
             to="/coach"
-            className="border border-primary/20 px-4 py-2 font-mono text-xs tracking-widest text-slate-400 hover:text-primary"
+            className="border border-line px-4 py-2 text-sm text-muted hover:text-ink rounded-md"
           >
-            EXIT_CATALOG
+            Exit to catalog
           </Link>
         </div>
       </main>

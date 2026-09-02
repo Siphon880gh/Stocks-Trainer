@@ -14,6 +14,8 @@ import {
   parseDrawTemplateId,
   saveLastDrawAttempt,
 } from "../lib/practiceDraw";
+import { CHART, chartPaneClass } from "../lib/chartTheme";
+import { cn } from "../lib/utils";
 
 function hexAlpha(hex: string, alpha: number): string {
   const n = Number.parseInt(hex.slice(1), 16);
@@ -46,20 +48,13 @@ function drawScene(
   active: Stroke | null,
 ) {
   ctx.clearRect(0, 0, width, height);
-  ctx.fillStyle = "#0a0f08";
+  ctx.fillStyle = CHART.bg;
   ctx.fillRect(0, 0, width, height);
 
-  // subtle grid
-  ctx.strokeStyle = "rgba(56, 255, 20, 0.08)";
+  ctx.strokeStyle = CHART.grid;
   ctx.lineWidth = 1;
-  const step = Math.max(20, Math.floor(width / 16));
-  for (let x = step; x < width; x += step) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, height);
-    ctx.stroke();
-  }
-  for (let y = step; y < height; y += step) {
+  const yStep = Math.max(24, Math.floor(height / 6));
+  for (let y = yStep; y < height; y += yStep) {
     ctx.beginPath();
     ctx.moveTo(0, y);
     ctx.lineTo(width, y);
@@ -104,9 +99,9 @@ function drawScene(
 }
 
 const GRADE_LABEL: Record<DrawGrade, string> = {
-  correct: "CORRECT",
-  partial: "PARTIAL",
-  incorrect: "INCORRECT",
+  correct: "Correct",
+  partial: "Partial",
+  incorrect: "Incorrect",
 };
 
 export default function PracticeDraw() {
@@ -140,7 +135,7 @@ export default function PracticeDraw() {
     }
     setStrokes(last.strokes);
     setResult({ grade: last.grade, score: last.score, tip: last.tip });
-    setRestoredNote(`LAST_ATTEMPT restored · ${last.grade.toUpperCase()}`);
+    setRestoredNote(`Last attempt restored · ${last.grade}`);
   }, [searchParams]);
 
   useEffect(() => {
@@ -235,7 +230,7 @@ export default function PracticeDraw() {
     });
     setRestoredNote(null);
     setWritebackNote(
-      `WRITEBACK · tip flag set for Dashboard · ${graded.grade.toUpperCase()}`,
+      `Saved a tip on the home path · ${graded.grade}`,
     );
   };
 
@@ -243,29 +238,14 @@ export default function PracticeDraw() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <header className="sticky top-0 z-10 bg-background-dark/95 border-b border-primary/30 backdrop-blur-sm">
-        <div className="flex items-center p-4 justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <span className="material-symbols-outlined text-primary text-3xl">history_edu</span>
-            <div>
-              <h1 className="text-lg font-bold tracking-tight text-primary font-mono">PRACTICE_DRAW</h1>
-              <p className="text-[10px] text-primary/60 leading-none">DRAW_CANDLESTICK_PATTERNS</p>
-            </div>
-          </Link>
-          <Link
-            to="/"
-            className="p-2 rounded hover:bg-primary/10 text-primary transition-colors flex items-center gap-2"
-          >
-            <span className="material-symbols-outlined">arrow_back</span>
-            <span className="text-xs font-mono">BACK</span>
-          </Link>
-        </div>
-      </header>
-
       <main className="flex-1 px-4 py-6 max-w-4xl mx-auto w-full space-y-4">
-        <section className="border-neon p-3 bg-neutral-dark/60 rounded-xl">
-          <h2 className="text-[10px] font-bold tracking-widest text-primary/70 mb-2 font-mono">
-            TEMPLATE_PICKER
+        <div>
+          <h1 className="text-lg font-semibold tracking-tight">Practice draw</h1>
+          <p className="text-[13px] text-muted">Sketch candlestick patterns on a light tape</p>
+        </div>
+        <section className="panel p-3">
+          <h2 className="text-[12px] font-semibold text-muted mb-2">
+            Template
           </h2>
           <div className="flex flex-wrap gap-2">
             {DRAW_TEMPLATES.map((t) => (
@@ -281,7 +261,7 @@ export default function PracticeDraw() {
                 className={`px-3 py-2 text-xs font-mono rounded border transition-colors ${
                   templateId === t.id
                     ? "border-primary bg-primary/20 text-primary"
-                    : "border-primary/30 text-primary/70 hover:bg-primary/10"
+                    : "border-line text-primary/70 hover:bg-primary/10"
                 }`}
               >
                 {t.name}
@@ -294,14 +274,14 @@ export default function PracticeDraw() {
           </p>
         </section>
 
-        <section className="border-neon p-3 bg-neutral-dark/60 rounded-xl space-y-3">
+        <section className="panel p-3 bg-surface rounded-xl space-y-3">
           <div className="flex items-center justify-between gap-2 flex-wrap">
             <h2 className="text-[10px] font-bold tracking-widest text-primary/70 font-mono">
-              CANVAS_AREA
+              CANVAS
             </h2>
             <div className="flex flex-wrap items-center gap-2">
               <div className="flex items-center gap-1.5" role="group" aria-label="Brush color">
-                <span className="text-[9px] font-mono text-primary/50 tracking-widest">BRUSH</span>
+                <span className="text-[12px] text-muted">Brush</span>
                 {(["bullish", "bearish"] as const).map((c) => (
                   <button
                     key={c}
@@ -312,9 +292,9 @@ export default function PracticeDraw() {
                     className={`w-6 h-6 rounded-sm border-2 ${
                       brushColor === c
                         ? c === "bullish"
-                          ? "border-primary shadow-[0_0_8px_#38ff14]"
-                          : "border-accent-red shadow-[0_0_8px_#ff3814]"
-                        : "border-primary/30 opacity-70"
+                          ? "border-primary "
+                          : "border-accent-red "
+                        : "border-line opacity-70"
                     }`}
                     style={{ backgroundColor: BRUSH_HEX[c] }}
                   />
@@ -324,30 +304,30 @@ export default function PracticeDraw() {
                 type="button"
                 onClick={handleUndo}
                 disabled={strokes.length === 0}
-                className="px-3 py-1.5 text-[10px] font-mono border border-primary/40 rounded text-primary disabled:opacity-30 hover:bg-primary/10"
+                className="px-3 py-1.5 text-[13px] border border-line rounded-md disabled:opacity-30 hover:bg-canvas"
               >
-                UNDO
+                Undo
               </button>
               <button
                 type="button"
                 onClick={handleClear}
                 disabled={strokes.length === 0 && !activeStroke}
-                className="px-3 py-1.5 text-[10px] font-mono border border-primary/40 rounded text-primary disabled:opacity-30 hover:bg-primary/10"
+                className="px-3 py-1.5 text-[13px] border border-line rounded-md disabled:opacity-30 hover:bg-canvas"
               >
-                CLEAR
+                Clear
               </button>
               <button
                 type="button"
                 onClick={handleSubmit}
                 disabled={strokes.length === 0}
-                className="px-3 py-1.5 text-[10px] font-mono border border-primary rounded bg-primary/20 text-primary font-bold disabled:opacity-30 hover:bg-primary/30"
+                className="px-3 py-1.5 text-[13px] rounded-md bg-primary text-white font-semibold disabled:opacity-30 hover:bg-primary-dim"
               >
-                SUBMIT
+                Submit
               </button>
             </div>
           </div>
           <div
-            className="aspect-video w-full bg-background-dark border-2 border-primary/40 rounded-lg overflow-hidden touch-none"
+            className={cn(chartPaneClass, "aspect-video w-full touch-none")}
             style={{ touchAction: "none" }}
           >
             <canvas
@@ -369,59 +349,52 @@ export default function PracticeDraw() {
               onPointerCancel={() => endStroke()}
             />
           </div>
-          <p className="text-[10px] font-mono text-primary/40">
+          <p className="text-[13px] text-muted">
             Pointer / touch · strokes: {strokes.length}
             {activeStroke ? " · drawing…" : ""} · brush:{" "}
-            {brushColor === "bullish" ? "GREEN" : "RED"}
+            {brushColor === "bullish" ? "green" : "red"}
           </p>
         </section>
 
         {(result || restoredNote || writebackNote) && (
-          <section className="border-neon p-4 bg-neutral-dark/80 rounded-xl font-mono text-[11px] space-y-1">
-            {restoredNote && <p className="text-primary/50">&gt; {restoredNote}</p>}
+          <section className="panel p-4 text-sm space-y-1">
+            {restoredNote && <p className="text-muted">{restoredNote}</p>}
             {result && (
               <>
                 <p
                   className={
                     result.grade === "correct"
-                      ? "text-primary"
+                      ? "text-up"
                       : result.grade === "partial"
-                        ? "text-primary/80"
+                        ? "text-ink"
                         : "text-accent-red"
                   }
                 >
-                  &gt; GRADE: {GRADE_LABEL[result.grade]} · score{" "}
-                  {Math.round(result.score * 100)}%
+                  Grade: {GRADE_LABEL[result.grade]} · {Math.round(result.score * 100)}%
                 </p>
-                <p className="text-primary/70">&gt; TIP: {result.tip}</p>
+                <p className="text-muted">{result.tip}</p>
               </>
             )}
-            {writebackNote && <p className="text-primary/60">&gt; {writebackNote}</p>}
+            {writebackNote && <p className="text-muted">{writebackNote}</p>}
           </section>
         )}
 
-        <section className="border-neon p-4 bg-neutral-dark/80 rounded-xl font-mono text-[11px] space-y-1">
-          <p className="text-primary/40">&gt; PRACTICE_DRAW ready</p>
-          <p className="text-primary/40">&gt; Templates: Doji · Hammer · Bullish Engulfing · Bearish Engulfing</p>
-          <p className="text-primary/40">&gt; Brush GREEN / RED — match the dashed candle colors</p>
-          <p className="text-primary/80">&gt; Sketch the guide, then SUBMIT for a coarse grade</p>
-          <p className="text-primary/40 animate-pulse">_</p>
-        </section>
+        <p className="text-[13px] text-muted">
+          Guides are dashed. Match green/red to the silhouette, then submit for a coarse grade.
+        </p>
 
-        <div className="flex gap-4">
+        <div className="flex gap-3">
           <Link
             to="/archive"
-            className="flex-1 p-4 border border-primary/30 bg-primary/5 rounded-xl hover:bg-primary/10 transition-colors text-center"
+            className="flex-1 p-3 border border-line rounded-lg hover:bg-canvas text-center text-sm"
           >
-            <span className="material-symbols-outlined text-primary block mb-2">menu_book</span>
-            <span className="text-xs font-mono text-primary">READ_THEORY</span>
+            Reference
           </Link>
           <Link
             to="/training"
-            className="flex-1 p-4 border border-primary rounded-xl bg-primary/20 hover:bg-primary/30 transition-colors text-center"
+            className="flex-1 p-3 rounded-lg bg-primary text-white font-semibold hover:bg-primary-dim text-center text-sm"
           >
-            <span className="material-symbols-outlined text-primary block mb-2">quiz</span>
-            <span className="text-xs font-mono text-primary font-bold">QUIZ_CENTER</span>
+            Quizzes
           </Link>
         </div>
       </main>

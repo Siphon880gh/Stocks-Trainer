@@ -135,22 +135,22 @@ export default function QuizModal({
       aria-labelledby="quiz-modal-title"
     >
       <div
-        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-black/40"
         onClick={currentIndex === questions.length - 1 && submitted ? handleClose : undefined}
         aria-hidden="true"
       />
-      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-background-dark border-2 border-primary/50 rounded-xl shadow-2xl shadow-primary/20">
+      <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-surface border border-line rounded-xl shadow-lg">
         {/* Modal Header */}
-        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-primary/20 bg-background-dark/95 backdrop-blur-sm">
-          <h2 id="quiz-modal-title" className="text-sm font-bold text-primary uppercase tracking-widest">
-            Training Quiz
+        <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-line bg-surface">
+          <h2 id="quiz-modal-title" className="text-sm font-semibold">
+            Quiz
           </h2>
-          <div className="flex items-center gap-4">
-            <span className="text-xs font-mono text-primary/70">
+          <div className="flex items-center gap-4 text-[13px] text-muted tabular-nums">
+            <span>
               {currentIndex + 1} / {questions.length}
             </span>
-            <span className="text-xs font-bold text-primary">{points} PTS</span>
-            <span className="text-xs text-primary/70">Streak: {streak}</span>
+            <span className="font-semibold text-ink">{points} pts</span>
+            <span>Streak {streak}</span>
             <button
               onClick={handleClose}
               className="p-2 rounded hover:bg-primary/10 text-primary transition-colors"
@@ -164,29 +164,19 @@ export default function QuizModal({
         {/* Quiz Content */}
         <div className="p-6 space-y-6">
           {/* Question */}
-          <div className="bg-neutral-dark/80 border border-primary/30 rounded-xl p-6">
-            <span className="text-xs font-mono text-primary/40">MODULE_ID: {question.id}</span>
-            <h3 className="text-xl font-bold mt-2 mb-2">Question</h3>
-            <p className="text-slate-400">{question.prompt}</p>
+          <div className="bg-surface border border-line rounded-xl p-6">
+            <span className="text-xs text-muted">Question {question.id}</span>
+            <h3 className="text-xl font-semibold mt-2 mb-2">Question</h3>
+            <p className="text-muted">{question.prompt}</p>
           </div>
 
           {/* Chart, snapshot card, or literacy context — skip hero chart when options are charts */}
           {question.optionsAreCharts ? null : question.snapshotId ? (
             <FinancialSnapshotCard snapshotId={question.snapshotId} />
           ) : question.overlayId || question.patternKey ? (
-            <div className="bg-background-dark border-2 border-primary/40 rounded-xl overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-2 border-b border-primary/30 bg-neutral-dark/80">
-                <div className="flex gap-2">
-                  <div className="w-2 h-2 rounded-full bg-red-500/50" />
-                  <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
-                  <div className="w-2 h-2 rounded-full bg-green-500/50" />
-                </div>
-                <span className="text-[10px] font-mono text-primary/50 tracking-widest uppercase">
-                  SAMPLE_Chart // Educational
-                </span>
-              </div>
-              <div className="relative h-[300px] w-full bg-background-dark p-4">
-                {question.overlayId ? (
+            <div className="overflow-hidden">
+              <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">SAMPLE chart · educational</p>
+              {question.overlayId ? (
                   <MarketChart
                     data={SAMPLE_OHLC}
                     height={260}
@@ -205,14 +195,13 @@ export default function QuizModal({
                     showScaleControls={false}
                   />
                 )}
-              </div>
             </div>
           ) : (
-            <div className="bg-background-dark border-2 border-primary/40 rounded-xl p-6 space-y-2">
-              <p className="text-[10px] font-mono text-primary/50 tracking-widest uppercase">
-                SAMPLE_Literacy_Context
+            <div className="panel p-6 space-y-2">
+              <p className="text-[12px] text-muted">
+                Literacy
               </p>
-              <p className="text-slate-300 text-sm">
+              <p className="text-sm">
                 Equities vocabulary drill — no chart required. Answer from definitions, then read the
                 process debrief.
               </p>
@@ -254,7 +243,7 @@ export default function QuizModal({
           {/* Feedback */}
           {submitted && (
             <div
-              className="bg-neutral-dark/80 border border-primary/30 rounded-xl p-6 font-mono text-sm space-y-2"
+              className="bg-surface border border-line rounded-xl p-6 font-mono text-sm space-y-2"
               role="status"
               aria-live="polite"
             >
@@ -305,7 +294,7 @@ export default function QuizModal({
                   <span className="text-primary opacity-50">&gt;</span>
                   <p className="text-primary">
                     +{POINTS_PER_CORRECT}
-                    {streak > 1 ? ` +${STREAK_BONUS} streak bonus` : ""} PTS
+                    {streak > 1 ? ` +${STREAK_BONUS} streak bonus` : ""} pts
                   </p>
                 </div>
               )}
@@ -319,19 +308,19 @@ export default function QuizModal({
                 onClick={handleSubmit}
                 disabled={!selectedOption}
                 className={cn(
-                  "flex-1 bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all",
+                  "flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all",
                   !selectedOption && "opacity-50 cursor-not-allowed"
                 )}
               >
-                SUBMIT ANALYSIS
+                Submit
                 <span className="material-symbols-outlined">bolt</span>
               </button>
             ) : (
               <button
                 onClick={handleNext}
-                className="flex-1 bg-primary hover:bg-primary/90 text-background-dark font-bold py-4 rounded-lg flex items-center justify-center gap-2"
+                className="flex-1 bg-primary hover:bg-primary-dim text-white font-semibold py-3.5 rounded-lg flex items-center justify-center gap-2"
               >
-                {currentIndex < questions.length - 1 ? "NEXT QUESTION" : "FINISH"}
+                {currentIndex < questions.length - 1 ? "Next question" : "Finish"}
                 <span className="material-symbols-outlined">arrow_forward</span>
               </button>
             )}
@@ -383,8 +372,8 @@ function QuizOptionButton({
         asChart ? "items-center p-2 rounded-lg" : "items-start p-6 rounded-lg",
         showCorrect && "bg-primary/20 border-2 border-primary",
         showIncorrect && "bg-accent-red/10 border-2 border-accent-red",
-        !submitted && selected && "bg-primary/10 border-2 border-primary shadow-[0_0_15px_rgba(56,255,20,0.1)]",
-        !submitted && !selected && "bg-neutral-dark/60 border border-primary/30 hover:border-primary hover:bg-neutral-dark/80"
+        !submitted && selected && "bg-primary/10 border-2 border-primary ",
+        !submitted && !selected && "bg-surface border border-line hover:border-primary hover:bg-surface"
       )}
     >
       {chartData ? (
@@ -424,7 +413,7 @@ function QuizOptionButton({
               selected ? "text-primary" : "text-primary/40"
             )}
           >
-            OPTION_{option.id} {selected && "[SELECTED]"}
+            Option {option.id} {selected && "(selected)"}
           </span>
           <span className={cn("text-lg font-bold", selected && "text-primary")}>{option.label}</span>
           <p

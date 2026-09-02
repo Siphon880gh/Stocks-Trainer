@@ -49,23 +49,13 @@ export default function Archive() {
 
   return (
     <div className="flex-1 flex flex-col">
-      <header className="sticky top-0 z-10 bg-background-dark/95 border-b border-primary/30 backdrop-blur-sm">
-        <div className="flex items-center p-4 justify-between">
-          <Link to="/" className="text-primary flex size-10 shrink-0 items-center justify-center hover:opacity-90 transition-opacity cursor-pointer">
-            <span className="material-symbols-outlined text-3xl">terminal</span>
-          </Link>
-          <h2 className="text-slate-100 text-lg font-bold leading-tight tracking-tight flex-1 ml-3 font-mono">
-            Accessing Database...<span className="animate-pulse">_</span>
-          </h2>
-          <div className="flex w-10 items-center justify-end">
-            <button className="flex items-center justify-center rounded-lg h-10 w-10 bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
-              <span className="material-symbols-outlined">search</span>
-            </button>
-          </div>
+      <header className="border-b border-line bg-surface">
+        <div className="px-4 py-3">
+          <h1 className="text-lg font-semibold tracking-tight">Reference</h1>
         </div>
         <div className="px-4 pb-4">
           <label className="flex flex-col w-full">
-            <div className="flex w-full items-stretch rounded-lg bg-neutral-dark/80 border border-primary/30 h-11">
+            <div className="flex w-full items-stretch rounded-lg bg-surface border border-line h-11">
               <div className="text-primary/60 flex items-center justify-center px-3">
                 <span className="material-symbols-outlined text-xl">search</span>
               </div>
@@ -92,7 +82,7 @@ export default function Archive() {
               }, { replace: true });
             }}
             className={`flex h-9 shrink-0 items-center gap-2 rounded-lg px-4 font-bold text-sm transition-colors ${
-              tab === "patterns" ? "bg-primary text-background-dark" : "bg-primary/10 text-primary hover:bg-primary/20"
+              tab === "patterns" ? "bg-primary text-white" : "bg-primary/10 text-primary hover:bg-primary/20"
             }`}
           >
             <span className="material-symbols-outlined text-lg">candlestick_chart</span>
@@ -105,7 +95,7 @@ export default function Archive() {
               setSearchParams({ tab: "indicators" }, { replace: true });
             }}
             className={`flex h-9 shrink-0 items-center gap-2 rounded-lg px-4 font-bold text-sm transition-colors ${
-              tab === "indicators" ? "bg-primary text-background-dark" : "bg-primary/10 text-primary hover:bg-primary/20"
+              tab === "indicators" ? "bg-primary text-white" : "bg-primary/10 text-primary hover:bg-primary/20"
             }`}
           >
             <span className="material-symbols-outlined text-lg">show_chart</span>
@@ -118,7 +108,7 @@ export default function Archive() {
               setSearchParams({ tab: "literacy" }, { replace: true });
             }}
             className={`flex h-9 shrink-0 items-center gap-2 rounded-lg px-4 font-bold text-sm transition-colors ${
-              tab === "literacy" ? "bg-primary text-background-dark" : "bg-primary/10 text-primary hover:bg-primary/20"
+              tab === "literacy" ? "bg-primary text-white" : "bg-primary/10 text-primary hover:bg-primary/20"
             }`}
           >
             <span className="material-symbols-outlined text-lg">menu_book</span>
@@ -134,8 +124,8 @@ export default function Archive() {
               onClick={() => setFilter(f)}
               className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded px-4 cursor-pointer transition-colors ${
                 filter === f
-                  ? "bg-primary text-background-dark"
-                  : "bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20"
+                  ? "bg-primary text-white"
+                  : "bg-primary/10 border border-line text-primary hover:bg-primary/20"
               }`}
             >
               <p className="text-xs font-bold uppercase tracking-wider">
@@ -151,8 +141,8 @@ export default function Archive() {
               onClick={() => setIndicatorFilter(f)}
               className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded px-4 cursor-pointer transition-colors ${
                 indicatorFilter === f
-                  ? "bg-primary text-background-dark"
-                  : "bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20"
+                  ? "bg-primary text-white"
+                  : "bg-primary/10 border border-line text-primary hover:bg-primary/20"
               }`}
             >
               <p className="text-xs font-bold uppercase tracking-wider">
@@ -198,7 +188,7 @@ export default function Archive() {
                 setSelectedTerm(term);
                 setSearchParams({ tab: "literacy", open: term.id }, { replace: true });
               }}
-              className="group w-full text-left flex flex-col rounded-xl border border-primary/30 bg-neutral-dark/60 p-4 hover:border-primary hover:bg-neutral-dark/80 transition-all cursor-pointer"
+              className="group w-full text-left flex flex-col rounded-xl border border-line bg-surface p-4 hover:border-primary hover:bg-surface transition-all cursor-pointer"
             >
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm text-primary">menu_book</span>
@@ -214,11 +204,11 @@ export default function Archive() {
               key={pattern.id}
               type="button"
               onClick={() => setSelectedPattern(pattern)}
-              className="group w-full text-left flex flex-col rounded-xl border border-primary/30 bg-neutral-dark/60 p-4 hover:border-primary hover:bg-neutral-dark/80 transition-all cursor-pointer"
+              className="group w-full text-left flex flex-col rounded-xl border border-line bg-surface p-4 hover:border-primary hover:bg-surface transition-all cursor-pointer"
               title={`${pattern.type.toUpperCase()}_PATTERN | CONFIRMATION: ${pattern.confirmation.toUpperCase()} — ${pattern.description}`}
             >
               <div className="flex gap-4">
-                <div className="h-24 w-24 shrink-0 rounded bg-background-dark overflow-hidden border border-primary/30 flex items-center justify-center">
+                <div className="h-24 w-24 shrink-0 rounded bg-background-dark overflow-hidden border border-line flex items-center justify-center">
                   {pattern.image ? (
                     <img
                       className="h-full w-full object-contain opacity-80 group-hover:opacity-100 transition-opacity p-2"
@@ -258,11 +248,11 @@ export default function Archive() {
               key={overlay.id}
               type="button"
               onClick={() => setSelectedOverlay(overlay)}
-              className="group w-full text-left flex flex-col rounded-xl border border-primary/30 bg-neutral-dark/60 p-4 hover:border-primary hover:bg-neutral-dark/80 transition-all cursor-pointer"
+              className="group w-full text-left flex flex-col rounded-xl border border-line bg-surface p-4 hover:border-primary hover:bg-surface transition-all cursor-pointer"
               title={`${overlay.category.toUpperCase()} — ${overlay.description}`}
             >
               <div className="flex gap-4">
-                <div className="h-24 w-24 shrink-0 rounded bg-background-dark overflow-hidden border border-primary/30 flex items-center justify-center">
+                <div className="h-24 w-24 shrink-0 rounded bg-background-dark overflow-hidden border border-line flex items-center justify-center">
                   <span className="material-symbols-outlined text-5xl text-primary/60">
                     {overlay.id === "sma" || overlay.id === "ema" ? "trending_up" : overlay.id === "rsi" || overlay.id === "macd" ? "show_chart" : "bar_chart"}
                   </span>
@@ -320,7 +310,7 @@ export default function Archive() {
           }}
         >
           <div
-            className="w-full max-w-lg border-neon bg-neutral-dark p-6 space-y-3"
+            className="w-full max-w-lg panel bg-surface p-6 space-y-3"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex items-start justify-between gap-4">
@@ -328,7 +318,7 @@ export default function Archive() {
                 <p className="text-[10px] font-mono text-primary/50 uppercase tracking-widest">
                   Literacy · {selectedTerm.category}
                 </p>
-                <h3 className="text-xl font-bold text-primary crt-glow">{selectedTerm.name}</h3>
+                <h3 className="text-xl font-bold text-primary">{selectedTerm.name}</h3>
               </div>
               <button
                 type="button"
@@ -354,27 +344,6 @@ export default function Archive() {
           </div>
         </div>
       )}
-
-      <nav className="sticky bottom-0 bg-background-dark border-t border-primary/30 pb-6 pt-2">
-        <div className="flex gap-2 px-4">
-          <Link to="/" className="flex flex-1 flex-col items-center justify-end gap-1 text-primary/40 hover:text-primary transition-colors">
-            <span className="material-symbols-outlined">terminal</span>
-            <p className="text-[10px] font-bold uppercase tracking-wider font-display">Terminal</p>
-          </Link>
-          <Link to="/archive" className="flex flex-1 flex-col items-center justify-end gap-1 text-primary">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>archive</span>
-            <p className="text-[10px] font-bold uppercase tracking-wider font-display">Archive</p>
-          </Link>
-          <Link to="/market" className="flex flex-1 flex-col items-center justify-end gap-1 text-primary/40 hover:text-primary transition-colors">
-            <span className="material-symbols-outlined">monitoring</span>
-            <p className="text-[10px] font-bold uppercase tracking-wider font-display">Analysis</p>
-          </Link>
-          <Link to="/training" className="flex flex-1 flex-col items-center justify-end gap-1 text-primary/40 hover:text-primary transition-colors">
-            <span className="material-symbols-outlined">settings_suggest</span>
-            <p className="text-[10px] font-bold uppercase tracking-wider font-display">Config</p>
-          </Link>
-        </div>
-      </nav>
     </div>
   );
 }

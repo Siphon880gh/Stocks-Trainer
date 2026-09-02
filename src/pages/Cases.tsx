@@ -66,18 +66,11 @@ export default function Cases() {
   }, [focusPack, marketClass, orderedPacks]);
 
   return (
-    <div className="bg-background-dark text-slate-100 min-h-screen flex flex-col font-display">
-      <header className="border-b border-primary/30 p-4 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 text-primary hover:opacity-90">
-          <span className="material-symbols-outlined">arrow_back</span>
-          <span className="font-mono text-xs tracking-widest">DASHBOARD</span>
-        </Link>
-        <p className="font-mono text-[10px] text-primary/50 uppercase">Cases · practice</p>
-      </header>
-      <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-10 space-y-8">
+    <div className="flex-1 flex flex-col">
+      <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-8 space-y-8">
         <div>
-          <h1 className="text-2xl font-bold text-primary tracking-tight">
-            Case Studies
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Case studies
           </h1>
           <p className="text-slate-400 text-sm mt-2">
             Read the setup, pick buy, sell, or hold, then see what happened.{" "}
@@ -104,7 +97,7 @@ export default function Cases() {
         </div>
 
         {!chartOk ? (
-          <div className="border border-primary/35 rounded-xl p-4 space-y-3 bg-primary/5">
+          <div className="border border-line rounded-xl p-4 space-y-3 bg-primary/5">
             <p className="text-sm text-slate-200 leading-relaxed">
               Cases make more sense after a short Indicators pass on Training —
               so the chart language in each brief is familiar. Want to look
@@ -117,7 +110,7 @@ export default function Cases() {
             <div className="flex flex-wrap gap-3 pt-1">
               <Link
                 to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
-                className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-background-dark"
+                className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-white"
               >
                 Take Indicators quiz
               </Link>
@@ -127,14 +120,14 @@ export default function Cases() {
                   setChartGateTemporaryBypass(true);
                   setTempBypass(true);
                 }}
-                className="inline-flex items-center gap-1 rounded-lg border border-primary/50 px-3 py-2 text-sm font-mono text-primary hover:bg-primary/10"
+                className="inline-flex items-center gap-1 rounded-lg border border-line px-3 py-2 text-sm font-mono text-primary hover:bg-primary/10"
               >
                 Browse cases this session
               </button>
             </div>
           </div>
         ) : tempBypass && !gateDone ? (
-          <div className="border border-yellow-500/30 rounded-xl px-4 py-3 text-xs font-mono text-yellow-100/80 space-y-2">
+          <div className="border border-amber-400/50 bg-amber-50 rounded-xl px-4 py-3 text-sm text-ink space-y-2">
             <p>
               Temporary session peek is on — Indicators progress is not saved.
               Finish Indicators on Training when you want it permanent.
@@ -174,7 +167,7 @@ export default function Cases() {
               id={`pack-${packId}`}
               ref={isFocus ? focusRef : undefined}
               className={`space-y-3 ${
-                isFocus ? "rounded-xl border border-primary/50 p-4 bg-primary/5" : ""
+                isFocus ? "rounded-xl border border-line p-4 bg-primary/5" : ""
               }`}
             >
               <h2 className="text-sm font-bold text-primary/80 uppercase tracking-widest">
@@ -192,7 +185,7 @@ export default function Cases() {
                     {unlocked ? (
                       <Link
                         to={`/cases/${c.id}`}
-                        className="block border border-primary/20 hover:border-primary/50 rounded-lg px-4 py-3 font-mono text-sm"
+                        className="block border border-line hover:border-line rounded-lg px-4 py-3 font-mono text-sm"
                       >
                         <span className="text-primary">{c.title}</span>
                         <span className="text-slate-500 text-xs ml-2">

@@ -134,7 +134,7 @@ function seedMilestones(ids: readonly string[]): Record<string, MilestoneProgres
 }
 
 const RECOVERY_MESSAGE =
-  "PROGRESS_STORE_RESET: Corrupt or outdated progress cleared. Path restored to first-run SAMPLE state.";
+  "Progress was reset: stored data was corrupt or outdated. Path restored to first-run SAMPLE state.";
 
 function emptyScores(): ProgressScores {
   return { totalPoints: 0, accuracy: 0 };
@@ -251,7 +251,7 @@ export function isSignedInLocal(state?: ProgressState): boolean {
 /** Sign in with a local display name (persists learner id). */
 export function signInLocal(displayName: string): ProgressState {
   const { state } = loadProgress();
-  const name = displayName.trim() || "TRAINEE";
+  const name = displayName.trim() || "You";
   const prev = state.account;
   return saveProgress({
     ...state,
@@ -277,7 +277,7 @@ export function signOutLocal(): ProgressState {
 
 export function setDisplayName(displayName: string): ProgressState {
   const { state } = loadProgress();
-  const name = displayName.trim() || "TRAINEE";
+  const name = displayName.trim() || "You";
   const prev = state.account;
   if (!prev?.signedInLocal) {
     return signInLocal(name);

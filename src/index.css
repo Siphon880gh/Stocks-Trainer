@@ -1,45 +1,47 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #38ff14;
-  --color-primary-dim: #2dd40f;
-  --color-background-light: #0a0f08;
-  --color-background-dark: #0a0f08;
-  --color-neutral-dark: #0f1810;
-  --color-accent-red: #ff3814;
-  --font-display: "Space Grotesk", sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  --color-primary: #2962ff;
+  --color-primary-dim: #1e53e5;
+  --color-background-light: #f4f5f8;
+  --color-background-dark: #f4f5f8;
+  --color-canvas: #f4f5f8;
+  --color-surface: #ffffff;
+  --color-neutral-dark: #ffffff;
+  --color-ink: #131722;
+  --color-muted: #787b86;
+  --color-line: #d1d4dc;
+  --color-up: #089981;
+  --color-accent-red: #f23645;
+  --color-slate-100: #131722;
+  --color-slate-200: #2a2e39;
+  --color-slate-300: #434651;
+  --color-slate-400: #787b86;
+  --color-slate-500: #9598a1;
+  --font-sans: "Instrument Sans", "Segoe UI", sans-serif;
+  --font-display: "Instrument Sans", "Segoe UI", sans-serif;
+  --font-mono: "Instrument Sans", "Segoe UI", sans-serif;
 }
 
 @layer utilities {
-  .crt-glow {
-    text-shadow: 0 0 5px rgba(56, 255, 20, 0.7);
+  .panel {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: 0.5rem;
   }
   .border-neon {
-    border: 1px solid var(--color-primary);
-    box-shadow: inset 0 0 10px rgba(56, 255, 20, 0.1), 0 0 5px rgba(56, 255, 20, 0.1);
+    border: 1px solid var(--color-line);
+    box-shadow: none;
   }
-  .scanline {
-    width: 100%;
-    height: 100px;
-    z-index: 99;
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0) 0%, rgba(56, 255, 20, 0.05) 50%, rgba(0, 0, 0, 0) 100%);
-    opacity: 0.1;
-    position: absolute;
-    pointer-events: none;
+  .crt-glow {
+    text-shadow: none;
   }
+  .scanline,
   .scanline-thin {
-    width: 100%;
-    height: 2px;
-    background: rgba(56, 255, 20, 0.1);
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
+    display: none;
   }
   .terminal-grid {
-    background-image: radial-gradient(circle, var(--color-neutral-dark) 1px, transparent 1px);
-    background-size: 20px 20px;
+    background-image: none;
   }
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -48,13 +50,30 @@
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
+  .chart-pane {
+    text-transform: none;
+    color-scheme: light;
+  }
+  .chart-pane input[type="range"] {
+    accent-color: #2962ff;
+  }
 }
 
 body {
-  text-transform: uppercase;
-  background-color: var(--color-background-dark);
+  text-transform: none;
+  background-color: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
 }
 
 #root {
-  background-color: var(--color-background-dark);
+  background-color: var(--color-canvas);
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  text-transform: none;
 }

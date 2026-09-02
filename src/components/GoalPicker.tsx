@@ -18,12 +18,10 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
     PATH_TEMPLATES.find((p) => p.id === selectedId) ?? BEGINNER_EQUITIES_PATH;
 
   return (
-    <section className="border border-primary/50 rounded-xl p-6 bg-neutral-dark/90 space-y-4 font-mono">
+    <section className="panel p-6 space-y-4">
       <div>
-        <h2 className="text-lg font-bold text-primary crt-glow tracking-tight">
-          GOAL_INTAKE · Choose path
-        </h2>
-        <p className="text-xs text-slate-400 mt-1">
+        <h2 className="text-lg font-semibold tracking-tight">Choose a path</h2>
+        <p className="text-sm text-muted mt-1">
           Preview milestones, then confirm. Default: Beginner Equities.
         </p>
       </div>
@@ -34,10 +32,10 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
             key={t.id}
             type="button"
             onClick={() => setSelectedId(t.id)}
-            className={`px-4 py-2 rounded text-sm font-bold transition-colors ${
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               selectedId === t.id
-                ? "bg-primary text-background-dark"
-                : "border border-primary/40 text-primary hover:bg-primary/10"
+                ? "bg-primary text-white"
+                : "border border-line text-ink hover:bg-canvas"
             }`}
           >
             {t.title}
@@ -45,12 +43,10 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
         ))}
       </div>
 
-      <div className="border border-primary/20 rounded-lg p-4 space-y-2">
-        <p className="text-sm text-slate-300">{selected.description}</p>
-        <p className="text-[10px] text-primary/50 uppercase tracking-widest">
-          Milestone preview
-        </p>
-        <ol className="space-y-1 text-xs text-primary/80">
+      <div className="border border-line rounded-lg p-4 space-y-2 bg-canvas">
+        <p className="text-sm">{selected.description}</p>
+        <p className="text-[12px] text-muted">Milestone preview</p>
+        <ol className="space-y-1 text-sm">
           {selected.milestones.map((m, i) => (
             <li key={m.id}>
               {i + 1}. {m.title}
@@ -58,12 +54,12 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
           ))}
         </ol>
         {selected.id === DECISION_MAKER_PATH.id ? (
-          <p className="text-[10px] text-yellow-400/80">
+          <p className="text-[12px] text-muted">
             Indicators quiz still required before graded cases.
           </p>
         ) : null}
         {selected.id === MARKET_EXPLORER_PATH.id ? (
-          <p className="text-[10px] text-yellow-400/80">
+          <p className="text-[12px] text-muted">
             SAMPLE multi-market practice only. Traditional stocks stay on Beginner
             Equities / Decision Maker — Explorer does not replace stock literacy.
           </p>
@@ -76,9 +72,9 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
           confirmPathSelection(selectedId);
           onConfirmed();
         }}
-        className="w-full bg-primary text-background-dark font-bold py-3 rounded"
+        className="w-full bg-primary text-white font-semibold py-3 rounded-md hover:bg-primary-dim"
       >
-        CONFIRM PATH · {selected.title.toUpperCase()}
+        Confirm path · {selected.title}
       </button>
     </section>
   );
