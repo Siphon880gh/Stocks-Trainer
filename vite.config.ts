@@ -3,8 +3,15 @@ import react from '@vitejs/plugin-react';
 import path from 'path';
 import {defineConfig} from 'vite';
 
-export default defineConfig({
+export default defineConfig(({mode}) => ({
     plugins: [react(), tailwindcss()],
+    base: mode === 'production' ? '/stocks/trainer/' : '/',
+    preview: {
+      port: Number(process.env.PORT),
+      host: '0.0.0.0',
+      strictPort: true,
+      allowedHosts: ['wengindustries.com'],
+    },
     resolve: {
       alias: {
         '@': path.resolve(__dirname, '.'),
@@ -17,5 +24,5 @@ export default defineConfig({
       // Do not modifyâfile watching is disabled to prevent flickering during agent edits.
       hmr: process.env.DISABLE_HMR !== 'true',
     },
-  }
+  })
 );

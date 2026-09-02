@@ -7,6 +7,7 @@
     "dev": "vite --port=3001 --host=0.0.0.0",
     "build": "vite build",
     "preview": "vite preview",
+    "start": "node ./node_modules/vite/bin/vite.js preview --host 0.0.0.0 --strictPort --port ${PORT:?PORT is required}",
     "clean": "rm -rf dist",
     "lint": "tsc --noEmit",
     "test:coaching": "tsx --test src/lib/coaching/coaching.test.ts"
@@ -33,7 +34,6 @@
     "autoprefixer": "^10.4.21",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
-    "typescript": "~5.8.2",
-    "vite": "^6.2.0"
+    "typescript": "~5.8.2"
   }
 }
