@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import MarketChart from "../components/MarketChart";
+import MarketChart, { type ChartHighlightMark } from "../components/MarketChart";
 import HistoryModal from "../components/HistoryModal";
 import ScanPatternsModal from "../components/ScanPatternsModal";
 import IndicatorGlossary from "../components/IndicatorGlossary";
@@ -21,8 +21,10 @@ import {
 } from "../lib/marketDataProvider";
 import { ASSET_CLASSES, type AssetClass } from "../lib/samplePacks";
 import { getOverlay, type OverlayDef } from "../lib/overlays";
-import { scanPatterns, patternBarIndices } from "../lib/patternScan";
+import { scanPatterns, patternBarIndices, type DetectedPattern } from "../lib/patternScan";
+import { patternDefForScanName } from "../lib/patterns";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
+import PatternDetailModal from "../components/PatternDetailModal";
 import { CHART_GATE_TRAINING_GROUP, isChartGateComplete } from "../lib/beginnerPath";
 import {
   chartFrequenciesForSeries,
@@ -38,6 +40,8 @@ const CLASS_LABELS: Record<AssetClass, string> = {
   option_context: "Options context",
   forex: "Forex",
 };
+
+type ChartHighlight = ChartHighlightMark & { pattern?: DetectedPattern };
 
 export default function Market() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -89,7 +93,8 @@ export default function Market() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
-  const [highlightBars, setHighlightBars] = useState<number[]>([]);
+  const [highlights, setHighlights] = useState<ChartHighlight[]>([]);
+  const [helpHighlightId, setHelpHighlightId] = useState<string | null>(null);
   const [popover, setPopover] = useState<{ overlayId: string; x: number; y: number } | null>(null);
   const [selectedOverlay, setSelectedOverlay] = useState<OverlayDef | null>(null);
   const [freqMinutes, setFreqMinutes] = useState<number | null>(null);
@@ -138,8 +143,21 @@ export default function Market() {
   );
 
   useEffect(() => {
-    setHighlightBars([]);
+    setHighlights([]);
+    setHelpHighlightId(null);
   }, [ohlcData]);
+
+  const helpPattern = highlights.find((h) => h.id === helpHighlightId)?.pattern;
+  const upsertHighlight = (item: ChartHighlight) => {
+    setHighlights((prev) => [...prev.filter((h) => h.id !== item.id), item]);
+  };
+  const revealChart = () => {
+    requestAnimationFrame(() => {
+      document
+        .getElementById("market-chart")
+        ?.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  };
 
   const toggleControl = (key: keyof typeof controls) => {
     setControls((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -304,7 +322,7 @@ export default function Market() {
         {!emptyClass && market ? (
         <div
           id="market-chart"
-          data-highlight-bars={highlightBars.join(",")}
+          data-highlight-bars={highlights.flatMap((h) => h.indices).join(",")}
           className="relative min-h-[350px] shrink-0"
         >
           <MarketChart
@@ -315,7 +333,12 @@ export default function Market() {
             showMACD={controls.macd}
             showBollinger={controls.bollinger}
             height={320}
-            highlightIndices={highlightBars}
+            highlights={highlights}
+            onExplainHighlight={(id) => setHelpHighlightId(id)}
+            onClearHighlight={(id) => {
+              setHighlights((prev) => prev.filter((h) => h.id !== id));
+              setHelpHighlightId((cur) => (cur === id ? null : cur));
+            }}
             statusLabel={`${dataProvider.label} feed`}
             frequencies={frequencies}
             frequencyMinutes={resolvedFreq}
@@ -391,21 +414,44 @@ export default function Market() {
         ) : null}
 
         {historyOpen && market ? (
-          <HistoryModal data={ohlcData} onClose={() => setHistoryOpen(false)} />
+          <HistoryModal
+            data={ohlcData}
+            onClose={() => setHistoryOpen(false)}
+            onSelectBar={(index, bar) => {
+              upsertHighlight({
+                id: `bar-${index}`,
+                indices: [index],
+                label: bar.name || `Bar ${index + 1}`,
+              });
+              setHistoryOpen(false);
+              revealChart();
+            }}
+          />
         ) : null}
         {scanOpen && market ? (
           <ScanPatternsModal
             patterns={detectedPatterns}
             onClose={() => setScanOpen(false)}
             onSelectPattern={(p) => {
-              setHighlightBars(patternBarIndices(p));
-              setScanOpen(false);
-              requestAnimationFrame(() => {
-                document
-                  .getElementById("market-chart")
-                  ?.scrollIntoView({ behavior: "smooth", block: "center" });
+              upsertHighlight({
+                id: `pattern-${p.index}-${p.name}`,
+                indices: patternBarIndices(p),
+                label: p.name,
+                canExplain: true,
+                pattern: p,
               });
+              setScanOpen(false);
+              revealChart();
             }}
+          />
+        ) : null}
+        {helpPattern ? (
+          <PatternDetailModal
+            pattern={patternDefForScanName(
+              helpPattern.name,
+              helpPattern.description,
+            )}
+            onClose={() => setHelpHighlightId(null)}
           />
         ) : null}
         {popover && (

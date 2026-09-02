@@ -4,9 +4,10 @@ import type { OHLC } from "../lib/ohlcData";
 interface HistoryModalProps {
   data: OHLC[];
   onClose: () => void;
+  onSelectBar?: (index: number, bar: OHLC) => void;
 }
 
-export default function HistoryModal({ data, onClose }: HistoryModalProps) {
+export default function HistoryModal({ data, onClose, onSelectBar }: HistoryModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -59,7 +60,36 @@ export default function HistoryModal({ data, onClose }: HistoryModalProps) {
               </thead>
               <tbody>
                 {data.map((row, i) => (
-                  <tr key={i} className="border-b border-primary/10 hover:bg-primary/5">
+                  <tr
+                    key={i}
+                    className={`border-b border-primary/10 ${
+                      onSelectBar
+                        ? "cursor-pointer hover:bg-primary/5 hover:border-primary"
+                        : "hover:bg-primary/5"
+                    }`}
+                    onClick={
+                      onSelectBar
+                        ? () => onSelectBar(i, row)
+                        : undefined
+                    }
+                    onKeyDown={
+                      onSelectBar
+                        ? (e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                              e.preventDefault();
+                              onSelectBar(i, row);
+                            }
+                          }
+                        : undefined
+                    }
+                    tabIndex={onSelectBar ? 0 : undefined}
+                    role={onSelectBar ? "button" : undefined}
+                    aria-label={
+                      onSelectBar
+                        ? `Highlight ${row.name || `bar ${i + 1}`}`
+                        : undefined
+                    }
+                  >
                     <td className="py-2 px-3 text-slate-200">{row.name}</td>
                     <td className="text-right py-2 px-3 text-slate-300">{fmt(row.open)}</td>
                     <td className="text-right py-2 px-3 text-primary">{fmt(row.high)}</td>

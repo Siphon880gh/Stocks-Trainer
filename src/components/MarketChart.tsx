@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import {
   ComposedChart,
@@ -30,6 +30,13 @@ import {
 import { CHART, chartPaneClass } from "../lib/chartTheme";
 import { cn } from "../lib/utils";
 
+export type ChartHighlightMark = {
+  id: string;
+  indices: number[];
+  label: string;
+  canExplain?: boolean;
+};
+
 interface MarketChartProps {
   data?: OHLC[];
   showSMA?: boolean;
@@ -39,8 +46,10 @@ interface MarketChartProps {
   showBollinger?: boolean;
   /** Price pane height; RSI/MACD add panes below (TradingView-style). */
   height?: number;
-  /** Bar indexes to tint after a pattern scan pick. */
-  highlightIndices?: number[];
+  /** Pattern / history marks to tint on the tape. */
+  highlights?: ChartHighlightMark[];
+  onExplainHighlight?: (id: string) => void;
+  onClearHighlight?: (id: string) => void;
   /** Show zoom in/out controls for the price axis. */
   showScaleControls?: boolean;
   /** Optional feed/status chip in the scale toolbar (Market page). */
@@ -55,6 +64,7 @@ const ZOOM_MIN = 0.5;
 const ZOOM_MAX = 4;
 const ZOOM_STEP = 0.25;
 const OSC_PANEL_H = 120;
+const EMPTY_HIGHLIGHTS: ChartHighlightMark[] = [];
 
 const scaleBtn =
   "rounded border border-[#d1d4dc] bg-white px-2 py-0.5 text-[#131722] hover:bg-[#f0f3fa] disabled:opacity-40";
@@ -180,6 +190,106 @@ function svgPointToViewport(
   }
   const p = pt.matrixTransform(ctm);
   return { x: p.x, y: p.y };
+}
+
+type HighlightBandBox = {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
+  wrapWidth: number;
+};
+
+function highlightBandBoxFor(
+  wrap: HTMLElement,
+  id: string,
+): HighlightBandBox | null {
+  const wrapR = wrap.getBoundingClientRect();
+  const sel = `[data-hl="${CSS.escape(id)}"]`;
+  const nodes = [...wrap.querySelectorAll(sel)];
+  if (nodes.length === 0) return null;
+  let left = Infinity;
+  let right = -Infinity;
+  let top = Infinity;
+  let bottom = -Infinity;
+  for (const n of nodes) {
+    const r = n.getBoundingClientRect();
+    left = Math.min(left, r.left);
+    right = Math.max(right, r.right);
+    top = Math.min(top, r.top);
+    bottom = Math.max(bottom, r.bottom);
+  }
+  return {
+    left: left - wrapR.left,
+    right: right - wrapR.left,
+    top: top - wrapR.top,
+    bottom: bottom - wrapR.top,
+    wrapWidth: wrapR.width,
+  };
+}
+
+function highlightBandBoxFromPlot(
+  wrap: HTMLElement,
+  indices: number[],
+  xDomain: [number, number],
+): HighlightBandBox | null {
+  if (indices.length === 0) return null;
+  const svg = wrap.querySelector("svg.recharts-surface");
+  if (!(svg instanceof SVGSVGElement)) return null;
+  const wrapR = wrap.getBoundingClientRect();
+  const svgR = svg.getBoundingClientRect();
+  const clip = svg.querySelector("clipPath rect");
+  const plotLeft = clip ? Number(clip.getAttribute("x")) : 4;
+  const plotTop = clip ? Number(clip.getAttribute("y")) : 8;
+  const plotWidth = clip
+    ? Number(clip.getAttribute("width"))
+    : Math.max(0, svgR.width - 68);
+  const plotHeight = clip
+    ? Number(clip.getAttribute("height"))
+    : Math.max(0, svgR.height - 36);
+  const [d0, d1] = xDomain;
+  const span = d1 - d0 || 1;
+  const minI = Math.min(...indices);
+  const maxI = Math.max(...indices);
+  const x1 = minI - 0.48;
+  const x2 = maxI + 0.48;
+  const left =
+    svgR.left - wrapR.left + plotLeft + ((x1 - d0) / span) * plotWidth;
+  const right =
+    svgR.left - wrapR.left + plotLeft + ((x2 - d0) / span) * plotWidth;
+  const top = svgR.top - wrapR.top + plotTop;
+  return {
+    left,
+    right,
+    top,
+    bottom: top + plotHeight,
+    wrapWidth: wrapR.width,
+  };
+}
+
+function highlightLabelAlign(
+  box: HighlightBandBox,
+): "left" | "center" | "right" {
+  const mid = (box.left + box.right) / 2;
+  if (mid < box.wrapWidth * 0.28) return "left";
+  if (mid > box.wrapWidth * 0.72) return "right";
+  return "center";
+}
+
+function highlightLabelStyle(box: HighlightBandBox): CSSProperties {
+  const align = highlightLabelAlign(box);
+  const mid = (box.left + box.right) / 2;
+  return {
+    left:
+      align === "left" ? box.left : align === "right" ? box.right : mid,
+    top: box.top,
+    transform:
+      align === "left"
+        ? "translate(0, calc(-100% - 2px))"
+        : align === "right"
+          ? "translate(-100%, calc(-100% - 2px))"
+          : "translate(-50%, calc(-100% - 2px))",
+  };
 }
 
 const chevronBtn =
@@ -375,7 +485,9 @@ export default function MarketChart({
   showMACD = false,
   showBollinger = false,
   height = 400,
-  highlightIndices,
+  highlights = EMPTY_HIGHLIGHTS,
+  onExplainHighlight,
+  onClearHighlight,
   showScaleControls = true,
   statusLabel,
   frequencies,
@@ -394,6 +506,11 @@ export default function MarketChart({
   const [dotHits, setDotHits] = useState<
     Array<{ id: string; left: number; top: number }>
   >([]);
+  const [highlightBands, setHighlightBands] = useState<
+    Record<string, HighlightBandBox>
+  >({});
+  const [frontHighlightId, setFrontHighlightId] = useState<string | null>(null);
+  const lastHighlightIdRef = useRef<string | null>(null);
   const chartWrapRef = useRef<HTMLDivElement>(null);
   const explainHelpRef = useRef<HTMLDivElement>(null);
   const explainDotsRef = useRef<Map<string, { id: string; cx: number; cy: number }>>(
@@ -576,6 +693,87 @@ export default function MarketChart({
     showMACD,
   ]);
 
+  useLayoutEffect(() => {
+    if (highlights.length === 0) {
+      setHighlightBands((prev) =>
+        Object.keys(prev).length === 0 ? prev : {},
+      );
+      return;
+    }
+    const wrap = chartWrapRef.current;
+    const xPad = 0.55;
+    const xDomain: [number, number] =
+      data.length === 0 ? [0, 1] : [-xPad, data.length - 1 + xPad];
+    let cancelled = false;
+    const run = () => {
+      if (cancelled || !wrap) return;
+      const next: Record<string, HighlightBandBox> = {};
+      for (const h of highlights) {
+        const box =
+          highlightBandBoxFor(wrap, h.id) ??
+          highlightBandBoxFromPlot(wrap, h.indices, xDomain);
+        if (box) next[h.id] = box;
+      }
+      setHighlightBands((prev) => {
+        const keys = Object.keys(next);
+        if (
+          keys.length === Object.keys(prev).length &&
+          keys.every((k) => {
+            const a = prev[k];
+            const b = next[k];
+            return (
+              a &&
+              b &&
+              a.left === b.left &&
+              a.right === b.right &&
+              a.top === b.top &&
+              a.bottom === b.bottom
+            );
+          })
+        ) {
+          return prev;
+        }
+        return next;
+      });
+    };
+    run();
+    const raf = requestAnimationFrame(() => requestAnimationFrame(run));
+    const t = window.setTimeout(run, 40);
+    const onWin = () => run();
+    window.addEventListener("resize", onWin);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(raf);
+      window.clearTimeout(t);
+      window.removeEventListener("resize", onWin);
+    };
+  }, [
+    highlights,
+    zoom,
+    data,
+    height,
+    showSMA,
+    showEMA,
+    showBollinger,
+    showRSI,
+    showMACD,
+  ]);
+
+  const lastHighlightId = highlights[highlights.length - 1]?.id ?? null;
+  useEffect(() => {
+    if (lastHighlightId !== lastHighlightIdRef.current) {
+      lastHighlightIdRef.current = lastHighlightId;
+      setFrontHighlightId(lastHighlightId);
+      return;
+    }
+    if (
+      frontHighlightId &&
+      !highlights.some((h) => h.id === frontHighlightId)
+    ) {
+      setFrontHighlightId(lastHighlightId);
+    }
+  }, [lastHighlightId, highlights, frontHighlightId]);
+
   useEffect(() => {
     if (pinnedExplain == null) return;
     const onWin = () => syncPopoverAnchor();
@@ -693,6 +891,10 @@ export default function MarketChart({
       height={showTicks ? 28 : 8}
     />
   );
+
+  const raiseHighlight = (id: string) => {
+    setFrontHighlightId(id);
+  };
 
   return (
     <div className={cn(chartPaneClass, "space-y-0")} style={{ fontFamily: CHART.font }}>
@@ -820,9 +1022,10 @@ export default function MarketChart({
                 className="absolute right-0 top-full z-30 mt-1.5 w-[280px] rounded border border-[#d1d4dc] bg-white px-3 py-2 text-[12px] leading-relaxed text-[#131722] shadow-md"
               >
                 Numbered dots appear on the candles and on any overlays you have
-                on, such as SMA. Each dot marks a specific area — what is
-                happening there, and what changed from the previous dot to this
-                one.
+                on, such as SMA (only if it's applicable to have explanations). 
+                Each dot marks a specific area — what is happening there, and 
+                what changed from the previous dot to this one.
+                Click a dot to see the explanation.
               </div>
             ) : null}
             </div>
@@ -841,7 +1044,12 @@ export default function MarketChart({
         <ResponsiveContainer width="100%" height={paneHeight}>
           <ComposedChart
             data={chartData}
-            margin={{ top: 8, right: 8, left: 4, bottom: 0 }}
+            margin={{
+              top: highlights.length > 0 ? 32 : 8,
+              right: 8,
+              left: 4,
+              bottom: 0,
+            }}
           >
             <CartesianGrid
               stroke={CHART.grid}
@@ -869,24 +1077,27 @@ export default function MarketChart({
                 explanationsOn && pinnedNote ? () => null : <PriceTooltip />
               }
             />
-            {(highlightIndices ?? []).map((i) => (
-              <g key={`hl-${i}`}>
-                <ReferenceArea
-                  x1={i - 0.48}
-                  x2={i + 0.48}
-                  y1={priceDomain[0]}
-                  y2={priceDomain[1]}
-                  yAxisId="price"
-                  {...({
-                    fill: CHART.highlight,
-                    fillOpacity: 0.18,
-                    stroke: CHART.highlight,
-                    strokeOpacity: 0.55,
-                    strokeWidth: 1,
-                  } as Record<string, string | number>)}
-                />
-              </g>
-            ))}
+            {highlights.flatMap((h) =>
+              h.indices.map((i) => (
+                <g key={`${h.id}-${i}`}>
+                  <ReferenceArea
+                    x1={i - 0.48}
+                    x2={i + 0.48}
+                    y1={priceDomain[0]}
+                    y2={priceDomain[1]}
+                    yAxisId="price"
+                    {...({
+                      fill: CHART.highlight,
+                      fillOpacity: 0.18,
+                      stroke: CHART.highlight,
+                      strokeOpacity: 0.55,
+                      strokeWidth: 1,
+                      "data-hl": h.id,
+                    } as Record<string, string | number>)}
+                  />
+                </g>
+              )),
+            )}
             {chartData.map((entry, i) => {
               const bodyLow = Math.min(entry.open, entry.close);
               const bodyHigh = Math.max(entry.open, entry.close);
@@ -1199,6 +1410,68 @@ export default function MarketChart({
         </div>
       ) : null}
 
+        {highlights.map((h) => {
+          const box = highlightBands[h.id];
+          if (!box) return null;
+          const front = frontHighlightId === h.id;
+          const bandW = Math.max(8, box.right - box.left);
+          return (
+            <div key={`hl-ui-${h.id}`}>
+              <div
+                data-highlight-hit={h.id}
+                className="absolute"
+                style={{
+                  left: box.left,
+                  top: box.top,
+                  width: bandW,
+                  height: Math.max(8, box.bottom - box.top),
+                  zIndex: 10 + Math.min(6, Math.round(Math.max(0, 250 - bandW) / 30)),
+                  cursor: "pointer",
+                }}
+                onMouseEnter={() => raiseHighlight(h.id)}
+                onClick={() => raiseHighlight(h.id)}
+              />
+              <div
+                data-pattern-highlight-label={h.id}
+                className="absolute flex items-center gap-1 rounded border border-[#2962ff] bg-white px-1.5 py-0.5 shadow-sm"
+                style={{
+                  ...highlightLabelStyle(box),
+                  zIndex: front ? 32 : 20,
+                  fontFamily: CHART.font,
+                  color: CHART.highlight,
+                }}
+                onMouseEnter={() => raiseHighlight(h.id)}
+              >
+                <span className="max-w-[200px] truncate text-[11px] font-semibold leading-none">
+                  {h.label}
+                </span>
+                {h.canExplain ? (
+                  <button
+                    type="button"
+                    aria-label={`About ${h.label}`}
+                    title={`About ${h.label}`}
+                    className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-[10px] font-semibold leading-none hover:bg-[#e8f0ff]"
+                    onClick={() => {
+                      raiseHighlight(h.id);
+                      onExplainHighlight?.(h.id);
+                    }}
+                  >
+                    i
+                  </button>
+                ) : null}
+                <button
+                  type="button"
+                  aria-label={`Clear ${h.label} highlight`}
+                  title="Clear highlight"
+                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-[10px] font-semibold leading-none hover:bg-[#e8f0ff]"
+                  onClick={() => onClearHighlight?.(h.id)}
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          );
+        })}
         {explanationsOn ? (
           <div
             data-explain-hits

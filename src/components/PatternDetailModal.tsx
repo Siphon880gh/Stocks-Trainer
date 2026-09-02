@@ -66,7 +66,7 @@ export default function PatternDetailModal({ pattern, onClose }: PatternDetailMo
                   {pattern.type} • {pattern.confirmation.replace("_", " ")} confirmation
                 </span>
               </div>
-              <p className="text-slate-200 text-sm leading-relaxed">{pattern.description}</p>
+              <p className="text-ink text-sm leading-relaxed">{pattern.description}</p>
             </div>
           </div>
           <div className="flex gap-3">

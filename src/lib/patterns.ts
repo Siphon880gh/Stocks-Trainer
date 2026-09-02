@@ -29,3 +29,34 @@ export const PATTERNS: PatternDef[] = [
 export function getPattern(id: string): PatternDef | undefined {
   return PATTERNS.find((p) => p.id === id);
 }
+
+const SCAN_NAME_DEFS: Record<string, PatternDef> = {
+  "Shooting Star / Inverted Hammer": {
+    id: "shooting-star-inverted-hammer",
+    name: "Shooting Star / Inverted Hammer",
+    type: "reversal",
+    confirmation: "high",
+    description:
+      "Long upper shadow with a small body near the low of the range. After a run-up it is a shooting star (sellers stepped in at the highs). After a selloff it is an inverted hammer (buyers may be probing). Wait for the next print to confirm either read.",
+  },
+};
+
+/** Archive / quiz PatternDef for a name returned by scanPatterns. */
+export function patternDefForScanName(
+  name: string,
+  fallbackDescription?: string,
+): PatternDef {
+  const special = SCAN_NAME_DEFS[name];
+  if (special) return special;
+  const byName = PATTERNS.find((p) => p.name === name);
+  if (byName) return byName;
+  return {
+    id: "scan-pattern",
+    name,
+    type: "neutral",
+    confirmation: "medium",
+    description:
+      fallbackDescription ||
+      "Candlestick pattern on this SAMPLE tape. Confirm with later prints.",
+  };
+}
