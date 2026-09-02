@@ -343,7 +343,14 @@ export default function Market() {
             frequencies={frequencies}
             frequencyMinutes={resolvedFreq}
             nativeMinutes={nativeMinutes}
-            onFrequencyMinutes={setFreqMinutes}
+            onFrequencyMinutes={(minutes) => {
+              if (minutes === resolvedFreq) {
+                setHighlights([]);
+                setHelpHighlightId(null);
+                return;
+              }
+              setFreqMinutes(minutes);
+            }}
           />
         </div>
         ) : null}

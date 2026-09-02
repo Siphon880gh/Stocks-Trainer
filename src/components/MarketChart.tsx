@@ -926,11 +926,11 @@ export default function MarketChart({
                         ? f.label
                         : `This SAMPLE series is ${nativeHint} bars — ${f.label} needs a finer feed`
                     }
-                    className={`${scaleBtn} ${
-                      active
-                        ? "border-[#2962ff] bg-[#e8f0ff] text-[#2962ff] hover:bg-[#e8f0ff]"
-                        : ""
-                    }`}
+                    className={cn(
+                      scaleBtn,
+                      active &&
+                        "border-[#2962ff] bg-[#e8f0ff] font-semibold text-[#2962ff] hover:bg-[#d6e4ff]",
+                    )}
                     onClick={() => onFrequencyMinutes?.(f.minutes)}
                   >
                     {f.label}
