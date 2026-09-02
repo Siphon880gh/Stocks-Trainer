@@ -133,3 +133,144 @@ export function scanPatterns(data: OHLC[]): DetectedPattern[] {
   }
   return results;
 }
+
+export interface ChartProgressionNote {
+  index: number;
+  step: number;
+  of: number;
+  barName: string;
+  headline: string;
+  detail: string;
+}
+
+export interface ProgressionOverlayValues {
+  sma?: Array<number | null>;
+  ema?: Array<number | null>;
+  rsi?: Array<number | null>;
+}
+
+function displayBarName(name: string): string {
+  return name.replace(/^D-/, "");
+}
+
+function pctFrom(base: number, value: number): string {
+  if (base === 0) return "flat vs the first open";
+  const pct = ((value - base) / Math.abs(base)) * 100;
+  const sign = pct > 0 ? "+" : "";
+  return `${sign}${pct.toFixed(1)}% vs the first open`;
+}
+
+/** SAMPLE walk-through of the tape so far — not a live call. */
+export function explainChartProgression(
+  data: OHLC[],
+  overlays: ProgressionOverlayValues = {},
+): ChartProgressionNote[] {
+  if (data.length === 0) return [];
+  const patterns = scanPatterns(data);
+  const atIndex = new Map<number, DetectedPattern[]>();
+  for (const p of patterns) {
+    const list = atIndex.get(p.index) ?? [];
+    list.push(p);
+    atIndex.set(p.index, list);
+  }
+  const first = data[0]!;
+  const n = data.length;
+
+  return data.map((c, i) => {
+    const prev = i > 0 ? data[i - 1] : undefined;
+    const range = c.high - c.low;
+    const body = Math.abs(c.close - c.open);
+    const upper = c.high - Math.max(c.open, c.close);
+    const lower = Math.min(c.open, c.close) - c.low;
+    const up = c.close >= c.open;
+    const label = displayBarName(c.name);
+    const bits: string[] = [];
+
+    let headline: string;
+    if (i === 0) {
+      headline = up
+        ? "Open of this SAMPLE window — buyers hold the first close"
+        : "Open of this SAMPLE window — sellers hold the first close";
+      bits.push(
+        `Bar 1 of ${n} (${label}). This is the starting print; later dots continue this path.`,
+      );
+    } else {
+      const vsPrev = c.close - prev!.close;
+      if (vsPrev > 0) {
+        headline = "Follow-through: close is higher than the prior bar";
+      } else if (vsPrev < 0) {
+        headline = "Setback: close slipped under the prior bar";
+      } else {
+        headline = "Pause: close matches the prior bar";
+      }
+      bits.push(
+        `Bar ${i + 1} of ${n} (${label}). So far this SAMPLE path is ${pctFrom(first.open, c.close)}.`,
+      );
+    }
+
+    if (range > 0) {
+      if (lower / range > 0.45) {
+        bits.push("Long lower wick: the bar probed lower, then buyers recovered toward the close.");
+      } else if (upper / range > 0.45) {
+        bits.push("Long upper wick: the bar probed higher, then got rejected into the close.");
+      } else if (body / range > 0.7) {
+        bits.push(
+          up
+            ? "Full-bodied green candle: little rejection, buyers kept the close."
+            : "Full-bodied red candle: little bounce, sellers kept the close.",
+        );
+      }
+    }
+
+    const runHigh = Math.max(...data.slice(0, i + 1).map((d) => d.high));
+    const runLow = Math.min(...data.slice(0, i + 1).map((d) => d.low));
+    if (i > 0 && c.high === runHigh) {
+      bits.push("New high on the window so far.");
+      if (!headline.startsWith("Open")) headline = "New high on this SAMPLE window so far";
+    } else if (i > 0 && c.low === runLow) {
+      bits.push("New low on the window so far.");
+      if (!headline.startsWith("Open")) headline = "New low on this SAMPLE window so far";
+    }
+
+    const hits = atIndex.get(i) ?? [];
+    for (const p of hits) {
+      bits.push(`${p.name}: ${p.description}`);
+    }
+
+    const sma = overlays.sma?.[i];
+    const smaPrev = i > 0 ? overlays.sma?.[i - 1] : null;
+    if (sma != null) {
+      if (smaPrev != null && prev) {
+        const wasAbove = prev.close >= smaPrev;
+        const nowAbove = c.close >= sma;
+        if (!wasAbove && nowAbove) bits.push("Close crossed back above SMA(5).");
+        else if (wasAbove && !nowAbove) bits.push("Close crossed under SMA(5).");
+        else bits.push(nowAbove ? "Close remains above SMA(5)." : "Close remains below SMA(5).");
+      } else {
+        bits.push(c.close >= sma ? "Close is above SMA(5)." : "Close is below SMA(5).");
+      }
+    } else if (overlays.ema?.[i] != null) {
+      const ema = overlays.ema[i]!;
+      bits.push(c.close >= ema ? "Close is above EMA(4)." : "Close is below EMA(4).");
+    }
+
+    const rsi = overlays.rsi?.[i];
+    if (rsi != null) {
+      if (rsi >= 70) bits.push(`RSI(5) is ${rsi.toFixed(0)} — stretched high on this SAMPLE oscillator.`);
+      else if (rsi <= 30) bits.push(`RSI(5) is ${rsi.toFixed(0)} — stretched low on this SAMPLE oscillator.`);
+    }
+
+    if (i === n - 1 && n > 1) {
+      bits.push("Last bar in this window: later frequencies or markets will tell a different SAMPLE path.");
+    }
+
+    return {
+      index: i,
+      step: i + 1,
+      of: n,
+      barName: label,
+      headline,
+      detail: bits.join(" "),
+    };
+  });
+}

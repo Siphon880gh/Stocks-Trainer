@@ -71,6 +71,115 @@ export function withBarLabels(
   return data.map((d, i) => ({ ...d, name: labels[i] ?? d.name }));
 }
 
+/** TradingView-style chart windows. Finer than the pack's native bars stay unavailable. */
+export const CHART_FREQUENCIES: ReadonlyArray<{ minutes: number; label: string }> = [
+  { minutes: 1, label: "1m" },
+  { minutes: 5, label: "5m" },
+  { minutes: 15, label: "15m" },
+  { minutes: 30, label: "30m" },
+  { minutes: 60, label: "1h" },
+  { minutes: 120, label: "2h" },
+  { minutes: 240, label: "4h" },
+  { minutes: 1440, label: "1D" },
+];
+
+export function formatBarFrequency(minutes: number): string {
+  if (minutes >= 1440 && minutes % 1440 === 0) return `${minutes / 1440}D`;
+  if (minutes >= 60 && minutes % 60 === 0) return `${minutes / 60}h`;
+  return `${minutes}m`;
+}
+
+function clockMinutesFromLabel(name: string): number | null {
+  const m = name.match(/(\d{1,2}):(\d{2})/);
+  if (!m) return null;
+  const hh = Number(m[1]);
+  const mm = Number(m[2]);
+  if (hh > 23 || mm > 59) return null;
+  return hh * 60 + mm;
+}
+
+/** Native bar width from successive HH:MM labels (midnight wrap allowed). */
+export function inferNativeBarMinutes(bars: OHLC[]): number | null {
+  if (bars.length < 2) return null;
+  const times = bars
+    .map((b) => clockMinutesFromLabel(b.name))
+    .filter((t): t is number => t != null);
+  if (times.length < 2) return null;
+  const counts = new Map<number, number>();
+  let best = 0;
+  let bestN = 0;
+  for (let i = 1; i < times.length; i++) {
+    let d = times[i] - times[i - 1];
+    if (d <= 0) d += 24 * 60;
+    const n = (counts.get(d) ?? 0) + 1;
+    counts.set(d, n);
+    if (n > bestN) {
+      bestN = n;
+      best = d;
+    }
+  }
+  return best > 0 ? best : null;
+}
+
+export function canUseChartFrequency(
+  nativeMinutes: number,
+  targetMinutes: number,
+  barCount: number,
+): boolean {
+  if (targetMinutes === nativeMinutes) return barCount >= 1;
+  if (targetMinutes < nativeMinutes) return false;
+  if (targetMinutes % nativeMinutes !== 0) return false;
+  const group = targetMinutes / nativeMinutes;
+  return Math.floor(barCount / group) >= 2;
+}
+
+export function chartFrequenciesForSeries(bars: OHLC[]): Array<{
+  minutes: number;
+  label: string;
+  enabled: boolean;
+}> {
+  const native = inferNativeBarMinutes(bars);
+  if (native == null) return [];
+  const list = CHART_FREQUENCIES.map((f) => ({ ...f }));
+  if (!list.some((f) => f.minutes === native)) {
+    list.push({ minutes: native, label: formatBarFrequency(native) });
+    list.sort((a, b) => a.minutes - b.minutes);
+  }
+  return list.map((f) => ({
+    ...f,
+    enabled: canUseChartFrequency(native, f.minutes, bars.length),
+  }));
+}
+
+/** Collapse `groupSize` native bars into one candle. Drops a trailing partial group. */
+export function aggregateOhlc(bars: OHLC[], groupSize: number): OHLC[] {
+  if (groupSize <= 1) return bars;
+  const out: OHLC[] = [];
+  for (let i = 0; i + groupSize <= bars.length; i += groupSize) {
+    const chunk = bars.slice(i, i + groupSize);
+    out.push({
+      name: chunk[0].name,
+      open: chunk[0].open,
+      high: Math.max(...chunk.map((c) => c.high)),
+      low: Math.min(...chunk.map((c) => c.low)),
+      close: chunk[chunk.length - 1].close,
+    });
+  }
+  return out.length > 0 ? out : bars;
+}
+
+export function ohlcAtFrequency(
+  bars: OHLC[],
+  targetMinutes: number | null,
+): OHLC[] {
+  const native = inferNativeBarMinutes(bars);
+  if (native == null || targetMinutes == null || targetMinutes === native) {
+    return bars;
+  }
+  if (!canUseChartFrequency(native, targetMinutes, bars.length)) return bars;
+  return aggregateOhlc(bars, targetMinutes / native);
+}
+
 /** Hammer pattern: long lower shadow, small body at top */
 export const HAMMER_OHLC: OHLC[] = [
   ohlc("1", 63800, 64000, 63200, 63900),
