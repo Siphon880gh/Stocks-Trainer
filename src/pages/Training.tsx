@@ -12,6 +12,13 @@ import {
   isChartGateComplete,
 } from "../lib/beginnerPath";
 import { getMilestoneStatus, loadProgress } from "../lib/progressStore";
+import { MISC_PRACTICE_ITEMS, isMiscPracticeDone } from "../lib/miscPractices";
+import { hasGradedPracticeDraw } from "../lib/practiceDraw";
+
+function practiceDone(id: string): boolean {
+  if (id === "draw") return hasGradedPracticeDraw();
+  return isMiscPracticeDone(id);
+}
 
 export default function Training() {
   const [searchParams] = useSearchParams();
@@ -102,9 +109,6 @@ export default function Training() {
               </Link>
               <Link to="/cases?pack=combined" className="text-primary underline">
                 Combined pack
-              </Link>
-              <Link to="/practice-draw?template=doji" className="text-primary underline">
-                Practice Draw
               </Link>
             </div>
           </div>
@@ -215,6 +219,18 @@ export default function Training() {
                 Answer sheet
               </button>
             )}
+          </div>
+        </div>
+
+        <div className="w-full max-w-xl panel p-4 text-sm space-y-2">
+          <p className="font-semibold">Misc Practices</p>
+          <div className="flex flex-wrap gap-3">
+            {MISC_PRACTICE_ITEMS.map((item) => (
+              <Link key={item.id} to={item.to} className="text-primary underline">
+                {item.title}
+                {practiceDone(item.id) ? " · done" : ""}
+              </Link>
+            ))}
           </div>
         </div>
       </main>

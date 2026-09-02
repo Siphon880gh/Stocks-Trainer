@@ -7,6 +7,11 @@ import {
 import { CHART, chartPaneClass } from "../lib/chartTheme";
 import { cn } from "../lib/utils";
 
+interface PriceMarker {
+  price: number;
+  label: string;
+}
+
 interface CandlestickChartProps {
   data: OHLC[];
   height?: number;
@@ -15,6 +20,9 @@ interface CandlestickChartProps {
   compact?: boolean;
   /** Show zoom in/out controls (ignored when compact). */
   showScaleControls?: boolean;
+  onSelectBar?: (index: number) => void;
+  onSelectPrice?: (price: number) => void;
+  markers?: PriceMarker[];
 }
 
 const fmt = (v: number) => v.toLocaleString(undefined, { maximumFractionDigits: 0 });
@@ -32,6 +40,9 @@ export default function CandlestickChart({
   highlightIndex,
   compact = false,
   showScaleControls = true,
+  onSelectBar,
+  onSelectPrice,
+  markers,
 }: CandlestickChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
@@ -70,6 +81,20 @@ export default function CandlestickChart({
   };
 
   const axisDigits = yRange < 2 ? 2 : yRange < 20 ? 1 : 0;
+
+  const priceFromSvgY = (svgY: number) =>
+    yMin + (1 - (svgY - padding.top) / innerHeight) * yRange;
+
+  const clientToSvg = (svg: SVGSVGElement, clientX: number, clientY: number) => {
+    const pt = svg.createSVGPoint();
+    pt.x = clientX;
+    pt.y = clientY;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return null;
+    return pt.matrixTransform(ctm.inverse());
+  };
+
+  const selectable = Boolean(onSelectBar || onSelectPrice);
 
   return (
     <div ref={containerRef} className={cn(chartPaneClass, "relative")}>
@@ -125,7 +150,14 @@ export default function CandlestickChart({
         height={height}
         viewBox={`0 0 ${chartWidth} ${height}`}
         preserveAspectRatio="xMidYMid meet"
-        style={{ background: CHART.bg }}
+        style={{ background: CHART.bg, cursor: onSelectPrice ? "crosshair" : undefined }}
+        onClick={(e) => {
+          if (!onSelectPrice) return;
+          const loc = clientToSvg(e.currentTarget, e.clientX, e.clientY);
+          if (!loc) return;
+          if (loc.y < padding.top || loc.y > padding.top + innerHeight) return;
+          onSelectPrice(priceFromSvgY(loc.y));
+        }}
       >
         {/* Horizontal grid only — typical tape layout */}
         {[0, 1, 2, 3, 4].map((i) => (
@@ -173,6 +205,32 @@ export default function CandlestickChart({
           </text>
         ))}
 
+        {(markers ?? []).map((m) => {
+          const my = y(m.price);
+          return (
+            <g key={`${m.label}-${m.price}`}>
+              <line
+                x1={padding.left}
+                y1={my}
+                x2={padding.left + innerWidth}
+                y2={my}
+                stroke={CHART.textMuted}
+                strokeDasharray="4 3"
+                strokeWidth={1}
+              />
+              <text
+                x={padding.left + 4}
+                y={my - 3}
+                fill={CHART.text}
+                fontSize={10}
+                fontFamily={CHART.font}
+              >
+                {m.label} {fmt(m.price)}
+              </text>
+            </g>
+          );
+        })}
+
         {data.map((entry, i) => {
           const cx = x(i);
           const isUp = entry.close >= entry.open;
@@ -194,7 +252,14 @@ export default function CandlestickChart({
               onMouseEnter={() => setHoveredIndex(i)}
               onMouseMove={(e) => handleMouseMove(e, i)}
               onMouseLeave={() => setHoveredIndex(null)}
-              style={{ cursor: compact ? "default" : "crosshair" }}
+              onClick={(e) => {
+                if (!onSelectBar) return;
+                e.stopPropagation();
+                onSelectBar(i);
+              }}
+              style={{
+                cursor: selectable ? "pointer" : compact ? "default" : "crosshair",
+              }}
             >
               <rect
                 x={cx - halfWidth - 2}
