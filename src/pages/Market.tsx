@@ -21,7 +21,7 @@ import {
 } from "../lib/marketDataProvider";
 import { ASSET_CLASSES, type AssetClass } from "../lib/samplePacks";
 import { getOverlay, type OverlayDef } from "../lib/overlays";
-import { scanPatterns } from "../lib/patternScan";
+import { scanPatterns, patternBarIndices } from "../lib/patternScan";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import { CHART_GATE_TRAINING_GROUP, isChartGateComplete } from "../lib/beginnerPath";
 import {
@@ -89,6 +89,7 @@ export default function Market() {
   const [historyOpen, setHistoryOpen] = useState(false);
   const [scanOpen, setScanOpen] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
+  const [highlightBars, setHighlightBars] = useState<number[]>([]);
   const [popover, setPopover] = useState<{ overlayId: string; x: number; y: number } | null>(null);
   const [selectedOverlay, setSelectedOverlay] = useState<OverlayDef | null>(null);
   const [freqMinutes, setFreqMinutes] = useState<number | null>(null);
@@ -135,6 +136,10 @@ export default function Market() {
     () => (ohlcData.length ? scanPatterns(ohlcData) : []),
     [ohlcData]
   );
+
+  useEffect(() => {
+    setHighlightBars([]);
+  }, [ohlcData]);
 
   const toggleControl = (key: keyof typeof controls) => {
     setControls((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -297,7 +302,11 @@ export default function Market() {
 
         {/* Chart Container */}
         {!emptyClass && market ? (
-        <div className="relative min-h-[350px] shrink-0">
+        <div
+          id="market-chart"
+          data-highlight-bars={highlightBars.join(",")}
+          className="relative min-h-[350px] shrink-0"
+        >
           <MarketChart
             data={ohlcData}
             showSMA={controls.sma}
@@ -306,6 +315,7 @@ export default function Market() {
             showMACD={controls.macd}
             showBollinger={controls.bollinger}
             height={320}
+            highlightIndices={highlightBars}
             statusLabel={`${dataProvider.label} feed`}
             frequencies={frequencies}
             frequencyMinutes={resolvedFreq}
@@ -384,7 +394,19 @@ export default function Market() {
           <HistoryModal data={ohlcData} onClose={() => setHistoryOpen(false)} />
         ) : null}
         {scanOpen && market ? (
-          <ScanPatternsModal patterns={detectedPatterns} onClose={() => setScanOpen(false)} />
+          <ScanPatternsModal
+            patterns={detectedPatterns}
+            onClose={() => setScanOpen(false)}
+            onSelectPattern={(p) => {
+              setHighlightBars(patternBarIndices(p));
+              setScanOpen(false);
+              requestAnimationFrame(() => {
+                document
+                  .getElementById("market-chart")
+                  ?.scrollIntoView({ behavior: "smooth", block: "center" });
+              });
+            }}
+          />
         ) : null}
         {popover && (
           <IndicatorPopover

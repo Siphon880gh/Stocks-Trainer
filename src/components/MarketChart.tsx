@@ -39,6 +39,8 @@ interface MarketChartProps {
   showBollinger?: boolean;
   /** Price pane height; RSI/MACD add panes below (TradingView-style). */
   height?: number;
+  /** Bar indexes to tint after a pattern scan pick. */
+  highlightIndices?: number[];
   /** Show zoom in/out controls for the price axis. */
   showScaleControls?: boolean;
   /** Optional feed/status chip in the scale toolbar (Market page). */
@@ -373,6 +375,7 @@ export default function MarketChart({
   showMACD = false,
   showBollinger = false,
   height = 400,
+  highlightIndices,
   showScaleControls = true,
   statusLabel,
   frequencies,
@@ -668,11 +671,17 @@ export default function MarketChart({
     fontSize: 12,
   };
 
+  const xPad = 0.55;
+  const xDomain: [number, number] =
+    chartData.length === 0
+      ? [0, 1]
+      : [-xPad, chartData.length - 1 + xPad];
+
   const sharedXAxis = (showTicks: boolean) => (
     <XAxis
       dataKey="index"
       type="number"
-      domain={[0, Math.max(0, chartData.length - 1)]}
+      domain={xDomain}
       tickCount={chartData.length}
       tickFormatter={
         showTicks ? (_, i) => chartData[i]?.name ?? "" : () => ""
@@ -860,6 +869,24 @@ export default function MarketChart({
                 explanationsOn && pinnedNote ? () => null : <PriceTooltip />
               }
             />
+            {(highlightIndices ?? []).map((i) => (
+              <g key={`hl-${i}`}>
+                <ReferenceArea
+                  x1={i - 0.48}
+                  x2={i + 0.48}
+                  y1={priceDomain[0]}
+                  y2={priceDomain[1]}
+                  yAxisId="price"
+                  {...({
+                    fill: CHART.highlight,
+                    fillOpacity: 0.18,
+                    stroke: CHART.highlight,
+                    strokeOpacity: 0.55,
+                    strokeWidth: 1,
+                  } as Record<string, string | number>)}
+                />
+              </g>
+            ))}
             {chartData.map((entry, i) => {
               const bodyLow = Math.min(entry.open, entry.close);
               const bodyHigh = Math.max(entry.open, entry.close);

@@ -5,9 +5,14 @@ import type { DetectedPattern } from "../lib/patternScan";
 interface ScanPatternsModalProps {
   patterns: DetectedPattern[];
   onClose: () => void;
+  onSelectPattern?: (pattern: DetectedPattern) => void;
 }
 
-export default function ScanPatternsModal({ patterns, onClose }: ScanPatternsModalProps) {
+export default function ScanPatternsModal({
+  patterns,
+  onClose,
+  onSelectPattern,
+}: ScanPatternsModalProps) {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -54,16 +59,18 @@ export default function ScanPatternsModal({ patterns, onClose }: ScanPatternsMod
               </p>
               <div className="space-y-3">
                 {patterns.map((p, i) => (
-                  <div
+                  <button
                     key={i}
-                    className="p-4 rounded-lg border border-line bg-surface hover:border-line transition-colors"
+                    type="button"
+                    className="w-full text-left p-4 rounded-lg border border-line bg-surface hover:border-primary hover:bg-primary/5 transition-colors"
+                    onClick={() => onSelectPattern?.(p)}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-bold text-primary">{p.name}</span>
                       <span className="text-xs font-mono text-primary/70">Candle {p.index + 1} • {p.confidence}%</span>
                     </div>
                     <p className="text-slate-300 text-sm">{p.description}</p>
-                  </div>
+                  </button>
                 ))}
               </div>
             </>

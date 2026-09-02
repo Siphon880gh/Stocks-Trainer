@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { sma, rsi } from "./indicators.ts";
 import type { OHLC } from "./ohlcData.ts";
-import { explainChartProgression } from "./patternScan.ts";
+import { explainChartProgression, patternBarIndices } from "./patternScan.ts";
 
 function fromCloses(closes: number[]): OHLC[] {
   return closes.map((c, i) => ({
@@ -77,5 +77,61 @@ describe("explainChartProgression", () => {
     assert.ok(rsiNotes.length >= 1);
     assert.equal(typeof rsiNotes[0]?.y, "number");
     assert.match(rsiNotes[0]!.detail, /RSI/i);
+  });
+});
+
+describe("patternBarIndices", () => {
+  it("highlights only the print bar for a single-candle pattern", () => {
+    assert.deepEqual(
+      patternBarIndices({
+        index: 4,
+        name: "Doji",
+        confidence: 85,
+        description: "",
+      }),
+      [4],
+    );
+    assert.deepEqual(
+      patternBarIndices({
+        index: 2,
+        name: "Hammer",
+        confidence: 88,
+        description: "",
+      }),
+      [2],
+    );
+  });
+
+  it("includes the prior bar for engulfing", () => {
+    assert.deepEqual(
+      patternBarIndices({
+        index: 5,
+        name: "Bullish Engulfing",
+        confidence: 90,
+        description: "",
+      }),
+      [4, 5],
+    );
+    assert.deepEqual(
+      patternBarIndices({
+        index: 3,
+        name: "Bearish Engulfing",
+        confidence: 90,
+        description: "",
+      }),
+      [2, 3],
+    );
+  });
+
+  it("includes all three bars for Morning Star", () => {
+    assert.deepEqual(
+      patternBarIndices({
+        index: 7,
+        name: "Morning Star",
+        confidence: 88,
+        description: "",
+      }),
+      [5, 6, 7],
+    );
   });
 });

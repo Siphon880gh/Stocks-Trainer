@@ -134,6 +134,18 @@ export function scanPatterns(data: OHLC[]): DetectedPattern[] {
   return results;
 }
 
+/** Candle indexes that make up a scanned pattern (for chart highlight). */
+export function patternBarIndices(pattern: DetectedPattern): number[] {
+  const i = pattern.index;
+  if (pattern.name.includes("Engulfing")) {
+    return i > 0 ? [i - 1, i] : [i];
+  }
+  if (pattern.name === "Morning Star") {
+    return i >= 2 ? [i - 2, i - 1, i] : [i];
+  }
+  return [i];
+}
+
 export type ChartProgressionAnchor =
   | "high"
   | "sma"
