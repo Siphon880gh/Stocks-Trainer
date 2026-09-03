@@ -9,7 +9,7 @@ Companions: [`src/lib/quizData.ts`](../src/lib/quizData.ts) · [`src/pages/Train
 ## How to run
 
 ```text
-/loop exhaustive Learn content using PROMPTS/LOOP-Learn.md
+/loop exhaustive Learn content using LOOPS/LOOP-Learn.md
 ```
 
 **Before starting**

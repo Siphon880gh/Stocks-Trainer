@@ -9,7 +9,7 @@ Companions: [`src/pages/Dashboard.tsx`](../src/pages/Dashboard.tsx) · [`src/com
 ## How to run
 
 ```text
-/loop exhaustive Home content using PROMPTS/LOOP-Home.md
+/loop exhaustive Home content using LOOPS/LOOP-Home.md
 ```
 
 **Before starting**

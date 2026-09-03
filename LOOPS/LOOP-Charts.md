@@ -9,7 +9,7 @@ Companions: [`src/lib/samplePacks.ts`](../src/lib/samplePacks.ts) · [`src/lib/m
 ## How to run
 
 ```text
-/loop exhaustive Charts content using PROMPTS/LOOP-Charts.md
+/loop exhaustive Charts content using LOOPS/LOOP-Charts.md
 ```
 
 **Before starting**

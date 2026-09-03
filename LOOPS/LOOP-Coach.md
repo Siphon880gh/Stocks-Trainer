@@ -9,7 +9,7 @@ Companions: [`src/lib/coaching/`](../src/lib/coaching/) · [`src/lib/coaching/se
 ## How to run
 
 ```text
-/loop exhaustive Coach content using PROMPTS/LOOP-Coach.md
+/loop exhaustive Coach content using LOOPS/LOOP-Coach.md
 ```
 
 **Before starting**

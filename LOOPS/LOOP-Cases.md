@@ -9,7 +9,7 @@ Companions: [`src/lib/caseStudies.ts`](../src/lib/caseStudies.ts) · [`src/lib/m
 ## How to run
 
 ```text
-/loop exhaustive Cases content using PROMPTS/LOOP-Cases.md
+/loop exhaustive Cases content using LOOPS/LOOP-Cases.md
 ```
 
 **Before starting**
@@ -60,7 +60,7 @@ Re-count from `CASE_STUDIES` / pack arrays each tick. A pack is **thin** until i
 
 **After all pack floors:** optional new `CaseThinkingMode` values. If you add a mode, also add labels + coach tips in `thinkingModeTips.ts` and at least one beginner + one intermediate case in the pack that owns the idea. Do not add modes while any pack is still thin.
 
-Keep `Cases.tsx` `CLASS_TO_PACKS` in sync if you introduce a **new** `CasePackId`. Prefer filling existing packs.
+Keep `CLASS_TO_DECIDE_PACKS` in `src/lib/marketNavigator.ts` in sync if you introduce a **new** `CasePackId`. Prefer filling existing packs.
 
 ---
 
@@ -78,7 +78,7 @@ Make the Cases section exhaustive: every existing pack meets its floor, every ho
 - Equity / mixed packs: `src/lib/caseStudies.ts` (`EARNINGS_CASES`, `COMPANY_NEWS_CASES`, `MACRO_NEWS_CASES`, `COMBINED_CASES`, `SCALE_CASES` — prefer dedicated pack arrays over growing SCALE for new work).
 - Multi-asset packs: `src/lib/multiAssetCases.ts` then re-export via `CASE_STUDIES`.
 - Pack metadata: `CASE_PACKS` in `caseStudies.ts`.
-- Cases list filter: `src/pages/Cases.tsx` `CLASS_TO_PACKS` + beginner difficulty filter.
+- Cases list filter: `CLASS_TO_DECIDE_PACKS` in `src/lib/marketNavigator.ts` + beginner difficulty filter.
 - Tips: `src/lib/thinkingModeTips.ts` must include every `CaseThinkingMode`.
 - Skill: `.agents/skills/add-case-pack-by-asset-class/SKILL.md`
 - Auto-verify: `npm run lint` && `npm run build`
@@ -140,6 +140,6 @@ PASS only if:
 ## Authoring notes
 
 - Beginner copy: concrete, no jargon pile-up. Intermediate copy may assume Indicators + one earnings pass.
-- Do not unlock shorts on the beginner path by accident (`allowShort` + CasePlayer soft-gate).
+- Do not unlock shorts on the beginner path by accident (`allowShort` + CasePlayer hides SHORT unless true).
 - Demo alias `DEMO_CASE` stays the first earnings case — do not retarget it.
 - Empty pack after beginner filter = pack disappears from Beginner `/cases`. Keep ≥1 beginner case in every pack you touch.

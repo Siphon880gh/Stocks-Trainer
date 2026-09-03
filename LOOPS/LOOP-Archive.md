@@ -9,7 +9,7 @@ Companions: [`src/lib/patterns.ts`](../src/lib/patterns.ts) · [`src/lib/overlay
 ## How to run
 
 ```text
-/loop exhaustive Archive content using PROMPTS/LOOP-Archive.md
+/loop exhaustive Archive content using LOOPS/LOOP-Archive.md
 ```
 
 **Before starting**

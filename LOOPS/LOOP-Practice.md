@@ -9,7 +9,7 @@ Companions: [`src/lib/practiceLabs.ts`](../src/lib/practiceLabs.ts) · [`src/lib
 ## How to run
 
 ```text
-/loop exhaustive Practice content using PROMPTS/LOOP-Practice.md
+/loop exhaustive Practice content using LOOPS/LOOP-Practice.md
 ```
 
 **Before starting**
