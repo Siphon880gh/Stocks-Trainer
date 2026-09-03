@@ -138,6 +138,44 @@ const ALT_CRYPTO_OHLC: OHLC[] = withBarLabels(
   SESSION_24H_LABELS_12
 );
 
+/** Stable-range educational tape (≠ BTC grind, ≠ alt breakout). */
+const STABLE_CRYPTO_OHLC: OHLC[] = withBarLabels(
+  [
+    ohlc("t0", 1.0002, 1.0006, 0.9998, 1.0001),
+    ohlc("t1", 1.0001, 1.0005, 0.9997, 1.0003),
+    ohlc("t2", 1.0003, 1.0007, 0.9999, 1.0000),
+    ohlc("t3", 1.0000, 1.0004, 0.9996, 0.9999),
+    ohlc("t4", 0.9999, 1.0003, 0.9996, 1.0002),
+    ohlc("t5", 1.0002, 1.0006, 0.9998, 1.0001),
+    ohlc("t6", 1.0001, 1.0005, 0.9997, 1.0000),
+    ohlc("t7", 1.0000, 1.0004, 0.9996, 1.0002),
+    ohlc("t8", 1.0002, 1.0005, 0.9998, 1.0001),
+    ohlc("t9", 1.0001, 1.0004, 0.9997, 1.0000),
+    ohlc("t10", 1.0000, 1.0003, 0.9997, 1.0001),
+    ohlc("t11", 1.0001, 1.0004, 0.9998, 1.0002),
+  ],
+  SESSION_24H_LABELS_12
+);
+
+/** Dump with no reclaim (≠ ETH dump-then-reclaim). */
+const DUMP_CRYPTO_OHLC: OHLC[] = withBarLabels(
+  [
+    ohlc("t0", 12.40, 12.62, 12.28, 12.50),
+    ohlc("t1", 12.50, 12.58, 12.10, 12.16),
+    ohlc("t2", 12.16, 12.22, 11.40, 11.48),
+    ohlc("t3", 11.48, 11.56, 10.80, 10.92),
+    ohlc("t4", 10.92, 11.10, 10.40, 10.52),
+    ohlc("t5", 10.52, 10.68, 10.20, 10.28),
+    ohlc("t6", 10.28, 10.40, 9.90, 10.02),
+    ohlc("t7", 10.02, 10.18, 9.70, 9.82),
+    ohlc("t8", 9.82, 9.96, 9.50, 9.58),
+    ohlc("t9", 9.58, 9.72, 9.30, 9.38),
+    ohlc("t10", 9.38, 9.50, 9.10, 9.18),
+    ohlc("t11", 9.18, 9.30, 8.90, 9.02),
+  ],
+  SESSION_24H_LABELS_12
+);
+
 const LEGACY_CRYPTO_PACKS: SamplePack[] = [
   {
     id: "btc",
@@ -165,6 +203,24 @@ const LEGACY_CRYPTO_PACKS: SamplePack[] = [
     ohlc: ALT_CRYPTO_OHLC,
     educationalNotes:
       "SAMPLE alt-style crypto: tight chop then breakout. Distinct from BTC/ETH. Browse only — SAMPLE/STYLIZED, not LIVE.",
+  },
+  {
+    id: "crypto-stable",
+    symbol: "USDC",
+    assetClass: "crypto",
+    displayName: "Stable Range (SAMPLE)",
+    ohlc: STABLE_CRYPTO_OHLC,
+    educationalNotes:
+      "SAMPLE educational stable-range tape: tiny wicks around a peg. Browse/drill only — not Beginner Equities Path, not LIVE.",
+  },
+  {
+    id: "crypto-dump",
+    symbol: "DUMP",
+    assetClass: "crypto",
+    displayName: "Dump, No Reclaim (SAMPLE)",
+    ohlc: DUMP_CRYPTO_OHLC,
+    educationalNotes:
+      "SAMPLE crypto: sharp dump that does not reclaim. Distinct from ETH dump-then-reclaim. STYLIZED — not LIVE.",
   },
 ];
 
@@ -220,7 +276,17 @@ const OPTION_CONTEXT_MARKETS: MarketDef[] = OPTION_CONTEXT_SAMPLE_PACKS.map((pac
 const FOREX_MARKETS: MarketDef[] = FOREX_SAMPLE_PACKS.map((pack) => {
   const last = pack.ohlc[pack.ohlc.length - 1]?.close ?? 0;
   const pair =
-    pack.id === "fx-eurusd" ? "EUR/USD" : pack.id === "fx-usdjpy" ? "USD/JPY" : pack.symbol;
+    pack.id === "fx-eurusd"
+      ? "EUR/USD"
+      : pack.id === "fx-usdjpy"
+        ? "USD/JPY"
+        : pack.id === "fx-audusd"
+          ? "AUD/USD"
+          : pack.id === "fx-gbpusd"
+            ? "GBP/USD"
+            : pack.id === "fx-eurjpy"
+              ? "EUR/JPY"
+              : pack.symbol;
   return marketFromPack(pack, {
     pair,
     price: formatPrice(last, pack.assetClass),
@@ -237,7 +303,7 @@ const CRYPTO_MARKETS: MarketDef[] = LEGACY_CRYPTO_PACKS.map((pack) => {
     pair,
     price: formatPrice(last, pack.assetClass),
     delta: deltaFromOhlc(pack.ohlc),
-    volatility: pack.id === "crypto-alt" ? "MED" : "HIGH",
+    volatility: pack.id === "crypto-alt" ? "MED" : pack.id === "crypto-stable" ? "LOW" : "HIGH",
   });
 });
 

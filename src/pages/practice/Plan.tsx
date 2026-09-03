@@ -3,7 +3,7 @@ import CandlestickChart from "../../components/CandlestickChart";
 import PracticeShell from "../../components/PracticeShell";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
 import {
-  PLAN_TAPE,
+  PLAN_TAPES,
   gradePlan,
   type GradeResult,
   type PlanMarks,
@@ -14,10 +14,12 @@ type Phase = keyof PlanMarks;
 const ORDER: Phase[] = ["entry", "stop", "target"];
 
 export default function PracticePlan() {
+  const [tapeIndex, setTapeIndex] = useState(0);
   const [phase, setPhase] = useState<Phase>("entry");
   const [marks, setMarks] = useState<Partial<PlanMarks>>({});
   const [result, setResult] = useState<GradeResult | null>(null);
-  const last = PLAN_TAPE[PLAN_TAPE.length - 1]!;
+  const tape = PLAN_TAPES[tapeIndex]!;
+  const last = tape.bars[tape.bars.length - 1]!;
 
   const markers = ORDER.filter((k) => marks[k] != null).map((k) => ({
     price: marks[k]!,
@@ -30,11 +32,30 @@ export default function PracticePlan() {
       blurb="Tap entry, then stop, then target on this SAMPLE tape. Grade is structure and R:R — not whether price would have worked."
     >
       <section className="panel p-4 space-y-3">
+        <label className="text-[12px] text-muted">
+          Tape
+          <select
+            className="ml-2 bg-surface border border-line text-ink text-sm px-2 py-1 rounded-md"
+            value={tapeIndex}
+            onChange={(e) => {
+              setTapeIndex(Number(e.target.value));
+              setMarks({});
+              setPhase("entry");
+              setResult(null);
+            }}
+          >
+            {PLAN_TAPES.map((t, i) => (
+              <option key={t.id} value={i}>
+                {t.name}
+              </option>
+            ))}
+          </select>
+        </label>
         <p className="text-sm">
           Tap <span className="font-semibold">{phase}</span>
         </p>
         <CandlestickChart
-          data={PLAN_TAPE}
+          data={tape.bars}
           height={280}
           showScaleControls={false}
           onSelectPrice={(price) => {

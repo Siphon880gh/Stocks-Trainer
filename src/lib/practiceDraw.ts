@@ -21,7 +21,10 @@ export type DrawTemplateId =
   | "doji"
   | "hammer"
   | "bullish-engulfing"
-  | "bearish-engulfing";
+  | "bearish-engulfing"
+  | "shooting-star"
+  | "inverted-hammer"
+  | "morning-star";
 
 export type DrawGrade = "correct" | "partial" | "incorrect";
 
@@ -161,6 +164,72 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     hint: "small green then large red",
     tip: "Small green body, then a larger red body that fully covers it. Include wicks.",
     guides: engulfingGuides("bullish", "bearish"),
+  },
+  {
+    id: "shooting-star",
+    name: "Shooting Star",
+    openingBrush: "bearish",
+    tip: "Small body near the low after a rally; long upper shadow at least 2× the body. Tiny lower wick.",
+    guides: candleGuide({
+      cx: 0.5,
+      halfW: 0.1,
+      high: 0.1,
+      bodyTop: 0.64,
+      bodyBottom: 0.8,
+      low: 0.86,
+      color: "bearish",
+    }),
+  },
+  {
+    id: "inverted-hammer",
+    name: "Inverted Hammer",
+    openingBrush: "bullish",
+    tip: "Same long upper wick as a shooting star, but after a decline. Small body near the low.",
+    guides: candleGuide({
+      cx: 0.5,
+      halfW: 0.1,
+      high: 0.1,
+      bodyTop: 0.64,
+      bodyBottom: 0.8,
+      low: 0.86,
+      color: "bullish",
+    }),
+  },
+  {
+    id: "morning-star",
+    name: "Morning Star",
+    openingBrush: "bearish",
+    hint: "red · small · green",
+    tip: "Three candles: large red, small middle, then large green. Keep them left-to-right.",
+    guides: [
+      ...candleGuide({
+        cx: 0.22,
+        halfW: 0.08,
+        high: 0.18,
+        bodyTop: 0.22,
+        bodyBottom: 0.72,
+        low: 0.78,
+        color: "bearish",
+      }),
+      ...candleGuide({
+        cx: 0.5,
+        halfW: 0.05,
+        high: 0.42,
+        bodyTop: 0.48,
+        bodyBottom: 0.58,
+        low: 0.7,
+        color: "bearish",
+      }),
+      ...candleGuide({
+        cx: 0.78,
+        halfW: 0.09,
+        high: 0.16,
+        bodyTop: 0.2,
+        bodyBottom: 0.7,
+        low: 0.76,
+        color: "bullish",
+      }),
+    ],
   },
 ];
 

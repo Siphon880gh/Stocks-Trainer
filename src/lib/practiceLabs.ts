@@ -1,4 +1,4 @@
-import { SAMPLE_OHLC, type OHLC } from "./ohlcData";
+import { PATTERN_OHLC, SAMPLE_OHLC, type OHLC } from "./ohlcData";
 import { scanPatterns } from "./patternScan";
 
 export type DrawGrade = "correct" | "partial" | "incorrect";
@@ -78,6 +78,81 @@ export const REGIME_WINDOWS: RegimeWindow[] = [
       bar("11:00", 99, 103, 98, 102),
       bar("11:30", 102, 104, 98, 100),
       bar("12:00", 100, 103, 97, 101),
+    ],
+  },
+  {
+    id: "squeeze",
+    name: "SAMPLE · squeeze",
+    regime: "range",
+    overlay: "bollinger",
+    overlayTip: "A squeeze is low volatility. Bollinger-style bands shrink before an expansion.",
+    bars: [
+      bar("09:30", 100, 104, 97, 102),
+      bar("10:00", 102, 104, 99, 101),
+      bar("10:30", 101, 102.5, 100, 101.5),
+      bar("11:00", 101.5, 102.2, 100.6, 101.4),
+      bar("11:30", 101.4, 101.9, 100.9, 101.3),
+      bar("12:00", 101.3, 101.7, 101.0, 101.4),
+    ],
+  },
+  {
+    id: "v-reclaim",
+    name: "SAMPLE · V-reclaim",
+    regime: "trend-up",
+    overlay: "sma",
+    overlayTip: "A sharp dump then reclaim still leaves a rising path a moving average can track.",
+    bars: [
+      bar("09:30", 108, 109, 106, 107),
+      bar("10:00", 107, 108, 102, 103),
+      bar("10:30", 103, 104, 98, 99),
+      bar("11:00", 99, 104, 98, 103),
+      bar("11:30", 103, 107, 102, 106),
+      bar("12:00", 106, 110, 105, 109),
+    ],
+  },
+  {
+    id: "round-top",
+    name: "SAMPLE · round top",
+    regime: "trend-down",
+    overlay: "sma",
+    overlayTip: "After the turn, price walks lower — a moving average still orients the slide.",
+    bars: [
+      bar("09:30", 100, 104, 99, 103),
+      bar("10:00", 103, 106, 102, 105),
+      bar("10:30", 105, 107, 103, 104),
+      bar("11:00", 104, 105, 100, 101),
+      bar("11:30", 101, 102, 97, 98),
+      bar("12:00", 98, 99, 94, 95),
+    ],
+  },
+  {
+    id: "trend-pause",
+    name: "SAMPLE · trend pause",
+    regime: "trend-up",
+    overlay: "sma",
+    overlayTip: "A pause inside an uptrend is still trend. SMA keeps you oriented until the grind resumes or fails.",
+    bars: [
+      bar("09:30", 90, 93, 89, 92),
+      bar("10:00", 92, 96, 91, 95),
+      bar("10:30", 95, 97, 94, 96),
+      bar("11:00", 96, 97, 95, 96),
+      bar("11:30", 96, 98, 95, 97),
+      bar("12:00", 97, 101, 96, 100),
+    ],
+  },
+  {
+    id: "gap-fade",
+    name: "SAMPLE · gap fade",
+    regime: "range",
+    overlay: "rsi",
+    overlayTip: "A gap that fades back into the prior band is still a range problem — RSI for stretch, not a new trend.",
+    bars: [
+      bar("09:30", 100, 102, 99, 101),
+      bar("10:00", 101, 103, 100, 102),
+      bar("10:30", 107, 108, 105, 106),
+      bar("11:00", 106, 107, 103, 104),
+      bar("11:30", 104, 105, 101, 102),
+      bar("12:00", 102, 104, 100, 101),
     ],
   },
 ];
@@ -221,8 +296,48 @@ export function gradeReplay(actions: ReplayAction[]): GradeResult {
   };
 }
 
-export const REPLAY_TAPE: OHLC[] = SAMPLE_OHLC;
+export const REPLAY_TAPES: { id: string; name: string; bars: OHLC[] }[] = [
+  { id: "replay-sample", name: "SAMPLE · mixed", bars: SAMPLE_OHLC },
+  {
+    id: "replay-slide",
+    name: "SAMPLE · slide",
+    bars: [
+      bar("09:30", 120, 121, 117, 118),
+      bar("10:00", 118, 119, 114, 115),
+      bar("10:30", 115, 116, 111, 112),
+      bar("11:00", 112, 113, 108, 109),
+      bar("11:30", 109, 110, 105, 106),
+      bar("12:00", 106, 107, 102, 103),
+      bar("12:30", 103, 104, 99, 100),
+      bar("13:00", 100, 101, 96, 97),
+    ],
+  },
+];
+export const REPLAY_TAPE: OHLC[] = REPLAY_TAPES[0]!.bars;
 export const REPLAY_START_BARS = 6;
+
+export const PLAN_TAPES: { id: string; name: string; bars: OHLC[] }[] = [
+  { id: "plan-up", name: "SAMPLE · grind", bars: SAMPLE_OHLC },
+  {
+    id: "plan-down",
+    name: "SAMPLE · slide",
+    bars: [
+      bar("09:30", 80, 81, 77, 78),
+      bar("10:00", 78, 79, 74, 75),
+      bar("10:30", 75, 76, 71, 72),
+      bar("11:00", 72, 73, 68, 69),
+      bar("11:30", 69, 70, 65, 66),
+      bar("12:00", 66, 67, 62, 63),
+    ],
+  },
+];
+export const PLAN_TAPE: OHLC[] = PLAN_TAPES[0]!.bars;
+
+export const HUNT_TAPES: { id: string; name: string; bars: OHLC[] }[] = [
+  { id: "hunt-hammer", name: "SAMPLE · hammer window", bars: PATTERN_OHLC.hammer ?? SAMPLE_OHLC },
+  { id: "hunt-doji", name: "SAMPLE · doji window", bars: PATTERN_OHLC.doji ?? SAMPLE_OHLC },
+];
+export const HUNT_TAPE: OHLC[] = HUNT_TAPES[0]!.bars;
 
 export interface PlanMarks {
   entry: number;
@@ -264,9 +379,6 @@ export function gradePlan(plan: PlanMarks, last: OHLC): GradeResult {
     tip: `Plan holds: stop opposite the target, ${((reward / risk) * 10) / 10}R, stop outside the last body.`,
   };
 }
-
-export const PLAN_TAPE: OHLC[] = SAMPLE_OHLC;
-export const HUNT_TAPE: OHLC[] = SAMPLE_OHLC;
 
 export function gradeHunt(markIndex: number, data: OHLC[], tolerance = 1): GradeResult {
   if (markIndex < 0 || markIndex >= data.length) {

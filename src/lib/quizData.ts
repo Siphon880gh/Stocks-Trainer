@@ -742,6 +742,125 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     patternKey: "morning-star",
     highlightIndex: 3,
   },
+  {
+    id: "PR-BU-DESC2",
+    prompt: "After a decline, a large green body fully covers the prior red body. That is…",
+    correctAnswer: "A",
+    options: BULLISH_ENGULFING_NAME_OPTIONS,
+    explanation: "Bullish Engulfing: buyers take the prior range. SAMPLE — wait for context, not a LIVE fill.",
+    patternKey: "bullish-engulfing",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-BU-DESC3",
+    prompt: "Which sentence matches Bullish Engulfing?",
+    correctAnswer: "A",
+    options: BULLISH_ENGULFING_DESC_OPTIONS,
+    explanation: "Green body completely covers the prior red body.",
+    patternKey: "bullish-engulfing",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-BU-MOVE2",
+    prompt: "SAMPLE: Bullish Engulfing prints after a selloff. Process-first move?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Market buy 10x with no invalidation", description: "Oversize." },
+      { id: "B", label: "Short because the green candle is late", description: "Fights the pattern." },
+      { id: "C", label: "Lean long with risk under the engulfing low", description: "Process." },
+    ],
+    explanation: "The pattern is a buyer handoff. Size with a level that is wrong if broken. SAMPLE teaching.",
+    patternKey: "bullish-engulfing",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-BE-DESC2",
+    prompt: "After a rally, a large red body fully covers the prior green body. That is…",
+    correctAnswer: "B",
+    options: BEARISH_ENGULFING_NAME_OPTIONS,
+    explanation: "Bearish Engulfing: sellers take the prior range.",
+    patternKey: "bearish-engulfing",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-BE-MOVE2",
+    prompt: "SAMPLE: Bearish Engulfing at a high. Process-first move?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Stand aside or reduce longs until the thesis is rewritten", description: "Process." },
+      { id: "B", label: "Double the long because red means discount", description: "Fights the pattern." },
+      { id: "C", label: "Ignore two-candle structures forever", description: "Avoidance." },
+    ],
+    explanation: "Sellers took the prior body. That is a reason to slow down, not to add blindly. SAMPLE.",
+    patternKey: "bearish-engulfing",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-SS-DESC2",
+    prompt: "Long upper wick, small body near the low, after a rally. Name it.",
+    correctAnswer: "C",
+    options: OPTIONS_5,
+    explanation: "Shooting Star: rejection at the highs after a run-up.",
+    patternKey: "shooting-star",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-SS-MOVE2",
+    prompt: "SAMPLE: Shooting Star after a grind up. Process-first move?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Chase the next high immediately", description: "Late chase." },
+      { id: "B", label: "Treat as rejection — wait for the next bar before adding long", description: "Process." },
+      { id: "C", label: "Assume LIVE volume confirmed it", description: "No LIVE volume here." },
+    ],
+    explanation: "Upper-wick rejection is a pause cue. Confirm with the next print. SAMPLE teaching.",
+    patternKey: "shooting-star",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-IH-DESC2",
+    prompt: "Long upper wick, small body, after a decline (not after a rally). That is…",
+    correctAnswer: "D",
+    options: OPTIONS_5,
+    explanation: "Inverted Hammer: same shape as a Shooting Star, bullish context at a bottom.",
+    patternKey: "inverted-hammer",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-IH-MOVE2",
+    prompt: "SAMPLE: Inverted Hammer after a washout. Process-first move?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Treat it as a Shooting Star short", description: "Wrong location." },
+      { id: "B", label: "All-in long on the wick", description: "Oversize a probe." },
+      { id: "C", label: "Bullish probe — wait for follow-through before sizing", description: "Process." },
+    ],
+    explanation: "Context is a bottom. Still a probe: next bar should confirm buyers. SAMPLE.",
+    patternKey: "inverted-hammer",
+    highlightIndex: 2,
+  },
+  {
+    id: "PR-MS-DESC2",
+    prompt: "Large red, small middle, large green at the lows. Name the three-bar pattern.",
+    correctAnswer: "C",
+    options: MORNING_STAR_NAME_OPTIONS,
+    explanation: "Morning Star: three-candle bullish reversal.",
+    patternKey: "morning-star",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-MS-MOVE2",
+    prompt: "SAMPLE: Morning Star completes. What is the honest invalidation idea?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Risk under the pattern low if you lean long", description: "Process." },
+      { id: "B", label: "There is no invalidation on three-bar patterns", description: "False." },
+      { id: "C", label: "Short the green bar because three bars mean exhaustion", description: "Fights the pattern." },
+    ],
+    explanation: "Structured reversal still needs a wrong level. SAMPLE process, not certainty.",
+    patternKey: "morning-star",
+    highlightIndex: 3,
+  },
 ];
 
 /** Candlestick anatomy — OHLC parts and red/green (no pattern ID). */
@@ -826,6 +945,62 @@ export const CANDLE_ANATOMY_QUESTIONS: QuizQuestion[] = [
     highlightIndex: 2,
     glossaryTermId: "candle-color",
   },
+  {
+    id: "CA-09",
+    prompt: "OHLC stands for…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Open, High, Low, Close", description: "The four prices of one bar." },
+      { id: "B", label: "Order, Hedge, Lot, Coupon", description: "Not candle anatomy." },
+      { id: "C", label: "Only High, Low, Close", description: "Missing the open." },
+    ],
+    explanation: "One candlestick is four prices: open, high, low, close. SAMPLE teaching — not a live quote.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "CA-10",
+    prompt: "The thin line above or below the body is called a…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Volume bar", description: "These SAMPLE candles do not plot volume." },
+      { id: "B", label: "Wick (shadow)", description: "High/low extremes." },
+      { id: "C", label: "Moving average", description: "That is an overlay." },
+    ],
+    explanation: "Wicks mark the high and low. The body is only open-to-close.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "CA-11",
+    prompt: "Color on these SAMPLE charts encodes…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "How much volume traded", description: "Color is not volume." },
+      { id: "B", label: "Whether the company beat earnings", description: "Unrelated." },
+      { id: "C", label: "Whether close finished above or below open", description: "Green vs red rule." },
+    ],
+    explanation: "Green = close > open; red = close < open. Not certainty, not volume.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "candle-color",
+  },
+  {
+    id: "CA-12",
+    prompt: "If open and close are almost equal, the body looks…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Tiny — buyers and sellers finished near even", description: "Indecision cue." },
+      { id: "B", label: "Impossible — every bar must be wide", description: "Doji-like bars exist." },
+      { id: "C", label: "Always green", description: "Color still follows close vs open." },
+    ],
+    explanation: "A small body means open ≈ close. That is an anatomy fact before you name a pattern.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
 ];
 
 export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
@@ -879,6 +1054,106 @@ export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
     assetClass: "equity",
     samplePackId: "eq-index-proxy",
   },
+  {
+    id: "IN-06",
+    prompt: "Price walking above a rising SMA most often reads as…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "A bullish trend bias — not a guarantee", description: "Process." },
+      { id: "B", label: "Proof the next bar must gap up", description: "No guarantee." },
+      { id: "C", label: "A LIVE order-routing signal", description: "SAMPLE overlay only." },
+    ],
+    explanation: "SMA is a smoother. Above a rising SMA is a bias, not a fill.",
+    overlayId: "sma",
+    assetClass: "equity",
+    samplePackId: "eq-gap-go",
+  },
+  {
+    id: "IN-07",
+    prompt: "Compared with SMA, EMA is usually…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Slower because it ignores new prices", description: "Opposite." },
+      { id: "B", label: "Faster — more weight on recent closes", description: "Definition." },
+      { id: "C", label: "An oscillator from 0–100", description: "That is RSI." },
+    ],
+    explanation: "EMA weights recent prices more, so it turns sooner than SMA. Still SAMPLE teaching.",
+    overlayId: "ema",
+    assetClass: "equity",
+    samplePackId: "eq-mega-tech",
+  },
+  {
+    id: "IN-08",
+    prompt: "RSI near 80 after a straight grind is best treated as…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "An automatic short", description: "Overbought ≠ must reverse." },
+      { id: "B", label: "Proof volume is fake", description: "Non sequitur." },
+      { id: "C", label: "A stretch reading — wait for later bars", description: "Process." },
+    ],
+    explanation: "RSI labels stretch vs mean. Trends can stay stretched. SAMPLE: do not treat 70/30 as a button.",
+    overlayId: "rsi",
+    assetClass: "equity",
+    samplePackId: "eq-cyclical",
+  },
+  {
+    id: "IN-09",
+    prompt: "A MACD line crossing above its signal line is…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "A momentum-shift cue to check with price", description: "Process." },
+      { id: "B", label: "A brokerage fill", description: "No routing here." },
+      { id: "C", label: "The same as Bollinger squeeze", description: "Different tool." },
+    ],
+    explanation: "MACD crossovers flag momentum changes. Confirm with the tape — SAMPLE overlays are not orders.",
+    overlayId: "macd",
+    assetClass: "equity",
+    samplePackId: "eq-index-proxy",
+  },
+  {
+    id: "IN-10",
+    prompt: "Bollinger Band squeeze (bands pinching) usually means…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Volume just printed a LIVE spike", description: "No LIVE volume feed." },
+      { id: "B", label: "Volatility is low — a later expansion is more likely", description: "Squeeze idea." },
+      { id: "C", label: "RSI is always above 70", description: "Unrelated." },
+    ],
+    explanation: "Squeeze = low volatility. Direction of the next expansion is not the squeeze itself.",
+    overlayId: "bollinger",
+    assetClass: "equity",
+    samplePackId: "eq-squeeze",
+  },
+  {
+    id: "IN-11",
+    prompt: "In a choppy range, which overlay is usually the better stretch tool?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "SMA as if it were a new trend", description: "Trend tool in a range." },
+      { id: "B", label: "Ignore all overlays", description: "You can still use oscillators." },
+      { id: "C", label: "RSI (oscillator) vs mean, not a new trend call", description: "Match tool to regime." },
+    ],
+    explanation: "Trend vs range: moving averages for a grind, RSI-style oscillators for stretch in a range.",
+    overlayId: "rsi",
+    assetClass: "equity",
+    samplePackId: "eq-index-proxy",
+    glossaryTermId: "trend-vs-range",
+  },
+  {
+    id: "IN-12",
+    prompt: "These indicator lines on Market are…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "SAMPLE / DELAYED teaching overlays — not LIVE theater", description: "Honesty." },
+      { id: "B", label: "A broker’s executable signals", description: "No brokerage." },
+      { id: "C", label: "Options Greeks", description: "Not a chain product." },
+    ],
+    explanation: "Provider labels stay SAMPLE or DELAYED. Overlays teach reading, they do not route orders.",
+    overlayId: "sma",
+    assetClass: "equity",
+    samplePackId: "eq-mega-tech",
+    glossaryTermId: "delayed-vs-sample-feed",
+  },
 ];
 
 /** Equity-pack-backed candle/indicator drills beyond the E4.M0 indicators gate (E4.M3). */
@@ -931,6 +1206,52 @@ export const EQUITY_PATTERN_QUIZ_QUESTIONS: QuizQuestion[] = [
     overlayId: "sma",
     assetClass: "equity",
     samplePackId: "eq-mega-tech",
+  },
+  {
+    id: "EQ-PAT-05",
+    prompt:
+      "SAMPLE gap-and-go pack: the tape jumps then holds. Which smoother best tracks that new higher path without extra weight on old closes?",
+    correctAnswer: "A",
+    options: INDICATOR_OPTIONS,
+    explanation:
+      "Equal-weight SMA is a simple way to stay oriented after a gap holds. Tied to eq-gap-go SAMPLE pack — not a LIVE fill.",
+    overlayId: "sma",
+    assetClass: "equity",
+    samplePackId: "eq-gap-go",
+  },
+  {
+    id: "EQ-PAT-06",
+    prompt:
+      "SAMPLE squeeze pack: range collapses then a small break. Which overlay family is built for pinch-then-expand?",
+    correctAnswer: "E",
+    options: INDICATOR_OPTIONS,
+    explanation:
+      "Bollinger-style bands shrink in a squeeze. Tied to eq-squeeze SAMPLE pack.",
+    overlayId: "bollinger",
+    assetClass: "equity",
+    samplePackId: "eq-squeeze",
+  },
+  {
+    id: "EQ-PAT-07",
+    prompt:
+      "SAMPLE gap-and-go pack: after the gap, which overlay reacts faster if you want recent closes to matter more?",
+    correctAnswer: "B",
+    options: INDICATOR_OPTIONS,
+    explanation: "EMA weights new prices more than SMA. Tied to eq-gap-go.",
+    overlayId: "ema",
+    assetClass: "equity",
+    samplePackId: "eq-gap-go",
+  },
+  {
+    id: "EQ-PAT-08",
+    prompt:
+      "SAMPLE squeeze pack: if the break is noisy, which 0–100 oscillator labels stretch vs the recent mean?",
+    correctAnswer: "C",
+    options: INDICATOR_OPTIONS,
+    explanation: "RSI is the stretch oscillator on these SAMPLE overlays. Tied to eq-squeeze.",
+    overlayId: "rsi",
+    assetClass: "equity",
+    samplePackId: "eq-squeeze",
   },
 ];
 
@@ -1073,6 +1394,32 @@ export const EQUITY_LITERACY_QUESTIONS: QuizQuestion[] = [
       "Start with horizon and risk capacity, then instruments. Short-horizon thrills often fight a long-horizon plan.",
     glossaryTermId: "risk-horizon",
   },
+  {
+    id: "EL-11",
+    prompt: "In this app, Equities means…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Traditional retail stocks / listed shares", description: "The primary path." },
+      { id: "B", label: "A LIVE options chain", description: "Options context is educational only." },
+      { id: "C", label: "A forex dealing desk", description: "Forex is a SAMPLE class after stocks." },
+    ],
+    explanation:
+      "Traditional retail stocks are labeled Equities here. Futures, crypto, forex, and options-context are SAMPLE expansion classes.",
+    glossaryTermId: "equities-traditional-retail",
+  },
+  {
+    id: "EL-12",
+    prompt: "The bid is the price buyers will pay; the ask is the price sellers will take. The gap between them is…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "A guaranteed profit", description: "Spreads are a cost, not a gift." },
+      { id: "B", label: "The company’s net margin", description: "Wrong statement." },
+      { id: "C", label: "The spread — a cost of transacting", description: "Process." },
+    ],
+    explanation:
+      "SAMPLE charts show OHLC, not a live book. Bid/ask literacy still matters: the spread is a friction, not a signal to chase.",
+    glossaryTermId: "bid-ask",
+  },
 ];
 
 /** Financial statement literacy (E4.M2) — uses SAMPLE snapshot cards. */
@@ -1194,6 +1541,45 @@ export const FINANCIAL_LITERACY_QUESTIONS: QuizQuestion[] = [
       "Divergence invites questions (working capital, accruals, one-offs)—not an automatic conclusion. Read both statements.",
     snapshotId: "snap-cyclical",
   },
+  {
+    id: "FL-10",
+    prompt: "Net margin is best read as…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "How much of each dollar of sales is kept as profit", description: "Net income / revenue." },
+      { id: "B", label: "How many shares are outstanding", description: "Equity structure." },
+      { id: "C", label: "The bid–ask spread", description: "Market microstructure." },
+    ],
+    explanation: "Net margin = net income ÷ revenue. SAMPLE cards print netMarginPct so you can compare mix and costs.",
+    snapshotId: "snap-mega-tech",
+    glossaryTermId: "net-margin",
+  },
+  {
+    id: "FL-11",
+    prompt: "A simple P/E on a SAMPLE card is…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "A buy rating", description: "Multiples are not grades." },
+      { id: "B", label: "Price divided by earnings — a starting question", description: "Humility." },
+      { id: "C", label: "Operating cash flow", description: "Wrong line." },
+    ],
+    explanation: "P/E is a multiple, not a verdict. SAMPLE teaching: ask what earnings quality sits under the number.",
+    snapshotId: "snap-mega-tech",
+    glossaryTermId: "pe-ratio",
+  },
+  {
+    id: "FL-12",
+    prompt: "Free cash flow on these SAMPLE cards is closest to…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Revenue before any costs", description: "That is the top line." },
+      { id: "B", label: "Share price × share count", description: "Market value, not cash." },
+      { id: "C", label: "Cash from operations minus sustaining reinvestment", description: "FCF idea." },
+    ],
+    explanation: "Profit can diverge from cash. SAMPLE snapshots list operating cash and free cash flow so you can notice that gap.",
+    snapshotId: "snap-cyclical",
+    glossaryTermId: "free-cash-flow",
+  },
 ];
 
 export const NEWS_LITERACY_QUESTIONS: QuizQuestion[] = [
@@ -1282,6 +1668,78 @@ export const NEWS_LITERACY_QUESTIONS: QuizQuestion[] = [
     explanation: "Anti-hindsight forces process under incomplete information — SAMPLE teaching design.",
     glossaryTermId: "chase-vs-fade",
   },
+  {
+    id: "NL-07",
+    prompt: "Rumor vs filing — which pair is ranked correctly for confidence?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Company filing / official release beats an anonymous post", description: "Source hierarchy." },
+      { id: "B", label: "The loudest reply is the filing", description: "Noise." },
+      { id: "C", label: "All headlines are equally true", description: "No ranking." },
+    ],
+    explanation: "Raise confidence when a disclosure confirms. SAMPLE: rumor ≠ filing.",
+    glossaryTermId: "rumor-vs-filing",
+  },
+  {
+    id: "NL-08",
+    prompt: "“Priced in” means…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "The stock cannot move again", description: "False." },
+      { id: "B", label: "The tape may already reflect widely expected news", description: "Definition." },
+      { id: "C", label: "A LIVE feed printed the fill", description: "No LIVE theater." },
+    ],
+    explanation: "If everyone expected the print, the first spike can fade. Ask what is new.",
+    glossaryTermId: "priced-in",
+  },
+  {
+    id: "NL-09",
+    prompt: "Chasing a headline gap is most dangerous when…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "You already finished Indicators", description: "Unrelated." },
+      { id: "B", label: "The company is in Equities class", description: "Class is not the issue." },
+      { id: "C", label: "The story is unverified and already in the open", description: "Late + low quality." },
+    ],
+    explanation: "Chase vs fade is a process choice: evidence quality, whether it is priced, and your horizon.",
+    glossaryTermId: "chase-vs-fade",
+  },
+  {
+    id: "NL-10",
+    prompt: "A SAMPLE news case asks BUY / SELL / HOLD before the aftermath. HOLD is…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "A valid taught answer when uncertainty is high", description: "Process." },
+      { id: "B", label: "Always wrong because you must trade", description: "This is not a casino." },
+      { id: "C", label: "The same as a LIVE short", description: "No routing; short is gated." },
+    ],
+    explanation: "Waiting is a decision. SAMPLE cases grade process, not “you must click buy.”",
+    glossaryTermId: "chase-vs-fade",
+  },
+  {
+    id: "NL-11",
+    prompt: "Correlation in a risk-off tape (plain language) means…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "This stock cannot be the story", description: "Too strong." },
+      { id: "B", label: "Many names may fall together — ask if this one is special", description: "Macro vs single-name." },
+      { id: "C", label: "A LIVE correlation matrix is running", description: "Not in this app." },
+    ],
+    explanation: "SAMPLE macro cases: is this name the story or along for the ride?",
+    glossaryTermId: "correlation",
+  },
+  {
+    id: "NL-12",
+    prompt: "Guidance cut in a headline is closest to…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "The outlook reset — reread the thesis", description: "Process." },
+      { id: "B", label: "Proof last quarter’s revenue was fake", description: "Jump." },
+      { id: "C", label: "A reason to ignore statements", description: "Opposite." },
+    ],
+    explanation: "Outlook can matter more than a beat on the last print. SAMPLE earnings + news literacy overlap here.",
+    glossaryTermId: "guidance",
+  },
 ];
 
 export const FINANCIAL_DRILLS_QUESTIONS: QuizQuestion[] = [
@@ -1365,6 +1823,397 @@ export const FINANCIAL_DRILLS_QUESTIONS: QuizQuestion[] = [
     explanation: "Statements literacy feeds decide-and-reveal — still SAMPLE snapshots, not LIVE EDGAR.",
     snapshotId: "snap-cyclical",
   },
+  {
+    id: "FD-07",
+    prompt: "On the SAMPLE mega-tech card, a fat net margin with weaker free cash flow first asks…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Where the cash went (working capital, capex, timing)", description: "Investigate." },
+      { id: "B", label: "To ignore the cash lines", description: "Skip the drill." },
+      { id: "C", label: "To treat P/E as cash", description: "Category error." },
+    ],
+    explanation: "Margin is not cash. SAMPLE drills: read income and cash together.",
+    snapshotId: "snap-mega-tech",
+    glossaryTermId: "free-cash-flow",
+  },
+  {
+    id: "FD-08",
+    prompt: "Liabilities large vs equity on the SAMPLE cyclical card is a cue to…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Assume bankruptcy today", description: "Jump." },
+      { id: "B", label: "Ask how a miss could get worse for owners", description: "Balance-sheet stress." },
+      { id: "C", label: "Ignore the balance sheet after a beat", description: "Skip process." },
+    ],
+    explanation: "Shareholders are last in line. SAMPLE: debt and cash bound how bad a miss can get.",
+    snapshotId: "snap-cyclical",
+  },
+  {
+    id: "FD-09",
+    prompt: "Revenue up, net margin down on a SAMPLE card most often points at…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "A LIVE filing error", description: "These are SAMPLE numbers." },
+      { id: "B", label: "The bid–ask spread", description: "Wrong domain." },
+      { id: "C", label: "Mix, costs, or pricing — profitability per sale slipped", description: "Margin compression." },
+    ],
+    explanation: "Top-line growth can hide a weaker profit story. That is the margin drill.",
+    snapshotId: "snap-cyclical",
+    glossaryTermId: "net-margin",
+  },
+  {
+    id: "FD-10",
+    prompt: "Using SAMPLE price and earnings, a higher P/E with unchanged price usually means…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Earnings in the denominator fell", description: "Multiple math." },
+      { id: "B", label: "The exchange closed", description: "Unrelated." },
+      { id: "C", label: "Free cash flow became revenue", description: "Wrong lines." },
+    ],
+    explanation: "P/E = price / earnings. SAMPLE cards exist so you can do that arithmetic with humility.",
+    snapshotId: "snap-mega-tech",
+    glossaryTermId: "pe-ratio",
+  },
+  {
+    id: "FD-11",
+    prompt: "Operating cash flow versus net income is useful because…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "They are always identical", description: "They often diverge." },
+      { id: "B", label: "Cash can confirm or challenge paper profit", description: "Process." },
+      { id: "C", label: "It replaces the need for a chart gate", description: "Indicators still come first." },
+    ],
+    explanation: "Accruals and working capital can wedge profit vs cash. SAMPLE snapshots put both on the card.",
+    snapshotId: "snap-mega-tech",
+  },
+  {
+    id: "FD-12",
+    prompt: "These statement cards are…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "SAMPLE / stylized teaching numbers — not live filings", description: "Honesty." },
+      { id: "B", label: "A LIVE EDGAR pull", description: "Out of scope." },
+      { id: "C", label: "Options chain quotes", description: "Wrong product." },
+    ],
+    explanation: "Financial drills stay SAMPLE. Do not treat the card as a live 10-Q.",
+    snapshotId: "snap-cyclical",
+    glossaryTermId: "delayed-vs-sample-feed",
+  },
+];
+
+export const FUTURES_LITERACY_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "FU-01",
+    prompt: "A futures contract is closest to…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "A share of a company", description: "That is equities." },
+      { id: "B", label: "An agreement to buy or sell an underlying later at a set price", description: "Definition." },
+      { id: "C", label: "A LIVE options chain", description: "Wrong product." },
+    ],
+    explanation: "Futures point at an underlying (index, commodity, rates). SAMPLE tapes here are not live contracts.",
+    glossaryTermId: "futures-market",
+    assetClass: "future",
+  },
+  {
+    id: "FU-02",
+    prompt: "In this trainer, Futures class is…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "SAMPLE educational charts — not a live desk", description: "Honesty." },
+      { id: "B", label: "The Beginner Equities Path", description: "Stocks stay Equities." },
+      { id: "C", label: "Order routing to an exchange", description: "No brokerage." },
+    ],
+    explanation: "Traditional retail stocks remain Equities. Futures are SAMPLE browse/decide after that fluency.",
+    glossaryTermId: "futures-market",
+    assetClass: "future",
+  },
+  {
+    id: "FU-03",
+    prompt: "Index-style vs energy-style SAMPLE futures tapes are useful because…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "They prove LIVE fills", description: "They do not." },
+      { id: "B", label: "All futures look identical", description: "Shapes differ on purpose." },
+      { id: "C", label: "Different underlyings have different tape shapes", description: "Process." },
+    ],
+    explanation: "Grind vs dump-reclaim vs range is the lesson — not a live roll calendar.",
+    assetClass: "future",
+  },
+  {
+    id: "FU-04",
+    prompt: "Roll literacy (plain language) means…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Contracts expire — the teaching tape is not a perpetual stock", description: "Process." },
+      { id: "B", label: "You must buy the stock instead", description: "Different market." },
+      { id: "C", label: "Greeks replace the chart", description: "No Greeks engine." },
+    ],
+    explanation: "SAMPLE futures charts still teach candles. Real desks also manage expiry. This app does not roll live contracts.",
+    glossaryTermId: "futures-market",
+    assetClass: "future",
+  },
+  {
+    id: "FU-05",
+    prompt: "Decide-and-reveal futures cases use…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "LIVE pit prices", description: "Out of scope." },
+      { id: "B", label: "SAMPLE briefs + pre/post OHLC", description: "Same CasePlayer loop." },
+      { id: "C", label: "A forex dealing desk", description: "Wrong class." },
+    ],
+    explanation: "Same BUY/SELL/HOLD loop as equities cases. Mock data only.",
+    assetClass: "future",
+  },
+  {
+    id: "FU-06",
+    prompt: "If you still need stock-market vocabulary, you should…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Stay on Equities literacy / Beginner path first", description: "Curriculum." },
+      { id: "B", label: "Skip to LIVE futures", description: "No LIVE." },
+      { id: "C", label: "Treat crypto as stocks", description: "Wrong class." },
+    ],
+    explanation: "Equities first. Futures SAMPLE is an expansion class.",
+    glossaryTermId: "equities-traditional-retail",
+    assetClass: "future",
+  },
+];
+
+export const FOREX_LITERACY_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "FX-01",
+    prompt: "Spot FX is closest to…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "The price of one currency in another", description: "Pair quote." },
+      { id: "B", label: "A share of a central bank", description: "Not equities." },
+      { id: "C", label: "A LIVE options chain", description: "Wrong product." },
+    ],
+    explanation: "EUR/USD is a pair. SAMPLE quotes here are stylized — not a live FX desk.",
+    glossaryTermId: "forex-spot",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-02",
+    prompt: "In this app, Forex class is…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "The traditional retail stocks path", description: "That is Equities." },
+      { id: "B", label: "SAMPLE pair tapes for chart literacy", description: "Honesty." },
+      { id: "C", label: "A dealing desk with leverage tickets", description: "No brokerage." },
+    ],
+    explanation: "Traditional retail stocks = Equities. FX is SAMPLE expansion.",
+    glossaryTermId: "forex-spot",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-03",
+    prompt: "Risk-on vs risk-off in SAMPLE FX often shows up as…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "A company’s net margin", description: "Statements, not FX." },
+      { id: "B", label: "A LIVE fill at the pit", description: "No LIVE." },
+      { id: "C", label: "Pairs moving together with mood — still ask what is new", description: "Process." },
+    ],
+    explanation: "Mood can move many pairs. SAMPLE: still separate rumor from data prints.",
+    glossaryTermId: "correlation",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-04",
+    prompt: "A data-print spike that immediately fades on a SAMPLE FX tape is a cue to…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Ask if the print was priced in before chasing", description: "Process." },
+      { id: "B", label: "Assume the pair cannot move again", description: "False." },
+      { id: "C", label: "Switch to LIVE quotes", description: "Stay SAMPLE." },
+    ],
+    explanation: "Same priced-in lesson as equities news. SAMPLE FX is still anti-hindsight practice.",
+    glossaryTermId: "priced-in",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-05",
+    prompt: "Majors vs crosses in these SAMPLE packs exist so you can see…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Identical scaled clones", description: "Forbidden." },
+      { id: "B", label: "Different shapes (drift, dump, range, spike-fade)", description: "Why multiple packs." },
+      { id: "C", label: "Greeks", description: "No chain." },
+    ],
+    explanation: "EURUSD drift ≠ USDJPY dump ≠ GBP range. Distinct teaching tapes.",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-06",
+    prompt: "HOLD on a SAMPLE FX case is…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Valid when the print is noisy and your horizon is unclear", description: "Process." },
+      { id: "B", label: "Cheating because FX must always trade", description: "This is education." },
+      { id: "C", label: "A LIVE short on the dollar", description: "No routing." },
+    ],
+    explanation: "Waiting is a decision on FX SAMPLE cases too.",
+    assetClass: "forex",
+  },
+];
+
+export const CRYPTO_LITERACY_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "CR-01",
+    prompt: "Crypto class in this trainer is…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "A replacement for Beginner Equities Path", description: "It is not." },
+      { id: "B", label: "SAMPLE browse/drill charts — not the stocks path", description: "Honesty." },
+      { id: "C", label: "LIVE on-chain execution", description: "No LIVE theater." },
+    ],
+    explanation: "Crypto does not replace Equities. SAMPLE/DELAYED labels only.",
+    glossaryTermId: "crypto-browse",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-02",
+    prompt: "Chase vs fade still applies on SAMPLE crypto because…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Spikes can be noise — evidence and horizon still matter", description: "Process." },
+      { id: "B", label: "Crypto never retraces", description: "False." },
+      { id: "C", label: "There is a LIVE order book here", description: "There is not." },
+    ],
+    explanation: "Same headline skill, different tape. SAMPLE only.",
+    glossaryTermId: "chase-vs-fade",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-03",
+    prompt: "A dump-with-no-reclaim SAMPLE tape is teaching…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "That every dump must bounce", description: "Opposite." },
+      { id: "B", label: "A LIVE liquidation feed", description: "Stylized OHLC." },
+      { id: "C", label: "Not every washout is a buy-the-dip", description: "Process." },
+    ],
+    explanation: "Distinct from ETH-style dump-then-reclaim. Shape is the lesson.",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-04",
+    prompt: "A stable-range SAMPLE pack is useful because…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Tiny ranges are a different tape than BTC grind", description: "Contrast." },
+      { id: "B", label: "It is a live peg guarantee", description: "Educational only." },
+      { id: "C", label: "It replaces SMA", description: "Unrelated." },
+    ],
+    explanation: "Not every crypto chart is a moon tape. SAMPLE contrast.",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-05",
+    prompt: "Chop-then-break on an alt SAMPLE pack is a cue to…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Assume LIVE volume confirmed it", description: "No LIVE volume." },
+      { id: "B", label: "Wait for the expansion, then decide with a level", description: "Process." },
+      { id: "C", label: "Treat it as Equities earnings", description: "Wrong class." },
+    ],
+    explanation: "Range then break is a regime change. SAMPLE process, not a casino button.",
+    glossaryTermId: "trend-vs-range",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-06",
+    prompt: "If you cannot yet read equities candles, crypto class should be…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Secondary — finish Equities literacy and Indicators first", description: "Curriculum." },
+      { id: "B", label: "Your only path", description: "Wrong spine." },
+      { id: "C", label: "A LIVE replacement for stocks", description: "No." },
+    ],
+    explanation: "Equities first. Crypto SAMPLE is browse/drill after candle fluency.",
+    glossaryTermId: "equities-traditional-retail",
+    assetClass: "crypto",
+  },
+];
+
+export const OPTIONS_LITERACY_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "OP-01",
+    prompt: "Options context in this app means…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "SAMPLE charts of an underlying around events or vol — not a chain", description: "Definition." },
+      { id: "B", label: "LIVE strikes, bids, and Greeks", description: "Out of scope." },
+      { id: "C", label: "The Beginner Equities Path", description: "Stocks stay Equities." },
+    ],
+    explanation: "No chain, no Greeks engine, no order routing. Underlying tape only.",
+    glossaryTermId: "options-context",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-02",
+    prompt: "Why show an underlying into an event window?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "To price a LIVE call", description: "Not a pricing product." },
+      { id: "B", label: "Event risk often shows up as coil or expansion on the stock tape", description: "Context." },
+      { id: "C", label: "Because options are equities", description: "Different product." },
+    ],
+    explanation: "Context education: the stock can squeeze or jump around events. SAMPLE.",
+    glossaryTermId: "options-context",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-03",
+    prompt: "A vol-spike SAMPLE underlying tape is teaching…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Implied vol as a tradable chain", description: "No chain." },
+      { id: "B", label: "That range is always tiny", description: "Opposite." },
+      { id: "C", label: "Wide range then settle can follow a shock", description: "Shape." },
+    ],
+    explanation: "You are reading the underlying, not quoting options. SAMPLE.",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-04",
+    prompt: "Failed breakout on an options-context pack is a cue to…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Ask whether the event move already failed — HOLD can be correct", description: "Process." },
+      { id: "B", label: "Buy every call automatically", description: "No chain; no auto." },
+      { id: "C", label: "Assume LIVE gamma is hedging", description: "No Greeks engine." },
+    ],
+    explanation: "Poke then fail is a tape story. Decide-and-reveal still uses BUY/SELL/HOLD on SAMPLE.",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-05",
+    prompt: "Pre-event coil (shrinking range) on SAMPLE context charts often means…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Volatility cannot expand later", description: "Coil can precede expansion." },
+      { id: "B", label: "The market is waiting — expansion may follow the event", description: "Context." },
+      { id: "C", label: "You have a LIVE straddle quote", description: "No quotes." },
+    ],
+    explanation: "Coil is a wait cue. Direction is not the coil itself.",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-06",
+    prompt: "Greeks and a live options chain in this trainer are…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Out of scope — educational underlying only", description: "Constraint." },
+      { id: "B", label: "Enabled on Market", description: "They are not." },
+      { id: "C", label: "Required before Equities literacy", description: "Opposite curriculum." },
+    ],
+    explanation: "Options context ≠ options product. Equities path stays stocks-first.",
+    glossaryTermId: "options-context",
+    assetClass: "option_context",
+  },
 ];
 
 export type QuizGroupId =
@@ -1383,7 +2232,11 @@ export type QuizGroupId =
   | "equity-literacy"
   | "financial-literacy"
   | "news-literacy"
-  | "financial-drills";
+  | "financial-drills"
+  | "futures-literacy"
+  | "forex-literacy"
+  | "crypto-literacy"
+  | "options-literacy";
 
 export interface QuizGroup {
   id: QuizGroupId;
@@ -1439,6 +2292,30 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   { id: "shooting-star", name: "Shooting Star", description: "Long upper shadow, top reversal", icon: "vertical_align_top" },
   { id: "inverted-hammer", name: "Inverted Hammer", description: "Long upper shadow, bottom reversal", icon: "vertical_align_bottom" },
   { id: "morning-star", name: "Morning Star", description: "Three-candle bullish reversal", icon: "nightlight" },
+  {
+    id: "futures-literacy",
+    name: "Futures Literacy",
+    description: "Contract vs stock, SAMPLE tapes, not a live desk (extra drill)",
+    icon: "candlestick_chart",
+  },
+  {
+    id: "forex-literacy",
+    name: "Forex Literacy",
+    description: "Pair quotes and risk-on/off on SAMPLE FX — not a live desk",
+    icon: "currency_exchange",
+  },
+  {
+    id: "crypto-literacy",
+    name: "Crypto Literacy",
+    description: "SAMPLE browse/drill only — does not replace Equities path",
+    icon: "token",
+  },
+  {
+    id: "options-literacy",
+    name: "Options Context Literacy",
+    description: "Underlying / event / vol context — no chain or Greeks",
+    icon: "tune",
+  },
 ];
 
 function patternKeysForGroup(groupId: QuizGroupId): string[] {
@@ -1454,6 +2331,10 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
   if (groupId === "news-literacy") return NEWS_LITERACY_QUESTIONS;
   if (groupId === "financial-drills") return FINANCIAL_DRILLS_QUESTIONS;
+  if (groupId === "futures-literacy") return FUTURES_LITERACY_QUESTIONS;
+  if (groupId === "forex-literacy") return FOREX_LITERACY_QUESTIONS;
+  if (groupId === "crypto-literacy") return CRYPTO_LITERACY_QUESTIONS;
+  if (groupId === "options-literacy") return OPTIONS_LITERACY_QUESTIONS;
   return QUIZ_QUESTIONS;
 }
 
@@ -1465,6 +2346,10 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
   if (groupId === "news-literacy") return NEWS_LITERACY_QUESTIONS;
   if (groupId === "financial-drills") return FINANCIAL_DRILLS_QUESTIONS;
+  if (groupId === "futures-literacy") return FUTURES_LITERACY_QUESTIONS;
+  if (groupId === "forex-literacy") return FOREX_LITERACY_QUESTIONS;
+  if (groupId === "crypto-literacy") return CRYPTO_LITERACY_QUESTIONS;
+  if (groupId === "options-literacy") return OPTIONS_LITERACY_QUESTIONS;
   if (groupId === "all") return QUIZ_QUESTIONS;
   const keys = patternKeysForGroup(groupId);
   const filtered = QUIZ_QUESTIONS.filter((q) => q.patternKey != null && keys.includes(q.patternKey));

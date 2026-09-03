@@ -24,6 +24,14 @@ export const PATTERNS: PatternDef[] = [
   { id: "head-shoulders", name: "Head and Shoulders", type: "reversal", sentiment: "bearish", confirmation: "very_high", description: "Three peaks: center peak (head) is highest, flanked by two lower peaks.", image: patternImage("head-shoulders.svg") },
   { id: "falling-wedge", name: "Falling Wedge", type: "continuation", sentiment: "bearish", confirmation: "medium", description: "Price consolidates between two downward sloping, converging trendlines.", image: patternImage("falling-wedge.svg") },
   { id: "morning-star", name: "Morning Star", type: "reversal", sentiment: "bullish", confirmation: "high", description: "A three-candle bullish reversal pattern occurring at the bottom of a downtrend.", image: patternImage("morning-star.svg") },
+  { id: "hanging-man", name: "Hanging Man", type: "reversal", sentiment: "bearish", confirmation: "medium", description: "Same long lower wick as a hammer, but after a rally—sellers may be showing up. Wait for the next print." },
+  { id: "evening-star", name: "Evening Star", type: "reversal", sentiment: "bearish", confirmation: "high", description: "Three-candle top: strong green, small middle, then strong red. SAMPLE teaching—confirm with later bars." },
+  { id: "piercing-line", name: "Piercing Line", type: "reversal", sentiment: "bullish", confirmation: "medium", description: "After a decline, a green body opens lower then closes well into the prior red body." },
+  { id: "dark-cloud-cover", name: "Dark Cloud Cover", type: "reversal", sentiment: "bearish", confirmation: "medium", description: "After a rally, a red body opens higher then closes well into the prior green body." },
+  { id: "three-white-soldiers", name: "Three White Soldiers", type: "continuation", sentiment: "bullish", confirmation: "high", description: "Three rising green bodies in a row after a decline or pause—buyers in control on this SAMPLE read." },
+  { id: "three-black-crows", name: "Three Black Crows", type: "continuation", sentiment: "bearish", confirmation: "high", description: "Three falling red bodies in a row after a rally or pause—sellers in control on this SAMPLE read." },
+  { id: "harami", name: "Harami", type: "reversal", sentiment: "neutral", confirmation: "low", description: "A small body nested inside the prior larger body—indecision after a swing. Direction needs the next print." },
+  { id: "tweezer-top", name: "Tweezer Top", type: "reversal", sentiment: "bearish", confirmation: "medium", description: "Two candles share a similar high after a rally—matched rejection at the highs on SAMPLE tapes." },
 ];
 
 export function getPattern(id: string): PatternDef | undefined {

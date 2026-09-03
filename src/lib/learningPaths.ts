@@ -33,42 +33,47 @@ export const BEGINNER_EQUITIES_PATH: LearningPathTemplate = {
   id: BEGINNER_EQUITIES_PATH_ID,
   title: "Beginner Equities Path",
   description:
-    "Literacy → statements → Indicators → earnings cases → company news cases (SAMPLE).",
+    "Traditional retail stocks: Equities literacy → statements → Indicators → earnings pack → company-news pack (SAMPLE).",
   milestones: [
     {
       id: "E4.M1",
       title: "Equities Literacy",
       contentRefs: ["quiz:equity-literacy", "glossary:literacy"],
       unlockFrom: [],
-      coachTip: "Learn what a share is, how exchanges work, and match risk to your horizon.",
+      coachTip:
+        "Open Training → Equities literacy. Optional Coach → Name the equity building blocks. Archive terms sit under Reference.",
     },
     {
       id: "E4.M2",
       title: "Statement Snapshot",
       contentRefs: ["quiz:financial-literacy", "snapshot:financial"],
       unlockFrom: ["E4.M1"],
-      coachTip: "Read revenue, profit vs cash, and simple P/E before trusting a headline.",
+      coachTip:
+        "Open Training → Statements literacy, then Coach → Read a SAMPLE company snapshot. Profit vs cash before any earnings case.",
     },
     {
       id: "E4.M0",
       title: "Chart Fluency",
       contentRefs: ["quiz:indicators", "pack:equity-sample"],
       unlockFrom: ["E4.M2"],
-      coachTip: "Prove candle/indicator fluency before graded decide-and-reveal cases.",
+      coachTip:
+        "Open Training → Indicators, then Charts on a SAMPLE equity pack. Coach → Why Indicators come before cases.",
     },
     {
       id: "E5.M3",
       title: "Earnings Cases",
       contentRefs: ["cases:earnings"],
       unlockFrom: ["E4.M0"],
-      coachTip: "Apply statement theory: beat/miss, margins, cash, guidance, balance sheet.",
+      coachTip:
+        "Open Cases → earnings. Start with beat or miss. Coach → Beat vs miss on a SAMPLE report.",
     },
     {
       id: "E5.M2",
       title: "Company News Cases",
       contentRefs: ["cases:company-news"],
       unlockFrom: ["E5.M3"],
-      coachTip: "Practice chase-vs-fade and company headlines on equity underlyings only.",
+      coachTip:
+        "Open Cases → company news. Coach → Chase vs fade a company headline.",
     },
   ],
 };
@@ -78,35 +83,39 @@ export const DECISION_MAKER_PATH: LearningPathTemplate = {
   id: DECISION_MAKER_PATH_ID,
   title: "Decision Maker Path",
   description:
-    "Case spine: earnings → company news → macro intro → combined news+statements (SAMPLE).",
+    "Decision practice on stocks: earnings pack → company-news → market-wide news → news plus financials (SAMPLE). Indicators quiz still gates graded cases.",
   milestones: [
     {
       id: "E5.M3",
       title: "Earnings Cases",
       contentRefs: ["cases:earnings"],
       unlockFrom: [],
-      coachTip: "Start with filings: beat/miss and statement red flags before headlines.",
+      coachTip:
+        "Open Cases → earnings (beginner and intermediate). Coach → Beat vs miss, or Revenue up, margin down.",
     },
     {
       id: "E5.M2",
       title: "Company News Cases",
       contentRefs: ["cases:company-news"],
       unlockFrom: ["E5.M3"],
-      coachTip: "Headline modes on equities: chase vs fade without macro yet.",
+      coachTip:
+        "Open Cases → company news. Coach → Chase vs fade a company headline. Skip market-wide news until this pack is done.",
     },
     {
       id: "E5.M2b",
       title: "Macro Intro Cases",
       contentRefs: ["cases:macro-news"],
       unlockFrom: ["E5.M2"],
-      coachTip: "Risk-off, prints, and supply shocks — still decide before reveal.",
+      coachTip:
+        "Open Cases → market-wide news. Coach → Stock versus a scared tape, Map a SAMPLE data print, or Who benefits from a supply shock.",
     },
     {
       id: "E5.M4",
       title: "Combined Cases",
       contentRefs: ["cases:combined"],
       unlockFrom: ["E5.M2b"],
-      coachTip: "News + statements together. Horizon mismatch can earn partial credit.",
+      coachTip:
+        "Open Cases → news plus financials. Coach → Headline plus snapshot. A different time frame can earn partial credit.",
     },
   ],
 };
@@ -116,35 +125,39 @@ export const MARKET_EXPLORER_PATH: LearningPathTemplate = {
   id: MARKET_EXPLORER_PATH_ID,
   title: "Market Explorer Path",
   description:
-    "SAMPLE multi-market decide practice: Indicators → futures → forex → crypto. Does not replace Beginner Equities (stocks).",
+    "SAMPLE multi-market decide practice: Indicators → futures pack → forex pack → crypto pack. Does not replace Beginner Equities (traditional stocks).",
   milestones: [
     {
       id: "E4.M0",
       title: "Chart Fluency",
       contentRefs: ["quiz:indicators"],
       unlockFrom: [],
-      coachTip: "Finish the Indicators quiz before any graded SAMPLE decide packs.",
+      coachTip:
+        "Open Training → Indicators before any graded SAMPLE decide pack. Coach → Why Indicators come before cases.",
     },
     {
       id: "E10.M5",
       title: "Futures SAMPLE Cases",
       contentRefs: ["cases:futures"],
       unlockFrom: ["E4.M0"],
-      coachTip: "Index/commodity-style SAMPLE decisions — still decide before reveal.",
+      coachTip:
+        "Open Cases → futures. Coach → Frame a SAMPLE futures decision. Index and commodity tapes, not a live desk.",
     },
     {
       id: "E10.M6",
       title: "Forex SAMPLE Cases",
       contentRefs: ["cases:forex"],
       unlockFrom: ["E10.M5"],
-      coachTip: "Spot FX SAMPLE — not a LIVE FX desk.",
+      coachTip:
+        "Open Cases → forex. Coach → Frame a SAMPLE forex decision. Practice pairs only — not a live FX desk.",
     },
     {
       id: "E10.M7",
       title: "Crypto SAMPLE Cases",
       contentRefs: ["cases:crypto", "cases:options-context"],
       unlockFrom: ["E10.M6"],
-      coachTip: "Crypto decide packs; options-context tip is educational only (no chain).",
+      coachTip:
+        "Open Cases → crypto, then options context (event and vol on the stock, no chain). Coach → Chase vs fade SAMPLE crypto hype, or Event risk without an options chain.",
     },
   ],
 };

@@ -2,11 +2,13 @@ import { useState } from "react";
 import CandlestickChart from "../../components/CandlestickChart";
 import PracticeShell from "../../components/PracticeShell";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
-import { HUNT_TAPE, gradeHunt, type GradeResult } from "../../lib/practiceLabs";
+import { HUNT_TAPES, gradeHunt, type GradeResult } from "../../lib/practiceLabs";
 
 export default function PracticeHunt() {
+  const [tapeIndex, setTapeIndex] = useState(0);
   const [mark, setMark] = useState<number | null>(null);
   const [result, setResult] = useState<GradeResult | null>(null);
+  const tape = HUNT_TAPES[tapeIndex]!;
 
   return (
     <PracticeShell
@@ -14,11 +16,29 @@ export default function PracticeHunt() {
       blurb="Tap the bar you think is a textbook candle pattern, then submit. Scanner runs after you mark — not before."
     >
       <section className="panel p-4 space-y-3">
+        <label className="text-[12px] text-muted">
+          Tape
+          <select
+            className="ml-2 bg-surface border border-line text-ink text-sm px-2 py-1 rounded-md"
+            value={tapeIndex}
+            onChange={(e) => {
+              setTapeIndex(Number(e.target.value));
+              setMark(null);
+              setResult(null);
+            }}
+          >
+            {HUNT_TAPES.map((t, i) => (
+              <option key={t.id} value={i}>
+                {t.name}
+              </option>
+            ))}
+          </select>
+        </label>
         <p className="text-sm">
-          {mark == null ? "Tap a bar" : `Selected bar ${mark + 1} (${HUNT_TAPE[mark]?.name})`}
+          {mark == null ? "Tap a bar" : `Selected bar ${mark + 1} (${tape.bars[mark]?.name})`}
         </p>
         <CandlestickChart
-          data={HUNT_TAPE}
+          data={tape.bars}
           height={280}
           showScaleControls={false}
           highlightIndex={mark ?? undefined}
@@ -33,7 +53,7 @@ export default function PracticeHunt() {
           disabled={mark == null}
           onClick={() => {
             if (mark == null) return;
-            setResult(gradeHunt(mark, HUNT_TAPE));
+            setResult(gradeHunt(mark, tape.bars));
             markMiscPracticeDone("hunt");
           }}
         >

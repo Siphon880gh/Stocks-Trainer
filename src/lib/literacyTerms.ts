@@ -129,6 +129,126 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     detail:
       "Neither is always right. Match the choice to evidence quality, liquidity, and your horizon. Used in company-news and multi-market SAMPLE cases.",
   },
+  {
+    id: "bid-ask",
+    name: "Bid vs Ask",
+    category: "markets",
+    summary: "Bid is what buyers will pay; ask is what sellers will take.",
+    detail:
+      "The spread between bid and ask is a cost of transacting. SAMPLE charts here show OHLC, not a live order book. Educational only.",
+  },
+  {
+    id: "liquidity",
+    name: "Liquidity",
+    category: "markets",
+    summary: "How easily you can trade without moving the price much.",
+    detail:
+      "Thin names can gap and slip. Liquid names absorb size more quietly. SAMPLE tapes are stylized—they do not measure real depth.",
+  },
+  {
+    id: "volatility",
+    name: "Volatility",
+    category: "markets",
+    summary: "How large and fast prices tend to swing.",
+    detail:
+      "Wide ranges and long wicks are a volatility cue on a SAMPLE candle chart. High volatility is not a buy or sell by itself—it changes how much uncertainty you accept.",
+  },
+  {
+    id: "volume",
+    name: "Volume",
+    category: "markets",
+    summary: "How much traded in the period—not shown as a live tape here.",
+    detail:
+      "Volume can confirm a move or warn that a spike had little participation. This trainer’s SAMPLE OHLC packs do not include a live volume feed.",
+  },
+  {
+    id: "support-resistance",
+    name: "Support and Resistance",
+    category: "process",
+    summary: "Prices where buying or selling has repeatedly shown up.",
+    detail:
+      "Support is a zone where buyers have stepped in; resistance where sellers have. SAMPLE teaching: treat them as areas, not magic lines, and wait for later prints to confirm.",
+  },
+  {
+    id: "trend-vs-range",
+    name: "Trend vs Range",
+    category: "process",
+    summary: "One-way grind versus chopping between levels.",
+    detail:
+      "Trend tools (moving averages) fit a grind. Oscillators fit a range. Mixing them blindly is a common SAMPLE drill mistake.",
+  },
+  {
+    id: "market-order-vs-limit",
+    name: "Market vs Limit (education)",
+    category: "position",
+    summary: "Market seeks a fill now; a limit waits for your price.",
+    detail:
+      "Educational contrast only—this app does not route orders. A market order accepts the current bid/ask; a limit order waits. SAMPLE teaching, not a broker tutorial.",
+  },
+  {
+    id: "earnings-season",
+    name: "Earnings Season",
+    category: "process",
+    summary: "The clustered window when many companies report results.",
+    detail:
+      "Reports can reset the story: beat, miss, margins, cash, guidance. SAMPLE cases use stylized snapshots—not live filings.",
+  },
+  {
+    id: "guidance",
+    name: "Guidance / Outlook",
+    category: "process",
+    summary: "What management says it expects next—not what already happened.",
+    detail:
+      "A cut in outlook can matter more than a beat on the last quarter. SAMPLE earnings cases teach you to reread the thesis after guidance changes.",
+  },
+  {
+    id: "free-cash-flow",
+    name: "Free Cash Flow",
+    category: "ownership",
+    summary: "Cash from operations minus what the business reinvests to stay running.",
+    detail:
+      "Profit on the income statement can diverge from cash. SAMPLE snapshots highlight operating cash and free cash flow so you can question accruals.",
+  },
+  {
+    id: "net-margin",
+    name: "Net Margin",
+    category: "ownership",
+    summary: "Net income as a share of revenue—how much of each sale is kept.",
+    detail:
+      "Revenue up with margin down can still be a weaker story. SAMPLE statement cards show netMarginPct for that comparison.",
+  },
+  {
+    id: "pe-ratio",
+    name: "P/E Ratio",
+    category: "ownership",
+    summary: "Price divided by earnings—a rough multiple, not a grade.",
+    detail:
+      "A high or low P/E is a starting question, not an answer. SAMPLE cards include price and earnings so you can compute a simple multiple. Not a valuation product.",
+  },
+  {
+    id: "diversification",
+    name: "Diversification",
+    category: "position",
+    summary: "Spreading bets so one name or one story cannot sink the whole plan.",
+    detail:
+      "SAMPLE teaching: one case is one decision. Position size and how names move together sit outside this trainer’s order ticket—because there is no ticket.",
+  },
+  {
+    id: "correlation",
+    name: "Correlation (plain language)",
+    category: "process",
+    summary: "Whether two prices tend to move together or not.",
+    detail:
+      "In a risk-off tape, many stocks fall together. SAMPLE macro cases ask whether this name is the story or just along for the ride. Not a live correlation matrix.",
+  },
+  {
+    id: "delayed-vs-sample-feed",
+    name: "SAMPLE vs DELAYED feed",
+    category: "markets",
+    summary: "This app labels practice data honestly—never LIVE theater.",
+    detail:
+      "SAMPLE / STYLIZED packs are curated teaching tapes. DELAYED is a labeled delayed adapter when enabled. Neither is a real-time brokerage quote. Equities path still uses SAMPLE packs first.",
+  },
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

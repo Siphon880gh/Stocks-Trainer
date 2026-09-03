@@ -141,14 +141,18 @@ export default function Dashboard() {
           </h1>
           {pathDone ? (
             <p className="text-sm text-muted mt-2">
-              {pathTemplate?.title ?? "Path"} complete (SAMPLE progress, not attested).
+              {progress.pathId === DECISION_MAKER_PATH_ID
+                ? "Decision Maker credential: earnings through news plus financials packs are complete (SAMPLE progress, not attested)."
+                : progress.pathId === MARKET_EXPLORER_PATH_ID
+                  ? "Market Explorer credential: futures, forex, and crypto SAMPLE packs are complete. Traditional stocks stay on Beginner Equities."
+                  : "Beginner Equities credential: literacy, Indicators, earnings pack, and company-news pack are complete (SAMPLE progress, not attested)."}
             </p>
           ) : activeDef ? (
             <p className="text-sm text-muted mt-2">{activeDef.summary}</p>
           ) : (
             <p className="text-sm text-muted mt-2">
               {goalPending
-                ? "Confirm a path above to begin."
+                ? "Confirm a path above to begin. Beginner Equities is the traditional stock path."
                 : `Start ${pathTemplate?.title ?? "your path"}.`}
             </p>
           )}
@@ -197,8 +201,12 @@ export default function Dashboard() {
         {coachingDoneCount === 0 ? (
           <p className="text-[13px] text-muted">
             Optional:{" "}
-            <Link to="/coach" className="text-primary hover:underline">
-              step coaching
+            <Link to="/coach/earnings-beat-miss" className="text-primary hover:underline">
+              Beat vs miss
+            </Link>
+            {" · "}
+            <Link to="/coach/chase-vs-fade" className="text-primary hover:underline">
+              Chase vs fade
             </Link>
           </p>
         ) : null}
@@ -246,6 +254,10 @@ export default function Dashboard() {
           Account · {signedIn ? progress.account?.displayName ?? "You" : "not signed in"}
         </summary>
         <div className="mt-3 space-y-3">
+          <p className="text-[12px] text-muted">
+            Progress stays on this device. Export and import JSON here. There is no cloud
+            sync and no fake upload success.
+          </p>
           <div className="flex flex-wrap items-end gap-3">
             <label className="flex flex-col gap-1">
               <span className="text-[12px] text-muted">Display name</span>

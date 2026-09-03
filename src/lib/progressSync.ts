@@ -26,7 +26,7 @@ export interface ProgressSyncAdapter {
 
 export const localOnlySyncAdapter: ProgressSyncAdapter = {
   mode: "local_only",
-  statusLabel: "Saved on this device",
+  statusLabel: "Saved on this device only · no cloud sync",
   async push(state: ProgressState) {
     saveProgress(state);
     return { ok: true as const, stub: true as const };

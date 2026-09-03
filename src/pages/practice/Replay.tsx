@@ -4,23 +4,34 @@ import PracticeShell from "../../components/PracticeShell";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
 import {
   REPLAY_START_BARS,
-  REPLAY_TAPE,
+  REPLAY_TAPES,
   gradeReplay,
   type GradeResult,
   type ReplayAction,
 } from "../../lib/practiceLabs";
 
 export default function PracticeReplay() {
+  const [tapeIndex, setTapeIndex] = useState(0);
   const [visible, setVisible] = useState(REPLAY_START_BARS);
   const [actions, setActions] = useState<ReplayAction[]>([]);
   const [revealed, setRevealed] = useState(false);
   const [result, setResult] = useState<GradeResult | null>(null);
-  const tape = revealed ? REPLAY_TAPE : REPLAY_TAPE.slice(0, visible);
+  const tapeDef = REPLAY_TAPES[tapeIndex]!;
+  const full = tapeDef.bars;
+  const tape = revealed ? full : full.slice(0, visible);
+
+  const resetTape = (next: number) => {
+    setTapeIndex(next);
+    setVisible(REPLAY_START_BARS);
+    setActions([]);
+    setRevealed(false);
+    setResult(null);
+  };
 
   const record = (action: ReplayAction) => {
     if (revealed) return;
     setActions((prev) => [...prev, action]);
-    setVisible((n) => Math.min(REPLAY_TAPE.length, n + 1));
+    setVisible((n) => Math.min(full.length, n + 1));
   };
 
   return (
@@ -30,8 +41,22 @@ export default function PracticeReplay() {
     >
       <section className="panel p-4 space-y-3">
         <p className="text-[12px] text-muted">
-          Showing {tape.length} / {REPLAY_TAPE.length} bars
+          {tapeDef.name} · showing {tape.length} / {full.length} bars
         </p>
+        <label className="text-[12px] text-muted">
+          Tape
+          <select
+            className="ml-2 bg-surface border border-line text-ink text-sm px-2 py-1 rounded-md"
+            value={tapeIndex}
+            onChange={(e) => resetTape(Number(e.target.value))}
+          >
+            {REPLAY_TAPES.map((t, i) => (
+              <option key={t.id} value={i}>
+                {t.name}
+              </option>
+            ))}
+          </select>
+        </label>
         <CandlestickChart data={tape} height={260} showScaleControls={false} />
         <div className="flex flex-wrap gap-2">
           <button
@@ -45,7 +70,7 @@ export default function PracticeReplay() {
           <button
             type="button"
             className="border border-line px-3 py-2 rounded-lg text-sm font-medium hover:bg-canvas disabled:opacity-40"
-            disabled={revealed || visible >= REPLAY_TAPE.length}
+            disabled={revealed || visible >= full.length}
             onClick={() => record("wait")}
           >
             Wait

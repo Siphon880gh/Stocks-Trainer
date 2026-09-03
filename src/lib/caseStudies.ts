@@ -57,7 +57,7 @@ export interface CaseStudy {
   correctActions: CaseAction[];
   acceptablePartial: CaseAction[];
   debrief: CaseDebrief;
-  /** Soft-gate: short not offered unless true */
+  /** When false or omitted, SHORT is hidden — not a decision on this case. */
   allowShort?: boolean;
   packId: CasePackId;
   difficulty: "beginner" | "intermediate";
@@ -97,6 +97,96 @@ const CYCLICAL_PRE: OHLC[] = [
   bar("T-2", 107.8, 108.4, 106.5, 107.0),
   bar("T-1", 107.0, 108.2, 106.8, 107.6),
   bar("T0", 107.6, 108.0, 106.9, 107.2),
+];
+
+const BANK_PRE: OHLC[] = [
+  bar("T-5", 42.8, 43.1, 42.4, 42.6),
+  bar("T-4", 42.6, 42.9, 42.1, 42.3),
+  bar("T-3", 42.3, 42.5, 41.6, 41.8),
+  bar("T-2", 41.8, 42.0, 41.2, 41.4),
+  bar("T-1", 41.4, 41.7, 40.9, 41.1),
+  bar("T0", 41.1, 41.4, 40.7, 40.9),
+];
+
+const HEALTH_PRE: OHLC[] = [
+  bar("T-5", 128.4, 129.0, 127.8, 128.6),
+  bar("T-4", 128.6, 129.2, 128.0, 128.4),
+  bar("T-3", 133.8, 135.2, 133.2, 134.6),
+  bar("T-2", 134.6, 136.0, 134.0, 135.4),
+  bar("T-1", 135.4, 136.4, 134.8, 135.8),
+  bar("T0", 135.8, 136.8, 135.2, 136.1),
+];
+
+const SMALL_PRE: OHLC[] = [
+  bar("T-5", 19.4, 19.9, 19.1, 19.6),
+  bar("T-4", 19.6, 20.2, 19.3, 19.5),
+  bar("T-3", 19.5, 19.8, 18.9, 19.2),
+  bar("T-2", 19.2, 19.7, 19.0, 19.6),
+  bar("T-1", 19.6, 20.1, 19.4, 19.8),
+  bar("T0", 19.8, 20.4, 19.5, 19.9),
+];
+
+const UTILITY_PRE: OHLC[] = [
+  bar("T-5", 58.2, 58.5, 58.0, 58.3),
+  bar("T-4", 58.3, 58.6, 58.1, 58.4),
+  bar("T-3", 58.4, 58.7, 58.2, 58.5),
+  bar("T-2", 58.5, 58.9, 58.3, 58.6),
+  bar("T-1", 58.6, 58.8, 58.4, 58.5),
+  bar("T0", 58.5, 58.7, 58.3, 58.4),
+];
+
+const AIRLINE_PRE: OHLC[] = [
+  bar("T-5", 36.8, 37.4, 36.2, 36.5),
+  bar("T-4", 36.5, 36.9, 35.4, 35.8),
+  bar("T-3", 35.8, 36.1, 34.6, 34.9),
+  bar("T-2", 34.9, 35.4, 34.2, 34.6),
+  bar("T-1", 34.6, 35.0, 33.8, 34.1),
+  bar("T0", 34.1, 34.5, 33.4, 33.7),
+];
+
+const FOOD_PRE: OHLC[] = [
+  bar("T-5", 72.1, 72.6, 71.8, 72.2),
+  bar("T-4", 72.2, 72.8, 71.9, 72.0),
+  bar("T-3", 72.0, 72.4, 71.5, 71.8),
+  bar("T-2", 71.8, 72.3, 71.4, 72.1),
+  bar("T-1", 72.1, 72.5, 71.7, 71.9),
+  bar("T0", 71.9, 72.4, 71.6, 72.0),
+];
+
+const PHARMA_PRE: OHLC[] = [
+  bar("T-5", 88.4, 89.2, 87.9, 88.8),
+  bar("T-4", 88.8, 89.6, 88.2, 89.1),
+  bar("T-3", 89.1, 89.5, 86.4, 86.9),
+  bar("T-2", 86.9, 87.4, 85.8, 86.2),
+  bar("T-1", 86.2, 86.8, 85.4, 85.9),
+  bar("T0", 85.9, 86.4, 85.1, 85.5),
+];
+
+const STEEL_PRE: OHLC[] = [
+  bar("T-5", 51.2, 51.8, 50.6, 51.0),
+  bar("T-4", 51.0, 51.4, 50.2, 50.5),
+  bar("T-3", 50.5, 52.8, 50.4, 52.4),
+  bar("T-2", 52.4, 54.1, 52.0, 53.6),
+  bar("T-1", 53.6, 54.8, 53.1, 54.2),
+  bar("T0", 54.2, 55.0, 53.8, 54.6),
+];
+
+const TELCO_PRE: OHLC[] = [
+  bar("T-5", 27.4, 27.7, 27.1, 27.3),
+  bar("T-4", 27.3, 27.6, 26.8, 27.0),
+  bar("T-3", 27.0, 27.2, 26.5, 26.7),
+  bar("T-2", 26.7, 26.9, 26.2, 26.4),
+  bar("T-1", 26.4, 26.8, 26.1, 26.5),
+  bar("T0", 26.5, 26.9, 26.3, 26.6),
+];
+
+const REIT_PRE: OHLC[] = [
+  bar("T-5", 31.8, 32.2, 31.5, 31.9),
+  bar("T-4", 31.9, 32.4, 31.6, 32.1),
+  bar("T-3", 32.1, 32.3, 31.4, 31.6),
+  bar("T-2", 31.6, 31.9, 31.1, 31.3),
+  bar("T-1", 31.3, 31.7, 31.0, 31.4),
+  bar("T0", 31.4, 31.8, 31.1, 31.5),
 ];
 
 const megaSnap = FINANCIAL_SNAPSHOTS[0]!;
@@ -298,6 +388,305 @@ export const EARNINGS_CASES: CaseStudy[] = [
     packId: "earnings",
     difficulty: "beginner",
   },
+  {
+    id: "case-earn-retail-beat-thin",
+    title: "Retail beat, but traffic was the story",
+    contextType: "financials",
+    thinkingMode: "beat_miss",
+    brief:
+      "This SAMPLE retailer beat on profit, but store traffic was weaker than the crowd wanted. The stock had already jumped into the print. Buy, sell, or hold before you see what happened next.",
+    statementSnapshot: {
+      ...megaSnap,
+      id: "snap-earn-retail-beat",
+      label: "Retail chain",
+      symbol: "NKE.S",
+      incomeStatement: {
+        revenue: 210_000,
+        netIncome: 18_000,
+        netMarginPct: 8.6,
+      },
+      notes: "Practice numbers: profit beat, traffic commentary weaker than hoped.",
+    },
+    preOhlc: [
+      bar("T-5", 94.2, 94.8, 93.9, 94.5),
+      bar("T-4", 94.5, 95.0, 94.1, 94.4),
+      bar("T-3", 97.8, 98.6, 97.4, 98.2),
+      bar("T-2", 98.2, 99.4, 98.0, 99.1),
+      bar("T-1", 99.1, 100.2, 98.8, 99.9),
+      bar("T0", 99.9, 101.0, 99.4, 100.6),
+    ],
+    postOhlc: withAftermath(
+      [
+        bar("T-5", 94.2, 94.8, 93.9, 94.5),
+        bar("T-4", 94.5, 95.0, 94.1, 94.4),
+        bar("T-3", 97.8, 98.6, 97.4, 98.2),
+        bar("T-2", 98.2, 99.4, 98.0, 99.1),
+        bar("T-1", 99.1, 100.2, 98.8, 99.9),
+        bar("T0", 99.9, 101.0, 99.4, 100.6),
+      ],
+      [
+        bar("+1", 97.2, 97.8, 95.6, 96.1),
+        bar("+2", 96.1, 96.6, 94.8, 95.2),
+        bar("+3", 95.2, 95.8, 94.2, 94.6),
+      ],
+    ),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A beat on profit is not the whole print. If the stock already jumped into the report, weaker traffic can be the new fact. HOLD is valid if you need time to reread the thesis.",
+      whyMarketMoved:
+        "Buyers who paid up for a clean beat stepped back when the traffic comment landed.",
+      evidence:
+        "Profit beat on SAMPLE numbers; the tape was already extended into the print; traffic was the miss the crowd cared about.",
+    },
+    allowShort: false,
+    packId: "earnings",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-earn-bank-quiet-beat",
+    title: "Bank beats, loan growth still slow",
+    contextType: "financials",
+    thinkingMode: "beat_miss",
+    brief:
+      "This SAMPLE regional bank beat on profit by a little. Loan growth stayed slow. The stock had already slipped into the print. Buy, sell, or hold before you see what happened next.",
+    statementSnapshot: {
+      ...cyclicalSnap,
+      id: "snap-earn-bank-quiet",
+      label: "Regional bank",
+      symbol: "JPM.S",
+      incomeStatement: {
+        revenue: 48_000,
+        netIncome: 12_400,
+        netMarginPct: 25.8,
+      },
+      notes: "Practice numbers: small profit beat, slow loan growth.",
+    },
+    preOhlc: BANK_PRE,
+    postOhlc: withAftermath(BANK_PRE, [
+      bar("+1", 40.9, 41.6, 40.6, 41.3),
+      bar("+2", 41.3, 41.8, 41.0, 41.5),
+      bar("+3", 41.5, 41.9, 41.1, 41.4),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: ["buy", "sell"],
+    debrief: {
+      process:
+        "A small beat into a weak tape is often not a new story. Hold is fair when the miss the crowd cared about (loan growth) did not flip.",
+      whyMarketMoved:
+        "The stock bounced a little, then stalled. The beat was not a reset.",
+      evidence:
+        "Profit beat on SAMPLE numbers; loan growth stayed slow; the chart was already slipping.",
+    },
+    allowShort: false,
+    packId: "earnings",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-earn-int-beat-gap",
+    title: "Beat on EPS, miss on the mix",
+    contextType: "financials",
+    thinkingMode: "beat_miss",
+    brief:
+      "This SAMPLE healthcare name beat EPS, but the mix shifted toward lower-margin contracts. The stock gapped higher into the print. You already passed Indicators. Decide with the mix, not the headline EPS.",
+    statementSnapshot: {
+      ...megaSnap,
+      id: "snap-earn-int-mix",
+      label: "Healthcare services",
+      symbol: "UNH.S",
+      incomeStatement: {
+        revenue: 412_000,
+        netIncome: 22_000,
+        netMarginPct: 5.3,
+      },
+      notes: "Practice: EPS beat, mix shifted to thinner contracts.",
+    },
+    preOhlc: HEALTH_PRE,
+    postOhlc: withAftermath(HEALTH_PRE, [
+      bar("+1", 132.4, 133.0, 129.8, 130.6),
+      bar("+2", 130.6, 131.2, 128.4, 129.1),
+      bar("+3", 129.1, 129.8, 127.6, 128.2),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "EPS can beat while the engine that produces EPS gets worse. Intermediate work is naming the mix, then matching your time frame.",
+      whyMarketMoved:
+        "Buyers who paid the gap sold when the mix comment landed.",
+      evidence:
+        "EPS beat on SAMPLE numbers; mix comment weaker; tape already gapped into the print.",
+    },
+    allowShort: false,
+    packId: "earnings",
+    difficulty: "intermediate",
+  },
+  {
+    id: "case-earn-int-margin-volume",
+    title: "Units up, dollars of profit down",
+    contextType: "financials",
+    thinkingMode: "margin_compression",
+    brief:
+      "This SAMPLE food company shipped more units. Net margin still fell. Price cuts and promotions explain most of it. The stock is stuck in a range. How do you treat a volume story that is not a profit story?",
+    statementSnapshot: {
+      ...cyclicalSnap,
+      id: "snap-earn-int-food-margin",
+      label: "Packaged food",
+      symbol: "GIS.S",
+      incomeStatement: {
+        revenue: 88_000,
+        netIncome: 4_200,
+        netMarginPct: 4.8,
+      },
+      notes: "Practice: unit growth with promotional margin hit.",
+    },
+    preOhlc: FOOD_PRE,
+    postOhlc: withAftermath(FOOD_PRE, [
+      bar("+1", 71.4, 71.8, 70.2, 70.6),
+      bar("+2", 70.6, 71.0, 69.6, 69.9),
+      bar("+3", 69.9, 70.4, 69.2, 69.5),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Volume without margin is not automatically healthy. Ask whether promotions are temporary or the new price the customer will pay.",
+      whyMarketMoved:
+        "The range broke lower once the promotional comment showed up in the numbers.",
+      evidence:
+        "Units up, net margin down on SAMPLE cards. Range tape, not a melt-up.",
+    },
+    allowShort: false,
+    packId: "earnings",
+    difficulty: "intermediate",
+  },
+  {
+    id: "case-earn-int-cash-receivables",
+    title: "Profit printed, receivables ate cash",
+    contextType: "financials",
+    thinkingMode: "cash_flow_red_flag",
+    brief:
+      "This SAMPLE software name printed a profit. Free cash flow went negative as receivables jumped. The stock had been grinding. You have already seen a snapshot card. Decide whether paper profit is enough.",
+    statementSnapshot: {
+      ...megaSnap,
+      id: "snap-earn-int-recv",
+      label: "Software vendor",
+      symbol: "CRM.S",
+      incomeStatement: {
+        revenue: 92_000,
+        netIncome: 11_000,
+        netMarginPct: 12.0,
+      },
+      cashFlow: {
+        operatingCashFlow: 1_200,
+        freeCashFlow: -4_800,
+      },
+      notes: "Practice: profit with a receivables-driven cash miss.",
+    },
+    preOhlc: SMALL_PRE,
+    postOhlc: withAftermath(SMALL_PRE, [
+      bar("+1", 18.9, 19.1, 17.8, 18.1),
+      bar("+2", 18.1, 18.4, 17.2, 17.5),
+      bar("+3", 17.5, 17.8, 16.9, 17.2),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Profit without cash is a process flag. Hold only if you can name why receivables will reverse. Buying the grind because EPS looks fine is the trap.",
+      whyMarketMoved:
+        "The chop resolved lower when cash quality showed up next to the profit print.",
+      evidence:
+        "SAMPLE FCF negative vs positive net income; receivables called out in the notes.",
+    },
+    allowShort: false,
+    packId: "earnings",
+    difficulty: "intermediate",
+  },
+  {
+    id: "case-earn-int-guide-cut-utility",
+    title: "Utility cuts capex-funded outlook",
+    contextType: "financials",
+    thinkingMode: "guidance_cut",
+    brief:
+      "This SAMPLE utility beat the quarter. It also cut next-year growth because a rate case slipped. The stock barely moved into the print. Which clock are you on: last quarter, or the delayed rate path?",
+    statementSnapshot: {
+      ...cyclicalSnap,
+      id: "snap-earn-int-util-guide",
+      label: "Regulated utility",
+      symbol: "NEE.S",
+      incomeStatement: {
+        revenue: 26_000,
+        netIncome: 3_100,
+        netMarginPct: 11.9,
+      },
+      notes: "Practice: quarter ok, growth outlook delayed by a rate case.",
+    },
+    preOhlc: UTILITY_PRE,
+    postOhlc: withAftermath(UTILITY_PRE, [
+      bar("+1", 57.8, 58.0, 56.9, 57.2),
+      bar("+2", 57.2, 57.4, 56.4, 56.7),
+      bar("+3", 56.7, 57.0, 56.1, 56.4),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A beat does not cancel a slower path. Intermediate work is matching the cut to your holding period, not treating utilities as auto-hold.",
+      whyMarketMoved:
+        "Income buyers faded a slower growth path even though the quarter was fine.",
+      evidence:
+        "Quarter beat on SAMPLE numbers; outlook cut tied to a delayed rate case.",
+    },
+    allowShort: false,
+    packId: "earnings",
+    difficulty: "intermediate",
+  },
+  {
+    id: "case-earn-int-debt-airline",
+    title: "Airline prints a profit on a thin equity cushion",
+    contextType: "financials",
+    thinkingMode: "balance_sheet_stress",
+    brief:
+      "This SAMPLE airline printed a profit after a weak stretch. Debt is still large versus equity. The tape is already sliding. A profitable quarter does not rewrite the balance sheet. What risk are you taking?",
+    statementSnapshot: {
+      ...cyclicalSnap,
+      id: "snap-earn-int-air-debt",
+      label: "Airline",
+      symbol: "DAL.S",
+      incomeStatement: {
+        revenue: 54_000,
+        netIncome: 1_800,
+        netMarginPct: 3.3,
+      },
+      balanceSheet: {
+        assets: 72_000,
+        liabilities: 64_000,
+        equity: 8_000,
+      },
+      notes: "Practice: thin profit, thin equity, still a lot of debt.",
+    },
+    preOhlc: AIRLINE_PRE,
+    postOhlc: withAftermath(AIRLINE_PRE, [
+      bar("+1", 32.8, 33.1, 31.6, 31.9),
+      bar("+2", 31.9, 32.3, 30.8, 31.2),
+      bar("+3", 31.2, 31.6, 30.2, 30.6),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Profit on a thin equity cushion still leaves you last in line. Hold only if you sized for a further slide. Buying because the quarter was green ignores leverage.",
+      whyMarketMoved:
+        "The slide continued. Leverage buyers did not get a reset from one print.",
+      evidence:
+        "SAMPLE liabilities dwarf equity; profit is thin; the tape was already weak.",
+    },
+    allowShort: false,
+    packId: "earnings",
+    difficulty: "intermediate",
+  },
 ];
 
 /** Pack A — thin company news (E5.M2). Equity underlyings; no macro/FOMC required. */
@@ -387,6 +776,206 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
     allowShort: false,
     packId: "company-news",
     difficulty: "beginner",
+  },
+  {
+    id: "case-news-pharma-trial-hype",
+    title: "Trial headline after a gap-down week",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE pharma name already dumped. Then a mid-stage trial headline hits social feeds. The trial is small. Is this a reason to chase the bounce, or a reason to wait for a filing?",
+    newsHeadline:
+      "Small mid-stage trial called encouraging on social posts. Full data not filed.",
+    preOhlc: PHARMA_PRE,
+    postOhlc: withAftermath(PHARMA_PRE, [
+      bar("+1", 87.2, 89.4, 86.8, 88.6),
+      bar("+2", 88.6, 89.0, 85.4, 85.9),
+      bar("+3", 85.9, 86.4, 84.6, 85.1),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A dumped chart plus a thin trial headline is a classic chase. Wait for what was actually measured. Hold is fair if you already own a sized position.",
+      whyMarketMoved:
+        "The bounce faded when the headline stayed small.",
+      evidence:
+        "Gap-down tape, then a social trial post without a full filing.",
+    },
+    allowShort: false,
+    packId: "company-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-news-steel-contract-spike",
+    title: "Steel mill wins a one-off order",
+    contextType: "news",
+    thinkingMode: "company_headline",
+    brief:
+      "This SAMPLE steel mill already spiked. Then it announces a one-off export order. The order is large for one quarter, not a multi-year book. Buy, sell, or hold?",
+    newsHeadline: "Wins a large one-quarter export order. No multi-year frame.",
+    preOhlc: STEEL_PRE,
+    postOhlc: withAftermath(STEEL_PRE, [
+      bar("+1", 54.0, 54.4, 51.8, 52.2),
+      bar("+2", 52.2, 52.8, 51.2, 51.6),
+      bar("+3", 51.6, 52.1, 50.8, 51.2),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Map the order to how long the cash shows up. A one-off after a spike is often a reason not to chase.",
+      whyMarketMoved:
+        "Late buyers met sellers who treated the order as already in the spike.",
+      evidence:
+        "Spike tape plus a one-quarter order, not a multi-year contract.",
+    },
+    allowShort: false,
+    packId: "company-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-news-telco-spectrum-pause",
+    title: "Telco delays a spectrum purchase",
+    contextType: "news",
+    thinkingMode: "company_headline",
+    brief:
+      "This SAMPLE telco was grinding lower. It delays a spectrum purchase to keep cash. No scandal. Does delaying a spend change the story enough to buy?",
+    newsHeadline: "Pauses a spectrum purchase to hold cash. No scandal alleged.",
+    preOhlc: TELCO_PRE,
+    postOhlc: withAftermath(TELCO_PRE, [
+      bar("+1", 26.8, 27.4, 26.6, 27.2),
+      bar("+2", 27.2, 27.6, 26.9, 27.3),
+      bar("+3", 27.3, 27.7, 27.0, 27.4),
+    ]),
+    correctActions: ["buy", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A pause can be a cash choice, not a broken network. Hold if you needed a permanent plan. Buy only if cash flexibility was the missing piece.",
+      whyMarketMoved:
+        "The grind lifted a little once the spend delay was clear.",
+      evidence:
+        "Company headline on cash vs spend. Weak tape, not a scandal dump.",
+    },
+    allowShort: false,
+    packId: "company-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-news-int-chase-reit",
+    title: "REIT already ran into a refinancing headline",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE REIT already ran. A refinancing headline says the company rolled a loan at a slightly better rate. You have Indicators. Is the headline new information, or a reason for late buyers to exit?",
+    newsHeadline:
+      "Rolls a loan at a modestly better rate. No new properties added.",
+    preOhlc: REIT_PRE,
+    postOhlc: withAftermath(REIT_PRE, [
+      bar("+1", 31.2, 31.5, 30.2, 30.5),
+      bar("+2", 30.5, 30.8, 29.8, 30.1),
+      bar("+3", 30.1, 30.4, 29.6, 29.9),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Ask what is already in the price. A modest refinance after a run is often incremental. Intermediate work is naming the incremental fact before you add risk.",
+      whyMarketMoved:
+        "The run faded. The headline did not add properties or cash flow.",
+      evidence:
+        "Extended REIT tape plus a modest rate roll, not a new portfolio.",
+    },
+    allowShort: false,
+    packId: "company-news",
+    difficulty: "intermediate",
+  },
+  {
+    id: "case-news-int-headline-plant",
+    title: "Factory fire, insurance comment attached",
+    contextType: "news",
+    thinkingMode: "company_headline",
+    brief:
+      "This SAMPLE food plant has a fire. The company says insurance should cover rebuild. The stock is in a tight range. Separate the scary picture from the cash comment before you dump or chase a bounce.",
+    newsHeadline:
+      "Plant fire. Company says insurance should cover rebuild costs.",
+    preOhlc: FOOD_PRE,
+    postOhlc: withAftermath(FOOD_PRE, [
+      bar("+1", 70.8, 71.2, 68.4, 69.0),
+      bar("+2", 69.0, 69.6, 68.1, 68.8),
+      bar("+3", 68.8, 70.2, 68.5, 69.8),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: ["sell", "buy"],
+    debrief: {
+      process:
+        "A fire is a real hit to near-term units. Insurance can cap the cash damage. Hold is process when you cannot yet size the downtime versus the cover.",
+      whyMarketMoved:
+        "The range broke, then partly filled as the insurance comment circulated.",
+      evidence:
+        "Company headline with an insurance claim, not a market-wide shock.",
+    },
+    allowShort: false,
+    packId: "company-news",
+    difficulty: "intermediate",
+  },
+  {
+    id: "case-news-int-chase-small",
+    title: "Small-name listing rumor after a chop",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE small name chopped for days. Chat says a larger listing is coming. No filing. You already know rumor vs filing from Training. Chase, fade, or wait?",
+    newsHeadline: "Unconfirmed listing chatter. No filing posted.",
+    preOhlc: SMALL_PRE,
+    postOhlc: withAftermath(SMALL_PRE, [
+      bar("+1", 21.2, 22.4, 20.8, 21.0),
+      bar("+2", 21.0, 21.4, 19.6, 19.9),
+      bar("+3", 19.9, 20.2, 19.1, 19.4),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Low-quality listing chatter after a chop is a fade-or-wait problem. Do not treat chat as a catalyst.",
+      whyMarketMoved:
+        "The spike faded when no filing appeared.",
+      evidence:
+        "Chop tape plus unconfirmed listing chatter.",
+    },
+    allowShort: false,
+    packId: "company-news",
+    difficulty: "intermediate",
+  },
+  {
+    id: "case-news-int-headline-bank-branch",
+    title: "Bank closes branches, keeps the deposit book",
+    contextType: "news",
+    thinkingMode: "company_headline",
+    brief:
+      "This SAMPLE bank was sliding. It closes a cluster of branches and says deposits stay. Cost cut vs franchise risk. You have a snapshot habit already. What is the actual change?",
+    newsHeadline:
+      "Closes a cluster of branches. Says deposits remain with the bank.",
+    preOhlc: BANK_PRE,
+    postOhlc: withAftermath(BANK_PRE, [
+      bar("+1", 41.2, 42.0, 41.0, 41.7),
+      bar("+2", 41.7, 42.2, 41.4, 41.9),
+      bar("+3", 41.9, 42.3, 41.5, 41.8),
+    ]),
+    correctActions: ["buy", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A branch close can be a cost story if deposits stay. Intermediate work is naming what must remain true (deposits) before you buy a falling bank tape.",
+      whyMarketMoved:
+        "The slide paused when the deposit comment bounded the franchise worry.",
+      evidence:
+        "Company headline on costs vs deposits. Sliding tape into the print.",
+    },
+    allowShort: false,
+    packId: "company-news",
+    difficulty: "intermediate",
   },
 ];
 
@@ -493,6 +1082,231 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
     allowShort: false,
     packId: "macro-news",
     difficulty: "intermediate",
+  },
+  {
+    id: "case-macro-beg-risk-off-utility",
+    title: "Market fear, utility barely moved",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "Risky stocks are selling. This SAMPLE utility barely moved. You own it as a calmer name. Buy more, sell, or hold while the rest of the tape is scared?",
+    newsHeadline:
+      "Risk appetite fades. Defensive names hold up better than growth.",
+    preOhlc: UTILITY_PRE,
+    postOhlc: withAftermath(UTILITY_PRE, [
+      bar("+1", 58.5, 59.0, 58.3, 58.8),
+      bar("+2", 58.8, 59.2, 58.5, 58.9),
+      bar("+3", 58.9, 59.3, 58.6, 59.0),
+    ]),
+    correctActions: ["hold", "buy"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Market-wide fear is about how much risk you want. A calm name can be a hold. Buying more is only process if that was already your plan.",
+      whyMarketMoved:
+        "Money rotated toward names that had not run.",
+      evidence:
+        "Market-wide headline plus a slow utility tape, not a company filing.",
+    },
+    allowShort: false,
+    packId: "macro-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-macro-beg-risk-off-airline",
+    title: "Travel stocks sold with everything else",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "Investors are selling risky assets. This SAMPLE airline was already sliding. The headline is about the whole market, not this company's flights. What do you do?",
+    newsHeadline: "Risk-off. High-beta travel names sold with the tape.",
+    preOhlc: AIRLINE_PRE,
+    postOhlc: withAftermath(AIRLINE_PRE, [
+      bar("+1", 32.9, 33.2, 31.4, 31.8),
+      bar("+2", 31.8, 32.1, 30.6, 31.0),
+      bar("+3", 31.0, 31.4, 30.2, 30.5),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "If the scare is market-wide, adding to a sliding airline is usually not process. Hold if you sized for a further slide.",
+      whyMarketMoved:
+        "Risky travel names sold together.",
+      evidence:
+        "Already-weak tape plus a risk-off headline.",
+    },
+    allowShort: false,
+    packId: "macro-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-macro-beg-risk-off-bank",
+    title: "Banks sold as credit worries rise",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "Credit spreads are in the headline. This SAMPLE bank was already grinding lower. No new filing from this bank. Stock vs tape: which one are you deciding?",
+    newsHeadline: "Credit spreads widen. Bank stocks sold as a group.",
+    preOhlc: BANK_PRE,
+    postOhlc: withAftermath(BANK_PRE, [
+      bar("+1", 40.4, 40.6, 39.2, 39.5),
+      bar("+2", 39.5, 39.8, 38.8, 39.1),
+      bar("+3", 39.1, 39.4, 38.5, 38.8),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A group move is not the same as a company filing. Cutting or holding a sized position is process. Buying because it looks cheap in a scare is usually not.",
+      whyMarketMoved:
+        "Bank stocks sold together as credit worry rose.",
+      evidence:
+        "Market-wide credit headline, not this bank's earnings.",
+    },
+    allowShort: false,
+    packId: "macro-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-macro-beg-print-jobs-hot",
+    title: "Jobs come in hotter than people hoped",
+    contextType: "news",
+    thinkingMode: "macro_print",
+    brief:
+      "A jobs print comes in hotter than people hoped. Rate-cut talk fades. This SAMPLE software name had been chopping. What do you do before you see the next bars?",
+    newsHeadline: "Jobs hotter than expected. Rate-cut odds fall.",
+    preOhlc: SMALL_PRE,
+    postOhlc: withAftermath(SMALL_PRE, [
+      bar("+1", 19.2, 19.4, 18.1, 18.4),
+      bar("+2", 18.4, 18.7, 17.8, 18.0),
+      bar("+3", 18.0, 18.3, 17.5, 17.8),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Hot labor data can reprice rates. Even a fine company can fall when people pay less for future profits. Match the action to how long you meant to hold.",
+      whyMarketMoved:
+        "Rate-sensitive names sold after the print.",
+      evidence:
+        "Economic data, not a company filing. Chop tape into the print.",
+    },
+    allowShort: false,
+    packId: "macro-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-macro-beg-print-soft-landing",
+    title: "Inflation cools a little",
+    contextType: "news",
+    thinkingMode: "macro_print",
+    brief:
+      "Inflation cools a little, not a collapse. This SAMPLE REIT had been stuck. Soft-landing talk picks up. Buy, sell, or hold?",
+    newsHeadline: "Inflation cools modestly. Soft-landing talk returns.",
+    preOhlc: REIT_PRE,
+    postOhlc: withAftermath(REIT_PRE, [
+      bar("+1", 31.7, 32.6, 31.5, 32.3),
+      bar("+2", 32.3, 32.9, 32.0, 32.6),
+      bar("+3", 32.6, 33.1, 32.2, 32.8),
+    ]),
+    correctActions: ["buy", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Easier inflation talk can help rate-sensitive names. Still ask whether you are early or late. Hold is fair if the move is already in the tape.",
+      whyMarketMoved:
+        "REITs bid as rate-cut hopes ticked up.",
+      evidence:
+        "Macro print tone, not a property filing.",
+    },
+    allowShort: false,
+    packId: "macro-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-macro-beg-print-gdp-soft",
+    title: "Growth data comes in soft",
+    contextType: "news",
+    thinkingMode: "macro_print",
+    brief:
+      "Growth data comes in soft. This SAMPLE steel mill had already spiked. Is softer growth a reason to take the spike off, or a reason to wait?",
+    newsHeadline: "Growth data softer than expected. Demand chatter cools.",
+    preOhlc: STEEL_PRE,
+    postOhlc: withAftermath(STEEL_PRE, [
+      bar("+1", 53.2, 53.6, 51.4, 51.8),
+      bar("+2", 51.8, 52.2, 50.6, 51.0),
+      bar("+3", 51.0, 51.5, 50.2, 50.6),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Soft growth can hit cyclicals that already ran. Taking risk off after a spike is process. Buying more because it 'looks cheap' after one print is usually not.",
+      whyMarketMoved:
+        "The spike faded as demand chatter cooled.",
+      evidence:
+        "Macro print plus a steel tape that had already jumped.",
+    },
+    allowShort: false,
+    packId: "macro-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-macro-beg-supply-freight",
+    title: "Port delay lifts freight costs",
+    contextType: "news",
+    thinkingMode: "geopolitics_supply",
+    brief:
+      "A port delay lifts freight costs overnight. This SAMPLE food company buys a lot of shipped inputs. The stock was range-bound. Who gets hurt?",
+    newsHeadline: "Port delay. Freight costs jump. Importers on watch.",
+    preOhlc: FOOD_PRE,
+    postOhlc: withAftermath(FOOD_PRE, [
+      bar("+1", 71.2, 71.5, 69.4, 69.8),
+      bar("+2", 69.8, 70.2, 68.8, 69.2),
+      bar("+3", 69.2, 69.6, 68.4, 68.8),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A supply shock can hurt companies that buy the scarce thing. Name which side this stock sits on before you buy a 'bounce.'",
+      whyMarketMoved:
+        "An importer-like food name sold as freight costs jumped.",
+      evidence:
+        "Supply headline on a range-bound buyer of shipped inputs.",
+    },
+    allowShort: false,
+    packId: "macro-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-macro-beg-supply-energy",
+    title: "Pipeline outage, energy producer",
+    contextType: "news",
+    thinkingMode: "geopolitics_supply",
+    brief:
+      "A pipeline outage hits the tape. This SAMPLE energy producer may get a better price near term. The stock had been weak. Scary news is not automatically a sell.",
+    newsHeadline: "Pipeline outage. Near-term energy prices jump.",
+    preOhlc: CYCLICAL_PRE,
+    postOhlc: withAftermath(CYCLICAL_PRE, [
+      bar("+1", 108.4, 111.8, 108.0, 111.2),
+      bar("+2", 111.2, 113.0, 110.4, 112.2),
+      bar("+3", 112.2, 113.4, 111.0, 112.0),
+    ]),
+    correctActions: ["buy", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Figure out whether this name sells the scarce thing or buys it. Producers can catch a bid on the same headline that hurts buyers.",
+      whyMarketMoved:
+        "The weak energy tape reversed as scarcity talk lifted prices.",
+      evidence:
+        "Supply-shock headline on a producer-like SAMPLE energy name.",
+    },
+    allowShort: false,
+    packId: "macro-news",
+    difficulty: "beginner",
   },
 ];
 
@@ -637,6 +1451,306 @@ export const COMBINED_CASES: CaseStudy[] = [
     allowShort: false,
     packId: "combined",
     difficulty: "intermediate",
+  },
+  {
+    id: "case-comb-beg-beat-headline",
+    title: "Quarter looks fine, headline is a probe",
+    contextType: "combined",
+    thinkingMode: "combined_earnings_headline",
+    brief:
+      "This SAMPLE tech name beat the quarter. The same morning a regulator probe hits the headline. Cash still looks healthy. Which fact rules your next few weeks?",
+    statementSnapshot: {
+      ...megaSnap,
+      id: "snap-comb-beg-probe",
+      notes: "Practice: quarter beat. Probe is a headline, not a verdict.",
+    },
+    newsHeadline: "Regulator opens a probe. Company says it will cooperate.",
+    preOhlc: TECH_PRE,
+    postOhlc: withAftermath(TECH_PRE, [
+      bar("+1", 178.8, 179.2, 176.2, 176.8),
+      bar("+2", 176.8, 177.4, 175.6, 176.1),
+      bar("+3", 176.1, 176.8, 175.2, 175.8),
+    ]),
+    correctActions: ["hold", "sell"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A beat does not cancel a probe. Hold if cash covers a long legal path. Sell if you cannot sit through the headline noise.",
+      whyMarketMoved:
+        "The stock discounted uncertainty, not a proven fine.",
+      evidence:
+        "Snapshot beat plus a probe headline. Time frame matters.",
+    },
+    allowShort: false,
+    packId: "combined",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-comb-beg-margin-recall",
+    title: "Thinner margin plus a product recall",
+    contextType: "combined",
+    thinkingMode: "combined_earnings_headline",
+    brief:
+      "The snapshot shows a thinner margin. The headline is a product recall. This SAMPLE food name was range-bound. Two matching warnings or one story?",
+    statementSnapshot: {
+      ...cyclicalSnap,
+      id: "snap-comb-beg-recall",
+      label: "Packaged food",
+      symbol: "GIS.S",
+      incomeStatement: {
+        revenue: 84_000,
+        netIncome: 3_600,
+        netMarginPct: 4.3,
+      },
+      notes: "Practice: margin already thin; recall is extra cost risk.",
+    },
+    newsHeadline: "Recalls a product line. Cost of the fix is not sized yet.",
+    preOhlc: FOOD_PRE,
+    postOhlc: withAftermath(FOOD_PRE, [
+      bar("+1", 71.0, 71.3, 68.8, 69.2),
+      bar("+2", 69.2, 69.6, 68.2, 68.6),
+      bar("+3", 68.6, 69.0, 67.8, 68.2),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "When the snapshot and the headline both point at cost, hope is not a plan. Hold only if you sized for more downside.",
+      whyMarketMoved:
+        "The range broke as recall cost stacked on a thin margin.",
+      evidence:
+        "Thinner SAMPLE margin plus a recall headline.",
+    },
+    allowShort: false,
+    packId: "combined",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-comb-beg-guide-bank",
+    title: "Bank beats, cuts the loan-growth outlook",
+    contextType: "combined",
+    thinkingMode: "combined_earnings_headline",
+    brief:
+      "This SAMPLE bank beat the quarter. The headline is a cut to loan-growth outlook. The stock was already sliding. Past quarter vs next year's book.",
+    statementSnapshot: {
+      ...cyclicalSnap,
+      id: "snap-comb-beg-bank-guide",
+      label: "Regional bank",
+      symbol: "JPM.S",
+      incomeStatement: {
+        revenue: 47_000,
+        netIncome: 11_800,
+        netMarginPct: 25.1,
+      },
+      notes: "Practice: quarter beat, loan-growth outlook cut.",
+    },
+    newsHeadline: "Beats the quarter. Cuts next-year loan-growth outlook.",
+    preOhlc: BANK_PRE,
+    postOhlc: withAftermath(BANK_PRE, [
+      bar("+1", 40.2, 40.5, 39.0, 39.4),
+      bar("+2", 39.4, 39.7, 38.6, 38.9),
+      bar("+3", 38.9, 39.2, 38.3, 38.6),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "The snapshot is the past. The outlook cut is the path. Sell if you owned it for growth. Hold if you are a long-term owner and capital is intact.",
+      whyMarketMoved:
+        "Sellers cared more about the outlook than the beat.",
+      evidence:
+        "Beat on SAMPLE numbers plus a guidance-style headline.",
+    },
+    allowShort: false,
+    packId: "combined",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-comb-beg-cash-airline",
+    title: "Airline profit, cash still thin, fuel headline",
+    contextType: "combined",
+    thinkingMode: "combined_earnings_headline",
+    brief:
+      "This SAMPLE airline printed a small profit. Free cash is still thin. The headline is a fuel-cost spike. Two clocks: last quarter vs the next few months of jet fuel.",
+    statementSnapshot: {
+      ...cyclicalSnap,
+      id: "snap-comb-beg-air-cash",
+      label: "Airline",
+      symbol: "DAL.S",
+      incomeStatement: {
+        revenue: 52_000,
+        netIncome: 900,
+        netMarginPct: 1.7,
+      },
+      cashFlow: {
+        operatingCashFlow: 1_100,
+        freeCashFlow: -800,
+      },
+      notes: "Practice: thin profit, thin cash, fuel headline the same day.",
+    },
+    newsHeadline: "Jet-fuel costs jump. Airlines warn on the next quarter.",
+    preOhlc: AIRLINE_PRE,
+    postOhlc: withAftermath(AIRLINE_PRE, [
+      bar("+1", 32.6, 32.9, 31.2, 31.5),
+      bar("+2", 31.5, 31.8, 30.4, 30.8),
+      bar("+3", 30.8, 31.2, 30.0, 30.3),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A green quarter does not refill cash. A fuel spike hits the next quarter. Hold only if you can name how the airline survives both.",
+      whyMarketMoved:
+        "The slide continued as fuel stacked on thin cash.",
+      evidence:
+        "SAMPLE cash still weak plus a fuel-cost headline.",
+    },
+    allowShort: false,
+    packId: "combined",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-comb-beg-rumor-buyout",
+    title: "Buyout rumor, then a quiet filing",
+    contextType: "combined",
+    thinkingMode: "combined_rumor_filing",
+    brief:
+      "Chat says this SAMPLE telco will be bought. Minutes later a filing only confirms talks, not a deal. Cash looks ordinary. Chase the rumor, or wait for a real offer?",
+    statementSnapshot: {
+      ...cyclicalSnap,
+      id: "snap-comb-beg-telco-rumor",
+      label: "Telco",
+      symbol: "T.S",
+      notes: "Practice: rumor vs a filing that only confirms talks.",
+    },
+    newsHeadline: "Filing confirms talks. No agreed price. Denies a signed deal.",
+    preOhlc: TELCO_PRE,
+    postOhlc: withAftermath(TELCO_PRE, [
+      bar("+1", 28.4, 29.8, 27.9, 28.1),
+      bar("+2", 28.1, 28.4, 26.8, 27.1),
+      bar("+3", 27.1, 27.4, 26.5, 26.8),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Talks are not a price. Fade or wait when the filing is smaller than the chat. Hold if you already own a sized line.",
+      whyMarketMoved:
+        "The spike faded once the filing bounded the rumor.",
+      evidence:
+        "Rumor volume vs a talks-only filing. Ordinary cash on the snapshot.",
+    },
+    allowShort: false,
+    packId: "combined",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-comb-beg-rumor-restatement",
+    title: "Restatement scare, classification filing",
+    contextType: "combined",
+    thinkingMode: "combined_rumor_filing",
+    brief:
+      "Chat claims this SAMPLE software name will restate revenue. A filing says it is a classification change, not fraud. Cash from operations still looks healthy.",
+    statementSnapshot: {
+      ...megaSnap,
+      id: "snap-comb-beg-class",
+      label: "Software vendor",
+      symbol: "CRM.S",
+      cashFlow: { operatingCashFlow: 14_000, freeCashFlow: 9_500 },
+      notes: "Practice: restatement rumor vs a narrow classification filing.",
+    },
+    newsHeadline:
+      "Company files a classification change and denies a fraud restatement.",
+    preOhlc: SMALL_PRE,
+    postOhlc: withAftermath(SMALL_PRE, [
+      bar("+1", 19.4, 20.6, 19.1, 20.2),
+      bar("+2", 20.2, 20.8, 19.8, 20.4),
+      bar("+3", 20.4, 20.9, 20.0, 20.5),
+    ]),
+    correctActions: ["buy", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Filed facts outrank chat. Panic-selling a classification change is often a mistake if cash quality is intact.",
+      whyMarketMoved:
+        "Fear eased once the filing bounded the issue.",
+      evidence:
+        "Healthy SAMPLE cash plus a clarification filing.",
+    },
+    allowShort: false,
+    packId: "combined",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-comb-beg-rumor-dividend",
+    title: "Dividend-cut rumor, then a keep-the-payout filing",
+    contextType: "combined",
+    thinkingMode: "combined_rumor_filing",
+    brief:
+      "Chat says this SAMPLE utility will cut the dividend. A filing the same day keeps the payout and delays a project instead. Cash is steady. Rumor vs filed fact.",
+    statementSnapshot: {
+      ...cyclicalSnap,
+      id: "snap-comb-beg-util-div",
+      label: "Regulated utility",
+      symbol: "NEE.S",
+      cashFlow: { operatingCashFlow: 6_400, freeCashFlow: 1_200 },
+      notes: "Practice: dividend-cut rumor vs a keep-the-payout filing.",
+    },
+    newsHeadline: "Keeps the dividend. Delays a project to protect cash.",
+    preOhlc: UTILITY_PRE,
+    postOhlc: withAftermath(UTILITY_PRE, [
+      bar("+1", 57.6, 57.9, 56.4, 56.8),
+      bar("+2", 56.8, 58.2, 56.6, 57.9),
+      bar("+3", 57.9, 58.6, 57.6, 58.3),
+    ]),
+    correctActions: ["buy", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "If the rumor and the filing disagree, size for the filed fact. Income owners often panic first. Hold or buy only after you read the actual payout line.",
+      whyMarketMoved:
+        "The dip filled when the filing kept the dividend.",
+      evidence:
+        "Rumor vs keep-the-payout filing. Steady SAMPLE cash.",
+    },
+    allowShort: false,
+    packId: "combined",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-comb-beg-rumor-pharma",
+    title: "Approval rumor, then a delay filing",
+    contextType: "combined",
+    thinkingMode: "combined_rumor_filing",
+    brief:
+      "Chat says this SAMPLE pharma name will get an early approval. A filing says the review is delayed. Cash is adequate. Do you trust the chat or the delay?",
+    statementSnapshot: {
+      ...megaSnap,
+      id: "snap-comb-beg-pharma-delay",
+      label: "Pharma",
+      symbol: "PFE.S",
+      notes: "Practice: approval rumor vs a delay filing.",
+    },
+    newsHeadline: "Review delayed. Company withdraws the early-approval rumor.",
+    preOhlc: PHARMA_PRE,
+    postOhlc: withAftermath(PHARMA_PRE, [
+      bar("+1", 84.2, 84.8, 82.0, 82.6),
+      bar("+2", 82.6, 83.1, 81.4, 81.9),
+      bar("+3", 81.9, 82.4, 80.8, 81.3),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "When chat and the filing disagree, the filing wins. Selling or holding a sized line is process. Buying the rumor after a delay is not.",
+      whyMarketMoved:
+        "The dump-week tape kept sliding once the delay was filed.",
+      evidence:
+        "Approval chatter vs a delay filing. Snapshot cash is not the catalyst.",
+    },
+    allowShort: false,
+    packId: "combined",
+    difficulty: "beginner",
   },
 ];
 

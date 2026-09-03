@@ -45,6 +45,27 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
 
       <div className="border border-line rounded-lg p-4 space-y-2 bg-canvas">
         <p className="text-sm">{selected.description}</p>
+        {selected.id === BEGINNER_EQUITIES_PATH.id ? (
+          <ul className="text-[12px] text-muted space-y-1">
+            <li>Who: first-time stock learners. Traditional retail equities stay here.</li>
+            <li>First click after confirm: Training → Equities literacy.</li>
+            <li>Done: earnings pack and company-news pack complete on the beginner path.</li>
+          </ul>
+        ) : null}
+        {selected.id === DECISION_MAKER_PATH.id ? (
+          <ul className="text-[12px] text-muted space-y-1">
+            <li>Who: you already know the beginner stock path and want more decide practice.</li>
+            <li>First click after confirm: Cases → earnings (Indicators quiz still gates graded cases).</li>
+            <li>Done: earnings, company news, market-wide news, and news plus financials packs complete.</li>
+          </ul>
+        ) : null}
+        {selected.id === MARKET_EXPLORER_PATH.id ? (
+          <ul className="text-[12px] text-muted space-y-1">
+            <li>Who: SAMPLE multi-market practice. This does not replace stock literacy.</li>
+            <li>First click after confirm: Training → Indicators, then Cases → futures.</li>
+            <li>Done: futures, forex, and crypto packs complete (options context is extra, no chain).</li>
+          </ul>
+        ) : null}
         <p className="text-[12px] text-muted">Milestone preview</p>
         <ol className="space-y-1 text-sm">
           {selected.milestones.map((m, i) => (
