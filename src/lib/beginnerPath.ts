@@ -24,6 +24,7 @@ import {
 } from "./learningPaths";
 import type { QuizGroupId } from "./quizData";
 import type { CasePackId } from "./caseStudies";
+import type { AssetClass } from "./samplePacks";
 
 export interface PathMilestoneDef {
   id: string;
@@ -219,7 +220,67 @@ export function isMilestoneUnlocked(milestoneId: string): boolean {
   return node.unlockFrom.every((id) => getMilestoneStatus(id) === "complete");
 }
 
+export const EXPANSION_ASSET_CLASSES: AssetClass[] = [
+  "future",
+  "forex",
+  "crypto",
+  "option_context",
+];
+
+const CASE_PACK_ASSET_CLASS: Partial<Record<CasePackId, AssetClass>> = {
+  futures: "future",
+  forex: "forex",
+  crypto: "crypto",
+  "options-context": "option_context",
+};
+
+const CLASS_EXPLORER_MILESTONE: Partial<Record<AssetClass, string>> = {
+  future: "E10.M5",
+  forex: "E10.M6",
+  crypto: "E10.M7",
+  option_context: "E10.M7",
+};
+
+const QUIZ_GROUP_ASSET_CLASS: Partial<Record<string, AssetClass>> = {
+  "futures-literacy": "future",
+  "forex-literacy": "forex",
+  "crypto-literacy": "crypto",
+  "options-literacy": "option_context",
+};
+
+const LITERACY_TERM_ASSET_CLASS: Record<string, AssetClass> = {
+  "futures-market": "future",
+  "forex-spot": "forex",
+  "crypto-browse": "crypto",
+  "options-context": "option_context",
+};
+
+export function quizGroupAssetClass(groupId: string): AssetClass | null {
+  return QUIZ_GROUP_ASSET_CLASS[groupId] ?? null;
+}
+
+export function literacyTermAssetClass(termId: string): AssetClass | null {
+  return LITERACY_TERM_ASSET_CLASS[termId] ?? null;
+}
+
+/** Equities always; expansion needs session peek or Market Explorer milestone. */
+export function canBrowseAssetClass(assetClass: AssetClass): boolean {
+  if (assetClass === "equity") return true;
+  if (isChartGateTemporarilyBypassed()) return true;
+  if (getPathId() !== MARKET_EXPLORER_PATH_ID) return false;
+  const milestoneId = CLASS_EXPLORER_MILESTONE[assetClass];
+  if (!milestoneId) return false;
+  const status = getMilestoneStatus(milestoneId);
+  return (
+    status === "available" ||
+    status === "in_progress" ||
+    status === "complete"
+  );
+}
+
 export function canStartQuizGroup(groupId: string): boolean {
+  const expansionClass = quizGroupAssetClass(groupId);
+  if (expansionClass && !canBrowseAssetClass(expansionClass)) return false;
   const pathId = getPathId();
   if (pathId === DECISION_MAKER_PATH_ID || pathId === MARKET_EXPLORER_PATH_ID) {
     // Non-beginner spines: literacy/drills free; chart gate startable
@@ -231,7 +292,10 @@ export function canStartQuizGroup(groupId: string): boolean {
 }
 
 export function canStartCasePack(packId: string): boolean {
+  if (isChartGateTemporarilyBypassed()) return true;
   if (!isChartGateCleared()) return false;
+  const packClass = CASE_PACK_ASSET_CLASS[packId as CasePackId];
+  if (packClass && !canBrowseAssetClass(packClass)) return false;
   const def = activePathDefs().find((m) => m.casesPack === packId);
   if (!def) {
     // Pack outside active path spine: chart gate only
@@ -241,7 +305,7 @@ export function canStartCasePack(packId: string): boolean {
 }
 
 export const CHART_GATE_PREREQ_TIP =
-  "Cases are easier after the Indicators quiz on Training. You can still peek for this browser session only — that skip is temporary and does not save as path progress.";
+  "Cases stay locked until Training → Indicators is complete. You can still peek for this browser session only — that skip is temporary and does not save as path progress.";
 
 export function trainingHrefForMilestone(id: string): string | null {
   const def = getPathMilestone(id);
@@ -294,12 +358,12 @@ export function coachTipForActive(): string {
   if (!id) {
     if (isPathComplete()) {
       if (pathId === DECISION_MAKER_PATH_ID) {
-        return "Credential unlocked: Decision Maker segment complete. Reset or switch path to practice again.";
+        return "Decision Maker credential unlocked. Review Cases → news plus financials, or reset the path to practice again.";
       }
       if (pathId === MARKET_EXPLORER_PATH_ID) {
-        return "Market Explorer SAMPLE segment complete. Equities paths remain for traditional stocks.";
+        return "Market Explorer SAMPLE segment complete. Equities paths remain for traditional stocks. Optional: Cases → options context (no chain).";
       }
-      return "Credential unlocked: Beginner Equities Path complete. Review cases or reset to practice again.";
+      return "Beginner Equities credential unlocked. Review Cases → earnings or company news, or reset the path to practice again.";
     }
     return "Open the next available milestone when ready.";
   }

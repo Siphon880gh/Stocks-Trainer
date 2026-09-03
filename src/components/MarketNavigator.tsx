@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import type { AssetClass } from "../lib/samplePacks";
 import {
+  canBrowseAssetClass,
   CHART_GATE_TRAINING_GROUP,
   isChartGateComplete,
   isChartGateTemporarilyBypassed,
@@ -25,6 +26,7 @@ interface MarketNavigatorProps {
   selectedClass?: AssetClass | null;
   /** Charts page: update Class + chart when a market type is chosen */
   onSelectClass?: (assetClass: AssetClass) => void;
+  onSessionPeekChange?: (enabled: boolean) => void;
   compact?: boolean;
 }
 
@@ -32,6 +34,7 @@ export default function MarketNavigator({
   initialClass = null,
   selectedClass = null,
   onSelectClass,
+  onSessionPeekChange,
   compact = false,
 }: MarketNavigatorProps) {
   const location = useLocation();
@@ -86,10 +89,13 @@ export default function MarketNavigator({
             className={`px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors ${
               selected === cls
                 ? "bg-primary text-white"
-                : "border border-line text-ink hover:bg-canvas"
+                : canBrowseAssetClass(cls)
+                  ? "border border-line text-ink hover:bg-canvas"
+                  : "border border-line text-muted hover:bg-canvas"
             }`}
           >
             {NAVIGATOR_CLASS_LABELS[cls]}
+            {!canBrowseAssetClass(cls) ? " · locked" : ""}
           </button>
         ))}
       </div>
@@ -118,16 +124,17 @@ export default function MarketNavigator({
           >
             Step by step
           </Link>
-          {lock === "chart_gate" ? (
+          {lock === "chart_gate" || lock === "path_lock" || lock === "class_lock" ? (
             <button
               type="button"
               onClick={() => {
                 setChartGateTemporaryBypass(true);
                 setTempBypass(true);
+                onSessionPeekChange?.(true);
               }}
               className="px-3 py-2 rounded-md border border-line text-primary text-[13px] hover:bg-canvas"
             >
-              Browse cases this session
+              Browse this session
             </button>
           ) : lock ? (
             <span
@@ -151,39 +158,46 @@ export default function MarketNavigator({
         </div>
       ) : null}
 
-      {selected && lock === "chart_gate" ? (
+      {selected &&
+      (lock === "chart_gate" || lock === "path_lock" || lock === "class_lock") ? (
         <div className="space-y-2">
           <p className="text-[13px] text-muted leading-relaxed">
-            Cases make more sense after Indicators on Training. You can open
-            them for this browser session only.
+            {lock === "chart_gate"
+              ? "Cases make more sense after Indicators on Training. You can open every pack for this browser session only, including Futures, Forex, Crypto, and Options context."
+              : lock === "class_lock"
+                ? "Futures, Forex, Crypto, and Options context stay locked until you peek this session. Equities stays the default path."
+                : "This class still follows the path. You can open its decide packs for this browser session only."}
           </p>
           <p className="text-[12px] text-muted">
-            Temporary — clears when you close the tab. Does not mark Indicators
-            complete in your saved progress.
+            Temporary — clears when you close the tab. Does not save as path
+            progress.
           </p>
-          <Link
-            to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
-            className="inline-block text-[13px] text-primary hover:underline"
-          >
-            Take Indicators quiz
-          </Link>
+          {lock === "chart_gate" ? (
+            <Link
+              to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
+              className="inline-block text-[13px] text-primary hover:underline"
+            >
+              Take Indicators quiz
+            </Link>
+          ) : null}
         </div>
       ) : null}
 
-      {selected && lock && lock !== "chart_gate" ? (
+      {selected && lock && lock === "no_pack" ? (
         <p className="text-[13px] text-muted">{decideLockCopy(lock)}</p>
       ) : null}
 
-      {selected && tempBypass && !gateDone && !lock ? (
+      {selected && tempBypass && !lock ? (
         <div className="space-y-1">
           <p className="text-[13px] text-muted">
-            Temporary session peek is on — Indicators progress is not saved.
+            Temporary session peek is on — path progress is not saved.
           </p>
           <button
             type="button"
             onClick={() => {
               setChartGateTemporaryBypass(false);
               setTempBypass(false);
+              onSessionPeekChange?.(false);
             }}
             className="text-[13px] text-primary underline"
           >

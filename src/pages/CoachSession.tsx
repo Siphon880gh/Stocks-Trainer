@@ -17,6 +17,12 @@ import {
   type CoachingOutcome,
 } from "../lib/coaching";
 import { markCoachingSessionComplete } from "../lib/progressStore";
+import {
+  canBrowseAssetClass,
+  isChartGateTemporarilyBypassed,
+  setChartGateTemporaryBypass,
+} from "../lib/beginnerPath";
+import { assetClassFromCoachTags } from "../lib/marketNavigator";
 
 const OUTCOME_UI: Record<
   CoachingOutcome,
@@ -64,6 +70,11 @@ export default function CoachSession() {
   const [nav, setNav] = useState<CoachingNavState | null>(null);
   const [trailOpen, setTrailOpen] = useState(true);
   const [showNodeIds, setShowNodeIds] = useState(false);
+  const [tempBypass, setTempBypass] = useState(isChartGateTemporarilyBypassed);
+  const sessionClass = loaded.ok
+    ? assetClassFromCoachTags(loaded.session.meta.tags)
+    : "equity";
+  const classOk = canBrowseAssetClass(sessionClass) || tempBypass;
 
   useEffect(() => {
     const r = loadSession(slug);
@@ -103,6 +114,30 @@ export default function CoachSession() {
           </ul>
         ) : null}
         <Link to="/coach" className="text-primary underline">
+          Back to coaching catalog
+        </Link>
+      </div>
+    );
+  }
+
+  if (!classOk) {
+    return (
+      <div className="max-w-xl mx-auto p-6 space-y-4">
+        <p className="text-sm text-slate-200 leading-relaxed">
+          This step is in Futures, Forex, Crypto, or Options context. Those
+          classes stay locked until you peek this session.
+        </p>
+        <button
+          type="button"
+          className="inline-flex rounded-lg border border-line px-3 py-2 text-sm font-mono text-primary hover:bg-primary/10"
+          onClick={() => {
+            setChartGateTemporaryBypass(true);
+            setTempBypass(true);
+          }}
+        >
+          Browse this session
+        </button>
+        <Link to="/coach" className="block text-sm text-primary underline">
           Back to coaching catalog
         </Link>
       </div>

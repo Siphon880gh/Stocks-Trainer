@@ -14,22 +14,14 @@ import {
   type CasePackId,
 } from "../lib/caseStudies";
 import {
+  CLASS_TO_DECIDE_PACKS,
   NAVIGATOR_CLASS_LABELS,
   parseMarketClassParam,
 } from "../lib/marketNavigator";
 import { DECISION_MAKER_PATH_ID, getPathId } from "../lib/progressStore";
-import type { AssetClass } from "../lib/samplePacks";
 import { thinkingModeLabel } from "../lib/thinkingModeTips";
 
 const VALID_PACKS = new Set(CASE_PACKS.map((p) => p.id));
-
-const CLASS_TO_PACKS: Partial<Record<AssetClass, CasePackId[]>> = {
-  equity: ["earnings", "company-news", "macro-news", "combined"],
-  future: ["futures"],
-  forex: ["forex"],
-  crypto: ["crypto"],
-  option_context: ["options-context"],
-};
 
 export default function Cases() {
   const [searchParams] = useSearchParams();
@@ -47,11 +39,15 @@ export default function Cases() {
   const chartOk = gateDone || tempBypass;
   const pathId = getPathId();
   const beginnerOnly = pathId !== DECISION_MAKER_PATH_ID;
+  const filterPack = (packId: CasePackId) =>
+    listCaseStudies(packId).filter((c) =>
+      beginnerOnly ? c.difficulty === "beginner" : true,
+    );
 
   const orderedPacks = useMemo(() => {
     let packs = CASE_PACKS;
     if (marketClass) {
-      const allowed = new Set(CLASS_TO_PACKS[marketClass] ?? []);
+      const allowed = new Set(CLASS_TO_DECIDE_PACKS[marketClass] ?? []);
       packs = CASE_PACKS.filter((p) => allowed.has(p.id as CasePackId));
     }
     if (!focusPack) return packs;
@@ -59,6 +55,12 @@ export default function Cases() {
     const rest = packs.filter((p) => p.id !== focusPack);
     return [...focused, ...rest];
   }, [focusPack, marketClass]);
+
+  const anyListedLocked = orderedPacks.some((meta) => {
+    const packId = meta.id as CasePackId;
+    return filterPack(packId).length > 0 && !canStartCasePack(packId);
+  });
+  const showSessionUnlock = !chartOk || anyListedLocked;
 
   useEffect(() => {
     if ((!focusPack && !marketClass) || !focusRef.current) return;
@@ -96,24 +98,26 @@ export default function Cases() {
           ) : null}
         </div>
 
-        {!chartOk ? (
+        {showSessionUnlock ? (
           <div className="border border-line rounded-xl p-4 space-y-3 bg-primary/5">
             <p className="text-sm text-slate-200 leading-relaxed">
-              Cases make more sense after a short Indicators pass on Training —
-              so the chart language in each brief is familiar. Want to look
-              around first? You can open cases for this browser session only.
+              {!gateDone
+                ? "Cases make more sense after a short Indicators pass on Training — so the chart language in each brief is familiar. Want to look around first? You can open every pack for this browser session only, including Futures, Forex, Crypto, and Options context."
+                : "Futures, Forex, Crypto, Options context, and later path packs stay locked. You can open them for this browser session only."}
             </p>
             <p className="text-xs text-slate-400 font-mono">
-              Temporary — clears when you close the tab. Does not mark Indicators
-              complete in your saved progress.
+              Temporary — clears when you close the tab. Does not save as path
+              progress.
             </p>
             <div className="flex flex-wrap gap-3 pt-1">
-              <Link
-                to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
-                className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-white"
-              >
-                Take Indicators quiz
-              </Link>
+              {!gateDone ? (
+                <Link
+                  to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
+                  className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-white"
+                >
+                  Take Indicators quiz
+                </Link>
+              ) : null}
               <button
                 type="button"
                 onClick={() => {
@@ -122,15 +126,17 @@ export default function Cases() {
                 }}
                 className="inline-flex items-center gap-1 rounded-lg border border-line px-3 py-2 text-sm font-mono text-primary hover:bg-primary/10"
               >
-                Browse cases this session
+                Browse this session
               </button>
             </div>
           </div>
-        ) : tempBypass && !gateDone ? (
+        ) : tempBypass ? (
           <div className="border border-amber-400/50 bg-amber-50 rounded-xl px-4 py-3 text-sm text-ink space-y-2">
             <p>
-              Temporary session peek is on — Indicators progress is not saved.
-              Finish Indicators on Training when you want it permanent.
+              Temporary session peek is on — path progress is not saved.
+              {!gateDone
+                ? " Finish Indicators on Training when you want it permanent."
+                : " Turn this off to return to path order."}
             </p>
             <button
               type="button"
@@ -156,9 +162,7 @@ export default function Cases() {
         {orderedPacks.map((meta) => {
           const packId = meta.id as CasePackId;
           const unlocked = canStartCasePack(packId);
-          const pack = listCaseStudies(packId).filter((c) =>
-            beginnerOnly ? c.difficulty === "beginner" : true
-          );
+          const pack = filterPack(packId);
           if (pack.length === 0) return null;
           const isFocus = focusPack === packId;
           return (

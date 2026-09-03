@@ -25,7 +25,12 @@ import { scanPatterns, patternBarIndices, type DetectedPattern } from "../lib/pa
 import { patternDefForScanName } from "../lib/patterns";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import PatternDetailModal from "../components/PatternDetailModal";
-import { CHART_GATE_TRAINING_GROUP, isChartGateComplete } from "../lib/beginnerPath";
+import {
+  canBrowseAssetClass,
+  CHART_GATE_TRAINING_GROUP,
+  isChartGateComplete,
+  isChartGateTemporarilyBypassed,
+} from "../lib/beginnerPath";
 import {
   chartFrequenciesForSeries,
   inferNativeBarMinutes,
@@ -43,28 +48,36 @@ const CLASS_LABELS: Record<AssetClass, string> = {
 
 type ChartHighlight = ChartHighlightMark & { pattern?: DetectedPattern };
 
+function marketsForFilter(filter: MarketAssetFilter) {
+  return listMarketsByAssetClass(filter).filter(
+    (m) =>
+      m.pack.assetClass === "equity" || canBrowseAssetClass(m.pack.assetClass),
+  );
+}
+
 export default function Market() {
   const [searchParams, setSearchParams] = useSearchParams();
   const classFromUrl = parseMarketClassParam(searchParams.get("class"));
   const [assetFilter, setAssetFilter] = useState<MarketAssetFilter>(
     () => classFromUrl ?? "all",
   );
+  const [peekOn, setPeekOn] = useState(isChartGateTemporarilyBypassed);
   const [providerId, setProviderId] = useState<MarketDataProviderId>(() =>
     getStoredProviderId(),
   );
   const dataProvider = useMemo(() => getMarketDataProvider(providerId), [providerId]);
   const filteredMarkets = useMemo(
-    () => listMarketsByAssetClass(assetFilter),
-    [assetFilter]
+    () => marketsForFilter(assetFilter),
+    [assetFilter, peekOn]
   );
   const [marketId, setMarketId] = useState(() => {
     const cls = classFromUrl ?? "all";
-    return listMarketsByAssetClass(cls)[0]?.id ?? "btc";
+    return marketsForFilter(cls)[0]?.id ?? "btc";
   });
 
   const applyAssetFilter = (next: MarketAssetFilter) => {
     setAssetFilter(next);
-    const list = listMarketsByAssetClass(next);
+    const list = marketsForFilter(next);
     if (list[0]) setMarketId(list[0].id);
     setSearchParams(
       (prev) => {
@@ -80,9 +93,9 @@ export default function Market() {
   useEffect(() => {
     if (!classFromUrl) return;
     setAssetFilter(classFromUrl);
-    const list = listMarketsByAssetClass(classFromUrl);
+    const list = marketsForFilter(classFromUrl);
     if (list[0]) setMarketId(list[0].id);
-  }, [classFromUrl]);
+  }, [classFromUrl, peekOn]);
   const [controls, setControls] = useState({
     sma: true,
     ema: false,
@@ -197,6 +210,7 @@ export default function Market() {
           initialClass={classFromUrl}
           selectedClass={assetFilter === "all" ? null : assetFilter}
           onSelectClass={applyAssetFilter}
+          onSessionPeekChange={setPeekOn}
         />
 
         {/* Financials */}
@@ -308,12 +322,18 @@ export default function Market() {
         {emptyClass ? (
           <div className="flex-1 panel p-8 text-sm text-muted space-y-2">
             <p className="text-ink font-semibold">
-              No packs in {CLASS_LABELS[assetFilter as AssetClass] ?? assetFilter}
+              {assetFilter !== "all" &&
+              assetFilter !== "equity" &&
+              !canBrowseAssetClass(assetFilter)
+                ? `${CLASS_LABELS[assetFilter]} is locked this session`
+                : `No packs in ${CLASS_LABELS[assetFilter as AssetClass] ?? assetFilter}`}
             </p>
             <p>
-              No SAMPLE packs in this asset class yet. Switch to Equities (stocks —
-              traditional retail), Futures, Options context, Forex, or Crypto — or leave
-              Class = All.
+              {assetFilter !== "all" &&
+              assetFilter !== "equity" &&
+              !canBrowseAssetClass(assetFilter)
+                ? "Use Browse this session in the navigator above. Equities stays the default path."
+                : "No SAMPLE packs in this asset class yet. Switch to Equities (stocks — traditional retail), Futures, Options context, Forex, or Crypto — or leave Class = All."}
             </p>
           </div>
         ) : null}

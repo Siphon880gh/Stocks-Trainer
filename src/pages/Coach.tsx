@@ -2,7 +2,9 @@ import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import MarketNavigator from "../components/MarketNavigator";
 import { listSessions } from "../lib/coaching";
+import { canBrowseAssetClass, isChartGateTemporarilyBypassed } from "../lib/beginnerPath";
 import {
+  assetClassFromCoachTags,
   coachSessionMatchesClass,
   parseMarketClassParam,
 } from "../lib/marketNavigator";
@@ -22,10 +24,14 @@ export default function Coach() {
     [sessions]
   );
   const [topicFilter, setTopicFilter] = useState(topicParam);
+  const [peekOn, setPeekOn] = useState(isChartGateTemporarilyBypassed);
 
   const filtered = sessions.filter((s) => {
     if (topicFilter && s.topic !== topicFilter) return false;
     if (!coachSessionMatchesClass(s.tags, classFilter)) return false;
+    if (!peekOn && !canBrowseAssetClass(assetClassFromCoachTags(s.tags))) {
+      return false;
+    }
     return true;
   });
 
@@ -65,6 +71,7 @@ export default function Coach() {
           initialClass={classFilter}
           selectedClass={classFilter}
           onSelectClass={onSelectClass}
+          onSessionPeekChange={setPeekOn}
         />
 
         <div className="flex flex-wrap items-center gap-3">
@@ -90,9 +97,11 @@ export default function Coach() {
 
         {filtered.length === 0 ? (
           <p className="text-sm text-muted">
-            {classFromUrl
-              ? "No step-coaching sessions seeded for this market type yet. Equities (stocks) has the beginner trees; Futures has a SAMPLE framing session."
-              : "No sessions in this topic."}
+            {!canBrowseAssetClass(classFilter)
+              ? "This class is locked. Use Browse this session above to open Futures, Forex, Crypto, and Options context for this tab only."
+              : classFromUrl
+                ? "No step-coaching sessions seeded for this market type yet. Equities (stocks) has the beginner trees; Futures has a SAMPLE framing session."
+                : "No sessions in this topic."}
           </p>
         ) : (
           <ul className="space-y-4" aria-label="Coaching session catalog">

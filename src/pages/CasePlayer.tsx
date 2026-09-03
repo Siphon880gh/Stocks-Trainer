@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import CandlestickChart from "../components/CandlestickChart";
 import FinancialSnapshotCard from "../components/FinancialSnapshotCard";
 import {
+  canBrowseAssetClass,
   CHART_GATE_TRAINING_GROUP,
   isChartGateCleared,
   isChartGateComplete,
@@ -36,6 +37,7 @@ export default function CasePlayer() {
   const [tempBypass, setTempBypass] = useState(isChartGateTemporarilyBypassed);
   const gateDone = isChartGateComplete();
   const gateOk = gateDone || tempBypass || isChartGateCleared();
+  const classOk = canBrowseAssetClass(study?.assetClass ?? "equity") || tempBypass;
 
   const [selected, setSelected] = useState<CaseAction | null>(null);
   const [submitted, setSubmitted] = useState(false);
@@ -52,13 +54,13 @@ export default function CasePlayer() {
     );
   }
 
-  if (!gateOk) {
+  if (!gateOk || !classOk) {
     return (
       <div className="max-w-xl mx-auto p-6 space-y-4">
         <p className="text-sm text-slate-200 leading-relaxed">
-          This case is clearer after the Indicators quiz on Training. You can
-          still open it for this browser session only — that peek is temporary
-          and does not save as path progress.
+          {!classOk
+            ? "This case is Futures, Forex, Crypto, or Options context. Those classes stay locked until you peek this session."
+            : "This case is clearer after the Indicators quiz on Training. You can still open it for this browser session only — that peek is temporary and does not save as path progress."}
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
@@ -89,7 +91,7 @@ export default function CasePlayer() {
     );
   }
 
-  const showShort = Boolean(study.allowShort);
+  const actions = ACTIONS.filter((a) => a.id !== "short" || Boolean(study.allowShort));
   const chartData = submitted ? study.postOhlc : study.preOhlc;
 
   const onSubmit = () => {
@@ -149,33 +151,26 @@ export default function CasePlayer() {
           <p className="text-[12px] font-semibold text-muted">
             Decision
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {ACTIONS.map((a) => {
-              const lockedShort = a.id === "short" && !showShort;
-              return (
-                <button
-                  key={a.id}
-                  type="button"
-                  disabled={submitted || lockedShort}
-                  title={
-                    lockedShort
-                      ? "Short selling is locked until you are comfortable with buy, sell, and hold"
-                      : a.label
-                  }
-                  onClick={() => !submitted && !lockedShort && setSelected(a.id)}
-                  className={`py-3 rounded font-bold font-mono text-sm border transition-colors ${
-                    lockedShort
-                      ? "opacity-40 border-line cursor-not-allowed"
-                      : selected === a.id
-                        ? "bg-primary text-white border-primary"
-                        : "border-line text-primary hover:bg-primary/10"
-                  }`}
-                >
-                  {a.label}
-                  {lockedShort ? " (locked)" : ""}
-                </button>
-              );
-            })}
+          <div
+            className={`grid gap-2 ${
+              actions.length === 4 ? "grid-cols-2 md:grid-cols-4" : "grid-cols-3"
+            }`}
+          >
+            {actions.map((a) => (
+              <button
+                key={a.id}
+                type="button"
+                disabled={submitted}
+                onClick={() => !submitted && setSelected(a.id)}
+                className={`py-3 rounded font-bold font-mono text-sm border transition-colors ${
+                  selected === a.id
+                    ? "bg-primary text-white border-primary"
+                    : "border-line text-primary hover:bg-primary/10"
+                }`}
+              >
+                {a.label}
+              </button>
+            ))}
           </div>
           {!submitted ? (
             <button

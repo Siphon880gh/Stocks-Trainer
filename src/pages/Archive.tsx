@@ -3,6 +3,12 @@ import { Link, useSearchParams } from "react-router-dom";
 import { PATTERNS, type PatternDef } from "../lib/patterns";
 import { OVERLAYS, getOverlaysByCategory, type OverlayDef, type OverlayCategory } from "../lib/overlays";
 import { LITERACY_TERMS, getLiteracyTerm, type LiteracyTerm } from "../lib/literacyTerms";
+import {
+  canBrowseAssetClass,
+  isChartGateTemporarilyBypassed,
+  literacyTermAssetClass,
+  setChartGateTemporaryBypass,
+} from "../lib/beginnerPath";
 import PatternDetailModal from "../components/PatternDetailModal";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 
@@ -22,6 +28,7 @@ export default function Archive() {
   const [selectedTerm, setSelectedTerm] = useState<LiteracyTerm | null>(null);
   const [filter, setFilter] = useState<FilterType>("all");
   const [indicatorFilter, setIndicatorFilter] = useState<OverlayCategory | "all">("all");
+  const [tempBypass, setTempBypass] = useState(isChartGateTemporarilyBypassed);
 
   useEffect(() => {
     if (tabParam === "indicators" || tabParam === "literacy") setTab(tabParam);
@@ -32,12 +39,19 @@ export default function Archive() {
     if (!openId) return;
     if (tab === "literacy" || tabParam === "literacy") {
       const term = getLiteracyTerm(openId);
-      if (term) setSelectedTerm(term);
+      if (term) {
+        const cls = literacyTermAssetClass(term.id);
+        if (cls && !canBrowseAssetClass(cls)) {
+          setSelectedTerm(null);
+          return;
+        }
+        setSelectedTerm(term);
+      }
       return;
     }
     const overlay = OVERLAYS.find((o) => o.id === openId);
     if (overlay) setSelectedOverlay(overlay);
-  }, [openId, tab, tabParam]);
+  }, [openId, tab, tabParam, tempBypass]);
 
   const filteredPatterns = PATTERNS.filter((p) => {
     if (filter === "all") return true;
@@ -180,24 +194,52 @@ export default function Archive() {
 
         <div className="space-y-4">
           {tab === "literacy"
-            ? LITERACY_TERMS.map((term) => (
-            <button
+            ? LITERACY_TERMS.map((term) => {
+              const cls = literacyTermAssetClass(term.id);
+              const locked = Boolean(cls && !canBrowseAssetClass(cls));
+              return (
+            <div
               key={term.id}
-              type="button"
-              onClick={() => {
-                setSelectedTerm(term);
-                setSearchParams({ tab: "literacy", open: term.id }, { replace: true });
-              }}
-              className="group w-full text-left flex flex-col rounded-xl border border-line bg-surface p-4 hover:border-primary hover:bg-surface transition-all cursor-pointer"
+              className={`w-full text-left flex flex-col rounded-xl border border-line bg-surface p-4 ${
+                locked ? "opacity-60" : ""
+              }`}
             >
+              <button
+                type="button"
+                disabled={locked}
+                onClick={() => {
+                  setSelectedTerm(term);
+                  setSearchParams({ tab: "literacy", open: term.id }, { replace: true });
+                }}
+                className={`group text-left ${
+                  locked ? "cursor-not-allowed" : "hover:text-primary cursor-pointer"
+                }`}
+              >
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm text-primary">menu_book</span>
                 <h4 className="text-slate-100 font-bold text-base font-display">{term.name}</h4>
                 <span className="text-[10px] font-mono text-primary/50 uppercase">{term.category}</span>
+                {locked ? (
+                  <span className="text-[10px] font-mono text-muted uppercase">locked</span>
+                ) : null}
               </div>
               <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">{term.summary}</p>
-            </button>
-          ))
+              </button>
+              {locked ? (
+                <button
+                  type="button"
+                  className="text-primary underline text-xs mt-2 font-mono text-left"
+                  onClick={() => {
+                    setChartGateTemporaryBypass(true);
+                    setTempBypass(true);
+                  }}
+                >
+                  Browse this session
+                </button>
+              ) : null}
+            </div>
+              );
+            })
           : tab === "patterns"
             ? filteredPatterns.map((pattern) => (
             <button

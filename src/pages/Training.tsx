@@ -10,6 +10,9 @@ import {
   CHART_GATE_TRAINING_GROUP,
   canStartQuizGroup,
   isChartGateComplete,
+  isChartGateTemporarilyBypassed,
+  quizGroupAssetClass,
+  setChartGateTemporaryBypass,
 } from "../lib/beginnerPath";
 import { getMilestoneStatus, loadProgress } from "../lib/progressStore";
 import { MISC_PRACTICE_ITEMS, isMiscPracticeDone } from "../lib/miscPractices";
@@ -32,6 +35,7 @@ export default function Training() {
   const [streak, setStreak] = useState(() => loadProgress().state.streaks.current);
   const [accuracy, setAccuracy] = useState(() => loadProgress().state.scores.accuracy);
   const [pathMapTick, setPathMapTick] = useState(0);
+  const [tempBypass, setTempBypass] = useState(isChartGateTemporarilyBypassed);
   const chartGateOpen =
     !isChartGateComplete() &&
     (getMilestoneStatus(CHART_GATE_MILESTONE_ID) === "available" ||
@@ -173,9 +177,36 @@ export default function Training() {
               · optional SAMPLE snapshot pack
             </p>
             {groupLocked ? (
-              <p className="text-accent-red text-sm">
-                Locked: finish the earlier path step first.
-              </p>
+              <div className="space-y-2">
+                <p className="text-accent-red text-sm">
+                  {quizGroupAssetClass(selectedGroup)
+                    ? "Locked: Futures, Forex, Crypto, and Options context need a session peek."
+                    : "Locked: finish the earlier path step first."}
+                </p>
+                {quizGroupAssetClass(selectedGroup) ? (
+                  <button
+                    type="button"
+                    className="text-primary underline text-sm"
+                    onClick={() => {
+                      setChartGateTemporaryBypass(true);
+                      setTempBypass(true);
+                    }}
+                  >
+                    Browse this session
+                  </button>
+                ) : null}
+              </div>
+            ) : tempBypass && quizGroupAssetClass(selectedGroup) ? (
+              <button
+                type="button"
+                className="text-primary underline text-sm"
+                onClick={() => {
+                  setChartGateTemporaryBypass(false);
+                  setTempBypass(false);
+                }}
+              >
+                Turn off temporary peek
+              </button>
             ) : null}
           </div>
 
