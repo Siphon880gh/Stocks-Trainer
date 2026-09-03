@@ -8,6 +8,7 @@ export const THINKING_MODE_LABELS: Record<CaseThinkingMode, string> = {
   balance_sheet_stress: "Too much debt",
   momentum_chase_vs_fade: "Chase or wait",
   company_headline: "Company news",
+  short_vs_sell: "Short vs sell",
   risk_off: "Market mood",
   macro_print: "Macro setup",
   geopolitics_supply: "Supply shock",
@@ -30,6 +31,8 @@ export const COACH_TIP_BY_THINKING_MODE: Record<CaseThinkingMode, string> = {
     "Are you early to a real trend, or late to a crowd? Waiting is a valid choice. Cases → company news.",
   company_headline:
     "Separate a shocking headline from a real change in cash. Decide your time frame first. Cases → company news.",
+  short_vs_sell:
+    "Sell exits a long you already have. Short is a new bet that price falls. Do not short a rumor. Cases → company news.",
   risk_off:
     "When the whole market sells off, ask if this stock is the story or just along for the ride. Cases → market-wide news.",
   macro_print:

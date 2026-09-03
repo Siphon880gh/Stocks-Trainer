@@ -43,7 +43,7 @@ Re-count from `CASE_STUDIES` / pack arrays each tick. A pack is **thin** until i
 | Step | Pack (`packId`) | Floor | Home thinking modes (must appear) |
 |------|-----------------|-------|-----------------------------------|
 | 1 | `earnings` | ≥8 beginner **and** ≥4 intermediate | `beat_miss`, `margin_compression`, `cash_flow_red_flag`, `guidance_cut`, `balance_sheet_stress` |
-| 2 | `company-news` | ≥8 beginner **and** ≥4 intermediate | `momentum_chase_vs_fade`, `company_headline` |
+| 2 | `company-news` | ≥8 beginner **and** ≥4 intermediate | `momentum_chase_vs_fade`, `company_headline`, `short_vs_sell` |
 | 3 | `macro-news` | ≥8 beginner **and** ≥4 intermediate | `risk_off`, `macro_print`, `geopolitics_supply` |
 | 4 | `combined` | ≥8 beginner **and** ≥4 intermediate | `combined_earnings_headline`, `combined_rumor_filing` |
 | 5 | `futures` | ≥8 beginner **and** ≥3 intermediate | reuse modes that fit index/commodity stories; `assetClass: "future"` |

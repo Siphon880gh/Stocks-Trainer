@@ -18,6 +18,7 @@ export type CaseThinkingMode =
   | "balance_sheet_stress"
   | "momentum_chase_vs_fade"
   | "company_headline"
+  | "short_vs_sell"
   | "risk_off"
   | "macro_print"
   | "geopolitics_supply"
@@ -187,6 +188,36 @@ const REIT_PRE: OHLC[] = [
   bar("T-2", 31.6, 31.9, 31.1, 31.3),
   bar("T-1", 31.3, 31.7, 31.0, 31.4),
   bar("T0", 31.4, 31.8, 31.1, 31.5),
+];
+
+/** Crowded staircase into a launch (≠ TECH grind, ≠ STEEL spike). */
+const APPAREL_PRE: OHLC[] = [
+  bar("T-5", 22.4, 23.1, 22.1, 22.9),
+  bar("T-4", 22.9, 24.8, 22.8, 24.6),
+  bar("T-3", 24.6, 27.2, 24.4, 26.8),
+  bar("T-2", 26.8, 30.4, 26.6, 30.1),
+  bar("T-1", 30.1, 34.2, 29.8, 33.8),
+  bar("T0", 33.8, 36.6, 33.4, 36.0),
+];
+
+/** Tight chop after a scare headline (≠ FOOD range, ≠ REIT). */
+const MINER_PRE: OHLC[] = [
+  bar("T-5", 14.2, 14.6, 13.9, 14.1),
+  bar("T-4", 14.1, 14.4, 13.6, 13.8),
+  bar("T-3", 13.8, 14.5, 13.7, 14.3),
+  bar("T-2", 14.3, 14.6, 13.9, 14.0),
+  bar("T-1", 14.0, 14.3, 13.5, 13.7),
+  bar("T0", 13.7, 14.2, 13.6, 14.0),
+];
+
+/** Run into a binary event (≠ PHARMA dump, ≠ HEALTH gap). */
+const BIOTECH_PRE: OHLC[] = [
+  bar("T-5", 41.2, 42.0, 40.8, 41.6),
+  bar("T-4", 41.6, 44.2, 41.4, 43.8),
+  bar("T-3", 43.8, 46.1, 43.5, 45.6),
+  bar("T-2", 45.6, 48.4, 45.2, 47.9),
+  bar("T-1", 47.9, 50.6, 47.4, 50.2),
+  bar("T0", 50.2, 51.4, 49.6, 50.8),
 ];
 
 const megaSnap = FINANCIAL_SNAPSHOTS[0]!;
@@ -974,6 +1005,91 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
         "Company headline on costs vs deposits. Sliding tape into the print.",
     },
     allowShort: false,
+    packId: "company-news",
+    difficulty: "intermediate",
+  },
+  {
+    id: "case-news-short-recall",
+    title: "You do not own it. The launch is recalled.",
+    contextType: "news",
+    thinkingMode: "short_vs_sell",
+    brief:
+      "You do not own this SAMPLE apparel stock. It already ran on a must-have launch. Then the company recalls that launch product. Sell is for shares you already have. Short is a new bet that the price falls. What do you do?",
+    newsHeadline: "Recalls the launch product. Stores pull the SKU.",
+    preOhlc: APPAREL_PRE,
+    postOhlc: withAftermath(APPAREL_PRE, [
+      bar("+1", 34.2, 34.8, 30.6, 31.0),
+      bar("+2", 31.0, 31.4, 28.4, 28.8),
+      bar("+3", 28.8, 29.2, 27.1, 27.6),
+    ]),
+    correctActions: ["short"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Sell closes a long you already have. You do not have one. Short is the downside bet when the launch thesis broke and the tape is crowded. Hold is fair if you refuse short risk — a short can lose more if the stock rips back.",
+      whyMarketMoved:
+        "Late launch buyers stepped aside. The recall removed the reason for the run.",
+      evidence:
+        "Crowded staircase into the launch, then a recall of that same product. You started with no shares.",
+    },
+    allowShort: true,
+    packId: "company-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-news-short-rumor-trap",
+    title: "Scary rumor, no filing, you do not own it",
+    contextType: "news",
+    thinkingMode: "short_vs_sell",
+    brief:
+      "You do not own this SAMPLE miner. Chat says the CEO is under review. The company has not filed anything. It says operations are unchanged. The chart is choppy, not a crash. Short is on this question so you can see the trap.",
+    newsHeadline:
+      "Unconfirmed CEO-under-review chatter. No filing. Operations unchanged.",
+    preOhlc: MINER_PRE,
+    postOhlc: withAftermath(MINER_PRE, [
+      bar("+1", 14.0, 14.4, 13.8, 14.2),
+      bar("+2", 14.2, 14.6, 14.0, 14.3),
+      bar("+3", 14.3, 14.5, 13.9, 14.1),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: [],
+    debrief: {
+      process:
+        "A rumor without a filing is not an automatic short. You also have nothing to sell. Stand aside until a fact shows up.",
+      whyMarketMoved:
+        "The chop stayed a chop. No filing arrived to change cash or control.",
+      evidence:
+        "Unconfirmed chatter, operations-unchanged comment, and a tight range — not a broken thesis.",
+    },
+    allowShort: true,
+    packId: "company-news",
+    difficulty: "beginner",
+  },
+  {
+    id: "case-news-int-short-trial-fail",
+    title: "Filed trial miss after a run-up",
+    contextType: "news",
+    thinkingMode: "short_vs_sell",
+    brief:
+      "You do not own this SAMPLE biotech. The stock ran into a trial date. The company filed: the trial missed its main goal. You already know rumor vs filing. Selling would be for a long you do not have. Is a short the process bet, or do you stand aside?",
+    newsHeadline: "Files that the late-stage trial missed its main goal.",
+    preOhlc: BIOTECH_PRE,
+    postOhlc: withAftermath(BIOTECH_PRE, [
+      bar("+1", 44.8, 45.6, 39.2, 39.8),
+      bar("+2", 39.8, 40.4, 37.6, 38.1),
+      bar("+3", 38.1, 38.6, 36.4, 36.9),
+    ]),
+    correctActions: ["short"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A filed miss broke the event thesis. Short is a new downside bet, not the same as selling a long. Hold is partial if you refuse short risk after a gap. Price can still bounce — shorts can lose more than they start with.",
+      whyMarketMoved:
+        "The event premium came out once the filing was public.",
+      evidence:
+        "Run into the date, then a filed miss of the main goal. You started with no shares.",
+    },
+    allowShort: true,
     packId: "company-news",
     difficulty: "intermediate",
   },
@@ -1930,7 +2046,7 @@ export const CASE_PACKS: {
     id: "company-news",
     name: "Company news",
     description:
-      "Practice on headlines: product news, contracts, leadership, buybacks.",
+      "Practice on headlines: product news, contracts, leadership, and when short is a real choice versus sell.",
     milestoneId: "E5.M2",
   },
   {

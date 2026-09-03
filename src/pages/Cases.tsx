@@ -75,7 +75,7 @@ export default function Cases() {
             Case studies
           </h1>
           <p className="text-slate-400 text-sm mt-2">
-            Read the setup, pick buy, sell, or hold, then see what happened.{" "}
+            Read the setup, pick buy, sell, hold, or short when the case teaches it, then see what happened.{" "}
             {CASE_LIBRARY_COUNT} practice cases.
             {beginnerOnly
               ? " Your beginner path shows beginner cases only."

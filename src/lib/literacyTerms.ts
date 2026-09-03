@@ -31,7 +31,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "position",
     summary: "Long benefits if value rises; short bets on a decline.",
     detail:
-      "Long = own (or intend to own) with upside if price/value rises. Short = borrow/sell hoping to repurchase cheaper. Shorting has asymmetric loss risk—held until later on the beginner path.",
+      "Long = own (or intend to own) with upside if price/value rises. Short = borrow/sell hoping to repurchase cheaper. Shorting has asymmetric loss risk. Sell exits a long you already have; short is a new downside bet. Practice that split on Cases → company news (Short vs sell).",
   },
   {
     id: "investing-vs-trading",

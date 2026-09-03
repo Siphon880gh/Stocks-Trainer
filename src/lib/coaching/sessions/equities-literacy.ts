@@ -56,7 +56,7 @@ export const equitiesLiteracySession: CoachingSession = {
             next: "wrong_hope",
           },
           {
-            label: "Price goes up over your time frame; shorts stay locked until the app teaches them",
+            label: "Price goes up over your time frame; short is a later case skill, not the same as sell",
             next: "success",
           },
         ],
@@ -70,7 +70,7 @@ export const equitiesLiteracySession: CoachingSession = {
       },
       success: {
         message:
-          "Session complete. You kept SAMPLE honesty and named long versus short gating.\n\nNext: Training → equity-literacy, then Archive terms.",
+          "Session complete. You kept SAMPLE honesty and named long versus short.\n\nNext: Training → equity-literacy, then Cases → company news when you practice short versus sell.",
         outcome: "success",
         choices: [],
       },
