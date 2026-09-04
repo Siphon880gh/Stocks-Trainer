@@ -15,11 +15,11 @@ AI-oriented codebase map for safe modification, feature tracing, and implementat
 
 ## What the app does
 
-**Stock Trainer (ANALYSIS_CORE)** — browser SPA that teaches technical analysis: candlestick patterns and indicator lines (SMA, EMA, RSI, MACD, Bollinger). Learners browse sample charts, scan patterns, take recognition quizzes, and read an Archive glossary.
+**Stock Trainer (ANALYSIS_CORE)** — browser SPA that teaches equities first: vocabulary, statement snapshots, candles/indicators, decide-and-reveal cases, then SAMPLE multi-market browse and deterministic step coaching. Charts still teach patterns and overlay lines (SMA, EMA, RSI, MACD, Bollinger).
 
-**Shipped today:** Dashboard, Market (charts + overlays + scan + simulated financials), Training (pattern + indicator quizzes), Archive (patterns + indicators), Practice Draw (placeholder).
+**Shipped today (E0–E11 Done(global)):** Home path + GoalPicker, Charts (SAMPLE/DELAYED + Navigator), Learn (quiz groups), Cases (decide→reveal), Coach (`/coach`), Archive, Practice Draw (graded canvas), local Account export/import. Content drain after milestones lives in `LOOPS/`, not new epic ids.
 
-**Planned (see epic map):** equities-first curriculum packs, progress persistence, decision case studies (buy/sell/short/hold → reveal), multi-asset literacy. Next implementation target when unlocked: **E1.M1** sample catalog/packs.
+**Do not** treat E1.M1 as the next implementation target. Milestone queues are complete; leftover work is content/coverage, not a new epic.
 
 ---
 
@@ -44,20 +44,22 @@ AI-oriented codebase map for safe modification, feature tracing, and implementat
 ```
 Browser
   main.tsx → App.tsx (BrowserRouter)
-    Layout (scanline + <Outlet />)
-      /              Dashboard
-      /market        Market → MarketChart + FinancialsPanel + scan/glossary modals
-      /training      Training → QuizModal / AnswerSheetModal
-      /archive       Archive → pattern/indicator detail modals
-      /practice-draw PracticeDraw (stub)
+    Layout → AppChrome + <Outlet />
+      /              Dashboard (path, GoalPicker, Account)
+      /market        Charts + MarketNavigator + MarketChart + scan
+      /training      Learn → QuizModal / AnswerSheetModal
+      /cases         Cases list; /cases/:caseId CasePlayer
+      /coach         catalog; /coach/:slug CoachSession
+      /archive       Archive (patterns / indicators / literacy)
+      /practice-draw PracticeDraw (graded canvas)
+      /practice/*    Misc practice labs (Hunt, Lookalikes, Levels, …)
 
-Data & logic live under src/lib/ (no API layer).
-UI chrome is mostly duplicated per page (each page owns its own header/nav).
+Data & logic live under src/lib/ (SAMPLE adapters; no paid live API).
 ```
 
-**Persistence:** Session UI state only (React `useState`). Quiz points/streak/accuracy are not written to `localStorage` yet (epic map plans that for E3).
+**Persistence:** `localStorage` key `analysis_core_progress_v1` (path, milestones, scores, streaks, drillFlags, coachingCompleted). Coaching mid-session uses `sessionStorage`. Export/import via `progressSync` (local only — no fake cloud).
 
-**Design language:** Dark green terminal (`--color-primary: #38ff14`), uppercase body text, neon borders (`.border-neon`, `.crt-glow`). Prefer extending existing tokens over inventing new palettes.
+**Design language:** Dark canvas, sentence-case learner copy, primary green CTAs. Prefer extending existing tokens over inventing new palettes. Do not put `SNAKE_CASE` in learner-facing labels.
 
 ---
 
@@ -74,11 +76,9 @@ trainer/
 └── src/
     ├── main.tsx (~10) / App.tsx (~23) / index.css (~60)
     ├── pages/                        # route screens
-    │   ├── Dashboard.tsx (~190)
-    │   ├── Market.tsx (~246)
-    │   ├── Training.tsx (~198)
-    │   ├── Archive.tsx (~276)
-    │   └── PracticeDraw.tsx (~63)
+    │   ├── Dashboard.tsx / Market.tsx / Training.tsx / Archive.tsx
+    │   ├── Cases.tsx / CasePlayer.tsx / Coach.tsx / CoachSession.tsx
+    │   └── PracticeDraw.tsx + pages/practice/*
     ├── components/                   # charts + modals
     │   ├── Layout.tsx (~10)
     │   ├── MarketChart.tsx (~255) / CandlestickChart.tsx (~213)
@@ -101,38 +101,27 @@ trainer/
 
 ## High-level code flow
 
-1. **Boot:** `main.tsx` mounts `App` → routes under `Layout`.
-2. **Dashboard:** Hardcoded feed cards + progress chrome; computes Sharpe/E/P from `SAMPLE_OHLC` / `financials` near the top of the file; links into Market/Training/Archive.
-3. **Market:** `marketId` selects `MARKETS` entry → `FinancialsPanel` + `MarketChart` with toggleable overlays → `scanPatterns(ohlc)` for Scan modal; right-click/glossary uses `overlays` registry. Detail: **AGENTS_CODE_REFERENCE-charts.md** + **data.md**.
-4. **Training:** Query `?group=` / `?start=1` open quiz; `QUIZ_GROUPS` → `getQuestionsForGroup` → `QuizModal` scores with `POINTS_PER_CORRECT` / `STREAK_BONUS`. Pattern questions render `CandlestickChart` from `PATTERN_OHLC`; indicator questions use `MarketChart` with one overlay. Detail: **AGENTS_CODE_REFERENCE-training.md**.
-5. **Archive:** Tabs patterns vs indicators; filters; detail modals; deep-link `?tab=indicators&open=sma`.
-6. **Practice Draw:** Placeholder canvas UI only (E7 deferred).
+1. **Boot:** `main.tsx` mounts `App` → routes under `Layout` / `AppChrome`.
+2. **Home:** Real path from `progressStore` + GoalPicker; primary CTA is Continue / Indicators quiz / Open cases; Also row + Account export/import.
+3. **Charts:** `marketId` selects a SAMPLE pack → `FinancialsPanel` + `MarketChart` + `scanPatterns`; `?nav=1` scrolls Market navigator; `?class=` filters. Detail: **AGENTS_CODE_REFERENCE-charts.md** + **data.md**.
+4. **Learn:** Query `?group=` / `?start=1` open quiz; `QUIZ_GROUPS` → `QuizModal`. Detail: **AGENTS_CODE_REFERENCE-training.md**.
+5. **Cases:** `?pack=` / `?market=` / `?class=` focus list; CasePlayer hides post tape until lock-in.
+6. **Coach:** `listSessions()` from `src/lib/coaching/`; `/coach/:slug` persist + rewind.
+7. **Archive:** Patterns / Indicators / Literacy; deep-link `?tab=indicators&open=sma`.
+8. **Practice Draw:** Graded canvas vs templates (`practiceDraw.ts`); not a placeholder.
 
-### Routing snippet (entire `App.tsx`)
-
-```tsx
-<BrowserRouter>
-  <Routes>
-    <Route path="/" element={<Layout />}>
-      <Route index element={<Dashboard />} />
-      <Route path="market" element={<Market />} />
-      <Route path="training" element={<Training />} />
-      <Route path="archive" element={<Archive />} />
-      <Route path="practice-draw" element={<PracticeDraw />} />
-    </Route>
-  </Routes>
-</BrowserRouter>
-```
+Routes live in `src/App.tsx` (Home, Charts, Learn, Cases, Coach, Archive, practice-draw, `/practice/*`). Read that file instead of copying a stale snippet.
 
 ---
 
 ## Safe-edit rules for AI
 
-- Prefer extending registries (`PATTERNS`, `OVERLAYS`, `MARKETS`, `QUIZ_*`, `PATTERN_OHLC`) over one-off hardcoding in pages.
-- Keep sample/fake data client-side; do not add live market APIs unless asked (E8 later).
+- Prefer extending registries (`PATTERNS`, `OVERLAYS`, `MARKETS`, `QUIZ_*`, `PATTERN_OHLC`, case packs, coaching sessions) over one-off hardcoding in pages.
+- Keep SAMPLE/STYLIZED data client-side; do not add paid live APIs unless asked.
 - Do not remove unused `package.json` deps “for cleanup” unless asked—focus on `src/`.
 - When changing quiz patterns, update **both** `quizData` and `ohlcData.PATTERN_OHLC` (and Archive `patterns.ts` if naming changes).
-- Progress % on Dashboard is decorative today—do not claim persistence without implementing E3.
+- Progress on Home is real (`analysis_core_progress_v1`). Do not rename that key without a migration.
+- Do not invent new epic/milestone ids. Queues in `.agents/state.json` are complete.
 
 ---
 

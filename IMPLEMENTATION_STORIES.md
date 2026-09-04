@@ -11,7 +11,7 @@ Parent map: [`EPIC_MAP.md`](./EPIC_MAP.md) · Runtime state: [`.agents/state.jso
 ## Global conventions
 
 - Stack: React 19, TypeScript, Vite, existing terminal UI language
-- Persist learner progress in `localStorage` until E8
+- Persist learner progress in `localStorage` (`analysis_core_progress_v1`); E8 adds local Account export/import (no paid cloud)
 - Case decision set (P0 default): `buy` | `sell` | `hold`; **`short` soft-gated** until long/hold fluency + tip
 - Grade: `correct` | `incorrect` | `partial` + **process** debrief (theory application, not direction-only)
 - Content tags: `assetClass`, `thinkingMode`, `contextType` (`news` | `financials` | `combined`)

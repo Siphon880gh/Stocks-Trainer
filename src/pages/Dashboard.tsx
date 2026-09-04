@@ -29,6 +29,7 @@ import {
   isGradedCasePackLocked,
   isPathComplete,
   MARKET_EXPLORER_PATH_MILESTONES,
+  setChartGateTemporaryBypass,
   trainingHrefForMilestone,
   type PathMilestoneDef,
 } from "../lib/beginnerPath";
@@ -208,8 +209,21 @@ export default function Dashboard() {
             <Link to="/coach/chase-vs-fade" className="text-primary hover:underline">
               Chase vs fade
             </Link>
+            {" · "}
+            <Link to="/coach/short-vs-sell" className="text-primary hover:underline">
+              Short versus sell
+            </Link>
           </p>
-        ) : null}
+        ) : (
+          <p className="text-[13px] text-muted">
+            Coach · {coachingDoneCount}{" "}
+            {coachingDoneCount === 1 ? "session" : "sessions"} reached success
+            {" · "}
+            <Link to="/coach" className="text-primary hover:underline">
+              Catalog
+            </Link>
+          </p>
+        )}
         {!newsLitDone ? (
           <p className="text-[13px] text-muted">
             Optional:{" "}
@@ -217,7 +231,9 @@ export default function Dashboard() {
               news literacy
             </Link>
           </p>
-        ) : null}
+        ) : (
+          <p className="text-[13px] text-muted">News literacy complete</p>
+        )}
         {progress.milestones["E4.M2"]?.status === "complete" && !finDrillsDone ? (
           <p className="text-[13px] text-muted">
             Optional:{" "}
@@ -225,6 +241,8 @@ export default function Dashboard() {
               statements drills
             </Link>
           </p>
+        ) : finDrillsDone ? (
+          <p className="text-[13px] text-muted">Statements drills complete</p>
         ) : null}
         {progress.pathId === MARKET_EXPLORER_PATH_ID ? (
           <p className="text-[13px] text-muted">
@@ -237,11 +255,15 @@ export default function Dashboard() {
         <p className="text-[12px] text-muted">Also</p>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
           <Link to="/market" className="text-primary hover:underline">Charts</Link>
+          <Link to="/market?nav=1" className="text-primary hover:underline">Market navigator</Link>
           <Link to="/training" className="text-primary hover:underline">Quizzes</Link>
           <Link to="/archive" className="text-primary hover:underline">Reference</Link>
           <Link to="/practice-draw" className="text-primary hover:underline">
             Draw{drawDone ? " · done" : ""}
           </Link>
+          <Link to="/practice/lookalike" className="text-primary hover:underline">Lookalikes</Link>
+          <Link to="/practice/hunt" className="text-primary hover:underline">Pattern hunt</Link>
+          <Link to="/practice/levels" className="text-primary hover:underline">Support and resistance</Link>
           <Link to="/coach" className="text-primary hover:underline">Coach</Link>
         </div>
         <p className="text-[12px] text-muted tabular-nums">
@@ -340,6 +362,7 @@ export default function Dashboard() {
                 )
               ) {
                 resetProgress();
+                setChartGateTemporaryBypass(false);
                 refreshProgress();
               }
             }}

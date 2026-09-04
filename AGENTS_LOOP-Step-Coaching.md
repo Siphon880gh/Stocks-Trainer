@@ -37,7 +37,7 @@ Or global continue (queue 6):
 
 **Before starting**
 1. E10 / `market_learning_order` complete; `next_action` at `E11.M1.S1` (or first unfinished E11 story).
-2. Leave working `npm run dev` alone; verify with `npm run lint` + `npm run build` (+ coaching test script once E11.M6 lands).
+2. Leave working `npm run dev` alone; verify with `npm run lint` + `npm run build` + `npm run test:coaching`.
 3. Stop yourself anytime; hard-stop on 10-round error budget or Done(step_coaching).
 
 ---

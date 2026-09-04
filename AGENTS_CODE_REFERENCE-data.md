@@ -24,8 +24,8 @@ AI feature map: sample markets, OHLC packs, pattern registry, scan, financials, 
 | `src/components/HistoryModal.tsx` | ~77 | History chrome |
 | `src/components/IndicatorGlossary.tsx` | ~81 | Overlay list |
 | `src/components/IndicatorPopover.tsx` | ~75 | Right-click overlay tip |
-| `src/pages/Dashboard.tsx` | ~190 | Home feed + decorative progress |
-| `src/pages/PracticeDraw.tsx` | ~63 | Stub canvas (E7 later) |
+| `src/pages/Dashboard.tsx` | — | Home path, GoalPicker, Account, real progress |
+| `src/pages/PracticeDraw.tsx` | — | Graded canvas vs templates (E7 shipped) |
 
 ---
 
@@ -48,10 +48,9 @@ Near the top: `scale(rows, factor)` clones OHLC at different price levels.
 
 `MarketDef`: `id`, `name`, `pair`, `data`, display `price` / `delta` / `volatility`.
 
-`MARKETS` (~middle): `btc` (base), `eth` (scaled), `sp500` (scaled).  
-`getMarket(id)` near end.
+`MARKETS` is built from `SAMPLE_PACKS_BY_CLASS` (equities first, then futures / options-context / forex / crypto). Legacy BTC/ETH/SPX still resolve through the same adapter.
 
-**Note:** Epic roadmap wants equities-first sample packs (E1); current catalog is crypto-heavy with one index. Prefer adding equity instruments here when implementing E1.M1.
+**Note:** E1–E9 SAMPLE catalogs already shipped. Add a new pack only as leftover content — do not treat E1.M1 as unstarted.
 
 ---
 
@@ -65,9 +64,9 @@ Fields: `type` (reversal/continuation/neutral), optional `sentiment`, `confirmat
 
 ## Pattern scan (`patternScan.ts`)
 
-Private detectors near top/middle: Doji, Hammer, Bullish/Bearish Engulfing, Shooting Star / Inverted Hammer (same geometry), Morning Star (3-bar).
+Candle detectors walk each bar (context-aware hammer vs hanging-man, pierce vs engulf, stars, soldiers/crows, harami, tweezers). Structure names (wedge/flag/double/triangle/H&S) come from 6–8 bar windows.
 
-`scanPatterns(data)` near end — walks bars, may emit **multiple** hits per index; returns `{ index, name, confidence, description }[]`.
+`scanPatterns(data)` returns `{ index, name, confidence, description }[]` and may emit multiple hits per index.
 
 Heuristic confidence scores are fixed literals (educational, not ML).
 
@@ -96,9 +95,9 @@ Overlay education: `IndicatorGlossary`, `IndicatorPopover`, `IndicatorDetailModa
 
 ## Dashboard & Practice Draw
 
-**Dashboard:** Terminal chrome + hardcoded market cards; real calc only for key metrics link (Sharpe/E/P from `SAMPLE_OHLC`). Progress “65%” and module labels are static UI. Nav links to other routes near bottom half.
+**Dashboard:** Live path from `progressStore` (`analysis_core_progress_v1`): next CTA, coach tip, Also row, Account export/import. Not decorative %.
 
-**PracticeDraw:** Placeholder “canvas coming soon”; links to Archive/Training. Do not invent full draw engine unless implementing E7.
+**PracticeDraw:** Graded pointer canvas vs templates in `practiceDraw.ts`. Storage key `analysis_core_practice_draw_v1`.
 
 ---
 
@@ -117,9 +116,8 @@ FAKE_FINANCIALS + returnsFromCloses ──► FinancialsPanel / Dashboard metric
 
 ## Safe-edit notes
 
-- E1 sample universe: extend `markets.ts` (and later pack loaders)—avoid hardcoding new instruments only inside Dashboard cards.
-- New detectable pattern: add detector + push in `scanPatterns`, optionally mirror in `PATTERNS` / quiz packs.
-- Scaling markets from one BTC base means shape is identical across assets—fine for MVP; real multi-asset packs should use distinct OHLC series.
+- New SAMPLE pack: add distinct OHLC in `samplePacks.ts` / `markets.ts` so `SAMPLE_PACKS_BY_CLASS` picks it up. Do not `scale()` clones.
+- New detectable pattern: add detector + tests in `patternScan.ts` / `patternScan.test.ts`, optionally mirror in `PATTERNS` / quiz packs.
 - Keep `FAKE_FINANCIALS` labeled simulated; do not present as live fundamentals.
 
 ---

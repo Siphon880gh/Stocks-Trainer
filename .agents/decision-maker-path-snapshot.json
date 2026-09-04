@@ -15,7 +15,7 @@
         "cases:earnings"
       ],
       "unlockFrom": [],
-      "coachTip": "Start with filings: beat/miss and statement red flags before headlines."
+      "coachTip": "Open Cases → earnings (beginner and intermediate). Coach → Beat vs miss, or Revenue up, margin down."
     },
     {
       "id": "E5.M2",
@@ -26,7 +26,7 @@
       "unlockFrom": [
         "E5.M3"
       ],
-      "coachTip": "Headline modes on equities: chase vs fade without macro yet."
+      "coachTip": "Open Cases → company news. Coach → Chase vs fade a company headline, or Short versus sell. Skip market-wide news until this pack is done."
     },
     {
       "id": "E5.M2b",
@@ -37,7 +37,7 @@
       "unlockFrom": [
         "E5.M2"
       ],
-      "coachTip": "Risk-off, prints, and supply shocks — still decide before reveal."
+      "coachTip": "Open Cases → market-wide news. Coach → Stock versus a scared tape, Map a SAMPLE data print, or Who benefits from a supply shock."
     },
     {
       "id": "E5.M4",
@@ -48,7 +48,7 @@
       "unlockFrom": [
         "E5.M2b"
       ],
-      "coachTip": "News + statements together. Horizon mismatch can earn partial credit."
+      "coachTip": "Open Cases → news plus financials. Coach → Headline plus snapshot. A different time frame can earn partial credit."
     }
   ]
 }

@@ -1,0 +1,55 @@
+{
+  "pathId": "market-explorer",
+  "title": "Market Explorer Path",
+  "milestoneOrder": [
+    "E4.M0",
+    "E10.M5",
+    "E10.M6",
+    "E10.M7"
+  ],
+  "milestones": [
+    {
+      "id": "E4.M0",
+      "title": "Chart Fluency",
+      "contentRefs": [
+        "quiz:indicators"
+      ],
+      "unlockFrom": [],
+      "coachTip": "Open Training → Indicators before any graded SAMPLE decide pack. Coach → Why Indicators come before cases. Optional: Learn → Misc Practices → Lookalikes or Pattern hunt."
+    },
+    {
+      "id": "E10.M5",
+      "title": "Futures SAMPLE Cases",
+      "contentRefs": [
+        "cases:futures"
+      ],
+      "unlockFrom": [
+        "E4.M0"
+      ],
+      "coachTip": "Open Cases → futures. Coach → Frame a SAMPLE futures decision, or Contango, backwardation, and the roll. Index and commodity tapes, not a live desk."
+    },
+    {
+      "id": "E10.M6",
+      "title": "Forex SAMPLE Cases",
+      "contentRefs": [
+        "cases:forex"
+      ],
+      "unlockFrom": [
+        "E10.M5"
+      ],
+      "coachTip": "Open Cases → forex. Coach → Frame a SAMPLE forex decision. Practice pairs only — not a live FX desk."
+    },
+    {
+      "id": "E10.M7",
+      "title": "Crypto SAMPLE Cases",
+      "contentRefs": [
+        "cases:crypto",
+        "cases:options-context"
+      ],
+      "unlockFrom": [
+        "E10.M6"
+      ],
+      "coachTip": "Open Cases → crypto, then options context (event and vol on the stock, no chain). Coach → Chase vs fade SAMPLE crypto hype, or Event risk without an options chain."
+    }
+  ]
+}

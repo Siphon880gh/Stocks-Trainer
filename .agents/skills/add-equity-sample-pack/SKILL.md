@@ -12,7 +12,7 @@ description: >-
 2. Append a `SamplePack` to `EQUITY_SAMPLE_PACKS` with `assetClass: "equity"`, SAMPLE/STYLIZED `educationalNotes`.
 3. Market list auto-includes equity packs via `markets.ts` → `EQUITY_MARKETS` — no Market.tsx change unless UI copy needs it.
 4. Run `npm run lint` && `npm run build`.
-5. Update `.agents/state.json` story status if this closes an E1.M1 story.
+5. E1.M1 is already `done`. Do not reopen it. A new pack is leftover SAMPLE content, not a new milestone.
 
 ## Failure notes
 - If charts look identical: rewrite OHLC shape (trend vs range vs selloff), do not only rescale prices.

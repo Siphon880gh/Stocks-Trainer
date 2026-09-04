@@ -5,7 +5,7 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 
 | Field | Value |
 |--------|--------|
-| **Status** | Epics finalized (Council Option A) · beginner path locked · ready to implement |
+| **Status** | Epics E0–E11 complete · Done(global) · content drain continues via `LOOPS/` |
 | **Platform** | Web (React 19 + Vite + TypeScript) |
 | **Primary learner** | Beginner picking up stocks → skilled decide-and-debrief trader |
 | **Curriculum principle** | Equities-first, concrete before abstract; literacy then theory application in cases |
@@ -63,10 +63,11 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 2. Read a simple company financial snapshot
 3. Candles + basic indicator lines (**path gate before cases**)
 4. Decision cases: earnings & company news (buy/sell/hold → reveal; **short soft-gated**)
-5. Decision cases: broader macro/news thinking *(post-MVP)*
-6. Combined news + statements cases *(post-MVP)*
-7. Scaled library + Decision Maker path *(post-MVP)*
-8. Then: futures / options / crypto literacy and multi-asset drills *(post-MVP)*
+5. Decision cases: broader macro/news thinking *(shipped)*
+6. Combined news + statements cases *(shipped)*
+7. Scaled library + Decision Maker path *(shipped)*
+8. Futures / options-context / crypto / forex SAMPLE literacy and decide packs *(shipped E9–E10)*
+9. Step coaching fail/rewind graphs *(shipped E11)*
 
 ---
 
@@ -93,7 +94,7 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 
 ## Flows (product-level)
 
-- **First-run:** Default Beginner Equities path → Dashboard with Milestone 1 unlocked (goal picker post-MVP)
+- **First-run:** GoalPicker (default Beginner Equities) → Home with Equities Literacy unlocked
 - **Primary loop:** Next milestone → lesson/quiz/case → score → tracker updates → unlock next
 - **Case loop:** Brief (news and/or statements + pre-reaction chart) → decision → reveal aftermath → grade + **process** debrief
 - **Coaching loop (E11):** Catalog → open session → choice nodes → wrong endings rewind to decision → success → restart; path trail from history stack
@@ -121,11 +122,11 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 |----|------|----------------|----------|--------|
 | E0 | Planning & Decisions | Locked scope, epics, beginner path, agent state | Mandatory | Complete |
 | E1 | Equities Sample Universe | Credible equity packs for charts/cases (multi-asset UI later) | MVP | Complete |
-| E2 | Learning Milestone Planner (AI Context) | Fixed Beginner path model P0; goal intake post-MVP | MVP (thin) | Planned |
-| E3 | Milestone Tracker & Progress Persistence | Resume-able real progress + unlocks | MVP | Planned |
-| E4 | Equities Literacy & Chart Fluency | Vocab + risk/horizon + statements + chart soft-gate | MVP | Planned |
-| E5 | Interactive Decision Case Studies (News + Financials) | Decide→reveal; thin packs in P0; scale modes post-MVP | MVP (priority content) | After foundation |
-| E6 | Dashboard Path Integration & Coach Surfaces | Home = active path + next action + coach tip | MVP | Planned |
+| E2 | Learning Milestone Planner (AI Context) | Fixed Beginner path model P0; goal intake post-MVP | MVP (thin) | Complete |
+| E3 | Milestone Tracker & Progress Persistence | Resume-able real progress + unlocks | MVP | Complete |
+| E4 | Equities Literacy & Chart Fluency | Vocab + risk/horizon + statements + chart soft-gate | MVP | Complete |
+| E5 | Interactive Decision Case Studies (News + Financials) | Decide→reveal; thin packs in P0; scale modes post-MVP | MVP (priority content) | Complete |
+| E6 | Dashboard Path Integration & Coach Surfaces | Home = active path + next action + coach tip | MVP | Complete |
 | E7 | Practice Draw Completion | Draw-to-learn feedback | Later | Complete |
 | E8 | Live/Delayed Market Data & Accounts | Real markets + sync | Later | Complete |
 | E9 | Multi-Asset SAMPLE Expansion | Futures / options-context / crypto deepen / forex SAMPLE after equities | Market types | Complete |
@@ -143,15 +144,15 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 
 ### E1. Equities Sample Universe
 - **Goal:** Charts/cases use distinct equity instrument packs first; other asset classes after path fluency
-- **Includes:** Catalog, pack schema, seed OHLC; stubs for future/option_context/crypto; Market browse/filter **post-MVP (E1.M2)**
+- **Includes:** Catalog, pack schema, seed OHLC; Market browse/filter by class **(E1.M2 shipped)**; later classes filled in E9
 - **Dependencies:** E0
 - **Out of scope:** Live quotes, order books
-- **Risks:** Options realism without becoming a pricing product — keep stubs quiet until E1.M2
+- **Risks:** Options realism without becoming a pricing product — options stay context/education only
 
 ### E2. Learning Milestone Planner (AI Context)
 - **Goal:** Stable path model for users and coding agents
-- **Includes (P0):** Beginner Equities template with contentRefs + unlock graph (no goal picker)
-- **Includes (post-MVP):** Goal intake UI; Decision Maker template; path preview/switch
+- **Includes (P0, shipped):** Beginner Equities template with contentRefs + unlock graph
+- **Includes (post-MVP, shipped):** Goal intake UI; Decision Maker + Market Explorer templates; path preview/switch
 - **Dependencies:** Content IDs from E1/E4/E5 (E3.M1 seeds fixed IDs early)
 - **Out of scope:** Social curriculum sharing, full LMS admin
 
@@ -164,7 +165,7 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 ### E4. Equities Literacy & Chart Fluency
 - **Goal:** Stock vocabulary, risk/horizon, company snapshot reading, and chart language **before** graded cases
 - **Includes:** Equities vocabulary quizzes; risk/horizon / investing-vs-trading beat; IS/BS/CF key lines & simple ratios; **E4.M0 chart soft-gate** (wire existing candle/indicator Training onto Beginner path)
-- **Post-MVP:** E4.M3 richer TA / multi-asset drill expansion
+- **Post-MVP (shipped):** E4.M3 richer TA / multi-asset drill expansion
 - **Dependencies:** E1 packs
 - **Out of scope:** Full accounting course; live options chains; cross-market as MVP headline
 
@@ -174,9 +175,9 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 - **Packs / thinking modes:**
   - **P0 — Financials / earnings:** beat/miss, margins, cash-flow flags, guidance, balance-sheet stress (≥3–5 cases)
   - **P0 — Company news (thin):** momentum vs fade, simple company headlines (equity underlyings)
-  - **Post-MVP — Macro:** risk-off, CPI/FOMC-style, geopolitics, sector rotation
-  - **Post-MVP — Combined:** earnings + headline; filings + rumor
-  - **Post-MVP — Scale:** ≥20 cases, difficulty tags, Decision Maker wiring
+  - **Macro (shipped):** risk-off, CPI/FOMC-style, geopolitics, sector rotation
+  - **Combined (shipped):** earnings + headline; filings + rumor
+  - **Scale (shipped):** ≥20 cases, difficulty tags, Decision Maker wiring
 - **Dependencies:** E1 packs for aftermath charts; E3 for progress; E4.M0 before graded packs
 - **Out of scope:** Live news paper trading; predicting future news; real-money execution
 - **Risks:** Hindsight bias — debriefs teach process and theory application, not only direction
@@ -190,7 +191,7 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 - Graded sketch vs pattern templates; optional link into milestones
 
 ### E8. Live/Delayed Data & Accounts *(Later)*
-- Feed adapter, auth, cloud progress sync
+- SAMPLE/DELAYED feed adapter, local account shell, export/import + cloud stub (no paid IdP)
 
 ### E9. Multi-Asset SAMPLE Expansion *(Market types)*
 - **Goal:** After equities fluency, fill Market class slots retail learners recognize: futures, options-context, deeper crypto, forex—all SAMPLE
@@ -210,11 +211,11 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 ### E11. Step-by-step Coaching *(Coaching)*
 - **Goal:** Another way to learn **all curriculum topics** via a guided wizard: branch on choices, hit **wrong** nodes that explain mistakes, **rewind** to the decision that caused them, reach **success**, restart
 - **Why not CasePlayer / QuizModal / LLM:** Cases are decide→reveal on OHLC; quizzes are MCQ; coach tips are one-liners. E11 is a **predefined decision graph** (content) + thin runtime (nav history / rewind / path trail). No runtime LLM, no external APIs mid-session
-- **Where in code (planned):**
+- **Where in code (shipped):**
   - Content: `src/lib/coaching/sessions/*` (metadata + graph; Vite glob discovery)
   - Runtime: `src/lib/coaching/` — validate, list/load, navigate, path trail, persist adapter
   - UI: `/coach` catalog · `/coach/:slug` session view · terminal outcome styling · collapsible path trail
-  - Entry: Dashboard **COACH** tile; optional deep-links from Training / Cases / Navigator by topic tags
+  - Entry: Home **Coach**; optional deep-links from Learn / Cases / Navigator by topic tags
 - **Persistence:** Session nav state behind a replaceable adapter (prefer `sessionStorage` for tab-scoped refresh recovery); optional ProgressStore flags for completed session slugs (Dashboard tips)—not a second unlock graph
 - **Includes:** E11.M1 schema+validate+sample · E11.M2 nav engine · E11.M3 catalog+session UI · E11.M4 persist+path visualizer · E11.M5 topic sessions+CTAs · E11.M6 tests+QA
 - **Dependencies:** E10 complete (topics exist to coach); reuse Layout/terminal tokens; do not rewrite CasePlayer

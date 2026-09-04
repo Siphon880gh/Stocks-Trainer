@@ -57,7 +57,7 @@ export const BEGINNER_EQUITIES_PATH: LearningPathTemplate = {
       contentRefs: ["quiz:indicators", "pack:equity-sample"],
       unlockFrom: ["E4.M2"],
       coachTip:
-        "Open Training → Indicators, then Charts on a SAMPLE equity pack. Coach → Why Indicators come before cases.",
+        "Open Training → Indicators, then Charts on a SAMPLE equity pack. Coach → Why Indicators come before cases. Optional: Learn → Misc Practices → Lookalikes or Pattern hunt.",
     },
     {
       id: "E5.M3",
@@ -73,7 +73,7 @@ export const BEGINNER_EQUITIES_PATH: LearningPathTemplate = {
       contentRefs: ["cases:company-news"],
       unlockFrom: ["E5.M3"],
       coachTip:
-        "Open Cases → company news. Coach → Chase vs fade a company headline.",
+        "Open Cases → company news. Coach → Chase vs fade a company headline, or Short versus sell.",
     },
   ],
 };
@@ -99,7 +99,7 @@ export const DECISION_MAKER_PATH: LearningPathTemplate = {
       contentRefs: ["cases:company-news"],
       unlockFrom: ["E5.M3"],
       coachTip:
-        "Open Cases → company news. Coach → Chase vs fade a company headline. Skip market-wide news until this pack is done.",
+        "Open Cases → company news. Coach → Chase vs fade a company headline, or Short versus sell. Skip market-wide news until this pack is done.",
     },
     {
       id: "E5.M2b",
@@ -133,7 +133,7 @@ export const MARKET_EXPLORER_PATH: LearningPathTemplate = {
       contentRefs: ["quiz:indicators"],
       unlockFrom: [],
       coachTip:
-        "Open Training → Indicators before any graded SAMPLE decide pack. Coach → Why Indicators come before cases.",
+        "Open Training → Indicators before any graded SAMPLE decide pack. Coach → Why Indicators come before cases. Optional: Learn → Misc Practices → Lookalikes or Pattern hunt.",
     },
     {
       id: "E10.M5",
@@ -141,7 +141,7 @@ export const MARKET_EXPLORER_PATH: LearningPathTemplate = {
       contentRefs: ["cases:futures"],
       unlockFrom: ["E4.M0"],
       coachTip:
-        "Open Cases → futures. Coach → Frame a SAMPLE futures decision. Index and commodity tapes, not a live desk.",
+        "Open Cases → futures. Coach → Frame a SAMPLE futures decision, or Contango, backwardation, and the roll. Index and commodity tapes, not a live desk.",
     },
     {
       id: "E10.M6",

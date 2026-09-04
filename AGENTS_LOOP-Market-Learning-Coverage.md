@@ -77,7 +77,7 @@ Ship `market_learning_order` (epic E10) until every E10.M* milestone is done.
 # STEP-BY-STEP CADENCE
 1. **Orient** — next unfinished `E10.Mx.Sy`; do not skip ahead in `market_learning_order`.
 2. **Implement story only**
-   - Navigator: deep-links `class` / `market` query params; VIEW_CHARTS / READ_LITERACY / DECIDE_CASES.
+   - Navigator: deep-links `class` / `market` query params; **View charts** / **Literacy** / **Decide cases**.
    - Quizzes: register groups in `quizData.ts` + Training list; SAMPLE copy.
    - Cases: `assetClass` on CaseStudy; seed packs with distinct OHLC; process debriefs; respect chart gate.
    - Path: new template + ProgressStore order; Equities paths must keep working.

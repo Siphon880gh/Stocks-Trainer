@@ -35,8 +35,8 @@ Middle of file:
 
 Near the end:
 - `POINTS_PER_CORRECT = 50`, `STREAK_BONUS = 10`.
-- `QuizGroupId` / `QUIZ_GROUPS` — includes `"indicators"`, `"all"`, and per-pattern families.
-- `getQuestionsForGroup(groupId)` — `"indicators"` → indicator bank; `"all"` → full pattern bank; else filter `patternKey === groupId`.
+- `QuizGroupId` / `QUIZ_GROUPS` — path groups (`equity-literacy`, `financial-literacy`, `indicators`, `news-literacy`, `financial-drills`) plus pattern families.
+- `getQuestionsForGroup(groupId)` — dedicated banks for literacy/drills/indicators; `"all"` → full pattern bank; else filter `patternKey === groupId`.
 - Index helpers: `getQuestionIndexInGroup`, `getGlobalIndexFromGroup`.
 
 ---
@@ -45,7 +45,7 @@ Near the end:
 
 Near the top of `Training.tsx`:
 - Reads `?group=` and `?start=1` from search params.
-- State: selected group, quiz open, points/streak/accuracy (session only).
+- State: selected group, quiz open; points/streak/accuracy seed from `progressStore`.
 - `start=1` effect opens `QuizModal`.
 
 UI (middle): group picker from `QUIZ_GROUPS`, launch quiz, answer sheet, links to Archive.
@@ -66,7 +66,7 @@ Chart preview (middle/lower):
 
 Close on last “Next”; reset index when modal opens (`useEffect` near middle).
 
-**Persistence:** None—parent `Training` holds session scores in memory.
+**Persistence:** `completeMilestoneFromQuiz` writes scores + milestone status to `analysis_core_progress_v1` (E3.M2). Parent `Training` also mirrors PTS in the header.
 
 ---
 
@@ -79,8 +79,8 @@ Lists questions for the active group; used to review or jump. Ties into Training
 ## Archive
 
 Near the top of `Archive.tsx`:
-- Tabs: `patterns` | `indicators` (URL `?tab=indicators`).
-- Deep-open indicator: `?open=<overlayId>`.
+- Tabs: `patterns` | `indicators` | `literacy` (URL `?tab=literacy`).
+- Deep-open: `?open=<overlayId>` or a literacy term id.
 - Filters: pattern sentiment (bullish/bearish/neutral) or overlay category.
 
 Renders cards from `PATTERNS` / `OVERLAYS`; opens `PatternDetailModal` or `IndicatorDetailModal`.
@@ -108,7 +108,7 @@ Archive (?tab,&open) → PATTERNS / OVERLAYS → detail modals
 
 - New pattern quiz: add OHLC pack in `ohlcData.PATTERN_OHLC`, optional `PATTERNS` entry, questions in `QUIZ_QUESTIONS`, and a `QUIZ_GROUPS` id if it needs its own family filter.
 - New indicator quiz: ensure overlay id exists in `overlays.ts` + `MarketChart` can show it; add to `INDICATOR_QUIZ_QUESTIONS`.
-- Do not assume scores survive refresh until E3 progress persistence lands.
+- Quiz and case scores write to `analysis_core_progress_v1`. Do not rename that key without a migration.
 - Keep `QuizGroupId` and `patternKey` strings aligned with `PATTERN_OHLC` keys.
 
 ---

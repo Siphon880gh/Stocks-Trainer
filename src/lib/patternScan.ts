@@ -76,13 +76,403 @@ function isMorningStar(data: OHLC[], i: number): boolean {
   return firstDown && midSmall && thirdUp && thirdBody > firstBody * 0.5;
 }
 
+function bodyLow(c: OHLC): number {
+  return Math.min(c.open, c.close);
+}
+
+function bodyHigh(c: OHLC): number {
+  return Math.max(c.open, c.close);
+}
+
+function isGreen(c: OHLC): boolean {
+  return c.close >= c.open;
+}
+
+function isRed(c: OHLC): boolean {
+  return c.close < c.open;
+}
+
+function bodyShare(c: OHLC): number {
+  const range = c.high - c.low;
+  if (range <= 0) return 0;
+  return Math.abs(c.close - c.open) / range;
+}
+
+/** Prior closes: rally, decline, or flat. Threshold is 0.1% so short SAMPLE tapes still count. */
+function closeTrend(data: OHLC[], i: number, lookback = 2): "up" | "down" | "flat" {
+  if (i < 1) return "flat";
+  const from = Math.max(0, i - lookback);
+  const a = data[from]!.close;
+  const b = data[i - 1]!.close;
+  const thresh = Math.max(Math.abs(a) * 0.001, 1);
+  if (b - a > thresh) return "up";
+  if (a - b > thresh) return "down";
+  return "flat";
+}
+
+function isEveningStar(data: OHLC[], i: number): boolean {
+  if (i < 2 || i >= data.length) return false;
+  const [first, mid, third] = [data[i - 2]!, data[i - 1]!, data[i]!];
+  const firstUp = isGreen(first);
+  const midSmall = Math.abs(mid.close - mid.open) < (mid.high - mid.low) * 0.3;
+  const thirdDown = isRed(third);
+  const thirdBody = Math.abs(third.close - third.open);
+  const firstBody = Math.abs(first.close - first.open);
+  const firstMid = (first.open + first.close) / 2;
+  return firstUp && midSmall && thirdDown && thirdBody > firstBody * 0.5 && third.close < firstMid;
+}
+
+function isPiercingLine(curr: OHLC, prev: OHLC): boolean {
+  if (!isRed(prev) || !isGreen(curr)) return false;
+  if (isBullishEngulfing(curr, prev)) return false;
+  const mid = (prev.open + prev.close) / 2;
+  return curr.open < prev.close && curr.close > mid && curr.close < prev.open;
+}
+
+function isDarkCloudCover(curr: OHLC, prev: OHLC): boolean {
+  if (!isGreen(prev) || !isRed(curr)) return false;
+  if (isBearishEngulfing(curr, prev)) return false;
+  const mid = (prev.open + prev.close) / 2;
+  return curr.open > prev.close && curr.close < mid && curr.close > prev.open;
+}
+
+function isThreeWhiteSoldiers(data: OHLC[], i: number): boolean {
+  if (i < 2) return false;
+  const a = data[i - 2]!;
+  const b = data[i - 1]!;
+  const c = data[i]!;
+  return (
+    isGreen(a) &&
+    isGreen(b) &&
+    isGreen(c) &&
+    bodyShare(a) >= 0.4 &&
+    bodyShare(b) >= 0.4 &&
+    bodyShare(c) >= 0.4 &&
+    b.close > a.close &&
+    c.close > b.close
+  );
+}
+
+function isThreeBlackCrows(data: OHLC[], i: number): boolean {
+  if (i < 2) return false;
+  const a = data[i - 2]!;
+  const b = data[i - 1]!;
+  const c = data[i]!;
+  return (
+    isRed(a) &&
+    isRed(b) &&
+    isRed(c) &&
+    bodyShare(a) >= 0.4 &&
+    bodyShare(b) >= 0.4 &&
+    bodyShare(c) >= 0.4 &&
+    b.close < a.close &&
+    c.close < b.close
+  );
+}
+
+function isHarami(curr: OHLC, prev: OHLC): boolean {
+  const currSpan = bodyHigh(curr) - bodyLow(curr);
+  const prevSpan = bodyHigh(prev) - bodyLow(prev);
+  if (prevSpan <= 0 || currSpan <= 0) return false;
+  return (
+    bodyLow(curr) > bodyLow(prev) &&
+    bodyHigh(curr) < bodyHigh(prev) &&
+    currSpan < prevSpan * 0.6
+  );
+}
+
+function highsMatch(a: OHLC, b: OHLC): boolean {
+  const thresh = Math.max(Math.abs(a.high) * 0.001, 1);
+  return Math.abs(a.high - b.high) <= thresh;
+}
+
+function lowsMatch(a: OHLC, b: OHLC): boolean {
+  const thresh = Math.max(Math.abs(a.low) * 0.001, 1);
+  return Math.abs(a.low - b.low) <= thresh;
+}
+
+function extremeHighCount(data: OHLC[]): number {
+  const maxH = Math.max(...data.map((c) => c.high));
+  const thresh = Math.max(Math.abs(maxH) * 0.001, 1);
+  return data.filter((c) => c.high >= maxH - thresh).length;
+}
+
+function extremeLowCount(data: OHLC[]): number {
+  const minL = Math.min(...data.map((c) => c.low));
+  const thresh = Math.max(Math.abs(minL) * 0.001, 1);
+  return data.filter((c) => c.low <= minL + thresh).length;
+}
+
+function linSlope(values: number[]): number {
+  const n = values.length;
+  if (n < 2) return 0;
+  let sumX = 0;
+  let sumY = 0;
+  let sumXY = 0;
+  let sumXX = 0;
+  for (let i = 0; i < n; i++) {
+    const y = values[i]!;
+    sumX += i;
+    sumY += y;
+    sumXY += i * y;
+    sumXX += i * i;
+  }
+  const den = n * sumXX - sumX * sumX;
+  if (den === 0) return 0;
+  return (n * sumXY - sumX * sumY) / den;
+}
+
+function slopeShare(values: number[]): number {
+  const mid = values.reduce((s, v) => s + v, 0) / values.length;
+  if (mid === 0) return 0;
+  return linSlope(values) / Math.abs(mid);
+}
+
+function barRange(c: OHLC): number {
+  return c.high - c.low;
+}
+
+function envelopeWidth(bars: OHLC[]): number {
+  return Math.max(...bars.map((c) => c.high)) - Math.min(...bars.map((c) => c.low));
+}
+
+function converges(data: OHLC[]): boolean {
+  const half = Math.max(2, Math.floor(data.length / 2));
+  const early = envelopeWidth(data.slice(0, half));
+  const late = envelopeWidth(data.slice(-half));
+  return late < early * 0.85;
+}
+
+function localTroughs(data: OHLC[]): number[] {
+  const out: number[] = [];
+  for (let i = 1; i < data.length - 1; i++) {
+    if (data[i]!.low <= data[i - 1]!.low && data[i]!.low <= data[i + 1]!.low) {
+      out.push(i);
+    }
+  }
+  return out;
+}
+
+function soldOffHigh(c: OHLC): boolean {
+  return c.close <= c.high - barRange(c) * 0.4;
+}
+
+function bouncedOffLow(c: OHLC): boolean {
+  return c.close >= c.low + barRange(c) * 0.4;
+}
+
+function isBullFlag(data: OHLC[]): boolean {
+  if (data.length < 6) return false;
+  const pole = data.slice(0, 3);
+  const flag = data.slice(3);
+  const poleRise = pole[pole.length - 1]!.close - pole[0]!.close;
+  const poleSpan = envelopeWidth(pole);
+  if (poleRise < poleSpan * 0.45) return false;
+  if (linSlope(flag.map((c) => c.close)) > 0) return false;
+  return envelopeWidth(flag) <= poleSpan * 0.65;
+}
+
+function isRisingWedge(data: OHLC[]): boolean {
+  if (data.length < 6 || isBullFlag(data)) return false;
+  if (extremeHighCount(data) >= 2) return false;
+  const highs = data.map((c) => c.high);
+  const lows = data.map((c) => c.low);
+  if (slopeShare(highs) <= 0.0006 || slopeShare(lows) <= 0.0006) return false;
+  if (!converges(data)) return false;
+  const last = data[data.length - 1]!;
+  const lastMid = (last.high + last.low) / 2;
+  const maxClose = Math.max(...data.map((c) => c.close));
+  return last.close <= lastMid || last.close < maxClose;
+}
+
+function isFallingWedge(data: OHLC[]): boolean {
+  if (data.length < 6) return false;
+  if (extremeLowCount(data) >= 2) return false;
+  const last = data[data.length - 1]!;
+  const prev = data[data.length - 2]!;
+  if (isRed(last) && isRed(prev) && last.close < prev.close) return false;
+  const highs = data.map((c) => c.high);
+  const lows = data.map((c) => c.low);
+  if (slopeShare(highs) >= -0.0006 || slopeShare(lows) >= -0.0006) return false;
+  return converges(data);
+}
+
+function isTriangle(data: OHLC[]): boolean {
+  if (data.length < 6) return false;
+  const highs = data.map((c) => c.high);
+  const lows = data.map((c) => c.low);
+  if (slopeShare(highs) >= -0.0004 || slopeShare(lows) <= 0.0004) return false;
+  return converges(data);
+}
+
+function isDoubleTop(data: OHLC[]): boolean {
+  if (data.length < 6) return false;
+  const maxH = Math.max(...data.map((c) => c.high));
+  const tol = Math.max(Math.abs(maxH) * 0.0015, 20);
+  const peaks = data
+    .map((c, i) => ({ i, h: c.high }))
+    .filter((p) => p.h >= maxH - tol);
+  if (peaks.length < 2) return false;
+  const lastClose = data[data.length - 1]!.close;
+  const drop = Math.max(Math.abs(maxH) * 0.005, 30);
+  for (let a = 0; a < peaks.length; a++) {
+    for (let b = a + 1; b < peaks.length; b++) {
+      const i = peaks[a]!.i;
+      const j = peaks[b]!.i;
+      const sep = j - i;
+      if (sep < 1) continue;
+      if (sep < 2 && !soldOffHigh(data[i]!)) continue;
+      const dip = Math.min(...data.slice(i, j + 1).map((c) => c.low));
+      if (dip > maxH - Math.max(Math.abs(maxH) * 0.008, 40)) continue;
+      if (lastClose < maxH - drop) return true;
+    }
+  }
+  return false;
+}
+
+function isDoubleBottom(data: OHLC[]): boolean {
+  if (data.length < 6) return false;
+  const minL = Math.min(...data.map((c) => c.low));
+  const tol = Math.max(Math.abs(minL) * 0.0015, 20);
+  const troughs = localTroughs(data).filter((i) => data[i]!.low <= minL + tol);
+  if (troughs.length < 2) return false;
+  const lift = Math.max(Math.abs(minL) * 0.005, 30);
+  for (let a = 0; a < troughs.length; a++) {
+    for (let b = a + 1; b < troughs.length; b++) {
+      const i = troughs[a]!;
+      const j = troughs[b]!;
+      const sep = j - i;
+      if (sep < 1) continue;
+      if (sep < 2 && !bouncedOffLow(data[i]!)) continue;
+      const bounce = Math.max(...data.slice(i, j + 1).map((c) => c.high));
+      if (bounce < minL + Math.max(Math.abs(minL) * 0.008, 40)) continue;
+      if (data[data.length - 1]!.close > minL + lift) return true;
+    }
+  }
+  return false;
+}
+
+function isHeadShoulders(data: OHLC[]): boolean {
+  if (data.length < 6) return false;
+  let head = 0;
+  for (let i = 1; i < data.length; i++) {
+    if (data[i]!.high > data[head]!.high) head = i;
+  }
+  if (head < 2 || head > data.length - 3) return false;
+  const headH = data[head]!.high;
+  let left = 0;
+  for (let i = 0; i < head; i++) {
+    if (data[i]!.high > data[left]!.high) left = i;
+  }
+  if (head - left < 1) return false;
+  let right = head + 2;
+  if (right >= data.length) return false;
+  for (let i = head + 2; i < data.length; i++) {
+    if (data[i]!.high >= data[right]!.high) right = i;
+  }
+  const leftH = data[left]!.high;
+  const rightH = data[right]!.high;
+  const prominence = Math.max(headH * 0.006, 80);
+  if (headH < leftH + prominence || headH < rightH + prominence) return false;
+  if (Math.abs(leftH - rightH) > Math.max(headH * 0.008, 80)) return false;
+  return data[data.length - 1]!.close < leftH;
+}
+
+export const STRUCTURE_SCAN_NAMES = new Set([
+  "Rising Wedge",
+  "Falling Wedge",
+  "Bull Flag",
+  "Double Top",
+  "Double Bottom",
+  "Triangle",
+  "Head and Shoulders",
+]);
+
+const STRUCTURE_WINDOWS = [6, 7, 8] as const;
+
+function scanStructuresOnWindow(data: OHLC[]): DetectedPattern[] {
+  if (data.length < 6) return [];
+  const last = data.length - 1;
+  const out: DetectedPattern[] = [];
+  const push = (name: string, confidence: number, description: string) => {
+    out.push({ index: last, name, confidence, description });
+  };
+  if (isHeadShoulders(data)) {
+    push(
+      "Head and Shoulders",
+      86,
+      "Three peaks: the middle high is the head. SAMPLE read — wait for the next print.",
+    );
+  } else if (isDoubleTop(data)) {
+    push(
+      "Double Top",
+      84,
+      "Two similar highs with a dip between. SAMPLE read — the second high failed to break out.",
+    );
+  }
+  if (isDoubleBottom(data)) {
+    push(
+      "Double Bottom",
+      84,
+      "Two similar lows with a bounce between. SAMPLE read — the second low held.",
+    );
+  }
+  if (isBullFlag(data)) {
+    push(
+      "Bull Flag",
+      83,
+      "A sharp rise, then a tight downward pause. SAMPLE read — the pause can be a rest.",
+    );
+  } else if (isRisingWedge(data)) {
+    push(
+      "Rising Wedge",
+      82,
+      "Price rises inside two upward, converging lines. SAMPLE read — buying is tiring.",
+    );
+  }
+  if (isTriangle(data)) {
+    push(
+      "Triangle",
+      80,
+      "Highs and lows squeeze toward a point. SAMPLE read — wait for which side breaks.",
+    );
+  } else if (isFallingWedge(data)) {
+    push(
+      "Falling Wedge",
+      82,
+      "Price consolidates between two downward, converging lines. SAMPLE teaching.",
+    );
+  }
+  return out;
+}
+
+function scanStructures(data: OHLC[]): DetectedPattern[] {
+  if (data.length < 6) return [];
+  const earliest = new Map<string, DetectedPattern>();
+  for (let end = 5; end < data.length; end++) {
+    for (const width of STRUCTURE_WINDOWS) {
+      if (end + 1 < width) continue;
+      const slice = data.slice(end + 1 - width, end + 1);
+      for (const hit of scanStructuresOnWindow(slice)) {
+        const mapped = { ...hit, index: end };
+        const prev = earliest.get(mapped.name);
+        if (!prev || mapped.index < prev.index) {
+          earliest.set(mapped.name, mapped);
+        }
+      }
+    }
+  }
+  return [...earliest.values()];
+}
+
 /** Scan OHLC data for patterns */
 export function scanPatterns(data: OHLC[]): DetectedPattern[] {
   const results: DetectedPattern[] = [];
   for (let i = 0; i < data.length; i++) {
     const candle = data[i]!;
     const prev = i > 0 ? data[i - 1] : undefined;
-    if (isDoji(candle, prev)) {
+    const wickSilhouette = isHammer(candle) || isShootingStar(candle);
+    if (isDoji(candle, prev) && !wickSilhouette) {
       results.push({
         index: i,
         name: "Doji",
@@ -91,12 +481,21 @@ export function scanPatterns(data: OHLC[]): DetectedPattern[] {
       });
     }
     if (isHammer(candle)) {
-      results.push({
-        index: i,
-        name: "Hammer",
-        confidence: 88,
-        description: "Bullish reversal; long lower shadow, small body at top.",
-      });
+      if (closeTrend(data, i) === "up") {
+        results.push({
+          index: i,
+          name: "Hanging Man",
+          confidence: 86,
+          description: "Same long lower wick as a hammer, but after a rally. Wait for the next print.",
+        });
+      } else {
+        results.push({
+          index: i,
+          name: "Hammer",
+          confidence: 88,
+          description: "Bullish reversal; long lower shadow, small body at top.",
+        });
+      }
     }
     if (prev && isBullishEngulfing(candle, prev)) {
       results.push({
@@ -104,6 +503,13 @@ export function scanPatterns(data: OHLC[]): DetectedPattern[] {
         name: "Bullish Engulfing",
         confidence: 90,
         description: "Green body engulfs previous red body; strong reversal signal.",
+      });
+    } else if (prev && isPiercingLine(candle, prev)) {
+      results.push({
+        index: i,
+        name: "Piercing Line",
+        confidence: 84,
+        description: "Green opens lower then closes well into the prior red body — not a full cover.",
       });
     }
     if (prev && isBearishEngulfing(candle, prev)) {
@@ -113,14 +519,30 @@ export function scanPatterns(data: OHLC[]): DetectedPattern[] {
         confidence: 90,
         description: "Red body engulfs previous green body; bearish reversal signal.",
       });
-    }
-    if (isShootingStar(candle)) {
+    } else if (prev && isDarkCloudCover(candle, prev)) {
       results.push({
         index: i,
-        name: "Shooting Star / Inverted Hammer",
-        confidence: 85,
-        description: "Long upper shadow, small body. Context: top = bearish, bottom = bullish.",
+        name: "Dark Cloud Cover",
+        confidence: 84,
+        description: "Red opens higher then closes well into the prior green body — not a full cover.",
       });
+    }
+    if (isShootingStar(candle)) {
+      if (closeTrend(data, i) === "down") {
+        results.push({
+          index: i,
+          name: "Inverted Hammer",
+          confidence: 85,
+          description: "Long upper shadow at a bottom after a decline. Wait for the next print.",
+        });
+      } else {
+        results.push({
+          index: i,
+          name: "Shooting Star",
+          confidence: 85,
+          description: "Long upper shadow at a top after a rally. Wait for the next print.",
+        });
+      }
     }
     if (isMorningStar(data, i)) {
       results.push({
@@ -130,7 +552,71 @@ export function scanPatterns(data: OHLC[]): DetectedPattern[] {
         description: "Three-candle bullish reversal at bottom of downtrend.",
       });
     }
+    if (isEveningStar(data, i)) {
+      results.push({
+        index: i,
+        name: "Evening Star",
+        confidence: 88,
+        description: "Three-candle top: strong green, small middle, then strong red.",
+      });
+    }
+    if (isThreeWhiteSoldiers(data, i)) {
+      results.push({
+        index: i,
+        name: "Three White Soldiers",
+        confidence: 87,
+        description: "Three rising green bodies in a row. SAMPLE read: buyers in control.",
+      });
+    }
+    if (isThreeBlackCrows(data, i)) {
+      results.push({
+        index: i,
+        name: "Three Black Crows",
+        confidence: 87,
+        description: "Three falling red bodies in a row. SAMPLE read: sellers in control.",
+      });
+    }
+    if (
+      prev &&
+      isHarami(candle, prev) &&
+      !isBullishEngulfing(candle, prev) &&
+      !isBearishEngulfing(candle, prev)
+    ) {
+      results.push({
+        index: i,
+        name: "Harami",
+        confidence: 78,
+        description: "A small body nested inside the prior larger body. Direction needs the next print.",
+      });
+    }
+    if (
+      prev &&
+      highsMatch(prev, candle) &&
+      closeTrend(data, i) === "up" &&
+      extremeHighCount(data.slice(Math.max(0, i - 5), i + 1)) === 2
+    ) {
+      results.push({
+        index: i,
+        name: "Tweezer Top",
+        confidence: 82,
+        description: "Two candles share a similar high after a rally — matched rejection.",
+      });
+    }
+    if (
+      prev &&
+      lowsMatch(prev, candle) &&
+      closeTrend(data, i) === "down" &&
+      extremeLowCount(data.slice(Math.max(0, i - 5), i + 1)) === 2
+    ) {
+      results.push({
+        index: i,
+        name: "Tweezer Bottom",
+        confidence: 82,
+        description: "Two candles share a similar low after a decline — matched support.",
+      });
+    }
   }
+  results.push(...scanStructures(data));
   return results;
 }
 
@@ -140,8 +626,28 @@ export function patternBarIndices(pattern: DetectedPattern): number[] {
   if (pattern.name.includes("Engulfing")) {
     return i > 0 ? [i - 1, i] : [i];
   }
-  if (pattern.name === "Morning Star") {
+  if (
+    pattern.name === "Morning Star" ||
+    pattern.name === "Evening Star" ||
+    pattern.name === "Three White Soldiers" ||
+    pattern.name === "Three Black Crows"
+  ) {
     return i >= 2 ? [i - 2, i - 1, i] : [i];
+  }
+  if (
+    pattern.name === "Piercing Line" ||
+    pattern.name === "Dark Cloud Cover" ||
+    pattern.name === "Harami" ||
+    pattern.name === "Tweezer Top" ||
+    pattern.name === "Tweezer Bottom"
+  ) {
+    return i > 0 ? [i - 1, i] : [i];
+  }
+  if (STRUCTURE_SCAN_NAMES.has(pattern.name)) {
+    const start = Math.max(0, i - 4);
+    const span: number[] = [];
+    for (let k = start; k <= i; k++) span.push(k);
+    return span;
   }
   return [i];
 }

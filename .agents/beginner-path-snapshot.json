@@ -17,7 +17,7 @@
         "glossary:literacy"
       ],
       "unlockFrom": [],
-      "coachTip": "Learn what a share is, how exchanges work, and match risk to your horizon."
+      "coachTip": "Open Training → Equities literacy. Optional Coach → Name the equity building blocks. Archive terms sit under Reference."
     },
     {
       "id": "E4.M2",
@@ -29,11 +29,11 @@
       "unlockFrom": [
         "E4.M1"
       ],
-      "coachTip": "Read revenue, profit vs cash, and simple P/E before trusting a headline."
+      "coachTip": "Open Training → Statements literacy, then Coach → Read a SAMPLE company snapshot. Profit vs cash before any earnings case."
     },
     {
       "id": "E4.M0",
-      "title": "Chart Soft-Gate",
+      "title": "Chart Fluency",
       "contentRefs": [
         "quiz:indicators",
         "pack:equity-sample"
@@ -41,7 +41,7 @@
       "unlockFrom": [
         "E4.M2"
       ],
-      "coachTip": "Prove candle/indicator fluency before graded decide-and-reveal cases."
+      "coachTip": "Open Training → Indicators, then Charts on a SAMPLE equity pack. Coach → Why Indicators come before cases. Optional: Learn → Misc Practices → Lookalikes or Pattern hunt."
     },
     {
       "id": "E5.M3",
@@ -52,7 +52,7 @@
       "unlockFrom": [
         "E4.M0"
       ],
-      "coachTip": "Apply statement theory: beat/miss, margins, cash, guidance, balance sheet."
+      "coachTip": "Open Cases → earnings. Start with beat or miss. Coach → Beat vs miss on a SAMPLE report."
     },
     {
       "id": "E5.M2",
@@ -63,7 +63,7 @@
       "unlockFrom": [
         "E5.M3"
       ],
-      "coachTip": "Practice chase-vs-fade and company headlines on equity underlyings only."
+      "coachTip": "Open Cases → company news. Coach → Chase vs fade a company headline, or Short versus sell."
     }
   ]
 }

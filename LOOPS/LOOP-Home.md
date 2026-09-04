@@ -38,8 +38,8 @@ Home should always answer: **what is my path, what do I do next, what did I alre
 2. **`COACH_TIP_BY_THINKING_MODE`** — every `CaseThinkingMode` has a tip that matches how Cases now teach that mode (update when Cases loop added a mode).
 3. **GoalPicker path cards** — three paths: who it is for, what you will click first, what “done” looks like; Equities = traditional retail stocks on Beginner.
 4. **Dashboard empty / locked / complete states** — first-run, chart-gate locked, path complete credential, Decision Maker badge, Market Explorer done; each distinct.
-5. **ACCOUNT_SHELL helper lines** — local only; export/import; no fake cloud sync success.
-6. **Market Navigator compact copy** on Home (if rendered) — VIEW_CHARTS / READ_LITERACY / DECIDE_CASES stay accurate for SAMPLE.
+5. **Account helper lines** — local only; export/import; no fake cloud sync success.
+6. **Market Navigator compact copy** on Home (if rendered) — **View charts** / **Literacy** / **Decide cases** stay accurate for SAMPLE.
 
 Skip a row when the copy already names the real next surface (Training group, Cases pack, Coach slug).
 

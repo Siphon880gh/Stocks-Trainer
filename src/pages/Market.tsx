@@ -96,6 +96,13 @@ export default function Market() {
     const list = marketsForFilter(classFromUrl);
     if (list[0]) setMarketId(list[0].id);
   }, [classFromUrl, peekOn]);
+
+  useEffect(() => {
+    if (searchParams.get("nav") !== "1") return;
+    document.getElementById("market-navigator")?.scrollIntoView({
+      block: "start",
+    });
+  }, [searchParams]);
   const [controls, setControls] = useState({
     sma: true,
     ema: false,

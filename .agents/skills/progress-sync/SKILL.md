@@ -13,11 +13,11 @@ description: >-
 ## API
 - `exportProgressJson` / `downloadProgressExport`
 - `importProgressJson` — schema check; corrupt → recovery message, store unchanged
-- `getProgressSyncAdapter()` → `SYNC_STUB / LOCAL_ONLY` (`push`/`pull` stub)
+- `getProgressSyncAdapter()` → `local_only` (`push`/`pull` stub)
 
 ## UI
-Dashboard ACCOUNT_SHELL: EXPORT_PROGRESS, IMPORT_PROGRESS, sync status label.
+Home **Account**: **Export**, **Import**, status **Saved on this device only · no cloud sync**.
 
 ## Rules
-- No paid cloud. Status must say stub / local only.
+- No paid cloud. Status must stay local-only — no fake upload success.
 - After changes: `npm run lint` && `npm run build`.

@@ -176,6 +176,25 @@ const DUMP_CRYPTO_OHLC: OHLC[] = withBarLabels(
   SESSION_24H_LABELS_12
 );
 
+/** Range, upside probe, then fail back through the range (≠ alt chop-then-break, ≠ dump-no-reclaim). */
+const CHOP_FAIL_CRYPTO_OHLC: OHLC[] = withBarLabels(
+  [
+    ohlc("t0", 2.40, 2.46, 2.36, 2.42),
+    ohlc("t1", 2.42, 2.48, 2.38, 2.44),
+    ohlc("t2", 2.44, 2.50, 2.40, 2.43),
+    ohlc("t3", 2.43, 2.49, 2.39, 2.45),
+    ohlc("t4", 2.45, 2.51, 2.41, 2.46),
+    ohlc("t5", 2.46, 2.68, 2.44, 2.64),
+    ohlc("t6", 2.64, 2.72, 2.58, 2.60),
+    ohlc("t7", 2.60, 2.63, 2.48, 2.50),
+    ohlc("t8", 2.50, 2.54, 2.40, 2.42),
+    ohlc("t9", 2.42, 2.46, 2.34, 2.36),
+    ohlc("t10", 2.36, 2.40, 2.28, 2.32),
+    ohlc("t11", 2.32, 2.36, 2.24, 2.28),
+  ],
+  SESSION_24H_LABELS_12
+);
+
 const LEGACY_CRYPTO_PACKS: SamplePack[] = [
   {
     id: "btc",
@@ -221,6 +240,15 @@ const LEGACY_CRYPTO_PACKS: SamplePack[] = [
     ohlc: DUMP_CRYPTO_OHLC,
     educationalNotes:
       "SAMPLE crypto: sharp dump that does not reclaim. Distinct from ETH dump-then-reclaim. STYLIZED — not LIVE.",
+  },
+  {
+    id: "crypto-chop-fail",
+    symbol: "CHOP",
+    assetClass: "crypto",
+    displayName: "Chop, Failed Break (SAMPLE)",
+    ohlc: CHOP_FAIL_CRYPTO_OHLC,
+    educationalNotes:
+      "SAMPLE crypto: range, upside probe, then fail back through the range. Distinct from alt chop-then-break and dump-no-reclaim. Browse/drill only — not Beginner Equities Path, not LIVE.",
   },
 ];
 

@@ -146,6 +146,44 @@ const SQUEEZE_OHLC: OHLC[] = withBarLabels(
   RTH_BAR_LABELS_12
 );
 
+/** Rally that fails and gives back the thrust (≠ gap-and-go hold, ≠ cyclical dump-then-bounce). */
+const FAIL_RALLY_OHLC: OHLC[] = withBarLabels(
+  [
+    bar("t0", 28.4, 28.8, 28.1, 28.6),
+    bar("t1", 28.6, 29.2, 28.4, 29.0),
+    bar("t2", 29.0, 29.8, 28.8, 29.6),
+    bar("t3", 29.6, 30.4, 29.4, 30.2),
+    bar("t4", 30.2, 30.8, 29.9, 30.0),
+    bar("t5", 30.0, 30.3, 29.2, 29.4),
+    bar("t6", 29.4, 29.7, 28.6, 28.8),
+    bar("t7", 28.8, 29.0, 28.0, 28.2),
+    bar("t8", 28.2, 28.5, 27.4, 27.6),
+    bar("t9", 27.6, 27.9, 27.0, 27.2),
+    bar("t10", 27.2, 27.5, 26.6, 26.8),
+    bar("t11", 26.8, 27.1, 26.3, 26.5),
+  ],
+  RTH_BAR_LABELS_12
+);
+
+/** Quiet grind, then a gap lower that stays offered (≠ fail-rally staircase, ≠ cyclical bounce). */
+const DIV_CUT_OHLC: OHLC[] = withBarLabels(
+  [
+    bar("t0", 16.8, 17.0, 16.6, 16.9),
+    bar("t1", 16.9, 17.1, 16.7, 16.8),
+    bar("t2", 16.8, 17.0, 16.6, 16.7),
+    bar("t3", 16.7, 16.9, 16.5, 16.6),
+    bar("t4", 16.6, 16.8, 16.4, 16.5),
+    bar("t5", 15.2, 15.4, 14.6, 14.8),
+    bar("t6", 14.8, 15.0, 14.3, 14.5),
+    bar("t7", 14.5, 14.7, 14.1, 14.3),
+    bar("t8", 14.3, 14.6, 14.0, 14.2),
+    bar("t9", 14.2, 14.4, 13.8, 14.0),
+    bar("t10", 14.0, 14.2, 13.7, 13.9),
+    bar("t11", 13.9, 14.1, 13.6, 13.8),
+  ],
+  RTH_BAR_LABELS_12
+);
+
 /** P0 equity floor: ≥3 packs with distinct OHLC shapes (not scaled clones). */
 export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
   {
@@ -192,6 +230,24 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
     ohlc: SQUEEZE_OHLC,
     educationalNotes:
       "SAMPLE defensive name: shrinking range (squeeze) then a small break. Distinct from index-proxy quiet range. STYLIZED educational series.",
+  },
+  {
+    id: "eq-fail-rally",
+    symbol: "PFE.S",
+    assetClass: "equity",
+    displayName: "Failed Rally Pharma (SAMPLE)",
+    ohlc: FAIL_RALLY_OHLC,
+    educationalNotes:
+      "SAMPLE single-name: a rally that fails and gives back the thrust. Distinct from gap-and-go hold and cyclical dump-then-bounce. STYLIZED — not a live feed.",
+  },
+  {
+    id: "eq-div-cut",
+    symbol: "T.S",
+    assetClass: "equity",
+    displayName: "Dividend-Cut Telco (SAMPLE)",
+    ohlc: DIV_CUT_OHLC,
+    educationalNotes:
+      "SAMPLE income name: quiet grind, then a gap lower that stays offered. Educational tape for a payout-cut shape — STYLIZED, not a live feed.",
   },
 ];
 

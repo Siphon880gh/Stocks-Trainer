@@ -2,13 +2,18 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { SAMPLE_OHLC, type OHLC } from "./ohlcData.ts";
 import { MISC_PRACTICE_ITEMS } from "./miscPractices.ts";
+import { scanPatterns } from "./patternScan.ts";
 import {
   candlePartAtPrice,
   gradeHunt,
+  gradeInvalidation,
   gradeLabel,
+  gradeLevel,
+  gradeLookalike,
   gradePlan,
   gradeRegime,
   gradeReplay,
+  HUNT_TAPES,
   REGIME_WINDOWS,
 } from "./practiceLabs.ts";
 
@@ -21,7 +26,7 @@ const green: OHLC = {
 };
 
 describe("misc practice catalog", () => {
-  it("lists Drawing plus the six labs", () => {
+  it("lists Drawing plus the six labs and Phase D lookalike / invalidation / levels", () => {
     const titles = MISC_PRACTICE_ITEMS.map((i) => i.title);
     assert.deepEqual(titles, [
       "Drawing",
@@ -31,6 +36,9 @@ describe("misc practice catalog", () => {
       "Bar replay",
       "Mark the plan",
       "Pattern hunt",
+      "Lookalikes",
+      "Invalidation",
+      "Support and resistance",
     ]);
   });
 });
@@ -88,5 +96,63 @@ describe("pattern hunt", () => {
     assert.equal(hits.grade, "correct");
     const miss = gradeHunt(0, SAMPLE_OHLC);
     assert.equal(miss.grade, "incorrect");
+  });
+
+  it("scores the hanging-man hunt tape on the Hanging Man bar", () => {
+    const tape = HUNT_TAPES.find((t) => t.id === "hunt-hanging-man");
+    assert.ok(tape);
+    const hit = scanPatterns(tape.bars).find((p) => p.name === "Hanging Man");
+    assert.ok(hit);
+    assert.equal(gradeHunt(hit.index, tape.bars).grade, "correct");
+  });
+
+  it("gives every hunt tape at least one scan hit", () => {
+    for (const tape of HUNT_TAPES) {
+      assert.ok(scanPatterns(tape.bars).length > 0, tape.id);
+    }
+  });
+
+  it("scores the falling-wedge hunt tape on the Falling Wedge bar", () => {
+    const tape = HUNT_TAPES.find((t) => t.id === "hunt-falling-wedge");
+    assert.ok(tape);
+    const hit = scanPatterns(tape.bars).find((p) => p.name === "Falling Wedge");
+    assert.ok(hit);
+    const result = gradeHunt(hit.index, tape.bars);
+    assert.equal(result.grade, "correct");
+    assert.match(result.tip, /Falling Wedge/);
+  });
+});
+
+describe("lookalike lab", () => {
+  it("accepts the hanging-man chart and rejects the hammer chart", () => {
+    assert.equal(gradeLookalike("hm-vs-hammer", "B").grade, "correct");
+    assert.equal(gradeLookalike("hm-vs-hammer", "A").grade, "incorrect");
+  });
+
+  it("accepts the rising-wedge chart over the bull-flag chart", () => {
+    assert.equal(gradeLookalike("rw-vs-flag", "A").grade, "correct");
+    assert.equal(gradeLookalike("rw-vs-flag", "B").grade, "incorrect");
+  });
+});
+
+describe("invalidation lab", () => {
+  it("accepts a tap under the hanging-man low and rejects the small body", () => {
+    assert.equal(gradeInvalidation("inv-hanging-man", 62800).grade, "correct");
+    assert.equal(gradeInvalidation("inv-hanging-man", 63950).grade, "incorrect");
+  });
+
+  it("accepts the falling-wedge coil low", () => {
+    assert.equal(gradeInvalidation("inv-falling-wedge", 62800).grade, "correct");
+  });
+});
+
+describe("levels lab", () => {
+  it("accepts the tweezer-bottom matched low as support", () => {
+    assert.equal(gradeLevel("lvl-tweezer-bottom", 62800).grade, "correct");
+    assert.equal(gradeLevel("lvl-tweezer-bottom", 64400).grade, "incorrect");
+  });
+
+  it("accepts the triangle rising-lows zone", () => {
+    assert.equal(gradeLevel("lvl-triangle-low", 63800).grade, "correct");
   });
 });

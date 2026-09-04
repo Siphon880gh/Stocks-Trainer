@@ -11,6 +11,9 @@ import PracticeRegime from "./pages/practice/Regime";
 import PracticeReplay from "./pages/practice/Replay";
 import PracticePlan from "./pages/practice/Plan";
 import PracticeHunt from "./pages/practice/Hunt";
+import PracticeLookalike from "./pages/practice/Lookalike";
+import PracticeInvalidation from "./pages/practice/Invalidation";
+import PracticeLevels from "./pages/practice/Levels";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
 import Coach from "./pages/Coach";
@@ -33,6 +36,9 @@ export default function App() {
           <Route path="practice/replay" element={<PracticeReplay />} />
           <Route path="practice/plan" element={<PracticePlan />} />
           <Route path="practice/hunt" element={<PracticeHunt />} />
+          <Route path="practice/lookalike" element={<PracticeLookalike />} />
+          <Route path="practice/invalidation" element={<PracticeInvalidation />} />
+          <Route path="practice/levels" element={<PracticeLevels />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />
           <Route path="coach" element={<Coach />} />

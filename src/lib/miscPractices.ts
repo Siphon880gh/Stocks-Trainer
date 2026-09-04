@@ -14,6 +14,9 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "replay", title: "Bar replay", to: "/practice/replay" },
   { id: "plan", title: "Mark the plan", to: "/practice/plan" },
   { id: "hunt", title: "Pattern hunt", to: "/practice/hunt" },
+  { id: "lookalike", title: "Lookalikes", to: "/practice/lookalike" },
+  { id: "invalidation", title: "Invalidation", to: "/practice/invalidation" },
+  { id: "levels", title: "Support and resistance", to: "/practice/levels" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

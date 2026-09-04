@@ -2,9 +2,9 @@
 
 Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_QA_User_Flows.md`](./AGENTS_LOOP_QA_User_Flows.md).
 
-**Routes:** `/` Dashboard · `/training` Learn · `/market` Market · `/archive` Archive · `/cases` Cases · `/cases/:caseId` Case player · `/practice-draw` Practice Draw
+**Routes:** `/` Home · `/training` Learn · `/market` Charts · `/archive` Archive · `/cases` Cases · `/cases/:caseId` Case player · `/practice-draw` Practice Draw · `/coach` Coach · `/coach/:slug` session
 
-**Progress:** `localStorage` key `analysis_core_progress_v1`. First-run shows GoalPicker until path confirm. Use Dashboard **RESET_PATH** (confirm dialog) to return to first-run.
+**Progress:** `localStorage` key `analysis_core_progress_v1`. First-run shows GoalPicker until path confirm. Use Home **Account** → **Reset path** (confirm dialog) to return to first-run. Reset also clears the session-only chart-gate peek so Indicators locks apply again.
 
 **Dev server:** `npm run dev` → typically `http://localhost:3001`. Ask before changing server setup.
 
@@ -24,7 +24,7 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 | G8 | Look up patterns / indicators / literacy terms | Archive | Tabs + deep-links from quizzes |
 | G9 | Sketch a candlestick template and get a coarse grade | Practice Draw | Grade + last-attempt restore |
 | G10 | Decision Maker spine (earnings → news → macro → combined) | Decision Maker path | Chart gate still required; badge when spine complete |
-| G11 | Local account shell + export/import progress | Dashboard ACCOUNT_SHELL | Sign-in local; export JSON; import restores |
+| G11 | Local account shell + export/import progress | Home Account | Sign-in local; export JSON; import restores |
 | G12 | Locked milestones show prerequisites (no silent skip) | Training / Cases | Locked quiz/case copy; chart-gate banner |
 
 ---
@@ -33,29 +33,35 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 | Location | Control | Label / copy |
 |----------|---------|--------------|
-| Dashboard GoalPicker | Path tabs | `Beginner Equities Path` / `Decision Maker Path` |
-| Dashboard GoalPicker | Confirm | `CONFIRM PATH · …` |
-| Dashboard path CTA | Primary tile | `NEXT_STEP` / `UNLOCK_GATE` / `OPEN_CASES` |
-| Dashboard quick tiles | | `READ_THEORY` · `IDENTIFY_CANDLE` · `CASE_STUDIES` · `PRACTICE_DRAW` · `CHART_GATE` |
-| Dashboard side rail | | `CHARTS` · `QUIZ_CENTER` · `CASE_STUDIES` · `ARCHIVE` · `PRACTICE_DRAW` |
-| Dashboard bottom nav | | `DASHBOARD` · `LEARN` · `MARKET` · `CONFIG` |
-| Training | Start | `START QUIZ` / `LOCKED` |
-| Training groups (path) | | `Equities Literacy` · `Statements Literacy` · `Indicators` |
-| Case player | Actions | `BUY` · `SELL` · `HOLD` · `SHORT` (+ `· LOCKED` when gated) |
-| Case player | Submit | `LOCK DECISION · REVEAL` |
+| Home GoalPicker | Path tabs | `Beginner Equities Path` / `Decision Maker Path` / `Market Explorer Path` |
+| Home GoalPicker | Heading / confirm | `Choose a path` · `Confirm path · {path title}` |
+| Home path CTA | Primary | `Continue` / `Indicators quiz` / `Open cases` |
+| Home Also | | `Charts` · `Market navigator` · `Quizzes` · `Reference` · `Draw` · `Lookalikes` · `Pattern hunt` · `Support and resistance` · `Coach` |
+| App chrome | | `Home` · `Learn` · `Charts` · `Cases` · `Coach` |
+| Training | Start | `Start quiz` / `Locked` |
+| Training groups (path) | | `Equities Literacy` · `Statements Literacy` · `Indicators` · `News Literacy` · `Statements Drills` |
+| Case list | Focus | `Showing: {pack name}` when `?pack=` is set |
+| Case player | Actions | `BUY` · `SELL` · `HOLD` · `SHORT` (SHORT omitted unless the case allows it) |
+| Case player | Submit | `Lock in and see what happened` |
+| Market navigator | Types | `Equities` · `Futures` · `Forex` · `Crypto` · `Options context` |
+| Market navigator | Actions | `View charts` · `Literacy` · `Step by step` · `Decide cases` |
+| Coach catalog | | `Step coaching` · Topic `All topics` |
+| Coach session | Outcomes | `Continue` · `Wrong · review` · `Success` |
+| Coach session | Actions | `Rewind to decision` / `Step back` · `Restart session` |
+| Home Account | | `Account · not signed in` / `Account · {name}` · `Sign in` · `Save name` · `Export` · `Import` · `Reset path` |
 
 ---
 
 ## Flow UF-01 — First-run goal intake (G1)
 
-**Precondition:** Cleared progress (RESET_PATH or empty localStorage).
+**Precondition:** Cleared progress (**Reset path** or empty localStorage).
 
-1. Open `/` (or click bottom nav **DASHBOARD**).
-2. See **GOAL_INTAKE · Choose path**.
-3. Click **Beginner Equities Path** (default) — preview shows E4.M1 → E4.M2 → E4.M0 → E5.M3 → E5.M2.
-4. Click **CONFIRM PATH · BEGINNER EQUITIES PATH**.
-5. GoalPicker dismisses. Path chrome shows `PATH::BEGINNER-EQUITIES · STEP_0/5`, active **E4.M1 · Equities Literacy**, coach tip visible.
-6. Primary CTA tile reads **NEXT_STEP**.
+1. Open `/` (or click chrome **Home**).
+2. See **Choose a path**.
+3. Click **Beginner Equities Path** (default) — preview shows Equities Literacy → Statement Snapshot → Chart Fluency → Earnings Cases → Company News Cases.
+4. Click **Confirm path · Beginner Equities Path**.
+5. GoalPicker stays as preview until confirm; after confirm, path chrome shows `Beginner Equities Path · 0/5`, headline **Equities Literacy**, coach tip visible.
+6. Primary CTA reads **Continue**.
 
 **Pass:** `pathConfirmed` true; E4.M1 `available`; later milestones `locked`.
 
@@ -65,15 +71,15 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 **Precondition:** UF-01 complete; active E4.M1.
 
-1. On Dashboard, click **NEXT_STEP** (or side rail **QUIZ_CENTER** then select group).
-2. Land on `/training?group=equity-literacy&start=1` — quiz modal opens (or select **Equities Literacy** → **START QUIZ**).
+1. On Home, click **Continue** (or chrome **Learn**, then select group).
+2. Land on `/training?group=equity-literacy&start=1` — quiz modal opens (or select **Equities Literacy** → **Start quiz**).
 3. For each question: pick an option → submit/next until group finishes.
 4. Modal closes; return to Training or navigate **DASHBOARD** (logo / home).
 5. Dashboard: E4.M1 `[complete]`; E4.M2 `[available]`; PTS/accuracy updated.
 
 **Pass:** Milestone writeback via quiz group `equity-literacy` → E4.M1.
 
-**Fail if:** Statements / Indicators groups startable before unlock on Beginner path (should show **LOCKED**).
+**Fail if:** Statements / Indicators groups startable before unlock on Beginner path (should show **Locked**).
 
 ---
 
@@ -81,10 +87,10 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 **Precondition:** E4.M1 complete.
 
-1. Dashboard → **NEXT_STEP** → `/training?group=financial-literacy&start=1`.
+1. Home → **Continue** → `/training?group=financial-literacy&start=1`.
 2. Complete **Statements Literacy** quiz (snapshot cards may appear on questions).
-3. Optional side path: bottom/side **ARCHIVE** → tab **Literacy** → open a term; or from quiz glossary link `?tab=literacy&open=…`.
-4. Return Dashboard: E4.M2 complete; E4.M0 available.
+3. Optional side path: Home **Reference** → tab **Literacy** → open a term; or from quiz glossary link `?tab=literacy&open=…`.
+4. Return Home: E4.M2 complete; E4.M0 available.
 
 **Pass:** E4.M2 complete; financial snapshot content visible during quiz where tagged.
 
@@ -94,11 +100,11 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 **Precondition:** E4.M2 complete; E4.M0 available.
 
-1. Dashboard → **NEXT_STEP** or quick tile **CHART_GATE** → `/training?group=indicators` (auto-start if `start=1`).
-2. Banner may show **Beginner Path · E4.M0 Chart Soft-Gate**.
-3. Select **Indicators** if needed → **START QUIZ** → finish all indicator questions.
-4. Dashboard: E4.M0 complete; E5.M3 available; case-gate lock copy gone.
-5. Negative check before finish: open `/cases` → yellow **Chart soft-gate required** banner; case titles not clickable as unlocked links.
+1. Home → **Continue** or **Indicators quiz** → `/training?group=indicators` (auto-start if `start=1`).
+2. Learn lists **Indicators** among path groups.
+3. Select **Indicators** if needed → **Start quiz** → finish all indicator questions.
+4. Home: E4.M0 complete; E5.M3 available; case-gate lock copy gone.
+5. Negative check before finish: open `/cases` → banner about Indicators plus **Take Indicators quiz**; locked packs stay locked.
 
 **Pass:** Graded packs unlock only after Indicators quiz completion.
 
@@ -108,13 +114,13 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 **Precondition:** E4.M0 complete; E5.M3 available.
 
-1. Dashboard → CTA **OPEN_CASES** → `/cases?pack=earnings`.
-2. See **FOCUS_PACK · earnings** and Earnings section marked **PATH_FOCUS**.
+1. Home → CTA **Open cases** → `/cases?pack=earnings`.
+2. See **Showing:** the earnings pack name; that pack section scrolls into view.
 3. Click first unlocked case (e.g. title containing beat/miss).
-4. Read brief (+ optional snapshot) + **SAMPLE_Pre_Reaction** chart (post tape hidden).
-5. Click **BUY** / **SELL** / **HOLD** (or **SHORT** if enabled) → **LOCK DECISION · REVEAL**.
-6. Aftermath chart + **GRADE** + process / why_moved / evidence debrief.
-7. **Back to case list** → Dashboard: case result in store; on **correct** or **partial**, E5.M3 flips `complete` and next milestone unlocks (`recordCaseResult`).
+4. Read brief (+ optional snapshot) + pre-reaction SAMPLE chart (post tape hidden).
+5. Click **BUY** / **SELL** / **HOLD** (or **SHORT** if the case allows it) → **Lock in and see what happened**.
+6. Aftermath chart + **Correct** / **Partial credit** / **Incorrect** + process debrief.
+7. **Back to cases** → Home: case result in store; on **correct** or **partial**, E5.M3 flips `complete` and next milestone unlocks (`recordCaseResult`).
 
 **Pass:** No aftermath before lock; debrief is process-oriented (not “price went up” only).
 
@@ -124,11 +130,11 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 **Precondition:** E5.M3 complete (or pack unlocked per path); chart gate done.
 
-1. Dashboard **OPEN_CASES** → `/cases?pack=company-news` (or Training links **Company news pack**).
+1. Home **Open cases** → `/cases?pack=company-news` (or Learn pack links).
 2. Open a company-news case.
-3. Confirm SHORT shows **· LOCKED** when case soft-gates short.
+3. Confirm **SHORT** is omitted unless the case sets `allowShort`.
 4. Complete decide → reveal → debrief.
-5. Return Dashboard; E5.M2 progresses toward path complete.
+5. Return Home; E5.M2 progresses toward path complete.
 
 **Pass:** Beginner path lists beginner-difficulty cases only.
 
@@ -139,21 +145,21 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 **Precondition:** Fresh Beginner Equities confirm.
 
 1. Run UF-02 → UF-03 → UF-04 → UF-05 → UF-06 until all five milestones `complete`.
-2. Dashboard headline **BEGINNER_EQUITIES_PATH_COMPLETE**; credential copy; coach tip for completion.
+2. Home headline **Beginner Equities path complete**; credential copy; coach tip for completion.
 3. Progress bar 100% (`5/5`).
 
-**Pass:** Credential label appears; RESET_PATH returns to GoalPicker / first-run skeleton.
+**Pass:** Credential label appears; **Reset path** returns to GoalPicker / first-run skeleton.
 
 ---
 
 ## Flow UF-08 — Market SAMPLE charts (G7)
 
-1. Dashboard bottom **MARKET** or side **CHARTS** or feed tile **VIEW_CHARTS_AND_FINANCIALS**.
+1. Home **Charts** or chrome **Charts**.
 2. Set **Class** filter to **Equities**; pick an equity SAMPLE market.
 3. Toggle overlays (SMA/EMA/RSI/MACD/Bollinger).
 4. Optional: **Provider** SAMPLE vs DELAYED (labels must not claim LIVE/REAL_TIME theater).
-5. If chart gate open, banner links to Indicators quiz.
-6. Open scan/glossary as available; return via bottom **DASHBOARD**.
+5. If chart gate is still open, navigator copy links to **Take Indicators quiz**.
+6. Open **Scan patterns** / glossary as available; return via chrome **Home**.
 
 **Pass:** Chart renders OHLC; provider label honest.
 
@@ -174,7 +180,7 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ## Flow UF-09 — Archive theory (G8)
 
-1. Dashboard **READ_THEORY** or bottom **CONFIG** → `/archive`.
+1. Home **Reference** → `/archive`.
 2. Tab **Patterns** → open a pattern detail.
 3. Tab **Indicators** → open SMA (or deep-link `/archive?tab=indicators&open=sma`).
 4. Tab **Literacy** → open a term.
@@ -186,12 +192,12 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ## Flow UF-10 — Practice Draw (G9)
 
-1. Dashboard **PRACTICE_DRAW** or Training link **Practice Draw**.
+1. Home **Draw** or Learn link **Practice Draw**.
 2. Optional: `/practice-draw?template=doji` preselects Doji.
-3. Pick template → draw strokes on canvas → **Submit**/grade control.
-4. See CORRECT / PARTIAL / INCORRECT + tip.
+3. Pick template → draw strokes on canvas → grade control.
+4. See correct / partial / incorrect + tip.
 5. Reload page: last attempt restored note appears.
-6. Dashboard may show draw tip / **DONE** badge on Practice Draw tile.
+6. Home **Draw** may show **· done** after a graded attempt.
 
 **Pass:** Grade persists across reload.
 
@@ -199,15 +205,15 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ## Flow UF-11 — Decision Maker path (G10)
 
-**Precondition:** RESET_PATH or first-run GoalPicker.
+**Precondition:** **Reset path** or first-run GoalPicker.
 
-1. On GoalPicker click **Decision Maker Path** — preview E5.M3 → E5.M2 → E5.M2b → E5.M4; yellow note about chart soft-gate.
-2. **CONFIRM PATH · DECISION MAKER PATH**.
-3. Active case milestone shows; CTA **UNLOCK_GATE** while E4.M0 incomplete.
-4. Complete Indicators quiz (Training **Indicators** → finish).
-5. CTA becomes **OPEN_CASES** → earnings pack.
-6. Complete earnings → company news → macro intro → combined packs (macro/combined via Cases list or Training pack links).
-7. When spine done: **BADGE · DECISION_MAKER_SEGMENT** / completion copy.
+1. On GoalPicker click **Decision Maker Path** — preview Earnings Cases → Company News Cases → Market-Wide News → News plus Financials; note about Indicators.
+2. **Confirm path · Decision Maker Path**.
+3. Active case milestone shows; CTA **Indicators quiz** while E4.M0 incomplete.
+4. Complete Indicators quiz (Learn **Indicators** → finish).
+5. CTA becomes **Open cases** → earnings pack.
+6. Complete earnings → company news → market-wide news → news plus financials packs (via Cases list or Learn pack links).
+7. When spine done: **Decision Maker path complete** / **Decision Maker segment**.
 
 **Pass:** Cases stay locked until Indicators complete; DM shows non-beginner difficulties when path is Decision Maker.
 
@@ -215,12 +221,12 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ## Flow UF-12 — Account shell + progress sync stub (G11)
 
-1. Dashboard **ACCOUNT_SHELL**: enter display name → **SIGN_IN_LOCAL** (or **SAVE_NAME** when signed in).
-2. Header shows `SIGNED_IN_LOCAL // …`.
-3. **EXPORT_PROGRESS** downloads JSON.
-4. Change something (e.g. take a quiz), then **IMPORT_PROGRESS** with prior file → restore message **IMPORT_OK** or reject copy.
-5. Sync adapter status label remains local-only (no fake cloud success).
-6. **SIGN_OUT** returns signed-out shell.
+1. Home **Account · not signed in**: enter display name → **Sign in** (or **Save name** when signed in).
+2. Summary reads `Account · {display name}`.
+3. **Export** downloads JSON.
+4. Change something (e.g. take a quiz), then **Import** with prior file → **Progress restored** or reject copy.
+5. Sync adapter status remains **Saved on this device only · no cloud sync**.
+6. **Sign out** returns **Account · not signed in**.
 
 **Pass:** No OAuth; import reject does not crash UI.
 
@@ -230,10 +236,10 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 **Precondition:** Fresh Beginner path after confirm; do **not** complete quizzes.
 
-1. Training: select **Statements Literacy** or **Indicators** → button **LOCKED** + unlock copy.
-2. Navigate `/cases` → chart-gate banner; packs locked.
-3. Open `/cases/case-earn-beat-miss` directly → red chart-gate tip + link to Indicators quiz.
-4. Dashboard quick **CASE_STUDIES** still opens list (locked), not a playable graded case.
+1. Learn: select **Statements Literacy** or **Indicators** → button **Locked** + unlock copy.
+2. Navigate `/cases` → Indicators banner; packs locked.
+3. Open `/cases/case-earn-beat-miss` directly → gate tip + **Take Indicators quiz**.
+4. Home **Open cases** / Cases chrome still opens the list (locked), not a playable graded case.
 
 **Pass:** No graded decide/reveal without gate; no silent unlock.
 
@@ -241,10 +247,10 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ## Flow UF-14 — Training secondary packs & answer sheet
 
-1. Bottom **LEARN** → `/training`.
-2. After chart gate (or on DM), banner links: Earnings / Company news / Macro / Combined / Practice Draw.
-3. Select **Equity Pack Drills** or a pattern family → **START QUIZ** (unlocked groups only).
-4. **ANSWER SHEET** → pick a practice question → quiz opens at that index.
+1. Chrome **Learn** → `/training`.
+2. After chart gate (or on DM), Learn still lists pack groups plus **Practice Draw** from Home **Draw**.
+3. Select **Equity Pack Drills** or a pattern family → **Start quiz** (unlocked groups only).
+4. **Answer sheet** → pick a practice question → quiz opens at that index.
 
 **Pass:** Answer sheet practice launches correct group/index.
 
@@ -252,11 +258,11 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ## Flow UF-15 — Market Navigator (E10)
 
-1. Dashboard tile **MARKET_NAV** → `/market?nav=1`.
-2. **MARKET_NAVIGATOR** shows Equities · Futures · Forex · Crypto · Options context.
-3. Select **Forex** → **VIEW_CHARTS** → Class filter Forex + SAMPLE FX packs.
-4. **READ_LITERACY** → Archive literacy term (or Training for Equities).
-5. With chart gate complete: **DECIDE_CASES** → `/cases?market=…` focused packs.
+1. Home **Market navigator** → `/market?nav=1` (navigator scrolls into view).
+2. **Market navigator** shows Equities · Futures · Forex · Crypto · Options context.
+3. Select **Forex** → **View charts** → Class filter Forex + SAMPLE FX packs.
+4. **Literacy** → Archive literacy term (or Learn for Equities).
+5. With chart gate complete: **Decide cases** → `/cases?market=…` focused packs.
 
 **Pass:** Helper copy states traditional retail = Equities (stocks); no LIVE desk claims.
 
@@ -264,9 +270,9 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ## Flow UF-16 — News literacy quiz (E10)
 
-1. Dashboard tip **NEWS_LITERACY** or Training → group **News Literacy**.
+1. Home Optional **news literacy** or Learn → group **News Literacy**.
 2. Finish ≥6 questions via QuizModal; glossary links open Archive terms (rumor/priced-in/chase).
-3. Return to Dashboard → tip becomes **DRILL_FLAG · NEWS_LITERACY complete**.
+3. Return to Home → **News literacy complete**.
 4. Beginner Equities unlock graph unchanged (E4.M1 etc. not auto-advanced by this drill).
 
 **Pass:** Optional drill; SAMPLE-only copy.
@@ -277,25 +283,25 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 **Precondition:** Indicators chart soft-gate complete.
 
-1. Navigator → **Futures** → **DECIDE_CASES** (or `/cases?market=future`).
-2. Open a Futures SAMPLE case → **BUY/SELL/HOLD** → **LOCK DECISION · REVEAL**.
+1. Navigator → **Futures** → **Decide cases** (or `/cases?market=future`).
+2. Open a Futures SAMPLE case → **BUY** / **SELL** / **HOLD** → **Lock in and see what happened**.
 3. Debrief shows process text (not direction-only).
 4. Optional: GoalPicker **Market Explorer Path** → confirm → spine gate → futures → forex → crypto.
 
-**Pass:** Anti-hindsight; SHORT soft-gated when locked; SAMPLE labels; Equities paths still available via RESET_PATH.
+**Pass:** Anti-hindsight; SHORT omitted unless the case allows it; SAMPLE labels; Equities paths still available via **Reset path**.
 
 ---
 
 ## Flow UF-18 — Step coaching (E11)
 
-1. Dashboard tile **COACH** (or side rail **STEP_COACHING**) → `/coach`.
-2. Catalog shows ≥4 sessions with topic + tags; optional **TOPIC_FILTER**.
+1. Home **Coach** (or chrome **Coach**) → `/coach`.
+2. Catalog **Step coaching** shows ≥4 sessions with topic + tags; Topic filter **All topics**.
 3. Open **Chase vs fade a company headline** → `/coach/chase-vs-fade`.
-4. Pick a wrong path (e.g. chase confirmed) → **OUTCOME · WRONG · REVIEW** → **REWIND_TO_DECISION**.
-5. Complete success path → **OUTCOME · SUCCESS** → **RESTART_SESSION** clears trail.
+4. Pick a wrong path (e.g. chase the open) → **Wrong · review** → **Rewind to decision**.
+5. Complete success path → **Success** → **Restart session** clears trail.
 6. Mid-session: refresh browser → nav state restores from `sessionStorage` (path trail matches).
-7. Collapse/expand **PATH_TRAIL**; optional **DEBUG_NODE_ID**.
-8. Return Dashboard → tip shows **COACHING_FLAG · N session(s) reached success** after a success finish.
+7. Collapse/expand **Path · N steps**; optional **Show node ids**.
+8. Return Home → **Coach · N session(s) reached success** after a success finish.
 
 **Pass:** No LLM; Beginner unlock graph unchanged; SAMPLE/educational copy only.
 
@@ -327,8 +333,8 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 | Issue | Change |
 |-------|--------|
-| Dashboard `OPEN_CASES` linked `?pack=` but Cases ignored it | Cases honors `pack`, focuses/scrolls pack section |
-| Cases hard to discover | Dashboard quick tile + side rail **CASE_STUDIES** → `/cases` |
+| Home `Open cases` linked `?pack=` but Cases ignored it | Cases honors `pack`, focuses/scrolls pack section |
+| Cases hard to discover | Home **Open cases** / chrome **Cases** → `/cases` |
 
 ---
 

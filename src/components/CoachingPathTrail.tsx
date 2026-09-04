@@ -36,7 +36,7 @@ export default function CoachingPathTrail({
           <span className="material-symbols-outlined text-sm" aria-hidden>
             {expanded ? "expand_less" : "expand_more"}
           </span>
-          Path · {steps.length} step{steps.length === 1 ? "" : "s"}
+          {steps.length === 1 ? "Path · 1 step" : `Path · ${steps.length} steps`}
         </button>
         <label className="inline-flex items-center gap-1.5 font-mono text-[10px] text-slate-500 cursor-pointer">
           <input

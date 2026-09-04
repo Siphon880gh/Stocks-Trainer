@@ -281,6 +281,146 @@ export const FALLING_WEDGE_OHLC: OHLC[] = [
   ohlc("6", 63400, 63700, 63100, 63600),
 ];
 
+/** Two candles share a similar high after a rally. */
+export const TWEEZER_TOP_OHLC: OHLC[] = [
+  ohlc("1", 63600, 63900, 63400, 63800),
+  ohlc("2", 63800, 64200, 63700, 64100),
+  ohlc("3", 64100, 64600, 64000, 64400),
+  ohlc("4", 64400, 64800, 64200, 64750),
+  ohlc("5", 64600, 64800, 64300, 64400),
+  ohlc("6", 64400, 64600, 64000, 64150),
+];
+
+/** Two candles share a similar low after a decline. */
+export const TWEEZER_BOTTOM_OHLC: OHLC[] = [
+  ohlc("1", 64400, 64600, 64000, 64100),
+  ohlc("2", 64100, 64200, 63600, 63700),
+  ohlc("3", 63700, 63800, 63200, 63300),
+  ohlc("4", 63300, 63450, 62800, 62950),
+  ohlc("5", 63000, 63500, 62800, 63400),
+  ohlc("6", 63400, 63800, 63200, 63650),
+];
+
+/** Rising, converging range (≠ falling-wedge down-squeeze). */
+export const RISING_WEDGE_OHLC: OHLC[] = [
+  ohlc("1", 62800, 63200, 62600, 63000),
+  ohlc("2", 63000, 63600, 62900, 63400),
+  ohlc("3", 63400, 64000, 63250, 63700),
+  ohlc("4", 63700, 64300, 63550, 64000),
+  ohlc("5", 64000, 64500, 63850, 64100),
+  ohlc("6", 64100, 64600, 63950, 64050),
+];
+
+/** Sharp rise, then a tight downward pause (≠ rising-wedge grind). */
+export const BULL_FLAG_OHLC: OHLC[] = [
+  ohlc("1", 62800, 63100, 62600, 62900),
+  ohlc("2", 62900, 63800, 62800, 63700),
+  ohlc("3", 63700, 64600, 63600, 64500),
+  ohlc("4", 64500, 64650, 64100, 64200),
+  ohlc("5", 64200, 64350, 63900, 64000),
+  ohlc("6", 64000, 64150, 63750, 63850),
+];
+
+/** Two similar highs with a dip between (≠ head-and-shoulders three peaks). */
+export const DOUBLE_TOP_OHLC: OHLC[] = [
+  ohlc("1", 63200, 63600, 63000, 63400),
+  ohlc("2", 63400, 64400, 63300, 64200),
+  ohlc("3", 64200, 64600, 63800, 63900),
+  ohlc("4", 63900, 64600, 63700, 64400),
+  ohlc("5", 64400, 64550, 63600, 63750),
+  ohlc("6", 63750, 63900, 63200, 63350),
+];
+
+/** Two similar lows with a bounce between (≠ tweezer-bottom two-bar match). */
+export const DOUBLE_BOTTOM_OHLC: OHLC[] = [
+  ohlc("1", 64400, 64600, 64000, 64100),
+  ohlc("2", 64100, 64200, 63200, 63400),
+  ohlc("3", 63400, 64200, 63300, 64000),
+  ohlc("4", 64000, 64100, 63200, 63350),
+  ohlc("5", 63350, 64100, 63250, 63950),
+  ohlc("6", 63950, 64600, 63800, 64400),
+];
+
+/** Highs and lows squeeze toward a point (≠ wedge one-way tilt). */
+export const TRIANGLE_OHLC: OHLC[] = [
+  ohlc("1", 63600, 64800, 62800, 64000),
+  ohlc("2", 64000, 64600, 63200, 63400),
+  ohlc("3", 63400, 64300, 63300, 64100),
+  ohlc("4", 64100, 64400, 63550, 63700),
+  ohlc("5", 63700, 64200, 63650, 64050),
+  ohlc("6", 64050, 64250, 63800, 63950),
+];
+
+/** Same long lower wick as a hammer, but after a rally (≠ hammer after a decline). */
+export const HANGING_MAN_OHLC: OHLC[] = [
+  ohlc("1", 62800, 63200, 62600, 63100),
+  ohlc("2", 63100, 63600, 63000, 63500),
+  ohlc("3", 63500, 64100, 63400, 64000),
+  ohlc("4", 64000, 64150, 62800, 63900),
+  ohlc("5", 63900, 64000, 63400, 63550),
+  ohlc("6", 63550, 63700, 63000, 63150),
+];
+
+/** Large green, small middle, large red at the highs (≠ morning-star at the lows). */
+export const EVENING_STAR_OHLC: OHLC[] = [
+  ohlc("1", 62800, 63200, 62700, 63100),
+  ohlc("2", 63100, 64000, 63000, 63900),
+  ohlc("3", 63900, 64200, 63800, 64000),
+  ohlc("4", 64000, 64100, 63000, 63150),
+  ohlc("5", 63150, 63400, 62800, 62950),
+  ohlc("6", 62950, 63200, 62600, 62750),
+];
+
+/** Green opens lower then closes into the prior red body (≠ full-cover engulfing). */
+export const PIERCING_LINE_OHLC: OHLC[] = [
+  ohlc("1", 64600, 64800, 64200, 64300),
+  ohlc("2", 64300, 64400, 63700, 63800),
+  ohlc("3", 63800, 63900, 62800, 62950),
+  ohlc("4", 62600, 63600, 62500, 63500),
+  ohlc("5", 63500, 63800, 63200, 63650),
+  ohlc("6", 63650, 64000, 63400, 63800),
+];
+
+/** Red opens higher then closes into the prior green body (≠ full-cover bearish engulfing). */
+export const DARK_CLOUD_COVER_OHLC: OHLC[] = [
+  ohlc("1", 62800, 63100, 62600, 63000),
+  ohlc("2", 63000, 63600, 62900, 63500),
+  ohlc("3", 63500, 64600, 63400, 64450),
+  ohlc("4", 64750, 64850, 63600, 63700),
+  ohlc("5", 63700, 63900, 63200, 63350),
+  ohlc("6", 63350, 63500, 62800, 62950),
+];
+
+/** Three rising green bodies after a decline (≠ one engulfing bar or a morning star). */
+export const THREE_WHITE_SOLDIERS_OHLC: OHLC[] = [
+  ohlc("1", 63600, 63800, 63000, 63150),
+  ohlc("2", 63150, 63700, 63050, 63600),
+  ohlc("3", 63600, 64200, 63500, 64100),
+  ohlc("4", 64100, 64700, 64000, 64600),
+  ohlc("5", 64600, 64900, 64400, 64750),
+  ohlc("6", 64750, 65100, 64600, 64950),
+];
+
+/** Three falling red bodies after a rally (≠ one bearish engulfing bar). */
+export const THREE_BLACK_CROWS_OHLC: OHLC[] = [
+  ohlc("1", 64000, 64800, 63900, 64650),
+  ohlc("2", 64650, 64750, 63800, 63900),
+  ohlc("3", 63900, 64000, 63100, 63200),
+  ohlc("4", 63200, 63300, 62400, 62550),
+  ohlc("5", 62550, 62800, 62200, 62350),
+  ohlc("6", 62350, 62600, 62000, 62150),
+];
+
+/** Small body nested inside the prior larger body (≠ engulfing full cover). */
+export const HARAMI_OHLC: OHLC[] = [
+  ohlc("1", 64800, 65000, 64400, 64550),
+  ohlc("2", 64550, 64700, 64000, 64100),
+  ohlc("3", 64100, 64600, 63000, 63150),
+  ohlc("4", 63600, 63900, 63500, 63750),
+  ohlc("5", 63750, 64000, 63300, 63450),
+  ohlc("6", 63450, 63700, 63000, 63150),
+];
+
 export const PATTERN_OHLC: Record<string, OHLC[]> = {
   hammer: HAMMER_OHLC,
   doji: DOJI_OHLC,
@@ -294,6 +434,20 @@ export const PATTERN_OHLC: Record<string, OHLC[]> = {
   "candle-red": CANDLE_RED_OHLC,
   "head-shoulders": HEAD_SHOULDERS_OHLC,
   "falling-wedge": FALLING_WEDGE_OHLC,
+  "tweezer-top": TWEEZER_TOP_OHLC,
+  "tweezer-bottom": TWEEZER_BOTTOM_OHLC,
+  "rising-wedge": RISING_WEDGE_OHLC,
+  "bull-flag": BULL_FLAG_OHLC,
+  "double-top": DOUBLE_TOP_OHLC,
+  "double-bottom": DOUBLE_BOTTOM_OHLC,
+  triangle: TRIANGLE_OHLC,
+  "hanging-man": HANGING_MAN_OHLC,
+  "evening-star": EVENING_STAR_OHLC,
+  "piercing-line": PIERCING_LINE_OHLC,
+  "dark-cloud-cover": DARK_CLOUD_COVER_OHLC,
+  "three-white-soldiers": THREE_WHITE_SOLDIERS_OHLC,
+  "three-black-crows": THREE_BLACK_CROWS_OHLC,
+  harami: HARAMI_OHLC,
 };
 
 /** High/low span across candles (and optional overlay values). */

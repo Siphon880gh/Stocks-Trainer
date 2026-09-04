@@ -82,22 +82,182 @@ function withAftermath(pre: OHLC[], aftermath: OHLC[]): OHLC[] {
   return [...pre, ...aftermath];
 }
 
-const TECH_PRE: OHLC[] = [
-  bar("T-5", 178.2, 179.0, 177.8, 178.6),
-  bar("T-4", 178.6, 179.4, 178.2, 179.1),
-  bar("T-3", 179.1, 180.0, 178.8, 179.6),
-  bar("T-2", 179.6, 180.8, 179.4, 180.4),
-  bar("T-1", 180.4, 181.2, 180.0, 180.9),
-  bar("T0", 180.9, 181.5, 180.2, 180.6),
+/** Distinct tapes for leftover clone drain — not scaled copies of a shared grind/dump. */
+const TECH_MISS_PRE: OHLC[] = [
+  bar("T-5", 172.4, 173.8, 171.9, 173.2),
+  bar("T-4", 173.2, 174.0, 172.6, 173.0),
+  bar("T-3", 173.0, 175.6, 172.8, 175.1),
+  bar("T-2", 175.1, 176.4, 174.6, 176.0),
+  bar("T-1", 176.0, 177.2, 175.4, 175.8),
+  bar("T0", 175.8, 176.6, 175.0, 175.4),
 ];
-
-const CYCLICAL_PRE: OHLC[] = [
-  bar("T-5", 108.5, 109.8, 107.9, 109.2),
-  bar("T-4", 109.2, 110.4, 108.6, 109.0),
-  bar("T-3", 109.0, 109.6, 107.2, 107.8),
-  bar("T-2", 107.8, 108.4, 106.5, 107.0),
-  bar("T-1", 107.0, 108.2, 106.8, 107.6),
-  bar("T0", 107.6, 108.0, 106.9, 107.2),
+const TECH_MARGIN_PRE: OHLC[] = [
+  bar("T-5", 181.0, 181.6, 180.4, 181.2),
+  bar("T-4", 181.2, 181.8, 180.8, 181.4),
+  bar("T-3", 181.4, 181.9, 181.0, 181.5),
+  bar("T-2", 181.5, 181.8, 180.6, 180.9),
+  bar("T-1", 180.9, 181.2, 180.2, 180.5),
+  bar("T0", 180.5, 180.8, 179.8, 180.1),
+];
+const TECH_GUIDE_PRE: OHLC[] = [
+  bar("T-5", 184.2, 185.0, 183.6, 184.0),
+  bar("T-4", 184.0, 184.6, 183.2, 183.8),
+  bar("T-3", 183.8, 184.4, 183.0, 183.5),
+  bar("T-2", 183.5, 184.0, 182.4, 182.8),
+  bar("T-1", 182.8, 183.4, 181.6, 182.0),
+  bar("T0", 182.0, 182.6, 181.2, 181.8),
+];
+const TECH_CHASE_PRE: OHLC[] = [
+  bar("T-5", 168.0, 169.2, 167.4, 168.6),
+  bar("T-4", 168.6, 172.8, 168.2, 172.2),
+  bar("T-3", 172.2, 175.4, 171.6, 175.0),
+  bar("T-2", 175.0, 177.8, 174.4, 177.2),
+  bar("T-1", 177.2, 179.0, 176.6, 178.4),
+  bar("T0", 178.4, 179.6, 177.8, 178.8),
+];
+const TECH_CEO_PRE: OHLC[] = [
+  bar("T-5", 190.4, 191.2, 189.8, 190.6),
+  bar("T-4", 190.6, 191.0, 189.4, 189.8),
+  bar("T-3", 189.8, 190.4, 188.6, 189.2),
+  bar("T-2", 189.2, 189.6, 187.4, 187.8),
+  bar("T-1", 187.8, 188.4, 186.2, 186.8),
+  bar("T0", 186.8, 187.2, 185.4, 185.9),
+];
+const TECH_RISKOFF_PRE: OHLC[] = [
+  bar("T-5", 176.0, 176.8, 175.4, 176.4),
+  bar("T-4", 176.4, 178.2, 176.0, 177.8),
+  bar("T-3", 177.8, 179.6, 177.2, 179.2),
+  bar("T-2", 179.2, 181.4, 178.8, 181.0),
+  bar("T-1", 181.0, 182.8, 180.4, 182.4),
+  bar("T0", 182.4, 183.6, 181.6, 182.8),
+];
+const INDEX_HOT_CPI_PRE: OHLC[] = [
+  bar("T-5", 508.0, 510.5, 506.8, 509.4),
+  bar("T-4", 509.4, 512.2, 508.6, 511.0),
+  bar("T-3", 511.0, 514.8, 510.2, 513.6),
+  bar("T-2", 513.6, 516.0, 512.4, 515.2),
+  bar("T-1", 515.2, 518.4, 514.0, 517.6),
+  bar("T0", 517.6, 519.2, 516.2, 518.0),
+];
+const TECH_COMB_PRE: OHLC[] = [
+  bar("T-5", 174.8, 175.6, 174.0, 175.2),
+  bar("T-4", 175.2, 176.8, 174.6, 176.4),
+  bar("T-3", 176.4, 176.9, 175.8, 176.2),
+  bar("T-2", 176.2, 178.4, 175.6, 178.0),
+  bar("T-1", 178.0, 178.8, 177.2, 177.6),
+  bar("T0", 177.6, 178.2, 176.8, 177.2),
+];
+const TECH_RUMOR_PRE: OHLC[] = [
+  bar("T-5", 183.0, 185.4, 181.6, 182.2),
+  bar("T-4", 182.2, 184.0, 180.8, 183.6),
+  bar("T-3", 183.6, 184.2, 181.4, 181.8),
+  bar("T-2", 181.8, 183.8, 180.6, 183.2),
+  bar("T-1", 183.2, 183.8, 181.0, 181.6),
+  bar("T0", 181.6, 182.8, 180.4, 181.2),
+];
+const TECH_COST_PRE: OHLC[] = [
+  bar("T-5", 188.6, 189.4, 187.8, 188.2),
+  bar("T-4", 188.2, 188.8, 186.4, 186.8),
+  bar("T-3", 186.8, 187.2, 185.0, 185.4),
+  bar("T-2", 185.4, 186.0, 183.8, 184.2),
+  bar("T-1", 184.2, 184.8, 182.6, 183.0),
+  bar("T0", 183.0, 183.6, 181.8, 182.4),
+];
+const TECH_PROBE_PRE: OHLC[] = [
+  bar("T-5", 179.2, 179.8, 178.8, 179.4),
+  bar("T-4", 179.4, 179.9, 179.0, 179.5),
+  bar("T-3", 179.5, 179.8, 179.1, 179.4),
+  bar("T-2", 179.4, 180.2, 179.0, 180.0),
+  bar("T-1", 180.0, 180.4, 179.6, 179.9),
+  bar("T0", 179.9, 180.3, 179.5, 179.8),
+];
+const TECH_WASH_PRE: OHLC[] = [
+  bar("T-5", 186.4, 186.8, 184.2, 184.6),
+  bar("T-4", 184.6, 185.0, 182.8, 183.2),
+  bar("T-3", 183.2, 183.8, 181.4, 181.8),
+  bar("T-2", 181.8, 182.4, 180.0, 180.6),
+  bar("T-1", 180.6, 181.2, 178.8, 179.4),
+  bar("T0", 179.4, 180.0, 177.6, 178.2),
+];
+const TECH_QUIET_PRE: OHLC[] = [
+  bar("T-5", 180.1, 180.6, 179.7, 180.2),
+  bar("T-4", 180.2, 180.7, 179.8, 180.3),
+  bar("T-3", 180.3, 180.8, 179.9, 180.1),
+  bar("T-2", 180.1, 180.5, 179.6, 180.0),
+  bar("T-1", 180.0, 180.4, 179.5, 179.9),
+  bar("T0", 179.9, 180.3, 179.4, 179.8),
+];
+const TECH_CONSOL_PRE: OHLC[] = [
+  bar("T-5", 177.8, 179.6, 177.2, 178.4),
+  bar("T-4", 178.4, 179.0, 176.8, 177.2),
+  bar("T-3", 177.2, 178.8, 176.6, 178.2),
+  bar("T-2", 178.2, 178.6, 176.4, 177.0),
+  bar("T-1", 177.0, 178.4, 176.8, 178.0),
+  bar("T0", 178.0, 178.6, 176.6, 177.4),
+];
+const TECH_LEGAL_PRE: OHLC[] = [
+  bar("T-5", 182.8, 183.6, 182.0, 182.4),
+  bar("T-4", 182.4, 183.0, 180.6, 181.0),
+  bar("T-3", 181.0, 181.8, 179.2, 179.8),
+  bar("T-2", 179.8, 180.4, 178.4, 179.0),
+  bar("T-1", 179.0, 179.6, 177.2, 177.8),
+  bar("T0", 177.8, 178.6, 176.4, 177.0),
+];
+const CYC_CASH_PRE: OHLC[] = [
+  bar("T-5", 112.4, 113.0, 110.6, 111.0),
+  bar("T-4", 111.0, 111.6, 108.4, 108.8),
+  bar("T-3", 108.8, 109.4, 106.2, 106.8),
+  bar("T-2", 106.8, 108.6, 106.0, 108.0),
+  bar("T-1", 108.0, 109.2, 107.2, 108.6),
+  bar("T0", 108.6, 109.0, 107.4, 107.8),
+];
+const CYC_DEBT_PRE: OHLC[] = [
+  bar("T-5", 116.0, 116.8, 114.8, 115.2),
+  bar("T-4", 115.2, 115.6, 113.4, 113.8),
+  bar("T-3", 113.8, 114.2, 112.0, 112.4),
+  bar("T-2", 112.4, 112.8, 110.6, 111.0),
+  bar("T-1", 111.0, 111.6, 109.4, 109.8),
+  bar("T0", 109.8, 110.4, 108.6, 109.0),
+];
+const CYC_CONTRACT_PRE: OHLC[] = [
+  bar("T-5", 104.2, 105.0, 103.6, 104.6),
+  bar("T-4", 104.6, 105.8, 103.8, 104.0),
+  bar("T-3", 104.0, 104.6, 102.8, 103.4),
+  bar("T-2", 103.4, 105.2, 103.0, 104.8),
+  bar("T-1", 104.8, 106.4, 104.4, 106.0),
+  bar("T0", 106.0, 107.2, 105.4, 106.6),
+];
+const CYC_SHIP_PRE: OHLC[] = [
+  bar("T-5", 98.4, 99.2, 97.8, 98.8),
+  bar("T-4", 98.8, 102.6, 98.4, 102.0),
+  bar("T-3", 102.0, 104.8, 101.2, 104.2),
+  bar("T-2", 104.2, 105.0, 103.0, 103.6),
+  bar("T-1", 103.6, 104.4, 102.4, 103.0),
+  bar("T0", 103.0, 103.8, 101.8, 102.4),
+];
+const CYC_PIPE_PRE: OHLC[] = [
+  bar("T-5", 101.0, 101.8, 100.4, 101.2),
+  bar("T-4", 101.2, 101.6, 99.8, 100.2),
+  bar("T-3", 103.8, 106.4, 103.2, 105.8),
+  bar("T-2", 105.8, 107.2, 104.6, 106.4),
+  bar("T-1", 106.4, 107.8, 105.2, 107.0),
+  bar("T0", 107.0, 108.2, 105.8, 107.4),
+];
+const CYC_LATER_PRE: OHLC[] = [
+  bar("T-5", 110.8, 111.4, 108.6, 109.0),
+  bar("T-4", 109.0, 109.6, 106.8, 107.2),
+  bar("T-3", 107.2, 107.8, 105.0, 105.6),
+  bar("T-2", 105.6, 106.4, 104.2, 105.0),
+  bar("T-1", 105.0, 105.8, 103.6, 104.2),
+  bar("T0", 104.2, 104.8, 102.8, 103.4),
+];
+const CYC_DIV_PRE: OHLC[] = [
+  bar("T-5", 111.6, 112.0, 111.0, 111.4),
+  bar("T-4", 111.4, 111.8, 110.6, 110.8),
+  bar("T-3", 110.8, 111.2, 110.0, 110.2),
+  bar("T-2", 110.2, 110.6, 108.4, 108.8),
+  bar("T-1", 108.8, 109.2, 106.6, 107.0),
+  bar("T0", 107.0, 107.4, 105.2, 105.8),
 ];
 
 const BANK_PRE: OHLC[] = [
@@ -242,8 +402,8 @@ export const EARNINGS_CASES: CaseStudy[] = [
       },
       notes: "Practice numbers: profit per share came in weaker than the recent run rate.",
     },
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_MISS_PRE,
+    postOhlc: withAftermath(TECH_MISS_PRE, [
       bar("+1", 176.0, 176.8, 174.5, 175.2),
       bar("+2", 175.2, 175.9, 173.8, 174.4),
       bar("+3", 174.4, 175.0, 173.2, 173.9),
@@ -279,8 +439,8 @@ export const EARNINGS_CASES: CaseStudy[] = [
       },
       notes: "Practice numbers: sales up, profit margin down.",
     },
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_MARGIN_PRE,
+    postOhlc: withAftermath(TECH_MARGIN_PRE, [
       bar("+1", 178.0, 178.5, 175.5, 176.2),
       bar("+2", 176.2, 176.8, 174.0, 174.8),
       bar("+3", 174.8, 175.4, 173.5, 174.1),
@@ -320,8 +480,8 @@ export const EARNINGS_CASES: CaseStudy[] = [
       },
       notes: "Practice numbers: reported profit, but cash from operations is weak.",
     },
-    preOhlc: CYCLICAL_PRE,
-    postOhlc: withAftermath(CYCLICAL_PRE, [
+    preOhlc: CYC_CASH_PRE,
+    postOhlc: withAftermath(CYC_CASH_PRE, [
       bar("+1", 105.0, 105.8, 103.2, 103.9),
       bar("+2", 103.9, 104.4, 102.0, 102.5),
       bar("+3", 102.5, 103.0, 101.2, 101.8),
@@ -357,8 +517,8 @@ export const EARNINGS_CASES: CaseStudy[] = [
       },
       notes: "Practice numbers: last quarter was fine. Next-year outlook was cut.",
     },
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_GUIDE_PRE,
+    postOhlc: withAftermath(TECH_GUIDE_PRE, [
       bar("+1", 177.5, 178.0, 175.0, 175.6),
       bar("+2", 175.6, 176.2, 174.2, 174.8),
       bar("+3", 174.8, 175.5, 173.8, 174.5),
@@ -399,8 +559,8 @@ export const EARNINGS_CASES: CaseStudy[] = [
       },
       notes: "Practice numbers: more debt, thinner equity cushion.",
     },
-    preOhlc: CYCLICAL_PRE,
-    postOhlc: withAftermath(CYCLICAL_PRE, [
+    preOhlc: CYC_DEBT_PRE,
+    postOhlc: withAftermath(CYC_DEBT_PRE, [
       bar("+1", 104.5, 105.0, 102.5, 103.0),
       bar("+2", 103.0, 103.5, 101.0, 101.6),
       bar("+3", 101.6, 102.2, 100.2, 100.8),
@@ -731,8 +891,8 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
       "The stock already rallied hard. Then a product-refresh headline hits and social media tells you to buy. The chart looks stretched. Is this a reason to buy, or a reason to wait?",
     newsHeadline:
       "Big tech announces a small product refresh. Social posts call it a moonshot.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_CHASE_PRE,
+    postOhlc: withAftermath(TECH_CHASE_PRE, [
       bar("+1", 179.5, 180.2, 177.0, 177.6),
       bar("+2", 177.6, 178.0, 176.2, 176.8),
       bar("+3", 176.8, 177.4, 175.5, 176.0),
@@ -760,8 +920,8 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
       "This industrial stock has been slipping. Then the company wins a multi-year supply contract with a large manufacturer. Does that change the story enough to buy, or do you wait?",
     newsHeadline:
       "Industrial company wins a multi-year supply contract with a large manufacturer.",
-    preOhlc: CYCLICAL_PRE,
-    postOhlc: withAftermath(CYCLICAL_PRE, [
+    preOhlc: CYC_CONTRACT_PRE,
+    postOhlc: withAftermath(CYC_CONTRACT_PRE, [
       bar("+1", 108.5, 110.2, 108.0, 109.6),
       bar("+2", 109.6, 111.0, 109.2, 110.4),
       bar("+3", 110.4, 111.5, 109.8, 111.0),
@@ -788,8 +948,8 @@ export const COMPANY_NEWS_CASES: CaseStudy[] = [
     brief:
       "The stock is near highs. The CEO resigns suddenly. The board names an interim leader. Nobody alleges fraud. What do you do?",
     newsHeadline: "CEO resigns unexpectedly. Board names an interim CEO.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_CEO_PRE,
+    postOhlc: withAftermath(TECH_CEO_PRE, [
       bar("+1", 178.0, 178.6, 175.8, 176.4),
       bar("+2", 176.4, 177.0, 175.0, 175.6),
       bar("+3", 175.6, 176.5, 174.8, 175.9),
@@ -1106,8 +1266,8 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
       "Investors are selling risky assets: credit spreads widen, defensive stocks hold up, high-growth tech weakens at the open. Your big-tech name had already run. What do you do?",
     newsHeadline:
       "Risk appetite fades. Money rotates toward cash and defensive stocks.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_RISKOFF_PRE,
+    postOhlc: withAftermath(TECH_RISKOFF_PRE, [
       bar("+1", 177.0, 177.8, 174.5, 175.2),
       bar("+2", 175.2, 175.9, 173.0, 173.8),
       bar("+3", 173.8, 174.6, 172.5, 173.2),
@@ -1135,27 +1295,12 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
       "Inflation comes in hotter than expected. Rate-cut hopes fade. This stock, used here as a stand-in for the broader market, had been grinding higher.",
     newsHeadline:
       "Inflation hotter than expected. Odds of a rate cut fall.",
-    preOhlc: TECH_PRE.map((r) => ({
-      ...r,
-      open: r.open * 2.9,
-      high: r.high * 2.9,
-      low: r.low * 2.9,
-      close: r.close * 2.9,
-    })),
-    postOhlc: withAftermath(
-      TECH_PRE.map((r) => ({
-        ...r,
-        open: r.open * 2.9,
-        high: r.high * 2.9,
-        low: r.low * 2.9,
-        close: r.close * 2.9,
-      })),
-      [
+    preOhlc: INDEX_HOT_CPI_PRE,
+    postOhlc: withAftermath(INDEX_HOT_CPI_PRE, [
         bar("+1", 520.0, 521.0, 514.0, 515.5),
         bar("+2", 515.5, 516.8, 512.0, 513.2),
         bar("+3", 513.2, 514.5, 511.0, 512.4),
-      ]
-    ),
+      ]),
     correctActions: ["sell", "hold"],
     acceptablePartial: ["hold"],
     debrief: {
@@ -1179,8 +1324,8 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
       "A key shipping lane is disrupted. Energy and freight costs jump overnight. Your industrial/energy-linked stock was already weak. Who benefits?",
     newsHeadline:
       "Shipping-lane disruption raises energy and freight cost fears.",
-    preOhlc: CYCLICAL_PRE,
-    postOhlc: withAftermath(CYCLICAL_PRE, [
+    preOhlc: CYC_SHIP_PRE,
+    postOhlc: withAftermath(CYC_SHIP_PRE, [
       bar("+1", 109.0, 112.5, 108.5, 111.8),
       bar("+2", 111.8, 113.2, 110.5, 112.0),
       bar("+3", 112.0, 113.0, 110.8, 111.5),
@@ -1404,8 +1549,8 @@ export const MACRO_NEWS_CASES: CaseStudy[] = [
     brief:
       "A pipeline outage hits the tape. This SAMPLE energy producer may get a better price near term. The stock had been weak. Scary news is not automatically a sell.",
     newsHeadline: "Pipeline outage. Near-term energy prices jump.",
-    preOhlc: CYCLICAL_PRE,
-    postOhlc: withAftermath(CYCLICAL_PRE, [
+    preOhlc: CYC_PIPE_PRE,
+    postOhlc: withAftermath(CYC_PIPE_PRE, [
       bar("+1", 108.4, 111.8, 108.0, 111.2),
       bar("+2", 111.2, 113.0, 110.4, 112.2),
       bar("+3", 112.2, 113.4, 111.0, 112.0),
@@ -1441,8 +1586,8 @@ export const COMBINED_CASES: CaseStudy[] = [
       notes: "Practice: last quarter beat. Forward outlook is weaker.",
     },
     newsHeadline: "Beats estimates but cuts next-year outlook.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_COMB_PRE,
+    postOhlc: withAftermath(TECH_COMB_PRE, [
       bar("+1", 178.5, 179.0, 175.0, 175.8),
       bar("+2", 175.8, 176.5, 174.2, 174.9),
       bar("+3", 174.9, 175.8, 173.8, 174.5),
@@ -1477,8 +1622,8 @@ export const COMBINED_CASES: CaseStudy[] = [
     },
     newsHeadline:
       "Company clarifies an accounting classification and denies a fraud rumor.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_RUMOR_PRE,
+    postOhlc: withAftermath(TECH_RUMOR_PRE, [
       bar("+1", 179.0, 181.0, 178.5, 180.5),
       bar("+2", 180.5, 181.8, 179.8, 181.2),
       bar("+3", 181.2, 182.0, 180.4, 181.5),
@@ -1512,8 +1657,8 @@ export const COMBINED_CASES: CaseStudy[] = [
       notes: "Practice: margin slip with an industry cost headline.",
     },
     newsHeadline: "Sector input costs spike. Peers warn on margins.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_COST_PRE,
+    postOhlc: withAftermath(TECH_COST_PRE, [
       bar("+1", 178.0, 178.5, 175.5, 176.0),
       bar("+2", 176.0, 176.8, 174.0, 174.8),
       bar("+3", 174.8, 175.5, 173.5, 174.2),
@@ -1547,8 +1692,8 @@ export const COMBINED_CASES: CaseStudy[] = [
       notes: "Practice: cash is soft now; the contract may help later.",
     },
     newsHeadline: "Wins a multi-year contract. Ramp starts next year.",
-    preOhlc: CYCLICAL_PRE,
-    postOhlc: withAftermath(CYCLICAL_PRE, [
+    preOhlc: CYC_LATER_PRE,
+    postOhlc: withAftermath(CYC_LATER_PRE, [
       bar("+1", 108.0, 109.5, 107.0, 108.8),
       bar("+2", 108.8, 110.0, 108.0, 109.2),
       bar("+3", 109.2, 110.2, 108.5, 109.6),
@@ -1581,8 +1726,8 @@ export const COMBINED_CASES: CaseStudy[] = [
       notes: "Practice: quarter beat. Probe is a headline, not a verdict.",
     },
     newsHeadline: "Regulator opens a probe. Company says it will cooperate.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_PROBE_PRE,
+    postOhlc: withAftermath(TECH_PROBE_PRE, [
       bar("+1", 178.8, 179.2, 176.2, 176.8),
       bar("+2", 176.8, 177.4, 175.6, 176.1),
       bar("+3", 176.1, 176.8, 175.2, 175.8),
@@ -1880,8 +2025,8 @@ export const SCALE_CASES: CaseStudy[] = [
     brief:
       "The board authorizes a large buyback after a soft stretch in the stock. Decide before you see the reaction.",
     newsHeadline: "Authorizes a large buyback and starts buying immediately.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_WASH_PRE,
+    postOhlc: withAftermath(TECH_WASH_PRE, [
       bar("+1", 181.0, 183.0, 180.5, 182.4),
       bar("+2", 182.4, 183.5, 181.8, 183.0),
       bar("+3", 183.0, 184.0, 182.2, 183.5),
@@ -1906,8 +2051,8 @@ export const SCALE_CASES: CaseStudy[] = [
     brief:
       "This industrial company cuts its dividend 40% to preserve cash. The stock was already weak.",
     newsHeadline: "Cuts the dividend 40%, citing balance-sheet flexibility.",
-    preOhlc: CYCLICAL_PRE,
-    postOhlc: withAftermath(CYCLICAL_PRE, [
+    preOhlc: CYC_DIV_PRE,
+    postOhlc: withAftermath(CYC_DIV_PRE, [
       bar("+1", 104.0, 104.8, 101.5, 102.2),
       bar("+2", 102.2, 103.0, 100.8, 101.4),
       bar("+3", 101.4, 102.0, 100.2, 100.9),
@@ -1932,8 +2077,8 @@ export const SCALE_CASES: CaseStudy[] = [
     brief:
       "Earnings modestly beat, guidance is in line, and the stock already looks expensive. Decide.",
     statementSnapshot: megaSnap,
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_QUIET_PRE,
+    postOhlc: withAftermath(TECH_QUIET_PRE, [
       bar("+1", 180.5, 181.2, 179.5, 180.2),
       bar("+2", 180.2, 180.8, 179.2, 179.8),
       bar("+3", 179.8, 180.5, 179.0, 180.0),
@@ -1958,8 +2103,8 @@ export const SCALE_CASES: CaseStudy[] = [
     brief:
       "A jobs report cools without collapsing. Talk of a soft landing picks up. This stock had been consolidating.",
     newsHeadline: "Labor market cools without collapsing. Soft-landing odds rise.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_CONSOL_PRE,
+    postOhlc: withAftermath(TECH_CONSOL_PRE, [
       bar("+1", 181.5, 183.2, 181.0, 182.8),
       bar("+2", 182.8, 184.0, 182.2, 183.5),
       bar("+3", 183.5, 184.5, 182.8, 184.0),
@@ -1990,8 +2135,8 @@ export const SCALE_CASES: CaseStudy[] = [
       notes: "Practice: legal headline vs cash cushion.",
     },
     newsHeadline: "Faces a consumer lawsuit. Damages are uncertain.",
-    preOhlc: TECH_PRE,
-    postOhlc: withAftermath(TECH_PRE, [
+    preOhlc: TECH_LEGAL_PRE,
+    postOhlc: withAftermath(TECH_LEGAL_PRE, [
       bar("+1", 178.0, 178.8, 176.0, 176.8),
       bar("+2", 176.8, 177.5, 175.5, 176.2),
       bar("+3", 176.2, 177.0, 175.8, 176.5),

@@ -8,7 +8,23 @@ export type PatternId =
   | "bearish-engulfing"
   | "shooting-star"
   | "inverted-hammer"
-  | "morning-star";
+  | "morning-star"
+  | "tweezer-bottom"
+  | "rising-wedge"
+  | "bull-flag"
+  | "double-top"
+  | "double-bottom"
+  | "triangle"
+  | "hanging-man"
+  | "evening-star"
+  | "piercing-line"
+  | "dark-cloud-cover"
+  | "three-white-soldiers"
+  | "three-black-crows"
+  | "harami"
+  | "tweezer-top"
+  | "falling-wedge"
+  | "head-shoulders";
 
 export interface QuizOption {
   id: "A" | "B" | "C" | "D" | "E";
@@ -161,6 +177,198 @@ const MORNING_STAR_DESC_OPTIONS: QuizOption[] = [
   { id: "A", label: "Open ≈ close on a single bar — indecision only", description: DESC_HINT },
   { id: "B", label: "One candle with a long lower wick after a selloff", description: DESC_HINT },
   { id: "C", label: "Large red, small middle, then large green — three-bar bullish reversal", description: DESC_HINT },
+];
+
+const TWEEZER_BOTTOM_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "hammer", label: "Hammer", description: "One long lower wick." },
+  { id: "B", patternId: "tweezer-bottom", label: "Tweezer Bottom", description: "Two candles share a similar low." },
+  { id: "C", patternId: "double-bottom", label: "Double Bottom", description: "Two swing lows with a bounce between." },
+];
+
+const TWEEZER_BOTTOM_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Two candles share a similar low after a decline — matched support", description: DESC_HINT },
+  { id: "B", label: "Two swing lows with a bounce high between them", description: DESC_HINT },
+  { id: "C", label: "Highs and lows squeeze toward one point", description: DESC_HINT },
+];
+
+const RISING_WEDGE_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "rising-wedge", label: "Rising Wedge", description: "Upward converging lines." },
+  { id: "B", patternId: "bull-flag", label: "Bull Flag", description: "Sharp rise, then a tight pause." },
+  { id: "C", patternId: "triangle", label: "Triangle", description: "Squeeze with no built-in tilt." },
+];
+
+const RISING_WEDGE_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Price rises inside two upward, converging lines — buying is tiring", description: DESC_HINT },
+  { id: "B", label: "A sharp rise, then a tight downward pause", description: DESC_HINT },
+  { id: "C", label: "Two similar highs with a dip between them", description: DESC_HINT },
+];
+
+const BULL_FLAG_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "rising-wedge", label: "Rising Wedge", description: "Slow squeeze higher." },
+  { id: "B", patternId: "bull-flag", label: "Bull Flag", description: "Pole, then a tight rest." },
+  { id: "C", patternId: "triangle", label: "Triangle", description: "Range squeeze, no pole." },
+];
+
+const BULL_FLAG_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "A sharp rise, then a tight downward or sideways pause", description: DESC_HINT },
+  { id: "B", label: "Two similar lows with a bounce between them", description: DESC_HINT },
+  { id: "C", label: "Two candles share a similar high after a rally", description: DESC_HINT },
+];
+
+const DOUBLE_TOP_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "double-top", label: "Double Top", description: "Two similar highs." },
+  { id: "B", patternId: "double-bottom", label: "Double Bottom", description: "Two similar lows." },
+  { id: "C", patternId: "triangle", label: "Triangle", description: "Squeeze, not two peaks." },
+];
+
+const DOUBLE_TOP_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Two similar highs with a dip between — second high failed to break out", description: DESC_HINT },
+  { id: "B", label: "Two similar lows with a bounce between them", description: DESC_HINT },
+  { id: "C", label: "A sharp rise then a tight flag pause", description: DESC_HINT },
+];
+
+const DOUBLE_BOTTOM_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "double-top", label: "Double Top", description: "Two similar highs." },
+  { id: "B", patternId: "tweezer-bottom", label: "Tweezer Bottom", description: "Two-bar matched low." },
+  { id: "C", patternId: "double-bottom", label: "Double Bottom", description: "Two swing lows, bounce between." },
+];
+
+const DOUBLE_BOTTOM_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Two similar lows with a bounce between — second low held", description: DESC_HINT },
+  { id: "B", label: "Two candles share one low with no bounce swing between", description: DESC_HINT },
+  { id: "C", label: "Price rises in two upward converging lines", description: DESC_HINT },
+];
+
+const TRIANGLE_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "triangle", label: "Triangle", description: "Squeeze toward a point." },
+  { id: "B", patternId: "rising-wedge", label: "Rising Wedge", description: "Upward tilt squeeze." },
+  { id: "C", patternId: "bull-flag", label: "Bull Flag", description: "Pole plus pause." },
+];
+
+const TRIANGLE_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Highs and lows squeeze toward a point — direction is the later break", description: DESC_HINT },
+  { id: "B", label: "Two similar highs with a neckline dip", description: DESC_HINT },
+  { id: "C", label: "Matched lows on two neighboring candles", description: DESC_HINT },
+];
+
+const HANGING_MAN_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "hammer", label: "Hammer", description: "Same wick after a decline." },
+  { id: "B", patternId: "hanging-man", label: "Hanging Man", description: "Long lower wick after a rally." },
+  { id: "C", patternId: "shooting-star", label: "Shooting Star", description: "Long upper wick at a top." },
+];
+
+const HANGING_MAN_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Long lower wick after a rally — sellers may be showing up", description: DESC_HINT },
+  { id: "B", label: "Long lower wick after a decline — buyers reclaimed a selloff", description: DESC_HINT },
+  { id: "C", label: "Long upper wick after a rally — rejection of higher prices", description: DESC_HINT },
+];
+
+const EVENING_STAR_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "morning-star", label: "Morning Star", description: "Red · small · green at the lows." },
+  { id: "B", patternId: "doji", label: "Doji", description: "One indecision candle." },
+  { id: "C", patternId: "evening-star", label: "Evening Star", description: "Green · small · red at the highs." },
+];
+
+const EVENING_STAR_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Large red, small middle, then large green — three-bar bullish reversal", description: DESC_HINT },
+  { id: "B", label: "Large green, small middle, then large red — three-bar top reversal", description: DESC_HINT },
+  { id: "C", label: "Open ≈ close on a single bar — indecision only", description: DESC_HINT },
+];
+
+const PIERCING_LINE_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "piercing-line", label: "Piercing Line", description: "Green closes into prior red." },
+  { id: "B", patternId: "bullish-engulfing", label: "Bullish Engulfing", description: "Green fully covers prior red." },
+  { id: "C", patternId: "hammer", label: "Hammer", description: "One-candle lower-wick reclaim." },
+];
+
+const PIERCING_LINE_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "After a decline, a green opens lower then closes well into the prior red body — not a full cover", description: DESC_HINT },
+  { id: "B", label: "A green body completely covers the prior red body", description: DESC_HINT },
+  { id: "C", label: "Two candles share a similar low after a decline", description: DESC_HINT },
+];
+
+const DARK_CLOUD_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "bearish-engulfing", label: "Bearish Engulfing", description: "Red fully covers prior green." },
+  { id: "B", patternId: "dark-cloud-cover", label: "Dark Cloud Cover", description: "Red closes into prior green." },
+  { id: "C", patternId: "shooting-star", label: "Shooting Star", description: "Long upper wick at a top." },
+];
+
+const DARK_CLOUD_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "A red body completely covers the prior green body", description: DESC_HINT },
+  { id: "B", label: "After a rally, a red opens higher then closes well into the prior green body — not a full cover", description: DESC_HINT },
+  { id: "C", label: "Three falling red bodies in a row", description: DESC_HINT },
+];
+
+const THREE_WHITE_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "morning-star", label: "Morning Star", description: "Red · small · green." },
+  { id: "B", patternId: "bullish-engulfing", label: "Bullish Engulfing", description: "One green covers one red." },
+  { id: "C", patternId: "three-white-soldiers", label: "Three White Soldiers", description: "Three rising green bodies." },
+];
+
+const THREE_WHITE_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Three rising green bodies in a row after a decline or pause", description: DESC_HINT },
+  { id: "B", label: "Large red, small middle, then large green", description: DESC_HINT },
+  { id: "C", label: "A green body completely covers the prior red body", description: DESC_HINT },
+];
+
+const THREE_CROWS_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "evening-star", label: "Evening Star", description: "Green · small · red." },
+  { id: "B", patternId: "three-black-crows", label: "Three Black Crows", description: "Three falling red bodies." },
+  { id: "C", patternId: "bearish-engulfing", label: "Bearish Engulfing", description: "One red covers one green." },
+];
+
+const THREE_CROWS_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Large green, small middle, then large red", description: DESC_HINT },
+  { id: "B", label: "Three falling red bodies in a row after a rally or pause", description: DESC_HINT },
+  { id: "C", label: "A red body completely covers the prior green body", description: DESC_HINT },
+];
+
+const HARAMI_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "engulfing", label: "Engulfing", description: "Current body covers the prior body." },
+  { id: "B", patternId: "doji", label: "Doji", description: "Open ≈ close, one bar." },
+  { id: "C", patternId: "harami", label: "Harami", description: "Small body nested in the prior body." },
+];
+
+const HARAMI_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "The current body fully covers the prior body — momentum shift", description: DESC_HINT },
+  { id: "B", label: "A small body nested inside the prior larger body — indecision after a swing", description: DESC_HINT },
+  { id: "C", label: "Open ≈ close with long wicks both ways", description: DESC_HINT },
+];
+
+const TWEEZER_TOP_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "double-top", label: "Double Top", description: "Two swings with a dip between." },
+  { id: "B", patternId: "shooting-star", label: "Shooting Star", description: "One long upper wick." },
+  { id: "C", patternId: "tweezer-top", label: "Tweezer Top", description: "Two candles share a similar high." },
+];
+
+const TWEEZER_TOP_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Two candles share a similar high after a rally — matched rejection", description: DESC_HINT },
+  { id: "B", label: "Two similar highs with a dip swing between them", description: DESC_HINT },
+  { id: "C", label: "Long upper wick on a single candle after a rally", description: DESC_HINT },
+];
+
+const FALLING_WEDGE_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "falling-wedge", label: "Falling Wedge", description: "Downward converging lines." },
+  { id: "B", patternId: "rising-wedge", label: "Rising Wedge", description: "Upward converging lines." },
+  { id: "C", patternId: "triangle", label: "Triangle", description: "Squeeze with no built-in tilt." },
+];
+
+const FALLING_WEDGE_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Price falls inside two downward, converging lines — selling is tiring", description: DESC_HINT },
+  { id: "B", label: "Price rises inside two upward, converging lines", description: DESC_HINT },
+  { id: "C", label: "Highs and lows squeeze with no built-in tilt", description: DESC_HINT },
+];
+
+const HEAD_SHOULDERS_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "double-top", label: "Double Top", description: "Two similar highs." },
+  { id: "B", patternId: "head-shoulders", label: "Head and Shoulders", description: "Three peaks; middle is highest." },
+  { id: "C", patternId: "triangle", label: "Triangle", description: "Squeeze, not three peaks." },
+];
+
+const HEAD_SHOULDERS_DESC_OPTIONS: QuizOption[] = [
+  { id: "A", label: "Two similar highs with a dip between them", description: DESC_HINT },
+  { id: "B", label: "Three peaks: the center peak (head) is highest, flanked by two lower shoulders", description: DESC_HINT },
+  { id: "C", label: "Two neighboring candles share a similar high", description: DESC_HINT },
 ];
 
 const OHLC_PART_OPTIONS: QuizOption[] = [
@@ -860,6 +1068,1128 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     explanation: "Structured reversal still needs a wrong level. SAMPLE process, not certainty.",
     patternKey: "morning-star",
     highlightIndex: 3,
+  },
+  {
+    id: "PR-TB-PICK",
+    prompt: "Which chart shows a Tweezer Bottom?",
+    correctAnswer: "C",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "hammer" },
+      { id: "B", chartKey: "double-bottom" },
+      { id: "C", chartKey: "tweezer-bottom", highlightIndex: 3 },
+      { id: "D", chartKey: "doji" },
+      { id: "E", chartKey: "triangle" },
+    ]),
+    explanation: "Tweezer Bottom is two neighboring candles with a matched low after a decline — not a two-swing double bottom.",
+    patternKey: "tweezer-bottom",
+  },
+  {
+    id: "PR-TB-DESC",
+    prompt: "Which description matches a Tweezer Bottom?",
+    correctAnswer: "A",
+    options: TWEEZER_BOTTOM_DESC_OPTIONS,
+    explanation: "Matched lows on two candles after a decline. SAMPLE — wait for the next print.",
+    patternKey: "tweezer-bottom",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-TB-NAME",
+    prompt: "Two candles share a similar low after a selloff. Name it.",
+    correctAnswer: "B",
+    options: TWEEZER_BOTTOM_NAME_OPTIONS,
+    explanation: "That is a Tweezer Bottom, not a Hammer (one wick) or a Double Bottom (two swings).",
+    patternKey: "tweezer-bottom",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-TB-MOVE",
+    prompt: "SAMPLE: Tweezer Bottom prints after a decline. Process-first move?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Market buy 10x because two lows never break", description: "Oversize." },
+      { id: "B", label: "Treat it as a Double Top short", description: "Wrong location." },
+      { id: "C", label: "Note matched support — wait for the next print before sizing a long", description: "Process." },
+    ],
+    explanation: "Matched lows are a support clue, not an automatic fill. SAMPLE teaching.",
+    patternKey: "tweezer-bottom",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-TB-DESC2",
+    prompt: "How is a Tweezer Bottom different from a Double Bottom?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Tweezer is two neighboring candles; Double Bottom is two swings with a bounce between", description: DESC_HINT },
+      { id: "B", label: "They are the same pattern with two names", description: DESC_HINT },
+      { id: "C", label: "Tweezer Bottom is always a LIVE short signal", description: DESC_HINT },
+    ],
+    explanation: "One is a two-bar match. The other is a swing structure. SAMPLE, not LIVE.",
+    patternKey: "tweezer-bottom",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-TB-MOVE2",
+    prompt: "SAMPLE: Tweezer Bottom, then the next bar loses the shared low. Process?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Add to the long — the tweezer cannot fail", description: "Dogma." },
+      { id: "B", label: "The support clue failed — stand aside or cut if you already leaned long", description: "Process." },
+      { id: "C", label: "Ignore later bars; two-bar patterns settle the trade", description: "Avoidance." },
+    ],
+    explanation: "The next print can cancel the match. SAMPLE process, not certainty.",
+    patternKey: "tweezer-bottom",
+    highlightIndex: 4,
+  },
+  {
+    id: "PR-RW-PICK",
+    prompt: "Which chart shows a Rising Wedge?",
+    correctAnswer: "B",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "falling-wedge" },
+      { id: "B", chartKey: "rising-wedge" },
+      { id: "C", chartKey: "bull-flag" },
+      { id: "D", chartKey: "triangle" },
+      { id: "E", chartKey: "hammer" },
+    ]),
+    explanation: "Rising Wedge climbs inside two upward converging lines — not a down-squeeze falling wedge or a flag pole.",
+    patternKey: "rising-wedge",
+  },
+  {
+    id: "PR-RW-DESC",
+    prompt: "Which description matches a Rising Wedge?",
+    correctAnswer: "A",
+    options: RISING_WEDGE_DESC_OPTIONS,
+    explanation: "Upward converging lines. SAMPLE: a break of the lower line still needs later bars.",
+    patternKey: "rising-wedge",
+  },
+  {
+    id: "PR-RW-NAME",
+    prompt: "Price rises inside two upward, converging lines. Name it.",
+    correctAnswer: "A",
+    options: RISING_WEDGE_NAME_OPTIONS,
+    explanation: "Rising Wedge — buying is tiring. Not a bull flag pole or a flat triangle.",
+    patternKey: "rising-wedge",
+  },
+  {
+    id: "PR-RW-MOVE",
+    prompt: "SAMPLE: Rising Wedge after a grind up. Process-first move?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Chase every new high until it breaks", description: "Late chase." },
+      { id: "B", label: "Short immediately because wedges always dump", description: "Dogma." },
+      { id: "C", label: "Treat as tiring buying — wait for a lower-line break, then the next print", description: "Process." },
+    ],
+    explanation: "The wedge is a structure, not a LIVE sell button. SAMPLE teaching.",
+    patternKey: "rising-wedge",
+  },
+  {
+    id: "PR-RW-DESC2",
+    prompt: "A Rising Wedge differs from a Triangle because…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "A triangle always points down and a wedge never does", description: DESC_HINT },
+      { id: "B", label: "The wedge has an upward tilt; a triangle squeeze has no built-in direction", description: DESC_HINT },
+      { id: "C", label: "Wedges are LIVE orders and triangles are SAMPLE only", description: DESC_HINT },
+    ],
+    explanation: "Tilt vs squeeze. Direction still waits for a break. SAMPLE, not LIVE.",
+    patternKey: "rising-wedge",
+  },
+  {
+    id: "PR-RW-MOVE2",
+    prompt: "SAMPLE: Rising Wedge, no break yet. Honest invalidation idea if you fade?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "You are wrong if price holds above the upper line and keeps expanding", description: "Process." },
+      { id: "B", label: "There is no wrong level on structure patterns", description: "False." },
+      { id: "C", label: "Double the short on every higher high", description: "Oversize." },
+    ],
+    explanation: "Structures still need a level that proves you wrong. SAMPLE process.",
+    patternKey: "rising-wedge",
+  },
+  {
+    id: "PR-BF-PICK",
+    prompt: "Which chart shows a Bull Flag?",
+    correctAnswer: "D",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "rising-wedge" },
+      { id: "B", chartKey: "triangle" },
+      { id: "C", chartKey: "hammer" },
+      { id: "D", chartKey: "bull-flag" },
+      { id: "E", chartKey: "double-top" },
+    ]),
+    explanation: "Bull Flag is a sharp pole, then a tight pause — not a slow rising squeeze.",
+    patternKey: "bull-flag",
+  },
+  {
+    id: "PR-BF-DESC",
+    prompt: "Which description matches a Bull Flag?",
+    correctAnswer: "A",
+    options: BULL_FLAG_DESC_OPTIONS,
+    explanation: "Pole, then a tight rest. SAMPLE: the pause can be a rest if the thrust was clean.",
+    patternKey: "bull-flag",
+  },
+  {
+    id: "PR-BF-NAME",
+    prompt: "A sharp rise, then a tight downward pause. Name it.",
+    correctAnswer: "B",
+    options: BULL_FLAG_NAME_OPTIONS,
+    explanation: "Bull Flag — pole then rest. Not a rising wedge grind.",
+    patternKey: "bull-flag",
+  },
+  {
+    id: "PR-BF-MOVE",
+    prompt: "SAMPLE: Bull Flag pause after a clean thrust. Process-first move?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Treat the pause as a possible rest — wait for the flag to hold before adding", description: "Process." },
+      { id: "B", label: "Short the pause because every dip is a new downtrend", description: "Fights the thrust." },
+      { id: "C", label: "All-in at the first pause bar with no invalidation", description: "Oversize." },
+    ],
+    explanation: "A rest is a hypothesis. Confirm the pause holds. SAMPLE teaching.",
+    patternKey: "bull-flag",
+  },
+  {
+    id: "PR-BF-DESC2",
+    prompt: "What makes a Bull Flag different from a Rising Wedge?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Nothing — both are just uptrends", description: DESC_HINT },
+      { id: "B", label: "A flag is always a LIVE buy and a wedge is always a LIVE sell", description: DESC_HINT },
+      { id: "C", label: "A flag is a sharp pole then a tight rest; a rising wedge is a slow upward squeeze", description: DESC_HINT },
+    ],
+    explanation: "Pole-and-pause vs grind-and-squeeze. SAMPLE, not LIVE.",
+    patternKey: "bull-flag",
+  },
+  {
+    id: "PR-BF-MOVE2",
+    prompt: "SAMPLE: Bull Flag, then the pause loses the pole low. Process?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Add long — flags never fail", description: "Dogma." },
+      { id: "B", label: "The rest idea failed — stand aside until a new structure prints", description: "Process." },
+      { id: "C", label: "Assume DELAYED data made the break fake and ignore it", description: "Feed theater." },
+    ],
+    explanation: "If the pause breaks the thrust, you do not own a flag. SAMPLE process.",
+    patternKey: "bull-flag",
+  },
+  {
+    id: "PR-DT-PICK",
+    prompt: "Which chart shows a Double Top?",
+    correctAnswer: "A",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "double-top" },
+      { id: "B", chartKey: "double-bottom" },
+      { id: "C", chartKey: "head-shoulders" },
+      { id: "D", chartKey: "tweezer-top" },
+      { id: "E", chartKey: "triangle" },
+    ]),
+    explanation: "Double Top is two similar swing highs with a dip between — not three peaks and not a two-bar tweezer.",
+    patternKey: "double-top",
+  },
+  {
+    id: "PR-DT-DESC",
+    prompt: "Which description matches a Double Top?",
+    correctAnswer: "A",
+    options: DOUBLE_TOP_DESC_OPTIONS,
+    explanation: "Two similar highs, failed breakout on the second. SAMPLE: confirm with a break of the dip.",
+    patternKey: "double-top",
+  },
+  {
+    id: "PR-DT-NAME",
+    prompt: "Two similar highs with a dip between them. Name it.",
+    correctAnswer: "A",
+    options: DOUBLE_TOP_NAME_OPTIONS,
+    explanation: "Double Top — two peaks, one dip. Not a double bottom or a triangle squeeze.",
+    patternKey: "double-top",
+  },
+  {
+    id: "PR-DT-MOVE",
+    prompt: "SAMPLE: Double Top, second high failed. Process-first move?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Buy the second high because two tests mean breakout", description: "Chase." },
+      { id: "B", label: "Short the first tick of the second high with no neckline plan", description: "Early fade." },
+      { id: "C", label: "Wait for a break of the dip (neckline) before treating it as confirmed", description: "Process." },
+    ],
+    explanation: "The usual confirmation is the dip break, not the second high itself. SAMPLE.",
+    patternKey: "double-top",
+  },
+  {
+    id: "PR-DT-DESC2",
+    prompt: "A Double Top is not a Tweezer Top because…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Tweezer tops only appear on crypto tapes", description: DESC_HINT },
+      { id: "B", label: "Tweezer Top is two neighboring highs; Double Top is two swings with a dip between", description: DESC_HINT },
+      { id: "C", label: "Double Top is a LIVE order ticket", description: DESC_HINT },
+    ],
+    explanation: "Two-bar match vs two-swing structure. SAMPLE, not LIVE.",
+    patternKey: "double-top",
+  },
+  {
+    id: "PR-DT-MOVE2",
+    prompt: "SAMPLE: Double Top neckline holds and price makes a higher high. Process?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "The failed-breakout idea is wrong — stand aside or rewrite the thesis", description: "Process." },
+      { id: "B", label: "Keep shorting every high because doubles always win", description: "Dogma." },
+      { id: "C", label: "Treat the higher high as a LIVE fill you missed", description: "No LIVE desk." },
+    ],
+    explanation: "A higher high after the second peak cancels the double. SAMPLE process.",
+    patternKey: "double-top",
+  },
+  {
+    id: "PR-DB-PICK",
+    prompt: "Which chart shows a Double Bottom?",
+    correctAnswer: "E",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "tweezer-bottom" },
+      { id: "B", chartKey: "double-top" },
+      { id: "C", chartKey: "hammer" },
+      { id: "D", chartKey: "triangle" },
+      { id: "E", chartKey: "double-bottom" },
+    ]),
+    explanation: "Double Bottom is two swing lows with a bounce between — not a two-bar tweezer match.",
+    patternKey: "double-bottom",
+  },
+  {
+    id: "PR-DB-DESC",
+    prompt: "Which description matches a Double Bottom?",
+    correctAnswer: "A",
+    options: DOUBLE_BOTTOM_DESC_OPTIONS,
+    explanation: "Two similar lows, second low held. SAMPLE: confirm with a break of the bounce high.",
+    patternKey: "double-bottom",
+  },
+  {
+    id: "PR-DB-NAME",
+    prompt: "Two similar lows with a bounce between them. Name it.",
+    correctAnswer: "C",
+    options: DOUBLE_BOTTOM_NAME_OPTIONS,
+    explanation: "Double Bottom — two swings. Not a two-bar tweezer and not a double top.",
+    patternKey: "double-bottom",
+  },
+  {
+    id: "PR-DB-MOVE",
+    prompt: "SAMPLE: Double Bottom, second low held. Process-first move?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Market buy the second low with no bounce-high plan", description: "Early." },
+      { id: "B", label: "Wait for a break of the bounce high before treating it as confirmed", description: "Process." },
+      { id: "C", label: "Short because two lows mean a third test is coming", description: "Dogma." },
+    ],
+    explanation: "Usual confirmation is the bounce-high break. SAMPLE teaching.",
+    patternKey: "double-bottom",
+  },
+  {
+    id: "PR-DB-DESC2",
+    prompt: "How do you tell a Double Bottom from a Tweezer Bottom?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Double Bottom has a bounce swing between two lows; Tweezer Bottom is two neighboring candles", description: DESC_HINT },
+      { id: "B", label: "Double Bottom is always bearish", description: DESC_HINT },
+      { id: "C", label: "Tweezer Bottom requires a LIVE tick tape", description: DESC_HINT },
+    ],
+    explanation: "Swing vs two-bar. SAMPLE, not LIVE.",
+    patternKey: "double-bottom",
+  },
+  {
+    id: "PR-DB-MOVE2",
+    prompt: "SAMPLE: Double Bottom, then the second low breaks. Process?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Add long — the second test must bounce later", description: "Hope." },
+      { id: "B", label: "Treat the break as a LIVE stop you can still hold", description: "No LIVE desk." },
+      { id: "C", label: "The hold idea failed — stand aside or cut if you already leaned long", description: "Process." },
+    ],
+    explanation: "A broken second low is not a double bottom anymore. SAMPLE process.",
+    patternKey: "double-bottom",
+  },
+  {
+    id: "PR-TR-PICK",
+    prompt: "Which chart shows a Triangle?",
+    correctAnswer: "C",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "rising-wedge" },
+      { id: "B", chartKey: "falling-wedge" },
+      { id: "C", chartKey: "triangle" },
+      { id: "D", chartKey: "bull-flag" },
+      { id: "E", chartKey: "doji" },
+    ]),
+    explanation: "Triangle is a two-sided squeeze with no built-in tilt — not a rising or falling wedge.",
+    patternKey: "triangle",
+  },
+  {
+    id: "PR-TR-DESC",
+    prompt: "Which description matches a Triangle?",
+    correctAnswer: "A",
+    options: TRIANGLE_DESC_OPTIONS,
+    explanation: "Squeeze toward a point. SAMPLE: wait for which side breaks, then the next print.",
+    patternKey: "triangle",
+  },
+  {
+    id: "PR-TR-NAME",
+    prompt: "Highs and lows squeeze toward a point. Name it.",
+    correctAnswer: "A",
+    options: TRIANGLE_NAME_OPTIONS,
+    explanation: "Triangle — no built-in direction. Not a rising wedge or a flag pole.",
+    patternKey: "triangle",
+  },
+  {
+    id: "PR-TR-MOVE",
+    prompt: "SAMPLE: Triangle is still squeezing. Process-first move?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Buy because triangles always break up", description: "Dogma." },
+      { id: "B", label: "Wait for which side breaks, then the next print — the squeeze is not the trade", description: "Process." },
+      { id: "C", label: "Short because squeezes always dump", description: "Dogma." },
+    ],
+    explanation: "Direction is the later break, not the triangle itself. SAMPLE teaching.",
+    patternKey: "triangle",
+  },
+  {
+    id: "PR-TR-DESC2",
+    prompt: "A Triangle is not a Rising Wedge because…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Triangles only appear on forex SAMPLE packs", description: DESC_HINT },
+      { id: "B", label: "Wedges never converge", description: DESC_HINT },
+      { id: "C", label: "A triangle squeeze has no built-in tilt; a rising wedge climbs as it squeezes", description: DESC_HINT },
+    ],
+    explanation: "Tilt vs two-sided squeeze. SAMPLE, not LIVE.",
+    patternKey: "triangle",
+  },
+  {
+    id: "PR-TR-MOVE2",
+    prompt: "SAMPLE: Triangle breaks, then the next bar fails back inside. Process?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "The break did not hold — stand aside until a later print settles it", description: "Process." },
+      { id: "B", label: "Double the breakout because failed breaks always retry", description: "Hope." },
+      { id: "C", label: "Treat the fail as a LIVE fill you can still chase", description: "No LIVE desk." },
+    ],
+    explanation: "A break that fails is not confirmation. SAMPLE process.",
+    patternKey: "triangle",
+  },
+  {
+    id: "PR-HM-PICK",
+    prompt: "Which chart shows a Hanging Man?",
+    correctAnswer: "B",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "hammer" },
+      { id: "B", chartKey: "hanging-man", highlightIndex: 3 },
+      { id: "C", chartKey: "shooting-star" },
+      { id: "D", chartKey: "doji" },
+      { id: "E", chartKey: "inverted-hammer" },
+    ]),
+    explanation: "Hanging Man is the same long lower wick as a Hammer, but after a rally — context, not silhouette.",
+    patternKey: "hanging-man",
+  },
+  {
+    id: "PR-HM-DESC",
+    prompt: "Which description matches a Hanging Man?",
+    correctAnswer: "A",
+    options: HANGING_MAN_DESC_OPTIONS,
+    explanation: "Long lower wick after a rally. SAMPLE — wait for the next print.",
+    patternKey: "hanging-man",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HM-NAME",
+    prompt: "Long lower wick after a rally. Name it.",
+    correctAnswer: "B",
+    options: HANGING_MAN_NAME_OPTIONS,
+    explanation: "Hanging Man. A Hammer is the same shape after a decline.",
+    patternKey: "hanging-man",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HM-MOVE",
+    prompt: "SAMPLE: Hanging Man prints after a rally. Process-first move?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Short immediately because a long lower wick always dumps", description: "Dogma." },
+      { id: "B", label: "Treat it as a Hammer long at the highs", description: "Wrong location." },
+      { id: "C", label: "Note sellers may be showing up — wait for the next print before fading", description: "Process." },
+    ],
+    explanation: "The wick is a clue, not a fill. SAMPLE teaching.",
+    patternKey: "hanging-man",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HM-DESC2",
+    prompt: "How is a Hanging Man different from a Hammer?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Same long lower wick — Hanging Man is after a rally; Hammer is after a decline", description: DESC_HINT },
+      { id: "B", label: "Hanging Man has a long upper wick and Hammer never does", description: DESC_HINT },
+      { id: "C", label: "Hammer is a LIVE buy and Hanging Man is a LIVE sell", description: DESC_HINT },
+    ],
+    explanation: "Context, not silhouette. SAMPLE, not LIVE.",
+    patternKey: "hanging-man",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HM-MOVE2",
+    prompt: "SAMPLE: Hanging Man, then the next bar makes a new high and holds. Process?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Double the short — hanging men cannot fail", description: "Dogma." },
+      { id: "B", label: "The fade idea failed — stand aside or cut if you already leaned short", description: "Process." },
+      { id: "C", label: "Ignore later bars; one wick settles the trade", description: "Avoidance." },
+    ],
+    explanation: "A new high after the wick cancels the hanging-man read. SAMPLE process.",
+    patternKey: "hanging-man",
+    highlightIndex: 4,
+  },
+  {
+    id: "PR-ES-PICK",
+    prompt: "Which chart shows an Evening Star?",
+    correctAnswer: "D",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "morning-star" },
+      { id: "B", chartKey: "doji" },
+      { id: "C", chartKey: "shooting-star" },
+      { id: "D", chartKey: "evening-star", highlightIndex: 3 },
+      { id: "E", chartKey: "bearish-engulfing" },
+    ]),
+    explanation: "Evening Star is green · small · red at the highs — the inverse of a Morning Star.",
+    patternKey: "evening-star",
+  },
+  {
+    id: "PR-ES-DESC",
+    prompt: "Which description matches an Evening Star?",
+    correctAnswer: "B",
+    options: EVENING_STAR_DESC_OPTIONS,
+    explanation: "Large green, small middle, large red. SAMPLE — confirm with later bars.",
+    patternKey: "evening-star",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-ES-NAME",
+    prompt: "Large green, small middle, then large red at the highs. Name it.",
+    correctAnswer: "C",
+    options: EVENING_STAR_NAME_OPTIONS,
+    explanation: "Evening Star. Morning Star is the opposite three-bar shape at the lows.",
+    patternKey: "evening-star",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-ES-MOVE",
+    prompt: "SAMPLE: Evening Star completes at the highs. Process-first move?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Treat as a possible top — wait for the next print before sizing a fade", description: "Process." },
+      { id: "B", label: "Buy the red bar because three bars mean a bounce", description: "Fights the pattern." },
+      { id: "C", label: "Market short 10x because evening stars never fail", description: "Oversize." },
+    ],
+    explanation: "Three bars are a structure, not a LIVE sell. SAMPLE teaching.",
+    patternKey: "evening-star",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-ES-DESC2",
+    prompt: "An Evening Star differs from a Morning Star because…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Evening Star is one candle and Morning Star is three", description: DESC_HINT },
+      { id: "B", label: "They are the same pattern with two names", description: DESC_HINT },
+      { id: "C", label: "Evening is green · small · red at a top; Morning is red · small · green at a bottom", description: DESC_HINT },
+    ],
+    explanation: "Inverse three-bar stories. SAMPLE, not LIVE.",
+    patternKey: "evening-star",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-ES-MOVE2",
+    prompt: "SAMPLE: Evening Star, then the next bar reclaims the first green high. Process?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Add to the short — three bars cannot fail", description: "Dogma." },
+      { id: "B", label: "The top idea failed — stand aside or cut if you already leaned short", description: "Process." },
+      { id: "C", label: "Treat the reclaim as a LIVE fill you missed", description: "No LIVE desk." },
+    ],
+    explanation: "A reclaim of the first green high cancels the evening-star read. SAMPLE process.",
+    patternKey: "evening-star",
+    highlightIndex: 4,
+  },
+  {
+    id: "PR-PL-PICK",
+    prompt: "Which chart shows a Piercing Line?",
+    correctAnswer: "A",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "piercing-line", highlightIndex: 3 },
+      { id: "B", chartKey: "bullish-engulfing" },
+      { id: "C", chartKey: "hammer" },
+      { id: "D", chartKey: "morning-star" },
+      { id: "E", chartKey: "tweezer-bottom" },
+    ]),
+    explanation: "Piercing Line closes well into the prior red body — it does not fully cover it.",
+    patternKey: "piercing-line",
+  },
+  {
+    id: "PR-PL-DESC",
+    prompt: "Which description matches a Piercing Line?",
+    correctAnswer: "A",
+    options: PIERCING_LINE_DESC_OPTIONS,
+    explanation: "Opens lower, closes into the red body. SAMPLE — wait for the next print.",
+    patternKey: "piercing-line",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-PL-NAME",
+    prompt: "After a decline, a green opens lower then closes well into the prior red. Name it.",
+    correctAnswer: "A",
+    options: PIERCING_LINE_NAME_OPTIONS,
+    explanation: "Piercing Line. Bullish Engulfing would fully cover the prior red body.",
+    patternKey: "piercing-line",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-PL-MOVE",
+    prompt: "SAMPLE: Piercing Line prints after a decline. Process-first move?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Market buy because a pierce always reverses", description: "Dogma." },
+      { id: "B", label: "Treat it as a Bearish Engulfing short", description: "Wrong pattern." },
+      { id: "C", label: "Note a reclaim into the prior red — wait for the next print before sizing a long", description: "Process." },
+    ],
+    explanation: "A pierce is a reclaim clue, not an automatic fill. SAMPLE teaching.",
+    patternKey: "piercing-line",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-PL-DESC2",
+    prompt: "A Piercing Line is not a Bullish Engulfing because…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Piercing Line only appears on forex SAMPLE packs", description: DESC_HINT },
+      { id: "B", label: "The green closes into the prior red body; it does not fully cover it", description: DESC_HINT },
+      { id: "C", label: "Engulfing is a LIVE order and Piercing Line is SAMPLE only", description: DESC_HINT },
+    ],
+    explanation: "Into the body vs full cover. SAMPLE, not LIVE.",
+    patternKey: "piercing-line",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-PL-MOVE2",
+    prompt: "SAMPLE: Piercing Line, then the next bar loses the pierce close. Process?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "The reclaim clue failed — stand aside or cut if you already leaned long", description: "Process." },
+      { id: "B", label: "Add long — pierces always retry", description: "Hope." },
+      { id: "C", label: "Treat the fail as a LIVE stop you can still hold", description: "No LIVE desk." },
+    ],
+    explanation: "The next print can cancel the pierce. SAMPLE process.",
+    patternKey: "piercing-line",
+    highlightIndex: 4,
+  },
+  {
+    id: "PR-DC-PICK",
+    prompt: "Which chart shows Dark Cloud Cover?",
+    correctAnswer: "C",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "bearish-engulfing" },
+      { id: "B", chartKey: "shooting-star" },
+      { id: "C", chartKey: "dark-cloud-cover", highlightIndex: 3 },
+      { id: "D", chartKey: "evening-star" },
+      { id: "E", chartKey: "tweezer-top" },
+    ]),
+    explanation: "Dark Cloud Cover closes well into the prior green body — it does not fully cover it.",
+    patternKey: "dark-cloud-cover",
+  },
+  {
+    id: "PR-DC-DESC",
+    prompt: "Which description matches Dark Cloud Cover?",
+    correctAnswer: "B",
+    options: DARK_CLOUD_DESC_OPTIONS,
+    explanation: "Opens higher, closes into the green body. SAMPLE — wait for the next print.",
+    patternKey: "dark-cloud-cover",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-DC-NAME",
+    prompt: "After a rally, a red opens higher then closes well into the prior green. Name it.",
+    correctAnswer: "B",
+    options: DARK_CLOUD_NAME_OPTIONS,
+    explanation: "Dark Cloud Cover. Bearish Engulfing would fully cover the prior green body.",
+    patternKey: "dark-cloud-cover",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-DC-MOVE",
+    prompt: "SAMPLE: Dark Cloud Cover prints after a rally. Process-first move?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Note a cover into the prior green — wait for the next print before fading", description: "Process." },
+      { id: "B", label: "Buy the red bar because clouds always bounce", description: "Fights the pattern." },
+      { id: "C", label: "Market short because covers never fail", description: "Oversize." },
+    ],
+    explanation: "A cover is a rejection clue, not a LIVE sell. SAMPLE teaching.",
+    patternKey: "dark-cloud-cover",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-DC-DESC2",
+    prompt: "Dark Cloud Cover is not a Bearish Engulfing because…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Dark Cloud Cover is always three candles", description: DESC_HINT },
+      { id: "B", label: "They are the same pattern with two names", description: DESC_HINT },
+      { id: "C", label: "The red closes into the prior green body; it does not fully cover it", description: DESC_HINT },
+    ],
+    explanation: "Into the body vs full cover. SAMPLE, not LIVE.",
+    patternKey: "dark-cloud-cover",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-DC-MOVE2",
+    prompt: "SAMPLE: Dark Cloud Cover, then the next bar reclaims the cover close. Process?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Add to the short — clouds cannot fail", description: "Dogma." },
+      { id: "B", label: "The cover idea failed — stand aside or cut if you already leaned short", description: "Process." },
+      { id: "C", label: "Ignore later bars; two-bar patterns settle the trade", description: "Avoidance." },
+    ],
+    explanation: "A reclaim after the cover cancels the fade. SAMPLE process.",
+    patternKey: "dark-cloud-cover",
+    highlightIndex: 4,
+  },
+  {
+    id: "PR-WS-PICK",
+    prompt: "Which chart shows Three White Soldiers?",
+    correctAnswer: "E",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "morning-star" },
+      { id: "B", chartKey: "bullish-engulfing" },
+      { id: "C", chartKey: "hammer" },
+      { id: "D", chartKey: "piercing-line" },
+      { id: "E", chartKey: "three-white-soldiers", highlightIndex: 3 },
+    ]),
+    explanation: "Three White Soldiers is three rising green bodies in a row — not a one-bar engulf or a three-bar star.",
+    patternKey: "three-white-soldiers",
+  },
+  {
+    id: "PR-WS-DESC",
+    prompt: "Which description matches Three White Soldiers?",
+    correctAnswer: "A",
+    options: THREE_WHITE_DESC_OPTIONS,
+    explanation: "Three rising greens after a decline or pause. SAMPLE read: buyers in control.",
+    patternKey: "three-white-soldiers",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-WS-NAME",
+    prompt: "Three rising green bodies in a row after a decline. Name it.",
+    correctAnswer: "C",
+    options: THREE_WHITE_NAME_OPTIONS,
+    explanation: "Three White Soldiers. Not a Morning Star and not one engulfing bar.",
+    patternKey: "three-white-soldiers",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-WS-MOVE",
+    prompt: "SAMPLE: Three White Soldiers just printed. Process-first move?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Chase the third close with no invalidation", description: "Late chase." },
+      { id: "B", label: "Treat as buyers in control — wait for a later print; risk under the first soldier if you lean long", description: "Process." },
+      { id: "C", label: "Short the third green because three up bars mean exhaustion", description: "Fights the pattern." },
+    ],
+    explanation: "Three greens are a read, not a chase button. SAMPLE teaching.",
+    patternKey: "three-white-soldiers",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-WS-DESC2",
+    prompt: "Three White Soldiers differ from a Morning Star because…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Soldiers are three rising greens; Morning Star is red · small · green", description: DESC_HINT },
+      { id: "B", label: "Morning Star is always four candles", description: DESC_HINT },
+      { id: "C", label: "Soldiers are a LIVE buy ticket", description: DESC_HINT },
+    ],
+    explanation: "Three same-color bodies vs a three-bar reversal mix. SAMPLE, not LIVE.",
+    patternKey: "three-white-soldiers",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-WS-MOVE2",
+    prompt: "SAMPLE: Three White Soldiers, then a red bar undercuts the first soldier. Process?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Add long — soldiers never fail", description: "Dogma." },
+      { id: "B", label: "Treat the undercut as a LIVE fill you can still hold", description: "No LIVE desk." },
+      { id: "C", label: "The control idea failed — stand aside or cut if you already leaned long", description: "Process." },
+    ],
+    explanation: "Losing the first soldier is not a soldiers tape anymore. SAMPLE process.",
+    patternKey: "three-white-soldiers",
+    highlightIndex: 4,
+  },
+  {
+    id: "PR-BC-PICK",
+    prompt: "Which chart shows Three Black Crows?",
+    correctAnswer: "B",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "evening-star" },
+      { id: "B", chartKey: "three-black-crows", highlightIndex: 3 },
+      { id: "C", chartKey: "bearish-engulfing" },
+      { id: "D", chartKey: "dark-cloud-cover" },
+      { id: "E", chartKey: "shooting-star" },
+    ]),
+    explanation: "Three Black Crows is three falling red bodies in a row — not a star or one engulfing bar.",
+    patternKey: "three-black-crows",
+  },
+  {
+    id: "PR-BC-DESC",
+    prompt: "Which description matches Three Black Crows?",
+    correctAnswer: "B",
+    options: THREE_CROWS_DESC_OPTIONS,
+    explanation: "Three falling reds after a rally or pause. SAMPLE read: sellers in control.",
+    patternKey: "three-black-crows",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-BC-NAME",
+    prompt: "Three falling red bodies in a row after a rally. Name it.",
+    correctAnswer: "B",
+    options: THREE_CROWS_NAME_OPTIONS,
+    explanation: "Three Black Crows. Not an Evening Star and not one engulfing bar.",
+    patternKey: "three-black-crows",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-BC-MOVE",
+    prompt: "SAMPLE: Three Black Crows just printed. Process-first move?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Treat as sellers in control — wait for a later print; risk above the first crow if you lean short", description: "Process." },
+      { id: "B", label: "Buy the third red because three down bars mean a bounce", description: "Fights the pattern." },
+      { id: "C", label: "Market short the third close with no invalidation", description: "Oversize." },
+    ],
+    explanation: "Three reds are a read, not a chase button. SAMPLE teaching.",
+    patternKey: "three-black-crows",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-BC-DESC2",
+    prompt: "Three Black Crows differ from an Evening Star because…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Crows only appear on crypto SAMPLE packs", description: DESC_HINT },
+      { id: "B", label: "Evening Star is always two candles", description: DESC_HINT },
+      { id: "C", label: "Crows are three falling reds; Evening Star is green · small · red", description: DESC_HINT },
+    ],
+    explanation: "Three same-color bodies vs a three-bar reversal mix. SAMPLE, not LIVE.",
+    patternKey: "three-black-crows",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-BC-MOVE2",
+    prompt: "SAMPLE: Three Black Crows, then a green bar reclaims the first crow high. Process?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Add short — crows never fail", description: "Dogma." },
+      { id: "B", label: "The control idea failed — stand aside or cut if you already leaned short", description: "Process." },
+      { id: "C", label: "Treat the reclaim as a LIVE fill you missed", description: "No LIVE desk." },
+    ],
+    explanation: "Reclaiming the first crow cancels the crows tape. SAMPLE process.",
+    patternKey: "three-black-crows",
+    highlightIndex: 4,
+  },
+  {
+    id: "PR-HA-PICK",
+    prompt: "Which chart shows a Harami?",
+    correctAnswer: "D",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "engulfing" },
+      { id: "B", chartKey: "doji" },
+      { id: "C", chartKey: "hammer" },
+      { id: "D", chartKey: "harami", highlightIndex: 3 },
+      { id: "E", chartKey: "morning-star" },
+    ]),
+    explanation: "Harami is a small body nested inside the prior larger body — the inverse of engulfing.",
+    patternKey: "harami",
+  },
+  {
+    id: "PR-HA-DESC",
+    prompt: "Which description matches a Harami?",
+    correctAnswer: "B",
+    options: HARAMI_DESC_OPTIONS,
+    explanation: "Small nested inside large. SAMPLE — direction needs the next print.",
+    patternKey: "harami",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HA-NAME",
+    prompt: "A small body nested inside the prior larger body. Name it.",
+    correctAnswer: "C",
+    options: HARAMI_NAME_OPTIONS,
+    explanation: "Harami. Engulfing is the opposite: the current body covers the prior one.",
+    patternKey: "harami",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HA-MOVE",
+    prompt: "SAMPLE: Harami prints after a swing. Process-first move?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Treat as indecision — wait for the next print; do not size on the nest alone", description: "Process." },
+      { id: "B", label: "Market buy because a nest always reverses up", description: "Dogma." },
+      { id: "C", label: "Market short because a nest always reverses down", description: "Dogma." },
+    ],
+    explanation: "Harami confirmation is low. SAMPLE teaching.",
+    patternKey: "harami",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HA-DESC2",
+    prompt: "A Harami is not an Engulfing because…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Harami nests a small body inside the prior body; Engulfing covers the prior body", description: DESC_HINT },
+      { id: "B", label: "Harami is always three candles", description: DESC_HINT },
+      { id: "C", label: "Engulfing is a LIVE order ticket", description: DESC_HINT },
+    ],
+    explanation: "Nested vs covering. SAMPLE, not LIVE.",
+    patternKey: "harami",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HA-MOVE2",
+    prompt: "SAMPLE: Harami, then the next bar expands through the large-body side. Process?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Ignore the expansion — the nest already settled the trade", description: "Avoidance." },
+      { id: "B", label: "Treat the expansion as a LIVE fill you missed", description: "No LIVE desk." },
+      { id: "C", label: "The next print decided direction — use that break, not the nest alone", description: "Process." },
+    ],
+    explanation: "The nest waits; the next print decides. SAMPLE process.",
+    patternKey: "harami",
+    highlightIndex: 4,
+  },
+  {
+    id: "PR-TT-PICK",
+    prompt: "Which chart shows a Tweezer Top?",
+    correctAnswer: "C",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "double-top" },
+      { id: "B", chartKey: "shooting-star" },
+      { id: "C", chartKey: "tweezer-top", highlightIndex: 3 },
+      { id: "D", chartKey: "tweezer-bottom" },
+      { id: "E", chartKey: "head-shoulders" },
+    ]),
+    explanation: "Tweezer Top is two neighboring candles with a matched high after a rally — not a two-swing double top.",
+    patternKey: "tweezer-top",
+  },
+  {
+    id: "PR-TT-DESC",
+    prompt: "Which description matches a Tweezer Top?",
+    correctAnswer: "A",
+    options: TWEEZER_TOP_DESC_OPTIONS,
+    explanation: "Matched highs on two candles after a rally. SAMPLE — wait for the next print.",
+    patternKey: "tweezer-top",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-TT-NAME",
+    prompt: "Two candles share a similar high after a rally. Name it.",
+    correctAnswer: "C",
+    options: TWEEZER_TOP_NAME_OPTIONS,
+    explanation: "Tweezer Top, not a Double Top (two swings) or a Shooting Star (one wick).",
+    patternKey: "tweezer-top",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-TT-MOVE",
+    prompt: "SAMPLE: Tweezer Top prints after a rally. Process-first move?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Market short 10x because two highs never break", description: "Oversize." },
+      { id: "B", label: "Note matched rejection — wait for the next print before sizing a fade", description: "Process." },
+      { id: "C", label: "Treat it as a Tweezer Bottom long", description: "Wrong location." },
+    ],
+    explanation: "Matched highs are a rejection clue, not an automatic fill. SAMPLE teaching.",
+    patternKey: "tweezer-top",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-TT-DESC2",
+    prompt: "How is a Tweezer Top different from a Double Top?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Tweezer is two neighboring candles; Double Top is two swings with a dip between", description: DESC_HINT },
+      { id: "B", label: "They are the same pattern with two names", description: DESC_HINT },
+      { id: "C", label: "Tweezer Top is always a LIVE long signal", description: DESC_HINT },
+    ],
+    explanation: "Two-bar match vs two-swing structure. SAMPLE, not LIVE.",
+    patternKey: "tweezer-top",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-TT-MOVE2",
+    prompt: "SAMPLE: Tweezer Top, then the next bar makes a new high. Process?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Add to the short — tweezers cannot fail", description: "Dogma." },
+      { id: "B", label: "Treat the new high as a LIVE fill you missed", description: "No LIVE desk." },
+      { id: "C", label: "The rejection clue failed — stand aside or cut if you already leaned short", description: "Process." },
+    ],
+    explanation: "A new high after the match cancels the tweezer. SAMPLE process.",
+    patternKey: "tweezer-top",
+    highlightIndex: 4,
+  },
+  {
+    id: "PR-FW-PICK",
+    prompt: "Which chart shows a Falling Wedge?",
+    correctAnswer: "A",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "falling-wedge" },
+      { id: "B", chartKey: "rising-wedge" },
+      { id: "C", chartKey: "triangle" },
+      { id: "D", chartKey: "bull-flag" },
+      { id: "E", chartKey: "hammer" },
+    ]),
+    explanation: "Falling Wedge drops inside two downward converging lines — not an upward rising wedge or a flat triangle.",
+    patternKey: "falling-wedge",
+  },
+  {
+    id: "PR-FW-DESC",
+    prompt: "Which description matches a Falling Wedge?",
+    correctAnswer: "A",
+    options: FALLING_WEDGE_DESC_OPTIONS,
+    explanation: "Downward converging lines. SAMPLE: a break of the upper line still needs later bars.",
+    patternKey: "falling-wedge",
+  },
+  {
+    id: "PR-FW-NAME",
+    prompt: "Price falls inside two downward, converging lines. Name it.",
+    correctAnswer: "A",
+    options: FALLING_WEDGE_NAME_OPTIONS,
+    explanation: "Falling Wedge — selling is tiring. Not a rising wedge or a flat triangle.",
+    patternKey: "falling-wedge",
+  },
+  {
+    id: "PR-FW-MOVE",
+    prompt: "SAMPLE: Falling Wedge after a grind down. Process-first move?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Chase every new low until it breaks", description: "Late chase." },
+      { id: "B", label: "Buy immediately because falling wedges always rip", description: "Dogma." },
+      { id: "C", label: "Treat as tiring selling — wait for an upper-line break, then the next print", description: "Process." },
+    ],
+    explanation: "The wedge is a structure, not a LIVE buy button. SAMPLE teaching.",
+    patternKey: "falling-wedge",
+  },
+  {
+    id: "PR-FW-DESC2",
+    prompt: "A Falling Wedge differs from a Triangle because…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "A triangle always points up and a wedge never does", description: DESC_HINT },
+      { id: "B", label: "The wedge has a downward tilt; a triangle squeeze has no built-in direction", description: DESC_HINT },
+      { id: "C", label: "Wedges are LIVE orders and triangles are SAMPLE only", description: DESC_HINT },
+    ],
+    explanation: "Tilt vs squeeze. Direction still waits for a break. SAMPLE, not LIVE.",
+    patternKey: "falling-wedge",
+  },
+  {
+    id: "PR-FW-MOVE2",
+    prompt: "SAMPLE: Falling Wedge, then the lower line breaks and range expands down. Process?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "The tiring-sell idea is wrong — stand aside or rewrite the thesis", description: "Process." },
+      { id: "B", label: "Double the long on every lower low", description: "Oversize." },
+      { id: "C", label: "There is no wrong level on structure patterns", description: "False." },
+    ],
+    explanation: "A downside expansion cancels the tiring-sell read. SAMPLE process.",
+    patternKey: "falling-wedge",
+  },
+  {
+    id: "PR-HS-PICK",
+    prompt: "Which chart shows Head and Shoulders?",
+    correctAnswer: "E",
+    optionsAreCharts: true,
+    options: chartPickOptions([
+      { id: "A", chartKey: "double-top" },
+      { id: "B", chartKey: "triangle" },
+      { id: "C", chartKey: "tweezer-top" },
+      { id: "D", chartKey: "falling-wedge" },
+      { id: "E", chartKey: "head-shoulders", highlightIndex: 3 },
+    ]),
+    explanation: "Head and Shoulders is three peaks with the middle highest — not two peaks and not a two-bar tweezer.",
+    patternKey: "head-shoulders",
+  },
+  {
+    id: "PR-HS-DESC",
+    prompt: "Which description matches Head and Shoulders?",
+    correctAnswer: "B",
+    options: HEAD_SHOULDERS_DESC_OPTIONS,
+    explanation: "Three peaks, head in the middle. SAMPLE: confirm with a neckline break.",
+    patternKey: "head-shoulders",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HS-NAME",
+    prompt: "Three peaks; the center peak is highest. Name it.",
+    correctAnswer: "B",
+    options: HEAD_SHOULDERS_NAME_OPTIONS,
+    explanation: "Head and Shoulders — three peaks. Not a two-peak double top.",
+    patternKey: "head-shoulders",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HS-MOVE",
+    prompt: "SAMPLE: Head and Shoulders, right shoulder in. Process-first move?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Short the first tick of the right shoulder with no neckline plan", description: "Early fade." },
+      { id: "B", label: "Buy the head because three peaks mean a breakout", description: "Chase." },
+      { id: "C", label: "Wait for a neckline break before treating it as confirmed", description: "Process." },
+    ],
+    explanation: "The usual confirmation is the neckline, not the right shoulder itself. SAMPLE.",
+    patternKey: "head-shoulders",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HS-DESC2",
+    prompt: "Head and Shoulders is not a Double Top because…",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Head and Shoulders has three peaks; Double Top has two similar highs and one dip", description: DESC_HINT },
+      { id: "B", label: "Double Top only appears on forex SAMPLE packs", description: DESC_HINT },
+      { id: "C", label: "Head and Shoulders is a LIVE order ticket", description: DESC_HINT },
+    ],
+    explanation: "Three peaks vs two. SAMPLE, not LIVE.",
+    patternKey: "head-shoulders",
+    highlightIndex: 3,
+  },
+  {
+    id: "PR-HS-MOVE2",
+    prompt: "SAMPLE: Head and Shoulders, then the right shoulder makes a new high. Process?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Keep shorting every high because three peaks always win", description: "Dogma." },
+      { id: "B", label: "The three-peak idea is wrong — stand aside or rewrite the thesis", description: "Process." },
+      { id: "C", label: "Treat the new high as a LIVE fill you missed", description: "No LIVE desk." },
+    ],
+    explanation: "A new high after the right shoulder cancels the pattern. SAMPLE process.",
+    patternKey: "head-shoulders",
+    highlightIndex: 5,
   },
 ];
 
@@ -2227,6 +3557,22 @@ export type QuizGroupId =
   | "shooting-star"
   | "inverted-hammer"
   | "morning-star"
+  | "tweezer-bottom"
+  | "rising-wedge"
+  | "bull-flag"
+  | "double-top"
+  | "double-bottom"
+  | "triangle"
+  | "hanging-man"
+  | "evening-star"
+  | "piercing-line"
+  | "dark-cloud-cover"
+  | "three-white-soldiers"
+  | "three-black-crows"
+  | "harami"
+  | "tweezer-top"
+  | "falling-wedge"
+  | "head-shoulders"
   | "indicators"
   | "equity-patterns"
   | "equity-literacy"
@@ -2292,6 +3638,22 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   { id: "shooting-star", name: "Shooting Star", description: "Long upper shadow, top reversal", icon: "vertical_align_top" },
   { id: "inverted-hammer", name: "Inverted Hammer", description: "Long upper shadow, bottom reversal", icon: "vertical_align_bottom" },
   { id: "morning-star", name: "Morning Star", description: "Three-candle bullish reversal", icon: "nightlight" },
+  { id: "tweezer-bottom", name: "Tweezer Bottom", description: "Two candles share a similar low after a decline", icon: "vertical_align_bottom" },
+  { id: "rising-wedge", name: "Rising Wedge", description: "Upward converging lines — buying is tiring", icon: "trending_up" },
+  { id: "bull-flag", name: "Bull Flag", description: "Sharp rise, then a tight pause", icon: "flag" },
+  { id: "double-top", name: "Double Top", description: "Two similar highs with a dip between", icon: "keyboard_double_arrow_up" },
+  { id: "double-bottom", name: "Double Bottom", description: "Two similar lows with a bounce between", icon: "keyboard_double_arrow_down" },
+  { id: "triangle", name: "Triangle", description: "Highs and lows squeeze — wait for the break", icon: "change_history" },
+  { id: "hanging-man", name: "Hanging Man", description: "Long lower wick after a rally — wait for the next print", icon: "vertical_align_bottom" },
+  { id: "evening-star", name: "Evening Star", description: "Green · small · red at the highs", icon: "nightlight" },
+  { id: "piercing-line", name: "Piercing Line", description: "Green closes into the prior red body", icon: "trending_up" },
+  { id: "dark-cloud-cover", name: "Dark Cloud Cover", description: "Red closes into the prior green body", icon: "trending_down" },
+  { id: "three-white-soldiers", name: "Three White Soldiers", description: "Three rising green bodies in a row", icon: "trending_up" },
+  { id: "three-black-crows", name: "Three Black Crows", description: "Three falling red bodies in a row", icon: "trending_down" },
+  { id: "harami", name: "Harami", description: "Small body nested inside the prior larger body", icon: "compare_arrows" },
+  { id: "tweezer-top", name: "Tweezer Top", description: "Two candles share a similar high after a rally", icon: "vertical_align_top" },
+  { id: "falling-wedge", name: "Falling Wedge", description: "Downward converging lines — selling is tiring", icon: "trending_down" },
+  { id: "head-shoulders", name: "Head and Shoulders", description: "Three peaks; the center peak is highest", icon: "account_tree" },
   {
     id: "futures-literacy",
     name: "Futures Literacy",

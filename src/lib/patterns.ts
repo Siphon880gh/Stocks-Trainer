@@ -32,6 +32,12 @@ export const PATTERNS: PatternDef[] = [
   { id: "three-black-crows", name: "Three Black Crows", type: "continuation", sentiment: "bearish", confirmation: "high", description: "Three falling red bodies in a row after a rally or pause—sellers in control on this SAMPLE read." },
   { id: "harami", name: "Harami", type: "reversal", sentiment: "neutral", confirmation: "low", description: "A small body nested inside the prior larger body—indecision after a swing. Direction needs the next print." },
   { id: "tweezer-top", name: "Tweezer Top", type: "reversal", sentiment: "bearish", confirmation: "medium", description: "Two candles share a similar high after a rally—matched rejection at the highs on SAMPLE tapes." },
+  { id: "tweezer-bottom", name: "Tweezer Bottom", type: "reversal", sentiment: "bullish", confirmation: "medium", description: "Two candles share a similar low after a decline—matched support on SAMPLE tapes. Wait for the next print." },
+  { id: "rising-wedge", name: "Rising Wedge", type: "reversal", sentiment: "bearish", confirmation: "medium", description: "Price rises inside two upward, converging lines. SAMPLE read: buying is tiring; a break of the lower line needs later bars." },
+  { id: "bull-flag", name: "Bull Flag", type: "continuation", sentiment: "bullish", confirmation: "medium", description: "A sharp rise, then a tight downward or sideways pause. SAMPLE read: the pause can be a rest, not a new downtrend, if the prior thrust was clean." },
+  { id: "double-top", name: "Double Top", type: "reversal", sentiment: "bearish", confirmation: "high", description: "Two similar highs with a dip between them. SAMPLE read: the second high failed to break out; a break of the dip is the usual confirmation." },
+  { id: "double-bottom", name: "Double Bottom", type: "reversal", sentiment: "bullish", confirmation: "high", description: "Two similar lows with a bounce between them. SAMPLE read: the second low held; a break of the bounce high is the usual confirmation." },
+  { id: "triangle", name: "Triangle", type: "neutral", sentiment: "neutral", confirmation: "low", description: "Highs and lows squeeze toward a point. SAMPLE read: direction is not the triangle itself—wait for which side breaks, then the next print." },
 ];
 
 export function getPattern(id: string): PatternDef | undefined {

@@ -10,10 +10,12 @@ import { earningsMarginsSession } from "./earnings-margins";
 import { equitiesLiteracySession } from "./equities-literacy";
 import { forexFramingSession } from "./forex-framing";
 import { futuresFramingSession } from "./futures-framing";
+import { futuresRollSession } from "./futures-roll";
 import { macroPrintSession } from "./macro-print";
 import { macroRiskOffSession } from "./macro-risk-off";
 import { newsLiteracySession } from "./news-literacy";
 import { optionsContextEventSession } from "./options-context-event";
+import { shortVsSellSession } from "./short-vs-sell";
 import { statementSnapshotSession } from "./statement-snapshot";
 import { supplyShockSession } from "./supply-shock";
 
@@ -23,6 +25,7 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   statementSnapshotSession,
   chartSoftGateSession,
   futuresFramingSession,
+  futuresRollSession,
   earningsBeatMissSession,
   earningsMarginsSession,
   earningsGuidanceSession,
@@ -36,4 +39,5 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   optionsContextEventSession,
   equitiesLiteracySession,
   newsLiteracySession,
+  shortVsSellSession,
 ];

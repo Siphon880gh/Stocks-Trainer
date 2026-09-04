@@ -368,8 +368,8 @@ export function coachTipForActive(): string {
     return "Open the next available milestone when ready.";
   }
   return (
-    getPathMilestone(id)?.coachTip ??
     template?.milestones.find((m) => m.id === id)?.coachTip ??
+    getPathMilestone(id)?.coachTip ??
     "Continue your learning path."
   );
 }
