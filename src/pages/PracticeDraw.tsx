@@ -16,6 +16,7 @@ import {
 } from "../lib/practiceDraw";
 import { CHART, chartPaneClass } from "../lib/chartTheme";
 import { cn } from "../lib/utils";
+import BrowsePopover from "../components/BrowsePopover";
 
 function hexAlpha(hex: string, alpha: number): string {
   const n = Number.parseInt(hex.slice(1), 16);
@@ -244,9 +245,27 @@ export default function PracticeDraw() {
           <p className="text-[13px] text-muted">Sketch candlestick patterns on a light tape</p>
         </div>
         <section className="panel p-3">
-          <h2 className="text-[12px] font-semibold text-muted mb-2">
-            Template
-          </h2>
+          <div className="flex items-center justify-between gap-2 mb-2">
+            <h2 className="text-[12px] font-semibold text-muted">
+              Template
+            </h2>
+            <BrowsePopover
+              title="Templates"
+              selectedId={templateId}
+              items={DRAW_TEMPLATES.map((t) => ({
+                id: t.id,
+                label: t.name,
+              }))}
+              onSelect={(id) => {
+                const t = DRAW_TEMPLATES.find((row) => row.id === id);
+                if (!t) return;
+                setTemplateId(t.id);
+                setResult(null);
+                setRestoredNote(null);
+                setBrushColor(t.openingBrush);
+              }}
+            />
+          </div>
           <div className="flex flex-wrap gap-2">
             {DRAW_TEMPLATES.map((t) => (
               <button

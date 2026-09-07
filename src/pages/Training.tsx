@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import QuizModal from "../components/QuizModal";
 import AnswerSheetModal from "../components/AnswerSheetModal";
 import PathMapPanel from "../components/PathMapPanel";
+import BrowsePopover from "../components/BrowsePopover";
 import { QUIZ_GROUPS, getQuestionsForGroup, type QuizGroupId } from "../lib/quizData";
 import {
   CHART_GATE_MILESTONE_ID,
@@ -130,7 +131,19 @@ export default function Training() {
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-[12px] font-semibold text-muted">Test group</h3>
+            <div className="flex items-center justify-between gap-2">
+              <h3 className="text-[12px] font-semibold text-muted">Test group</h3>
+              <BrowsePopover
+                title="Test groups"
+                selectedId={selectedGroup}
+                items={QUIZ_GROUPS.map((g) => ({
+                  id: g.id,
+                  label: g.name,
+                  hint: `${getQuestionsForGroup(g.id).length} questions`,
+                }))}
+                onSelect={(id) => setSelectedGroup(id as QuizGroupId)}
+              />
+            </div>
             <div className="flex flex-wrap gap-2">
               {QUIZ_GROUPS.map((g) => {
                 const isFeatured =

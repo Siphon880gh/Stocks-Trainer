@@ -7,6 +7,7 @@ import IndicatorGlossary from "../components/IndicatorGlossary";
 import IndicatorPopover from "../components/IndicatorPopover";
 import FinancialsPanel from "../components/FinancialsPanel";
 import MarketNavigator from "../components/MarketNavigator";
+import BrowsePopover from "../components/BrowsePopover";
 import {
   getMarket,
   listMarketsByAssetClass,
@@ -303,6 +304,17 @@ export default function Market() {
                 </option>
               ))}
             </select>
+            <BrowsePopover
+              title="Markets"
+              selectedId={marketInFilter?.id}
+              items={filteredMarkets.map((m) => ({
+                id: m.id,
+                label:
+                  m.pack.assetClass === "equity" ? `${m.pair} · SAMPLE` : m.pair,
+                hint: CLASS_LABELS[m.pack.assetClass],
+              }))}
+              onSelect={setMarketId}
+            />
           </div>
           {!emptyClass && market ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 flex-1">

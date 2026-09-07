@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import BrowsePopover from "../components/BrowsePopover";
 import {
   canStartCasePack,
   CHART_GATE_TRAINING_GROUP,
@@ -24,6 +25,7 @@ import { thinkingModeLabel } from "../lib/thinkingModeTips";
 const VALID_PACKS = new Set(CASE_PACKS.map((p) => p.id));
 
 export default function Cases() {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const packParam = searchParams.get("pack");
   const marketClass =
@@ -61,6 +63,22 @@ export default function Cases() {
     return filterPack(packId).length > 0 && !canStartCasePack(packId);
   });
   const showSessionUnlock = !chartOk || anyListedLocked;
+  const browseItems = useMemo(
+    () =>
+      orderedPacks.flatMap((meta) => {
+        const packId = meta.id as CasePackId;
+        const unlocked = canStartCasePack(packId);
+        return filterPack(packId).map((c) => ({
+          id: c.id,
+          label: c.title,
+          hint: `${meta.name} · ${
+            c.difficulty === "beginner" ? "Beginner" : "Intermediate"
+          }`,
+          disabled: !unlocked,
+        }));
+      }),
+    [orderedPacks, beginnerOnly, chartOk, tempBypass],
+  );
 
   useEffect(() => {
     if ((!focusPack && !marketClass) || !focusRef.current) return;
@@ -70,7 +88,8 @@ export default function Cases() {
   return (
     <div className="flex-1 flex flex-col">
       <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-8 space-y-8">
-        <div>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
           <h1 className="text-2xl font-semibold tracking-tight">
             Case studies
           </h1>
@@ -96,6 +115,12 @@ export default function Cases() {
                   : " practice."}
             </p>
           ) : null}
+          </div>
+          <BrowsePopover
+            title="Cases"
+            items={browseItems}
+            onSelect={(id) => navigate(`/cases/${id}`)}
+          />
         </div>
 
         {showSessionUnlock ? (

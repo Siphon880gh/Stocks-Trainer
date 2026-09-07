@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import BrowsePopover from "../components/BrowsePopover";
 import { PATTERNS, type PatternDef } from "../lib/patterns";
 import { OVERLAYS, getOverlaysByCategory, type OverlayDef, type OverlayCategory } from "../lib/overlays";
 import { LITERACY_TERMS, getLiteracyTerm, type LiteracyTerm } from "../lib/literacyTerms";
@@ -173,7 +174,7 @@ export default function Archive() {
       </header>
 
       <main className="flex-1 px-4 py-6 space-y-6 max-w-7xl mx-auto w-full">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3">
           <h3 className="text-primary text-sm font-bold uppercase tracking-[0.2em] font-mono">
             {tab === "patterns"
               ? "Pattern Library / root"
@@ -181,15 +182,73 @@ export default function Archive() {
                 ? "Indicator Library / root"
                 : "Literacy Glossary / root"}
           </h3>
-          <span className="text-primary/40 text-xs font-mono">
-            Total:{" "}
-            {tab === "patterns"
-              ? filteredPatterns.length
-              : tab === "indicators"
-                ? filteredOverlays.length
-                : LITERACY_TERMS.length}{" "}
-            entries
-          </span>
+          <div className="flex items-center gap-3">
+            <BrowsePopover
+              title={
+                tab === "patterns"
+                  ? "Patterns"
+                  : tab === "indicators"
+                    ? "Indicators"
+                    : "Literacy"
+              }
+              selectedId={
+                tab === "patterns"
+                  ? selectedPattern?.id
+                  : tab === "indicators"
+                    ? selectedOverlay?.id
+                    : selectedTerm?.id
+              }
+              items={
+                tab === "patterns"
+                  ? filteredPatterns.map((p) => ({
+                      id: p.id,
+                      label: p.name,
+                      hint: p.type,
+                    }))
+                  : tab === "indicators"
+                    ? filteredOverlays.map((o) => ({
+                        id: o.id,
+                        label: o.name,
+                        hint: o.fullName,
+                      }))
+                    : LITERACY_TERMS.map((term) => {
+                        const cls = literacyTermAssetClass(term.id);
+                        const locked = Boolean(cls && !canBrowseAssetClass(cls));
+                        return {
+                          id: term.id,
+                          label: term.name,
+                          hint: locked ? `${term.category} · locked` : term.category,
+                          disabled: locked,
+                        };
+                      })
+              }
+              onSelect={(id) => {
+                if (tab === "patterns") {
+                  const pattern = filteredPatterns.find((p) => p.id === id);
+                  if (pattern) setSelectedPattern(pattern);
+                  return;
+                }
+                if (tab === "indicators") {
+                  const overlay = filteredOverlays.find((o) => o.id === id);
+                  if (overlay) setSelectedOverlay(overlay);
+                  return;
+                }
+                const term = LITERACY_TERMS.find((t) => t.id === id);
+                if (!term) return;
+                setSelectedTerm(term);
+                setSearchParams({ tab: "literacy", open: term.id }, { replace: true });
+              }}
+            />
+            <span className="text-primary/40 text-xs font-mono">
+              Total:{" "}
+              {tab === "patterns"
+                ? filteredPatterns.length
+                : tab === "indicators"
+                  ? filteredOverlays.length
+                  : LITERACY_TERMS.length}{" "}
+              entries
+            </span>
+          </div>
         </div>
 
         <div className="space-y-4">

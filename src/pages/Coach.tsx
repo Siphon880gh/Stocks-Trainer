@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import MarketNavigator from "../components/MarketNavigator";
+import BrowsePopover from "../components/BrowsePopover";
 import { listSessions } from "../lib/coaching";
 import { canBrowseAssetClass, isChartGateTemporarilyBypassed } from "../lib/beginnerPath";
 import {
@@ -12,6 +13,7 @@ import { isCoachingSessionComplete } from "../lib/progressStore";
 import type { AssetClass } from "../lib/samplePacks";
 
 export default function Coach() {
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const topicParam = searchParams.get("topic") ?? "";
   const classFromUrl = parseMarketClassParam(
@@ -56,7 +58,8 @@ export default function Coach() {
   return (
     <div className="flex-1 flex flex-col">
       <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-8 space-y-8">
-        <div>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
           <h1 className="text-2xl font-semibold tracking-tight">
             Step coaching
           </h1>
@@ -64,6 +67,16 @@ export default function Coach() {
             Deterministic decision trees. Fail, read the correction, rewind, then finish a success
             path. SAMPLE / educational only.
           </p>
+          </div>
+          <BrowsePopover
+            title="Sessions"
+            items={filtered.map((s) => ({
+              id: s.slug,
+              label: s.title,
+              hint: `${s.topic}${isCoachingSessionComplete(s.slug) ? " · done" : ""}`,
+            }))}
+            onSelect={(id) => navigate(`/coach/${id}`)}
+          />
         </div>
 
         <MarketNavigator
@@ -100,7 +113,7 @@ export default function Coach() {
             {!canBrowseAssetClass(classFilter)
               ? "This class is locked. Use Browse this session above to open Futures, Forex, Crypto, and Options context for this tab only."
               : classFromUrl
-                ? "No step-coaching sessions seeded for this market type yet. Equities (stocks) has the beginner trees; Futures has a SAMPLE framing session."
+                ? "No step-coaching sessions match this market type yet."
                 : "No sessions in this topic."}
           </p>
         ) : (
