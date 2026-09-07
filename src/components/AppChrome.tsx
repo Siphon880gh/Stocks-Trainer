@@ -8,6 +8,7 @@ const NAV = [
   { to: "/market", label: "Charts" },
   { to: "/cases", label: "Cases" },
   { to: "/coach", label: "Coach" },
+  { to: "/playbooks", label: "Playbooks" },
 ] as const;
 
 export default function AppChrome({ children }: { children: ReactNode }) {

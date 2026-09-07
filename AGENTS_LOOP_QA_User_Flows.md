@@ -84,7 +84,7 @@ QA Stock Trainer against every user flow in `QA_User_Flows.md` until all flows P
 # CONTEXT
 - Flow contract: `QA_User_Flows.md` (learning goals G1–G15, click steps, exact UI labels)
 - Product constraints: `EPIC_MAP.md`, `AGENTS_CODE_REFERENCE.md`
-- App routes: `/`, `/training`, `/market`, `/archive`, `/cases`, `/cases/:caseId`, `/practice-draw`, `/coach`, `/coach/:slug`
+- App routes: `/`, `/training`, `/market`, `/archive`, `/cases`, `/cases/:caseId`, `/practice-draw`, `/coach`, `/coach/:slug`, `/playbooks`, `/playbooks/:id`
 - Progress: `localStorage` `analysis_core_progress_v1`
 - Auto-verify (static): `npm run lint` then `npm run build` after any code change
 - Browser: prefer cursor-ide-browser MCP (navigate → lock → snapshot/click → unlock when done)

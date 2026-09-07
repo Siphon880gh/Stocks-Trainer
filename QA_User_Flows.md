@@ -2,7 +2,7 @@
 
 Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_QA_User_Flows.md`](./AGENTS_LOOP_QA_User_Flows.md).
 
-**Routes:** `/` Home · `/training` Learn · `/market` Charts · `/archive` Archive · `/cases` Cases · `/cases/:caseId` Case player · `/practice-draw` Practice Draw · `/coach` Coach · `/coach/:slug` session
+**Routes:** `/` Home · `/training` Learn · `/market` Charts · `/archive` Archive · `/cases` Cases · `/cases/:caseId` Case player · `/practice-draw` Practice Draw · `/coach` Coach · `/coach/:slug` session · `/playbooks` Playbooks · `/playbooks/:id` playbook
 
 **Progress:** `localStorage` key `analysis_core_progress_v1`. First-run shows GoalPicker until path confirm. Use Home **Account** → **Reset path** (confirm dialog) to return to first-run. Reset also clears the session-only chart-gate peek so Indicators locks apply again.
 
@@ -36,8 +36,8 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 | Home GoalPicker | Path tabs | `Beginner Equities Path` / `Decision Maker Path` / `Market Explorer Path` |
 | Home GoalPicker | Heading / confirm | `Choose a path` · `Confirm path · {path title}` |
 | Home path CTA | Primary | `Continue` / `Indicators quiz` / `Open cases` |
-| Home Also | | `Charts` · `Market navigator` · `Quizzes` · `Reference` · `Draw` · `Lookalikes` · `Pattern hunt` · `Support and resistance` · `Coach` |
-| App chrome | | `Home` · `Learn` · `Charts` · `Cases` · `Coach` |
+| Home Also | | `Charts` · `Market navigator` · `Quizzes` · `Reference` · `Draw` · `Lookalikes` · `Pattern hunt` · `Support and resistance` · `Coach` · `Playbooks` |
+| App chrome | | `Home` · `Learn` · `Charts` · `Cases` · `Coach` · `Playbooks` |
 | Training | Start | `Start quiz` / `Locked` |
 | Training groups (path) | | `Equities Literacy` · `Statements Literacy` · `Indicators` · `News Literacy` · `Statements Drills` |
 | Case list | Focus | `Showing: {pack name}` when `?pack=` is set |

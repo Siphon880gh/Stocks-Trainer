@@ -163,8 +163,9 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | `/cases` · `/cases/:caseId` | Decide-and-reveal case library |
 | `/practice-draw` | Sketch + grade |
 | `/coach` · `/coach/:slug` | Step-by-step coaching (decision trees · no LLM) |
+| `/playbooks` · `/playbooks/:id` | Playbooks — strategy kits from a source URL (four collapsed panels) |
 
-Chrome: **Home** · **Learn** · **Charts** · **Cases** · **Coach**.
+Chrome: **Home** · **Learn** · **Charts** · **Cases** · **Coach** · **Playbooks**.
 
 Progress is stored locally (`localStorage` key `analysis_core_progress_v1`).
 

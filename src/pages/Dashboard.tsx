@@ -265,6 +265,7 @@ export default function Dashboard() {
           <Link to="/practice/hunt" className="text-primary hover:underline">Pattern hunt</Link>
           <Link to="/practice/levels" className="text-primary hover:underline">Support and resistance</Link>
           <Link to="/coach" className="text-primary hover:underline">Coach</Link>
+          <Link to="/playbooks" className="text-primary hover:underline">Playbooks</Link>
         </div>
         <p className="text-[12px] text-muted tabular-nums">
           {progress.scores.totalPoints} pts · streak {progress.streaks.current} · {progress.scores.accuracy}% accuracy

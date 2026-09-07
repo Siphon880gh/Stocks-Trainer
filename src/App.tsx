@@ -18,6 +18,8 @@ import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
 import Coach from "./pages/Coach";
 import CoachSession from "./pages/CoachSession";
+import Playbooks from "./pages/Playbooks";
+import Playbook from "./pages/Playbook";
 
 export default function App() {
   const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || undefined;
@@ -43,6 +45,8 @@ export default function App() {
           <Route path="cases/:caseId" element={<CasePlayer />} />
           <Route path="coach" element={<Coach />} />
           <Route path="coach/:slug" element={<CoachSession />} />
+          <Route path="playbooks" element={<Playbooks />} />
+          <Route path="playbooks/:id" element={<Playbook />} />
         </Route>
       </Routes>
     </BrowserRouter>
