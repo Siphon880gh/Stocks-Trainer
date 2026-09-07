@@ -195,6 +195,25 @@ const CHOP_FAIL_CRYPTO_OHLC: OHLC[] = withBarLabels(
   SESSION_24H_LABELS_12
 );
 
+/** Round-top after a run (≠ BTC grind, ≠ SOL chop-then-break, ≠ dump-no-reclaim). */
+const ROUND_CRYPTO_OHLC: OHLC[] = withBarLabels(
+  [
+    ohlc("t0", 0.42, 0.44, 0.41, 0.43),
+    ohlc("t1", 0.43, 0.48, 0.42, 0.47),
+    ohlc("t2", 0.47, 0.54, 0.46, 0.53),
+    ohlc("t3", 0.53, 0.58, 0.51, 0.56),
+    ohlc("t4", 0.56, 0.57, 0.52, 0.53),
+    ohlc("t5", 0.53, 0.54, 0.49, 0.50),
+    ohlc("t6", 0.50, 0.51, 0.46, 0.47),
+    ohlc("t7", 0.47, 0.48, 0.43, 0.44),
+    ohlc("t8", 0.44, 0.45, 0.40, 0.41),
+    ohlc("t9", 0.41, 0.42, 0.38, 0.39),
+    ohlc("t10", 0.39, 0.40, 0.36, 0.37),
+    ohlc("t11", 0.37, 0.38, 0.34, 0.35),
+  ],
+  SESSION_24H_LABELS_12
+);
+
 const LEGACY_CRYPTO_PACKS: SamplePack[] = [
   {
     id: "btc",
@@ -250,6 +269,15 @@ const LEGACY_CRYPTO_PACKS: SamplePack[] = [
     educationalNotes:
       "SAMPLE crypto: range, upside probe, then fail back through the range. Distinct from alt chop-then-break and dump-no-reclaim. Browse/drill only — not Beginner Equities Path, not LIVE.",
   },
+  {
+    id: "crypto-round",
+    symbol: "ROUND",
+    assetClass: "crypto",
+    displayName: "Round Top After a Run (SAMPLE)",
+    ohlc: ROUND_CRYPTO_OHLC,
+    educationalNotes:
+      "SAMPLE crypto: impulse then lower highs — a round-top, not a BTC grind, not a SOL breakout, and not a dump-from-the-open. Browse/drill only — not Beginner Equities Path, not LIVE.",
+  },
 ];
 
 const LEGACY_SPX_PACK: SamplePack = {
@@ -279,7 +307,7 @@ const EQUITY_MARKETS: MarketDef[] = EQUITY_SAMPLE_PACKS.map((pack) => {
 /** E9.M1 — Futures SAMPLE markets (Class → Futures). */
 const FUTURE_MARKETS: MarketDef[] = FUTURE_SAMPLE_PACKS.map((pack) => {
   const last = pack.ohlc[pack.ohlc.length - 1]?.close ?? 0;
-  const vol = pack.id === "fut-energy" ? "HIGH" : "MED";
+  const vol = pack.id === "fut-energy" || pack.id === "fut-ng" || pack.id === "fut-kc" ? "HIGH" : "MED";
   return marketFromPack(pack, {
     pair: pack.symbol,
     price: formatPrice(last, pack.assetClass),
@@ -291,7 +319,7 @@ const FUTURE_MARKETS: MarketDef[] = FUTURE_SAMPLE_PACKS.map((pack) => {
 /** E9.M2 — Options-context SAMPLE markets (underlying charts only). */
 const OPTION_CONTEXT_MARKETS: MarketDef[] = OPTION_CONTEXT_SAMPLE_PACKS.map((pack) => {
   const last = pack.ohlc[pack.ohlc.length - 1]?.close ?? 0;
-  const vol = pack.id === "opt-ctx-vol" ? "HIGH" : "MED";
+  const vol = pack.id === "opt-ctx-vol" || pack.id === "opt-ctx-dump" ? "HIGH" : "MED";
   return marketFromPack(pack, {
     pair: pack.symbol,
     price: formatPrice(last, pack.assetClass),
@@ -314,12 +342,16 @@ const FOREX_MARKETS: MarketDef[] = FOREX_SAMPLE_PACKS.map((pack) => {
             ? "GBP/USD"
             : pack.id === "fx-eurjpy"
               ? "EUR/JPY"
-              : pack.symbol;
+              : pack.id === "fx-usdchf"
+                ? "USD/CHF"
+                : pack.id === "fx-gbpjpy"
+                  ? "GBP/JPY"
+                : pack.symbol;
   return marketFromPack(pack, {
     pair,
     price: formatPrice(last, pack.assetClass),
     delta: deltaFromOhlc(pack.ohlc),
-    volatility: pack.id === "fx-usdjpy" ? "HIGH" : "LOW",
+    volatility: pack.id === "fx-usdjpy" || pack.id === "fx-gbpjpy" ? "HIGH" : "LOW",
   });
 });
 

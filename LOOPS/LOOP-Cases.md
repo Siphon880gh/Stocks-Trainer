@@ -2,6 +2,8 @@
 
 Deepen the decide-and-reveal library on `/cases` and `/cases/:caseId`. Runtime (CasePlayer, chart soft-gate, packs, Navigator decide links) already exists.
 
+When every pack **floor below is already met** but Forex / Futures / Crypto / Options context still look thin next to Equities (four equity packs vs one pack per other class), stop this loop and run [`LOOP-Asymmetry.md`](./LOOP-Asymmetry.md) instead.
+
 Companions: [`src/lib/caseStudies.ts`](../src/lib/caseStudies.ts) · [`src/lib/multiAssetCases.ts`](../src/lib/multiAssetCases.ts) · [`src/pages/Cases.tsx`](../src/pages/Cases.tsx) · [`src/pages/CasePlayer.tsx`](../src/pages/CasePlayer.tsx) · [`src/lib/thinkingModeTips.ts`](../src/lib/thinkingModeTips.ts) · [`.agents/skills/add-case-pack-by-asset-class/SKILL.md`](../.agents/skills/add-case-pack-by-asset-class/SKILL.md)
 
 ---

@@ -58,12 +58,60 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
       "In this trainer, Options context means SAMPLE charts of an underlying around events or volatility. It is not a LIVE options chain, not order routing, and not a Greeks/pricing engine. Traditional retail stocks remain Equities.",
   },
   {
+    id: "options-event-vol",
+    name: "Event risk and vol on the stock (SAMPLE)",
+    category: "markets",
+    summary: "Coil, spike, or settle around a known event is a stock-tape story — still no chain or Greeks.",
+    detail:
+      "A SAMPLE event window can shrink range, then expand. Grade the underlying with BUY/SELL/HOLD. Inventing a straddle, implied vol, or delta skips the product rule. Educational only.",
+  },
+  {
+    id: "options-failed-break",
+    name: "Failed breakout on the underlying (SAMPLE)",
+    category: "process",
+    summary: "A poke through a level that fails is a stock story — HOLD can be correct; still no calls.",
+    detail:
+      "On SAMPLE options-context tapes, price can push through a watched level and close back. Ask whether the event move already failed. Do not invent a call overlay or gamma hedge. Educational only.",
+  },
+  {
+    id: "options-hold-event",
+    name: "HOLD into a known event (SAMPLE)",
+    category: "process",
+    summary: "A scheduled event does not force a fill — HOLD is allowed, and there are still no calls.",
+    detail:
+      "On SAMPLE options-context tapes, a known event tomorrow with no edge on the stock is a wait. Chatter that you must be in is not a listing print and not a 10-Q overnight. This is not a coil/spike tape-shape drill and not a failed-break poke. Educational only — no chain, no Greeks.",
+  },
+  {
     id: "futures-market",
     name: "Futures (SAMPLE)",
     category: "markets",
     summary: "Contracts on an underlying (index, commodity, etc.) — SAMPLE browse class here.",
     detail:
       "Futures are agreements to buy/sell an underlying later at a set price. This app shows STYLIZED SAMPLE futures tapes for chart practice—not LIVE contracts or order routing. The traditional retail stocks path stays Equities.",
+  },
+  {
+    id: "futures-roll",
+    name: "Roll, contango, backwardation (SAMPLE)",
+    category: "markets",
+    summary: "Contracts expire; front vs next month is a structure to name, not a trade button.",
+    detail:
+      "Roll means the front month ends and attention moves to the next. Contango: front richer than next. Backwardation: front cheaper than next. SAMPLE teaching — this app has no live roll calendar or calculator.",
+  },
+  {
+    id: "futures-underlying",
+    name: "Index vs commodity futures (SAMPLE)",
+    category: "markets",
+    summary: "The contract points at an index, energy, metal, or ag — so the tape shape is not one clone.",
+    detail:
+      "An index-style grind is not an energy dump-reclaim and not a weather/ag coil. Name which underlying the SAMPLE pack is teaching. This app is not a live contract, pit, or weather desk.",
+  },
+  {
+    id: "futures-harvest",
+    name: "Weather and harvest supply (SAMPLE)",
+    category: "markets",
+    summary: "A drought or harvest print is a supply fact on this grain contract — not a 10-Q and not a roll button.",
+    detail:
+      "Map weather to crop supply on this SAMPLE future, then ask if the first jump already priced the scare. A later harvest that is larger than the scare implied means re-decide. HOLD is allowed. This is not contango-as-sell, not an index-vs-energy label, and not a company filing. Educational only — not a live weather desk.",
   },
   {
     id: "crypto-browse",
@@ -74,12 +122,60 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
       "Crypto Class is SAMPLE browse/drill only. It does not replace Beginner Equities Path (stocks). Feeds are SAMPLE or DELAYED labels—never LIVE/REAL_TIME theater.",
   },
   {
+    id: "crypto-depeg-scare",
+    name: "Stable depeg scare (SAMPLE)",
+    category: "markets",
+    summary: "Chat that a peg broke is a source drill — not a live redemption or exchange.",
+    detail:
+      "A SAMPLE stable wobble is rumor until a named issuer or official note confirms it. Do not treat this app as a CEX, and do not assume every dump is a depeg. Educational only.",
+  },
+  {
+    id: "crypto-weekend",
+    name: "Weekend hours (SAMPLE crypto)",
+    category: "markets",
+    summary: "Crypto can print when stock markets are closed — hours are not a must-trade.",
+    detail:
+      "A SAMPLE weekend gap is still chase-versus-wait. A thin book can move on chatter with no protocol change. HOLD is valid. This app is not a live exchange or a 24/7 desk.",
+  },
+  {
+    id: "crypto-listing",
+    name: "Listing chat vs official note (SAMPLE)",
+    category: "markets",
+    summary: "Venue-listing chatter is rumor until a scheduled exchange note — chat is not a listing.",
+    detail:
+      "On SAMPLE crypto tapes, a run on listing chat can already have the rumor in. Separate that volume from an official no-listing (or listing) note, then re-decide. HOLD is allowed. This is not a depeg-peg drill, not weekend-hours, and not a 10-Q. Educational only — not a live listing desk.",
+  },
+  {
     id: "forex-spot",
     name: "Forex / FX (SAMPLE)",
     category: "markets",
     summary: "Currency pairs (spot FX) as a SAMPLE Market class after equities fluency.",
     detail:
       "Forex is trading one currency against another. Here it is SAMPLE spot FX for chart literacy. Traditional retail stocks = Equities. Not a LIVE FX feed or broker.",
+  },
+  {
+    id: "forex-pip",
+    name: "Pip and spread (SAMPLE FX)",
+    category: "markets",
+    summary: "A pip is a tiny FX price step; the spread is a cost of trading the pair.",
+    detail:
+      "On SAMPLE FX tapes, a noisy print plus a wide spread is a HOLD cue — waiting is valid. This app is not a live FX desk and does not quote real bank spreads. Educational only.",
+  },
+  {
+    id: "forex-major-cross",
+    name: "Majors vs crosses (SAMPLE FX)",
+    category: "markets",
+    summary: "A major usually includes the dollar; a cross is two non-dollar currencies.",
+    detail:
+      "SAMPLE packs use majors and crosses so tapes are not clones: EUR/USD drift is not USD/JPY dump is not EUR/JPY. This is chart literacy, not a live FX desk or a ranking of which pair to trade.",
+  },
+  {
+    id: "forex-risk-on",
+    name: "Risk-on vs risk-off (SAMPLE FX)",
+    category: "markets",
+    summary: "Risk mood maps to a pair — commodity FX often bids on risk-on; funding FX often bids on risk-off.",
+    detail:
+      "Name which side of this SAMPLE pair the mood hits, then ask if the first tick already priced it. HOLD is allowed. This is not a pip-spread cost drill, not a major-versus-cross label, and not a 10-Q. Educational only — not a live FX desk.",
   },
   {
     id: "equities-traditional-retail",

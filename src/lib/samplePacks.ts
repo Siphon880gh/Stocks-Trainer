@@ -337,6 +337,38 @@ const AG_FUTURE_OHLC: OHLC[] = withBarLabels([
   bar("06:00", 472, 476, 470, 474),
 ], SESSION_24H_LABELS_12)
 
+/** Nat-gas dump with no reclaim (≠ CL dump-then-bounce, ≠ rates stair, ≠ ag coil-expand). */
+const NG_FUTURE_OHLC: OHLC[] = withBarLabels([
+  bar("08:00", 3.42, 3.48, 3.38, 3.46),
+  bar("10:00", 3.46, 3.52, 3.40, 3.44),
+  bar("12:00", 3.44, 3.48, 3.12, 3.16),
+  bar("14:00", 3.16, 3.20, 2.88, 2.92),
+  bar("16:00", 2.92, 2.98, 2.74, 2.78),
+  bar("18:00", 2.78, 2.84, 2.68, 2.72),
+  bar("20:00", 2.72, 2.76, 2.62, 2.66),
+  bar("22:00", 2.66, 2.70, 2.56, 2.60),
+  bar("00:00", 2.60, 2.64, 2.50, 2.54),
+  bar("02:00", 2.54, 2.58, 2.46, 2.50),
+  bar("04:00", 2.50, 2.54, 2.42, 2.46),
+  bar("06:00", 2.46, 2.50, 2.38, 2.42),
+], SESSION_24H_LABELS_12)
+
+/** Coffee poke-and-fail (≠ NG dump-no-reclaim, ≠ CL dump-then-bounce, ≠ ag coil-expand). */
+const KC_FUTURE_OHLC: OHLC[] = withBarLabels([
+  bar("08:00", 248.2, 249.0, 247.8, 248.6),
+  bar("10:00", 248.6, 249.4, 248.0, 248.8),
+  bar("12:00", 248.8, 249.6, 248.2, 249.2),
+  bar("14:00", 249.2, 252.8, 249.0, 249.4),
+  bar("16:00", 249.4, 249.8, 246.2, 246.6),
+  bar("18:00", 246.6, 247.2, 244.8, 245.2),
+  bar("20:00", 245.2, 245.8, 243.4, 243.8),
+  bar("22:00", 243.8, 244.4, 242.0, 242.6),
+  bar("00:00", 242.6, 243.2, 241.2, 241.8),
+  bar("02:00", 241.8, 242.4, 240.6, 241.2),
+  bar("04:00", 241.2, 241.8, 239.8, 240.4),
+  bar("06:00", 240.4, 241.0, 239.2, 239.6),
+], SESSION_24H_LABELS_12)
+
 /** E9.M1 — Futures SAMPLE packs (≥2 distinct shapes). */
 export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
   {
@@ -383,6 +415,24 @@ export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
     ohlc: AG_FUTURE_OHLC,
     educationalNotes:
       "SAMPLE agricultural-style future: coil then a one-bar expansion. Distinct from energy dump. STYLIZED — not a live contract.",
+  },
+  {
+    id: "fut-ng",
+    symbol: "NG.F",
+    assetClass: "future",
+    displayName: "Nat Gas Future · Dump No Reclaim (SAMPLE)",
+    ohlc: NG_FUTURE_OHLC,
+    educationalNotes:
+      "SAMPLE nat-gas future: dump that keeps leaking — no bounce-back. Distinct from CL dump-reclaim, rates stair-down, and ag coil-expand. STYLIZED — not a live contract.",
+  },
+  {
+    id: "fut-kc",
+    symbol: "KC.F",
+    assetClass: "future",
+    displayName: "Coffee Future · Failed Break (SAMPLE)",
+    ohlc: KC_FUTURE_OHLC,
+    educationalNotes:
+      "SAMPLE coffee future: poke through a high that fails, then the tape leaks. Distinct from NG dump-no-reclaim, CL dump-reclaim, and ag coil-expand. STYLIZED — not a live contract.",
   },
 ];
 
@@ -466,6 +516,38 @@ const OPT_CTX_FAIL_OHLC: OHLC[] = withBarLabels([
   bar("06:00", 54.2, 54.6, 53.8, 54.0),
 ], RTH_BAR_LABELS_12)
 
+/** Round-top underlying: slow rollover after a high (≠ failed poke, ≠ vol-spike, ≠ coil). */
+const OPT_CTX_ROUND_OHLC: OHLC[] = withBarLabels([
+  bar("08:00", 186.0, 188.2, 185.2, 187.4),
+  bar("10:00", 187.4, 190.0, 186.6, 189.2),
+  bar("12:00", 189.2, 192.0, 188.4, 191.4),
+  bar("14:00", 191.4, 193.6, 190.8, 192.8),
+  bar("16:00", 192.8, 193.4, 191.2, 191.6),
+  bar("18:00", 191.6, 192.0, 189.8, 190.2),
+  bar("20:00", 190.2, 190.8, 188.6, 189.0),
+  bar("22:00", 189.0, 189.6, 187.4, 187.8),
+  bar("00:00", 187.8, 188.4, 186.4, 186.8),
+  bar("02:00", 186.8, 187.4, 185.6, 186.0),
+  bar("04:00", 186.0, 186.6, 184.8, 185.2),
+  bar("06:00", 185.2, 185.8, 184.2, 184.6),
+], RTH_BAR_LABELS_12)
+
+/** Dump-no-reclaim underlying: gap lower then leak (≠ failed poke, ≠ vol-spike settle, ≠ round-top). */
+const OPT_CTX_DUMP_OHLC: OHLC[] = withBarLabels([
+  bar("08:00", 64.2, 64.8, 63.8, 64.4),
+  bar("10:00", 64.4, 64.9, 63.6, 63.9),
+  bar("12:00", 63.9, 64.2, 58.4, 58.8),
+  bar("14:00", 58.8, 59.4, 56.2, 56.6),
+  bar("16:00", 56.6, 57.2, 54.8, 55.1),
+  bar("18:00", 55.1, 55.6, 53.6, 53.9),
+  bar("20:00", 53.9, 54.4, 52.4, 52.7),
+  bar("22:00", 52.7, 53.1, 51.4, 51.7),
+  bar("00:00", 51.7, 52.0, 50.6, 50.9),
+  bar("02:00", 50.9, 51.2, 49.8, 50.1),
+  bar("04:00", 50.1, 50.4, 49.2, 49.5),
+  bar("06:00", 49.5, 49.8, 48.6, 48.9),
+], RTH_BAR_LABELS_12)
+
 /** E9.M2 — Options-context SAMPLE packs (underlying education; not LIVE chains / Greeks). */
 export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
   {
@@ -512,6 +594,24 @@ export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
     ohlc: OPT_CTX_FAIL_OHLC,
     educationalNotes:
       "SAMPLE options *context*: underlying pokes a high then fails back into the range. Educational tape — no chain / Greeks.",
+  },
+  {
+    id: "opt-ctx-round",
+    symbol: "ROUND.OPT",
+    assetClass: "option_context",
+    displayName: "Underlying · Round Top (SAMPLE)",
+    ohlc: OPT_CTX_ROUND_OHLC,
+    educationalNotes:
+      "SAMPLE options *context*: the stock rolls over slowly after a high — not a failed poke, not a vol spike, not a coil. Educational tape — no chain / Greeks.",
+  },
+  {
+    id: "opt-ctx-dump",
+    symbol: "DUMP.OPT",
+    assetClass: "option_context",
+    displayName: "Underlying · Dump No Reclaim (SAMPLE)",
+    ohlc: OPT_CTX_DUMP_OHLC,
+    educationalNotes:
+      "SAMPLE options *context*: the stock gaps down and keeps leaking — no bounce-back. Distinct from failed poke, vol-spike settle, and round-top. Educational tape — no chain / Greeks.",
   },
 ];
 
@@ -595,6 +695,38 @@ const FX_EURJPY_OHLC: OHLC[] = withBarLabels([
   bar("06:00", 164.16, 164.38, 163.96, 164.12),
 ], SESSION_24H_LABELS_12)
 
+/** Safe-haven CHF grind lower (≠ EURUSD drift up, USDJPY dump-reclaim, GBP range, EURJPY spike-fade). */
+const FX_USDCHF_OHLC: OHLC[] = withBarLabels([
+  bar("08:00", 0.8920, 0.8932, 0.8914, 0.8918),
+  bar("10:00", 0.8918, 0.8924, 0.8906, 0.8910),
+  bar("12:00", 0.8910, 0.8916, 0.8898, 0.8902),
+  bar("14:00", 0.8902, 0.8908, 0.8888, 0.8892),
+  bar("16:00", 0.8892, 0.8898, 0.8878, 0.8884),
+  bar("18:00", 0.8884, 0.8890, 0.8870, 0.8874),
+  bar("20:00", 0.8874, 0.8880, 0.8860, 0.8866),
+  bar("22:00", 0.8866, 0.8872, 0.8852, 0.8858),
+  bar("00:00", 0.8858, 0.8864, 0.8844, 0.8850),
+  bar("02:00", 0.8850, 0.8856, 0.8836, 0.8842),
+  bar("04:00", 0.8842, 0.8848, 0.8828, 0.8834),
+  bar("06:00", 0.8834, 0.8840, 0.8820, 0.8826),
+], SESSION_24H_LABELS_12)
+
+/** Expanding two-way cross (≠ GBPUSD tight band, EURJPY one spike-fade, USDJPY dump-reclaim). */
+const FX_GBPJPY_OHLC: OHLC[] = withBarLabels([
+  bar("08:00", 191.40, 191.80, 191.20, 191.55),
+  bar("10:00", 191.55, 192.10, 191.10, 191.70),
+  bar("12:00", 191.70, 193.20, 190.80, 192.40),
+  bar("14:00", 192.40, 194.10, 190.40, 191.20),
+  bar("16:00", 191.20, 193.80, 189.90, 192.80),
+  bar("18:00", 192.80, 194.60, 191.40, 193.20),
+  bar("20:00", 193.20, 194.20, 192.00, 192.60),
+  bar("22:00", 192.60, 194.00, 191.80, 193.40),
+  bar("00:00", 193.40, 194.80, 192.20, 193.00),
+  bar("02:00", 193.00, 194.40, 191.60, 192.20),
+  bar("04:00", 192.20, 193.60, 191.20, 192.80),
+  bar("06:00", 192.80, 194.20, 191.80, 193.10),
+], SESSION_24H_LABELS_12)
+
 /** E9.M4 — Forex SAMPLE packs (spot FX browse after equities fluency). */
 export const FOREX_SAMPLE_PACKS: SamplePack[] = [
   {
@@ -641,6 +773,24 @@ export const FOREX_SAMPLE_PACKS: SamplePack[] = [
     ohlc: FX_EURJPY_OHLC,
     educationalNotes:
       "SAMPLE cross: sharp spike then fade back. Distinct from USDJPY dump-reclaim. Not a live FX desk.",
+  },
+  {
+    id: "fx-usdchf",
+    symbol: "USDCHF",
+    assetClass: "forex",
+    displayName: "USD/CHF Grind Lower (SAMPLE)",
+    ohlc: FX_USDCHF_OHLC,
+    educationalNotes:
+      "SAMPLE major: slow stair-step lower (CHF bid). Distinct from EURUSD drift up, USDJPY dump-reclaim, GBP range, and EURJPY spike-fade. STYLIZED — not a live FX desk.",
+  },
+  {
+    id: "fx-gbpjpy",
+    symbol: "GBPJPY",
+    assetClass: "forex",
+    displayName: "GBP/JPY Expanding Range (SAMPLE)",
+    ohlc: FX_GBPJPY_OHLC,
+    educationalNotes:
+      "SAMPLE cross: range gets wider both ways, not a tight GBP band and not a one-bar EURJPY spike-fade. STYLIZED — not a live FX desk.",
   },
 ];
 

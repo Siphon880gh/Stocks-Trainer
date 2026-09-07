@@ -2,7 +2,15 @@
 
 Reusable `/loop` prompts that deepen **content** per app section. Runtime and milestone queues stay in the root `AGENTS_LOOP-*.md` files. These loops assume that runtime already exists.
 
-**Preferred:** one graph session that picks the next section each tick — [`LOOP-Graph.md`](./LOOP-Graph.md). Default policy drains Archive then Charts, then echoes the same teaching idea across loops, then drains leftovers.
+**If Forex / Futures / Crypto / Options look thin next to Equities:** section floors are probably already met. Run class catch-up instead of the graph:
+
+```text
+/loop class asymmetry using LOOPS/LOOP-Asymmetry.md
+```
+
+See [`LOOP-Asymmetry.md`](./LOOP-Asymmetry.md). Do not combine it with the graph or a single-section exhaustive loop in the same session.
+
+**Preferred for first-pass exhaustive content:** one graph session that picks the next section each tick — [`LOOP-Graph.md`](./LOOP-Graph.md). Default policy drains Archive then Charts, then echoes the same teaching idea across loops, then drains leftovers.
 
 ```text
 /loop content graph using LOOPS/LOOP-Graph.md
@@ -24,6 +32,7 @@ Swap the file for the section you want:
 
 | Section (nav / route) | Loop file | `/loop` line |
 |-----------------------|-----------|--------------|
+| **Class asymmetry** (Forex/Futures/Crypto/Options vs Equities) | [`LOOP-Asymmetry.md`](./LOOP-Asymmetry.md) | `/loop class asymmetry using LOOPS/LOOP-Asymmetry.md` |
 | **Graph (all sections)** | [`LOOP-Graph.md`](./LOOP-Graph.md) | `/loop content graph using LOOPS/LOOP-Graph.md` |
 | Home `/` | [`LOOP-Home.md`](./LOOP-Home.md) | `/loop exhaustive Home content using LOOPS/LOOP-Home.md` |
 | Learn `/training` | [`LOOP-Learn.md`](./LOOP-Learn.md) | `/loop exhaustive Learn content using LOOPS/LOOP-Learn.md` |

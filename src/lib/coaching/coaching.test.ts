@@ -16,6 +16,8 @@ import {
   type CoachingSession,
 } from "./index.ts";
 import { chaseVsFadeSession } from "./sessions/chase-vs-fade.ts";
+import { coachSessionMatchesClass } from "../marketNavigator.ts";
+import type { AssetClass } from "../samplePacks.ts";
 
 describe("coaching validation", () => {
   it("accepts the chase-vs-fade sample", () => {
@@ -75,6 +77,15 @@ describe("coaching discovery", () => {
     const list = listSessions();
     assert.ok(list.length >= 4);
     assert.ok(list.some((s) => s.slug === "chase-vs-fade"));
+  });
+
+  it("expansion classes each have at least twelve tagged sessions", () => {
+    const list = listSessions();
+    const classes: AssetClass[] = ["future", "forex", "crypto", "option_context"];
+    for (const cls of classes) {
+      const n = list.filter((s) => coachSessionMatchesClass(s.tags, cls)).length;
+      assert.ok(n >= 12, `${cls} has ${n} sessions, need ≥12`);
+    }
   });
 
   it("loads start via loadSession", () => {

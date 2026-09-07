@@ -250,9 +250,21 @@ const QUIZ_GROUP_ASSET_CLASS: Partial<Record<string, AssetClass>> = {
 
 const LITERACY_TERM_ASSET_CLASS: Record<string, AssetClass> = {
   "futures-market": "future",
+  "futures-roll": "future",
+  "futures-underlying": "future",
+  "futures-harvest": "future",
   "forex-spot": "forex",
+  "forex-pip": "forex",
+  "forex-major-cross": "forex",
+  "forex-risk-on": "forex",
   "crypto-browse": "crypto",
+  "crypto-depeg-scare": "crypto",
+  "crypto-weekend": "crypto",
+  "crypto-listing": "crypto",
   "options-context": "option_context",
+  "options-event-vol": "option_context",
+  "options-failed-break": "option_context",
+  "options-hold-event": "option_context",
 };
 
 export function quizGroupAssetClass(groupId: string): AssetClass | null {

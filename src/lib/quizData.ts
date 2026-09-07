@@ -3268,6 +3268,7 @@ export const FUTURES_LITERACY_QUESTIONS: QuizQuestion[] = [
       { id: "C", label: "Different underlyings have different tape shapes", description: "Process." },
     ],
     explanation: "Grind vs dump-reclaim vs range is the lesson — not a live roll calendar.",
+    glossaryTermId: "futures-underlying",
     assetClass: "future",
   },
   {
@@ -3280,7 +3281,7 @@ export const FUTURES_LITERACY_QUESTIONS: QuizQuestion[] = [
       { id: "C", label: "Greeks replace the chart", description: "No Greeks engine." },
     ],
     explanation: "SAMPLE futures charts still teach candles. Real desks also manage expiry. This app does not roll live contracts.",
-    glossaryTermId: "futures-market",
+    glossaryTermId: "futures-roll",
     assetClass: "future",
   },
   {
@@ -3306,6 +3307,90 @@ export const FUTURES_LITERACY_QUESTIONS: QuizQuestion[] = [
     ],
     explanation: "Equities first. Futures SAMPLE is an expansion class.",
     glossaryTermId: "equities-traditional-retail",
+    assetClass: "future",
+  },
+  {
+    id: "FU-07",
+    prompt: "On a SAMPLE futures brief, contango means…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "An automatic sell because the front month must fall", description: "Structure is not a trade button." },
+      { id: "B", label: "A live roll calculator that prints the exact P&L", description: "This app has no calculator." },
+      { id: "C", label: "The front month is richer than the next — name it, then ask if your horizon cares", description: "Process." },
+    ],
+    explanation:
+      "Contango is a structure to name. Backwardation is the opposite (front cheaper than next). SAMPLE teaching — no live roll desk.",
+    glossaryTermId: "futures-roll",
+    assetClass: "future",
+  },
+  {
+    id: "FU-08",
+    prompt: "A SAMPLE corn future jumps on a drought headline. What do you map first?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "An earnings beat on a seed company — treat it like a 10-Q surprise", description: "Wrong product." },
+      { id: "B", label: "Weather is a supply story on this grain contract — then ask if the first jump already priced the scare", description: "Process." },
+      { id: "C", label: "Contango just printed a live sell — dump the front month automatically", description: "Structure is not this brief." },
+    ],
+    explanation:
+      "Ag weather names which side this contract is on (crop supply), not an income statement and not a roll-structure button. The first jump can already be the whole move. SAMPLE teaching — not a live weather desk.",
+    glossaryTermId: "futures-underlying",
+    assetClass: "future",
+  },
+  {
+    id: "FU-09",
+    prompt: "On a SAMPLE futures brief, backwardation means…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "An automatic buy because the cheap front month must rally", description: "Structure is not a trade button." },
+      { id: "B", label: "Balance-sheet stress on the commodity producer’s 10-Q", description: "Statements, not this class." },
+      { id: "C", label: "The front month is cheaper than the next — name it, then ask if your horizon cares", description: "Process." },
+    ],
+    explanation:
+      "Backwardation is the opposite of contango (front cheaper than next). Name the structure; do not treat it as a buy button or a filing. SAMPLE teaching — no live roll desk.",
+    glossaryTermId: "futures-roll",
+    assetClass: "future",
+  },
+  {
+    id: "FU-10",
+    prompt: "A later SAMPLE card shows harvest arriving larger than the drought scare implied. What now?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Keep buying the old scare because weather tweets are still circulating", description: "Stale headline." },
+      { id: "B", label: "A larger harvest is a supply fact on this grain contract — re-decide instead of riding the scare", description: "Process." },
+      { id: "C", label: "Treat it as backwardation flipping to an automatic buy, or as a 10-Q beat", description: "Wrong brief." },
+    ],
+    explanation:
+      "Weather stories get updated by the crop. Re-decide on the new supply fact. This is not a roll-structure button and not an income statement. SAMPLE teaching — not a live ag desk.",
+    glossaryTermId: "futures-underlying",
+    assetClass: "future",
+  },
+  {
+    id: "FU-11",
+    prompt: "A SAMPLE grain future already jumped on a drought scare. The next card is only a weather tweet — no harvest size. What now?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "A tweet with no crop size is not a new harvest fact — HOLD or ask what is new instead of buying the scare again", description: "Process." },
+      { id: "B", label: "Keep buying because drought tweets always mean a smaller crop", description: "Stale headline." },
+      { id: "C", label: "Treat it as contango flipping to an automatic sell, or as a 10-Q miss", description: "Wrong brief." },
+    ],
+    explanation:
+      "Harvest literacy needs a supply size, not another weather tweet. HOLD is allowed until a crop fact shows up. This is not the first drought jump, not a larger-harvest reprint, and not a roll button. SAMPLE teaching — not a live weather desk.",
+    glossaryTermId: "futures-harvest",
+    assetClass: "future",
+  },
+  {
+    id: "FU-12",
+    prompt: "A SAMPLE grain future already jumped on a drought scare. An official crop-progress print then comes in in line with that scare. What now?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "An in-line crop print is often already in the first jump — HOLD or ask what is new instead of buying the scare again", description: "Process." },
+      { id: "B", label: "Buy again because any official print proves a smaller crop than the scare", description: "In-line is not a new shortage." },
+      { id: "C", label: "Treat it as backwardation flipping to an automatic buy, or as a 10-Q beat", description: "Wrong brief." },
+    ],
+    explanation:
+      "An official print that matches the scare is often priced in. HOLD is allowed. This is not the first drought jump, not a larger-harvest surprise, not a tweet with no size, and not a roll button. SAMPLE teaching — not a live weather desk.",
+    glossaryTermId: "futures-harvest",
     assetClass: "future",
   },
 ];
@@ -3373,6 +3458,7 @@ export const FOREX_LITERACY_QUESTIONS: QuizQuestion[] = [
       { id: "C", label: "Greeks", description: "No chain." },
     ],
     explanation: "EURUSD drift ≠ USDJPY dump ≠ GBP range. Distinct teaching tapes.",
+    glossaryTermId: "forex-major-cross",
     assetClass: "forex",
   },
   {
@@ -3385,6 +3471,91 @@ export const FOREX_LITERACY_QUESTIONS: QuizQuestion[] = [
       { id: "C", label: "A LIVE short on the dollar", description: "No routing." },
     ],
     explanation: "Waiting is a decision on FX SAMPLE cases too.",
+    glossaryTermId: "forex-pip",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-07",
+    prompt: "EUR/USD is quoted as dollars per euro. If the SAMPLE quote rises, which currency strengthened?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "The dollar — the quote currency always wins when the number goes up", description: "Opposite of this pair." },
+      { id: "B", label: "The euro (base): it takes more dollars to buy one euro", description: "Pair convention." },
+      { id: "C", label: "Neither — FX quotes are company shares", description: "Wrong product." },
+    ],
+    explanation:
+      "In EUR/USD the euro is the base. A higher quote means a stronger euro versus the dollar. SAMPLE teaching — not a live FX desk.",
+    glossaryTermId: "forex-spot",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-08",
+    prompt: "SAMPLE U.S. payrolls print hotter than expected. EUR/USD drops on the first tick. What do you map first?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Hot payrolls can keep U.S. rates higher — often a stronger dollar versus EUR — then ask if that was already priced in", description: "Map the print to this pair." },
+      { id: "B", label: "The company’s net margin on the euro", description: "Statements, not FX." },
+      { id: "C", label: "A LIVE BOJ fill you must chase in this app", description: "No live desk; wrong print." },
+    ],
+    explanation:
+      "Name which side of EUR/USD the payrolls story hits, then decide. A first tick can already be the whole move. SAMPLE teaching — not a live print.",
+    glossaryTermId: "priced-in",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-09",
+    prompt: "A SAMPLE FX tape prints noisy ticks and the brief names a wide spread. What is the process cue?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Treat the spread as the company’s operating margin on the pair", description: "Statements, not FX." },
+      { id: "B", label: "Chase the first tick — hot payrolls always dump EUR/USD so you must fill", description: "Wrong brief; not a must-trade." },
+      { id: "C", label: "HOLD — a pip is a tiny step and a wide spread is a cost, not a must-trade", description: "Process." },
+    ],
+    explanation:
+      "Pip size plus spread is a cost of trading the pair. Noisy ticks with a wide spread are a wait, not a 10-Q and not a payrolls chase. SAMPLE teaching — this app does not quote live bank spreads.",
+    glossaryTermId: "forex-pip",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-10",
+    prompt: "SAMPLE risk-on mood hits. AUD/USD jumps on the first tick. What do you map first?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Risk-on often bids commodity FX like AUD versus USD — then ask if the first jump already priced the mood", description: "Map mood to this pair." },
+      { id: "B", label: "Treat it as an earnings beat on an Australian miner’s 10-Q", description: "Statements, not FX." },
+      { id: "C", label: "HOLD because a wide pip spread always applies on every tick", description: "Spread is not this brief." },
+    ],
+    explanation:
+      "Name which side of AUD/USD the risk-on story hits, then decide. A first tick can already be the whole move. This is not a 10-Q and not a pip-cost drill. SAMPLE teaching — not a live FX desk.",
+    glossaryTermId: "forex-major-cross",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-11",
+    prompt: "SAMPLE risk-off mood hits. USD/JPY dumps on the first tick. What do you map first?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Risk-off often bids funding FX like JPY versus USD — then ask if the first dump already priced the mood", description: "Map mood to this pair." },
+      { id: "B", label: "Treat it as a 10-Q miss on a Japanese exporter", description: "Statements, not FX." },
+      { id: "C", label: "Chase AUD/USD higher because risk-on always bids commodity FX on every tick", description: "Wrong mood; not this brief." },
+    ],
+    explanation:
+      "Name which side of USD/JPY the risk-off story hits (JPY as funding FX), then decide. A first tick can already be the whole move. This is not a 10-Q and not the risk-on AUD bid. SAMPLE teaching — not a live FX desk.",
+    glossaryTermId: "forex-risk-on",
+    assetClass: "forex",
+  },
+  {
+    id: "FX-12",
+    prompt: "SAMPLE risk-on mood hits. EUR/JPY jumps on the first tick. What do you map first?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Risk-on often bids a euro-yen cross (risk vs funding JPY) — then ask if the first jump already priced the mood", description: "Map mood to this cross." },
+      { id: "B", label: "Treat it as an earnings beat on a European bank's 10-Q", description: "Statements, not FX." },
+      { id: "C", label: "Chase USD/JPY lower because risk-off always bids JPY on every tick", description: "Wrong mood; not this brief." },
+    ],
+    explanation:
+      "Name which side of EUR/JPY the risk-on story hits (euro vs funding yen), then decide. A first tick can already be the whole move. This is not a 10-Q, not the AUD/USD commodity bid, and not the USD/JPY risk-off dump. SAMPLE teaching — not a live FX desk.",
+    glossaryTermId: "forex-risk-on",
     assetClass: "forex",
   },
 ];
@@ -3438,6 +3609,7 @@ export const CRYPTO_LITERACY_QUESTIONS: QuizQuestion[] = [
       { id: "C", label: "It replaces SMA", description: "Unrelated." },
     ],
     explanation: "Not every crypto chart is a moon tape. SAMPLE contrast.",
+    glossaryTermId: "crypto-depeg-scare",
     assetClass: "crypto",
   },
   {
@@ -3464,6 +3636,90 @@ export const CRYPTO_LITERACY_QUESTIONS: QuizQuestion[] = [
     ],
     explanation: "Equities first. Crypto SAMPLE is browse/drill after candle fluency.",
     glossaryTermId: "equities-traditional-retail",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-07",
+    prompt: "A SAMPLE crypto tape can print over the weekend. That means…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "You must trade every weekend gap because the market never sleeps", description: "Hours are not a must-trade." },
+      { id: "B", label: "A gap is still chase-versus-wait — HOLD is valid; this is not a live exchange", description: "Process." },
+      { id: "C", label: "Weekend prints are Equities earnings filings", description: "Wrong class." },
+    ],
+    explanation:
+      "Open hours do not force a trade. A thin weekend book can gap on chatter. SAMPLE teaching — not a 24/7 desk.",
+    glossaryTermId: "crypto-weekend",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-08",
+    prompt: "Chat says a SAMPLE dollar-pegged token slipped. BTC dumps with it. What do you map first?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Treat chat as rumor until a named issuer or official note confirms — then re-decide; this app is not a CEX", description: "Source first." },
+      { id: "B", label: "Treat it as a cash-flow red flag on the issuer’s 10-Q", description: "Statements, not crypto." },
+      { id: "C", label: "You must buy the BTC dump because crypto prints on weekends", description: "Hours are not this brief." },
+    ],
+    explanation:
+      "A depeg scare is a source drill, not an income statement and not a weekend-hours button. Unconfirmed chat is not a peg break. SAMPLE teaching — not a live exchange or redemption rail.",
+    glossaryTermId: "crypto-depeg-scare",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-09",
+    prompt: "A SAMPLE bitcoin tape coils. An exchange-hack headline hits. The brief says the protocol is unchanged. What do you map first?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Treat it as a dollar-peg break on a stablecoin until chat volume proves it", description: "Wrong brief." },
+      { id: "B", label: "A platform scare on this coin — not a protocol change — then ask if the first dump already priced the chatter", description: "Process." },
+      { id: "C", label: "A guidance cut on the exchange’s 10-Q", description: "Statements, not crypto." },
+    ],
+    explanation:
+      "Name which side the headline hits: venue risk, not the chain, not an income statement, and not a depeg drill. SAMPLE teaching — not a live CEX.",
+    glossaryTermId: "crypto-browse",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-10",
+    prompt: "This SAMPLE alt already ran on listing chat. Minutes later a scheduled exchange note says there is no listing. What do you map first?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Separate rumor volume from the official note — chat is not a listing — then ask if the run already priced it", description: "Process." },
+      { id: "B", label: "Treat it as an exchange-hack platform scare on bitcoin", description: "Wrong brief." },
+      { id: "C", label: "Treat it as an earnings beat on the token issuer’s 10-Q", description: "Statements, not crypto." },
+    ],
+    explanation:
+      "Listing chat is rumor until the exchange note. The run may already have the chatter in. This is not a hack headline and not an income statement. SAMPLE teaching — not a live listing desk.",
+    glossaryTermId: "chase-vs-fade",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-11",
+    prompt: "SAMPLE listing chat is running on an alt. The brief has no scheduled exchange note. What now?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Chase the volume — listing chat always lists, so you must fill", description: "Chat is not a listing." },
+      { id: "B", label: "Treat it as a depeg scare or as a 10-Q beat on the issuer", description: "Wrong brief." },
+      { id: "C", label: "Chat is not a listing — HOLD until an official note; volume is not confirmation", description: "Process." },
+    ],
+    explanation:
+      "Listing literacy needs an official note, not chat volume. HOLD is allowed. This is not the no-listing reprint, not a depeg drill, and not weekend-hours. SAMPLE teaching — not a live listing desk.",
+    glossaryTermId: "crypto-listing",
+    assetClass: "crypto",
+  },
+  {
+    id: "CR-12",
+    prompt: "This SAMPLE alt already ran on listing chat. A scheduled exchange note then confirms the listing in line with that chat. What now?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "An in-line listing note is often already in the first run — HOLD or ask what is new instead of chasing the confirmation", description: "Process." },
+      { id: "B", label: "Chase again because any official listing note proves the first run was too small", description: "In-line is not a new listing surprise." },
+      { id: "C", label: "Treat it as a depeg scare, a weekend-hours must-fill, or as a 10-Q beat", description: "Wrong brief." },
+    ],
+    explanation:
+      "An official note that matches the listing chat is often priced in. HOLD is allowed. This is not the no-listing reprint, not chat with no note, not a hack headline, and not a depeg drill. SAMPLE teaching — not a live listing desk.",
+    glossaryTermId: "crypto-listing",
     assetClass: "crypto",
   },
 ];
@@ -3505,6 +3761,7 @@ export const OPTIONS_LITERACY_QUESTIONS: QuizQuestion[] = [
       { id: "C", label: "Wide range then settle can follow a shock", description: "Shape." },
     ],
     explanation: "You are reading the underlying, not quoting options. SAMPLE.",
+    glossaryTermId: "options-event-vol",
     assetClass: "option_context",
   },
   {
@@ -3517,6 +3774,7 @@ export const OPTIONS_LITERACY_QUESTIONS: QuizQuestion[] = [
       { id: "C", label: "Assume LIVE gamma is hedging", description: "No Greeks engine." },
     ],
     explanation: "Poke then fail is a tape story. Decide-and-reveal still uses BUY/SELL/HOLD on SAMPLE.",
+    glossaryTermId: "options-failed-break",
     assetClass: "option_context",
   },
   {
@@ -3542,6 +3800,90 @@ export const OPTIONS_LITERACY_QUESTIONS: QuizQuestion[] = [
     ],
     explanation: "Options context ≠ options product. Equities path stays stocks-first.",
     glossaryTermId: "options-context",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-07",
+    prompt: "After a SAMPLE known event prints, the right next move is…",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Keep an invented straddle running until an expiry you made up", description: "No chain, no expiry product." },
+      { id: "B", label: "Re-decide BUY/SELL/HOLD on the stock tape — the coil is over", description: "Process." },
+      { id: "C", label: "Compute delta by hand so you can still trade options", description: "No Greeks engine." },
+    ],
+    explanation:
+      "The event already happened. Grade the underlying again. Inventing a ticket to expire skips the product rule. SAMPLE only.",
+    glossaryTermId: "options-event-vol",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-08",
+    prompt: "You HOLD a SAMPLE underlying into a known event. After the print the stock gaps and chops. What clock belongs here?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "A cash-flow red-flag calendar from the last 10-Q", description: "Statements, not this class." },
+      { id: "B", label: "A stock confirmation window (hours to a session) — not an options expiry you invented", description: "Process." },
+      { id: "C", label: "Vega decay until Friday because this app quotes a live chain", description: "No chain." },
+    ],
+    explanation:
+      "Event context still needs a named window so you know when to re-decide on the stock. Inventing expiry or reading a 10-Q calendar skips the product. SAMPLE teaching — no Greeks, no chain.",
+    glossaryTermId: "options-event-vol",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-09",
+    prompt: "Chat says a SAMPLE known event will be a blowout. The event is still tomorrow. The stock already ran. What do you map first?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Separate rumor versus the scheduled print, then ask if the run already priced the chat — still no calls", description: "Process." },
+      { id: "B", label: "Treat chat as a guidance cut on the last 10-Q", description: "Statements, not this class." },
+      { id: "C", label: "Start an invented-expiry clock because you HOLD into events", description: "Clock is not this brief." },
+    ],
+    explanation:
+      "Chat is not the event result. Stay on the stock: rumor vs the scheduled card, and whether the run already has the chatter in. No chain, no Greeks. SAMPLE teaching.",
+    glossaryTermId: "options-event-vol",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-10",
+    prompt: "A SAMPLE known event is tomorrow. You have no edge on the stock. Thin chatter says you must be in before events. What is the process stance?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Buy because listing-style chat already proved the print", description: "Wrong brief." },
+      { id: "B", label: "Treat it as a 10-Q you must own overnight", description: "Statements, not this class." },
+      { id: "C", label: "HOLD is allowed — options context does not force a fill, and there are still no calls", description: "Process." },
+    ],
+    explanation:
+      "No edge means wait. Event context is not a must-trade, and this app still has no chain. SAMPLE teaching — no Greeks.",
+    glossaryTermId: "options-context",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-11",
+    prompt: "You already HOLD a SAMPLE underlying into a known event. Thin chatter says leftover premium means add. What now?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Size you already have is HOLD — leftover premium is not a fill, and there are still no calls", description: "Process." },
+      { id: "B", label: "Add because implied vol is rich and this app quotes a live chain", description: "No chain." },
+      { id: "C", label: "Treat leftover premium as a 10-Q you must own overnight", description: "Statements, not this class." },
+    ],
+    explanation:
+      "HOLD into an event is not a must-add. Leftover-premium chatter is not a stock edge and not a chain. This is not the no-edge entry drill. SAMPLE teaching — no Greeks.",
+    glossaryTermId: "options-hold-event",
+    assetClass: "option_context",
+  },
+  {
+    id: "OP-12",
+    prompt: "This SAMPLE underlying already ran on event chat. The scheduled event then prints in line with that chat. What now?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "An in-line print is often already in the first run — HOLD or ask what is new on the stock; still no calls", description: "Process." },
+      { id: "B", label: "Chase again because any official print proves the first run was too small", description: "In-line is not a new surprise." },
+      { id: "C", label: "Add leftover premium, invent a chain, or treat it as a 10-Q you must own overnight", description: "Wrong brief." },
+    ],
+    explanation:
+      "An official print that matches the event chat is often priced in. HOLD is allowed. This is not the leftover-premium add, not the no-edge entry, not chat with the event still tomorrow, and still no chain. SAMPLE teaching — no Greeks.",
+    glossaryTermId: "options-event-vol",
     assetClass: "option_context",
   },
 ];

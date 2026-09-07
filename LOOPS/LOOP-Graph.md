@@ -24,7 +24,7 @@ Override policy in the same line if you do not want the default:
 **Before starting**
 1. Leave working `npm run dev` alone; verify with `npm run lint` + `npm run build` (and `npm run test:coaching` when the tick is Coach).
 2. Stop yourself anytime; hard-stop on the error budget or Done(graph).
-3. Do not also start a single-section `/loop` in the same session.
+3. Do not also start a single-section `/loop` or [`LOOP-Asymmetry.md`](./LOOP-Asymmetry.md) in the same session. Graph is equities-first; class catch-up is a separate run.
 
 ---
 
