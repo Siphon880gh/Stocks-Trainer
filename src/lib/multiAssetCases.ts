@@ -1181,6 +1181,16 @@ const BIO_PRE: OHLC[] = [
   bar("T0", 86.2, 89.4, 85.8, 88.8),
 ];
 
+/** Falling wedge (lower highs, higher lows) — not CASINO rising wedge, HOTEL flag, or BIO three-push. */
+const GROC_PRE: OHLC[] = [
+  bar("T-5", 42.4, 42.8, 42.0, 42.7),
+  bar("T-4", 42.7, 42.75, 41.6, 41.8),
+  bar("T-3", 41.8, 42.35, 41.7, 42.22),
+  bar("T-2", 42.22, 42.28, 41.85, 41.95),
+  bar("T-1", 41.95, 42.18, 41.9, 42.1),
+  bar("T0", 42.1, 42.16, 42.0, 42.06),
+];
+
 export const FUTURES_CASES: CaseStudy[] = [
   {
     id: "case-fut-trend-cont",
@@ -5254,6 +5264,34 @@ export const OPTIONS_CONTEXT_CASES: CaseStudy[] = [
     allowShort: false,
     packId: "options-context",
     difficulty: "intermediate",
+    assetClass: "option_context",
+  },
+  {
+    id: "case-optctx-groc-falling-wedge",
+    title: "Grocery underlying falling wedge after a trucking scare already in the tape",
+    contextType: "news",
+    thinkingMode: "geopolitics_supply",
+    brief:
+      "This SAMPLE grocer coiled into a falling wedge after a trucking-strike scare. A scheduled union note then says the strike is shorter than the scare. Thin leftover-premium chatter says you must be in. Name which side the grocer is on, then ask whether the scare is already in the wedge. This app grades the stock only — no chain, no Greeks.",
+    newsHeadline:
+      "Union note: strike shorter than the scare. Falling wedge still coiled. Leftover-premium chatter: must be in. Options context only.",
+    preOhlc: GROC_PRE,
+    postOhlc: withAftermath(GROC_PRE, [
+      bar("+1", 42.06, 42.52, 42.02, 42.44),
+      bar("+2", 42.44, 42.78, 42.36, 42.68),
+      bar("+3", 42.68, 42.96, 42.58, 42.86),
+    ]),
+    correctActions: ["buy", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A falling wedge after a trucking scare that a union note already bounded is often a wait-for-break, not a new shortage. The grocer is on the freight-scare side; a shorter strike is less tight. Leftover premium is not a stock fill. HOLD if you will not buy a SAMPLE grocer. This is not leftover-premium math, not the casino rising wedge, not the biotech three-push, and still no chain.",
+      whyMarketMoved: "The wedge broke higher once the shorter-strike note bounded the scare.",
+      evidence: "Grocery falling-wedge tape plus a shorter-strike union note. No Greeks.",
+    },
+    allowShort: false,
+    packId: "options-context",
+    difficulty: "beginner",
     assetClass: "option_context",
   },
 ];
