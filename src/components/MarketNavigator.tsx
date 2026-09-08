@@ -64,16 +64,19 @@ export default function MarketNavigator({
         compact ? "p-3 space-y-2" : "p-4 space-y-3"
       }`}
     >
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
         <h2 className="text-sm font-semibold">
           Market navigator
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1.5">
           <p className="text-[12px] text-muted">
             Charts · literacy · decide · step (SAMPLE)
           </p>
           {selected ? (
-            <YouTubeSearchLink title={navigatorYoutubeTutorialTitle(selected)} />
+            <YouTubeSearchLink
+              title={navigatorYoutubeTutorialTitle(selected)}
+              label="Videos"
+            />
           ) : null}
         </div>
       </div>

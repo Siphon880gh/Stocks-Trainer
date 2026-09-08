@@ -904,7 +904,7 @@ export default function MarketChart({
     <div className={cn(chartPaneClass, "space-y-0")} style={{ fontFamily: CHART.font }}>
       {showScaleControls ? (
         <div
-          className="flex flex-wrap items-center gap-2 px-2 py-1.5 text-[11px] border-b border-[#e0e3eb] bg-[#f8f9fd]"
+          className="flex flex-wrap items-center gap-x-2 gap-y-2 px-2 py-2 text-[11px] border-b border-[#e0e3eb] bg-[#f8f9fd]"
           style={{ color: CHART.textMuted }}
         >
           {frequencies && frequencies.length > 0 ? (
@@ -976,12 +976,12 @@ export default function MarketChart({
             Fit
           </button>
           <span>{zoom.toFixed(2)}×</span>
-          <div className="ml-auto flex items-center gap-2">
+          <div className="ml-auto flex shrink-0 items-center">
             <div ref={explainHelpRef} className="relative">
-            <div className="inline-flex items-stretch overflow-hidden rounded-md border border-[#2962ff]">
+            <div className="inline-flex h-7 items-stretch overflow-hidden rounded-md border border-[#2962ff]">
               <button
                 type="button"
-                className={`px-3 py-1 text-[12px] text-[#2962ff] ${
+                className={`px-3 text-[12px] text-[#2962ff] ${
                   explanationsOn
                     ? "bg-[#e8f0ff] font-semibold hover:bg-[#d6e4ff]"
                     : "bg-white font-medium hover:bg-[#e8f0ff]"
@@ -1005,7 +1005,7 @@ export default function MarketChart({
                 aria-label="What are chart explanations?"
                 aria-expanded={explainHelpOn}
                 title="What are chart explanations?"
-                className={`border-l border-[#2962ff] px-1.5 text-[#2962ff] ${
+                className={`min-w-7 border-l border-[#2962ff] px-1.5 text-[#2962ff] ${
                   explanationsOn
                     ? "bg-[#e8f0ff] hover:bg-[#d6e4ff]"
                     : "bg-white hover:bg-[#e8f0ff]"
@@ -1034,12 +1034,20 @@ export default function MarketChart({
             ) : null}
             </div>
             {statusLabel ? (
-              <span className="flex items-center gap-1 text-[10px] px-2 py-0.5 rounded border border-[#d1d4dc] bg-white text-[#131722] normal-case">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#089981]" />
-                {statusLabel}
-              </span>
+              <>
+                <span aria-hidden className="mx-3 h-4 w-px bg-[#d1d4dc]" />
+                <span className="inline-flex h-7 items-center gap-1.5 px-2.5 text-[11px] rounded-md border border-[#d1d4dc] bg-white text-[#131722] normal-case">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#089981]" />
+                  {statusLabel}
+                </span>
+              </>
             ) : null}
-            {youtubeTitle ? <YouTubeSearchLink title={youtubeTitle} /> : null}
+            {youtubeTitle ? (
+              <>
+                <span aria-hidden className="mx-3 h-4 w-px bg-[#d1d4dc]" />
+                <YouTubeSearchLink title={youtubeTitle} label="Videos" />
+              </>
+            ) : null}
           </div>
         </div>
       ) : null}
