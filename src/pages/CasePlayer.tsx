@@ -22,6 +22,7 @@ import {
   coachTipForThinkingMode,
   thinkingModeLabel,
 } from "../lib/thinkingModeTips";
+import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
 const ACTIONS: { id: CaseAction; label: string }[] = [
   { id: "buy", label: "BUY" },
@@ -121,7 +122,10 @@ export default function CasePlayer() {
 
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 space-y-4">
         <div className="panel p-4 space-y-2">
-          <h1 className="text-xl font-semibold">{study.title}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-xl font-semibold">{study.title}</h1>
+            <YouTubeSearchLink title={study.title} />
+          </div>
           <p className="text-sm">{study.brief}</p>
           <p className="text-[13px] text-muted leading-relaxed">
             Tip: {coachTipForThinkingMode(study.thinkingMode)}

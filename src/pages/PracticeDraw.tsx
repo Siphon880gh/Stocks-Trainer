@@ -17,6 +17,7 @@ import {
 import { CHART, chartPaneClass } from "../lib/chartTheme";
 import { cn } from "../lib/utils";
 import BrowsePopover from "../components/BrowsePopover";
+import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
 function hexAlpha(hex: string, alpha: number): string {
   const n = Number.parseInt(hex.slice(1), 16);
@@ -241,7 +242,10 @@ export default function PracticeDraw() {
     <div className="flex-1 flex flex-col">
       <main className="flex-1 px-4 py-6 max-w-4xl mx-auto w-full space-y-4">
         <div>
-          <h1 className="text-lg font-semibold tracking-tight">Practice draw</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-lg font-semibold tracking-tight">Practice draw</h1>
+            <YouTubeSearchLink title="Practice draw" />
+          </div>
           <p className="text-[13px] text-muted">Sketch candlestick patterns on a light tape</p>
         </div>
         <section className="panel p-3">

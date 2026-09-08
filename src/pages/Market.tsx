@@ -379,6 +379,7 @@ export default function Market() {
               setHelpHighlightId((cur) => (cur === id ? null : cur));
             }}
             statusLabel={`${dataProvider.label} feed`}
+            youtubeTitle={market.name}
             frequencies={frequencies}
             frequencyMinutes={resolvedFreq}
             nativeMinutes={nativeMinutes}

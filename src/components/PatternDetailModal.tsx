@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { PatternDef } from "../lib/patterns";
+import YouTubeSearchLink from "./YouTubeSearchLink";
 
 interface PatternDetailModalProps {
   pattern: PatternDef;
@@ -34,9 +35,12 @@ export default function PatternDetailModal({ pattern, onClose }: PatternDetailMo
       />
       <div className="relative w-full max-w-lg bg-surface border border-line rounded-xl shadow-lg overflow-hidden">
         <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-surface">
-          <h2 id="pattern-modal-title" className="text-lg font-bold text-primary">
-            {pattern.name}
-          </h2>
+          <div className="flex items-center gap-2 min-w-0">
+            <h2 id="pattern-modal-title" className="text-lg font-bold text-primary truncate">
+              {pattern.name}
+            </h2>
+            <YouTubeSearchLink title={pattern.name} />
+          </div>
           <button
             onClick={onClose}
             className="p-2 rounded hover:bg-primary/10 text-primary transition-colors"

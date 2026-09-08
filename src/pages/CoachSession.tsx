@@ -23,6 +23,7 @@ import {
   setChartGateTemporaryBypass,
 } from "../lib/beginnerPath";
 import { assetClassFromCoachTags } from "../lib/marketNavigator";
+import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
 const OUTCOME_UI: Record<
   CoachingOutcome,
@@ -196,9 +197,12 @@ export default function CoachSession() {
           <p className="text-[12px] text-muted truncate">
             {session.meta.topic}
           </p>
-          <h1 className="text-sm md:text-base font-semibold truncate">
-            {session.meta.title}
-          </h1>
+          <div className="flex items-center justify-end gap-2 min-w-0">
+            <h1 className="text-sm md:text-base font-semibold truncate">
+              {session.meta.title}
+            </h1>
+            <YouTubeSearchLink title={session.meta.title} />
+          </div>
         </div>
       </div>
 

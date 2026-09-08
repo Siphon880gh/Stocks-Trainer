@@ -18,6 +18,7 @@ import {
 import { getMilestoneStatus, loadProgress } from "../lib/progressStore";
 import { MISC_PRACTICE_ITEMS, isMiscPracticeDone } from "../lib/miscPractices";
 import { hasGradedPracticeDraw } from "../lib/practiceDraw";
+import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
 function practiceDone(id: string): boolean {
   if (id === "draw") return hasGradedPracticeDraw();
@@ -155,23 +156,25 @@ export default function Training() {
                   g.id === "news-literacy" ||
                   g.id === "financial-drills";
                 return (
-                  <button
-                    key={g.id}
-                    onClick={() => setSelectedGroup(g.id)}
-                    className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
-                      selectedGroup === g.id
-                        ? "bg-primary text-white"
-                        : isFeatured
-                          ? "border border-line bg-primary/5 text-ink hover:bg-primary/10"
-                          : "border border-line text-ink hover:bg-canvas"
-                    }`}
-                  >
-                    {g.icon && <span className="material-symbols-outlined text-lg">{g.icon}</span>}
-                    {g.name}
-                    <span className="text-[10px] font-normal opacity-80">
-                      ({getQuestionsForGroup(g.id).length})
-                    </span>
-                  </button>
+                  <span key={g.id} className="inline-flex items-center gap-1">
+                    <button
+                      onClick={() => setSelectedGroup(g.id)}
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                        selectedGroup === g.id
+                          ? "bg-primary text-white"
+                          : isFeatured
+                            ? "border border-line bg-primary/5 text-ink hover:bg-primary/10"
+                            : "border border-line text-ink hover:bg-canvas"
+                      }`}
+                    >
+                      {g.icon && <span className="material-symbols-outlined text-lg">{g.icon}</span>}
+                      {g.name}
+                      <span className="text-[10px] font-normal opacity-80">
+                        ({getQuestionsForGroup(g.id).length})
+                      </span>
+                    </button>
+                    <YouTubeSearchLink title={g.name} />
+                  </span>
                 );
               })}
             </div>
@@ -270,10 +273,13 @@ export default function Training() {
           <p className="font-semibold">Misc Practices</p>
           <div className="flex flex-wrap gap-3">
             {MISC_PRACTICE_ITEMS.map((item) => (
-              <Link key={item.id} to={item.to} className="text-primary underline">
-                {item.title}
-                {practiceDone(item.id) ? " · done" : ""}
-              </Link>
+              <span key={item.id} className="inline-flex items-center gap-1">
+                <Link to={item.to} className="text-primary underline">
+                  {item.title}
+                  {practiceDone(item.id) ? " · done" : ""}
+                </Link>
+                <YouTubeSearchLink title={item.title} />
+              </span>
             ))}
           </div>
         </div>

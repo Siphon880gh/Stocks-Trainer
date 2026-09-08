@@ -29,6 +29,7 @@ import {
 } from "../lib/patternScan";
 import { CHART, chartPaneClass } from "../lib/chartTheme";
 import { cn } from "../lib/utils";
+import YouTubeSearchLink from "./YouTubeSearchLink";
 
 export type ChartHighlightMark = {
   id: string;
@@ -54,6 +55,8 @@ interface MarketChartProps {
   showScaleControls?: boolean;
   /** Optional feed/status chip in the scale toolbar (Market page). */
   statusLabel?: string;
+  /** Chart-pack YouTube search, shown next to explanations + feed status. */
+  youtubeTitle?: string;
   frequencies?: Array<{ minutes: number; label: string; enabled: boolean }>;
   frequencyMinutes?: number | null;
   nativeMinutes?: number | null;
@@ -490,6 +493,7 @@ export default function MarketChart({
   onClearHighlight,
   showScaleControls = true,
   statusLabel,
+  youtubeTitle,
   frequencies,
   frequencyMinutes = null,
   nativeMinutes = null,
@@ -1035,6 +1039,7 @@ export default function MarketChart({
                 {statusLabel}
               </span>
             ) : null}
+            {youtubeTitle ? <YouTubeSearchLink title={youtubeTitle} /> : null}
           </div>
         </div>
       ) : null}

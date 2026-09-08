@@ -21,6 +21,7 @@ import {
 } from "../lib/marketNavigator";
 import { DECISION_MAKER_PATH_ID, getPathId } from "../lib/progressStore";
 import { thinkingModeLabel } from "../lib/thinkingModeTips";
+import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
 const VALID_PACKS = new Set(CASE_PACKS.map((p) => p.id));
 
@@ -212,19 +213,20 @@ export default function Cases() {
                 {pack.map((c) => (
                   <li key={c.id}>
                     {unlocked ? (
-                      <Link
-                        to={`/cases/${c.id}`}
-                        className="block border border-line hover:border-line rounded-lg px-4 py-3 font-mono text-sm"
-                      >
-                        <span className="text-primary">{c.title}</span>
-                        <span className="text-slate-500 text-xs ml-2">
-                          {thinkingModeLabel(c.thinkingMode)} ·{" "}
-                          {c.difficulty === "beginner" ? "Beginner" : "Intermediate"}
-                        </span>
-                      </Link>
+                      <div className="flex items-center gap-2 border border-line hover:border-line rounded-lg px-4 py-3 font-mono text-sm">
+                        <Link to={`/cases/${c.id}`} className="min-w-0 flex-1">
+                          <span className="text-primary">{c.title}</span>
+                          <span className="text-slate-500 text-xs ml-2">
+                            {thinkingModeLabel(c.thinkingMode)} ·{" "}
+                            {c.difficulty === "beginner" ? "Beginner" : "Intermediate"}
+                          </span>
+                        </Link>
+                        <YouTubeSearchLink title={c.title} />
+                      </div>
                     ) : (
-                      <div className="border border-white/5 rounded-lg px-4 py-3 font-mono text-sm text-slate-600">
-                        {c.title}
+                      <div className="flex items-center gap-2 border border-white/5 rounded-lg px-4 py-3 font-mono text-sm text-slate-600">
+                        <span className="min-w-0 flex-1">{c.title}</span>
+                        <YouTubeSearchLink title={c.title} />
                       </div>
                     )}
                   </li>

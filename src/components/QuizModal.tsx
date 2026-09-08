@@ -4,10 +4,12 @@ import { cn } from "../lib/utils";
 import {
   getQuestionsForGroup,
   POINTS_PER_CORRECT,
+  QUIZ_GROUPS,
   STREAK_BONUS,
   type QuizGroupId,
   type QuizOption,
 } from "../lib/quizData";
+import YouTubeSearchLink from "./YouTubeSearchLink";
 import { PATTERN_OHLC, SAMPLE_OHLC } from "../lib/ohlcData";
 import { getLiteracyTerm } from "../lib/literacyTerms";
 import { completeMilestoneFromQuiz } from "../lib/progressStore";
@@ -48,6 +50,7 @@ export default function QuizModal({
 
   const question = questions[currentIndex];
   const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
+  const groupName = QUIZ_GROUPS.find((g) => g.id === groupId)?.name ?? "Quiz";
 
   const handleSubmit = useCallback(() => {
     if (!selectedOption || submitted) return;
@@ -142,9 +145,12 @@ export default function QuizModal({
       <div className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-surface border border-line rounded-xl shadow-lg">
         {/* Modal Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 border-b border-line bg-surface">
-          <h2 id="quiz-modal-title" className="text-sm font-semibold">
-            Quiz
-          </h2>
+          <div className="flex items-center gap-2 min-w-0">
+            <h2 id="quiz-modal-title" className="text-sm font-semibold truncate">
+              {groupName}
+            </h2>
+            <YouTubeSearchLink title={groupName} />
+          </div>
           <div className="flex items-center gap-4 text-[13px] text-muted tabular-nums">
             <span>
               {currentIndex + 1} / {questions.length}

@@ -12,6 +12,7 @@ import {
 } from "../lib/beginnerPath";
 import PatternDetailModal from "../components/PatternDetailModal";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
+import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
 type FilterType = "all" | "bullish" | "bearish" | "neutral";
 type ArchiveTab = "patterns" | "indicators" | "literacy";
@@ -263,6 +264,7 @@ export default function Archive() {
                 locked ? "opacity-60" : ""
               }`}
             >
+              <div className="flex items-start gap-2">
               <button
                 type="button"
                 disabled={locked}
@@ -270,7 +272,7 @@ export default function Archive() {
                   setSelectedTerm(term);
                   setSearchParams({ tab: "literacy", open: term.id }, { replace: true });
                 }}
-                className={`group text-left ${
+                className={`group text-left min-w-0 flex-1 ${
                   locked ? "cursor-not-allowed" : "hover:text-primary cursor-pointer"
                 }`}
               >
@@ -284,6 +286,8 @@ export default function Archive() {
               </div>
               <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">{term.summary}</p>
               </button>
+              <YouTubeSearchLink title={term.name} />
+              </div>
               {locked ? (
                 <button
                   type="button"
@@ -301,11 +305,14 @@ export default function Archive() {
             })
           : tab === "patterns"
             ? filteredPatterns.map((pattern) => (
-            <button
+            <div
               key={pattern.id}
+              className="relative rounded-xl border border-line bg-surface p-4 hover:border-primary transition-all"
+            >
+            <button
               type="button"
               onClick={() => setSelectedPattern(pattern)}
-              className="group w-full text-left flex flex-col rounded-xl border border-line bg-surface p-4 hover:border-primary hover:bg-surface transition-all cursor-pointer"
+              className="group w-full text-left flex flex-col cursor-pointer"
               title={`${pattern.type.toUpperCase()}_PATTERN | CONFIRMATION: ${pattern.confirmation.toUpperCase()} — ${pattern.description}`}
             >
               <div className="flex gap-4">
@@ -322,7 +329,7 @@ export default function Archive() {
                     </span>
                   )}
                 </div>
-                <div className="flex flex-col justify-between py-1">
+                <div className="flex flex-col justify-between py-1 pr-16">
                   <div>
                     <div className="flex items-center gap-2">
                       <span
@@ -343,13 +350,18 @@ export default function Archive() {
                 </div>
               </div>
             </button>
+            <YouTubeSearchLink title={pattern.name} className="absolute top-4 right-4" />
+            </div>
           ))
             : filteredOverlays.map((overlay) => (
-            <button
+            <div
               key={overlay.id}
+              className="relative rounded-xl border border-line bg-surface p-4 hover:border-primary transition-all"
+            >
+            <button
               type="button"
               onClick={() => setSelectedOverlay(overlay)}
-              className="group w-full text-left flex flex-col rounded-xl border border-line bg-surface p-4 hover:border-primary hover:bg-surface transition-all cursor-pointer"
+              className="group w-full text-left flex flex-col cursor-pointer"
               title={`${overlay.category.toUpperCase()} — ${overlay.description}`}
             >
               <div className="flex gap-4">
@@ -358,7 +370,7 @@ export default function Archive() {
                     {overlay.id === "sma" || overlay.id === "ema" ? "trending_up" : overlay.id === "rsi" || overlay.id === "macd" ? "show_chart" : "bar_chart"}
                   </span>
                 </div>
-                <div className="flex flex-col justify-between py-1">
+                <div className="flex flex-col justify-between py-1 pr-16">
                   <div>
                     <div className="flex items-center gap-2">
                       <span className="material-symbols-outlined text-sm text-primary">
@@ -375,6 +387,8 @@ export default function Archive() {
                 </div>
               </div>
             </button>
+            <YouTubeSearchLink title={overlay.name} className="absolute top-4 right-4" />
+            </div>
           ))}
         </div>
       </main>
@@ -419,7 +433,10 @@ export default function Archive() {
                 <p className="text-[10px] font-mono text-primary/50 uppercase tracking-widest">
                   Literacy · {selectedTerm.category}
                 </p>
-                <h3 className="text-xl font-bold text-primary">{selectedTerm.name}</h3>
+                <h3 className="text-xl font-bold text-primary inline-flex items-center gap-2">
+                  {selectedTerm.name}
+                  <YouTubeSearchLink title={selectedTerm.name} />
+                </h3>
               </div>
               <button
                 type="button"

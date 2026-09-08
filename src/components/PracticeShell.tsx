@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
+import YouTubeSearchLink from "./YouTubeSearchLink";
 
 export default function PracticeShell({
   title,
@@ -20,7 +21,10 @@ export default function PracticeShell({
             </Link>
             {" · Misc Practices"}
           </p>
-          <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
+            <YouTubeSearchLink title={title} />
+          </div>
           <p className="text-[13px] text-muted">{blurb}</p>
         </div>
         {children}

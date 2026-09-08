@@ -635,6 +635,16 @@ const GBPNZD_PRE: OHLC[] = [
   bar("T0", 2.094, 2.112, 2.09, 2.106),
 ];
 
+/** Falling wedge (lower highs, higher lows) — not TRY rising wedge, AUDJPY flag, or GBPNZD three-push. */
+const EURCAD_PRE: OHLC[] = [
+  bar("T-5", 1.492, 1.498, 1.488, 1.496),
+  bar("T-4", 1.496, 1.497, 1.478, 1.48),
+  bar("T-3", 1.48, 1.49, 1.479, 1.487),
+  bar("T-2", 1.487, 1.489, 1.481, 1.483),
+  bar("T-1", 1.483, 1.488, 1.482, 1.486),
+  bar("T0", 1.486, 1.488, 1.484, 1.485),
+];
+
 const SOL_PRE: OHLC[] = [
   bar("T-5", 142.0, 146.0, 140.0, 144.0),
   bar("T-4", 144.0, 148.0, 141.0, 147.0),
@@ -3194,6 +3204,34 @@ export const FOREX_CASES: CaseStudy[] = [
         "Intermediate work is naming what is already in the price. Three pushes into a dairy scare are often late-chase, not a new path. Fade or wait; HOLD if the slip already has your size. This is not the AUD/CAD double-top, not the EUR/AUD inside-bar wait, not the AUD/NZD supply grind, and not a live FX desk.",
       whyMarketMoved: "The third push failed and sterling-kiwi leaked lower once the dairy-scare chase stalled.",
       evidence: "GBP/NZD three-push tape plus a scare-already-ran headline. Practice only.",
+    },
+    allowShort: false,
+    packId: "forex",
+    difficulty: "intermediate",
+    assetClass: "forex",
+  },
+  {
+    id: "case-fx-int-eurcad-falling-wedge",
+    title: "EUR/CAD falling wedge after an oil scare already in the tape",
+    contextType: "news",
+    thinkingMode: "geopolitics_supply",
+    brief:
+      "EUR/CAD coiled into a falling wedge after a Canadian oil-supply scare. You have Indicators. A scheduled inventory note then says the shortage was smaller than the scare. Name which side the loonie is on, then ask whether the scare is already in the wedge. SAMPLE pair only, not a live FX desk.",
+    newsHeadline:
+      "Inventory note: oil shortage smaller than the scare. EUR/CAD still in a falling wedge.",
+    preOhlc: EURCAD_PRE,
+    postOhlc: withAftermath(EURCAD_PRE, [
+      bar("+1", 1.485, 1.494, 1.484, 1.492),
+      bar("+2", 1.492, 1.498, 1.49, 1.496),
+      bar("+3", 1.496, 1.502, 1.494, 1.5),
+    ]),
+    correctActions: ["buy", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Intermediate work is naming what is already in the price. A falling wedge after an oil scare that an inventory note already bounded is often a wait-for-break, not a new shortage. CAD is on the oil-supply side; a smaller shortage is less CAD bid. HOLD if you will not buy a SAMPLE euro-loonie cross. This is not the GBP/NZD three-push, not the NOK supply fade, not the EUR/USD energy wobble, and not a live FX desk.",
+      whyMarketMoved: "The wedge broke higher once the smaller-shortage inventory note bounded the scare.",
+      evidence: "EUR/CAD falling-wedge tape plus a smaller-shortage inventory note. Practice only.",
     },
     allowShort: false,
     packId: "forex",

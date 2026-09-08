@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { OVERLAYS } from "../lib/overlays";
+import YouTubeSearchLink from "./YouTubeSearchLink";
 
 interface IndicatorGlossaryProps {
   onClose?: () => void;
@@ -23,14 +24,17 @@ export default function IndicatorGlossary({ onClose, compact = false }: Indicato
           </div>
         </div>
         {OVERLAYS.map((ind) => (
-          <details key={ind.id} className="group">
-            <summary className="cursor-pointer text-sm font-mono text-primary hover:text-primary/90 flex items-center gap-2">
-              <span className="material-symbols-outlined text-base">info</span>
-              {ind.name} — {ind.fullName}
-            </summary>
-            <p className="mt-1 text-xs text-slate-300 pl-6">{ind.description}</p>
-            <p className="mt-0.5 text-xs text-primary/60 pl-6 italic">Use: {ind.useCase}</p>
-          </details>
+          <div key={ind.id} className="flex items-start gap-2">
+            <details className="group min-w-0 flex-1">
+              <summary className="cursor-pointer text-sm font-mono text-primary hover:text-primary/90 flex items-center gap-2">
+                <span className="material-symbols-outlined text-base">info</span>
+                {ind.name} — {ind.fullName}
+              </summary>
+              <p className="mt-1 text-xs text-slate-300 pl-6">{ind.description}</p>
+              <p className="mt-0.5 text-xs text-primary/60 pl-6 italic">Use: {ind.useCase}</p>
+            </details>
+            <YouTubeSearchLink title={ind.name} />
+          </div>
         ))}
       </div>
     );
@@ -50,16 +54,19 @@ export default function IndicatorGlossary({ onClose, compact = false }: Indicato
           key={ind.id}
           className="border border-line rounded-lg overflow-hidden bg-canvas"
         >
-          <button
-            onClick={() => setExpanded(expanded === ind.id ? null : ind.id)}
-            className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-primary/5 transition-colors"
-          >
-            <span className="font-bold text-primary">{ind.name}</span>
-            <span className="text-xs text-primary/60">{ind.fullName}</span>
-            <span className="material-symbols-outlined text-primary/60">
-              {expanded === ind.id ? "expand_less" : "expand_more"}
-            </span>
-          </button>
+          <div className="flex items-center gap-2 pr-2">
+            <button
+              onClick={() => setExpanded(expanded === ind.id ? null : ind.id)}
+              className="min-w-0 flex-1 px-4 py-3 flex items-center justify-between text-left hover:bg-primary/5 transition-colors"
+            >
+              <span className="font-bold text-primary">{ind.name}</span>
+              <span className="text-xs text-primary/60">{ind.fullName}</span>
+              <span className="material-symbols-outlined text-primary/60">
+                {expanded === ind.id ? "expand_less" : "expand_more"}
+              </span>
+            </button>
+            <YouTubeSearchLink title={ind.name} />
+          </div>
           {expanded === ind.id && (
             <div className="px-4 pb-4 pt-0 space-y-2">
               <p className="text-slate-300 text-sm">{ind.description}</p>

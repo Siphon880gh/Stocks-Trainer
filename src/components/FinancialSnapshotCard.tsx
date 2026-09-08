@@ -3,6 +3,7 @@ import {
   simplePE,
   type FinancialSnapshot,
 } from "../lib/financialSnapshots";
+import YouTubeSearchLink from "./YouTubeSearchLink";
 
 interface FinancialSnapshotCardProps {
   snapshotId?: string;
@@ -28,7 +29,10 @@ export default function FinancialSnapshotCard({
         <p className="text-[10px] font-mono text-primary/50 tracking-widest uppercase">
           Practice snapshot · {snapshot.symbol}
         </p>
-        <p className="text-[10px] font-mono text-primary/70">{snapshot.label}</p>
+        <p className="text-[10px] font-mono text-primary/70 inline-flex items-center gap-1">
+          {snapshot.label}
+          <YouTubeSearchLink title={snapshot.label} />
+        </p>
       </div>
       <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-mono">
         <div className="border border-line rounded p-3 space-y-1 bg-canvas">

@@ -11,6 +11,7 @@ import {
 } from "../lib/marketNavigator";
 import { isCoachingSessionComplete } from "../lib/progressStore";
 import type { AssetClass } from "../lib/samplePacks";
+import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
 export default function Coach() {
   const navigate = useNavigate();
@@ -121,18 +122,20 @@ export default function Coach() {
             {filtered.map((meta) => {
               const done = isCoachingSessionComplete(meta.slug);
               return (
-                <li key={meta.slug}>
-                  <Link
-                    to={`/coach/${meta.slug}`}
-                    className="block panel p-4 hover:border-primary/40 transition-colors space-y-2"
-                  >
-                    <div className="flex flex-wrap items-baseline justify-between gap-2">
-                      <h2 className="text-lg font-semibold">{meta.title}</h2>
-                      <span className="text-[12px] text-muted">
-                        {meta.topic}
-                        {done ? " · done" : ""}
-                      </span>
+                <li key={meta.slug} className="panel p-4 hover:border-primary/40 transition-colors space-y-2">
+                  <div className="flex flex-wrap items-baseline justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <Link to={`/coach/${meta.slug}`} className="text-lg font-semibold hover:text-primary">
+                        {meta.title}
+                      </Link>
+                      <YouTubeSearchLink title={meta.title} />
                     </div>
+                    <span className="text-[12px] text-muted">
+                      {meta.topic}
+                      {done ? " · done" : ""}
+                    </span>
+                  </div>
+                  <Link to={`/coach/${meta.slug}`} className="block space-y-2">
                     <p className="text-sm text-muted">{meta.summary}</p>
                     <div className="flex flex-wrap gap-2">
                       {meta.tags.map((tag) => (

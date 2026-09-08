@@ -7,6 +7,7 @@ import { NAVIGATOR_CLASS_LABELS } from "../lib/marketNavigator";
 import { getPlaybook } from "../lib/playbooks";
 import { getOverlay } from "../lib/overlays";
 import { getSamplePack } from "../lib/samplePacks";
+import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
 export default function Playbook() {
   const { id = "" } = useParams();
@@ -37,7 +38,10 @@ export default function Playbook() {
           <Link to="/playbooks" className="text-sm text-primary hover:underline">
             Back to playbooks
           </Link>
-          <h1 className="text-2xl font-semibold tracking-tight">{playbook.title}</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-semibold tracking-tight">{playbook.title}</h1>
+            <YouTubeSearchLink title={playbook.title} />
+          </div>
           <p className="text-sm text-muted">{playbook.summary}</p>
           <p className="text-sm">
             <span className="text-muted">Resource · </span>
@@ -120,7 +124,10 @@ export default function Playbook() {
             {pack ? (
               <div className="space-y-3">
                 <p className="text-sm text-muted">
-                  {pack.displayName}
+                  <span className="inline-flex items-center gap-2">
+                    {pack.displayName}
+                    <YouTubeSearchLink title={pack.displayName} />
+                  </span>
                   {overlays.length > 0
                     ? ` · ${overlays.map((id) => getOverlay(id)?.name ?? id).join(", ")}`
                     : ""}

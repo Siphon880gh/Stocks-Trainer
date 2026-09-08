@@ -17,7 +17,9 @@ import {
   marketLiteracyHref,
   NAVIGATOR_CLASS_LABELS,
   NAVIGATOR_CLASSES,
+  navigatorYoutubeTutorialTitle,
 } from "../lib/marketNavigator";
+import YouTubeSearchLink from "./YouTubeSearchLink";
 
 interface MarketNavigatorProps {
   /** Pre-select from URL `class` */
@@ -66,9 +68,14 @@ export default function MarketNavigator({
         <h2 className="text-sm font-semibold">
           Market navigator
         </h2>
-        <p className="text-[12px] text-muted">
-          Charts · literacy · decide · step (SAMPLE)
-        </p>
+        <div className="flex items-center gap-2">
+          <p className="text-[12px] text-muted">
+            Charts · literacy · decide · step (SAMPLE)
+          </p>
+          {selected ? (
+            <YouTubeSearchLink title={navigatorYoutubeTutorialTitle(selected)} />
+          ) : null}
+        </div>
       </div>
 
       <p className="text-[13px] text-muted leading-relaxed">

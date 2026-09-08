@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import type { OverlayDef } from "../lib/overlays";
 import MarketChart from "./MarketChart";
 import { SAMPLE_OHLC } from "../lib/ohlcData";
+import YouTubeSearchLink from "./YouTubeSearchLink";
 
 interface IndicatorDetailModalProps {
   overlay: OverlayDef;
@@ -42,9 +43,12 @@ export default function IndicatorDetailModal({ overlay, onClose, hidePracticeLin
       />
       <div className="relative w-full max-w-lg bg-surface border border-line rounded-xl shadow-lg overflow-hidden">
         <div className="flex items-center justify-between px-4 py-3 border-b border-line bg-surface">
-          <h2 id="indicator-modal-title" className="text-lg font-bold text-primary">
-            {overlay.name}
-          </h2>
+          <div className="flex items-center gap-2 min-w-0">
+            <h2 id="indicator-modal-title" className="text-lg font-bold text-primary truncate">
+              {overlay.name}
+            </h2>
+            <YouTubeSearchLink title={overlay.name} />
+          </div>
           <button
             onClick={onClose}
             className="p-2 rounded hover:bg-primary/10 text-primary transition-colors"

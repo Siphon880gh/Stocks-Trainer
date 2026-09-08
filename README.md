@@ -167,6 +167,8 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 
 Chrome: **Home** · **Learn** · **Charts** · **Cases** · **Coach** · **Playbooks**.
 
+Teaching formats (quiz, step-by-step, playbook, case, chart pack, reference, practice, snapshot): [`RESOURCES.md`](./RESOURCES.md).
+
 Progress is stored locally (`localStorage` key `analysis_core_progress_v1`).
 
 ---

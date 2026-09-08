@@ -31,6 +31,19 @@ export const NAVIGATOR_CLASS_LABELS: Record<AssetClass, string> = {
   option_context: "Options context",
 };
 
+/** Lowercase market-type word(s) used in `stocks {type} tutorial` YouTube searches. */
+export const NAVIGATOR_YOUTUBE_MARKET_TYPE: Record<AssetClass, string> = {
+  equity: "equities",
+  future: "futures",
+  forex: "forex",
+  crypto: "crypto",
+  option_context: "options context",
+};
+
+export function navigatorYoutubeTutorialTitle(assetClass: AssetClass): string {
+  return `${NAVIGATOR_YOUTUBE_MARKET_TYPE[assetClass]} tutorial`;
+}
+
 /** Query aliases → AssetClass */
 export function parseMarketClassParam(
   raw: string | null,
