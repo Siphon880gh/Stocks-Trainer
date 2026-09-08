@@ -156,7 +156,7 @@ export default function Training() {
                   g.id === "news-literacy" ||
                   g.id === "financial-drills";
                 return (
-                  <span key={g.id} className="inline-flex items-center gap-1">
+                  <span key={g.id} className="group/yt inline-flex items-center gap-1">
                     <button
                       onClick={() => setSelectedGroup(g.id)}
                       className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
@@ -173,7 +173,10 @@ export default function Training() {
                         ({getQuestionsForGroup(g.id).length})
                       </span>
                     </button>
-                    <YouTubeSearchLink title={g.name} />
+                    <YouTubeSearchLink
+                      title={g.name}
+                      className="opacity-0 pointer-events-none transition-opacity group-hover/yt:opacity-100 group-hover/yt:pointer-events-auto group-focus-within/yt:opacity-100 group-focus-within/yt:pointer-events-auto"
+                    />
                   </span>
                 );
               })}
