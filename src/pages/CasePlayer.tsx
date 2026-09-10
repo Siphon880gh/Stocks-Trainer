@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import AiExplainModal from "../components/AiExplainModal";
 import CandlestickChart from "../components/CandlestickChart";
 import FinancialSnapshotCard from "../components/FinancialSnapshotCard";
 import {
@@ -10,6 +11,10 @@ import {
   isChartGateTemporarilyBypassed,
   setChartGateTemporaryBypass,
 } from "../lib/beginnerPath";
+import {
+  buildAiExplainPrompt,
+  buildCaseExplanationMarkdown,
+} from "../lib/aiExplainPrompt";
 import {
   CASE_PACKS,
   getCaseStudy,
@@ -43,6 +48,8 @@ export default function CasePlayer() {
   const [selected, setSelected] = useState<CaseAction | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [grade, setGrade] = useState<CaseGrade | null>(null);
+  const [explainOpen, setExplainOpen] = useState(false);
+  const closeExplain = useCallback(() => setExplainOpen(false), []);
 
   if (!study) {
     return (
@@ -94,6 +101,11 @@ export default function CasePlayer() {
 
   const actions = ACTIONS.filter((a) => a.id !== "short" || Boolean(study.allowShort));
   const chartData = submitted ? study.postOhlc : study.preOhlc;
+  const showAiExplain = submitted && grade === "correct" && selected !== null;
+  const explainPrompt =
+    showAiExplain && selected
+      ? buildAiExplainPrompt(buildCaseExplanationMarkdown(study, selected))
+      : "";
 
   const onSubmit = () => {
     if (!selected || submitted) return;
@@ -190,22 +202,36 @@ export default function CasePlayer() {
 
         {submitted && grade ? (
           <div className="border border-line rounded-xl p-4 font-mono text-sm space-y-2 bg-surface">
-            <p
-              className={
-                grade === "correct"
-                  ? "text-primary"
+            <div className="flex flex-wrap items-center gap-2">
+              <p
+                className={
+                  grade === "correct"
+                    ? "text-primary"
+                    : grade === "partial"
+                      ? "text-yellow-400"
+                      : "text-accent-red"
+                }
+              >
+                {grade === "correct"
+                  ? "Correct"
                   : grade === "partial"
-                    ? "text-yellow-400"
-                    : "text-accent-red"
-              }
-            >
-              {grade === "correct"
-                ? "Correct"
-                : grade === "partial"
-                  ? "Partial credit"
-                  : "Incorrect"}
-              {selected ? ` · you chose ${selected}` : ""}
-            </p>
+                    ? "Partial credit"
+                    : "Incorrect"}
+                {selected ? ` · you chose ${selected}` : ""}
+              </p>
+              {showAiExplain ? (
+                <button
+                  type="button"
+                  onClick={() => setExplainOpen(true)}
+                  className="inline-flex items-center gap-1 font-mono text-[10px] tracking-widest border border-line px-2 py-0.5 text-primary hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                >
+                  <span className="material-symbols-outlined text-sm" aria-hidden>
+                    auto_fix_high
+                  </span>
+                  AI Explain
+                </button>
+              ) : null}
+            </div>
             <p className="text-slate-300">
               <span className="text-primary/50">How to think about it: </span>
               {study.debrief.process}
@@ -234,6 +260,11 @@ export default function CasePlayer() {
           </div>
         ) : null}
       </main>
+      <AiExplainModal
+        open={explainOpen && showAiExplain}
+        prompt={explainPrompt}
+        onClose={closeExplain}
+      />
     </div>
   );
 }

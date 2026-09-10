@@ -229,9 +229,17 @@ export const EXPANSION_ASSET_CLASSES: AssetClass[] = [
 
 const CASE_PACK_ASSET_CLASS: Partial<Record<CasePackId, AssetClass>> = {
   futures: "future",
+  "futures-tape": "future",
+  "futures-macro": "future",
   forex: "forex",
+  "forex-tape": "forex",
+  "forex-macro": "forex",
   crypto: "crypto",
+  "crypto-tape": "crypto",
+  "crypto-macro": "crypto",
   "options-context": "option_context",
+  "options-tape": "option_context",
+  "options-macro": "option_context",
 };
 
 const CLASS_EXPLORER_MILESTONE: Partial<Record<AssetClass, string>> = {

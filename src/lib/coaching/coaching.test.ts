@@ -1,13 +1,20 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import {
+  buildAiExplainPrompt,
+  buildPathExplanationMarkdown,
   buildPathTrail,
+  canShowAiExplain,
+  chartBarsForCoachSlug,
+  chatGptShareUrl,
   choose,
   choiceLabelBetween,
+  claudeShareUrl,
   ensureKnownNode,
   initialNavState,
   listSessions,
   loadSession,
+  nodeMessageToMarkdown,
   restart,
   rewindTo,
   stepBack,
@@ -16,6 +23,7 @@ import {
   type CoachingSession,
 } from "./index.ts";
 import { chaseVsFadeSession } from "./sessions/chase-vs-fade.ts";
+import { cryptoSolAltHypeSession } from "./sessions/crypto-sol-alt-hype.ts";
 import { coachSessionMatchesClass } from "../marketNavigator.ts";
 import type { AssetClass } from "../samplePacks.ts";
 
@@ -210,5 +218,92 @@ describe("path trail labels", () => {
     assert.equal(trail[0]!.choiceLabel, choiceLabelBetween(tree, "start", "priced_in"));
     assert.equal(trail[1]!.isCurrent, true);
     assert.equal(trail[1]!.choiceLabel, null);
+  });
+});
+
+describe("AI explain prompt", () => {
+  it("hides on start and wrong, shows after a correct continue or success", () => {
+    assert.equal(canShowAiExplain("continue", 0), false);
+    assert.equal(canShowAiExplain("wrong", 1), false);
+    assert.equal(canShowAiExplain("continue", 1), true);
+    assert.equal(canShowAiExplain("success", 2), true);
+  });
+
+  it("bolds the question line in a node message", () => {
+    const md = nodeMessageToMarkdown(
+      "SAMPLE: bitcoin is flat. A SOL-style alt is extended after influencer clips. Not a live venue.\n\nFirst check?"
+    );
+    assert.match(md, /\*\*First check\?\*\*/);
+    assert.match(md, /SAMPLE: bitcoin is flat/);
+  });
+
+  it("fills markdown from the session title through the current node", () => {
+    const tree = cryptoSolAltHypeSession.tree;
+    const trail = buildPathTrail(tree, {
+      currentNodeId: "own",
+      history: ["start"],
+    });
+    const md = buildPathExplanationMarkdown({
+      title: cryptoSolAltHypeSession.meta.title,
+      topic: cryptoSolAltHypeSession.meta.topic,
+      steps: trail,
+    });
+    assert.match(md, /^# Alt hype versus SAMPLE bitcoin/m);
+    assert.match(md, /\*Multi-market decisions\*/);
+    assert.match(md, /## 1\./);
+    assert.match(md, /\*\*First check\?\*\*/);
+    assert.match(
+      md,
+      /\*You chose: Ask whether the alt has its own durable fact, or only social heat\*/
+    );
+    assert.match(md, /## 2\./);
+    assert.match(md, /The brief is clips, not a protocol or listing fact/);
+    assert.match(md, /\*\*What stance fits the alt\?\*\*/);
+    assert.doesNotMatch(md, /You chose: Hold or fade/);
+    assert.doesNotMatch(md, /SAMPLE chart/);
+  });
+
+  it("appends an OHLC table when the session has a chart", () => {
+    const tree = cryptoSolAltHypeSession.tree;
+    const trail = buildPathTrail(tree, {
+      currentNodeId: "own",
+      history: ["start"],
+    });
+    const md = buildPathExplanationMarkdown({
+      title: cryptoSolAltHypeSession.meta.title,
+      topic: cryptoSolAltHypeSession.meta.topic,
+      steps: trail,
+      chart: [
+        { name: "T0", open: 100, high: 102, low: 99, close: 101 },
+      ],
+    });
+    assert.match(md, /## SAMPLE chart/);
+    assert.match(md, /\| Time \| High \| Open \| Close \| Low \|/);
+    assert.match(md, /\| T0 \| 102 \| 100 \| 101 \| 99 \|/);
+  });
+
+  it("uses a unique playbook tape and skips a slug with two packs", () => {
+    assert.ok((chartBarsForCoachSlug("chart-soft-gate")?.length ?? 0) > 0);
+    assert.equal(chartBarsForCoachSlug("chase-vs-fade"), undefined);
+    assert.equal(chartBarsForCoachSlug("does-not-exist"), undefined);
+  });
+
+  it("wraps the path markdown in the TLDR / ELI5 prompt", () => {
+    const prompt = buildAiExplainPrompt("# Title\n\nHello");
+    assert.match(prompt, /Generate a TLDR, then ELI5/);
+    assert.match(prompt, /Can this be applied in other scenarios\?/);
+    assert.match(prompt, /What's happening financially\?/);
+    assert.match(prompt, /Explanation here:/);
+    assert.match(prompt, /"""\n# Title\n\nHello\n"""/);
+  });
+
+  it("builds ChatGPT and Claude share URLs", () => {
+    const prompt = "Read this explanation";
+    const gpt = chatGptShareUrl(prompt);
+    const claude = claudeShareUrl(prompt);
+    assert.ok(gpt.startsWith("https://chatgpt.com/"));
+    assert.ok(gpt.includes("q=Read"));
+    assert.ok(claude.startsWith("https://claude.ai/new"));
+    assert.ok(claude.includes("q=Read"));
   });
 });

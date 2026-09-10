@@ -36,6 +36,15 @@ export {
   choiceLabelBetween,
   type PathTrailStep,
 } from "./pathTrail";
+export {
+  buildAiExplainPrompt,
+  buildPathExplanationMarkdown,
+  canShowAiExplain,
+  chartBarsForCoachSlug,
+  chatGptShareUrl,
+  claudeShareUrl,
+  nodeMessageToMarkdown,
+} from "./explainPrompt";
 
 function catalogEntries(): { session: CoachingSession; validation: CoachingValidationResult }[] {
   return COACHING_SESSION_MODULES.map((session) => ({

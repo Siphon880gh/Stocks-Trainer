@@ -9,10 +9,10 @@ import { CASE_STUDIES, type CasePackId } from "./caseStudies";
 
 export const CLASS_TO_DECIDE_PACKS: Partial<Record<AssetClass, CasePackId[]>> = {
   equity: ["earnings", "company-news", "macro-news", "combined"],
-  future: ["futures"],
-  forex: ["forex"],
-  crypto: ["crypto"],
-  option_context: ["options-context"],
+  future: ["futures", "futures-tape", "futures-macro"],
+  forex: ["forex", "forex-tape", "forex-macro"],
+  crypto: ["crypto", "crypto-tape", "crypto-macro"],
+  option_context: ["options-context", "options-tape", "options-macro"],
 };
 
 export const NAVIGATOR_CLASSES: AssetClass[] = [

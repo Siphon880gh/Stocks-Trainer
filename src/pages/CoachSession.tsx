@@ -1,9 +1,14 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import AiExplainModal from "../components/AiExplainModal";
 import CoachingPathTrail from "../components/CoachingPathTrail";
 import {
+  buildAiExplainPrompt,
+  buildPathExplanationMarkdown,
   buildPathTrail,
+  canShowAiExplain,
   canStepBack,
+  chartBarsForCoachSlug,
   choose,
   currentNode,
   ensureKnownNode,
@@ -71,6 +76,8 @@ export default function CoachSession() {
   const [nav, setNav] = useState<CoachingNavState | null>(null);
   const [trailOpen, setTrailOpen] = useState(true);
   const [showNodeIds, setShowNodeIds] = useState(false);
+  const [explainOpen, setExplainOpen] = useState(false);
+  const closeExplain = useCallback(() => setExplainOpen(false), []);
   const [tempBypass, setTempBypass] = useState(isChartGateTemporarilyBypassed);
   const sessionClass = loaded.ok
     ? assetClassFromCoachTags(loaded.session.meta.tags)
@@ -88,6 +95,7 @@ export default function CoachSession() {
   }, [slug]);
 
   useEffect(() => {
+    setExplainOpen(false);
     if (!nav) return;
     if (skipFocusOnce.current) {
       skipFocusOnce.current = false;
@@ -167,6 +175,17 @@ export default function CoachSession() {
   const backAvailable = canStepBack(tree, state);
   const terminal = node.outcome === "wrong" || node.outcome === "success";
   const trail = buildPathTrail(tree, state);
+  const showAiExplain = canShowAiExplain(node.outcome, state.history.length);
+  const explainPrompt = showAiExplain
+    ? buildAiExplainPrompt(
+        buildPathExplanationMarkdown({
+          title: session.meta.title,
+          topic: session.meta.topic,
+          steps: trail,
+          chart: chartBarsForCoachSlug(slug),
+        })
+      )
+    : "";
 
   const onChoose = (choice: CoachingChoice) => {
     const result = choose(tree, state, choice);
@@ -231,6 +250,18 @@ export default function CoachSession() {
               </span>
               {outcomeUi.label}
             </span>
+            {showAiExplain ? (
+              <button
+                type="button"
+                onClick={() => setExplainOpen(true)}
+                className="inline-flex items-center gap-1 font-mono text-[10px] tracking-widest border border-line px-2 py-0.5 text-primary hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+              >
+                <span className="material-symbols-outlined text-sm" aria-hidden>
+                  auto_fix_high
+                </span>
+                AI Explain
+              </button>
+            ) : null}
             {showNodeIds ? (
               <span className="font-mono text-[10px] text-slate-500">
                 NODE · {state.currentNodeId}
@@ -293,6 +324,11 @@ export default function CoachSession() {
           </Link>
         </div>
       </main>
+      <AiExplainModal
+        open={explainOpen && showAiExplain}
+        prompt={explainPrompt}
+        onClose={closeExplain}
+      />
     </div>
   );
 }

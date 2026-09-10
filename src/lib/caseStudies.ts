@@ -34,9 +34,17 @@ export type CasePackId =
   | "macro-news"
   | "combined"
   | "futures"
+  | "futures-tape"
+  | "futures-macro"
   | "forex"
+  | "forex-tape"
+  | "forex-macro"
   | "crypto"
-  | "options-context";
+  | "crypto-tape"
+  | "crypto-macro"
+  | "options-context"
+  | "options-tape"
+  | "options-macro";
 
 export interface CaseDebrief {
   /** Process + theory — not direction-only */
@@ -2215,9 +2223,37 @@ export const CASE_PACKS: {
     milestoneId: "E10.M5",
   },
   {
+    id: "futures-tape",
+    name: "Futures tape",
+    description:
+      "Headline and chase practice on SAMPLE futures. Not live futures.",
+    milestoneId: "E10.M5",
+  },
+  {
+    id: "futures-macro",
+    name: "Futures macro",
+    description:
+      "Risk-off, data prints, and supply shocks on SAMPLE futures. Not live futures.",
+    milestoneId: "E10.M5",
+  },
+  {
     id: "forex",
     name: "Forex",
     description: "Currency practice. Not a live FX desk.",
+    milestoneId: "E10.M6",
+  },
+  {
+    id: "forex-tape",
+    name: "Forex tape",
+    description:
+      "Headline and chase practice on SAMPLE FX pairs. Not a live FX desk.",
+    milestoneId: "E10.M6",
+  },
+  {
+    id: "forex-macro",
+    name: "Forex macro",
+    description:
+      "Risk-off, data prints, and supply shocks on SAMPLE FX pairs. Not a live FX desk.",
     milestoneId: "E10.M6",
   },
   {
@@ -2227,10 +2263,38 @@ export const CASE_PACKS: {
     milestoneId: "E10.M7",
   },
   {
+    id: "crypto-tape",
+    name: "Crypto tape",
+    description:
+      "Headline and chase practice on SAMPLE crypto charts. Not a live exchange.",
+    milestoneId: "E10.M7",
+  },
+  {
+    id: "crypto-macro",
+    name: "Crypto macro",
+    description:
+      "Risk-off, data prints, and supply shocks on SAMPLE crypto charts. Not a live exchange.",
+    milestoneId: "E10.M7",
+  },
+  {
     id: "options-context",
     name: "Options context",
     description:
       "How event risk and volatility affect the stock. No options chain here.",
+    milestoneId: "E10.M7",
+  },
+  {
+    id: "options-tape",
+    name: "Options tape",
+    description:
+      "Headline and chase practice on the underlying. No options chain here.",
+    milestoneId: "E10.M7",
+  },
+  {
+    id: "options-macro",
+    name: "Options macro",
+    description:
+      "Risk-off, data prints, and supply shocks on the underlying. No options chain here.",
     milestoneId: "E10.M7",
   },
 ];
