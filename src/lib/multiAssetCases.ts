@@ -858,6 +858,36 @@ const UAH6_PRE: OHLC[] = [
   bar("T0", 0.022948, 0.023186, 0.021668, 0.022268),
 ];
 
+/** Piercing line after a dump (T-1 tall red, T0 green opens below T-1 close and closes into the T-1 body above the midpoint) — not UAH 0.0228 thrusting (red after a grind), P6 0.248 hanging, GEL 0.368 in-neck, ILS 0.322 long-legged, BGN 0.94 in-neck, or GBPMXN 24.27 spot piercing. */
+const QAR6_PRE: OHLC[] = [
+  bar("T-5", 0.27864, 0.27918, 0.27648, 0.27686),
+  bar("T-4", 0.27686, 0.27728, 0.27448, 0.27486),
+  bar("T-3", 0.27486, 0.27528, 0.27248, 0.27286),
+  bar("T-2", 0.27286, 0.27348, 0.27086, 0.27128),
+  bar("T-1", 0.27128, 0.27186, 0.26448, 0.26528),
+  bar("T0", 0.26418, 0.26986, 0.26368, 0.26886),
+];
+
+/** Piercing line after a dump (T-1 tall red, T0 green opens below T-1 close and closes into the T-1 body above the midpoint) — not QAR 0.269 tape piercing (even dump), UAH 0.0228 thrusting, P6 0.248 hanging, GEL 0.368 in-neck, ILS 0.322 long-legged, MAD 0.104 thrusting, or AUDZAR 11.65 spot piercing. */
+const AED6_PRE: OHLC[] = [
+  bar("T-5", 0.30186, 0.30348, 0.29864, 0.29928),
+  bar("T-4", 0.29928, 0.30018, 0.29686, 0.29748),
+  bar("T-3", 0.29748, 0.29828, 0.29264, 0.29318),
+  bar("T-2", 0.29318, 0.29486, 0.29048, 0.29186),
+  bar("T-1", 0.29186, 0.29248, 0.28218, 0.28328),
+  bar("T0", 0.28186, 0.28948, 0.28108, 0.28818),
+];
+
+/** Bullish engulfing after a dump (T-1 tall red, T0 green opens below T-1 close and closes above the T-1 open) — not QAR 0.269 piercing (close stays inside the prior body), AED 0.288 piercing, C6 0.727 grind engulf, EURZAR 20.92 dump-engulf, NZDPLN 2.38 matching high, or PEER 2.86 crows. */
+const BHD6_PRE: OHLC[] = [
+  bar("T-5", 2.6286, 2.6484, 2.5686, 2.5886),
+  bar("T-4", 2.5886, 2.5984, 2.5486, 2.5686),
+  bar("T-3", 2.5686, 2.5984, 2.5086, 2.5386),
+  bar("T-2", 2.5386, 2.5684, 2.5186, 2.5486),
+  bar("T-1", 2.5486, 2.5584, 2.4486, 2.4686),
+  bar("T0", 2.4386, 2.5784, 2.4286, 2.5648),
+];
+
 /** Bearish in-neck after a grind (T-1 tall green, T0 long red opens above T-1 close and closes at nearly the T-1 close, not the T-1 low) — not ISK6 0.0072 on-neck (that closes at T-1 low), ILS 0.322 long-legged, PEN 0.419 dragonfly, BGN 0.94 tape in-neck, P6 0.248 hanging, or NZDDKK 3.83 spot in-neck. */
 const GEL6_PRE: OHLC[] = [
   bar("T-5", 0.33864, 0.34228, 0.33642, 0.34118),
@@ -1425,6 +1455,26 @@ const CHFDKK_PRE: OHLC[] = [
   bar("T0", 7.9486, 7.9784, 7.8186, 7.8686),
 ];
 
+/** Piercing line after a dump (T-1 tall red, T0 green opens below T-1 close and closes into the T-1 body above the midpoint) — not CHFDKK 7.87 thrusting (red after a grind), EURCZK 25.4 marubozu, TILE 24.18 shooting star, WAX 24.18 matching high, MXN 17.26 USD/MXN gap, or ZAR 18.5 USD/ZAR dump. */
+const GBPMXN_PRE: OHLC[] = [
+  bar("T-5", 25.128, 25.158, 24.968, 25.008),
+  bar("T-4", 25.008, 25.038, 24.808, 24.848),
+  bar("T-3", 24.848, 24.888, 24.648, 24.688),
+  bar("T-2", 24.688, 24.748, 24.528, 24.568),
+  bar("T-1", 24.568, 24.618, 23.748, 23.828),
+  bar("T0", 23.708, 24.368, 23.648, 24.268),
+];
+
+/** Bullish engulfing after a dump (T-1 tall red, T0 green opens below T-1 close and closes above the T-1 open) — not GBPMXN 24.27 piercing (close stays inside the prior body), AUDZAR 11.65 piercing, EURNZD 1.80 grind engulf, CADSGD 0.96 grind engulf, ZAR 18.5 USD/ZAR dump, or CASEMENT 273 leftover piercing. */
+const EURZAR_PRE: OHLC[] = [
+  bar("T-5", 21.728, 21.786, 21.448, 21.518),
+  bar("T-4", 21.518, 21.568, 21.186, 21.248),
+  bar("T-3", 21.248, 21.318, 20.918, 20.986),
+  bar("T-2", 20.986, 21.086, 20.748, 20.848),
+  bar("T-1", 20.848, 20.918, 20.186, 20.286),
+  bar("T0", 20.128, 20.986, 20.068, 20.918),
+];
+
 /** Harami after a dump (small inside bar, not a reclaim) — not GBPCAD tweezer, NZDJPY H&S, or JPY elevated dump. */
 const CADJPY_PRE: OHLC[] = [
   bar("T-5", 108.4, 108.8, 108.2, 108.6),
@@ -1673,6 +1723,16 @@ const CADDKK_PRE: OHLC[] = [
   bar("T-2", 4.8428, 4.9086, 4.8186, 4.8886),
   bar("T-1", 4.8886, 4.9684, 4.8586, 4.9286),
   bar("T0", 4.9586, 4.9784, 4.8986, 4.9186),
+];
+
+/** Piercing line after a dump (T-1 tall red, T0 green opens below T-1 close and closes into the T-1 body above the midpoint) — not CADDKK 4.92 thrusting (red after a grind), EURSEK 11 expand, EURNOK 12 oil grind, GBPSEK 12.8 hanging, ZAR 18.5 USD/ZAR dump, or GBPMXN 24.27 tape piercing. */
+const AUDZAR_PRE: OHLC[] = [
+  bar("T-5", 12.068, 12.088, 11.968, 11.988),
+  bar("T-4", 11.988, 12.008, 11.888, 11.908),
+  bar("T-3", 11.908, 11.928, 11.808, 11.828),
+  bar("T-2", 11.828, 11.848, 11.728, 11.748),
+  bar("T-1", 11.748, 11.768, 11.448, 11.468),
+  bar("T0", 11.428, 11.668, 11.408, 11.648),
 ];
 
 const SOL_PRE: OHLC[] = [
@@ -2293,6 +2353,26 @@ const RUNE_PRE: OHLC[] = [
   bar("T0", 0.8128, 0.8184, 0.7748, 0.7886),
 ];
 
+/** Piercing line after a dump (T-1 tall red, T0 green opens below T-1 close and closes into the T-1 body above the midpoint) — not RUNE 0.79 thrusting (red after a grind), EURAUD 1.66 inside, SEAL 1.42 long-legged, NONCE 1.86 marubozu, SEQ 0.86 fail-break, or GBPMXN 24.27 spot piercing. */
+const PRISM_PRE: OHLC[] = [
+  bar("T-5", 1.6286, 1.6328, 1.6148, 1.6186),
+  bar("T-4", 1.6186, 1.6228, 1.6048, 1.6086),
+  bar("T-3", 1.6086, 1.6128, 1.5948, 1.5986),
+  bar("T-2", 1.5986, 1.6038, 1.5848, 1.5886),
+  bar("T-1", 1.5886, 1.5928, 1.5448, 1.5486),
+  bar("T0", 1.5428, 1.5786, 1.5386, 1.5728),
+];
+
+/** Bullish engulfing after a dump (T-1 tall red, T0 green opens below T-1 close and closes above the T-1 open) — not PRISM 1.57 piercing (close stays inside the prior body), LENS 8.97 piercing, VAULT 9.11 grind engulf, NODE 4.18 crows, ATTEST 3.6 star, or BHD 2.56 futures engulf. */
+const BEVEL_PRE: OHLC[] = [
+  bar("T-5", 4.2786, 4.3084, 4.1886, 4.2186),
+  bar("T-4", 4.2186, 4.2384, 4.1286, 4.1586),
+  bar("T-3", 4.1586, 4.1984, 4.0486, 4.0886),
+  bar("T-2", 4.0886, 4.1284, 4.0186, 4.0386),
+  bar("T-1", 4.0386, 4.0584, 3.8386, 3.8686),
+  bar("T0", 3.8186, 4.0884, 3.7986, 4.0486),
+];
+
 /** Shooting star (T0 small body near the lows, long upper wick; low stays inside T-1) — not CARB harami, RENT CPI coil, LITH brine grind, HIVE dump, POOL evening star, WRAP outside, SEQ fail, KEEPER engulf, GATE 7.4 tape star, VAULT 9 tape engulf, or AUDNOK 6.8 macro star. */
 const ATTEST_PRE: OHLC[] = [
   bar("T-5", 3.618, 3.642, 3.602, 3.636),
@@ -2461,6 +2541,16 @@ const WARD_PRE: OHLC[] = [
   bar("T-2", 12.6286, 12.7186, 12.5986, 12.6986),
   bar("T-1", 12.6986, 12.8684, 12.6686, 12.7986),
   bar("T0", 12.8486, 12.8784, 12.7186, 12.7686),
+];
+
+/** Piercing line after a dump (T-1 tall red, T0 green opens below T-1 close and closes into the T-1 body above the midpoint) — not WARD 12.77 thrusting (red after a grind), PRISM 1.57 tape piercing, RUNE 0.79 thrusting, SEAL 1.42 long-legged, BATCH 8.87 dragonfly, LANE 8.27 dark-cloud, or AED 0.288 futures piercing. */
+const LENS_PRE: OHLC[] = [
+  bar("T-5", 9.4864, 9.5286, 9.3184, 9.3486),
+  bar("T-4", 9.3486, 9.3684, 9.2186, 9.2486),
+  bar("T-3", 9.2486, 9.2984, 9.0886, 9.1486),
+  bar("T-2", 9.1486, 9.1884, 9.0486, 9.0864),
+  bar("T-1", 9.0864, 9.1248, 8.7486, 8.7986),
+  bar("T0", 8.7286, 8.9986, 8.6986, 8.9686),
 ];
 
 const EVENT_COIL_PRE: OHLC[] = [
@@ -3171,6 +3261,26 @@ const SPANDREL_PRE: OHLC[] = [
   bar("T0", 181.148, 181.686, 178.448, 179.468),
 ];
 
+/** Piercing line after a dump (T-1 tall red, T0 green opens below T-1 close and closes into the T-1 body above the midpoint) — not SPANDREL 179 thrusting (red after a grind), TRANSOM 311 macro thrusting, SETTLE 212 digest, NZDHUF 228 harami-cross, UND 190 coil, or GBPMXN 24.27 spot piercing. */
+const SHINGLE_PRE: OHLC[] = [
+  bar("T-5", 225.186, 225.348, 224.648, 224.786),
+  bar("T-4", 224.786, 224.918, 224.186, 224.328),
+  bar("T-3", 224.328, 224.468, 223.648, 223.786),
+  bar("T-2", 223.786, 223.948, 223.186, 223.328),
+  bar("T-1", 223.328, 223.486, 221.648, 221.786),
+  bar("T0", 221.548, 222.868, 221.448, 222.686),
+];
+
+/** Bullish engulfing after a dump (T-1 tall red, T0 green opens below T-1 close and closes above the T-1 open) — not SHINGLE 223 piercing (close stays inside the prior body), CASEMENT 273 piercing, ROOF 19.11 grind engulf, SPANDREL 179 thrusting, NZDHUF 228 harami-cross, or BEVEL 4.05 crypto engulf. */
+const CORBEL_PRE: OHLC[] = [
+  bar("T-5", 243.648, 244.186, 240.248, 240.868),
+  bar("T-4", 240.868, 241.248, 238.186, 238.648),
+  bar("T-3", 238.648, 239.186, 235.448, 236.186),
+  bar("T-2", 236.186, 237.248, 234.648, 235.486),
+  bar("T-1", 235.486, 235.848, 230.186, 230.868),
+  bar("T0", 229.848, 236.648, 229.248, 235.686),
+];
+
 /** Harami cross after a grind (T-1 tall green, T0 doji fully inside T-1 body) — not CABLE harami (small real body), SOFFIT gravestone, TRUSS 81.6 tape harami-cross, STUCCO 51.86, LINTEL 74.2, MERKLE 12.38, or LIME inside-bar still-ahead. */
 const FASCIA_PRE: OHLC[] = [
   bar("T-5", 87.214, 87.318, 87.086, 87.286),
@@ -3269,6 +3379,16 @@ const TRANSOM_PRE: OHLC[] = [
   bar("T-2", 308.628, 309.748, 308.286, 309.486),
   bar("T-1", 309.486, 312.186, 309.186, 311.368),
   bar("T0", 311.748, 312.048, 309.868, 310.686),
+];
+
+/** Piercing line after a dump (T-1 tall red, T0 green opens below T-1 close and closes into the T-1 body above the midpoint) — not TRANSOM 311 thrusting (red after a grind), SHINGLE 223 tape piercing, SPANDREL 179 thrusting, SETTLE 212 digest, NZDHUF 228 harami-cross, UND 190 coil, CADHUF 268 dragonfly, or LENS 8.97 crypto piercing. */
+const CASEMENT_PRE: OHLC[] = [
+  bar("T-5", 281.648, 282.186, 279.248, 279.868),
+  bar("T-4", 279.868, 280.248, 278.186, 278.648),
+  bar("T-3", 278.648, 279.186, 275.448, 276.186),
+  bar("T-2", 276.186, 277.248, 274.648, 275.486),
+  bar("T-1", 275.486, 275.848, 270.186, 270.868),
+  bar("T0", 269.848, 273.648, 269.248, 273.286),
 ];
 
 export const FUTURES_CASES: CaseStudy[] = [
@@ -5031,6 +5151,62 @@ export const FUTURES_CASES: CaseStudy[] = [
     assetClass: "future",
   },
   {
+    id: "case-fut-tape-qar-piercing",
+    title: "Qatari-riyal futures print a piercing line after a dump",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE Qatari-riyal future already dumped into a tall red bar, then printed a green bar that opens below that red close and closes into that prior body, still above the midpoint. The riyal is grouped with risk currencies in this SAMPLE brief, not a QCB-fixing story. Thin chatter says the piercing bounce must continue. Practice data only — not a live FX-futures desk. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Piercing line on Qatari-riyal futures. Thin chatter: the piercing bounce must continue.",
+    preOhlc: QAR6_PRE,
+    postOhlc: withAftermath(QAR6_PRE, [
+      bar("+1", 0.26886, 0.26948, 0.26428, 0.26486),
+      bar("+2", 0.26486, 0.26548, 0.26028, 0.26086),
+      bar("+3", 0.26086, 0.26148, 0.25528, 0.25586),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A piercing line after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes into that prior body, still above the midpoint. This is not a bullish engulfing: the green close stays inside the prior body and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not zloty-futures: that hanging man sits near 0.248, not this riyal piercing line. This is not Ukrainian-hryvnia: that thrusting line sits near 0.0228. HOLD if the slip already has your size. This is not the hard-red wheat tweezer, not the Class-III milk evening star, not the Brent opening drive, not the Nikkei dump, not the spring-wheat inside bar, not the two-year outside bar, not the sterling-futures fail-break, not the Canadian-dollar engulfing, not the yen-futures shooting star, not the kiwi-futures dark-cloud, not the real-futures three-crows, not the Hong Kong dollar hanging man, not the ruble-futures harami, not the krona-futures marubozu, not the ringgit-futures gravestone, not the rupiah-futures harami-cross, not the Chilean-peso spinning top, not the Colombian-peso long-legged doji, not the Peruvian-sol dragonfly, not the Singapore-dollar matching high, not the Taiwan-dollar belt hold, not the Czech-koruna separating lines, not the Norwegian-krone on-neck, not the Bulgarian-lev in-neck, not the Ukrainian-hryvnia thrusting, not the GBP/MXN piercing spot tape, and not a live FX-futures desk.",
+      whyMarketMoved: "The piercing close failed and Qatari-riyal futures leaked; the bounce was not a resume of a reversal.",
+      evidence: "Qatari-riyal-futures piercing-line tape plus thin piercing-bounce-must-continue chatter. Practice only.",
+    },
+    allowShort: false,
+    packId: "futures-tape",
+    difficulty: "beginner",
+    assetClass: "future",
+  },
+  {
+    id: "case-fut-tape-bhd-engulf",
+    title: "Bahraini-dinar futures print a bullish engulfing after a dump",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE Bahraini-dinar future already dumped into a tall red bar, then printed a green bar that opens below that red close and closes above that red open, swallowing the prior body. The dinar is grouped with risk currencies in this SAMPLE brief, not a CBB-fixing story. Thin chatter says the engulfing bounce must continue. Practice data only — not a live FX-futures desk. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Bullish engulfing on Bahraini-dinar futures. Thin chatter: the engulfing bounce must continue.",
+    preOhlc: BHD6_PRE,
+    postOhlc: withAftermath(BHD6_PRE, [
+      bar("+1", 2.5648, 2.5748, 2.5086, 2.5186),
+      bar("+2", 2.5186, 2.5284, 2.4586, 2.4686),
+      bar("+3", 2.4686, 2.4784, 2.3986, 2.4086),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A bullish engulfing after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes above that prior open, swallowing the red body. This is not a piercing line: a piercing close stays inside the prior body, above the midpoint, and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not Qatari-riyal tape: that piercing line sits near 0.269, not this Bahraini-dinar engulfing. This is not Canadian-dollar futures: that bearish engulfing sits near 0.727 after a grind, not after a dump. HOLD if the slip already has your size. This is not the hard-red wheat tweezer, not the Class-III milk evening star, not the Brent opening drive, not the Nikkei dump, not the spring-wheat inside bar, not the two-year outside bar, not the sterling-futures fail-break, not the Canadian-dollar engulfing, not the yen-futures shooting star, not the kiwi-futures dark-cloud, not the real-futures three-crows, not the Hong Kong dollar hanging man, not the ruble-futures harami, not the krona-futures marubozu, not the ringgit-futures gravestone, not the rupiah-futures harami-cross, not the Chilean-peso spinning top, not the Colombian-peso long-legged doji, not the Peruvian-sol dragonfly, not the Singapore-dollar matching high, not the Taiwan-dollar belt hold, not the Czech-koruna separating lines, not the Norwegian-krone on-neck, not the Bulgarian-lev in-neck, not the Ukrainian-hryvnia thrusting, not the Qatari-riyal piercing, not the EUR/ZAR engulfing spot tape, and not a live FX-futures desk.",
+      whyMarketMoved: "The engulfing close failed and Bahraini-dinar futures leaked; the bounce was not a resume of a reversal.",
+      evidence: "Bahraini-dinar-futures bullish-engulfing tape plus thin engulfing-bounce-must-continue chatter. Practice only.",
+    },
+    allowShort: false,
+    packId: "futures-tape",
+    difficulty: "beginner",
+    assetClass: "future",
+  },
+  {
     id: "case-fut-macro-zb-open-drive",
     title: "Long-bond futures open with a wide drive as risk appetite fades",
     contextType: "news",
@@ -5723,6 +5899,34 @@ export const FUTURES_CASES: CaseStudy[] = [
         "A risk-off bid can keep this contract falling when the dirham is grouped with risk currencies. A bearish thrusting line after a grind is usually fade-or-wait, not a chase of the pause as a resume. The last bar is a long red that opens above the prior close and closes into that prior body, still above the midpoint. This is not in-neck: in-neck closes at nearly the prior close. This is not on-neck: on-neck closes at nearly the prior low. This is not a dark-cloud: a dark-cloud closes in the lower half of the prior body, still above that prior open. This is not separating lines: those share nearly the same open as the prior tall green. This is not a belt hold: a belt hold opens at that last bar's own high with no upper wick. This is not a matching high: both of those bars are green and share nearly the same high. This is not a dump-then-harami: that pattern shows up after a decline, not after a grind. This is not Georgian-lari: that in-neck sits near 0.368, not this dirham thrusting line. This is not krona-futures: that marubozu sits near 0.0948. This is not Norwegian-krone: that on-neck sits near 0.119. HOLD if the slip already has your size. This is not the long-bond duration opening drive, not the five-year CPI coil, not the aluminum smelter grind, not the steel-coil dump-no-reclaim, not the midcap evening star, not the Aussie-dollar outside bar, not the nickel fail-break, not the euro-futures engulfing, not the swiss-franc shooting star, not the peso-futures dark-cloud, not the rand-futures three-crows, not the zloty-futures hanging man, not the lira-futures harami, not the won-futures marubozu, not the Danish-krone gravestone, not the Philippine-peso harami-cross, not the forint-futures spinning top, not the shekel-futures long-legged doji, not the offshore-yuan dragonfly, not the Thai-baht matching high, not the Indian-rupee belt hold, not the Romanian-leu separating lines, not the Icelandic-krona on-neck, not the Georgian-lari in-neck, not the Ukrainian-hryvnia tape thrusting, not the CAD/DKK thrusting spot tape, and not a live FX-futures desk.",
       whyMarketMoved: "The thrusting close held and Moroccan-dirham futures leaked as risk currencies stayed offered.",
       evidence: "Moroccan-dirham-futures bearish-thrusting tape plus a risk-off brief. Practice only.",
+    },
+    allowShort: false,
+    packId: "futures-macro",
+    difficulty: "beginner",
+    assetClass: "future",
+  },
+  {
+    id: "case-fut-macro-aed-piercing",
+    title: "UAE-dirham futures print a piercing line after a dump as risk appetite fades",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "This SAMPLE UAE-dirham future already dumped into a tall red bar, then printed a green bar that opens below that red close and closes into that prior body, still above the midpoint, as risk appetite faded. The dirham is grouped with risk currencies in this SAMPLE brief, not a CBUAE-fixing story. Thin chatter says the piercing bounce must continue. Practice data only — not a live FX-futures desk. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Risk-off. UAE-dirham futures sold with risk currencies. Piercing line. Thin chatter: the piercing bounce must continue.",
+    preOhlc: AED6_PRE,
+    postOhlc: withAftermath(AED6_PRE, [
+      bar("+1", 0.28818, 0.28886, 0.28048, 0.28118),
+      bar("+2", 0.28118, 0.28186, 0.27148, 0.27218),
+      bar("+3", 0.27218, 0.27286, 0.25864, 0.25928),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A risk-off bid can keep this contract falling when the dirham is grouped with risk currencies. A piercing line after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes into that prior body, still above the midpoint. This is not a bullish engulfing: the green close stays inside the prior body and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not Qatari-riyal tape: that piercing line sits near 0.269, not this UAE-dirham piercing line. This is not Moroccan-dirham: that thrusting line sits near 0.104. HOLD if the slip already has your size. This is not the long-bond duration opening drive, not the five-year CPI coil, not the aluminum smelter grind, not the steel-coil dump-no-reclaim, not the midcap evening star, not the Aussie-dollar outside bar, not the nickel fail-break, not the euro-futures engulfing, not the swiss-franc shooting star, not the peso-futures dark-cloud, not the rand-futures three-crows, not the zloty-futures hanging man, not the lira-futures harami, not the won-futures marubozu, not the Danish-krone gravestone, not the Philippine-peso harami-cross, not the forint-futures spinning top, not the shekel-futures long-legged doji, not the offshore-yuan dragonfly, not the Thai-baht matching high, not the Indian-rupee belt hold, not the Romanian-leu separating lines, not the Icelandic-krona on-neck, not the Georgian-lari in-neck, not the Moroccan-dirham thrusting, not the Qatari-riyal tape piercing, not the AUD/ZAR piercing spot tape, and not a live FX-futures desk.",
+      whyMarketMoved: "The piercing close failed and UAE-dirham futures leaked as risk currencies stayed offered.",
+      evidence: "UAE-dirham-futures piercing-line tape plus a risk-off brief. Practice only.",
     },
     allowShort: false,
     packId: "futures-macro",
@@ -7492,6 +7696,62 @@ export const FOREX_CASES: CaseStudy[] = [
     assetClass: "forex",
   },
   {
+    id: "case-fx-tape-gbpmxn-piercing",
+    title: "GBP/MXN prints a piercing line after a dump",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "GBP/MXN already dumped into a tall red bar, then printed a green bar that opens below that red close and closes into that prior body, still above the midpoint. Thin chatter says the piercing bounce must continue. SAMPLE pair only, not a live FX desk. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Piercing line on sterling-peso. Thin chatter: the piercing bounce must continue.",
+    preOhlc: GBPMXN_PRE,
+    postOhlc: withAftermath(GBPMXN_PRE, [
+      bar("+1", 24.268, 24.318, 23.848, 23.898),
+      bar("+2", 23.898, 23.948, 23.428, 23.478),
+      bar("+3", 23.478, 23.528, 22.868, 22.918),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A piercing line after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes into that prior body, still above the midpoint. This is not a bullish engulfing: the green close stays inside the prior body and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not the USD/MXN remittance-gap stall: that tape sits near 17.26, not this sterling-peso piercing line. HOLD if the slip already has your size. This is not the GBP/CAD tweezer, not the GBP/CHF Swiss evening star, not the NZD/CHF opening drive, not the CHF/JPY dump, not the CAD/CHF inside bar, not the GBP/AUD outside bar, not the NZD/CAD fail-break, not the EUR/NZD engulfing, not the GBP/NOK shooting star, not the NZD/NOK dark-cloud, not the NZD/SEK three-crows, not the GBP/SEK hanging man, not the EUR/PLN harami, not the EUR/CZK marubozu, not the EUR/HUF gravestone, not the GBP/HUF harami-cross, not the EUR/RON spinning top, not the GBP/RON long-legged doji, not the AUD/RON dragonfly, not the AUD/HUF matching high, not the AUD/CZK belt hold, not the NZD/CZK separating lines, not the EUR/DKK on-neck, not the GBP/DKK in-neck, not the CHF/DKK thrusting, not the EUR/CAD falling wedge, not the GBP/NZD three-push, and not a live FX desk.",
+      whyMarketMoved: "The piercing close failed and sterling-peso leaked; the bounce was not a resume of a reversal.",
+      evidence: "GBP/MXN piercing-line tape plus thin piercing-bounce-must-continue chatter. Practice only.",
+    },
+    allowShort: false,
+    packId: "forex-tape",
+    difficulty: "beginner",
+    assetClass: "forex",
+  },
+  {
+    id: "case-fx-tape-eurzar-engulf",
+    title: "EUR/ZAR prints a bullish engulfing after a dump",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "EUR/ZAR already dumped into a tall red bar, then printed a green bar that opens below that red close and closes above that red open, swallowing the prior body. Thin chatter says the engulfing bounce must continue. SAMPLE pair only, not a live FX desk. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Bullish engulfing on euro-rand. Thin chatter: the engulfing bounce must continue.",
+    preOhlc: EURZAR_PRE,
+    postOhlc: withAftermath(EURZAR_PRE, [
+      bar("+1", 20.918, 20.968, 20.348, 20.418),
+      bar("+2", 20.418, 20.468, 19.648, 19.718),
+      bar("+3", 19.718, 19.768, 18.848, 18.918),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A bullish engulfing after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes above that prior open, swallowing the red body. This is not a piercing line: a piercing close stays inside the prior body, above the midpoint, and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not the GBP/MXN piercing tape: that close stays inside the prior body near 24.27, not this euro-rand engulfing. This is not USD/ZAR: that dump-no-reclaim sits near 18.5. This is not EUR/NZD: that bearish engulfing sits near 1.80 after a grind, not after a dump. HOLD if the slip already has your size. This is not the GBP/CAD tweezer, not the GBP/CHF Swiss evening star, not the NZD/CHF opening drive, not the CHF/JPY dump, not the CAD/CHF inside bar, not the GBP/AUD outside bar, not the NZD/CAD fail-break, not the EUR/NZD engulfing, not the GBP/NOK shooting star, not the NZD/NOK dark-cloud, not the NZD/SEK three-crows, not the GBP/SEK hanging man, not the EUR/PLN harami, not the EUR/CZK marubozu, not the EUR/HUF gravestone, not the GBP/HUF harami-cross, not the EUR/RON spinning top, not the GBP/RON long-legged doji, not the AUD/RON dragonfly, not the AUD/HUF matching high, not the AUD/CZK belt hold, not the NZD/CZK separating lines, not the EUR/DKK on-neck, not the GBP/DKK in-neck, not the CHF/DKK thrusting, not the GBP/MXN piercing, not the AUD/ZAR piercing, and not a live FX desk.",
+      whyMarketMoved: "The engulfing close failed and euro-rand leaked; the bounce was not a resume of a reversal.",
+      evidence: "EUR/ZAR bullish-engulfing tape plus thin engulfing-bounce-must-continue chatter. Practice only.",
+    },
+    allowShort: false,
+    packId: "forex-tape",
+    difficulty: "beginner",
+    assetClass: "forex",
+  },
+  {
     id: "case-fx-macro-cadjpy-harami",
     title: "CAD/JPY harami after a dump as risk appetite fades",
     contextType: "news",
@@ -8184,6 +8444,34 @@ export const FOREX_CASES: CaseStudy[] = [
         "A risk-off bid can keep this pair falling when the loonie is the risk side versus the krone. A bearish thrusting line after a grind is usually fade-or-wait, not a chase of the pause as a resume. The last bar is a long red that opens above the prior close and closes into that prior body, still above the midpoint. This is not in-neck: in-neck closes at nearly the prior close. This is not on-neck: on-neck closes at nearly the prior low. This is not a dark-cloud: a dark-cloud closes in the lower half of the prior body, still above that prior open. This is not separating lines: those share nearly the same open as the prior tall green. This is not a belt hold: a belt hold opens at that last bar's own high with no upper wick. This is not a matching high: both of those bars are green and share nearly the same high. This is not the CAD/JPY dump-then-harami: that pattern shows up after a decline, not after a grind. This is not euro-krone: EUR/DKK is the ERM2 on-neck tape, not this loonie-krone risk-off. This is not Aussie-krone: AUD/DKK is the on-neck macro near 4.55. This is not kiwi-krone: NZD/DKK is the in-neck macro near 3.83. This is not sterling-zloty: GBP/PLN is the harami near 5.086, not this thrusting line. HOLD if the slip already has your size. This is not the CAD/JPY dump-then-harami, not the AUD/CHF jobs coil, not the EUR/NOK oil grind, not the AUD/SGD dump-no-reclaim, not the NZD/SGD evening star, not the EUR/SGD outside bar, not the GBP/SGD fail-break, not the CAD/SGD engulfing, not the AUD/NOK shooting star, not the CAD/NOK dark-cloud, not the AUD/SEK three-crows, not the CAD/SEK hanging man, not the GBP/PLN harami, not the GBP/CZK marubozu, not the AUD/PLN gravestone, not the NZD/HUF harami-cross, not the CAD/RON spinning top, not the NZD/RON long-legged doji, not the CAD/HUF dragonfly, not the NZD/PLN matching high, not the CAD/CZK belt hold, not the CAD/PLN separating lines, not the AUD/DKK on-neck, not the NZD/DKK in-neck, not the EUR/DKK tape on-neck, not the GBP/DKK tape in-neck, not the CHF/DKK tape thrusting, and not a live FX desk.",
       whyMarketMoved: "The thrusting close held and loonie-krone leaked as the loonie stayed offered with risk.",
       evidence: "CAD/DKK bearish-thrusting tape plus a risk-off brief. Practice only.",
+    },
+    allowShort: false,
+    packId: "forex-macro",
+    difficulty: "beginner",
+    assetClass: "forex",
+  },
+  {
+    id: "case-fx-macro-audzar-piercing",
+    title: "AUD/ZAR prints a piercing line after a dump as risk appetite fades",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "AUD/ZAR already dumped into a tall red bar, then printed a green bar that opens below that red close and closes into that prior body, still above the midpoint, as risk appetite faded. The Aussie is the risk side versus the rand in this SAMPLE brief, not a euro-peg or ERM2 story. Thin chatter says the piercing bounce must continue. SAMPLE pair only, not a live FX desk. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Risk-off. Aussie sold versus the rand. Piercing line. Thin chatter: the piercing bounce must continue.",
+    preOhlc: AUDZAR_PRE,
+    postOhlc: withAftermath(AUDZAR_PRE, [
+      bar("+1", 11.648, 11.668, 11.428, 11.448),
+      bar("+2", 11.448, 11.468, 11.188, 11.208),
+      bar("+3", 11.208, 11.228, 10.868, 10.888),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A risk-off bid can keep this pair falling when the Aussie is the risk side versus the rand. A piercing line after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes into that prior body, still above the midpoint. This is not a bullish engulfing: the green close stays inside the prior body and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not the CAD/JPY dump-then-harami: that inside bar is not a piercing close into the prior body. This is not USD/ZAR: that dump-no-reclaim sits near 18.5, not this Aussie-rand piercing line. HOLD if the slip already has your size. This is not the CAD/JPY dump-then-harami, not the AUD/CHF jobs coil, not the EUR/NOK oil grind, not the AUD/SGD dump-no-reclaim, not the NZD/SGD evening star, not the EUR/SGD outside bar, not the GBP/SGD fail-break, not the CAD/SGD engulfing, not the AUD/NOK shooting star, not the CAD/NOK dark-cloud, not the AUD/SEK three-crows, not the CAD/SEK hanging man, not the GBP/PLN harami, not the GBP/CZK marubozu, not the AUD/PLN gravestone, not the NZD/HUF harami-cross, not the CAD/RON spinning top, not the NZD/RON long-legged doji, not the CAD/HUF dragonfly, not the NZD/PLN matching high, not the CAD/CZK belt hold, not the CAD/PLN separating lines, not the AUD/DKK on-neck, not the NZD/DKK in-neck, not the CAD/DKK thrusting, not the GBP/MXN piercing tape, and not a live FX desk.",
+      whyMarketMoved: "The piercing close failed and Aussie-rand leaked as the Aussie stayed offered with risk.",
+      evidence: "AUD/ZAR piercing-line tape plus a risk-off brief. Practice only.",
     },
     allowShort: false,
     packId: "forex-macro",
@@ -9984,6 +10272,62 @@ export const CRYPTO_CASES: CaseStudy[] = [
     assetClass: "crypto",
   },
   {
+    id: "case-crypto-tape-prism-piercing",
+    title: "Prism token prints a piercing line after a dump",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE prism token already dumped into a tall red bar, then printed a green bar that opens below that red close and closes into that prior body, still above the midpoint. Prism tokens are the prism-and-facet beta side in this SAMPLE brief, not a stablecoin. No protocol change. Thin chatter says the piercing bounce must continue. Practice data only — not a live exchange. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Piercing line on the prism token. Thin chatter: the piercing bounce must continue. No protocol change.",
+    preOhlc: PRISM_PRE,
+    postOhlc: withAftermath(PRISM_PRE, [
+      bar("+1", 1.5728, 1.5764, 1.5486, 1.5528),
+      bar("+2", 1.5528, 1.5564, 1.5286, 1.5328),
+      bar("+3", 1.5328, 1.5364, 1.5048, 1.5086),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A piercing line after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes into that prior body, still above the midpoint. This is not a bullish engulfing: the green close stays inside the prior body and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not leftover protocol math. This is not the rune-token tape: that thrusting line sits near 0.79, not this prism-and-facet beta. This is not the seal-token: that long-legged doji sits near 1.42. HOLD if the slip already has your size. This is not leftover protocol math, not the orbital tweezer, not the mesh-network evening star, not the custody opening drive, not the bandwidth dump, not the MEV-relay inside bar, not the yield-farm outside bar, not the blob-token fail-break, not the vault-token engulfing, not the gate-token shooting star, not the dock-token dark-cloud, not the node-token three-crows, not the slot-token hanging man, not the epoch-token harami, not the nonce-token marubozu, not the gossip-token gravestone, not the witness-token harami-cross, not the commit-token spinning top, not the hint-token long-legged doji, not the batch-token dragonfly, not the quill-token matching high, not the sigil-token belt hold, not the glyph-token separating lines, not the cipher-token on-neck, not the scroll-token in-neck, not the rune-token thrusting, and not a live exchange.",
+      whyMarketMoved: "The piercing close failed and the prism token leaked; the bounce was not a resume of a reversal.",
+      evidence: "Prism-token piercing-line tape plus thin piercing-bounce-must-continue chatter. Practice only.",
+    },
+    allowShort: false,
+    packId: "crypto-tape",
+    difficulty: "beginner",
+    assetClass: "crypto",
+  },
+  {
+    id: "case-crypto-tape-bevel-engulf",
+    title: "Bevel token prints a bullish engulfing after a dump",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE bevel token already dumped into a tall red bar, then printed a green bar that opens below that red close and closes above that red open, swallowing the prior body. Bevel tokens are the bevel-and-edge beta side in this SAMPLE brief, not a stablecoin. No protocol change. Thin chatter says the engulfing bounce must continue. Practice data only — not a live exchange. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Bullish engulfing on the bevel token. Thin chatter: the engulfing bounce must continue. No protocol change.",
+    preOhlc: BEVEL_PRE,
+    postOhlc: withAftermath(BEVEL_PRE, [
+      bar("+1", 4.0486, 4.0684, 3.9186, 3.9386),
+      bar("+2", 3.9386, 3.9584, 3.7686, 3.7886),
+      bar("+3", 3.7886, 3.8084, 3.5486, 3.5686),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A bullish engulfing after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes above that prior open, swallowing the red body. This is not a piercing line: a piercing close stays inside the prior body, above the midpoint, and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not leftover protocol math. This is not the prism-token tape: that piercing line sits near 1.57, not this bevel-and-edge beta. This is not the vault-token: that bearish engulfing sits near 9.11 after a grind, not after a dump. HOLD if the slip already has your size. This is not leftover protocol math, not the orbital tweezer, not the mesh-network evening star, not the custody opening drive, not the bandwidth dump, not the MEV-relay inside bar, not the yield-farm outside bar, not the blob-token fail-break, not the vault-token engulfing, not the gate-token shooting star, not the dock-token dark-cloud, not the node-token three-crows, not the slot-token hanging man, not the epoch-token harami, not the nonce-token marubozu, not the gossip-token gravestone, not the witness-token harami-cross, not the commit-token spinning top, not the hint-token long-legged doji, not the batch-token dragonfly, not the quill-token matching high, not the sigil-token belt hold, not the glyph-token separating lines, not the cipher-token on-neck, not the scroll-token in-neck, not the rune-token thrusting, not the prism-token piercing, and not a live exchange.",
+      whyMarketMoved: "The engulfing close failed and the bevel token leaked; the bounce was not a resume of a reversal.",
+      evidence: "Bevel-token bullish-engulfing tape plus thin engulfing-bounce-must-continue chatter. Practice only.",
+    },
+    allowShort: false,
+    packId: "crypto-tape",
+    difficulty: "beginner",
+    assetClass: "crypto",
+  },
+  {
     id: "case-crypto-macro-carb-harami",
     title: "Carbon-credit token harami after a dump as risk appetite fades",
     contextType: "news",
@@ -10677,6 +11021,34 @@ export const CRYPTO_CASES: CaseStudy[] = [
         "A risk-off bid can keep this token falling when it is the ward-and-watch beta side. A bearish thrusting line after a grind is usually fade-or-wait, not a chase of the pause as a resume. The last bar is a long red that opens above the prior close and closes into that prior body, still above the midpoint. This is not in-neck: in-neck closes at nearly the prior close. This is not on-neck: on-neck closes at nearly the prior low. This is not a dark-cloud: a dark-cloud closes in the lower half of the prior body, still above that prior open. This is not separating lines: those share nearly the same open as the prior tall green. This is not a belt hold: a belt hold opens at that last bar's own high with no upper wick. This is not a matching high: both of those bars are green and share nearly the same high. This is not a dump-then-harami: that pattern shows up after a decline, not after a grind. This is not leftover protocol math. This is not the codex-token: that in-neck sits near 32.85, not this ward-and-watch beta. This is not the rune-token tape: that thrusting line sits near 0.79. This is not the merkle-token: that harami-cross sits near 12.38. HOLD if the slip already has your size. This is not leftover protocol math, not the carbon-credit dump-then-harami, not the compute-rental CPI coil, not the lithium brine grind, not the social-token dump-no-reclaim, not the liquidity-pool evening star, not the wrapped-asset outside bar, not the sequencer-token fail-break, not the keeper-token engulfing, not the attest-token shooting star, not the lane-token dark-cloud, not the peer-token three-crows, not the quorum-token hanging man, not the shard-token harami, not the prover-token marubozu, not the bundle-token gravestone, not the merkle-token harami-cross, not the reveal-token spinning top, not the seal-token long-legged doji, not the ink-token dragonfly, not the wax-token matching high, not the forge-token belt hold, not the crest-token separating lines, not the tome-token on-neck, not the codex-token in-neck, not the rune-token tape thrusting, and not a live exchange.",
       whyMarketMoved: "The thrusting close held and the ward token leaked as ward-and-watch beta stayed offered with risk.",
       evidence: "Ward-token bearish-thrusting tape plus a risk-off brief. Practice only.",
+    },
+    allowShort: false,
+    packId: "crypto-macro",
+    difficulty: "beginner",
+    assetClass: "crypto",
+  },
+  {
+    id: "case-crypto-macro-lens-piercing",
+    title: "Lens token prints a piercing line after a dump as risk appetite fades",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "This SAMPLE lens token already dumped into a tall red bar, then printed a green bar that opens below that red close and closes into that prior body, still above the midpoint, as risk appetite faded. Lens tokens are the lens-and-focus beta side in this SAMPLE brief, not a stablecoin. No protocol change. Thin chatter says the piercing bounce must continue. Practice data only — not a live exchange. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Risk-off. Lens token sold with lens-and-focus beta. Piercing line. Thin chatter: the piercing bounce must continue. No protocol change.",
+    preOhlc: LENS_PRE,
+    postOhlc: withAftermath(LENS_PRE, [
+      bar("+1", 8.9686, 8.9984, 8.7486, 8.7786),
+      bar("+2", 8.7786, 8.8084, 8.5486, 8.5786),
+      bar("+3", 8.5786, 8.6084, 8.3286, 8.3586),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A risk-off bid can keep this token falling when it is the lens-and-focus beta side. A piercing line after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes into that prior body, still above the midpoint. This is not a bullish engulfing: the green close stays inside the prior body and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not leftover protocol math. This is not the prism-token tape: that piercing line sits near 1.57, not this lens-and-focus beta. This is not the ward-token: that thrusting line sits near 12.77. HOLD if the slip already has your size. This is not leftover protocol math, not the carbon-credit dump-then-harami, not the compute-rental CPI coil, not the lithium brine grind, not the social-token dump-no-reclaim, not the liquidity-pool evening star, not the wrapped-asset outside bar, not the sequencer-token fail-break, not the keeper-token engulfing, not the attest-token shooting star, not the lane-token dark-cloud, not the peer-token three-crows, not the quorum-token hanging man, not the shard-token harami, not the prover-token marubozu, not the bundle-token gravestone, not the merkle-token harami-cross, not the reveal-token spinning top, not the seal-token long-legged doji, not the ink-token dragonfly, not the wax-token matching high, not the forge-token belt hold, not the crest-token separating lines, not the tome-token on-neck, not the codex-token in-neck, not the ward-token thrusting, not the prism-token tape piercing, and not a live exchange.",
+      whyMarketMoved: "The piercing close failed and the lens token leaked as lens-and-focus beta stayed offered with risk.",
+      evidence: "Lens-token piercing-line tape plus a risk-off brief. Practice only.",
     },
     allowShort: false,
     packId: "crypto-macro",
@@ -12497,6 +12869,62 @@ export const OPTIONS_CONTEXT_CASES: CaseStudy[] = [
     assetClass: "option_context",
   },
   {
+    id: "case-optctx-tape-shingle-piercing",
+    title: "Shingle mill prints a piercing line after a dump",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE shingle mill already dumped into a tall red bar, then printed a green bar that opens below that red close and closes into that prior body, still above the midpoint. Thin leftover-premium chatter says the piercing bounce must continue. This app grades the stock only — no chain, no Greeks. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Piercing line on the shingle mill. Thin chatter: leftover premium, the piercing bounce must continue. Options context only.",
+    preOhlc: SHINGLE_PRE,
+    postOhlc: withAftermath(SHINGLE_PRE, [
+      bar("+1", 222.686, 222.848, 221.186, 221.348),
+      bar("+2", 221.348, 221.518, 219.648, 219.818),
+      bar("+3", 219.818, 219.986, 217.448, 217.618),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A piercing line after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes into that prior body, still above the midpoint. This is not a bullish engulfing: the green close stays inside the prior body and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not the spandrel-mill tape: that thrusting line sits near 179 leftover premium, not this shingle mill. This is not the transom-mill: that thrusting line sits near 311. Leftover premium is not a stock fill. HOLD if the slip already has your size. This is not leftover-premium math, not the railroad tweezer, not the cement evening star, not the port opening drive, not the beverage dump, not the lime-kiln inside bar, not the glass-container outside bar, not the tank-farm fail-break, not the roofing-maker engulfing, not the tile-kiln shooting star, not the pipe-mill dark-cloud, not the sand-quarry three-crows, not the grout-mill hanging man, not the stucco-mill harami, not the joist-mill marubozu, not the purlin-mill gravestone, not the truss-mill harami-cross, not the ridge-mill spinning top, not the eave-mill long-legged doji, not the flash-mill dragonfly, not the dormer-mill matching high, not the gutter-mill belt hold, not the stud-mill separating lines, not the jamb-mill on-neck, not the newel-mill in-neck, not the spandrel-mill thrusting, not the prism-token piercing tape, and still no chain.",
+      whyMarketMoved: "The piercing close failed and the shingle mill leaked; the bounce was not a resume of a reversal.",
+      evidence: "Shingle-mill piercing-line tape plus thin leftover-premium piercing-bounce-must-continue chatter. No Greeks.",
+    },
+    allowShort: false,
+    packId: "options-tape",
+    difficulty: "beginner",
+    assetClass: "option_context",
+  },
+  {
+    id: "case-optctx-tape-corbel-engulf",
+    title: "Corbel mill prints a bullish engulfing after a dump",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE corbel mill already dumped into a tall red bar, then printed a green bar that opens below that red close and closes above that red open, swallowing the prior body. Thin leftover-premium chatter says the engulfing bounce must continue. This app grades the stock only — no chain, no Greeks. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Bullish engulfing on the corbel mill. Thin chatter: leftover premium, the engulfing bounce must continue. Options context only.",
+    preOhlc: CORBEL_PRE,
+    postOhlc: withAftermath(CORBEL_PRE, [
+      bar("+1", 235.686, 236.248, 232.848, 233.248),
+      bar("+2", 233.248, 233.648, 229.186, 229.648),
+      bar("+3", 229.648, 230.048, 224.186, 224.648),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A bullish engulfing after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes above that prior open, swallowing the red body. This is not a piercing line: a piercing close stays inside the prior body, above the midpoint, and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not the shingle-mill tape: that piercing line sits near 223 leftover premium, not this corbel mill. This is not the roofing-maker: that bearish engulfing sits near 19 leftover premium after a grind, not after a dump. Leftover premium is not a stock fill. HOLD if the slip already has your size. This is not leftover-premium math, not the railroad tweezer, not the cement evening star, not the port opening drive, not the beverage dump, not the lime-kiln inside bar, not the glass-container outside bar, not the tank-farm fail-break, not the roofing-maker engulfing, not the tile-kiln shooting star, not the pipe-mill dark-cloud, not the sand-quarry three-crows, not the grout-mill hanging man, not the stucco-mill harami, not the joist-mill marubozu, not the purlin-mill gravestone, not the truss-mill harami-cross, not the ridge-mill spinning top, not the eave-mill long-legged doji, not the flash-mill dragonfly, not the dormer-mill matching high, not the gutter-mill belt hold, not the stud-mill separating lines, not the jamb-mill on-neck, not the newel-mill in-neck, not the spandrel-mill thrusting, not the shingle-mill piercing, and still no chain.",
+      whyMarketMoved: "The engulfing close failed and the corbel mill leaked; the bounce was not a resume of a reversal.",
+      evidence: "Corbel-mill bullish-engulfing tape plus thin leftover-premium engulfing-bounce-must-continue chatter. No Greeks.",
+    },
+    allowShort: false,
+    packId: "options-tape",
+    difficulty: "beginner",
+    assetClass: "option_context",
+  },
+  {
     id: "case-optctx-macro-wste-harami",
     title: "Waste-hauler harami after a dump as risk appetite fades",
     contextType: "news",
@@ -13190,6 +13618,34 @@ export const OPTIONS_CONTEXT_CASES: CaseStudy[] = [
         "A risk-off bid can keep this stock falling when transom is the cyclical industrial side. A bearish thrusting line after a grind is usually fade-or-wait, not a chase of the pause as a resume. The last bar is a long red that opens above the prior close and closes into that prior body, still above the midpoint. This is not in-neck: in-neck closes at nearly the prior close. This is not on-neck: on-neck closes at nearly the prior low. This is not a dark-cloud: a dark-cloud closes in the lower half of the prior body, still above that prior open. This is not separating lines: those share nearly the same open as the prior tall green. This is not a belt hold: a belt hold opens at that last bar's own high with no upper wick. This is not a matching high: both of those bars are green and share nearly the same high. This is not a dump-then-harami: that pattern shows up after a decline, not after a grind. This is not the lime-kiln inside-bar-still-ahead HOLD: there is no official air-permit note still ahead. This is not the baluster-mill: that in-neck sits near 206 leftover premium, not this transom mill. This is not the spandrel-mill tape: that thrusting line sits near 179. Leftover premium is not a stock fill. HOLD if the slip already has your size. This is not leftover-premium math, not the waste-hauler dump-then-harami, not the auto-dealer CPI coil, not the fertilizer potash grind, not the staffing dump-no-reclaim, not the paper-mill evening star, not the salt-miner outside bar, not the asphalt-paver fail-break, not the brick-kiln engulfing, not the gypsum-board shooting star, not the concrete-slab dark-cloud, not the clay-pit three-crows, not the rebar-mill hanging man, not the cable-mill harami, not the lintel-mill marubozu, not the soffit-mill gravestone, not the fascia-mill harami-cross, not the gable-mill spinning top, not the hip-mill long-legged doji, not the sill-mill dragonfly, not the rafter-mill matching high, not the mullion-mill belt hold, not the sash-mill separating lines, not the lath-mill on-neck, not the baluster-mill in-neck, not the spandrel-mill tape thrusting, and still no chain.",
       whyMarketMoved: "The thrusting close held and the transom mill leaked as cyclicals stayed offered with risk.",
       evidence: "Transom-mill bearish-thrusting tape plus a risk-off leftover-premium brief. No Greeks.",
+    },
+    allowShort: false,
+    packId: "options-macro",
+    difficulty: "beginner",
+    assetClass: "option_context",
+  },
+  {
+    id: "case-optctx-macro-casement-piercing",
+    title: "Casement mill prints a piercing line after a dump as risk appetite fades",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "This SAMPLE casement mill already dumped into a tall red bar, then printed a green bar that opens below that red close and closes into that prior body, still above the midpoint, as risk appetite faded. Casement is the cyclical industrial in this SAMPLE brief, not duration. Thin leftover-premium chatter says the piercing bounce must continue. This app grades the stock only — no chain, no Greeks. Chase the bounce, wait, or take risk off?",
+    newsHeadline:
+      "Risk-off. Casement mill sold with cyclicals. Piercing line. Thin chatter: leftover premium, the piercing bounce must continue. Options context only.",
+    preOhlc: CASEMENT_PRE,
+    postOhlc: withAftermath(CASEMENT_PRE, [
+      bar("+1", 273.286, 273.648, 269.848, 270.248),
+      bar("+2", 270.248, 270.648, 263.186, 263.648),
+      bar("+3", 263.648, 264.048, 257.186, 257.648),
+    ]),
+    correctActions: ["sell", "hold"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A risk-off bid can keep this stock falling when casement is the cyclical industrial side. A piercing line after a dump is usually fade-or-wait, not a chase of the first green as a resume. The last bar is a green that opens below the prior close and closes into that prior body, still above the midpoint. This is not a bullish engulfing: the green close stays inside the prior body and does not swallow that red open. This is not a dark-cloud: a dark-cloud is a red bar after a green grind. This is not a thrusting line: a thrusting line is a long red that opens above a prior green close. This is not on-neck or in-neck: those are red follow-through after a green. This is not the shingle-mill tape: that piercing line sits near 223 leftover premium, not this casement mill. This is not the transom-mill: that thrusting line sits near 311. Leftover premium is not a stock fill. HOLD if the slip already has your size. This is not leftover-premium math, not the waste-hauler dump-then-harami, not the auto-dealer CPI coil, not the fertilizer potash grind, not the staffing dump-no-reclaim, not the paper-mill evening star, not the salt-miner outside bar, not the asphalt-paver fail-break, not the brick-kiln engulfing, not the gypsum-board shooting star, not the concrete-slab dark-cloud, not the clay-pit three-crows, not the rebar-mill hanging man, not the cable-mill harami, not the lintel-mill marubozu, not the soffit-mill gravestone, not the fascia-mill harami-cross, not the gable-mill spinning top, not the hip-mill long-legged doji, not the sill-mill dragonfly, not the rafter-mill matching high, not the mullion-mill belt hold, not the sash-mill separating lines, not the lath-mill on-neck, not the baluster-mill in-neck, not the transom-mill thrusting, not the shingle-mill tape piercing, and still no chain.",
+      whyMarketMoved: "The piercing close failed and the casement mill leaked as cyclicals stayed offered with risk.",
+      evidence: "Casement-mill piercing-line tape plus a risk-off leftover-premium brief. No Greeks.",
     },
     allowShort: false,
     packId: "options-macro",
