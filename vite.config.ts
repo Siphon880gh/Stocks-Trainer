@@ -5,7 +5,9 @@ import {defineConfig} from 'vite';
 
 export default defineConfig(({mode}) => ({
     plugins: [react(), tailwindcss()],
-    base: mode === 'production' ? '/stocks/trainer/' : '/',
+    // Keep production assets relative to dist/index.html so the build works
+    // whether dist is visited directly or deployed beneath a web-server alias.
+    base: mode === 'production' ? './' : '/',
     preview: {
       port: Number(process.env.PORT),
       host: '0.0.0.0',

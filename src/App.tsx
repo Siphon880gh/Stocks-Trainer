@@ -22,7 +22,16 @@ import Playbooks from "./pages/Playbooks";
 import Playbook from "./pages/Playbook";
 
 export default function App() {
-  const basename = import.meta.env.BASE_URL.replace(/\/$/, "") || undefined;
+  const baseUrl = import.meta.env.BASE_URL;
+  // A relative Vite base ("./") has no stable URL pathname to use as a router
+  // basename. When the static build is mounted below a variable web-server
+  // prefix, preserve everything before /trainer/stocks-trainer/dist as its basename.
+  const mountedBuild = window.location.pathname.match(
+    /^(.*\/trainer\/stocks-trainer\/dist)(?:\/|$)/,
+  )?.[1];
+  const basename = mountedBuild ?? (baseUrl.startsWith("/")
+    ? baseUrl.replace(/\/$/, "") || undefined
+    : undefined);
   return (
     <BrowserRouter basename={basename}>
       <Routes>

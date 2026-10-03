@@ -11,7 +11,12 @@ export interface PatternDef {
   image?: string;
 }
 
-const patternImage = (file: string) => `${import.meta.env.BASE_URL}patterns/${file}`;
+// Resolve public images from the loaded document, not from the client-side
+// route. This keeps them working with Vite's relative production base.
+const patternImage = (file: string) => new URL(
+  `${import.meta.env.BASE_URL}patterns/${file}`,
+  document.baseURI,
+).href;
 
 export const PATTERNS: PatternDef[] = [
   { id: "doji", name: "Doji", type: "neutral", sentiment: "neutral", confirmation: "medium", description: "Indecision in the market with equal open/close." },
