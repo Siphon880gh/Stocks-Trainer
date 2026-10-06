@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import GoalPicker from "../components/GoalPicker";
+import JargonText from "../components/JargonText";
 import {
   DECISION_MAKER_PATH_ID,
   isDecisionMakerPathComplete,
@@ -149,7 +150,9 @@ export default function Dashboard() {
                   : "Beginner Equities credential: literacy, Indicators, earnings pack, and company-news pack are complete (SAMPLE progress, not attested)."}
             </p>
           ) : activeDef ? (
-            <p className="text-sm text-muted mt-2">{activeDef.summary}</p>
+            <p className="text-sm text-muted mt-2">
+              <JargonText text={activeDef.summary} />
+            </p>
           ) : (
             <p className="text-sm text-muted mt-2">
               {goalPending
@@ -167,7 +170,9 @@ export default function Dashboard() {
       </section>
 
       <section className="space-y-4">
-        <p className="text-sm">Coach: {coachTip}</p>
+        <p className="text-sm">
+          Coach: <JargonText text={coachTip} />
+        </p>
         <div className="h-1.5 w-full bg-canvas rounded-full overflow-hidden">
           <div
             className="h-full bg-primary rounded-full"
@@ -229,6 +234,10 @@ export default function Dashboard() {
             Optional:{" "}
             <Link to="/training?group=news-literacy" className="text-primary hover:underline">
               news literacy
+            </Link>
+            {" · "}
+            <Link to="/training?group=earnings-jargon" className="text-primary hover:underline">
+              earnings desk language
             </Link>
           </p>
         ) : (

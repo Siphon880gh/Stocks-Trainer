@@ -13,6 +13,7 @@ import {
 import PatternDetailModal from "../components/PatternDetailModal";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
+import JargonText from "../components/JargonText";
 
 type FilterType = "all" | "bullish" | "bearish" | "neutral";
 type ArchiveTab = "patterns" | "indicators" | "literacy";
@@ -284,7 +285,9 @@ export default function Archive() {
                   <span className="text-[10px] font-mono text-muted uppercase">locked</span>
                 ) : null}
               </div>
-              <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">{term.summary}</p>
+              <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
+                <JargonText text={term.summary} />
+              </p>
               </button>
               <YouTubeSearchLink title={term.name} />
               </div>
@@ -344,7 +347,7 @@ export default function Archive() {
                     <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
                       &gt; {pattern.type.toUpperCase()}_PATTERN<br />
                       &gt; CONFIRMATION: {pattern.confirmation.toUpperCase().replace("_", " ")}<br />
-                      {pattern.description}
+                      <JargonText text={pattern.description} />
                     </p>
                   </div>
                 </div>
@@ -452,7 +455,9 @@ export default function Archive() {
                 <span className="material-symbols-outlined">close</span>
               </button>
             </div>
-            <p className="text-sm text-slate-300">{selectedTerm.detail}</p>
+            <p className="text-sm text-slate-300">
+              <JargonText text={selectedTerm.detail} />
+            </p>
             <Link
               to="/training?group=equity-literacy&start=1"
               className="inline-flex text-xs font-bold text-primary underline"

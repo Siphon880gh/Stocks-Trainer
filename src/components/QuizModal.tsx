@@ -10,6 +10,7 @@ import {
   type QuizOption,
 } from "../lib/quizData";
 import YouTubeSearchLink from "./YouTubeSearchLink";
+import JargonText from "./JargonText";
 import { PATTERN_OHLC, SAMPLE_OHLC } from "../lib/ohlcData";
 import { getLiteracyTerm } from "../lib/literacyTerms";
 import { completeMilestoneFromQuiz } from "../lib/progressStore";
@@ -173,7 +174,9 @@ export default function QuizModal({
           <div className="bg-surface border border-line rounded-xl p-6">
             <span className="text-xs text-muted">Question {question.id}</span>
             <h3 className="text-xl font-semibold mt-2 mb-2">Question</h3>
-            <p className="text-muted">{question.prompt}</p>
+            <p className="text-muted">
+              <JargonText text={question.prompt} />
+            </p>
           </div>
 
           {/* Chart, snapshot card, or literacy context — skip hero chart when options are charts */}
@@ -208,8 +211,20 @@ export default function QuizModal({
                 Literacy
               </p>
               <p className="text-sm">
-                Equities vocabulary drill — no chart required. Answer from definitions, then read the
-                process debrief.
+                {groupId === "earnings-jargon" ? (
+                  <>
+                    Earnings desk language. Hover the{" "}
+                    <span className="material-symbols-outlined align-text-bottom text-[15px] text-primary">
+                      info
+                    </span>{" "}
+                    beside a phrase if you want the definition, then pick the best read.
+                  </>
+                ) : (
+                  <>
+                    Equities vocabulary drill — no chart required. Answer from definitions, then read the
+                    process debrief.
+                  </>
+                )}
               </p>
               {question.glossaryTermId && getLiteracyTerm(question.glossaryTermId) ? (
                 <p className="text-primary/70 text-xs font-mono">
@@ -263,23 +278,28 @@ export default function QuizModal({
                 <span className="text-primary opacity-50">&gt;</span>
                 <p className="text-slate-300 italic">
                   "
-                  {splitHintTerms(question.explanation).map((part, i) =>
-                    part.overlayId ? (
-                      <span key={i} className="inline whitespace-nowrap not-italic">
-                        {part.text}
-                        <button
-                          type="button"
-                          className="inline-flex align-middle ml-0.5 text-primary hover:text-primary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
-                          aria-label={`About ${part.text}`}
-                          onClick={() => setHintOverlayId(part.overlayId!)}
-                        >
-                          <span className="material-symbols-outlined text-[16px] leading-none">info</span>
-                        </button>
-                      </span>
-                    ) : (
-                      <span key={i}>{part.text}</span>
-                    )
-                  )}
+                  <JargonText
+                    text={question.explanation}
+                    renderPlain={(chunk) =>
+                      splitHintTerms(chunk).map((part, i) =>
+                        part.overlayId ? (
+                          <span key={i} className="inline whitespace-nowrap not-italic">
+                            {part.text}
+                            <button
+                              type="button"
+                              className="inline-flex align-middle ml-0.5 text-primary hover:text-primary/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                              aria-label={`About ${part.text}`}
+                              onClick={() => setHintOverlayId(part.overlayId!)}
+                            >
+                              <span className="material-symbols-outlined text-[16px] leading-none">info</span>
+                            </button>
+                          </span>
+                        ) : (
+                          <span key={i}>{part.text}</span>
+                        )
+                      )
+                    }
+                  />
                   "
                 </p>
               </div>
@@ -421,14 +441,16 @@ function QuizOptionButton({
           >
             Option {option.id} {selected && "(selected)"}
           </span>
-          <span className={cn("text-lg font-bold", selected && "text-primary")}>{option.label}</span>
+          <span className={cn("text-lg font-bold", selected && "text-primary")}>
+            <JargonText text={option.label} />
+          </span>
           <p
             className={cn(
               "text-sm mt-1 transition-opacity",
               selected ? "text-primary/60" : "text-slate-400 opacity-0 group-hover:opacity-100"
             )}
           >
-            {option.description}
+            <JargonText text={option.description} />
           </p>
           <div
             className={cn(

@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
+import JargonText from "./JargonText";
 import {
   activePathMilestoneId,
   coachTipForActive,
@@ -164,8 +165,12 @@ export default function PathMapPanel({
             <p className="font-medium">
               Now · {active.title}
             </p>
-            <p className="text-muted">{active.summary}</p>
-            <p className="text-muted">Coach: {coachTip}</p>
+            <p className="text-muted">
+              <JargonText text={active.summary} />
+            </p>
+            <p className="text-muted">
+              Coach: <JargonText text={coachTip} />
+            </p>
             {active.trainingGroup ? (
               <button
                 type="button"

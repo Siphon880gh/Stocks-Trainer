@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import BrowsePopover from "../components/BrowsePopover";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
+import JargonText from "../components/JargonText";
 import { NAVIGATOR_CLASS_LABELS } from "../lib/marketNavigator";
 import { buildPlaybookCursorPrompt, classifySourceUrl, type SourceUrlKind } from "../lib/playbookPrompt";
 import { listPlaybooks } from "../lib/playbooks";
@@ -343,7 +344,9 @@ export default function Playbooks() {
                       </span>
                     </div>
                     <Link to={`/playbooks/${p.id}`} className="block space-y-2">
-                      <p className="text-sm text-muted">{p.summary}</p>
+                      <p className="text-sm text-muted">
+                        <JargonText text={p.summary} />
+                      </p>
                       <p className="text-[12px] text-muted">{p.source.label}</p>
                     </Link>
                   </li>

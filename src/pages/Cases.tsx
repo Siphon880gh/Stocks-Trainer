@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import BrowsePopover from "../components/BrowsePopover";
+import JargonText from "../components/JargonText";
 import {
   canStartCasePack,
   CHART_GATE_TRAINING_GROUP,
@@ -203,7 +204,9 @@ export default function Cases() {
               <h2 className="text-sm font-bold text-primary/80 uppercase tracking-widest">
                 {meta.name} ({pack.length})
               </h2>
-              <p className="text-xs text-slate-500">{meta.description}</p>
+              <p className="text-xs text-slate-500">
+                <JargonText text={meta.description} />
+              </p>
               {!unlocked ? (
                 <p className="text-xs text-slate-500">
                   Locked. Finish the earlier beginner-path steps first.
@@ -215,7 +218,9 @@ export default function Cases() {
                     {unlocked ? (
                       <div className="flex items-center gap-2 border border-line hover:border-line rounded-lg px-4 py-3 font-mono text-sm">
                         <Link to={`/cases/${c.id}`} className="min-w-0 flex-1">
-                          <span className="text-primary">{c.title}</span>
+                          <span className="text-primary">
+                            <JargonText text={c.title} />
+                          </span>
                           <span className="text-slate-500 text-xs ml-2">
                             {thinkingModeLabel(c.thinkingMode)} ·{" "}
                             {c.difficulty === "beginner" ? "Beginner" : "Intermediate"}
@@ -225,7 +230,9 @@ export default function Cases() {
                       </div>
                     ) : (
                       <div className="flex items-center gap-2 border border-white/5 rounded-lg px-4 py-3 font-mono text-sm text-slate-600">
-                        <span className="min-w-0 flex-1">{c.title}</span>
+                        <span className="min-w-0 flex-1">
+                          <JargonText text={c.title} />
+                        </span>
                         <YouTubeSearchLink title={c.title} />
                       </div>
                     )}

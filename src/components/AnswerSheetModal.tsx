@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { getQuestionsForGroup, QUIZ_GROUPS, type QuizGroupId } from "../lib/quizData";
 import { PATTERN_OHLC, SAMPLE_OHLC } from "../lib/ohlcData";
 import CandlestickChart from "./CandlestickChart";
+import JargonText from "./JargonText";
 import MarketChart from "./MarketChart";
 
 interface AnswerSheetModalProps {
@@ -82,7 +83,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                             <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
                               <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>
                               <span className="font-bold text-primary flex items-center gap-2">
-                                {q.correctAnswer}: {label}
+                                {q.correctAnswer}: <JargonText text={label} />
                                 {onPracticeQuestion && (
                                   <span className="text-xs font-normal text-primary/60">— Click to practice</span>
                                 )}
@@ -153,7 +154,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                     <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
                       <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>
                       <span className="font-bold text-primary flex items-center gap-2">
-                        {q.correctAnswer}: {label}
+                        {q.correctAnswer}: <JargonText text={label} />
                         {onPracticeQuestion && (
                           <span className="text-xs font-normal text-primary/60">— Click to practice</span>
                         )}

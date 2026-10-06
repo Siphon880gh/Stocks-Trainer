@@ -28,6 +28,7 @@ import {
   thinkingModeLabel,
 } from "../lib/thinkingModeTips";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
+import JargonText from "../components/JargonText";
 
 const ACTIONS: { id: CaseAction; label: string }[] = [
   { id: "buy", label: "BUY" },
@@ -138,13 +139,15 @@ export default function CasePlayer() {
             <h1 className="text-xl font-semibold">{study.title}</h1>
             <YouTubeSearchLink title={study.title} />
           </div>
-          <p className="text-sm">{study.brief}</p>
+          <p className="text-sm">
+            <JargonText text={study.brief} />
+          </p>
           <p className="text-[13px] text-muted leading-relaxed">
-            Tip: {coachTipForThinkingMode(study.thinkingMode)}
+            Tip: <JargonText text={coachTipForThinkingMode(study.thinkingMode)} />
           </p>
           {study.newsHeadline ? (
             <p className="text-sm text-primary/90">
-              Headline: {study.newsHeadline}
+              Headline: <JargonText text={study.newsHeadline} />
             </p>
           ) : null}
         </div>
@@ -234,15 +237,15 @@ export default function CasePlayer() {
             </div>
             <p className="text-slate-300">
               <span className="text-primary/50">How to think about it: </span>
-              {study.debrief.process}
+              <JargonText text={study.debrief.process} />
             </p>
             <p className="text-slate-300">
               <span className="text-primary/50">Why the price moved: </span>
-              {study.debrief.whyMarketMoved}
+              <JargonText text={study.debrief.whyMarketMoved} />
             </p>
             <p className="text-slate-300">
               <span className="text-primary/50">What the numbers showed: </span>
-              {study.debrief.evidence}
+              <JargonText text={study.debrief.evidence} />
             </p>
             {grade === "partial" && study.partialOnHorizonMismatch ? (
               <p className="text-yellow-400/90 text-xs">

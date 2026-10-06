@@ -12,6 +12,7 @@ import {
 import { isCoachingSessionComplete } from "../lib/progressStore";
 import type { AssetClass } from "../lib/samplePacks";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
+import JargonText from "../components/JargonText";
 
 export default function Coach() {
   const navigate = useNavigate();
@@ -136,7 +137,9 @@ export default function Coach() {
                     </span>
                   </div>
                   <Link to={`/coach/${meta.slug}`} className="block space-y-2">
-                    <p className="text-sm text-muted">{meta.summary}</p>
+                    <p className="text-sm text-muted">
+                      <JargonText text={meta.summary} />
+                    </p>
                     <div className="flex flex-wrap gap-2">
                       {meta.tags.map((tag) => (
                         <span

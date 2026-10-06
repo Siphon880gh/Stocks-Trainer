@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import PracticeShell from "../../components/PracticeShell";
+import JargonText from "../../components/JargonText";
 import { LITERACY_TERMS } from "../../lib/literacyTerms";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
 
@@ -37,8 +38,12 @@ export default function PracticeFlashcards() {
           <p className="text-xl font-semibold">{term.name}</p>
           {flipped ? (
             <div className="mt-3 space-y-2 text-sm">
-              <p>{term.summary}</p>
-              <p className="text-muted">{term.detail}</p>
+              <p>
+                <JargonText text={term.summary} />
+              </p>
+              <p className="text-muted">
+                <JargonText text={term.detail} />
+              </p>
             </div>
           ) : (
             <p className="text-sm text-muted mt-3">Tap to flip</p>

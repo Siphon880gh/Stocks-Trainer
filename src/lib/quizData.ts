@@ -3888,6 +3888,330 @@ export const OPTIONS_LITERACY_QUESTIONS: QuizQuestion[] = [
   },
 ];
 
+const PHRASE = "Pick the phrase that fits.";
+
+export const EARNINGS_JARGON_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "EJ-01",
+    prompt: "The stock climbed for several sessions. The company reports tonight. What is that climb called?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Into the print", description: PHRASE },
+      { id: "B", label: "After the print", description: "That window is later." },
+      { id: "C", label: "Faded the print", description: "That is a give-back after the release." },
+    ],
+    explanation: "Into the print is the price action leading up to the earnings release, while the numbers are still ahead.",
+  },
+  {
+    id: "EJ-02",
+    prompt: "A note says the book is still pre-print. The release is tomorrow morning. Which clock is that?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Post-print trading", description: "The release already happened." },
+      { id: "B", label: "Before the print", description: PHRASE },
+      { id: "C", label: "Guide-up", description: "That is a forecast change, not a clock." },
+    ],
+    explanation: "Pre-print and before the print both mean earnings have not been released yet.",
+  },
+  {
+    id: "EJ-03",
+    prompt: "The company has just reported revenue and profit. Traders are arguing about those numbers, not the days before. What are they arguing about?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "The run-up into earnings", description: "That already happened." },
+      { id: "B", label: "The whisper number", description: "That is an unofficial forecast, not the report." },
+      { id: "C", label: "The print", description: PHRASE },
+    ],
+    explanation: "The print is the actual reported earnings or results.",
+  },
+  {
+    id: "EJ-04",
+    prompt: "The release hit twenty minutes ago and the stock is still moving. Which window is this?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "After the print", description: PHRASE },
+      { id: "B", label: "Pre-print", description: "That is still before the release." },
+      { id: "C", label: "Into the print", description: "That is the approach, not the aftermath." },
+    ],
+    explanation: "After the print, or post-print, is trading after the earnings release.",
+  },
+  {
+    id: "EJ-05",
+    prompt: "Someone says ignore the headline adjectives and read what price and trading activity are signaling. What are they telling you to read?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "The whisper number", description: "That is an unofficial estimate." },
+      { id: "B", label: "The tape", description: PHRASE },
+      { id: "C", label: "Guidance", description: "That is management’s forecast." },
+    ],
+    explanation: "The tape is what the stock’s price and trading activity are signaling.",
+  },
+  {
+    id: "EJ-06",
+    prompt: "Before the release, bids were thin, rallies failed, and sellers kept showing up. Which description fits that trading?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "The tape was weak", description: PHRASE },
+      { id: "B", label: "The tape was strong", description: "Strength would show buyers in control." },
+      { id: "C", label: "Clean beat", description: "That describes the report, not the trading." },
+    ],
+    explanation: "Tape was weak means the stock’s trading showed weakness. Tape was strong means it showed strength.",
+  },
+  {
+    id: "EJ-07",
+    prompt: "Everyone had expected a rate hold, the headline matches, and the first spike fades. What was already true of that news?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Not priced in", description: "Then the news would be a surprise." },
+      { id: "B", label: "Miss and lower", description: "That is a report plus a forecast cut." },
+      { id: "C", label: "Priced in", description: PHRASE },
+    ],
+    explanation: "Priced in means investors already expected it, so it may already be reflected in the stock price.",
+  },
+  {
+    id: "EJ-08",
+    prompt: "A product surprise lands that almost nobody had in their model. The stock gaps and holds. What was true of that surprise?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Priced in", description: "Then the gap would be less of a surprise." },
+      { id: "B", label: "Not priced in", description: PHRASE },
+      { id: "C", label: "Sell the news", description: "That is a drop after expected good news." },
+    ],
+    explanation: "Not priced in means the market was not expecting it.",
+  },
+  {
+    id: "EJ-09",
+    prompt: "Into the release, investors were looking for unusually strong results, not a routine quarter. Which phrase names that setup?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Expectations were elevated", description: PHRASE },
+      { id: "B", label: "Low bar", description: "A low bar is easy to beat." },
+      { id: "C", label: "Guide-down", description: "That is a cut to the forecast." },
+    ],
+    explanation: "Expectations were elevated means investors were expecting unusually strong results.",
+  },
+  {
+    id: "EJ-10",
+    prompt: "Published estimates were easy to clear because the crowd had already cut numbers. Which bar is that?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "High bar", description: "A high bar is hard to beat." },
+      { id: "B", label: "Whisper number", description: "That is an unofficial figure, not the difficulty." },
+      { id: "C", label: "Low bar", description: PHRASE },
+    ],
+    explanation: "A low bar means expectations were easy to beat. A high bar means they were hard to beat.",
+  },
+  {
+    id: "EJ-11",
+    prompt: "The crowd wanted a blowout, and a merely decent quarter may not be enough. Which bar is that?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Low bar", description: "A low bar is easy to clear." },
+      { id: "B", label: "High bar", description: PHRASE },
+      { id: "C", label: "Good print", description: "That judges the report after it lands." },
+    ],
+    explanation: "A high bar means expectations were hard to beat.",
+  },
+  {
+    id: "EJ-12",
+    prompt: "Reported profit came in above the published Wall Street analyst estimate. What did the company do?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Beat the Street", description: PHRASE },
+      { id: "B", label: "Missed the Street", description: "That is a result below estimates." },
+      { id: "C", label: "Guide-down", description: "That is a lower forecast, not the past quarter." },
+    ],
+    explanation: "Beat the Street means results exceeded Wall Street analyst estimates.",
+  },
+  {
+    id: "EJ-13",
+    prompt: "Profit landed below the published analyst estimate. What did the company do?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Beat the Street", description: "That is a result above estimates." },
+      { id: "B", label: "Clean beat", description: "A clean beat clears the important metrics." },
+      { id: "C", label: "Missed the Street", description: PHRASE },
+    ],
+    explanation: "Missed the Street means results fell below analyst estimates.",
+  },
+  {
+    id: "EJ-14",
+    prompt: "The main EPS number topped estimates, but you have not checked margins or the outlook yet. What do you have so far?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Clean beat", description: "A clean beat needs the important metrics, not one line." },
+      { id: "B", label: "Headline beat", description: PHRASE },
+      { id: "C", label: "Beat and raise", description: "That also needs a higher forecast." },
+    ],
+    explanation: "A headline beat or headline miss is only the main reported number versus estimates.",
+  },
+  {
+    id: "EJ-15",
+    prompt: "Published estimates are $1.10. Desk chat is using $1.25, and that figure is not in the analyst consensus. What is $1.25?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Whisper number", description: PHRASE },
+      { id: "B", label: "The print", description: "The print is what the company actually reported." },
+      { id: "C", label: "Guidance", description: "Guidance is management’s own forecast." },
+    ],
+    explanation: "A whisper number is an unofficial expectation that may sit above or below published analyst estimates.",
+  },
+  {
+    id: "EJ-16",
+    prompt: "The company beat the published estimate, but the whisper number was higher and the stock fell. Which phrase fits?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Clean beat", description: "A clean beat does not hide a disappointed tape." },
+      { id: "B", label: "Miss and lower", description: "That is a miss plus a cut forecast." },
+      { id: "C", label: "Beat but not enough", description: PHRASE },
+    ],
+    explanation: "Beat but not enough means the company officially beat estimates but failed to meet higher market expectations.",
+  },
+  {
+    id: "EJ-17",
+    prompt: "Revenue, margins, and profit all came through, and the report did not carry an obvious negative. What kind of print is that?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Bad print", description: "A bad print is broadly weak." },
+      { id: "B", label: "Good print", description: PHRASE },
+      { id: "C", label: "Headline miss", description: "That is the main number missing estimates." },
+    ],
+    explanation: "A good print is a broadly strong earnings report. A bad print is a broadly weak one.",
+  },
+  {
+    id: "EJ-18",
+    prompt: "The important lines beat, and there is no ugly margin comment or outlook cut sitting next to them. Which phrase is the tightest?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Clean beat", description: PHRASE },
+      { id: "B", label: "Headline beat", description: "A headline beat can still hide weak lines." },
+      { id: "C", label: "Beat but not enough", description: "That failed a higher bar." },
+    ],
+    explanation: "A clean beat means the most important metrics beat expectations without obvious negatives.",
+  },
+  {
+    id: "EJ-19",
+    prompt: "This quarter beat estimates, and management also raised what it expects next. What pair is that?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Miss and lower", description: "That is a miss plus a reduced forecast." },
+      { id: "B", label: "Beat and raise", description: PHRASE },
+      { id: "C", label: "Sell the news", description: "That describes the stock’s reaction, not the forecast." },
+    ],
+    explanation: "Beat and raise means the company beat current estimates and increased future guidance.",
+  },
+  {
+    id: "EJ-20",
+    prompt: "Results came in light, and management reduced the outlook with them. What pair is that?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Beat and raise", description: "That is a beat plus a higher forecast." },
+      { id: "B", label: "Clean beat", description: "A clean beat does not come with a cut outlook." },
+      { id: "C", label: "Miss and lower", description: PHRASE },
+    ],
+    explanation: "Miss and lower means the company missed estimates and reduced future guidance.",
+  },
+  {
+    id: "EJ-21",
+    prompt: "Management publishes what it expects for the next few quarters. That forecast is not last quarter’s actual result. What is it called?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Guidance", description: PHRASE },
+      { id: "B", label: "The print", description: "The print is the reported result." },
+      { id: "C", label: "The tape", description: "The tape is price and trading." },
+    ],
+    explanation: "Guide, or guidance, is management’s forecast for future results.",
+  },
+  {
+    id: "EJ-22",
+    prompt: "The quarter was fine, but management lowered the forecast for next year. What did they do to the outlook?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Guide-up", description: "A guide-up raises the forecast." },
+      { id: "B", label: "Guide-down", description: PHRASE },
+      { id: "C", label: "Whisper number", description: "A whisper is unofficial, not the company’s forecast." },
+    ],
+    explanation: "A guide-down means management lowered its forecast. A guide-up means management raised it.",
+  },
+  {
+    id: "EJ-23",
+    prompt: "The news was good, but people had already bought it, and the stock fell once it was official. Which phrase names that drop?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Ripped on the print", description: "That is a sharp jump after earnings." },
+      { id: "B", label: "Not priced in", description: "A surprise tends to move with the news, not against it." },
+      { id: "C", label: "Sell the news", description: PHRASE },
+    ],
+    explanation: "Sell the news means the stock falls after good news because investors had already bought beforehand.",
+  },
+  {
+    id: "EJ-24",
+    prompt: "The stock rose for a week on a rumored beat, then fell when the beat actually printed. Which full phrase is that?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Buy the rumor, sell the news", description: PHRASE },
+      { id: "B", label: "Beat and raise", description: "That describes the numbers and the outlook." },
+      { id: "C", label: "Got hit on the print", description: "That names the drop, not the rise that came first." },
+    ],
+    explanation: "Buy the rumor, sell the news: price rises on anticipation, then falls when the expected event happens.",
+  },
+  {
+    id: "EJ-25",
+    prompt: "Shares climbed in the sessions ahead of the report, before any number was out. What is that climb called?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Faded the print", description: "A fade gives back a post-release pop." },
+      { id: "B", label: "Run-up into earnings", description: PHRASE },
+      { id: "C", label: "Post-print", description: "Post-print is after the release." },
+    ],
+    explanation: "A run-up into earnings means the stock climbed ahead of earnings.",
+  },
+  {
+    id: "EJ-26",
+    prompt: "The stock jumped in the first minutes after the release, then gave those gains back. What did it do?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Ripped on the print", description: "A rip is the jump itself, still held." },
+      { id: "B", label: "Got hit on the print", description: "That is a sharp drop, not a give-back of a pop." },
+      { id: "C", label: "Faded the print", description: PHRASE },
+    ],
+    explanation: "Faded the print means the stock initially rose after earnings, then gave back the gains.",
+  },
+  {
+    id: "EJ-27",
+    prompt: "Right after the release the stock jumped sharply and the move held. What did it do?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Ripped on the print", description: PHRASE },
+      { id: "B", label: "Got hit on the print", description: "That is a sharp drop." },
+      { id: "C", label: "Guide-down", description: "That is a lower forecast, not the price jump." },
+    ],
+    explanation: "Ripped on the print means the stock jumped sharply after earnings.",
+  },
+  {
+    id: "EJ-28",
+    prompt: "The release was ugly and the stock dropped sharply in the after-hours session. What did it do?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Ripped on the print", description: "That is a sharp jump." },
+      { id: "B", label: "Got hit on the print", description: PHRASE },
+      { id: "C", label: "Low bar", description: "That describes expectations before the release." },
+    ],
+    explanation: "Got hit on the print means the stock dropped sharply after earnings.",
+  },
+  {
+    id: "EJ-29",
+    prompt: "Two companies both beat the Street. One stock rips and one stock sells off. You care about that difference, not only the beat. What are you studying?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Headline miss", description: "Both companies beat." },
+      { id: "B", label: "The whisper number", description: "A whisper is one input, not the whole response." },
+      { id: "C", label: "Reaction function", description: PHRASE },
+    ],
+    explanation: "The reaction function is how the market responds to a set of results, not just whether the numbers beat or missed.",
+  },
+];
+
 export type QuizGroupId =
   | "all"
   | "candle-anatomy"
@@ -3920,6 +4244,7 @@ export type QuizGroupId =
   | "equity-literacy"
   | "financial-literacy"
   | "news-literacy"
+  | "earnings-jargon"
   | "financial-drills"
   | "futures-literacy"
   | "forex-literacy"
@@ -3951,6 +4276,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "News Literacy",
     description: "Rumor vs filing, priced-in, chase vs fade, source humility (SAMPLE)",
     icon: "newspaper",
+  },
+  {
+    id: "earnings-jargon",
+    name: "Earnings Desk Language",
+    description: "Print, tape, whisper, guide, and the phrases around a release. Hover the i for a definition.",
+    icon: "info",
   },
   {
     id: "financial-drills",
@@ -4034,6 +4365,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
   if (groupId === "news-literacy") return NEWS_LITERACY_QUESTIONS;
+  if (groupId === "earnings-jargon") return EARNINGS_JARGON_QUESTIONS;
   if (groupId === "financial-drills") return FINANCIAL_DRILLS_QUESTIONS;
   if (groupId === "futures-literacy") return FUTURES_LITERACY_QUESTIONS;
   if (groupId === "forex-literacy") return FOREX_LITERACY_QUESTIONS;
@@ -4049,6 +4381,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
   if (groupId === "news-literacy") return NEWS_LITERACY_QUESTIONS;
+  if (groupId === "earnings-jargon") return EARNINGS_JARGON_QUESTIONS;
   if (groupId === "financial-drills") return FINANCIAL_DRILLS_QUESTIONS;
   if (groupId === "futures-literacy") return FUTURES_LITERACY_QUESTIONS;
   if (groupId === "forex-literacy") return FOREX_LITERACY_QUESTIONS;

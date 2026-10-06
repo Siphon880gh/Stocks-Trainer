@@ -154,6 +154,7 @@ export default function Training() {
                   g.id === "equity-literacy" ||
                   g.id === "financial-literacy" ||
                   g.id === "news-literacy" ||
+                  g.id === "earnings-jargon" ||
                   g.id === "financial-drills";
                 return (
                   <span key={g.id} className="group/yt inline-flex items-center gap-1">
@@ -185,6 +186,15 @@ export default function Training() {
               {QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.description}
             </p>
             <p className="text-[13px] text-muted">
+              Earnings phrases:{" "}
+              <button
+                type="button"
+                className="underline text-primary"
+                onClick={() => setSelectedGroup("earnings-jargon")}
+              >
+                Earnings desk language
+              </button>
+              {" · "}
               After Statements Literacy:{" "}
               <button
                 type="button"

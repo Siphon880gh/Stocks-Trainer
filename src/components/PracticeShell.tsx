@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import YouTubeSearchLink from "./YouTubeSearchLink";
+import JargonText from "./JargonText";
 
 export default function PracticeShell({
   title,
@@ -25,7 +26,9 @@ export default function PracticeShell({
             <h1 className="text-lg font-semibold tracking-tight">{title}</h1>
             <YouTubeSearchLink title={title} />
           </div>
-          <p className="text-[13px] text-muted">{blurb}</p>
+          <p className="text-[13px] text-muted">
+            <JargonText text={blurb} />
+          </p>
         </div>
         {children}
       </main>

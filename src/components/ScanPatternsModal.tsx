@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { DetectedPattern } from "../lib/patternScan";
+import JargonText from "./JargonText";
 
 interface ScanPatternsModalProps {
   patterns: DetectedPattern[];
@@ -69,7 +70,9 @@ export default function ScanPatternsModal({
                       <span className="font-bold text-primary">{p.name}</span>
                       <span className="text-xs font-mono text-primary/70">Candle {p.index + 1} • {p.confidence}%</span>
                     </div>
-                    <p className="text-slate-300 text-sm">{p.description}</p>
+                    <p className="text-slate-300 text-sm">
+                      <JargonText text={p.description} />
+                    </p>
                   </button>
                 ))}
               </div>

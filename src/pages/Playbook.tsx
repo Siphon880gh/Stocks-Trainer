@@ -8,6 +8,7 @@ import { getPlaybook } from "../lib/playbooks";
 import { getOverlay } from "../lib/overlays";
 import { getSamplePack } from "../lib/samplePacks";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
+import JargonText from "../components/JargonText";
 
 export default function Playbook() {
   const { id = "" } = useParams();
@@ -42,7 +43,9 @@ export default function Playbook() {
             <h1 className="text-2xl font-semibold tracking-tight">{playbook.title}</h1>
             <YouTubeSearchLink title={playbook.title} />
           </div>
-          <p className="text-sm text-muted">{playbook.summary}</p>
+          <p className="text-sm text-muted">
+            <JargonText text={playbook.summary} />
+          </p>
           <p className="text-sm">
             <span className="text-muted">Resource · </span>
             <a
@@ -65,7 +68,7 @@ export default function Playbook() {
           <PlaybookPanel title="Strategy">
             {playbook.explanation ? (
               <p className="text-sm text-ink whitespace-pre-wrap leading-relaxed">
-                {playbook.explanation}
+                <JargonText text={playbook.explanation} />
               </p>
             ) : (
               <p className="text-sm text-muted">

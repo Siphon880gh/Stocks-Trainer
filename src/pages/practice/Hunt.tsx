@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CandlestickChart from "../../components/CandlestickChart";
+import JargonText from "../../components/JargonText";
 import PracticeShell from "../../components/PracticeShell";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
 import { HUNT_TAPES, gradeHunt, type GradeResult } from "../../lib/practiceLabs";
@@ -63,7 +64,7 @@ export default function PracticeHunt() {
           <p className="text-sm">
             <span className="font-semibold capitalize">{result.grade}</span>
             {" · "}
-            {result.tip}
+            <JargonText text={result.tip} />
           </p>
         ) : null}
       </section>

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { PatternDef } from "../lib/patterns";
 import YouTubeSearchLink from "./YouTubeSearchLink";
+import JargonText from "./JargonText";
 
 interface PatternDetailModalProps {
   pattern: PatternDef;
@@ -70,7 +71,9 @@ export default function PatternDetailModal({ pattern, onClose }: PatternDetailMo
                   {pattern.type} • {pattern.confirmation.replace("_", " ")} confirmation
                 </span>
               </div>
-              <p className="text-ink text-sm leading-relaxed">{pattern.description}</p>
+              <p className="text-ink text-sm leading-relaxed">
+                <JargonText text={pattern.description} />
+              </p>
             </div>
           </div>
           <div className="flex gap-3">

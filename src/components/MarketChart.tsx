@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import JargonText from "./JargonText";
 import { createPortal } from "react-dom";
 import {
   ComposedChart,
@@ -408,8 +409,12 @@ function ExplanationPopover({
           </span>
         </button>
       </div>
-      <p className="font-semibold mb-0.5 px-0.5">{note.headline}</p>
-      <p className="text-[#787b86] px-0.5">{note.detail}</p>
+      <p className="font-semibold mb-0.5 px-0.5">
+        <JargonText text={note.headline} />
+      </p>
+      <p className="text-[#787b86] px-0.5">
+        <JargonText text={note.detail} />
+      </p>
     </div>,
     document.body,
   );

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CandlestickChart from "../../components/CandlestickChart";
+import JargonText from "../../components/JargonText";
 import PracticeShell from "../../components/PracticeShell";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
 import { PATTERN_OHLC, SAMPLE_OHLC } from "../../lib/ohlcData";
@@ -37,7 +38,9 @@ export default function PracticeLookalike() {
             ))}
           </select>
         </label>
-        <p className="text-sm">{round.prompt}</p>
+        <p className="text-sm">
+          <JargonText text={round.prompt} />
+        </p>
         <div className="grid gap-3 md:grid-cols-2">
           <button
             type="button"
@@ -82,7 +85,7 @@ export default function PracticeLookalike() {
           <p className="text-sm">
             <span className="font-semibold capitalize">{result.grade}</span>
             {" · "}
-            {result.tip}
+            <JargonText text={result.tip} />
           </p>
         ) : null}
       </section>

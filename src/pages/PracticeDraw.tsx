@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import JargonText from "../components/JargonText";
 import {
   BRUSH_HEX,
   DRAW_TEMPLATES,
@@ -395,7 +396,9 @@ export default function PracticeDraw() {
                 >
                   Grade: {GRADE_LABEL[result.grade]} · {Math.round(result.score * 100)}%
                 </p>
-                <p className="text-muted">{result.tip}</p>
+                <p className="text-muted">
+                  <JargonText text={result.tip} />
+                </p>
               </>
             )}
             {writebackNote && <p className="text-muted">{writebackNote}</p>}

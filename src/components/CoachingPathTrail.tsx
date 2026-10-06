@@ -1,4 +1,5 @@
 import type { PathTrailStep } from "../lib/coaching/pathTrail";
+import JargonText from "./JargonText";
 
 interface Props {
   steps: PathTrailStep[];
@@ -65,7 +66,7 @@ export default function CoachingPathTrail({
                   <span className="font-bold">NOW</span>
                 ) : (
                   <span className="normal-case text-slate-300 whitespace-pre-wrap break-words">
-                    {step.messagePreview}
+                    <JargonText text={step.messagePreview} />
                   </span>
                 )}
                 {showNodeIds ? (
@@ -74,12 +75,12 @@ export default function CoachingPathTrail({
               </p>
               {!step.isCurrent && step.choiceLabel ? (
                 <p className="pl-4 normal-case text-slate-500 break-words">
-                  You chose: {step.choiceLabel}
+                  You chose: <JargonText text={step.choiceLabel} />
                 </p>
               ) : null}
               {step.isCurrent ? (
                 <p className="pl-4 normal-case text-slate-300 whitespace-pre-wrap break-words">
-                  {step.messagePreview}
+                  <JargonText text={step.messagePreview} />
                 </p>
               ) : null}
             </li>

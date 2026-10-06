@@ -29,6 +29,7 @@ import {
 } from "../lib/beginnerPath";
 import { assetClassFromCoachTags } from "../lib/marketNavigator";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
+import JargonText from "../components/JargonText";
 
 const OUTCOME_UI: Record<
   CoachingOutcome,
@@ -272,7 +273,7 @@ export default function CoachSession() {
             id={messageId}
             className="text-sm md:text-base whitespace-pre-wrap leading-relaxed"
           >
-            {node.message}
+            <JargonText text={node.message} />
           </p>
         </div>
 
@@ -289,7 +290,7 @@ export default function CoachSession() {
                     onClick={() => onChoose(choice)}
                     className="w-full text-left border border-line bg-canvas hover:bg-primary/10 hover:border-primary px-4 py-3 font-mono text-sm normal-case transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                   >
-                    {choice.label}
+                    <JargonText text={choice.label} />
                   </button>
                 </li>
               ))}
