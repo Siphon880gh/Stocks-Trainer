@@ -20,6 +20,45 @@ function ChatGptMark() {
   );
 }
 
+export function WhyNotAutomatic() {
+  return (
+    <details className="text-sm text-ink">
+      <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 font-medium [&::-webkit-details-marker]:hidden">
+        <span
+          aria-hidden="true"
+          className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-current text-[11px] font-semibold italic leading-none"
+        >
+          i
+        </span>
+        Why is this not automatic
+      </summary>
+      <div className="mt-2 max-w-2xl space-y-2 text-sm leading-relaxed text-muted">
+        <p>
+          Weng provides this service for free and cannot cover the ongoing cost of AI tokens. That&apos;s why this Prompt Builder is designed to let users supply their own AI processing resources rather than having the app pay for them. This is also why AI processing isn&apos;t integrated directly into the app for a more seamless experience.
+        </p>
+        <p>There are several ways to accomplish this:</p>
+        <ol className="list-decimal space-y-2 pl-5">
+          <li>
+            <strong className="font-semibold text-ink">Copy the generated prompt into ChatGPT or Claude:</strong> Users can use their existing AI subscriptions to process the prompt.
+          </li>
+          <li>
+            <strong className="font-semibold text-ink">Copy the generated prompt into an AI harness like Cursor or Claude Code:</strong> Users can leverage their own AI coding environments and available token allowances.
+          </li>
+          <li>
+            <strong className="font-semibold text-ink">Provide their own API key:</strong> The app could process prompts directly using the user&apos;s API key, with usage billed to the user. However, this requires trusting that the app does not store, log, or copy the key. This is generally easier to verify with a locally running application or a Chrome extension, although neither is inherently secure without reviewing how it handles credentials.
+          </li>
+        </ol>
+        <p>
+          <strong className="font-semibold text-ink">For now, letting you use your own AI tools is the most practical approach.</strong> It keeps the service free while allowing you to use AI resources you already have access to. This app uses the method best suited to its particular workflow.
+        </p>
+        <p>
+          If the service eventually becomes commercial and can sustain the cost of AI tokens, AI processing could be integrated directly into the app for a more seamless experience.
+        </p>
+      </div>
+    </details>
+  );
+}
+
 function ClaudeMark() {
   return (
     <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" className="shrink-0">
@@ -123,6 +162,7 @@ export default function AiExplainModal({ open, prompt, onClose }: Props) {
         </div>
 
         <div className="p-4 overflow-y-auto min-h-0 flex-1 space-y-3">
+          <WhyNotAutomatic />
           <label className="block text-[12px] text-muted" htmlFor={promptFieldId}>
             Prompt
           </label>

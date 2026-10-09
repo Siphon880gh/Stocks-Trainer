@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { WhyNotAutomatic } from "../components/AiExplainModal";
 import BrowsePopover from "../components/BrowsePopover";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText from "../components/JargonText";
@@ -171,6 +172,7 @@ function CreateFromSource({
           variant === "rail" && "md:flex md:min-h-0 md:flex-1 md:flex-col",
         )}
       >
+        <WhyNotAutomatic />
         <h3 className="text-[15px] font-semibold tracking-tight text-ink shrink-0">Prompt preview</h3>
         <pre
           className={cn(
