@@ -55,6 +55,8 @@ export interface QuizQuestion {
   assetClass?: AssetClass;
   /** Optional E1 sample pack id for equity-backed drills */
   samplePackId?: string;
+  /** Optional labeled price lines on the hero candle chart (e.g. Open / Close). */
+  priceMarkers?: Array<{ price: number; label: string }>;
 }
 
 /** Build numbered chart choices (1…n) for “which chart is the pattern?” questions. */
@@ -2333,6 +2335,272 @@ export const CANDLE_ANATOMY_QUESTIONS: QuizQuestion[] = [
   },
 ];
 
+/** Chart-pick choices for one-candle reading; the marked candle is bar 4 (index 3). */
+function candlePickOptions(keys: [string, string, string, string]): QuizOption[] {
+  return chartPickOptions(
+    keys.map((chartKey, i) => ({ id: (["A", "B", "C", "D"] as const)[i], chartKey, highlightIndex: 3 }))
+  );
+}
+
+/** Reading one candle — what wicks and bodies say (price rejected, stability, indecision, strong move). */
+export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
+  // Price rejected
+  {
+    id: "CR-01",
+    prompt: "Which chart's marked candle shows price rejected at the highs: a long upper wick with a small body near the low?",
+    correctAnswer: "C",
+    options: candlePickOptions(["candle-stable-red", "candle-bears-win", "candle-rejected-high", "candle-indecision-red"]),
+    optionsAreCharts: true,
+    explanation:
+      "Chart 3. Buyers pushed price far above the open, but sellers drove it back down to close near the low. The long upper wick is the rejection. Chart 1 is a steady red bar, chart 2 is a tall bears-win body, and chart 4 has wicks on both sides (indecision).",
+    patternKey: "candle-rejected-high",
+    highlightIndex: 3,
+    glossaryTermId: "wick-rejection",
+  },
+  {
+    id: "CR-02",
+    prompt: "After a rally, the marked red candle has a long upper wick and a small body near its low. What happened during that period?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Sellers controlled it from open to close with no pushback", description: "That would be a full red body with tiny wicks." },
+      { id: "B", label: "Buyers pushed price well above the open, then sellers drove it back to close near the low", description: "Higher prices were rejected." },
+      { id: "C", label: "Nothing useful; only body color matters", description: "Wicks show where price traded and got pushed back." },
+    ],
+    explanation:
+      "The upper wick marks the high that buyers reached but could not hold. Closing near the low after a rally is a potential bearish reversal (shooting-star style). It is a warning, not a verdict.",
+    patternKey: "candle-rejected-high",
+    highlightIndex: 3,
+    glossaryTermId: "wick-rejection",
+  },
+  {
+    id: "CR-03",
+    prompt: "After a decline, the marked green candle has a long lower wick and a small body near its high. What is the best read?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Sellers pushed price far down, buyers absorbed it and closed near the high: a potential bullish reversal", description: "Lower prices were rejected." },
+      { id: "B", label: "The bottom is guaranteed, so buy immediately", description: "One candle guarantees nothing." },
+      { id: "C", label: "Bearish, because the long wick shows sellers won", description: "Sellers reached the low but lost it by the close." },
+    ],
+    explanation:
+      "A long lower wick with the close near the high is a hammer-style rejection of lower prices. After a decline it is a potential bullish reversal. It still needs confirmation from what comes next.",
+    patternKey: "candle-rejected-low",
+    highlightIndex: 3,
+    glossaryTermId: "wick-rejection",
+  },
+  {
+    id: "CR-04",
+    prompt: "A rejection candle is only a potential reversal. What makes the bearish read on this chart more trustworthy?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "The wick is long, so the reversal is already confirmed", description: "Wick length alone confirms nothing." },
+      { id: "B", label: "The candle is red, and red always means a reversal", description: "Color only says close < open." },
+      { id: "C", label: "It formed after a rally, and the next candle closed lower", description: "Context plus follow-through." },
+    ],
+    explanation:
+      "Location and confirmation turn a shape into evidence. Here the rejection came after three up candles, and bar 5 closed below the rejection candle's close. Without that follow-through, the signal can simply fail.",
+    patternKey: "candle-rejected-high",
+    highlightIndex: 3,
+    glossaryTermId: "wick-rejection",
+  },
+  {
+    id: "CR-05",
+    prompt: "This hammer-style candle closed slightly green. If the same shape had closed slightly red instead, what would change most?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "It would flip to a bearish signal", description: "The long lower wick still shows buyers reclaimed the drop." },
+      { id: "B", label: "Very little: the long lower wick and close near the high carry most of the message", description: "Shape and location first, color second." },
+      { id: "C", label: "It would stop being a candle at all", description: "Every period still draws a candle." },
+    ],
+    explanation:
+      "Hammers can close red or green. A green close is a slightly stronger version because buyers finished above the open, but the rejection story comes from the long lower wick and where the body sits.",
+    patternKey: "candle-rejected-low",
+    highlightIndex: 3,
+    glossaryTermId: "wick-rejection",
+  },
+  // Price stability
+  {
+    id: "CR-06",
+    prompt: "Which chart's marked candle shows price stability: a full body with almost no wicks?",
+    correctAnswer: "B",
+    options: candlePickOptions(["candle-indecision-green", "candle-stable-green", "candle-rejected-low", "candle-indecision-red"]),
+    optionsAreCharts: true,
+    explanation:
+      "Chart 2. Open and close sit almost at the low and high, so price moved steadily from open to close. Charts 1 and 4 have small bodies with wicks both ways, and chart 3 has a long lower wick.",
+    patternKey: "candle-stable-green",
+    highlightIndex: 3,
+    glossaryTermId: "full-body-candle",
+  },
+  {
+    id: "CR-07",
+    prompt: "The marked green candle has a full body and barely any wicks. What does that tell you about the period?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Price moved from open to close with little pushback, so buyers kept steady control", description: "Tiny wicks = little rejection." },
+      { id: "B", label: "Buyers and sellers were evenly matched", description: "That would be a small body with wicks both ways." },
+      { id: "C", label: "Price was rejected at the high", description: "Rejection leaves a long wick." },
+    ],
+    explanation:
+      "Wicks show how far price traveled beyond the open and close. When they are tiny, the period was one-sided and orderly. Here each candle is a similar size, so it reads as steady buying, not a burst.",
+    patternKey: "candle-stable-green",
+    highlightIndex: 3,
+    glossaryTermId: "full-body-candle",
+  },
+  {
+    id: "CR-08",
+    prompt: "A run of red candles like this, each with a similar full body and tiny wicks, points to…",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Indecision", description: "Indecision shows small bodies and long wicks." },
+      { id: "B", label: "A confirmed bullish reversal", description: "Nothing here shows buyers pushing back." },
+      { id: "C", label: "Orderly, steady selling with little pushback", description: "Sellers in steady control." },
+    ],
+    explanation:
+      "Full red bodies with tiny wicks mean each period opened near its high and closed near its low. Similar sizes make it a steady decline rather than one panic candle.",
+    patternKey: "candle-stable-red",
+    highlightIndex: 3,
+    glossaryTermId: "full-body-candle",
+  },
+  {
+    id: "CR-09",
+    prompt: "Both this candle and a strong-movement candle have full bodies and tiny wicks. What separates them?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Color: strong-movement candles are always green", description: "Bears can win a period too." },
+      { id: "B", label: "Body size compared with recent candles", description: "Strong moves are much taller than their neighbors." },
+      { id: "C", label: "Strong-movement candles always have long wicks", description: "Long wicks would mean rejection." },
+    ],
+    explanation:
+      "Read candles relative to their neighbors. This body is about the same size as the ones before it: steady. A strong-movement candle is several times taller than recent bodies: expansion.",
+    patternKey: "candle-stable-green",
+    highlightIndex: 3,
+    glossaryTermId: "full-body-candle",
+  },
+  // Indecision
+  {
+    id: "CR-10",
+    prompt: "Which chart's marked candle shows indecision: a small body with wicks on both sides?",
+    correctAnswer: "D",
+    options: candlePickOptions(["candle-stable-green", "candle-rejected-low", "candle-bulls-win", "candle-indecision-green"]),
+    optionsAreCharts: true,
+    explanation:
+      "Chart 4. Price traded well above and below the open, then closed close to where it started. Chart 1 is a full body, chart 2 has one long lower wick (rejection), and chart 3 is a tall bulls-win body.",
+    patternKey: "candle-indecision-green",
+    highlightIndex: 3,
+    glossaryTermId: "indecision-candle",
+  },
+  {
+    id: "CR-11",
+    prompt: "The marked candle has a small red body with wicks above and below. What is the read?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Both sides pushed price around, but neither won by the close: indecision", description: "Small body, two-sided wicks." },
+      { id: "B", label: "Sellers won decisively because it is red", description: "The close was only slightly below the open." },
+      { id: "C", label: "Price was rejected only at the high", description: "There is a long lower wick too." },
+    ],
+    explanation:
+      "A spinning-top shape: price explored both directions and finished near the open. The red color only says the close was a little lower than the open.",
+    patternKey: "candle-indecision-red",
+    highlightIndex: 3,
+    glossaryTermId: "indecision-candle",
+  },
+  {
+    id: "CR-12",
+    prompt: "This indecision candle is green. Does that mean buyers won the period?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Yes, green always means strong buying", description: "Green only means close > open." },
+      { id: "B", label: "No, small bodies are always bearish", description: "Small bodies are neutral on their own." },
+      { id: "C", label: "Barely: the close was only slightly above the open, so neither side controlled it", description: "Size of the body matters more than its color." },
+    ],
+    explanation:
+      "Color tells you direction, body size tells you how decisive it was. A tiny green body inside long wicks is a near tie, not a buyer win.",
+    patternKey: "candle-indecision-green",
+    highlightIndex: 3,
+    glossaryTermId: "indecision-candle",
+  },
+  {
+    id: "CR-13",
+    prompt: "After a short rally, an indecision candle appears. What is a sound next step?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Sell immediately, because the top is in", description: "Indecision is not a reversal by itself." },
+      { id: "B", label: "Treat it as a pause or early warning and watch which side takes over next", description: "Wait for the next candles." },
+      { id: "C", label: "Ignore it, because small candles never matter", description: "After a run, a stall is worth noticing." },
+    ],
+    explanation:
+      "Indecision after a run says momentum is stalling, not that it has reversed. Here bar 5 closed higher again, which shows why acting on the indecision candle alone would have been early.",
+    patternKey: "candle-indecision-red",
+    highlightIndex: 3,
+    glossaryTermId: "indecision-candle",
+  },
+  // Strong movement
+  {
+    id: "CR-14",
+    prompt: "Which chart's marked candle is a strong move: a tall body much bigger than the candles before it, with small wicks?",
+    correctAnswer: "A",
+    options: candlePickOptions(["candle-bulls-win", "candle-stable-green", "candle-indecision-green", "candle-rejected-low"]),
+    optionsAreCharts: true,
+    explanation:
+      "Chart 1. The marked body is several times taller than the quiet candles before it and has almost no wicks. Chart 2 is a full body but the same size as its neighbors, chart 3 is indecision, and chart 4 is a rejection wick.",
+    patternKey: "candle-bulls-win",
+    highlightIndex: 3,
+    glossaryTermId: "strong-move-candle",
+  },
+  {
+    id: "CR-15",
+    prompt: "On the marked red candle, the open is at the top of the body and the close is at the bottom. What happened?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Buyers won the period", description: "Close finished far below the open." },
+      { id: "B", label: "Neither side won: indecision", description: "Indecision has a small body." },
+      { id: "C", label: "Sellers drove price down nearly the whole period and closed near the low: bears win", description: "Tall red body, tiny wicks." },
+    ],
+    explanation:
+      "Red means close < open. A tall red body with almost no wicks means price opened near the high and closed near the low, so sellers controlled the whole period.",
+    patternKey: "candle-bears-win",
+    highlightIndex: 3,
+    glossaryTermId: "strong-move-candle",
+    priceMarkers: [
+      { price: 64500, label: "Open" },
+      { price: 63600, label: "Close" },
+    ],
+  },
+  {
+    id: "CR-16",
+    prompt: "On the marked green candle, the open is near the bottom and the close near the top, with very little wick. What does it say?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Price was rejected at the high", description: "There is no long upper wick." },
+      { id: "B", label: "Buyers drove price up nearly the whole period and closed near the high: bulls win", description: "Tall green body, tiny wicks." },
+      { id: "C", label: "Sellers won the period", description: "Close finished far above the open." },
+    ],
+    explanation:
+      "Green means close > open. A tall green body that opens near the low and closes near the high shows buyers in control from start to finish.",
+    patternKey: "candle-bulls-win",
+    highlightIndex: 3,
+    glossaryTermId: "strong-move-candle",
+    priceMarkers: [
+      { price: 64000, label: "Open" },
+      { price: 64900, label: "Close" },
+    ],
+  },
+  {
+    id: "CR-17",
+    prompt: "Does one strong bulls-win candle guarantee the next candle goes up?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "No. It shows who controlled this period, and price often pauses or pulls back after a big expansion", description: "Conviction, not a forecast." },
+      { id: "B", label: "Yes, a tall green body always continues", description: "Nothing on a chart is always." },
+      { id: "C", label: "Only if the wicks are long", description: "Long wicks would weaken the read." },
+    ],
+    explanation:
+      "A strong candle is evidence of conviction for one period. It is not a promise about the next one. Here bar 5 paused and closed slightly lower. Look at what follows before assuming continuation.",
+    patternKey: "candle-bulls-win",
+    highlightIndex: 3,
+    glossaryTermId: "strong-move-candle",
+  },
+];
+
 export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
   {
     id: "IN-01",
@@ -4215,6 +4483,7 @@ export const EARNINGS_JARGON_QUESTIONS: QuizQuestion[] = [
 export type QuizGroupId =
   | "all"
   | "candle-anatomy"
+  | "candle-reading"
   | "hammer"
   | "doji"
   | "engulfing"
@@ -4297,6 +4566,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     icon: "candlestick_chart",
   },
   {
+    id: "candle-reading",
+    name: "Reading One Candle",
+    description: "Price rejected, stability, indecision, and strong moves from wicks and bodies",
+    icon: "candlestick_chart",
+  },
+  {
     id: "equity-patterns",
     name: "Equity Pack Drills",
     description: "Candle/indicator drills tagged to E1 equity SAMPLE packs (post-P0)",
@@ -4361,6 +4636,7 @@ function patternKeysForGroup(groupId: QuizGroupId): string[] {
 function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
+  if (groupId === "candle-reading") return CANDLE_READING_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
@@ -4377,6 +4653,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
 export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
+  if (groupId === "candle-reading") return CANDLE_READING_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;

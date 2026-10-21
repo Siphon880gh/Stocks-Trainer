@@ -85,7 +85,7 @@ Walk families in this order (equities-first):
 | # | Family id | Typical chain (skip missing hops) |
 |---|-----------|-------------------------------------|
 | 1 | `pattern` | Archive pattern (+ optional `PATTERN_OHLC` / scan) → Learn family quiz → Practice draw template → Practice hunt tape if scan hits |
-| 2 | `anatomy` | Archive term (`ohlc-anatomy` / `candle-color`) → Learn `candle-anatomy` |
+| 2 | `anatomy` | Archive term (`ohlc-anatomy` / `candle-color`; one-candle reads `wick-rejection` / `full-body-candle` / `indecision-candle` / `strong-move-candle`) → Learn `candle-anatomy` / `candle-reading` |
 | 3 | `vocab` | Archive ownership/markets/position/process term → Learn `equity-literacy` → Coach literacy session → Home tip |
 | 4 | `statements` | Archive term (FCF, margin, P/E, …) → Learn `financial-literacy` or `financial-drills` (new snapshot if needed) → Cases `earnings` case in matching thinking mode → Coach earnings/statements session → Home thinking-mode tip |
 | 5 | `indicators` | Archive overlay row only if chart renders it → Learn `indicators` question → Practice regime window with that overlay |

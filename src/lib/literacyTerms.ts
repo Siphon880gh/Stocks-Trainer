@@ -218,6 +218,38 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
       "Color encodes the period’s direction, not volume or certainty. SAMPLE charts paint green when close > open and red when close < open.",
   },
   {
+    id: "wick-rejection",
+    name: "Price rejected (long wick)",
+    category: "markets",
+    summary: "A long wick with a small body at the other end: price went there and got pushed back.",
+    detail:
+      "Long upper wick, body near the low: buyers pushed up, sellers drove it back down (shooting-star style, a potential bearish reversal after a rally). Long lower wick, body near the high: sellers pushed down, buyers drove it back up (hammer style, a potential bullish reversal after a decline). Body color matters less than where the wick and body sit. It is only a potential reversal: check where it formed and wait for the next candle to confirm. SAMPLE teaching, not a trade signal.",
+  },
+  {
+    id: "full-body-candle",
+    name: "Price stability (full body, tiny wicks)",
+    category: "markets",
+    summary: "Open and close sit near the extremes: price moved steadily one way with little pushback.",
+    detail:
+      "Tiny wicks mean the high and low are close to the open and close, so neither side fought back much during the period. Green = buyers in steady control; red = sellers in steady control. A run of similar-sized full bodies reads as an orderly trend. What separates this from a strong movement candle is size compared with recent candles. SAMPLE teaching.",
+  },
+  {
+    id: "indecision-candle",
+    name: "Indecision (small body, wicks both sides)",
+    category: "markets",
+    summary: "Price moved both ways but closed near where it opened. Neither side won the period.",
+    detail:
+      "Spinning tops and doji-like candles have a small body with wicks above and below. A tiny green or red body barely changes the read: the close was near the open. After a strong run it can be an early warning that momentum is fading. Inside a range it is often just noise. Wait for the next candles to show which side takes over. SAMPLE teaching.",
+  },
+  {
+    id: "strong-move-candle",
+    name: "Strong movement (bulls win / bears win)",
+    category: "markets",
+    summary: "A tall body with small wicks that is much bigger than recent candles: one side controlled the whole period.",
+    detail:
+      "Bulls win: open near the low, close near the high (tall green body). Bears win: open near the high, close near the low (tall red body). Marubozu-style candles show conviction for that period. They do not guarantee the next candle goes the same way, and price often pauses or pulls back after a big expansion. SAMPLE teaching.",
+  },
+  {
     id: "chase-vs-fade",
     name: "Chase vs Fade",
     category: "process",

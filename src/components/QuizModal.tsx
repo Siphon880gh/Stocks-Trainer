@@ -202,6 +202,7 @@ export default function QuizModal({
                     height={260}
                     highlightIndex={question.highlightIndex ?? 2}
                     showScaleControls={false}
+                    markers={question.priceMarkers}
                   />
                 )}
             </div>

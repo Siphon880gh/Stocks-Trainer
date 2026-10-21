@@ -421,6 +421,83 @@ export const HARAMI_OHLC: OHLC[] = [
   ohlc("6", 63450, 63700, 63000, 63150),
 ];
 
+/**
+ * Reading one candle (Learn `candle-reading`). The marked candle is bar 4 (index 3);
+ * bars 1–3 give context and bar 5 shows what followed.
+ */
+
+/** Price rejected higher: red, long upper wick, small body near the low, after a rally. */
+export const CANDLE_REJECTED_HIGH_OHLC: OHLC[] = [
+  ohlc("1", 63400, 63750, 63300, 63700),
+  ohlc("2", 63700, 64050, 63600, 64000),
+  ohlc("3", 64000, 64350, 63900, 64300),
+  ohlc("4", 64300, 65300, 64150, 64200), // upper wick 1000, body 100, lower wick 50
+  ohlc("5", 64200, 64300, 63800, 63900), // next close lower = follow-through
+];
+
+/** Price rejected lower: green, long lower wick, small body near the high, after a decline. */
+export const CANDLE_REJECTED_LOW_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64900, 64400, 64450),
+  ohlc("2", 64450, 64500, 64050, 64100),
+  ohlc("3", 64100, 64150, 63700, 63750),
+  ohlc("4", 63700, 63900, 62700, 63850), // lower wick 1000, body 150, upper wick 50
+  ohlc("5", 63850, 64250, 63800, 64200), // next close higher = follow-through
+];
+
+/** Price stability (green): steady full bodies, tiny wicks, similar sizes. */
+export const CANDLE_STABLE_GREEN_OHLC: OHLC[] = [
+  ohlc("1", 63500, 63710, 63480, 63700),
+  ohlc("2", 63700, 63890, 63690, 63880),
+  ohlc("3", 63880, 64110, 63870, 64100),
+  ohlc("4", 64100, 64310, 64090, 64300), // body 200, wicks 10
+  ohlc("5", 64300, 64500, 64280, 64490),
+];
+
+/** Price stability (red): steady full bodies, tiny wicks, similar sizes. */
+export const CANDLE_STABLE_RED_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64820, 64590, 64600),
+  ohlc("2", 64600, 64610, 64420, 64430),
+  ohlc("3", 64430, 64440, 64210, 64220),
+  ohlc("4", 64220, 64230, 64010, 64020), // body 200, wicks 10
+  ohlc("5", 64020, 64030, 63830, 63840),
+];
+
+/** Indecision (green): small body, wicks on both sides, inside a choppy range. */
+export const CANDLE_INDECISION_GREEN_OHLC: OHLC[] = [
+  ohlc("1", 64000, 64300, 63800, 64200),
+  ohlc("2", 64200, 64350, 63900, 64000),
+  ohlc("3", 64000, 64250, 63750, 64100),
+  ohlc("4", 64050, 64450, 63650, 64120), // body 70, upper wick 330, lower wick 400
+  ohlc("5", 64120, 64300, 63900, 64000),
+];
+
+/** Indecision (red): small body, wicks on both sides, after a short rally. */
+export const CANDLE_INDECISION_RED_OHLC: OHLC[] = [
+  ohlc("1", 63600, 63850, 63550, 63800),
+  ohlc("2", 63800, 64100, 63750, 64050),
+  ohlc("3", 64050, 64300, 64000, 64250),
+  ohlc("4", 64280, 64650, 63900, 64200), // body 80, upper wick 370, lower wick 300
+  ohlc("5", 64200, 64400, 63950, 64300),
+];
+
+/** Strong movement, bulls win: tall green body (open near low, close near high) after a quiet range. */
+export const CANDLE_BULLS_WIN_OHLC: OHLC[] = [
+  ohlc("1", 64000, 64150, 63850, 64050),
+  ohlc("2", 64050, 64200, 63900, 63950),
+  ohlc("3", 63950, 64100, 63850, 64050),
+  ohlc("4", 64000, 64920, 63980, 64900), // body 900, wicks 20
+  ohlc("5", 64900, 65050, 64700, 64850), // pause after the expansion
+];
+
+/** Strong movement, bears win: tall red body (open near high, close near low) after a quiet range. */
+export const CANDLE_BEARS_WIN_OHLC: OHLC[] = [
+  ohlc("1", 64500, 64650, 64350, 64450),
+  ohlc("2", 64450, 64600, 64300, 64550),
+  ohlc("3", 64550, 64650, 64400, 64450),
+  ohlc("4", 64500, 64520, 63580, 63600), // body 900, wicks 20
+  ohlc("5", 63600, 63800, 63450, 63700),
+];
+
 export const PATTERN_OHLC: Record<string, OHLC[]> = {
   hammer: HAMMER_OHLC,
   doji: DOJI_OHLC,
@@ -432,6 +509,14 @@ export const PATTERN_OHLC: Record<string, OHLC[]> = {
   "morning-star": MORNING_STAR_OHLC,
   "candle-green": CANDLE_GREEN_OHLC,
   "candle-red": CANDLE_RED_OHLC,
+  "candle-rejected-high": CANDLE_REJECTED_HIGH_OHLC,
+  "candle-rejected-low": CANDLE_REJECTED_LOW_OHLC,
+  "candle-stable-green": CANDLE_STABLE_GREEN_OHLC,
+  "candle-stable-red": CANDLE_STABLE_RED_OHLC,
+  "candle-indecision-green": CANDLE_INDECISION_GREEN_OHLC,
+  "candle-indecision-red": CANDLE_INDECISION_RED_OHLC,
+  "candle-bulls-win": CANDLE_BULLS_WIN_OHLC,
+  "candle-bears-win": CANDLE_BEARS_WIN_OHLC,
   "head-shoulders": HEAD_SHOULDERS_OHLC,
   "falling-wedge": FALLING_WEDGE_OHLC,
   "tweezer-top": TWEEZER_TOP_OHLC,

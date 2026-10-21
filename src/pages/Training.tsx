@@ -149,6 +149,7 @@ export default function Training() {
               {QUIZ_GROUPS.map((g) => {
                 const isFeatured =
                   g.id === "candle-anatomy" ||
+                  g.id === "candle-reading" ||
                   g.id === "indicators" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
