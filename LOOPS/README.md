@@ -10,10 +10,10 @@ Reusable `/loop` prompts that deepen **content** per app section. Runtime and mi
 
 See [`LOOP-Asymmetry.md`](./LOOP-Asymmetry.md). Do not combine it with the graph or a single-section exhaustive loop in the same session.
 
-**Preferred for first-pass exhaustive content:** one graph session that picks the next section each tick — [`LOOP-Graph.md`](./LOOP-Graph.md). Default policy drains Archive then Charts, then echoes the same teaching idea across loops, then drains leftovers.
+**Preferred for first-pass exhaustive content:** one graph session that picks the next section each tick — [`LOOP-Graph.md`](../docs/projects/content-graph/LOOP-Graph.md) (lives in the content-graph project folder with its [`CHARTER.md`](../docs/projects/content-graph/CHARTER.md); the section loops it runs stay here). Default policy drains Archive then Charts, then echoes the same teaching idea across loops, then drains leftovers.
 
 ```text
-/loop content graph using LOOPS/LOOP-Graph.md
+/loop content graph using docs/projects/content-graph/LOOP-Graph.md
 ```
 
 To pin a policy: `policy=DRAIN` (finish one section before the next) or `policy=ECHO` (hop after every resource). Default is `FOUNDATION_THEN_ECHO`.
@@ -33,7 +33,8 @@ Swap the file for the section you want:
 | Section (nav / route) | Loop file | `/loop` line |
 |-----------------------|-----------|--------------|
 | **Class asymmetry** (Forex/Futures/Crypto/Options vs Equities) | [`LOOP-Asymmetry.md`](./LOOP-Asymmetry.md) | `/loop class asymmetry using LOOPS/LOOP-Asymmetry.md` |
-| **Graph (all sections)** | [`LOOP-Graph.md`](./LOOP-Graph.md) | `/loop content graph using LOOPS/LOOP-Graph.md` |
+| **Graph (all sections)** | [`LOOP-Graph.md`](../docs/projects/content-graph/LOOP-Graph.md) | `/loop content graph using docs/projects/content-graph/LOOP-Graph.md` |
+| **Project: Financials & earnings** (statements, 13-week forecast, preview, Read the Print) | [`LOOP-Financials-Earnings.md`](../docs/projects/financials-earnings/LOOP-Financials-Earnings.md) | `/loop financials project using docs/projects/financials-earnings/LOOP-Financials-Earnings.md` |
 | Home `/` | [`LOOP-Home.md`](./LOOP-Home.md) | `/loop exhaustive Home content using LOOPS/LOOP-Home.md` |
 | Learn `/training` | [`LOOP-Learn.md`](./LOOP-Learn.md) | `/loop exhaustive Learn content using LOOPS/LOOP-Learn.md` |
 | Charts `/market` | [`LOOP-Charts.md`](./LOOP-Charts.md) | `/loop exhaustive Charts content using LOOPS/LOOP-Charts.md` |
@@ -58,6 +59,13 @@ Prefer **no interval** so each wake adds the next content unit instead of waitin
 - Process teaching over “price went up.”
 - After any code change: `npm run lint` && `npm run build`.
 - Create or adapt `.agents/skills/*` when the same authoring workflow repeats.
+
+## Project loops
+
+Milestone-by-milestone projects live in `docs/projects/<name>/` (CHARTER.md · EPICS.md · STORIES.md · PROGRESS.md · loop file). They build new surfaces and stop for human review or repeated failure; do not run them in the same session as the graph or a section loop.
+
+- [`docs/projects/content-graph/`](../docs/projects/content-graph/CHARTER.md): the content graph orchestrator
+- [`docs/projects/financials-earnings/`](../docs/projects/financials-earnings/CHARTER.md): financials, expectations and earnings reactions
 
 ## Not these files
 

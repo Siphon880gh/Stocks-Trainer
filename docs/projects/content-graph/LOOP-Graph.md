@@ -2,21 +2,23 @@
 
 Orchestrator for the seven section content loops. One `/loop` session; this file **picks** which section loop to execute each tick. Authoring rules always come from the chosen section file — this file does not invent cases, questions, or packs.
 
-Companions: [`README.md`](./README.md) · [`LOOP-Archive.md`](./LOOP-Archive.md) · [`LOOP-Charts.md`](./LOOP-Charts.md) · [`LOOP-Learn.md`](./LOOP-Learn.md) · [`LOOP-Practice.md`](./LOOP-Practice.md) · [`LOOP-Cases.md`](./LOOP-Cases.md) · [`LOOP-Coach.md`](./LOOP-Coach.md) · [`LOOP-Home.md`](./LOOP-Home.md)
+Charter: [`CHARTER.md`](./CHARTER.md) · Section loops (unchanged location): [`LOOPS/README.md`](../../../LOOPS/README.md)
+
+Companions: [`LOOP-Archive.md`](../../../LOOPS/LOOP-Archive.md) · [`LOOP-Charts.md`](../../../LOOPS/LOOP-Charts.md) · [`LOOP-Learn.md`](../../../LOOPS/LOOP-Learn.md) · [`LOOP-Practice.md`](../../../LOOPS/LOOP-Practice.md) · [`LOOP-Cases.md`](../../../LOOPS/LOOP-Cases.md) · [`LOOP-Coach.md`](../../../LOOPS/LOOP-Coach.md) · [`LOOP-Home.md`](../../../LOOPS/LOOP-Home.md)
 
 ---
 
 ## How to run
 
 ```text
-/loop content graph using LOOPS/LOOP-Graph.md
+/loop content graph using docs/projects/content-graph/LOOP-Graph.md
 ```
 
 Override policy in the same line if you do not want the default:
 
 ```text
-/loop content graph using LOOPS/LOOP-Graph.md policy=DRAIN
-/loop content graph using LOOPS/LOOP-Graph.md policy=ECHO
+/loop content graph using docs/projects/content-graph/LOOP-Graph.md policy=DRAIN
+/loop content graph using docs/projects/content-graph/LOOP-Graph.md policy=ECHO
 ```
 
 **Default policy: `FOUNDATION_THEN_ECHO`.** Drain the lookup + instrument layers first, then walk **resource families** across loops (one unit per loop hop), then drain leftovers.
@@ -24,7 +26,7 @@ Override policy in the same line if you do not want the default:
 **Before starting**
 1. Leave working `npm run dev` alone; verify with `npm run lint` + `npm run build` (and `npm run test:coaching` when the tick is Coach).
 2. Stop yourself anytime; hard-stop on the error budget or Done(graph).
-3. Do not also start a single-section `/loop` or [`LOOP-Asymmetry.md`](./LOOP-Asymmetry.md) in the same session. Graph is equities-first; class catch-up is a separate run.
+3. Do not also start a single-section `/loop` or [`LOOP-Asymmetry.md`](../../../LOOPS/LOOP-Asymmetry.md) in the same session. Graph is equities-first; class catch-up is a separate run.
 
 ---
 
@@ -44,13 +46,13 @@ Do not mix policies mid-run unless the human names a new one.
 
 | Node | File | Unit per tick |
 |------|------|----------------|
-| Archive | `LOOP-Archive.md` | 1 term **or** 1 pattern **or** 1 overlay |
-| Charts | `LOOP-Charts.md` | 1 SAMPLE pack |
-| Learn | `LOOP-Learn.md` | 1 question (or 1 new group + first question) |
-| Practice | `LOOP-Practice.md` | 1 draw template **or** 1 regime window **or** 1 tape |
-| Cases | `LOOP-Cases.md` | 1 case study |
-| Coach | `LOOP-Coach.md` | 1 coaching session |
-| Home | `LOOP-Home.md` | 1 copy cluster |
+| Archive | `LOOPS/LOOP-Archive.md` | 1 term **or** 1 pattern **or** 1 overlay |
+| Charts | `LOOPS/LOOP-Charts.md` | 1 SAMPLE pack |
+| Learn | `LOOPS/LOOP-Learn.md` | 1 question (or 1 new group + first question) |
+| Practice | `LOOPS/LOOP-Practice.md` | 1 draw template **or** 1 regime window **or** 1 tape |
+| Cases | `LOOPS/LOOP-Cases.md` | 1 case study |
+| Coach | `LOOPS/LOOP-Coach.md` | 1 coaching session |
+| Home | `LOOPS/LOOP-Home.md` | 1 copy cluster |
 
 ---
 
@@ -88,7 +90,7 @@ Walk families in this order (equities-first):
 | 2 | `anatomy` | Archive term (`ohlc-anatomy` / `candle-color`; one-candle reads `wick-rejection` / `full-body-candle` / `indecision-candle` / `strong-move-candle`) → Learn `candle-anatomy` / `candle-reading` |
 | 2b | `price-action` | Archive process term (`market-structure`, `breakout-retest`, `risk-reward`, SMC terms, `supply-zone` / `demand-zone` …) → Learn `price-action` / `supply-demand` → `buy-or-sell` scenario chart (`scenarioCharts.ts`, reveal annotations; double / triple top & bottom, H&S, wedges, trendline, retests, zones) |
 | 3 | `vocab` | Archive ownership/markets/position/process term → Learn `equity-literacy` → Coach literacy session → Home tip |
-| 4 | `statements` | Archive term (FCF, margin, P/E, …) → Learn `financial-literacy` or `financial-drills` (new snapshot if needed) → Cases `earnings` case in matching thinking mode → Coach earnings/statements session → Home thinking-mode tip |
+| 4 | `statements` | Archive term (FCF, margin, P/E, …) → Learn `financial-literacy` or `financial-drills` (new snapshot if needed), or the project groups `statements-reading` / `cash-forecast-13wk` / `earnings-preview` / `earnings-reaction` ([financials-earnings](../financials-earnings/CHARTER.md); Practice `/practice/statements`, `/practice/read-the-print`) → Cases `earnings` case in matching thinking mode → Coach earnings/statements session → Home thinking-mode tip |
 | 5 | `indicators` | Archive overlay row only if chart renders it → Learn `indicators` question → Practice regime window with that overlay |
 | 6 | `news` | Archive term (`rumor-vs-filing`, `priced-in`, `chase-vs-fade`) → Learn `news-literacy` → Cases `company-news` → Coach headline tree (skip if `chase-vs-fade` already covers) → Home tip |
 | 7 | `macro` | Cases `macro-news` (risk-off / print / supply) → Coach macro session → Home tip |
@@ -151,7 +153,7 @@ Run the seven LOOPS/ section content loops as one graph until every section’s 
 **Done (per tick):** Exactly one content unit in **one** section loop, chosen by the policy’s picker, verified with that section’s rubric.
 
 # CONTEXT
-- Picker + families: `LOOPS/LOOP-Graph.md`
+- Picker + families: `docs/projects/content-graph/LOOP-Graph.md`
 - Authoring: only the chosen `LOOPS/LOOP-*.md` (never freelance a unit type that file forbids)
 - Shared constraints: SAMPLE/STYLIZED; no LIVE; no brokerage; Equities path unlocks unchanged; one unit per tick
 - Auto-verify: `npm run lint` && `npm run build`; add `npm run test:coaching` when the unit is a coaching session
@@ -197,3 +199,4 @@ PASS only if:
 - Learn Phase D is gated by Learn A–C even in `ECHO`; the picker parks multi-market Learn hops until then.
 - Home is last in drain order so copy can name real ids. In echo, a Home hop is allowed **after** that family’s primary surface exists.
 - Milestone `AGENTS_LOOP-*.md` files are out of this graph.
+- Project loops (e.g. [`../financials-earnings/LOOP-Financials-Earnings.md`](../financials-earnings/LOOP-Financials-Earnings.md)) build new surfaces milestone by milestone; do not run them in the same session as this graph. Once a project ships its groups, the matching echo family here points at them.

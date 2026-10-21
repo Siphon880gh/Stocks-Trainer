@@ -168,7 +168,7 @@ Hub list: `src/lib/miscPractices.ts`.
 
 ## How types combine
 
-A teaching idea often shows up as several resources (see echo families in [`LOOPS/LOOP-Graph.md`](./LOOPS/LOOP-Graph.md)):
+A teaching idea often shows up as several resources (see echo families in [`docs/projects/content-graph/LOOP-Graph.md`](./docs/projects/content-graph/LOOP-Graph.md)):
 
 ```text
 Literacy term  →  Quiz  →  Step-by-step  →  Case study

@@ -17,6 +17,8 @@ import {
 } from "../lib/beginnerPath";
 import { getMilestoneStatus, loadProgress } from "../lib/progressStore";
 import { MISC_PRACTICE_ITEMS, isMiscPracticeDone } from "../lib/miscPractices";
+import FinancialsTrainingCard from "../components/financials/FinancialsTrainingCard";
+import { isFinancialsQuizGroup } from "../lib/financials/quizBanks";
 import { hasGradedPracticeDraw } from "../lib/practiceDraw";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
@@ -160,7 +162,8 @@ export default function Training() {
                   g.id === "financial-literacy" ||
                   g.id === "news-literacy" ||
                   g.id === "earnings-jargon" ||
-                  g.id === "financial-drills";
+                  g.id === "financial-drills" ||
+                  isFinancialsQuizGroup(g.id);
                 return (
                   <span key={g.id} className="group/yt inline-flex items-center gap-1">
                     <button
@@ -331,6 +334,8 @@ export default function Training() {
             </span>
           </div>
         </div>
+
+        <FinancialsTrainingCard onSelectGroup={setSelectedGroup} />
 
         <div className="w-full max-w-xl panel p-4 text-sm space-y-2">
           <p className="font-semibold">Misc Practices</p>

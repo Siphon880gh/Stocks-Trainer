@@ -34,7 +34,18 @@ interface CandlestickChartProps {
   annotations?: ChartAnnotations;
   /** Empty bar slots reserved on the right (room for zones / risk-reward boxes). */
   padRightBars?: number;
+  /**
+   * Draw a volume sub-pane under the price pane (bars tinted by candle colour). Off by default; also off when
+   * `compact` or when no bar has `volume`, so existing charts render byte-identically.
+   */
+  showVolume?: boolean;
 }
+
+/** Height (svg units) added below the price pane when the volume sub-pane is on. */
+export const VOLUME_PANE_HEIGHT = 56;
+
+const fmtVolume = (v: number) =>
+  v >= 1e9 ? `${(v / 1e9).toFixed(1)}B` : v >= 1e6 ? `${(v / 1e6).toFixed(1)}M` : v >= 1e3 ? `${(v / 1e3).toFixed(0)}K` : String(Math.round(v));
 
 const TONE_COLOR: Record<AnnotationTone, string> = {
   neutral: CHART.textMuted,
@@ -65,6 +76,7 @@ export default function CandlestickChart({
   markers,
   annotations,
   padRightBars = 0,
+  showVolume = false,
 }: CandlestickChartProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
@@ -84,6 +96,12 @@ export default function CandlestickChart({
   const [yMin, yMax] = paddedPriceDomain(dataMin, dataMax, domainZoom);
   const yRange = yMax - yMin;
   const innerHeight = paneHeight - padding.top - padding.bottom;
+  const volumeOn = showVolume && !compact && data.some((d) => (d.volume ?? 0) > 0);
+  /** 0 unless the volume pane is on, so every existing coordinate below is unchanged by default. */
+  const volH = volumeOn ? VOLUME_PANE_HEIGHT : 0;
+  const volTop = padding.top + innerHeight + 6;
+  const volBarMax = volH - 12;
+  const maxVolume = volumeOn ? Math.max(...data.map((d) => d.volume ?? 0)) : 0;
 
   const candleCount = slotCount;
   const gap = compact || dense ? 1.5 : 2;
@@ -169,13 +187,16 @@ export default function CandlestickChart({
                 {fmt(data[hoveredIndex].close)}
               </span>
             </p>
+            {data[hoveredIndex].volume !== undefined ? (
+              <p><span className="text-[#787b86] w-4 inline-block">V</span> {fmtVolume(data[hoveredIndex].volume!)}</p>
+            ) : null}
           </div>
         </div>
       ) : null}
       <svg
         width="100%"
-        height={paneHeight}
-        viewBox={`0 0 ${chartWidth} ${paneHeight}`}
+        height={paneHeight + volH}
+        viewBox={`0 0 ${chartWidth} ${paneHeight + volH}`}
         preserveAspectRatio="xMidYMid meet"
         style={{ background: CHART.bg, cursor: onSelectPrice ? "crosshair" : undefined }}
         onClick={(e) => {
@@ -222,7 +243,7 @@ export default function CandlestickChart({
           <text
             key={d.name}
             x={x(i)}
-            y={height - (compact ? 4 : 6)}
+            y={height - (compact ? 4 : 6) + volH}
             fill={CHART.textMuted}
             fontSize={compact ? 8 : 10}
             fontFamily={CHART.font}
@@ -257,6 +278,48 @@ export default function CandlestickChart({
             </g>
           );
         })}
+
+        {(annotations?.events ?? []).map((ev, ei) => {
+          const color = TONE_COLOR[ev.tone ?? "entry"];
+          const ex = x(ev.index);
+          return (
+            <g key={`event-${ei}`}>
+              <line x1={ex} y1={padding.top} x2={ex} y2={padding.top + innerHeight + volH} stroke={color} strokeDasharray="3 3" strokeWidth={1} strokeOpacity={0.8} />
+              <text x={ex + 3} y={padding.top + 9} fill={color} fontSize={9} fontFamily={CHART.font} stroke={CHART.bg} strokeWidth={3} paintOrder="stroke">
+                {ev.label}
+              </text>
+            </g>
+          );
+        })}
+
+        {volumeOn ? (
+          <g aria-label="Volume">
+            <line x1={padding.left} y1={volTop - 3} x2={padding.left + innerWidth} y2={volTop - 3} stroke={CHART.grid} strokeWidth={1} />
+            <text x={chartWidth - padding.right + 6} y={volTop + 6} fill={CHART.textMuted} fontSize={9} fontFamily={CHART.font} textAnchor="start">
+              Vol
+            </text>
+            <text x={chartWidth - padding.right + 6} y={volTop + 17} fill={CHART.textMuted} fontSize={9} fontFamily={CHART.font} textAnchor="start">
+              {fmtVolume(maxVolume)}
+            </text>
+            {data.map((d, i) => {
+              const v = d.volume ?? 0;
+              if (v <= 0) return null;
+              const h = Math.max(1, (v / maxVolume) * volBarMax);
+              const bw = Math.max(dense ? 1.5 : 3, candleWidth - 1);
+              return (
+                <rect
+                  key={`vol-${i}`}
+                  x={x(i) - bw / 2}
+                  y={volTop + volBarMax - h}
+                  width={bw}
+                  height={h}
+                  fill={d.close >= d.open ? CHART.up : CHART.down}
+                  fillOpacity={0.45}
+                />
+              );
+            })}
+          </g>
+        ) : null}
 
         {(markers ?? []).map((m) => {
           const my = y(m.price);

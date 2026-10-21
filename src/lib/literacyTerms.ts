@@ -1,4 +1,5 @@
 import { ADVANCED_TERMS } from "./advancedPatterns";
+import { FINANCIAL_TERMS } from "./financials/terms";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
@@ -612,6 +613,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
       "SAMPLE / STYLIZED packs are curated teaching tapes. DELAYED is a labeled delayed adapter when enabled. Neither is a real-time brokerage quote. Equities path still uses SAMPLE packs first.",
   },
   ...ADVANCED_TERMS,
+  ...FINANCIAL_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

@@ -7,6 +7,8 @@ export interface OHLC {
   high: number;
   low: number;
   close: number;
+  /** Optional traded volume (shares). Charts draw it only with `showVolume`. */
+  volume?: number;
 }
 
 function ohlc(

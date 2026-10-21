@@ -307,6 +307,20 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ---
 
+## Flow UF-19 — Financials & earnings: Read the Print (FE project)
+
+1. Learn → **Financials & earnings** card → **Read the Print** (`/practice/read-the-print`).
+2. Round 1/14 shows the earnings preview (consensus, whisper, guidance, KPI watch, implied move, run-up, positioning), the last reported quarters and only the 30 sessions before the report. No actual EPS / revenue / new guidance / reaction name is visible.
+3. **How does it trade on the report?** pick A–E → pick the follow-through (with / against / chop) → reveal shows the full chart with volume and teaching marks, the actuals, "What mattered", why the other answers don't fit and related glossary terms.
+4. Score = 2 for the call + 1 for the follow-through; refresh keeps rounds played and best session (`analysis_core_read_the_print_v1`).
+5. From the card open **Statements lab** (`/practice/statements`): switch company / tab; `#forecast` toggles what-ifs (delay collections, defer capex, revolver off → breach tint).
+6. From the card open **Reading the Statements** (`/training?group=statements-reading&start=1`): the statement exhibit shows above the options; forecast questions hide the breach tint until submit.
+7. From the card open **Mark the band** (`/practice/mark-the-band`): type band low / high (lines appear on the chart) → **Lock the band** → the report bar appears → type the fill level → **Reveal** shows x/3, the real band and the fill. Coach → **Earnings week** (`/coach/earnings-week`) walks the same kind of report preview → print → reaction.
+
+**Pass:** SAMPLE / STYLIZED labels on every screen; deep links `?round=n&phase=read|answer|follow|reveal`; nothing about the actuals before the reveal; works at 390 px width.
+
+---
+
 ## Flow matrix (goal → primary flow)
 
 | Goal | Primary flow | Secondary |
@@ -326,6 +340,7 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 | G13 Navigator / multi-market | UF-15 | UF-17 |
 | G14 News literacy | UF-16 | UF-06 |
 | G15 Step coaching | UF-18 | UF-06 |
+| G16 Financials & earnings (project) | UF-19 | UF-14 |
 
 ---
 

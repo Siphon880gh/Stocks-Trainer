@@ -20,6 +20,7 @@ import { getOverlay, splitHintTerms } from "../lib/overlays";
 import CandlestickChart from "./CandlestickChart";
 import MarketChart from "./MarketChart";
 import FinancialSnapshotCard from "./FinancialSnapshotCard";
+import FinancialsQuizExhibit from "./financials/FinancialsQuizExhibit";
 import IndicatorDetailModal from "./IndicatorDetailModal";
 
 interface QuizModalProps {
@@ -201,7 +202,9 @@ export default function QuizModal({
           </div>
 
           {/* Chart, snapshot card, or literacy context — skip hero chart when options are charts */}
-          {question.optionsAreCharts ? null : question.snapshotId ? (
+          {question.optionsAreCharts ? null : question.financialsExhibit ? (
+            <FinancialsQuizExhibit exhibit={question.financialsExhibit} revealed={submitted} />
+          ) : question.snapshotId ? (
             <FinancialSnapshotCard snapshotId={question.snapshotId} />
           ) : question.overlayId || question.patternKey ? (
             <div className="overflow-hidden">

@@ -79,6 +79,21 @@ Pure helpers: `earningsPriceRatio`, `sharpeRatio`, `returnsFromCloses`, `volatil
 
 `FinancialsPanel` maps closes → returns → Sharpe/vol and shows E/P + P/E from fake fundamentals.
 
+## Financials & earnings project (`src/lib/financials/`)
+
+Project docs: [`docs/projects/financials-earnings/`](docs/projects/financials-earnings/CHARTER.md). SAMPLE / STYLIZED fictional companies (`.S` tickers); not live filings. Tests: `npm run test:financials`.
+
+- `types.ts` (statements, `Quarter`, `Company`, `GuidanceRange`). Money = whole **thousands**; cash-flow lines store the cash impact (outflows negative).
+- `companies.ts`: `buildQuarters(opening, drivers)` builds 8 tied quarters; `COMPANIES` = Northwind Cloud `NWCL.S` (SaaS burner, one equity raise), Harbor & Pine `HBPN.S` (seasonal retailer), Ironbridge Industrial `IRBG.S` (levered, covenant). `ties.ts` = tie-out validators (IS / BS / CF / chain).
+- `metrics.ts` (margins, FCF, EBITDA, net debt, DSO / DIO / DPO, CCC, coverage, burn, runway, QoQ / YoY, TTM, net leverage, `quarterMetrics`); `format.ts` (`fmtK` parentheses for negatives, `FIN_DISCLAIMER`, `glossaryHref`).
+- `terms.ts`: `FINANCIAL_TERMS` (33), spread into `LITERACY_TERMS`.
+- `cashForecast.ts` + `cashForecastFixtures.ts`: 13-week direct-method forecast with auto revolver draw / repay, validators, `applyWhatIf` (delay collections, defer capex, revolver on / off; never mutates). 4 fixtures incl. the level-1 replica of Weng's sketch.
+- `earningsEvents.ts`: 14 `EARNINGS_EVENTS` (consensus, whisper, prior / new guidance, KPI watch, implied move, run-up, positioning, archetype). Beat / miss labels are **computed** (EPS ≥ 1¢; revenue and guidance midpoint ±1%) and checked against each story's claims.
+- `reactionCharts.ts`: seeded `generateReaction(event)` (30 pre + report + 15 post bars, with `volume`), per-archetype validator (non-muted gaps are outside the implied move; muted inside), `revealAnnotations`.
+- `readThePrint.ts` / `readThePrintProgress.ts`: the game's rounds (answer = `answerFor(archetype, direction)`) and progress key `analysis_core_read_the_print_v1`.
+- `quizBanks.ts` / `quizExhibit.ts`: FE6 quiz banks (see the training reference).
+- FE8: `coachEarningsWeek.ts` (Coach session `earnings-week`, registered in `coaching/sessions/index.ts`, numbers from irbg-q1fy26) and `markTheBand.ts` (`BAND_ROUNDS`, `gradeBand`; page `/practice/mark-the-band`, same round order as Read the Print).
+
 ---
 
 ## Market page wiring (`Market.tsx`)

@@ -73,6 +73,8 @@ Add `QuizGroupId` + `QUIZ_GROUPS` entry + dedicated questions array + `getQuesti
 18. `crypto-literacy` — browse/drill only; does not replace Equities path
 19. `options-literacy` — underlying / event / vol context; no Greeks/chain
 
+Project groups (owned by [`../docs/projects/financials-earnings/`](../docs/projects/financials-earnings/CHARTER.md); extend them through that project's loop, not here): 20. `statements-reading` (≥12) · 21. `cash-forecast-13wk` (≥10) · 22. `earnings-preview` (≥10) · 23. `earnings-reaction` (≥10, chart-based). Banks live in `src/lib/financials/quizBanks.ts`; numbers come from the fixtures and are recomputed in `financialsQuiz.test.ts`.
+
 New groups that should write Dashboard tips (like news-literacy) must extend `progressStore` writeback **only** if an existing pattern already exists for that group; otherwise leave them as extra Learn drills without new progress flags.
 
 **Inside a group:** next question = first missing skill in that group’s topic list, not a duplicate prompt.

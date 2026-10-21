@@ -36,11 +36,20 @@ export interface ChartPoint {
   tone?: AnnotationTone;
 }
 
+/** A vertical line at a bar (an earnings report, a macro release …) with a short label at the top. */
+export interface ChartEvent {
+  index: number;
+  label: string;
+  tone?: AnnotationTone;
+}
+
 export interface ChartAnnotations {
   levels?: ChartLevel[];
   trendlines?: ChartTrendline[];
   zones?: ChartZone[];
   points?: ChartPoint[];
+  /** Vertical event lines (no price, so they do not change the chart's price extent). */
+  events?: ChartEvent[];
 }
 
 /** Every price an annotation touches, so the chart can fit them in view. */

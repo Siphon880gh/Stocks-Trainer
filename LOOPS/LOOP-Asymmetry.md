@@ -20,7 +20,7 @@ Prefer **no interval** (dynamic). One content unit per tick.
 
 **Before starting**
 1. Leave working `npm run dev` alone; verify with `npm run lint` + `npm run build`.
-2. Do **not** also run `LOOP-Graph.md` or a single-section exhaustive loop in this session — those pickers are equities-first and will fight this queue.
+2. Do **not** also run the content graph ([`docs/projects/content-graph/LOOP-Graph.md`](../docs/projects/content-graph/LOOP-Graph.md)) or a single-section exhaustive loop in this session — those pickers are equities-first and will fight this queue.
 3. Stop yourself anytime; hard-stop on the 10-round error budget or Done(asymmetry).
 
 **On each tick**

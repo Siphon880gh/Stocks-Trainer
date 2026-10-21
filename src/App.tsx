@@ -14,6 +14,9 @@ import PracticeHunt from "./pages/practice/Hunt";
 import PracticeLookalike from "./pages/practice/Lookalike";
 import PracticeInvalidation from "./pages/practice/Invalidation";
 import PracticeLevels from "./pages/practice/Levels";
+import PracticeStatementsLab from "./pages/practice/StatementsLab";
+import PracticeReadThePrint from "./pages/practice/ReadThePrint";
+import PracticeMarkTheBand from "./pages/practice/MarkTheBand";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
 import Coach from "./pages/Coach";
@@ -50,6 +53,9 @@ export default function App() {
           <Route path="practice/lookalike" element={<PracticeLookalike />} />
           <Route path="practice/invalidation" element={<PracticeInvalidation />} />
           <Route path="practice/levels" element={<PracticeLevels />} />
+          <Route path="practice/statements" element={<PracticeStatementsLab />} />
+          <Route path="practice/read-the-print" element={<PracticeReadThePrint />} />
+          <Route path="practice/mark-the-band" element={<PracticeMarkTheBand />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />
           <Route path="coach" element={<Coach />} />

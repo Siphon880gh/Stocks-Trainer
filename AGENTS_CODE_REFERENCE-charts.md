@@ -70,6 +70,21 @@ Custom scale math near top (`y()` / `x()` helpers); hover tooltip state; candles
 
 **Consumers:** `QuizModal` for pattern questions via `PATTERN_OHLC[patternKey]`.
 
+### Volume pane + event lines (generic, opt-in; added by the financials project FE4.M1)
+
+Backward-compatible API any feature can reuse (earnings reactions, macro releases, …):
+
+- **`OHLC.volume?: number`** (`src/lib/ohlcData.ts`). Optional; existing data has none.
+- **`showVolume?: boolean`** on `CandlestickChart` (default `false`). When on, **and** not `compact`, **and** at least one bar has `volume > 0`, the svg grows by `VOLUME_PANE_HEIGHT` (56, exported) and draws one bar per candle under the price pane, tinted up/down by candle colour, with a `Vol` + max-volume label on the right axis. X-axis labels move below the pane. Tooltip shows `V` when the hovered bar has volume.
+- **`annotations.events?: ChartEvent[]`** (`{ index, label, tone? }` in `src/lib/chartAnnotations.ts`). A dashed vertical line at the bar (through the volume pane when shown) with a label at the top. Default tone `entry`. Events carry no price, so `annotationPrices()` and the price scale are unchanged. Drawn after zones and before candles (behind price).
+- **Byte-identity guarantee:** with neither feature used, markup is identical to before. Proven by `src/lib/financials/render.test.tsx` against hashes in `src/lib/financials/__snapshots__/candlestick-baseline.json` (4 cases: default, compact, fully annotated with `padRightBars`, dense scenario). If you intentionally change chart rendering, regenerate with `npx tsx src/lib/financials/chartSnapshotCases.tsx --write` and say so in your change notes.
+
+```tsx
+<CandlestickChart data={barsWithVolume} showVolume annotations={{ events: [{ index: 30, label: "Report" }] }} />
+```
+
+**Consumers:** `src/lib/financials/reactionCharts.ts` (earnings reaction charts) via the Read the Print game.
+
 ---
 
 ## Code flow (charts)
