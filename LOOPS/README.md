@@ -36,6 +36,7 @@ Swap the file for the section you want:
 | **Graph (all sections)** | [`LOOP-Graph.md`](../docs/projects/content-graph/LOOP-Graph.md) | `/loop content graph using docs/projects/content-graph/LOOP-Graph.md` |
 | **Project: Financials & earnings** (statements, 13-week forecast, preview, Read the Print) | [`LOOP-Financials-Earnings.md`](../docs/projects/financials-earnings/LOOP-Financials-Earnings.md) | `/loop financials project using docs/projects/financials-earnings/LOOP-Financials-Earnings.md` |
 | **Project: Macro forces** (jobs, CPI, FOMC, yields, mortgage rates → SIMULATED look-alikes + reaction game) | [`LOOP-Macro-Forces.md`](../docs/projects/macro-forces/LOOP-Macro-Forces.md) | `/loop macro project using docs/projects/macro-forces/LOOP-Macro-Forces.md` |
+| **Project: Beginner Academy** (course map, placement, paper trading, challenges, rewards, options ladder) | [`LOOP-Beginner-Academy.md`](../docs/projects/beginner-academy/LOOP-Beginner-Academy.md) | `/loop beginner academy project using docs/projects/beginner-academy/LOOP-Beginner-Academy.md` |
 | Home `/` | [`LOOP-Home.md`](./LOOP-Home.md) | `/loop exhaustive Home content using LOOPS/LOOP-Home.md` |
 | Learn `/training` | [`LOOP-Learn.md`](./LOOP-Learn.md) | `/loop exhaustive Learn content using LOOPS/LOOP-Learn.md` |
 | Charts `/market` | [`LOOP-Charts.md`](./LOOP-Charts.md) | `/loop exhaustive Charts content using LOOPS/LOOP-Charts.md` |
@@ -68,6 +69,7 @@ Milestone-by-milestone projects live in `docs/projects/<name>/` (CHARTER.md · E
 - [`docs/projects/content-graph/`](../docs/projects/content-graph/CHARTER.md): the content graph orchestrator
 - [`docs/projects/financials-earnings/`](../docs/projects/financials-earnings/CHARTER.md): financials, expectations and earnings reactions
 - [`docs/projects/macro-forces/`](../docs/projects/macro-forces/CHARTER.md): macro releases (jobs, CPI, FOMC, yields, mortgage rates…) with real-source links, SIMULATED look-alikes and market-reaction game · `/loop macro project using docs/projects/macro-forces/LOOP-Macro-Forces.md`
+- [`docs/projects/beginner-academy/`](../docs/projects/beginner-academy/CHARTER.md): broker-style beginner training — leveled course map with short units, placement check, SIMULATED paper account (market/limit/stop/stop-limit/trailing stop), challenges, virtual points/badges/streak, options knowledge ladder · `/loop beginner academy project using docs/projects/beginner-academy/LOOP-Beginner-Academy.md`
 
 ## Not these files
 
