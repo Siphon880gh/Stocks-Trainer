@@ -19,6 +19,7 @@ import { earningsDebtSession } from "./earnings-debt";
 import { earningsGuidanceSession } from "./earnings-guidance";
 import { earningsMarginsSession } from "./earnings-margins";
 import { earningsWeekSession } from "../../financials/coachEarningsWeek";
+import { cpiMorningSession } from "../../macro/coachCpiMorning";
 import { equitiesLiteracySession } from "./equities-literacy";
 import { forexBojPrintSession } from "./forex-boj-print";
 import { forexCbHeadlineSession } from "./forex-cb-headline";
@@ -130,4 +131,5 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   newsLiteracySession,
   shortVsSellSession,
   earningsWeekSession,
+  cpiMorningSession,
 ];

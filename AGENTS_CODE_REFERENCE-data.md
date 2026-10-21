@@ -94,6 +94,17 @@ Project docs: [`docs/projects/financials-earnings/`](docs/projects/financials-ea
 - `quizBanks.ts` / `quizExhibit.ts`: FE6 quiz banks (see the training reference).
 - FE8: `coachEarningsWeek.ts` (Coach session `earnings-week`, registered in `coaching/sessions/index.ts`, numbers from irbg-q1fy26) and `markTheBand.ts` (`BAND_ROUNDS`, `gradeBand`; page `/practice/mark-the-band`, same round order as Read the Print).
 
+## Macro forces project (`src/lib/macro/`)
+
+Project docs: [`docs/projects/macro-forces/`](docs/projects/macro-forces/CHARTER.md). Every number is SIMULATED (fictional world, no logos, no copied text); each lesson links the real source in `SOURCES.md`. Tests: `npm run test:macro`; URL check: `npm run check:macro-sources` (bot-blocked BLS / FRED / DOL / CME hosts are verified by hand and logged in `SOURCES.md`).
+
+- `types.ts` (release kinds, `Regime`, `Instrument`, `SurpriseLabel`, `ReactionArchetype`, `MacroSource`); `sources.ts` = `MACRO_SOURCES` (mirrors `SOURCES.md`, checked by `sources.test.ts`) + `OFFICIAL_HOSTS`; `checkSources.ts` CLI; `sourcesLog.ts` manual-verification log.
+- `world.ts`: deterministic `WORLD` (months, weeks, days, quarters) — payroll prints + two revisions, household survey identities, CPI / PPI / PCE indexes, claims, JOLTS, GDP contributions, retail, ISM, sentiment, starts, Treasury curve, breakevens, dollar, 30y mortgage (10y + spread). `consistency.ts` = identity checks used by the tests.
+- `fed.ts`: FOMC meetings (target range, futures pricing, dots, statement text); `releases.ts`: `RELEASES` (consensus, range, prior / revised, actual, computed `effectiveLabel`, twists); `viewData.ts` = pure table builders for the look-alike viewers (`components/macro/viewers/`); `display.ts` number formats.
+- `reactions.ts`: transmission rules (kind × surprise × regime → yields / dollar / index / sectors + rationale, hedged); `reactionCharts.ts`: seeded intraday (42 × 5-min) and daily OHLC per instrument + reveal annotations (uses `CandlestickChart` `events` / annotations; volume optional).
+- `game.ts` (`MACRO_ROUNDS` 29, `answerKey`, `scoreRound`) + `macroProgress.ts` (key `macro_desk_progress_v1`); `lessons.ts` (`MACRO_LESSONS` 18, six-part lesson spec); `glossary.ts` (`MACRO_TERMS` 50, spread into `LITERACY_TERMS`); `caseLinks.ts` (`MACRO_CASE_LESSON_LINKS`, read-only bridge to `caseStudies.ts`).
+- Pages: `/macro` (`pages/macro/MacroDesk.tsx`), `/macro/:lessonId` (`MacroLesson.tsx`), `/macro/play` (`MacroPlay.tsx`).
+
 ---
 
 ## Market page wiring (`Market.tsx`)

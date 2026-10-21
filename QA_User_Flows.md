@@ -321,6 +321,20 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ---
 
+## Flow UF-20 — Macro Desk: real source → SIMULATED release → market reaction (MF project)
+
+1. Learn → **Macro Desk** card → **Macro Desk** (`/macro`): 18 lesson cards grouped by family (labor, inflation, growth, Fed, rates, housing), reaction-game entry and the 5 quiz groups.
+2. Open **Employment Situation** (`/macro/employment-situation`). Step 1 "Visit the real source" opens bls.gov in a new tab (official host only). Step 2 shows the look-alike with a **SIMULATED** banner, no agency logo, fictional numbers; the event picker and the viewer show the same month.
+3. Step 3 expectations: consensus, range, prior and prior-revised; actual and surprise (σ) appear after **Reveal**.
+4. Step 4 reaction round: read → predict 2y / 10y yield, dollar, stock index, one sector (up / down / muted) → reveal shows the annotated candlestick chart (release line, pre-release range, follow-through / reversal mark), the regime-dependent explanation and why the other calls do not fit. Nothing about the outcome before the reveal.
+5. Step 5 links the lesson's quiz group (`/training?group=macro-releases&start=1`) and glossary terms (Archive literacy tab). In the quiz, release exhibits keep the "Market read" verdict back until submit.
+6. **Reaction game** (`/macro/play`): 29 rounds in order; refresh keeps rounds played and best score (`macro_desk_progress_v1`); the Learn card shows "n/29 rounds played".
+7. Cases → **Inflation comes in hotter than expected** (`/cases/case-macro-print`): a small "Read the real release" link (BLS CPI) + "Macro Desk: Consumer prices (CPI)" sits under the headline; grading unchanged.
+
+**Pass:** SIMULATED label on every look-alike and chart; every real-source link is an official host from `SOURCES.md`; explanations hedged ("usually", "in this regime"); works at 390 px width.
+
+---
+
 ## Flow matrix (goal → primary flow)
 
 | Goal | Primary flow | Secondary |
@@ -341,6 +355,7 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 | G14 News literacy | UF-16 | UF-06 |
 | G15 Step coaching | UF-18 | UF-06 |
 | G16 Financials & earnings (project) | UF-19 | UF-14 |
+| G17 Macro forces (project) | UF-20 | UF-05–06 |
 
 ---
 

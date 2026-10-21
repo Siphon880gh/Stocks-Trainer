@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import MacroHomeTip from "../components/macro/MacroHomeTip";
 import { Link } from "react-router-dom";
 import GoalPicker from "../components/GoalPicker";
 import JargonText from "../components/JargonText";
@@ -381,6 +382,8 @@ export default function Dashboard() {
           </button>
         </div>
       </details>
+
+      <MacroHomeTip />
 
       {(recoveryMessage || drawTip) && (
         <section className="text-[12px] text-muted space-y-1">

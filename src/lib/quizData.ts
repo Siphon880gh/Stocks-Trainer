@@ -10,6 +10,8 @@ import { BUY_SELL_QUESTIONS } from "./buySellDrill";
 import { ADVANCED_QUESTIONS, ADVANCED_RARE_KEYS, familyKeys } from "./advancedPatterns";
 import { FINANCIALS_QUESTION_BANKS, FINANCIALS_QUIZ_GROUPS, isFinancialsQuizGroup, type FinancialsQuizGroupId } from "./financials/quizBanks";
 import type { FinancialsExhibit } from "./financials/quizExhibit";
+import { MACRO_QUESTION_BANKS, MACRO_QUIZ_GROUPS, isMacroQuizGroup, type MacroQuizGroupId } from "./macro/quiz/banks";
+import type { MacroExhibit } from "./macro/quiz/exhibit";
 
 export { PRICE_ACTION_QUESTIONS, SUPPLY_DEMAND_QUESTIONS, BUY_SELL_QUESTIONS };
 
@@ -158,6 +160,8 @@ export interface QuizQuestion {
   chartSize?: "large";
   /** FE6: statement / forecast / preview / reaction exhibit from src/lib/financials (rendered by FinancialsQuizExhibit). */
   financialsExhibit?: FinancialsExhibit;
+  /** MF7: release / reaction-chart / curve exhibit from src/lib/macro (rendered by MacroQuizExhibit). */
+  macroExhibit?: MacroExhibit;
 }
 
 /** Build numbered chart choices (1…n) for “which chart is the pattern?” questions. */
@@ -5328,7 +5332,8 @@ export type QuizGroupId =
   | "forex-literacy"
   | "crypto-literacy"
   | "options-literacy"
-  | FinancialsQuizGroupId;
+  | FinancialsQuizGroupId
+  | MacroQuizGroupId;
 
 export interface QuizGroup {
   id: QuizGroupId;
@@ -5369,6 +5374,7 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     icon: "finance_mode",
   },
   ...FINANCIALS_QUIZ_GROUPS,
+  ...MACRO_QUIZ_GROUPS,
   { id: "indicators", name: "Indicators", description: "Identify SMA, EMA, RSI, MACD, Bollinger Bands", icon: "show_chart" },
   {
     id: "candle-anatomy",
@@ -5541,6 +5547,7 @@ function patternKeysForGroup(groupId: QuizGroupId): string[] {
 
 function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isFinancialsQuizGroup(groupId)) return FINANCIALS_QUESTION_BANKS[groupId];
+  if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
@@ -5563,6 +5570,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
 
 export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isFinancialsQuizGroup(groupId)) return FINANCIALS_QUESTION_BANKS[groupId];
+  if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;

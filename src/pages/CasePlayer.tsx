@@ -29,6 +29,7 @@ import {
 } from "../lib/thinkingModeTips";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText from "../components/JargonText";
+import CaseMacroLink from "../components/macro/CaseMacroLink";
 
 const ACTIONS: { id: CaseAction; label: string }[] = [
   { id: "buy", label: "BUY" },
@@ -150,6 +151,7 @@ export default function CasePlayer() {
               Headline: <JargonText text={study.newsHeadline} />
             </p>
           ) : null}
+          <CaseMacroLink caseId={study.id} />
         </div>
 
         {study.statementSnapshot ? (

@@ -19,6 +19,8 @@ import { getMilestoneStatus, loadProgress } from "../lib/progressStore";
 import { MISC_PRACTICE_ITEMS, isMiscPracticeDone } from "../lib/miscPractices";
 import FinancialsTrainingCard from "../components/financials/FinancialsTrainingCard";
 import { isFinancialsQuizGroup } from "../lib/financials/quizBanks";
+import MacroTrainingCard from "../components/macro/MacroTrainingCard";
+import { isMacroQuizGroup } from "../lib/macro/quiz/banks";
 import { hasGradedPracticeDraw } from "../lib/practiceDraw";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
@@ -163,7 +165,8 @@ export default function Training() {
                   g.id === "news-literacy" ||
                   g.id === "earnings-jargon" ||
                   g.id === "financial-drills" ||
-                  isFinancialsQuizGroup(g.id);
+                  isFinancialsQuizGroup(g.id) ||
+                  isMacroQuizGroup(g.id);
                 return (
                   <span key={g.id} className="group/yt inline-flex items-center gap-1">
                     <button
@@ -336,6 +339,8 @@ export default function Training() {
         </div>
 
         <FinancialsTrainingCard onSelectGroup={setSelectedGroup} />
+
+        <MacroTrainingCard onSelectGroup={setSelectedGroup} />
 
         <div className="w-full max-w-xl panel p-4 text-sm space-y-2">
           <p className="font-semibold">Misc Practices</p>

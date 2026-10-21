@@ -133,6 +133,7 @@ Companion files: [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [
 | E10 | Market Learning Coverage | Navigator + news/statements drills + SAMPLE decide packs per market + Explorer path | Coverage | Complete |
 | E11 | Step-by-step Coaching | Deterministic decision-tree wizard: fail → explain → rewind → succeed across topics | Coaching | Complete |
 | FE (project) | Financials, Expectations & Earnings Reactions | Read statements, 13-week cash forecast, earnings preview, Read the Print game → [`docs/projects/financials-earnings/`](docs/projects/financials-earnings/CHARTER.md) | Project | See PROGRESS.md |
+| MF (project) | Macro Forces: Releases, Rates & Market Reactions | Real-source link → SIMULATED look-alike (jobs, CPI, FOMC, Treasury curve, FRED, mortgage rates…) → consensus vs actual → reaction game → quizzes → [`docs/projects/macro-forces/`](docs/projects/macro-forces/CHARTER.md) | Project | See PROGRESS.md |
 
 ---
 

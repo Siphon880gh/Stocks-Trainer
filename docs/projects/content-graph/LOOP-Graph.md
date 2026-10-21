@@ -93,7 +93,7 @@ Walk families in this order (equities-first):
 | 4 | `statements` | Archive term (FCF, margin, P/E, …) → Learn `financial-literacy` or `financial-drills` (new snapshot if needed), or the project groups `statements-reading` / `cash-forecast-13wk` / `earnings-preview` / `earnings-reaction` ([financials-earnings](../financials-earnings/CHARTER.md); Practice `/practice/statements`, `/practice/read-the-print`) → Cases `earnings` case in matching thinking mode → Coach earnings/statements session → Home thinking-mode tip |
 | 5 | `indicators` | Archive overlay row only if chart renders it → Learn `indicators` question → Practice regime window with that overlay |
 | 6 | `news` | Archive term (`rumor-vs-filing`, `priced-in`, `chase-vs-fade`) → Learn `news-literacy` → Cases `company-news` → Coach headline tree (skip if `chase-vs-fade` already covers) → Home tip |
-| 7 | `macro` | Cases `macro-news` (risk-off / print / supply) → Coach macro session → Home tip |
+| 7 | `macro` | Learn project groups `macro-releases` / `rates-curve` / `fed-policy` / `housing-mortgage` / `macro-reactions` ([macro-forces](../macro-forces/CHARTER.md); Macro Desk `/macro`, lesson `/macro/:lessonId`, game `/macro/play`) → Cases `macro-news` (risk-off / print / supply; print cases link their lesson) → Coach macro session → Home tip |
 | 8 | `combined` | Cases `combined` → Coach combined session → Home tip |
 | 9 | `equity-tape` | Charts equity pack (new shape) → Learn `equity-patterns` question with that `samplePackId` → Cases earnings/news using a distinct (not cloned) tape |
 | 10 | `futures` | Archive `futures-market` (exists → skip) → Charts `future` pack → Learn `futures-literacy` (Phase D) → Cases `futures` → Coach futures tree → Home nav copy |

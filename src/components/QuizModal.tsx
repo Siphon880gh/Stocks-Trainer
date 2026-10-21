@@ -21,6 +21,7 @@ import CandlestickChart from "./CandlestickChart";
 import MarketChart from "./MarketChart";
 import FinancialSnapshotCard from "./FinancialSnapshotCard";
 import FinancialsQuizExhibit from "./financials/FinancialsQuizExhibit";
+import MacroQuizExhibit from "./macro/MacroQuizExhibit";
 import IndicatorDetailModal from "./IndicatorDetailModal";
 
 interface QuizModalProps {
@@ -204,6 +205,8 @@ export default function QuizModal({
           {/* Chart, snapshot card, or literacy context — skip hero chart when options are charts */}
           {question.optionsAreCharts ? null : question.financialsExhibit ? (
             <FinancialsQuizExhibit exhibit={question.financialsExhibit} revealed={submitted} />
+          ) : question.macroExhibit ? (
+            <MacroQuizExhibit exhibit={question.macroExhibit} revealed={submitted} />
           ) : question.snapshotId ? (
             <FinancialSnapshotCard snapshotId={question.snapshotId} />
           ) : question.overlayId || question.patternKey ? (
