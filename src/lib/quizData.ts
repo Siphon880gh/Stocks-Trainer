@@ -2346,7 +2346,7 @@ function candlePickOptions(keys: [string, string, string, string]): QuizOption[]
 export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
   // Price rejected
   {
-    id: "CR-01",
+    id: "OC-01",
     prompt: "Which chart's marked candle shows price rejected at the highs: a long upper wick with a small body near the low?",
     correctAnswer: "C",
     options: candlePickOptions(["candle-stable-red", "candle-bears-win", "candle-rejected-high", "candle-indecision-red"]),
@@ -2358,7 +2358,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "wick-rejection",
   },
   {
-    id: "CR-02",
+    id: "OC-02",
     prompt: "After a rally, the marked red candle has a long upper wick and a small body near its low. What happened during that period?",
     correctAnswer: "B",
     options: [
@@ -2373,7 +2373,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "wick-rejection",
   },
   {
-    id: "CR-03",
+    id: "OC-03",
     prompt: "After a decline, the marked green candle has a long lower wick and a small body near its high. What is the best read?",
     correctAnswer: "A",
     options: [
@@ -2388,7 +2388,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "wick-rejection",
   },
   {
-    id: "CR-04",
+    id: "OC-04",
     prompt: "A rejection candle is only a potential reversal. What makes the bearish read on this chart more trustworthy?",
     correctAnswer: "C",
     options: [
@@ -2403,7 +2403,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "wick-rejection",
   },
   {
-    id: "CR-05",
+    id: "OC-05",
     prompt: "This hammer-style candle closed slightly green. If the same shape had closed slightly red instead, what would change most?",
     correctAnswer: "B",
     options: [
@@ -2419,7 +2419,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
   },
   // Price stability
   {
-    id: "CR-06",
+    id: "OC-06",
     prompt: "Which chart's marked candle shows price stability: a full body with almost no wicks?",
     correctAnswer: "B",
     options: candlePickOptions(["candle-indecision-green", "candle-stable-green", "candle-rejected-low", "candle-indecision-red"]),
@@ -2431,7 +2431,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "full-body-candle",
   },
   {
-    id: "CR-07",
+    id: "OC-07",
     prompt: "The marked green candle has a full body and barely any wicks. What does that tell you about the period?",
     correctAnswer: "A",
     options: [
@@ -2446,7 +2446,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "full-body-candle",
   },
   {
-    id: "CR-08",
+    id: "OC-08",
     prompt: "A run of red candles like this, each with a similar full body and tiny wicks, points to…",
     correctAnswer: "C",
     options: [
@@ -2461,7 +2461,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "full-body-candle",
   },
   {
-    id: "CR-09",
+    id: "OC-09",
     prompt: "Both this candle and a strong-movement candle have full bodies and tiny wicks. What separates them?",
     correctAnswer: "B",
     options: [
@@ -2477,7 +2477,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
   },
   // Indecision
   {
-    id: "CR-10",
+    id: "OC-10",
     prompt: "Which chart's marked candle shows indecision: a small body with wicks on both sides?",
     correctAnswer: "D",
     options: candlePickOptions(["candle-stable-green", "candle-rejected-low", "candle-bulls-win", "candle-indecision-green"]),
@@ -2489,7 +2489,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "indecision-candle",
   },
   {
-    id: "CR-11",
+    id: "OC-11",
     prompt: "The marked candle has a small red body with wicks above and below. What is the read?",
     correctAnswer: "A",
     options: [
@@ -2504,7 +2504,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "indecision-candle",
   },
   {
-    id: "CR-12",
+    id: "OC-12",
     prompt: "This indecision candle is green. Does that mean buyers won the period?",
     correctAnswer: "C",
     options: [
@@ -2519,7 +2519,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "indecision-candle",
   },
   {
-    id: "CR-13",
+    id: "OC-13",
     prompt: "After a short rally, an indecision candle appears. What is a sound next step?",
     correctAnswer: "B",
     options: [
@@ -2535,7 +2535,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
   },
   // Strong movement
   {
-    id: "CR-14",
+    id: "OC-14",
     prompt: "Which chart's marked candle is a strong move: a tall body much bigger than the candles before it, with small wicks?",
     correctAnswer: "A",
     options: candlePickOptions(["candle-bulls-win", "candle-stable-green", "candle-indecision-green", "candle-rejected-low"]),
@@ -2547,7 +2547,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     glossaryTermId: "strong-move-candle",
   },
   {
-    id: "CR-15",
+    id: "OC-15",
     prompt: "On the marked red candle, the open is at the top of the body and the close is at the bottom. What happened?",
     correctAnswer: "C",
     options: [
@@ -2566,7 +2566,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     ],
   },
   {
-    id: "CR-16",
+    id: "OC-16",
     prompt: "On the marked green candle, the open is near the bottom and the close near the top, with very little wick. What does it say?",
     correctAnswer: "B",
     options: [
@@ -2585,7 +2585,7 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     ],
   },
   {
-    id: "CR-17",
+    id: "OC-17",
     prompt: "Does one strong bulls-win candle guarantee the next candle goes up?",
     correctAnswer: "A",
     options: [

@@ -36,7 +36,7 @@ Middle of file:
 Near the end:
 - `POINTS_PER_CORRECT = 50`, `STREAK_BONUS = 10`.
 - `QuizGroupId` / `QUIZ_GROUPS` — path groups (`equity-literacy`, `financial-literacy`, `indicators`, `news-literacy`, `financial-drills`) plus pattern families.
-- `CANDLE_READING_QUESTIONS` (`candle-reading`, ids `CR-`) — one-candle reads (price rejected, stability, indecision, strong move). Series are `PATTERN_OHLC["candle-rejected-high"|"candle-rejected-low"|"candle-stable-*"|"candle-indecision-*"|"candle-bulls-win"|"candle-bears-win"]`, marked candle at index 3; glossary ids `wick-rejection`, `full-body-candle`, `indecision-candle`, `strong-move-candle`. Optional `priceMarkers` on a question draws labeled lines (e.g. Open / Close) on the hero chart.
+- `CANDLE_READING_QUESTIONS` (`candle-reading`, ids `OC-`) — one-candle reads (price rejected, stability, indecision, strong move). Series are `PATTERN_OHLC["candle-rejected-high"|"candle-rejected-low"|"candle-stable-*"|"candle-indecision-*"|"candle-bulls-win"|"candle-bears-win"]`, marked candle at index 3; glossary ids `wick-rejection`, `full-body-candle`, `indecision-candle`, `strong-move-candle`. Optional `priceMarkers` on a question draws labeled lines (e.g. Open / Close) on the hero chart.
 - `getQuestionsForGroup(groupId)` — dedicated banks for literacy/drills/indicators; `"all"` → full pattern bank; else filter `patternKey === groupId`.
 - Index helpers: `getQuestionIndexInGroup`, `getGlobalIndexFromGroup`.
 
