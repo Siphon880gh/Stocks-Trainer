@@ -498,6 +498,155 @@ export const CANDLE_BEARS_WIN_OHLC: OHLC[] = [
   ohlc("5", 63600, 63800, 63450, 63700),
 ];
 
+/** Candlestick pattern book (PDF lessons) — patterns not covered by the families above. */
+
+/** White marubozu after a decline: tall green body, no wicks (open = low, close = high). */
+export const WHITE_MARUBOZU_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64850, 64450, 64500),
+  ohlc("2", 64500, 64550, 64150, 64200),
+  ohlc("3", 64200, 64250, 63850, 63900),
+  ohlc("4", 63900, 64700, 63900, 64700),
+  ohlc("5", 64700, 64900, 64550, 64800),
+];
+
+/** Black marubozu after a rally: tall red body, no wicks (open = high, close = low). */
+export const BLACK_MARUBOZU_OHLC: OHLC[] = [
+  ohlc("1", 63500, 63850, 63450, 63800),
+  ohlc("2", 63800, 64150, 63750, 64100),
+  ohlc("3", 64100, 64450, 64050, 64400),
+  ohlc("4", 64400, 64400, 63600, 63600),
+  ohlc("5", 63600, 63750, 63300, 63450),
+];
+
+/** Spinning top after a decline: small body (bigger than a doji) with wicks both ways. */
+export const SPINNING_TOP_OHLC: OHLC[] = [
+  ohlc("1", 64600, 64700, 64250, 64300),
+  ohlc("2", 64300, 64400, 63950, 64000),
+  ohlc("3", 63980, 64400, 63550, 64130), // body 150, upper 270, lower 430
+  ohlc("4", 64130, 64350, 63900, 64250),
+  ohlc("5", 64250, 64450, 64100, 64200),
+];
+
+/** Bearish harami: tall green, then a small red body inside it, after a rally. */
+export const BEARISH_HARAMI_OHLC: OHLC[] = [
+  ohlc("1", 63300, 63550, 63250, 63500),
+  ohlc("2", 63500, 63800, 63450, 63750),
+  ohlc("3", 63750, 64700, 63700, 64600),
+  ohlc("4", 64400, 64500, 64150, 64250), // body 64400→64250 sits inside 63750–64600
+  ohlc("5", 64250, 64350, 63900, 64000),
+];
+
+/** Three inside up: tall red, small green inside it, then green closing above the first open. */
+export const THREE_INSIDE_UP_OHLC: OHLC[] = [
+  ohlc("1", 64900, 65000, 64550, 64600),
+  ohlc("2", 64600, 64700, 64250, 64300),
+  ohlc("3", 64300, 64350, 63300, 63400),
+  ohlc("4", 63500, 63850, 63450, 63800),
+  ohlc("5", 63800, 64500, 63750, 64450), // closes above 64300 (first candle's open)
+];
+
+/** Three inside down: tall green, small red inside it, then red closing below the first open. */
+export const THREE_INSIDE_DOWN_OHLC: OHLC[] = [
+  ohlc("1", 62900, 63250, 62850, 63200),
+  ohlc("2", 63200, 63550, 63150, 63500),
+  ohlc("3", 63500, 64450, 63450, 64400),
+  ohlc("4", 64300, 64350, 63950, 64000),
+  ohlc("5", 64000, 64050, 63350, 63400), // closes below 63500 (first candle's open)
+];
+
+/** Three outside up: short red, green that engulfs it, then a higher green close. */
+export const THREE_OUTSIDE_UP_OHLC: OHLC[] = [
+  ohlc("1", 64700, 64750, 64350, 64400),
+  ohlc("2", 64400, 64450, 64050, 64100),
+  ohlc("3", 64100, 64150, 63850, 63900),
+  ohlc("4", 63800, 64400, 63750, 64350),
+  ohlc("5", 64350, 64800, 64300, 64750),
+];
+
+/** Three outside down: short green, red that engulfs it, then a lower red close. */
+export const THREE_OUTSIDE_DOWN_OHLC: OHLC[] = [
+  ohlc("1", 63300, 63650, 63250, 63600),
+  ohlc("2", 63600, 63950, 63550, 63900),
+  ohlc("3", 63900, 64150, 63850, 64100),
+  ohlc("4", 64200, 64250, 63600, 63650),
+  ohlc("5", 63650, 63700, 63150, 63200),
+];
+
+/** On-neck: long red, then a small green that opens below its low and closes back at its close. */
+export const ON_NECK_OHLC: OHLC[] = [
+  ohlc("1", 64900, 64950, 64550, 64600),
+  ohlc("2", 64600, 64650, 64250, 64300),
+  ohlc("3", 64300, 64320, 63500, 63550),
+  ohlc("4", 63300, 63560, 63250, 63540), // close ≈ prior close, never gets into the red body
+  ohlc("5", 63540, 63580, 63100, 63150),
+];
+
+/** Bullish counterattack: long red, then a long green that opens far lower and closes at the same close. */
+export const BULLISH_COUNTERATTACK_OHLC: OHLC[] = [
+  ohlc("1", 65200, 65250, 64850, 64900),
+  ohlc("2", 64900, 64950, 64500, 64550),
+  ohlc("3", 64550, 64600, 63750, 63800),
+  ohlc("4", 63050, 63820, 63000, 63800),
+  ohlc("5", 63800, 64250, 63750, 64200),
+];
+
+/** Bearish counterattack: long green, then a long red that opens far higher and closes at the same close. */
+export const BEARISH_COUNTERATTACK_OHLC: OHLC[] = [
+  ohlc("1", 63000, 63350, 62950, 63300),
+  ohlc("2", 63300, 63700, 63250, 63650),
+  ohlc("3", 63650, 64450, 63600, 64400),
+  ohlc("4", 65150, 65200, 64380, 64400),
+  ohlc("5", 64400, 64450, 63950, 64000),
+];
+
+/** Rising three methods: long green, three small reds inside its range, long green to a new close high. */
+export const RISING_THREE_METHODS_OHLC: OHLC[] = [
+  ohlc("1", 63400, 63650, 63350, 63600),
+  ohlc("2", 63600, 64500, 63550, 64450),
+  ohlc("3", 64400, 64450, 64250, 64300),
+  ohlc("4", 64300, 64350, 64100, 64150),
+  ohlc("5", 64150, 64200, 63950, 64000),
+  ohlc("6", 64000, 64850, 63950, 64800),
+];
+
+/** Falling three methods: long red, three small greens inside its range, long red to a new close low. */
+export const FALLING_THREE_METHODS_OHLC: OHLC[] = [
+  ohlc("1", 64900, 64950, 64650, 64700),
+  ohlc("2", 64700, 64750, 63800, 63850),
+  ohlc("3", 63900, 64100, 63850, 64050),
+  ohlc("4", 64050, 64250, 64000, 64200),
+  ohlc("5", 64200, 64400, 64150, 64350),
+  ohlc("6", 64350, 64400, 63450, 63500),
+];
+
+/** Bullish mat hold: long green, gap up, three small drifting candles above the first low, long green. */
+export const MAT_HOLD_OHLC: OHLC[] = [
+  ohlc("1", 63300, 63550, 63250, 63500),
+  ohlc("2", 63500, 64300, 63450, 64250),
+  ohlc("3", 64500, 64550, 64350, 64400), // gaps above bar 2's high
+  ohlc("4", 64400, 64420, 64200, 64250),
+  ohlc("5", 64250, 64280, 64050, 64100),
+  ohlc("6", 64100, 64800, 64080, 64750),
+];
+
+/** Upside tasuki gap: green, green that gaps up, then a red that closes inside the gap without filling it. */
+export const UPSIDE_TASUKI_GAP_OHLC: OHLC[] = [
+  ohlc("1", 63300, 63550, 63250, 63500),
+  ohlc("2", 63500, 64100, 63450, 64050),
+  ohlc("3", 64250, 64600, 64200, 64550), // gap: 64100–64200
+  ohlc("4", 64450, 64500, 64120, 64150), // closes inside the gap
+  ohlc("5", 64150, 64700, 64100, 64650),
+];
+
+/** Downside tasuki gap: red, red that gaps down, then a green that closes inside the gap without filling it. */
+export const DOWNSIDE_TASUKI_GAP_OHLC: OHLC[] = [
+  ohlc("1", 64900, 64950, 64650, 64700),
+  ohlc("2", 64700, 64750, 64100, 64150),
+  ohlc("3", 63950, 64000, 63600, 63650), // gap: 64000–64100
+  ohlc("4", 63750, 64080, 63700, 64050), // closes inside the gap
+  ohlc("5", 64050, 64100, 63400, 63450),
+];
+
 export const PATTERN_OHLC: Record<string, OHLC[]> = {
   hammer: HAMMER_OHLC,
   doji: DOJI_OHLC,
@@ -533,6 +682,22 @@ export const PATTERN_OHLC: Record<string, OHLC[]> = {
   "three-white-soldiers": THREE_WHITE_SOLDIERS_OHLC,
   "three-black-crows": THREE_BLACK_CROWS_OHLC,
   harami: HARAMI_OHLC,
+  "white-marubozu": WHITE_MARUBOZU_OHLC,
+  "black-marubozu": BLACK_MARUBOZU_OHLC,
+  "spinning-top": SPINNING_TOP_OHLC,
+  "bearish-harami": BEARISH_HARAMI_OHLC,
+  "three-inside-up": THREE_INSIDE_UP_OHLC,
+  "three-inside-down": THREE_INSIDE_DOWN_OHLC,
+  "three-outside-up": THREE_OUTSIDE_UP_OHLC,
+  "three-outside-down": THREE_OUTSIDE_DOWN_OHLC,
+  "on-neck": ON_NECK_OHLC,
+  "bullish-counterattack": BULLISH_COUNTERATTACK_OHLC,
+  "bearish-counterattack": BEARISH_COUNTERATTACK_OHLC,
+  "rising-three-methods": RISING_THREE_METHODS_OHLC,
+  "falling-three-methods": FALLING_THREE_METHODS_OHLC,
+  "mat-hold": MAT_HOLD_OHLC,
+  "upside-tasuki-gap": UPSIDE_TASUKI_GAP_OHLC,
+  "downside-tasuki-gap": DOWNSIDE_TASUKI_GAP_OHLC,
 };
 
 /** High/low span across candles (and optional overlay values). */

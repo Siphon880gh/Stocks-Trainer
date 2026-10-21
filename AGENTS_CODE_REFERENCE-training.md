@@ -37,6 +37,7 @@ Near the end:
 - `POINTS_PER_CORRECT = 50`, `STREAK_BONUS = 10`.
 - `QuizGroupId` / `QUIZ_GROUPS` — path groups (`equity-literacy`, `financial-literacy`, `indicators`, `news-literacy`, `financial-drills`) plus pattern families.
 - `CANDLE_READING_QUESTIONS` (`candle-reading`, ids `OC-`) — one-candle reads (price rejected, stability, indecision, strong move). Series are `PATTERN_OHLC["candle-rejected-high"|"candle-rejected-low"|"candle-stable-*"|"candle-indecision-*"|"candle-bulls-win"|"candle-bears-win"]`, marked candle at index 3; glossary ids `wick-rejection`, `full-body-candle`, `indecision-candle`, `strong-move-candle`. Optional `priceMarkers` on a question draws labeled lines (e.g. Open / Close) on the hero chart.
+- `PATTERN_BOOK_QUESTIONS` (`candle-pattern-book`, ids `PB-NN`) — reading rules from the candlestick pattern-book lessons (origin, real body, hollow/filled, prior trend, confirmation/invalidation, 50% rules, reversal vs continuation). Family drills for the book's extra patterns live in `QUIZ_QUESTIONS` (ids `PB-MARU-`, `PB-ST-`, `PB-BH-`, `PB-TIO-`, `PB-CA-`, `PB-CONT-`) and are grouped by `patternKeysForGroup`: `doji` (+`spinning-top`), `harami` (+`bearish-harami`), `marubozu`, `three-inside-outside`, `counterattack-on-neck`, `continuation-methods`.
 - `getQuestionsForGroup(groupId)` — dedicated banks for literacy/drills/indicators; `"all"` → full pattern bank; else filter `patternKey === groupId`.
 - Index helpers: `getQuestionIndexInGroup`, `getGlobalIndexFromGroup`.
 

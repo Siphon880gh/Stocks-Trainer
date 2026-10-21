@@ -150,6 +150,7 @@ export default function Training() {
                 const isFeatured =
                   g.id === "candle-anatomy" ||
                   g.id === "candle-reading" ||
+                  g.id === "candle-pattern-book" ||
                   g.id === "indicators" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||

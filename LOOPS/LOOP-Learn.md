@@ -54,6 +54,8 @@ For each family group, floor **≥6** questions with the existing sort contract 
 
 7. `hammer` · 8. `doji` · 9. `engulfing` · 10. `bullish-engulfing` · 11. `bearish-engulfing` · 12. `shooting-star` · 13. `inverted-hammer` · 14. `morning-star`
 
+Multi-key families (one group, several `patternKey`s via `patternKeysForGroup`): `doji` (+`spinning-top`), `harami` (+`bearish-harami`), `marubozu`, `three-inside-outside`, `counterattack-on-neck`, `continuation-methods`.
+
 If a new Archive pattern ships (from the Archive loop), add `patternKey` + `PATTERN_OHLC` entry **before** family questions that show a chart.
 
 ### Phase C — equity pack drills

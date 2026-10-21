@@ -24,7 +24,23 @@ export type PatternId =
   | "harami"
   | "tweezer-top"
   | "falling-wedge"
-  | "head-shoulders";
+  | "head-shoulders"
+  | "white-marubozu"
+  | "black-marubozu"
+  | "spinning-top"
+  | "bearish-harami"
+  | "three-inside-up"
+  | "three-inside-down"
+  | "three-outside-up"
+  | "three-outside-down"
+  | "on-neck"
+  | "bullish-counterattack"
+  | "bearish-counterattack"
+  | "rising-three-methods"
+  | "falling-three-methods"
+  | "mat-hold"
+  | "upside-tasuki-gap"
+  | "downside-tasuki-gap";
 
 export interface QuizOption {
   id: "A" | "B" | "C" | "D" | "E";
@@ -384,6 +400,33 @@ const CANDLE_COLOR_OPTIONS: QuizOption[] = [
   { id: "A", label: "Close is above open", description: "Buyers finished higher — typically green." },
   { id: "B", label: "Close is below open", description: "Sellers finished lower — typically red." },
   { id: "C", label: "High equals the low", description: "A flat range, not a color rule." },
+];
+
+const MARUBOZU_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "spinning-top", label: "Spinning Top", description: "Small body, wicks both ways." },
+  { id: "B", patternId: "white-marubozu", label: "White Marubozu", description: "Tall green body, no wicks." },
+  { id: "C", patternId: "black-marubozu", label: "Black Marubozu", description: "Tall red body, no wicks." },
+];
+
+const INSIDE_OUTSIDE_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "three-inside-up", label: "Three Inside Up", description: "Harami, then a confirming green." },
+  { id: "B", patternId: "three-outside-up", label: "Three Outside Up", description: "Engulfing, then a confirming green." },
+  { id: "C", patternId: "three-inside-down", label: "Three Inside Down", description: "Harami, then a confirming red." },
+  { id: "D", patternId: "three-outside-down", label: "Three Outside Down", description: "Engulfing, then a confirming red." },
+];
+
+const COUNTERATTACK_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "piercing-line", label: "Piercing Line", description: "Green closes past the red body's midpoint." },
+  { id: "B", patternId: "bullish-counterattack", label: "Bullish Counterattack", description: "Long green closes back at the red's close." },
+  { id: "C", patternId: "on-neck", label: "On-Neck", description: "Small green closes back at the red's close." },
+];
+
+const CONTINUATION_NAME_OPTIONS: QuizOption[] = [
+  { id: "A", patternId: "rising-three-methods", label: "Rising Three Methods", description: "Long green, three small pullbacks inside, long green." },
+  { id: "B", patternId: "mat-hold", label: "Mat Hold", description: "Long green, gap up, small drift, long green." },
+  { id: "C", patternId: "upside-tasuki-gap", label: "Upside Tasuki Gap", description: "Gap up, then a red that closes inside the gap." },
+  { id: "D", patternId: "falling-three-methods", label: "Falling Three Methods", description: "Long red, three small bounces inside, long red." },
+  { id: "E", patternId: "downside-tasuki-gap", label: "Downside Tasuki Gap", description: "Gap down, then a green that closes inside the gap." },
 ];
 
 export const QUIZ_OPTIONS = OPTIONS_3;
@@ -2193,6 +2236,426 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     patternKey: "head-shoulders",
     highlightIndex: 5,
   },
+  // --- Pattern book (PDF) families: marubozu ---
+  {
+    id: "PB-MARU-01",
+    prompt: "Which chart's marked candle is a white marubozu: a tall green body with no wicks?",
+    correctAnswer: "B",
+    options: chartPickOptions([
+      { id: "A", chartKey: "spinning-top", highlightIndex: 2 },
+      { id: "B", chartKey: "white-marubozu", highlightIndex: 3 },
+      { id: "C", chartKey: "hammer", highlightIndex: 2 },
+    ]),
+    optionsAreCharts: true,
+    explanation:
+      "Chart 2. It opened at the low and closed at the high, so there is no wick on either end. Chart 1 is a spinning top and chart 3 is a hammer.",
+    patternKey: "white-marubozu",
+    highlightIndex: 3,
+    glossaryTermId: "strong-move-candle",
+  },
+  {
+    id: "PB-MARU-02",
+    prompt: "After a decline, the marked candle is tall, green, and has no wicks. Name it.",
+    correctAnswer: "B",
+    options: MARUBOZU_NAME_OPTIONS,
+    explanation:
+      "White marubozu: open = low and close = high. Buyers controlled every part of the period. It is the cleanest version of the Strong movement (bulls win) candle.",
+    patternKey: "white-marubozu",
+    highlightIndex: 3,
+    glossaryTermId: "strong-move-candle",
+  },
+  {
+    id: "PB-MARU-03",
+    prompt: "A marubozu has no upper or lower wick. What does that tell you about its prices?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "The open and close are the period's extremes (high and low)", description: DESC_HINT },
+      { id: "B", label: "The open and close were almost equal", description: DESC_HINT },
+      { id: "C", label: "Price never moved during the period", description: DESC_HINT },
+    ],
+    explanation:
+      "Wicks mark trading beyond the body. No wicks means price never went past the open or close. On a white marubozu open = low and close = high; on a black one open = high and close = low.",
+    patternKey: "white-marubozu",
+    highlightIndex: 3,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "PB-MARU-04",
+    prompt: "After a rally, the marked candle is tall, red, and has no wicks. Name it.",
+    correctAnswer: "C",
+    options: MARUBOZU_NAME_OPTIONS,
+    explanation:
+      "Black marubozu: it opened at the high and closed at the low. Sellers controlled the whole period.",
+    patternKey: "black-marubozu",
+    highlightIndex: 3,
+    glossaryTermId: "strong-move-candle",
+  },
+  {
+    id: "PB-MARU-05",
+    prompt: "A black marubozu prints right after a rally. What is the honest read?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "The top is confirmed; the trend has reversed", description: "One candle confirms nothing." },
+      { id: "B", label: "A strong warning for longs; watch whether the next candles keep closing lower", description: "Warning, then follow-through." },
+      { id: "C", label: "Ignore it; color only matters on green candles", description: "Red bodies count too." },
+    ],
+    explanation:
+      "Sellers controlled the entire period, which is meaningful after a rally. It is still one period. A follow-through close lower (bar 5 here) is what turns the warning into evidence.",
+    patternKey: "black-marubozu",
+    highlightIndex: 3,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-MARU-MOVE1",
+    prompt: "SAMPLE: a white marubozu appears after a decline. Which plan shows good process?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Buy max size at the close because buyers won", description: "Chasing one candle." },
+      { id: "B", label: "Short it, because tall candles always reverse", description: "No evidence for that." },
+      { id: "C", label: "Note the strength, wait for the next candle to hold, and know the level that cancels the idea (e.g. back below its low)", description: "Confirm + invalidation." },
+    ],
+    explanation:
+      "Strength is information, not a guarantee. Waiting for follow-through and defining where the idea is wrong keeps one candle from becoming a bet. SAMPLE process, not advice.",
+    patternKey: "white-marubozu",
+    highlightIndex: 3,
+    glossaryTermId: "pattern-confirmation",
+  },
+  // --- Spinning top (doji family) ---
+  {
+    id: "PB-ST-01",
+    prompt: "The marked candle has a small body with wicks on both sides, and its body is clearly bigger than a doji's. Name it.",
+    correctAnswer: "B",
+    options: [
+      { id: "A", patternId: "doji", label: "Doji", description: "Open and close almost equal." },
+      { id: "B", patternId: "spinning-top", label: "Spinning Top", description: "Small body, wicks both ways." },
+      { id: "C", patternId: "white-marubozu", label: "White Marubozu", description: "Tall body, no wicks." },
+    ],
+    explanation:
+      "A spinning top shows the same indecision as a doji, but open and close are a little further apart. It is the Indecision candle from Reading One Candle.",
+    patternKey: "spinning-top",
+    highlightIndex: 2,
+    glossaryTermId: "indecision-candle",
+  },
+  {
+    id: "PB-ST-02",
+    prompt: "What is the main difference between a doji and a spinning top?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Body size: a doji's open and close are almost equal; a spinning top's body is small but visible", description: DESC_HINT },
+      { id: "B", label: "A doji is always bullish and a spinning top always bearish", description: DESC_HINT },
+      { id: "C", label: "A spinning top has no wicks", description: DESC_HINT },
+    ],
+    explanation:
+      "Both mean neither side won the period. Neither is bullish or bearish by itself; location and the next candles decide what it means.",
+    patternKey: "spinning-top",
+    highlightIndex: 2,
+    glossaryTermId: "indecision-candle",
+  },
+  // --- Bearish harami (harami family) ---
+  {
+    id: "PB-BH-01",
+    prompt: "After a rally, a tall green candle is followed by a small red body that sits inside it. Which pattern is marked?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", patternId: "bearish-engulfing", label: "Bearish Engulfing", description: "Red body covers the green body." },
+      { id: "B", patternId: "dark-cloud-cover", label: "Dark Cloud Cover", description: "Red opens above and closes deep into green." },
+      { id: "C", patternId: "bearish-harami", label: "Bearish Harami", description: "Small red inside the tall green." },
+    ],
+    explanation:
+      "Harami means the second body is contained by the first. After a rally, the small red inside the tall green says buying momentum stalled.",
+    patternKey: "bearish-harami",
+    highlightIndex: 3,
+    glossaryTermId: "prior-trend-context",
+  },
+  {
+    id: "PB-BH-02",
+    prompt: "A bearish harami has formed. What would add the most evidence for a top?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Nothing; the harami is already a confirmed reversal", description: "Harami is a low-confirmation setup." },
+      { id: "B", label: "A next candle that closes below the first green candle's open", description: "That completes Three Inside Down." },
+      { id: "C", label: "A next candle that makes a new high", description: "That would argue against the top." },
+    ],
+    explanation:
+      "Harami patterns only show a stall. A strong red close below the tall candle's open turns it into Three Inside Down, the confirmed version.",
+    patternKey: "bearish-harami",
+    highlightIndex: 3,
+    glossaryTermId: "pattern-confirmation",
+  },
+  // --- Three inside / outside ---
+  {
+    id: "PB-TIO-01",
+    prompt: "After a decline: tall red, small green inside it, then a green that closes above the first candle's open. Name the pattern.",
+    correctAnswer: "A",
+    options: INSIDE_OUTSIDE_NAME_OPTIONS,
+    explanation:
+      "Three Inside Up = bullish harami (bars 3–4) plus a confirming green close above the tall red's open (bar 5).",
+    patternKey: "three-inside-up",
+    highlightIndex: 4,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-TIO-02",
+    prompt: "In Three Inside Up, what job does the third candle do?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "It shows indecision", description: DESC_HINT },
+      { id: "B", label: "It must engulf the first candle", description: DESC_HINT },
+      { id: "C", label: "It confirms the harami by closing above the first candle's open", description: DESC_HINT },
+    ],
+    explanation:
+      "The harami alone only shows selling stalled. The third candle shows buyers actually took control. That built-in confirmation is why the three-candle version is more reliable than the harami alone.",
+    patternKey: "three-inside-up",
+    highlightIndex: 4,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-TIO-03",
+    prompt: "After a rally: tall green, small red inside it, then a red that closes below the first candle's open. Name the pattern.",
+    correctAnswer: "C",
+    options: INSIDE_OUTSIDE_NAME_OPTIONS,
+    explanation:
+      "Three Inside Down = bearish harami plus a confirming red close below the tall green's open.",
+    patternKey: "three-inside-down",
+    highlightIndex: 4,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-TIO-04",
+    prompt: "After a decline: short red, a green that engulfs its body, then a higher green close. Name the pattern.",
+    correctAnswer: "B",
+    options: INSIDE_OUTSIDE_NAME_OPTIONS,
+    explanation:
+      "Three Outside Up = bullish engulfing (bars 3–4) plus a confirming higher close (bar 5). Inside = harami start; outside = engulfing start.",
+    patternKey: "three-outside-up",
+    highlightIndex: 4,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-TIO-05",
+    prompt: "After a rally: short green, a red that engulfs its body, then a lower red close. Name the pattern.",
+    correctAnswer: "D",
+    options: INSIDE_OUTSIDE_NAME_OPTIONS,
+    explanation:
+      "Three Outside Down = bearish engulfing plus a confirming lower close.",
+    patternKey: "three-outside-down",
+    highlightIndex: 4,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-TIO-06",
+    prompt: "What separates the 'inside' patterns from the 'outside' patterns?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Inside starts with a harami (small body inside the big one); outside starts with an engulfing (big body covers the small one)", description: DESC_HINT },
+      { id: "B", label: "Inside patterns are bullish and outside patterns are bearish", description: DESC_HINT },
+      { id: "C", label: "Outside patterns need a gap; inside patterns cannot have one", description: DESC_HINT },
+    ],
+    explanation:
+      "Both families have an up and a down version. The first two candles decide the name; the third candle confirms.",
+    patternKey: "three-outside-up",
+    highlightIndex: 4,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-TIO-MOVE1",
+    prompt: "SAMPLE: Three Outside Down just completed. Which plan shows good process?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Short with no invalidation; three candles cannot fail", description: "Patterns fail often." },
+      { id: "B", label: "Lean bearish with invalidation above the pattern's high", description: "Confirmed setup, defined risk." },
+      { id: "C", label: "Buy, because the third candle is oversold", description: "Fighting the evidence." },
+    ],
+    explanation:
+      "The third candle already confirmed the engulfing, so the setup is complete. It can still fail, so the idea needs a level that proves it wrong: above the pattern's high. SAMPLE process, not advice.",
+    patternKey: "three-outside-down",
+    highlightIndex: 4,
+    glossaryTermId: "pattern-confirmation",
+  },
+  // --- Counterattack and on-neck ---
+  {
+    id: "PB-CA-01",
+    prompt: "In a decline, a long red is followed by a long green that opens far lower and closes right at the red's close. Name it.",
+    correctAnswer: "B",
+    options: COUNTERATTACK_NAME_OPTIONS,
+    explanation:
+      "Bullish counterattack: two long bodies of opposite color with matching closes. Buyers wiped out the gap down but did not push into the red body.",
+    patternKey: "bullish-counterattack",
+    highlightIndex: 3,
+    glossaryTermId: "prior-trend-context",
+  },
+  {
+    id: "PB-CA-02",
+    prompt: "Why is a bullish counterattack usually treated as weaker than a piercing line?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "It only gets back to the prior close; a piercing line closes past the red body's midpoint", description: DESC_HINT },
+      { id: "B", label: "It has three candles instead of two", description: DESC_HINT },
+      { id: "C", label: "It only appears in uptrends", description: DESC_HINT },
+    ],
+    explanation:
+      "Same idea, different depth. The further the green closes into the red body, the more control buyers showed. Wait for the next candle either way.",
+    patternKey: "bullish-counterattack",
+    highlightIndex: 3,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-CA-03",
+    prompt: "In a rally, a long green is followed by a long red that opens far higher and closes right at the green's close. Name it.",
+    correctAnswer: "C",
+    options: [
+      { id: "A", patternId: "dark-cloud-cover", label: "Dark Cloud Cover", description: "Red closes past the green body's midpoint." },
+      { id: "B", patternId: "bearish-engulfing", label: "Bearish Engulfing", description: "Red body covers the green body." },
+      { id: "C", patternId: "bearish-counterattack", label: "Bearish Counterattack", description: "Long red closes back at the green's close." },
+    ],
+    explanation:
+      "Bearish counterattack: sellers erased the gap up and closed where the prior candle closed. Weaker than dark cloud cover, which closes deeper into the green body.",
+    patternKey: "bearish-counterattack",
+    highlightIndex: 3,
+    glossaryTermId: "prior-trend-context",
+  },
+  {
+    id: "PB-CA-04",
+    prompt: "In a decline, a long red is followed by a small green that opens below the red's low and only closes back at the red's close. Name it.",
+    correctAnswer: "C",
+    options: COUNTERATTACK_NAME_OPTIONS,
+    explanation:
+      "On-neck: the two closes form a flat 'neckline'. Unlike the counterattack, the green body is small. Compare Piercing Line, where the green closes well into the red body.",
+    patternKey: "on-neck",
+    highlightIndex: 3,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-CA-05",
+    prompt: "How is the on-neck pattern traditionally read?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "A strong bullish reversal, because the last candle is green", description: "Color is not the whole story." },
+      { id: "B", label: "A pause in a downtrend, often followed by more downside, because buyers could not get into the red body", description: "Continuation read." },
+      { id: "C", label: "A signal that the trend has already turned up", description: "Nothing here shows buyers in control." },
+    ],
+    explanation:
+      "Some guides list on-neck as bullish because the last candle is green. The traditional read is bearish continuation: the bounce stalled exactly at the prior close. Here bar 5 kept falling. Either way it is a weak signal that needs the next candle.",
+    patternKey: "on-neck",
+    highlightIndex: 3,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-CA-MOVE1",
+    prompt: "SAMPLE: a bullish counterattack just printed after a long decline. What is a sound next step?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Wait for a next candle that closes higher before treating it as a turn", description: "Confirm first." },
+      { id: "B", label: "Buy max size now; matching closes guarantee a bottom", description: "Guarantees do not exist." },
+      { id: "C", label: "Treat it as on-neck and short immediately", description: "Different pattern: the green body is long." },
+    ],
+    explanation:
+      "Counterattacks are low-confirmation setups. A follow-through close higher (bar 5 here) is the evidence; invalidation sits below the green candle's low. SAMPLE process.",
+    patternKey: "bullish-counterattack",
+    highlightIndex: 3,
+    glossaryTermId: "pattern-confirmation",
+  },
+  // --- Continuation: three methods, mat hold, tasuki gaps ---
+  {
+    id: "PB-CONT-01",
+    prompt: "Uptrend: a long green, three small red candles that stay inside its range, then a long green closing above the first. Name it.",
+    correctAnswer: "A",
+    options: CONTINUATION_NAME_OPTIONS,
+    explanation:
+      "Rising three methods: the small candles are a rest inside the first candle's range, and the last candle resumes the trend.",
+    patternKey: "rising-three-methods",
+    highlightIndex: 5,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-CONT-02",
+    prompt: "Downtrend: a long red, three small green candles that stay inside its range, then a long red closing below the first. Name it.",
+    correctAnswer: "D",
+    options: CONTINUATION_NAME_OPTIONS,
+    explanation:
+      "Falling three methods: the bounce never escapes the first candle's range, so buyers did not have enough strength to turn the trend.",
+    patternKey: "falling-three-methods",
+    highlightIndex: 5,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-CONT-03",
+    prompt: "In rising three methods, what makes the three small candles a pause rather than a reversal?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "They are red", description: DESC_HINT },
+      { id: "B", label: "There are exactly three of them, which is always bullish", description: DESC_HINT },
+      { id: "C", label: "They stay inside the first candle's range and never break its low", description: DESC_HINT },
+    ],
+    explanation:
+      "Sellers got three tries and could not break the first candle's range. A close below the first candle's low would break the pattern.",
+    patternKey: "rising-three-methods",
+    highlightIndex: 5,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-CONT-04",
+    prompt: "Uptrend: a long green, then a gap higher and three small candles drifting down that stay above the first candle's low, then a long green. Name it.",
+    correctAnswer: "B",
+    options: CONTINUATION_NAME_OPTIONS,
+    explanation:
+      "Mat hold: like rising three methods, but the pullback starts with a gap up and holds above the first candle's low. The final long green resumes the uptrend.",
+    patternKey: "mat-hold",
+    highlightIndex: 5,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-CONT-05",
+    prompt: "Uptrend: a green, then a green that gaps up, then a red that closes inside that gap without filling it. Name it.",
+    correctAnswer: "C",
+    options: CONTINUATION_NAME_OPTIONS,
+    explanation:
+      "Upside tasuki gap: the red candle is a pullback that leaves part of the gap open. If the gap holds, the uptrend is intact.",
+    patternKey: "upside-tasuki-gap",
+    highlightIndex: 3,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-CONT-06",
+    prompt: "In an upside tasuki gap, what would cancel the bullish read?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Price closing below the gap, fully filling it", description: DESC_HINT },
+      { id: "B", label: "The next candle closing higher", description: DESC_HINT },
+      { id: "C", label: "The red candle having a small lower wick", description: DESC_HINT },
+    ],
+    explanation:
+      "The open gap is the support the pattern relies on. Once it is filled, buyers have given back the jump and the continuation idea is off.",
+    patternKey: "upside-tasuki-gap",
+    highlightIndex: 3,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-CONT-07",
+    prompt: "Downtrend: a red, then a red that gaps down, then a green that closes inside that gap without filling it. Name it.",
+    correctAnswer: "E",
+    options: CONTINUATION_NAME_OPTIONS,
+    explanation:
+      "Downside tasuki gap: the green bounce stalls inside the gap. If the gap stays open, the downtrend is intact.",
+    patternKey: "downside-tasuki-gap",
+    highlightIndex: 3,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-CONT-MOVE1",
+    prompt: "SAMPLE: falling three methods just completed. What is the honest invalidation idea for a bearish lean?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "There is none; continuation patterns cannot fail", description: "They can." },
+      { id: "B", label: "A move back above the high of the first long red candle", description: "Above the pattern's range." },
+      { id: "C", label: "Any green candle at all", description: "Small bounces are part of the pattern." },
+    ],
+    explanation:
+      "The pattern says sellers kept control of the first candle's range. If price climbs back above that range, the story is wrong. SAMPLE process, not advice.",
+    patternKey: "falling-three-methods",
+    highlightIndex: 5,
+    glossaryTermId: "pattern-confirmation",
+  },
 ];
 
 /** Candlestick anatomy — OHLC parts and red/green (no pattern ID). */
@@ -2598,6 +3061,251 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     patternKey: "candle-bulls-win",
     highlightIndex: 3,
     glossaryTermId: "strong-move-candle",
+  },
+];
+
+/** Candlestick pattern book — reading rules and pattern criteria from the PDF lessons (cross-links existing families). */
+export const PATTERN_BOOK_QUESTIONS: QuizQuestion[] = [
+  {
+    id: "PB-01",
+    prompt: "Candlestick charts trace back to Japanese rice trading. What core idea from that history still matters?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Prices follow a fixed calendar cycle", description: "Not the lesson." },
+      { id: "B", label: "Prices reflect traders' emotions as well as supply and demand", description: "Buyers vs sellers inside each candle." },
+      { id: "C", label: "Only closing prices matter", description: "Candles show all four prices." },
+    ],
+    explanation:
+      "Popular history credits the rice merchant Munehisa Homma with noticing that emotion moved prices. Each candle is a summary of that tug-of-war.",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "candlestick-origins",
+  },
+  {
+    id: "PB-02",
+    prompt: "Pattern guides call the wide part of the candle the 'real body'. What range does it cover?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "From the open to the close", description: "Body = open↔close." },
+      { id: "B", label: "From the high to the low", description: "That is the full range, wicks included." },
+      { id: "C", label: "From yesterday's close to today's close", description: "That is the change, not the body." },
+    ],
+    explanation:
+      "The real body is open to close. The shadows (wicks) above and below show the high and low.",
+    patternKey: "candle-red",
+    highlightIndex: 2,
+    glossaryTermId: "ohlc-anatomy",
+  },
+  {
+    id: "PB-03",
+    prompt: "On an older black-and-white chart, a candle has a hollow (white) body. What does that mean?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "The close was below the open", description: "That would be a filled (black) body." },
+      { id: "B", label: "No trades happened", description: "Hollow is about direction, not volume." },
+      { id: "C", label: "The close was above the open, the same as green here", description: "Hollow/white = up period." },
+    ],
+    explanation:
+      "Hollow or white = close above open (like green). Filled or black = close below open (like red).",
+    patternKey: "candle-green",
+    highlightIndex: 2,
+    glossaryTermId: "candle-color",
+  },
+  {
+    id: "PB-04",
+    prompt: "The marked candle has a small body near the top and a long lower wick, but it appears after a steady rally. Is it a bullish hammer?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Yes; the shape is all that matters", description: "Location changes the meaning." },
+      { id: "B", label: "No; after a rally the same shape is a hanging man, a potential bearish warning", description: "Prior trend decides." },
+      { id: "C", label: "No; it is a shooting star", description: "A shooting star has a long upper wick." },
+    ],
+    explanation:
+      "Reversal patterns need a trend to reverse. Bullish reversals belong after declines, bearish reversals after rallies.",
+    patternKey: "hanging-man",
+    highlightIndex: 3,
+    glossaryTermId: "prior-trend-context",
+  },
+  {
+    id: "PB-05",
+    prompt: "A guide says 'only buy on green-candle days and only sell on red-candle days.' What is the problem with that as a rule?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Nothing; color alone is a complete plan", description: "It is not." },
+      { id: "B", label: "It should be the opposite: buy red, sell green", description: "Also a color-only rule." },
+      { id: "C", label: "Color only shows close vs open for one period; context, confirmation, and risk still decide the plan", description: "Color is one input." },
+    ],
+    explanation:
+      "Green does show strength for that period, which is the useful part of the idea. But a green day can be a hanging man after a rally or a weak spinning top. Use color as one clue, not a trigger.",
+    patternKey: "hanging-man",
+    highlightIndex: 3,
+    glossaryTermId: "candle-color",
+  },
+  {
+    id: "PB-06",
+    prompt: "A real chart almost matches a textbook pattern, but one detail is slightly off. What is the sound approach?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Ask whether the pattern's story still holds, and lean more on context and confirmation", description: "Judge the story." },
+      { id: "B", label: "Ignore it; anything not textbook-perfect is meaningless", description: "Too strict." },
+      { id: "C", label: "Count it as a perfect signal anyway", description: "Too loose." },
+    ],
+    explanation:
+      "Minor variations are normal. The risk is the opposite habit: stretching definitions until you see the pattern you wanted.",
+    patternKey: "tweezer-bottom",
+    highlightIndex: 4,
+    glossaryTermId: "pattern-tolerance",
+  },
+  {
+    id: "PB-07",
+    prompt: "A hammer forms after a decline. What is the usual confirmation step before treating it as a turn?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "None; the hammer is the confirmation", description: "One-candle setups need follow-through." },
+      { id: "B", label: "A next candle that closes higher (a bullish candle)", description: "Follow-through." },
+      { id: "C", label: "A next candle that makes a new low", description: "That argues against the hammer." },
+    ],
+    explanation:
+      "Waiting for a bullish next candle filters many failed hammers. Here bar 4 closed higher after the hammer.",
+    patternKey: "hammer",
+    highlightIndex: 2,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-08",
+    prompt: "Where does a hammer's idea usually become wrong (the invalidation level)?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "Above the hammer's high", description: "That is where it is working." },
+      { id: "B", label: "At the hammer's open", description: "Too tight; normal noise." },
+      { id: "C", label: "Below the hammer's low", description: "Buyers lost the level they defended." },
+    ],
+    explanation:
+      "The hammer says buyers defended its low. If price trades below that low, the story is broken. For a hanging man or shooting star, the mirror level is above the high. SAMPLE process; there is no order ticket here.",
+    patternKey: "hammer",
+    highlightIndex: 2,
+    glossaryTermId: "pattern-confirmation",
+  },
+  {
+    id: "PB-09",
+    prompt: "In a piercing line, how far does the green candle need to close into the prior red body?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Above the midpoint (more than 50%) of the red body", description: "Past halfway." },
+      { id: "B", label: "Anywhere above the red candle's low", description: "Too shallow." },
+      { id: "C", label: "Above the red candle's open", description: "That would be an engulfing." },
+    ],
+    explanation:
+      "Opening below the prior low and closing past the halfway point shows buyers took back most of the selloff. Closing only at the prior close is a counterattack or on-neck; closing above the open is a bullish engulfing.",
+    patternKey: "piercing-line",
+    highlightIndex: 3,
+    glossaryTermId: "prior-trend-context",
+  },
+  {
+    id: "PB-10",
+    prompt: "In dark cloud cover, the red candle opens above the prior high. Where must it close?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Anywhere below its own open", description: "Too loose." },
+      { id: "B", label: "Below the midpoint of the prior green body", description: "More than 50% into it." },
+      { id: "C", label: "Below the prior green candle's open", description: "That would be a bearish engulfing." },
+    ],
+    explanation:
+      "The deep close into the green body shows sellers reversed most of the prior advance. It is a setup; a lower next close is the confirmation.",
+    patternKey: "dark-cloud-cover",
+    highlightIndex: 3,
+    glossaryTermId: "prior-trend-context",
+  },
+  {
+    id: "PB-11",
+    prompt: "In a morning star, what does the small middle candle show, and where does it sit?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", label: "A strong rally; it is the tallest candle", description: "It is the smallest." },
+      { id: "B", label: "It must be red and engulf the first candle", description: "Not the rule." },
+      { id: "C", label: "Indecision; ideally a small body (often a doji) sitting apart from the other two bodies", description: "The pause between sellers and buyers." },
+    ],
+    explanation:
+      "Long red (sellers), small middle (stall), long green (buyers). When the middle candle is a doji it is called a morning doji star. The evening star is the mirror at a top.",
+    patternKey: "morning-star",
+    highlightIndex: 2,
+    glossaryTermId: "indecision-candle",
+  },
+  {
+    id: "PB-12",
+    prompt: "Which details make three white soldiers convincing?",
+    correctAnswer: "A",
+    options: [
+      { id: "A", label: "Three long green bodies, each opening within the prior body and closing near its high, with short wicks", description: DESC_HINT },
+      { id: "B", label: "Three green candles with long upper wicks", description: DESC_HINT },
+      { id: "C", label: "Three tiny green bodies inside one red candle", description: DESC_HINT },
+    ],
+    explanation:
+      "Long upper wicks would show selling at the highs. Three black crows is the mirror after a rally: long red bodies closing near their lows.",
+    patternKey: "three-white-soldiers",
+    highlightIndex: 3,
+    glossaryTermId: "full-body-candle",
+  },
+  {
+    id: "PB-13",
+    prompt: "After a decline, a candle has a small body near its low and an upper wick more than twice the body. Name it.",
+    correctAnswer: "D",
+    options: [
+      { id: "A", patternId: "hammer", label: "Hammer", description: "Long lower wick after a decline." },
+      { id: "B", patternId: "hanging-man", label: "Hanging Man", description: "Long lower wick after a rally." },
+      { id: "C", patternId: "shooting-star", label: "Shooting Star", description: "Long upper wick after a rally." },
+      { id: "D", patternId: "inverted-hammer", label: "Inverted Hammer", description: "Long upper wick after a decline." },
+    ],
+    explanation:
+      "Same two shapes, two locations: lower wick → hammer (decline) or hanging man (rally); upper wick → inverted hammer (decline) or shooting star (rally). The wick should be at least about twice the body.",
+    patternKey: "inverted-hammer",
+    highlightIndex: 2,
+    glossaryTermId: "prior-trend-context",
+  },
+  {
+    id: "PB-14",
+    prompt: "In a tweezer bottom, two candles make almost the same low. What does that matching low suggest?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Resistance overhead", description: "Matching highs would be resistance." },
+      { id: "B", label: "Support: sellers failed twice at the same price", description: "A level defended twice." },
+      { id: "C", label: "A guaranteed new uptrend", description: "Still needs a confirming candle." },
+    ],
+    explanation:
+      "Two tests of the same low mark a level buyers defended. A tweezer top is the mirror: matching highs that show resistance. Confirmation is the next candle moving away from the level.",
+    patternKey: "tweezer-bottom",
+    highlightIndex: 4,
+    glossaryTermId: "support-resistance",
+  },
+  {
+    id: "PB-15",
+    prompt: "Which of these is a continuation pattern rather than a reversal pattern?",
+    correctAnswer: "C",
+    options: [
+      { id: "A", patternId: "evening-star", label: "Evening Star", description: "Three-candle top." },
+      { id: "B", patternId: "bullish-engulfing", label: "Bullish Engulfing", description: "Two-candle bottom." },
+      { id: "C", patternId: "rising-three-methods", label: "Rising Three Methods", description: "Five-candle pause in an uptrend." },
+    ],
+    explanation:
+      "Continuation patterns describe a pause before the trend resumes: rising/falling three methods, mat hold, tasuki gaps, on-neck. Evening star and engulfing are reversals.",
+    patternKey: "rising-three-methods",
+    highlightIndex: 5,
+    glossaryTermId: "reversal-vs-continuation",
+  },
+  {
+    id: "PB-16",
+    prompt: "A doji or spinning top appears. Is it a reversal or a continuation pattern?",
+    correctAnswer: "B",
+    options: [
+      { id: "A", label: "Always a reversal", description: "Too strong." },
+      { id: "B", label: "Neither on its own; it shows indecision, and location plus the next candles decide", description: "Context first." },
+      { id: "C", label: "Always a continuation", description: "Too strong." },
+    ],
+    explanation:
+      "Some guides file doji and spinning tops under continuation, others under reversal. They really show balance. After a long run they can warn of fading momentum; inside a range they are usually noise.",
+    patternKey: "spinning-top",
+    highlightIndex: 2,
+    glossaryTermId: "indecision-candle",
   },
 ];
 
@@ -4508,6 +5216,11 @@ export type QuizGroupId =
   | "tweezer-top"
   | "falling-wedge"
   | "head-shoulders"
+  | "marubozu"
+  | "three-inside-outside"
+  | "counterattack-on-neck"
+  | "continuation-methods"
+  | "candle-pattern-book"
   | "indicators"
   | "equity-patterns"
   | "equity-literacy"
@@ -4572,6 +5285,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     icon: "candlestick_chart",
   },
   {
+    id: "candle-pattern-book",
+    name: "Candlestick Pattern Book",
+    description: "Reading rules for 30+ patterns: prior trend, confirmation, body and wick criteria",
+    icon: "menu_book",
+  },
+  {
     id: "equity-patterns",
     name: "Equity Pack Drills",
     description: "Candle/indicator drills tagged to E1 equity SAMPLE packs (post-P0)",
@@ -4579,7 +5298,7 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   },
   { id: "all", name: "All Patterns", description: "Mix of all candlestick patterns", icon: "shuffle" },
   { id: "hammer", name: "Hammer Family", description: "Long lower shadow, small body at top—bullish reversal", icon: "vertical_align_bottom" },
-  { id: "doji", name: "Doji Family", description: "Open ≈ close, long wicks—indecision", icon: "trending_flat" },
+  { id: "doji", name: "Doji Family", description: "Open ≈ close, long wicks—indecision (includes spinning top)", icon: "trending_flat" },
   { id: "engulfing", name: "Engulfing Family", description: "Body engulfs previous candle—momentum shift", icon: "compare_arrows" },
   { id: "bullish-engulfing", name: "Bullish Engulfing", description: "Green body engulfs prior red", icon: "trending_up" },
   { id: "bearish-engulfing", name: "Bearish Engulfing", description: "Red body engulfs prior green", icon: "trending_down" },
@@ -4598,10 +5317,14 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   { id: "dark-cloud-cover", name: "Dark Cloud Cover", description: "Red closes into the prior green body", icon: "trending_down" },
   { id: "three-white-soldiers", name: "Three White Soldiers", description: "Three rising green bodies in a row", icon: "trending_up" },
   { id: "three-black-crows", name: "Three Black Crows", description: "Three falling red bodies in a row", icon: "trending_down" },
-  { id: "harami", name: "Harami", description: "Small body nested inside the prior larger body", icon: "compare_arrows" },
+  { id: "harami", name: "Harami", description: "Small body nested inside the prior larger body (bullish and bearish)", icon: "compare_arrows" },
   { id: "tweezer-top", name: "Tweezer Top", description: "Two candles share a similar high after a rally", icon: "vertical_align_top" },
   { id: "falling-wedge", name: "Falling Wedge", description: "Downward converging lines — selling is tiring", icon: "trending_down" },
   { id: "head-shoulders", name: "Head and Shoulders", description: "Three peaks; the center peak is highest", icon: "account_tree" },
+  { id: "marubozu", name: "Marubozu", description: "Tall body, no wicks—one side controlled the whole period", icon: "crop_portrait" },
+  { id: "three-inside-outside", name: "Three Inside / Outside", description: "Harami or engulfing, then a confirming third candle", icon: "view_week" },
+  { id: "counterattack-on-neck", name: "Counterattack & On-Neck", description: "Second candle closes right back at the prior close", icon: "horizontal_rule" },
+  { id: "continuation-methods", name: "Three Methods, Mat Hold & Tasuki", description: "Pauses inside a trend that often resolve the same way", icon: "trending_up" },
   {
     id: "futures-literacy",
     name: "Futures Literacy",
@@ -4630,6 +5353,14 @@ export const QUIZ_GROUPS: QuizGroup[] = [
 
 function patternKeysForGroup(groupId: QuizGroupId): string[] {
   if (groupId === "engulfing") return ["engulfing", "bullish-engulfing", "bearish-engulfing"];
+  if (groupId === "doji") return ["doji", "spinning-top"];
+  if (groupId === "harami") return ["harami", "bearish-harami"];
+  if (groupId === "marubozu") return ["white-marubozu", "black-marubozu"];
+  if (groupId === "three-inside-outside")
+    return ["three-inside-up", "three-inside-down", "three-outside-up", "three-outside-down"];
+  if (groupId === "counterattack-on-neck") return ["bullish-counterattack", "bearish-counterattack", "on-neck"];
+  if (groupId === "continuation-methods")
+    return ["rising-three-methods", "falling-three-methods", "mat-hold", "upside-tasuki-gap", "downside-tasuki-gap"];
   return [groupId];
 }
 
@@ -4637,6 +5368,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
   if (groupId === "candle-reading") return CANDLE_READING_QUESTIONS;
+  if (groupId === "candle-pattern-book") return PATTERN_BOOK_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
@@ -4654,6 +5386,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
   if (groupId === "candle-reading") return CANDLE_READING_QUESTIONS;
+  if (groupId === "candle-pattern-book") return PATTERN_BOOK_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;

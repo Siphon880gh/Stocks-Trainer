@@ -215,7 +215,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "markets",
     summary: "Green = close above open; red = close below open.",
     detail:
-      "Color encodes the period’s direction, not volume or certainty. SAMPLE charts paint green when close > open and red when close < open.",
+      "Color encodes the period’s direction, not volume or certainty. SAMPLE charts paint green when close > open and red when close < open. Older and printed charts often use a hollow (white) body for up periods and a filled (black) body for down periods; the rule is the same.",
   },
   {
     id: "wick-rejection",
@@ -248,6 +248,46 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     summary: "A tall body with small wicks that is much bigger than recent candles: one side controlled the whole period.",
     detail:
       "Bulls win: open near the low, close near the high (tall green body). Bears win: open near the high, close near the low (tall red body). Marubozu-style candles show conviction for that period. They do not guarantee the next candle goes the same way, and price often pauses or pulls back after a big expansion. SAMPLE teaching.",
+  },
+  {
+    id: "candlestick-origins",
+    name: "Japanese candlesticks (origin)",
+    category: "markets",
+    summary: "Candle charts come from Japanese rice trading and focus on what traders did inside each period.",
+    detail:
+      "Popular history credits Munehisa Homma, an 18th-century rice merchant, with noticing that rice prices reflected traders' emotions as well as supply and demand. The chart style itself was refined later and reached Western traders in the late 20th century. The lesson that carries over: each candle summarizes a fight between buyers and sellers. SAMPLE teaching.",
+  },
+  {
+    id: "prior-trend-context",
+    name: "Prior trend (reversal context)",
+    category: "process",
+    summary: "A reversal pattern needs a trend to reverse: bullish reversals after declines, bearish reversals after rallies.",
+    detail:
+      "The same shape can mean different things in different places. A small body with a long lower wick is a hammer after a decline and a hanging man after a rally. With no clear prior trend, most reversal patterns are just noise. SAMPLE teaching.",
+  },
+  {
+    id: "pattern-confirmation",
+    name: "Confirmation & invalidation",
+    category: "process",
+    summary: "Wait for the next candle to agree, and know the price that would prove the read wrong.",
+    detail:
+      "Single and two-candle patterns are setups, not signals. A common rule is to wait for the next candle to close in the pattern's direction (three-candle patterns like Three Inside Up build that step in). Invalidation usually sits just past the pattern's extreme: below a hammer's low, above a shooting star's high. This trainer has no order ticket; this is process practice, not advice.",
+  },
+  {
+    id: "reversal-vs-continuation",
+    name: "Reversal vs continuation patterns",
+    category: "process",
+    summary: "Reversal patterns suggest a trend may turn; continuation patterns suggest a pause before the trend resumes.",
+    detail:
+      "Reversal examples: hammer, engulfing, morning/evening star, harami, three inside/outside, counterattack. Continuation examples: rising/falling three methods, mat hold, tasuki gaps, on-neck. Doji and spinning tops are indecision; what they mean depends on where they appear. Labels describe tendencies, not outcomes. SAMPLE teaching.",
+  },
+  {
+    id: "pattern-tolerance",
+    name: "Textbook vs real-world patterns",
+    category: "process",
+    summary: "Real charts rarely match the textbook exactly; judge the story, not a perfect shape.",
+    detail:
+      "Minor differences are normal (a tiny wick on a marubozu, a near-equal low on a tweezer). Ask whether the pattern's story still holds: who took control, and where. The flip side: do not stretch a definition until you see the pattern you hoped for. SAMPLE teaching.",
   },
   {
     id: "chase-vs-fade",
