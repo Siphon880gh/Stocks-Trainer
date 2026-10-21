@@ -131,6 +131,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                                   height={180}
                                   highlightIndex={q.highlightIndex ?? 2}
                                   showScaleControls={false}
+                                  annotations={q.annotations}
                                 />
                               )}
                             </div>
@@ -202,6 +203,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                           height={180}
                           highlightIndex={q.highlightIndex ?? 2}
                           showScaleControls={false}
+                          annotations={q.annotations}
                         />
                       )}
                     </div>

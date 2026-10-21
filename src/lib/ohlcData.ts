@@ -1,3 +1,6 @@
+import { SCENARIO_OHLC } from "./scenarioCharts";
+import { ADVANCED_OHLC, ADVANCED_DRILL_SPECS } from "./advancedPatterns";
+
 export interface OHLC {
   name: string;
   open: number;
@@ -647,6 +650,379 @@ export const DOWNSIDE_TASUKI_GAP_OHLC: OHLC[] = [
   ohlc("5", 64050, 64100, 63400, 63450),
 ];
 
+/** Candlestick encyclopedia (cheat-sheet lessons) — basic candles, doji and marubozu variants, gap and multi-candle patterns. */
+
+/** Long green candle: tall body with normal wicks, much bigger than the quiet candles before it. */
+export const LONG_GREEN_CANDLE_OHLC: OHLC[] = [
+  ohlc("1", 64000, 64150, 63850, 64050),
+  ohlc("2", 64050, 64200, 63900, 63950),
+  ohlc("3", 63950, 64100, 63850, 64000),
+  ohlc("4", 64000, 64850, 63900, 64750),
+  ohlc("5", 64750, 64900, 64600, 64800),
+];
+
+/** Long red candle: tall body with normal wicks. */
+export const LONG_RED_CANDLE_OHLC: OHLC[] = [
+  ohlc("1", 64500, 64650, 64350, 64450),
+  ohlc("2", 64450, 64600, 64300, 64550),
+  ohlc("3", 64550, 64650, 64400, 64500),
+  ohlc("4", 64500, 64600, 63650, 63750),
+  ohlc("5", 63750, 63900, 63600, 63700),
+];
+
+/** Short green candle: small body, small range. */
+export const SHORT_GREEN_CANDLE_OHLC: OHLC[] = [
+  ohlc("1", 64000, 64200, 63850, 64100),
+  ohlc("2", 64100, 64250, 63900, 63950),
+  ohlc("3", 63950, 64150, 63850, 64100),
+  ohlc("4", 64050, 64140, 63990, 64090),
+  ohlc("5", 64090, 64300, 64000, 64200),
+];
+
+/** Short red candle: small body, small range. */
+export const SHORT_RED_CANDLE_OHLC: OHLC[] = [
+  ohlc("1", 64300, 64450, 64150, 64200),
+  ohlc("2", 64200, 64350, 64050, 64300),
+  ohlc("3", 64300, 64400, 64150, 64200),
+  ohlc("4", 64230, 64270, 64140, 64190),
+  ohlc("5", 64190, 64300, 64000, 64250),
+];
+
+/** Bullish closing marubozu: closes at the high (no upper wick), has a lower wick. */
+export const BULLISH_CLOSING_MARUBOZU_OHLC: OHLC[] = [
+  ohlc("1", 63500, 63750, 63450, 63700),
+  ohlc("2", 63700, 63950, 63650, 63900),
+  ohlc("3", 63900, 64150, 63850, 64100),
+  ohlc("4", 64100, 64800, 63950, 64800),
+  ohlc("5", 64800, 65000, 64700, 64900),
+];
+
+/** Bearish closing marubozu: closes at the low (no lower wick), has an upper wick. */
+export const BEARISH_CLOSING_MARUBOZU_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64850, 64550, 64600),
+  ohlc("2", 64600, 64650, 64350, 64400),
+  ohlc("3", 64400, 64450, 64150, 64200),
+  ohlc("4", 64200, 64350, 63500, 63500),
+  ohlc("5", 63500, 63600, 63250, 63350),
+];
+
+/** Bullish opening marubozu: opens at the low (no lower wick), has an upper wick. */
+export const BULLISH_OPENING_MARUBOZU_OHLC: OHLC[] = [
+  ohlc("1", 63300, 63600, 63250, 63550),
+  ohlc("2", 63550, 63800, 63500, 63750),
+  ohlc("3", 63750, 64000, 63700, 63950),
+  ohlc("4", 63950, 64700, 63950, 64550),
+  ohlc("5", 64550, 64750, 64450, 64700),
+];
+
+/** Bearish opening marubozu: opens at the high (no upper wick), has a lower wick. */
+export const BEARISH_OPENING_MARUBOZU_OHLC: OHLC[] = [
+  ohlc("1", 65000, 65050, 64750, 64800),
+  ohlc("2", 64800, 64850, 64550, 64600),
+  ohlc("3", 64600, 64650, 64350, 64400),
+  ohlc("4", 64400, 64400, 63600, 63750),
+  ohlc("5", 63750, 63850, 63450, 63500),
+];
+
+/** Long-legged doji after a rally: open ≈ close with very long wicks both ways. */
+export const LONG_LEGGED_DOJI_OHLC: OHLC[] = [
+  ohlc("1", 63600, 63850, 63550, 63800),
+  ohlc("2", 63800, 64050, 63750, 64000),
+  ohlc("3", 64000, 64250, 63950, 64200),
+  ohlc("4", 64200, 64750, 63650, 64210),
+  ohlc("5", 64210, 64350, 63950, 64050),
+];
+
+/** Cross doji in a range: open = close, lower wick longer than the upper. */
+export const CROSS_DOJI_OHLC: OHLC[] = [
+  ohlc("1", 64000, 64200, 63850, 64100),
+  ohlc("2", 64100, 64250, 63900, 63950),
+  ohlc("3", 63950, 64150, 63800, 64050),
+  ohlc("4", 64050, 64150, 63850, 64050),
+  ohlc("5", 64050, 64200, 63900, 64100),
+];
+
+/** Inverted cross doji in a range: open = close near the low, upper wick much longer than the lower. */
+export const INVERTED_CROSS_DOJI_OHLC: OHLC[] = [
+  ohlc("1", 64100, 64300, 63950, 64200),
+  ohlc("2", 64200, 64300, 64000, 64050),
+  ohlc("3", 64050, 64250, 63900, 64150),
+  ohlc("4", 64100, 64350, 64050, 64100),
+  ohlc("5", 64100, 64250, 63950, 64000),
+];
+
+/** Dragonfly doji after a decline: open = close = high, long lower wick (buyers defended lower levels). */
+export const DRAGONFLY_DOJI_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64850, 64450, 64500),
+  ohlc("2", 64500, 64550, 64150, 64200),
+  ohlc("3", 64200, 64250, 63850, 63900),
+  ohlc("4", 63900, 63900, 63300, 63900),
+  ohlc("5", 63900, 64300, 63850, 64250),
+];
+
+/** Gravestone doji after a rally: open = close = low, long upper wick (sellers defended upper levels). */
+export const GRAVESTONE_DOJI_OHLC: OHLC[] = [
+  ohlc("1", 63300, 63550, 63250, 63500),
+  ohlc("2", 63500, 63850, 63450, 63800),
+  ohlc("3", 63800, 64150, 63750, 64100),
+  ohlc("4", 64100, 64700, 64100, 64100),
+  ohlc("5", 64100, 64150, 63700, 63750),
+];
+
+/** Bullish kicker: red, then a green that gaps above the red's open and never looks back. */
+export const BULLISH_KICKER_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64850, 64450, 64500),
+  ohlc("2", 64500, 64550, 64150, 64200),
+  ohlc("3", 64200, 64250, 63750, 63800),
+  ohlc("4", 64300, 64900, 64280, 64850),
+  ohlc("5", 64850, 65050, 64750, 64950),
+];
+
+/** Bearish kicker: green, then a red that gaps below the green's open. */
+export const BEARISH_KICKER_OHLC: OHLC[] = [
+  ohlc("1", 63200, 63550, 63150, 63500),
+  ohlc("2", 63500, 63850, 63450, 63800),
+  ohlc("3", 63800, 64250, 63750, 64200),
+  ohlc("4", 63700, 63720, 63100, 63150),
+  ohlc("5", 63150, 63250, 62850, 62950),
+];
+
+/** Bullish separating lines: in an uptrend, a red pullback, then a green opening at the red's open. */
+export const BULLISH_SEPARATING_LINES_OHLC: OHLC[] = [
+  ohlc("1", 63300, 63600, 63250, 63550),
+  ohlc("2", 63550, 63850, 63500, 63800),
+  ohlc("3", 63800, 63850, 63450, 63500),
+  ohlc("4", 63800, 64400, 63780, 64350),
+  ohlc("5", 64350, 64550, 64250, 64500),
+];
+
+/** Bearish separating lines: in a downtrend, a green bounce, then a red opening at the green's open. */
+export const BEARISH_SEPARATING_LINES_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64850, 64450, 64500),
+  ohlc("2", 64500, 64550, 64150, 64200),
+  ohlc("3", 64200, 64550, 64150, 64500),
+  ohlc("4", 64200, 64220, 63600, 63650),
+  ohlc("5", 63650, 63750, 63400, 63450),
+];
+
+/** Bullish side-by-side white lines: green, gap up, then two similar greens side by side. */
+export const BULLISH_SIDE_BY_SIDE_OHLC: OHLC[] = [
+  ohlc("1", 63300, 63550, 63250, 63500),
+  ohlc("2", 63500, 64000, 63450, 63950),
+  ohlc("3", 64150, 64450, 64100, 64400),
+  ohlc("4", 64160, 64470, 64120, 64420),
+  ohlc("5", 64420, 64800, 64350, 64750),
+];
+
+/** Bearish side-by-side white lines: red, gap down, then two similar greens that stay below the gap. */
+export const BEARISH_SIDE_BY_SIDE_OHLC: OHLC[] = [
+  ohlc("1", 64900, 64950, 64650, 64700),
+  ohlc("2", 64700, 64750, 64250, 64300),
+  ohlc("3", 63850, 64100, 63800, 64050),
+  ohlc("4", 63860, 64110, 63820, 64060),
+  ohlc("5", 64060, 64080, 63500, 63550),
+];
+
+/** In-neck: long red, then a small green opening below its low and closing just inside its body. */
+export const IN_NECK_OHLC: OHLC[] = [
+  ohlc("1", 65100, 65150, 64750, 64800),
+  ohlc("2", 64800, 64850, 64450, 64500),
+  ohlc("3", 64500, 64520, 63700, 63750),
+  ohlc("4", 63500, 63830, 63450, 63800),
+  ohlc("5", 63800, 63820, 63300, 63350),
+];
+
+/** Thrusting: long red, then a green opening below its low and closing into the body but below its midpoint. */
+export const THRUSTING_OHLC: OHLC[] = [
+  ohlc("1", 64700, 64750, 64350, 64400),
+  ohlc("2", 64400, 64450, 64050, 64100),
+  ohlc("3", 64100, 64120, 63250, 63300),
+  ohlc("4", 63100, 63580, 63050, 63550),
+  ohlc("5", 63550, 63600, 63000, 63050),
+];
+
+/** Two crows: long green, a red that gaps up, then a red that opens inside it and closes inside the green body. */
+export const TWO_CROWS_OHLC: OHLC[] = [
+  ohlc("1", 63000, 63350, 62950, 63300),
+  ohlc("2", 63300, 63650, 63250, 63600),
+  ohlc("3", 63600, 64400, 63550, 64350),
+  ohlc("4", 64600, 64700, 64450, 64500),
+  ohlc("5", 64550, 64600, 63900, 63950),
+  ohlc("6", 63950, 64000, 63600, 63650),
+];
+
+/** Upside gap two crows: long green, a red that gaps up, then a bigger red that engulfs it but still closes above the green. */
+export const UPSIDE_GAP_TWO_CROWS_OHLC: OHLC[] = [
+  ohlc("1", 62900, 63250, 62850, 63200),
+  ohlc("2", 63200, 63550, 63150, 63500),
+  ohlc("3", 63500, 64300, 63450, 64250),
+  ohlc("4", 64500, 64600, 64350, 64400),
+  ohlc("5", 64550, 64650, 64280, 64300),
+  ohlc("6", 64300, 64320, 63800, 63850),
+];
+
+/** Bullish abandoned baby: long red, a doji that gaps below it, then a green that gaps above the doji. */
+export const BULLISH_ABANDONED_BABY_OHLC: OHLC[] = [
+  ohlc("1", 65000, 65050, 64650, 64700),
+  ohlc("2", 64700, 64750, 64350, 64400),
+  ohlc("3", 64400, 64420, 63650, 63700),
+  ohlc("4", 63450, 63550, 63350, 63450),
+  ohlc("5", 63700, 64300, 63650, 64250),
+  ohlc("6", 64250, 64500, 64150, 64400),
+];
+
+/** Bearish abandoned baby: long green, a doji that gaps above it, then a red that gaps below the doji. */
+export const BEARISH_ABANDONED_BABY_OHLC: OHLC[] = [
+  ohlc("1", 63000, 63350, 62950, 63300),
+  ohlc("2", 63300, 63650, 63250, 63600),
+  ohlc("3", 63600, 64350, 63580, 64300),
+  ohlc("4", 64550, 64650, 64450, 64550),
+  ohlc("5", 64300, 64400, 63700, 63750),
+  ohlc("6", 63750, 63800, 63400, 63450),
+];
+
+/** Bullish tri star: three dojis after a decline, the middle one gapped below the other two. */
+export const BULLISH_TRI_STAR_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64850, 64450, 64500),
+  ohlc("2", 64500, 64550, 64150, 64200),
+  ohlc("3", 64200, 64250, 63850, 63900),
+  ohlc("4", 63800, 63900, 63650, 63800),
+  ohlc("5", 63550, 63620, 63400, 63550),
+  ohlc("6", 63750, 63900, 63680, 63750),
+  ohlc("7", 63750, 64200, 63700, 64150),
+];
+
+/** Bearish tri star: three dojis after a rally, the middle one gapped above the other two. */
+export const BEARISH_TRI_STAR_OHLC: OHLC[] = [
+  ohlc("1", 63200, 63550, 63150, 63500),
+  ohlc("2", 63500, 63850, 63450, 63800),
+  ohlc("3", 63800, 64150, 63750, 64100),
+  ohlc("4", 64200, 64350, 64100, 64200),
+  ohlc("5", 64450, 64600, 64400, 64450),
+  ohlc("6", 64250, 64380, 64150, 64250),
+  ohlc("7", 64250, 64300, 63800, 63850),
+];
+
+/** Bullish three-line strike: three rising greens, then one red that erases them (traditionally a pause in an uptrend). */
+export const BULLISH_THREE_LINE_STRIKE_OHLC: OHLC[] = [
+  ohlc("1", 63200, 63450, 63150, 63400),
+  ohlc("2", 63400, 63750, 63350, 63700),
+  ohlc("3", 63700, 64050, 63650, 64000),
+  ohlc("4", 64000, 64350, 63950, 64300),
+  ohlc("5", 64350, 64400, 63300, 63350),
+  ohlc("6", 63350, 63800, 63300, 63700),
+];
+
+/** Bearish three-line strike: three falling reds, then one green that erases them. */
+export const BEARISH_THREE_LINE_STRIKE_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64850, 64550, 64600),
+  ohlc("2", 64600, 64650, 64250, 64300),
+  ohlc("3", 64300, 64350, 63950, 64000),
+  ohlc("4", 64000, 64050, 63650, 63700),
+  ohlc("5", 63650, 64650, 63600, 64620),
+  ohlc("6", 64620, 64700, 64200, 64250),
+];
+
+/** Upside gap three methods: two greens with a gap between, then a red that fills the gap. */
+export const UPSIDE_GAP_THREE_METHODS_OHLC: OHLC[] = [
+  ohlc("1", 63300, 63550, 63250, 63500),
+  ohlc("2", 63500, 64000, 63450, 63950),
+  ohlc("3", 64150, 64600, 64100, 64550),
+  ohlc("4", 64400, 64450, 63750, 63800),
+  ohlc("5", 63800, 64300, 63750, 64250),
+];
+
+/** Downside gap three methods: two reds with a gap between, then a green that fills the gap. */
+export const DOWNSIDE_GAP_THREE_METHODS_OHLC: OHLC[] = [
+  ohlc("1", 64900, 64950, 64650, 64700),
+  ohlc("2", 64700, 64750, 64200, 64250),
+  ohlc("3", 64050, 64100, 63600, 63650),
+  ohlc("4", 63800, 64500, 63750, 64450),
+  ohlc("5", 64450, 64500, 63950, 64000),
+];
+
+/** Bullish breakaway: long red, a red gap down, three small lower candles, then a long green closing into the gap. */
+export const BULLISH_BREAKAWAY_OHLC: OHLC[] = [
+  ohlc("1", 64900, 64950, 64650, 64700),
+  ohlc("2", 64700, 64750, 64350, 64400),
+  ohlc("3", 64400, 64420, 63800, 63850),
+  ohlc("4", 63650, 63700, 63450, 63500),
+  ohlc("5", 63500, 63550, 63300, 63350),
+  ohlc("6", 63250, 63400, 63150, 63300),
+  ohlc("7", 63300, 63780, 63250, 63750),
+  ohlc("8", 63750, 64100, 63700, 64050),
+];
+
+/** Bearish breakaway: long green, a green gap up, three small higher candles, then a long red closing into the gap. */
+export const BEARISH_BREAKAWAY_OHLC: OHLC[] = [
+  ohlc("1", 63000, 63300, 62950, 63250),
+  ohlc("2", 63250, 63600, 63200, 63550),
+  ohlc("3", 63550, 64150, 63500, 64100),
+  ohlc("4", 64300, 64500, 64250, 64450),
+  ohlc("5", 64450, 64650, 64400, 64600),
+  ohlc("6", 64600, 64800, 64550, 64700),
+  ohlc("7", 64700, 64750, 64180, 64200),
+  ohlc("8", 64200, 64250, 63850, 63900),
+];
+
+/** Bearish mat hold: long red, a gap down, three small bounce candles below the first high, then a long red. */
+export const BEARISH_MAT_HOLD_OHLC: OHLC[] = [
+  ohlc("1", 64900, 64950, 64650, 64700),
+  ohlc("2", 64700, 64750, 63900, 63950),
+  ohlc("3", 63750, 63850, 63700, 63800),
+  ohlc("4", 63800, 64000, 63780, 63950),
+  ohlc("5", 63950, 64150, 63900, 64100),
+  ohlc("6", 64100, 64120, 63350, 63400),
+];
+
+/** Supply zone (teaching chart): a small base candle, then a big-bodied drop away from it. */
+export const SUPPLY_ZONE_OHLC: OHLC[] = [
+  ohlc("1", 63600, 63850, 63550, 63800),
+  ohlc("2", 63800, 64100, 63750, 64050),
+  ohlc("3", 64050, 64300, 64000, 64250),
+  ohlc("4", 64250, 64380, 64180, 64220), // base: small body, top of zone = its high
+  ohlc("5", 64220, 64240, 63400, 63450), // impulse: big body leaving the zone
+  ohlc("6", 63450, 63600, 63300, 63500),
+  ohlc("7", 63500, 63800, 63450, 63750),
+  ohlc("8", 63750, 64100, 63700, 64050),
+  ohlc("9", 64050, 64300, 64000, 64200), // back into the zone
+  ohlc("10", 64200, 64250, 63850, 63900), // rejection from supply
+];
+
+/** Demand zone (teaching chart): a small base candle, then a big-bodied rally away from it. */
+export const DEMAND_ZONE_OHLC: OHLC[] = [
+  ohlc("1", 64800, 64850, 64500, 64550),
+  ohlc("2", 64550, 64600, 64250, 64300),
+  ohlc("3", 64300, 64350, 64050, 64100),
+  ohlc("4", 64100, 64170, 63980, 64130), // base: small body, bottom of zone = its low
+  ohlc("5", 64130, 64980, 64110, 64950), // impulse: big body leaving the zone
+  ohlc("6", 64950, 65100, 64850, 65000),
+  ohlc("7", 65000, 65050, 64700, 64750),
+  ohlc("8", 64750, 64800, 64400, 64450),
+  ohlc("9", 64450, 64500, 64050, 64150), // back into the zone
+  ohlc("10", 64150, 64550, 64100, 64500), // bounce from demand
+];
+
+/** Hammer shape in the middle of a sideways range (no prior downtrend) — Buy-or-Sell “wait” case. */
+export const HAMMER_NO_TREND_OHLC: OHLC[] = [
+  ohlc("1", 64000, 64250, 63850, 64150),
+  ohlc("2", 64150, 64300, 63900, 63950),
+  ohlc("3", 63950, 64200, 63850, 64100),
+  ohlc("4", 64100, 64250, 63850, 64000),
+  ohlc("5", 64000, 64110, 63500, 64080), // hammer shape, but nothing to reverse
+  ohlc("6", 64080, 64250, 63900, 64000),
+];
+
+/** Bearish-engulfing shape inside a flat range (no prior rally) — Buy-or-Sell “wait” case. */
+export const ENGULFING_NO_TREND_OHLC: OHLC[] = [
+  ohlc("1", 64100, 64300, 63900, 64000),
+  ohlc("2", 64000, 64250, 63850, 64150),
+  ohlc("3", 64150, 64300, 63950, 64050),
+  ohlc("4", 64000, 64200, 63900, 64120),
+  ohlc("5", 64180, 64260, 63880, 63950), // engulfs bar 4's body, but mid-range
+  ohlc("6", 63950, 64150, 63850, 64100),
+];
+
 export const PATTERN_OHLC: Record<string, OHLC[]> = {
   hammer: HAMMER_OHLC,
   doji: DOJI_OHLC,
@@ -698,7 +1074,182 @@ export const PATTERN_OHLC: Record<string, OHLC[]> = {
   "mat-hold": MAT_HOLD_OHLC,
   "upside-tasuki-gap": UPSIDE_TASUKI_GAP_OHLC,
   "downside-tasuki-gap": DOWNSIDE_TASUKI_GAP_OHLC,
+  "long-green-candle": LONG_GREEN_CANDLE_OHLC,
+  "long-red-candle": LONG_RED_CANDLE_OHLC,
+  "short-green-candle": SHORT_GREEN_CANDLE_OHLC,
+  "short-red-candle": SHORT_RED_CANDLE_OHLC,
+  "bullish-closing-marubozu": BULLISH_CLOSING_MARUBOZU_OHLC,
+  "bearish-closing-marubozu": BEARISH_CLOSING_MARUBOZU_OHLC,
+  "bullish-opening-marubozu": BULLISH_OPENING_MARUBOZU_OHLC,
+  "bearish-opening-marubozu": BEARISH_OPENING_MARUBOZU_OHLC,
+  "long-legged-doji": LONG_LEGGED_DOJI_OHLC,
+  "cross-doji": CROSS_DOJI_OHLC,
+  "inverted-cross-doji": INVERTED_CROSS_DOJI_OHLC,
+  "dragonfly-doji": DRAGONFLY_DOJI_OHLC,
+  "gravestone-doji": GRAVESTONE_DOJI_OHLC,
+  "bullish-kicker": BULLISH_KICKER_OHLC,
+  "bearish-kicker": BEARISH_KICKER_OHLC,
+  "bullish-separating-lines": BULLISH_SEPARATING_LINES_OHLC,
+  "bearish-separating-lines": BEARISH_SEPARATING_LINES_OHLC,
+  "bullish-side-by-side-white-lines": BULLISH_SIDE_BY_SIDE_OHLC,
+  "bearish-side-by-side-white-lines": BEARISH_SIDE_BY_SIDE_OHLC,
+  "in-neck": IN_NECK_OHLC,
+  "thrusting": THRUSTING_OHLC,
+  "two-crows": TWO_CROWS_OHLC,
+  "upside-gap-two-crows": UPSIDE_GAP_TWO_CROWS_OHLC,
+  "bullish-abandoned-baby": BULLISH_ABANDONED_BABY_OHLC,
+  "bearish-abandoned-baby": BEARISH_ABANDONED_BABY_OHLC,
+  "bullish-tri-star": BULLISH_TRI_STAR_OHLC,
+  "bearish-tri-star": BEARISH_TRI_STAR_OHLC,
+  "bullish-three-line-strike": BULLISH_THREE_LINE_STRIKE_OHLC,
+  "bearish-three-line-strike": BEARISH_THREE_LINE_STRIKE_OHLC,
+  "upside-gap-three-methods": UPSIDE_GAP_THREE_METHODS_OHLC,
+  "downside-gap-three-methods": DOWNSIDE_GAP_THREE_METHODS_OHLC,
+  "bullish-breakaway": BULLISH_BREAKAWAY_OHLC,
+  "bearish-breakaway": BEARISH_BREAKAWAY_OHLC,
+  "bearish-mat-hold": BEARISH_MAT_HOLD_OHLC,
+  "supply-zone": SUPPLY_ZONE_OHLC,
+  "demand-zone": DEMAND_ZONE_OHLC,
+  ...SCENARIO_OHLC,
+  "inverse-head-shoulders": SCENARIO_OHLC["sc-inverse-head-shoulders"],
+  "triple-top": SCENARIO_OHLC["sc-triple-top"],
+  "triple-bottom": SCENARIO_OHLC["sc-triple-bottom"],
+  ...ADVANCED_OHLC,
+  "hammer-no-trend": HAMMER_NO_TREND_OHLC,
+  "engulfing-no-trend": ENGULFING_NO_TREND_OHLC,
 };
+
+/**
+ * Buy-or-Sell drill charts, derived from the pattern charts above.
+ * `bs-<key>`: bars up to the pattern's last candle plus one confirming candle that closes beyond that candle's high (up) or low (down).
+ * `bs-<key>-open`: bars up to the pattern's last candle only — no confirmation yet.
+ */
+export type DrillDirection = "up" | "down" | "open";
+
+/**
+ * Buy-or-Sell drill charts. "up"/"down" add one confirming candle after the pattern's last bar (`end`);
+ * "open" stops at the pattern (unconfirmed). `from` = first bar whose extreme the confirmation must clear (default `end`).
+ */
+export const DRILL_CHART_SPECS: ReadonlyArray<{ key: string; end: number; dir: DrillDirection; from?: number }> = [
+  // bullish reversals
+  { key: "hammer", end: 2, dir: "up" },
+  { key: "inverted-hammer", end: 2, dir: "up" },
+  { key: "engulfing", end: 2, dir: "up" },
+  { key: "piercing-line", end: 3, dir: "up" },
+  { key: "morning-star", end: 3, dir: "up" },
+  { key: "three-white-soldiers", end: 3, dir: "up" },
+  { key: "tweezer-bottom", end: 4, dir: "up" },
+  { key: "harami", end: 3, dir: "up" },
+  { key: "three-inside-up", end: 4, dir: "up" },
+  { key: "three-outside-up", end: 4, dir: "up" },
+  { key: "bullish-counterattack", end: 3, dir: "up" },
+  { key: "white-marubozu", end: 3, dir: "up" },
+  { key: "candle-rejected-low", end: 3, dir: "up" },
+  { key: "candle-bulls-win", end: 3, dir: "up" },
+  { key: "dragonfly-doji", end: 3, dir: "up" },
+  { key: "bullish-kicker", end: 3, dir: "up" },
+  { key: "bullish-abandoned-baby", end: 4, dir: "up" },
+  { key: "bullish-tri-star", end: 5, dir: "up" },
+  { key: "bullish-breakaway", end: 6, dir: "up" },
+  { key: "bullish-closing-marubozu", end: 3, dir: "up" },
+  { key: "bullish-opening-marubozu", end: 3, dir: "up" },
+  // bullish continuations
+  { key: "rising-three-methods", end: 5, dir: "up" },
+  { key: "mat-hold", end: 5, dir: "up" },
+  { key: "upside-tasuki-gap", end: 3, dir: "up" },
+  { key: "bullish-separating-lines", end: 3, dir: "up" },
+  { key: "bullish-side-by-side-white-lines", end: 3, dir: "up" },
+  { key: "upside-gap-three-methods", end: 3, dir: "up" },
+  { key: "bull-flag", end: 5, dir: "up", from: 2 },
+  // bearish reversals
+  { key: "shooting-star", end: 2, dir: "down" },
+  { key: "hanging-man", end: 3, dir: "down" },
+  { key: "bearish-engulfing", end: 2, dir: "down" },
+  { key: "dark-cloud-cover", end: 3, dir: "down" },
+  { key: "evening-star", end: 3, dir: "down" },
+  { key: "three-black-crows", end: 3, dir: "down" },
+  { key: "tweezer-top", end: 4, dir: "down" },
+  { key: "bearish-harami", end: 3, dir: "down" },
+  { key: "three-inside-down", end: 4, dir: "down" },
+  { key: "three-outside-down", end: 4, dir: "down" },
+  { key: "bearish-counterattack", end: 3, dir: "down" },
+  { key: "black-marubozu", end: 3, dir: "down" },
+  { key: "candle-rejected-high", end: 3, dir: "down" },
+  { key: "candle-bears-win", end: 3, dir: "down" },
+  { key: "gravestone-doji", end: 3, dir: "down" },
+  { key: "bearish-kicker", end: 3, dir: "down" },
+  { key: "bearish-abandoned-baby", end: 4, dir: "down" },
+  { key: "bearish-tri-star", end: 5, dir: "down" },
+  { key: "bearish-breakaway", end: 6, dir: "down" },
+  { key: "two-crows", end: 4, dir: "down" },
+  { key: "upside-gap-two-crows", end: 4, dir: "down" },
+  { key: "bearish-closing-marubozu", end: 3, dir: "down" },
+  { key: "bearish-opening-marubozu", end: 3, dir: "down" },
+  // bearish continuations
+  { key: "falling-three-methods", end: 5, dir: "down" },
+  { key: "bearish-mat-hold", end: 5, dir: "down" },
+  { key: "downside-tasuki-gap", end: 3, dir: "down" },
+  { key: "bearish-separating-lines", end: 3, dir: "down" },
+  { key: "bearish-side-by-side-white-lines", end: 3, dir: "down" },
+  { key: "downside-gap-three-methods", end: 3, dir: "down" },
+  { key: "on-neck", end: 3, dir: "down" },
+  { key: "in-neck", end: 3, dir: "down" },
+  { key: "thrusting", end: 3, dir: "down" },
+  // unconfirmed (pattern is the last candle)
+  { key: "hammer", end: 2, dir: "open" },
+  { key: "engulfing", end: 2, dir: "open" },
+  { key: "shooting-star", end: 2, dir: "open" },
+  { key: "dark-cloud-cover", end: 3, dir: "open" },
+  { key: "hanging-man", end: 3, dir: "open" },
+  { key: "inverted-hammer", end: 2, dir: "open" },
+  { key: "gravestone-doji", end: 3, dir: "open" },
+  // indecision / unclear direction (wait cases)
+  { key: "doji", end: 2, dir: "open" },
+  { key: "spinning-top", end: 2, dir: "open" },
+  { key: "long-legged-doji", end: 3, dir: "open" },
+  { key: "cross-doji", end: 3, dir: "open" },
+  { key: "inverted-cross-doji", end: 3, dir: "open" },
+  { key: "bullish-three-line-strike", end: 4, dir: "open" },
+  { key: "bearish-three-line-strike", end: 4, dir: "open" },
+  // pattern shape with no prior trend (wait cases)
+  { key: "hammer-no-trend", end: 4, dir: "open" },
+  { key: "engulfing-no-trend", end: 4, dir: "open" },
+  // harami crosses, doji stars, high-wave / rickshaw man (wait), advanced / rare patterns
+  ...ADVANCED_DRILL_SPECS,
+];
+
+/** One confirming candle: opens at the pattern close and closes beyond the pattern's high (up) or low (down) over bars [from, end]. */
+export function confirmationBar(bars: OHLC[], end: number, dir: "up" | "down", from = end): OHLC {
+  const last = bars[end];
+  const span = bars.slice(from, end + 1);
+  const recent = bars.slice(Math.max(0, end - 3), end + 1);
+  const avgBody = Math.max(50, recent.reduce((s, b) => s + Math.abs(b.close - b.open), 0) / recent.length);
+  const open = last.close;
+  const close =
+    dir === "up"
+      ? Math.max(...span.map((b) => b.high)) + Math.round(avgBody * 0.4)
+      : Math.min(...span.map((b) => b.low)) - Math.round(avgBody * 0.4);
+  const wick = Math.round(avgBody * 0.15);
+  return ohlc(
+    String(end + 2),
+    open,
+    Math.max(open, close) + wick,
+    Math.min(open, close) - wick,
+    close
+  );
+}
+
+export function drillChartKey(key: string, dir: DrillDirection): string {
+  return dir === "open" ? `bs-${key}-open` : `bs-${key}`;
+}
+
+for (const spec of DRILL_CHART_SPECS) {
+  const source = PATTERN_OHLC[spec.key];
+  if (!source) continue;
+  const head = source.slice(0, spec.end + 1);
+  PATTERN_OHLC[drillChartKey(spec.key, spec.dir)] =
+    spec.dir === "open" ? head : [...head, confirmationBar(source, spec.end, spec.dir, spec.from ?? spec.end)];
+}
 
 /** High/low span across candles (and optional overlay values). */
 export function ohlcPriceExtent(

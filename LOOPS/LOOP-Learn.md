@@ -54,7 +54,9 @@ For each family group, floor **≥6** questions with the existing sort contract 
 
 7. `hammer` · 8. `doji` · 9. `engulfing` · 10. `bullish-engulfing` · 11. `bearish-engulfing` · 12. `shooting-star` · 13. `inverted-hammer` · 14. `morning-star`
 
-Multi-key families (one group, several `patternKey`s via `patternKeysForGroup`): `doji` (+`spinning-top`), `harami` (+`bearish-harami`), `marubozu`, `three-inside-outside`, `counterattack-on-neck`, `continuation-methods`.
+Multi-key families (one group, several `patternKey`s via `patternKeysForGroup`): `doji` (+`spinning-top` and long-legged / cross / inverted cross / dragonfly / gravestone), `harami` (+`bearish-harami`, bullish / bearish harami cross), `morning-star` / `evening-star` (+doji stars), `double-top` / `double-bottom` (+triple top / bottom), `rising-wedge` / `falling-wedge` (+`sc-` wedge scenarios), `marubozu` (+opening / closing), `head-shoulders` (+inverse), `three-inside-outside`, `counterattack-on-neck` (+in-neck, thrusting), `continuation-methods` (+separating / side-by-side lines, gap three methods, bearish mat hold), `gap-reversals`, `crows-and-strikes`, `advanced-rare` ("Advanced & Rare Patterns": rare textbook patterns from `advancedPatterns.ts`, always labelled "Advanced / rare": infrequent and less reliable, confirm first). The `doji` family also gets high-wave and rickshaw man.
+
+Dedicated banks: `price-action` (`PA-`), `supply-demand` (`SD-`), `buy-or-sell` (`BS-`, see `src/lib/buySellDrill.ts`). Every new directional pattern also needs a `DRILL_CHART_SPECS` entry and an `INFO` row in the drill so Buy-or-Sell keeps full coverage.
 
 If a new Archive pattern ships (from the Archive loop), add `patternKey` + `PATTERN_OHLC` entry **before** family questions that show a chart.
 

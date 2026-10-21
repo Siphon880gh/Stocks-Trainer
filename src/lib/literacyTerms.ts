@@ -1,3 +1,5 @@
+import { ADVANCED_TERMS } from "./advancedPatterns";
+
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
 export interface LiteracyTerm {
@@ -223,7 +225,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "markets",
     summary: "A long wick with a small body at the other end: price went there and got pushed back.",
     detail:
-      "Long upper wick, body near the low: buyers pushed up, sellers drove it back down (shooting-star style, a potential bearish reversal after a rally). Long lower wick, body near the high: sellers pushed down, buyers drove it back up (hammer style, a potential bullish reversal after a decline). Body color matters less than where the wick and body sit. It is only a potential reversal: check where it formed and wait for the next candle to confirm. SAMPLE teaching, not a trade signal.",
+      "Long upper wick, body near the low: buyers pushed up, sellers drove it back down (shooting-star style, a potential bearish reversal after a rally). Long lower wick, body near the high: sellers pushed down, buyers drove it back up (hammer style, a potential bullish reversal after a decline). Body color matters less than where the wick and body sit. The wick tells a story: price traveled there during the period, found the other side waiting, and was pushed back before the close. It is only a potential reversal: check where it formed and wait for the next candle to confirm. SAMPLE teaching, not a trade signal.",
   },
   {
     id: "full-body-candle",
@@ -290,6 +292,198 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
       "Minor differences are normal (a tiny wick on a marubozu, a near-equal low on a tweezer). Ask whether the pattern's story still holds: who took control, and where. The flip side: do not stretch a definition until you see the pattern you hoped for. SAMPLE teaching.",
   },
   {
+    id: "long-vs-short-candle",
+    name: "Long vs short candles",
+    category: "markets",
+    summary: "Compare a body with the bodies just before it: much taller is long, much smaller is short.",
+    detail:
+      "A long green says buyers moved price a long way in one period; a long red says sellers did. A short body (green or red) says little happened and neither side pushed hard. 'Long' is always relative to recent candles on the same chart, never a fixed size. SAMPLE teaching, not a signal by itself.",
+  },
+  {
+    id: "marubozu-types",
+    name: "Marubozu types (full, opening, closing)",
+    category: "markets",
+    summary: "Marubozu = a long body with no wick on one or both ends.",
+    detail:
+      "Full marubozu: no wicks at all (white/green or black/red). Closing marubozu: no wick on the closing end, so it closed at the extreme (bullish closes at the high, bearish at the low): the winning side still held control at the close. Opening marubozu: no wick on the opening end (bullish opens at the low, bearish at the high), with a wick at the close: strong start, some give-back. Closing versions are usually read as a little stronger. Context still decides.",
+  },
+  {
+    id: "doji-types",
+    name: "Doji types",
+    category: "markets",
+    summary: "Open ≈ close. The wick layout tells you which kind.",
+    detail:
+      "Standard doji: small wicks, balanced. Long-legged doji: long wicks both ways, big swings and no winner. Dragonfly: open, high and close at the top with a long lower wick (buyers defended lower levels). Gravestone: open, low and close at the bottom with a long upper wick (sellers defended upper levels). Cross doji has a longer lower wick; inverted cross has a longer upper wick (naming varies between books). Every doji is indecision until the next candle and the prior trend give it meaning.",
+  },
+  {
+    id: "dragonfly-gravestone",
+    name: "Dragonfly vs gravestone doji",
+    category: "markets",
+    summary: "Dragonfly (T): buyers defended lows. Gravestone (⊥): sellers defended highs.",
+    detail:
+      "Dragonfly doji: sellers pushed price far down during the period, buyers pushed it all the way back to the open/high. After a decline that is a possible bottom. Gravestone doji: buyers pushed far up, sellers pushed it all the way back to the open/low. After a rally that is a possible top. Both need the next candle to confirm, and both mean little in the middle of a range.",
+  },
+  {
+    id: "gap-reversal",
+    name: "Gap reversals (kicker, abandoned baby)",
+    category: "markets",
+    summary: "A gap that flips direction shows sentiment changed between sessions.",
+    detail:
+      "Kicker: the second candle gaps past the first candle's open in the opposite direction and runs. Abandoned baby: a doji gaps away from the trend, then the next candle gaps back the other way, leaving the doji alone on an 'island'. Both are rare and strong. The invalidation is simple: if the gap fills, the story is wrong. In 24/7 markets like crypto true gaps are rare, so these show up mostly in stocks.",
+  },
+  {
+    id: "three-line-strike",
+    name: "Three-line strike (why it is tricky)",
+    category: "markets",
+    summary: "Three candles one way, then one big candle that wipes them all out.",
+    detail:
+      "Bullish three-line strike: three rising greens, then a long red that closes below the first green's open. Bearish: three falling reds, then a long green that closes above the first red's open. Classic books call these continuation patterns (the strike is 'profit taking'), but in practice the fourth candle often starts a reversal. Honest read: the direction is unclear; wait for the next candles to pick a side.",
+  },
+  {
+    id: "meeting-lines",
+    name: "Meeting lines (= counterattack lines)",
+    category: "markets",
+    summary: "Two opposite-colored candles that close at about the same price.",
+    detail:
+      "Meeting lines is another name for counterattack lines. Bullish: a long red, then a long green that opens far lower and closes back at the red's close. Bearish: a long green, then a long red that opens far higher and closes back at the green's close. Weaker than piercing line or dark cloud cover because the second candle only gets back to the prior close; wait for confirmation.",
+  },
+  {
+    id: "neck-patterns",
+    name: "On-neck, in-neck, thrusting",
+    category: "markets",
+    summary: "How far a green bounce gets into a long red body after a gap down.",
+    detail:
+      "All three: downtrend, long red, then a green that opens below the red's low. On-neck: green closes near the red's low. In-neck: green closes just barely inside the red body. Thrusting: green closes well into the red body but below its midpoint. Past the midpoint it becomes a piercing line (bullish). The first three are weak bounces that usually let the downtrend continue.",
+  },
+  {
+    id: "gap-continuation",
+    name: "Gap continuation patterns",
+    category: "markets",
+    summary: "Separating lines, side-by-side lines, tasuki gaps, gap three methods.",
+    detail:
+      "Separating lines: a counter-trend candle, then a trend candle that opens at the same price and runs away. Side-by-side white lines: two similar green candles that gap away from the prior candle. Tasuki gap: a counter candle that closes inside a gap without filling it. Gap three methods: a counter candle that fully fills the gap. In each case the trend resumes only if the next candles agree.",
+  },
+  {
+    id: "market-structure",
+    name: "Market structure (HH, HL, LH, LL)",
+    category: "process",
+    summary: "Uptrend = higher highs and higher lows. Downtrend = lower highs and lower lows.",
+    detail:
+      "Label each swing: HH (higher high), HL (higher low), LH (lower high), LL (lower low). HH + HL = uptrend; LH + LL = downtrend. When highs and lows stay inside a band with no progress, the market is ranging. A candle pattern means most at the edge of structure (a reversal pattern at a HL in an uptrend or at the top of a range), and least in the middle of a range.",
+  },
+  {
+    id: "breakout-retest",
+    name: "Breakout and retest",
+    category: "process",
+    summary: "Price closes through a level, comes back to test it from the other side, and holds.",
+    detail:
+      "Breakout: a close beyond support or resistance (a wick through is not enough). Retest: price returns to that level; old resistance should now act as support (or old support as resistance). A retest that holds with a confirming candle is a common entry area. A retest that closes back through the level is a failed breakout. Retests do not always happen, and holding is never guaranteed.",
+  },
+  {
+    id: "risk-reward",
+    name: "Entry, stop loss, target and R:R",
+    category: "process",
+    summary: "Know where you are wrong before you know where you are right.",
+    detail:
+      "Entry: where the idea starts (often after the confirmation candle). Stop loss: the price that proves the idea wrong (beyond the pattern's extreme, the retest wick, or the zone). Target: a realistic area such as the next level. Risk:reward compares the distance to target with the distance to stop; 1:2 means aiming for twice what you risk. A good R:R does not make a trade likely to win; it only means one winner can pay for more than one loser. SAMPLE process, not advice.",
+  },
+  {
+    id: "trendline",
+    name: "Trendline",
+    category: "process",
+    summary: "A line through rising lows (uptrend) or falling highs (downtrend).",
+    detail:
+      "Draw it through at least two swing points; a third touch makes it more meaningful. A close through the trendline is a warning that the trend is weakening; a retest from the other side that fails adds weight. Trendlines are drawn by people and are approximate, so treat them as areas, not exact prices.",
+  },
+  {
+    id: "neckline",
+    name: "Neckline",
+    category: "process",
+    summary: "The line under a double top or head and shoulders (or over their inverse versions).",
+    detail:
+      "Double top: the low between the two tops. Head and shoulders: the line through the two troughs either side of the head. The pattern is only confirmed by a close through the neckline. Until then it is just a pullback. After the break the neckline often flips role (support becomes resistance) and gets retested.",
+  },
+  {
+    id: "break-of-structure",
+    name: "Break of structure (BOS)",
+    category: "process",
+    summary: "A close beyond the last swing high (in an uptrend) or swing low (in a downtrend).",
+    detail:
+      "Smart-money-concepts traders use BOS to describe a trend continuing: in an uptrend, closing above the last high is a bullish BOS. When price instead breaks the last higher low, many call it a change of character (the trend may be turning). These are labels for ordinary structure; use the candle close, not a wick, and expect false breaks.",
+  },
+  {
+    id: "liquidity-sweep",
+    name: "Liquidity sweep",
+    category: "process",
+    summary: "A quick wick beyond an obvious high or low that snaps back.",
+    detail:
+      "Many traders put stops just beyond equal highs/lows. A sweep is a fast push through those levels (triggering stops) followed by a close back inside the range, often leaving a long wick, like a hammer or shooting star at the extreme. It can mark a reversal, but it is only clear in hindsight; wait for a confirming close.",
+  },
+  {
+    id: "order-block",
+    name: "Order block (and exit order block)",
+    category: "process",
+    summary: "The last opposite candle before a strong move, used as a zone.",
+    detail:
+      "Bullish order block: the last red candle before a strong rally that breaks structure. Bearish order block: the last green candle before a strong drop. Traders mark that candle's range as a zone and watch how price reacts when it returns, much like a demand or supply zone. An 'exit order block' is the opposite-side zone where a move is expected to stall, used as a profit-taking area rather than an entry. These are SMC labels, not guaranteed reaction points.",
+  },
+  {
+    id: "breaker-block",
+    name: "Breaker block",
+    category: "process",
+    summary: "An order block that failed and flipped sides.",
+    detail:
+      "When price closes straight through an order block, that block 'breaks'. Traders then expect it to act the other way on a retest: a broken bullish block can become resistance, a broken bearish block support. It is the zone version of support turning into resistance.",
+  },
+  {
+    id: "supply-zone",
+    name: "Supply zone",
+    category: "process",
+    summary: "An area where sellers overwhelmed buyers: a small base, then a big-body drop away.",
+    detail:
+      "Find a small base candle (or a few small candles) right before a strong red candle that leaves the area fast. Mark from the base's high down to its body. When price later rallies back into that area, unfilled sell interest may push it down again. Strongest when fresh (not yet revisited). Broken if price closes strongly above the zone. SAMPLE teaching, not a guarantee.",
+  },
+  {
+    id: "demand-zone",
+    name: "Demand zone",
+    category: "process",
+    summary: "An area where buyers overwhelmed sellers: a small base, then a big-body rally away.",
+    detail:
+      "Find a small base candle (or a few) right before a strong green candle that leaves the area fast. Mark from the base's body down to its low. When price later falls back into that area, unfilled buy interest may push it up again. Strongest when fresh. Broken if price closes strongly below the zone. Look for a bullish candle (hammer, engulfing) inside the zone before acting.",
+  },
+  {
+    id: "base-candle",
+    name: "Base candle",
+    category: "process",
+    summary: "The small-body candle (or cluster) where a zone forms before the big move.",
+    detail:
+      "A base candle has a small body compared with nearby candles: a pause where orders built up. The zone is drawn around it. A base with several candles is still a base; what matters is that it is small and is followed by an impulse candle that leaves fast.",
+  },
+  {
+    id: "impulse-candle",
+    name: "Impulse (big-body departure) candle",
+    category: "process",
+    summary: "The large-body candle that leaves the base and proves which side won.",
+    detail:
+      "An impulse candle has a body several times larger than the base and larger than recent candles (in this trainer, at least 3× the base body). A weak, overlapping departure makes a weak zone. The bigger and faster the departure, the more orders were likely left behind.",
+  },
+  {
+    id: "fresh-vs-tested-zone",
+    name: "Fresh vs tested zone",
+    category: "process",
+    summary: "A zone price has not returned to yet is fresh; each revisit uses up orders.",
+    detail:
+      "The first return to a fresh zone is usually the most watched. After one or two tests, the zone weakens, and a big-body candle straight into it (with no rejection) warns that it may break. If price closes through the zone, it is broken and may flip role.",
+  },
+  {
+    id: "zone-flip",
+    name: "Zone flip (vs support/resistance flip)",
+    category: "process",
+    summary: "A broken demand zone can act as supply on the retest, and vice versa.",
+    detail:
+      "Same idea as support becoming resistance, but drawn as an area instead of a line: when price closes strongly through a demand zone, sellers who were trapped there may sell when price returns, so the old demand acts as supply. A support/resistance level is a single price that has been touched often; a zone is the base area of one strong departure.",
+  },
+  {
     id: "chase-vs-fade",
     name: "Chase vs Fade",
     category: "process",
@@ -335,7 +529,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "process",
     summary: "Prices where buying or selling has repeatedly shown up.",
     detail:
-      "Support is a zone where buyers have stepped in; resistance where sellers have. SAMPLE teaching: treat them as areas, not magic lines, and wait for later prints to confirm.",
+      "Support is a zone where buyers have stepped in; resistance where sellers have. The more times a level holds, the more traders watch it. Once broken, old resistance often becomes support (and old support resistance), which is what a breakout retest checks. A candle pattern at support or resistance means more than the same pattern mid-range. SAMPLE teaching: treat them as areas, not magic lines, and wait for later prints to confirm.",
   },
   {
     id: "trend-vs-range",
@@ -417,6 +611,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     detail:
       "SAMPLE / STYLIZED packs are curated teaching tapes. DELAYED is a labeled delayed adapter when enabled. Neither is a real-time brokerage quote. Equities path still uses SAMPLE packs first.",
   },
+  ...ADVANCED_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

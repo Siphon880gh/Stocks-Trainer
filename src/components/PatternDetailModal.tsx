@@ -70,6 +70,11 @@ export default function PatternDetailModal({ pattern, onClose }: PatternDetailMo
                 <span className="text-xs font-mono text-primary/60 uppercase tracking-wider">
                   {pattern.type} • {pattern.confirmation.replace("_", " ")} confirmation
                 </span>
+                {pattern.rare ? (
+                  <span className="text-[10px] font-mono uppercase tracking-wide rounded border border-amber-500/60 text-amber-600 px-1.5 py-0.5">
+                    Advanced / rare
+                  </span>
+                ) : null}
               </div>
               <p className="text-ink text-sm leading-relaxed">
                 <JargonText text={pattern.description} />

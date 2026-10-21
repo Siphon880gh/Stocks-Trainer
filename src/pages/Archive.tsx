@@ -337,12 +337,26 @@ export default function Archive() {
                     <div className="flex items-center gap-2">
                       <span
                         className={`material-symbols-outlined text-sm ${
-                          pattern.id === "head-shoulders" ? "text-accent-red" : pattern.type === "reversal" ? "text-primary" : pattern.type === "continuation" ? "text-primary/70" : "text-primary/60"
+                          pattern.sentiment === "bearish" ? "text-accent-red" : pattern.type === "reversal" ? "text-primary" : pattern.type === "continuation" ? "text-primary/70" : "text-primary/60"
                         }`}
                       >
-                        {pattern.id === "head-shoulders" ? "arrow_downward" : pattern.type === "reversal" ? "arrow_upward" : pattern.type === "continuation" ? "trending_flat" : "remove"}
+                        {pattern.type === "reversal"
+                          ? pattern.sentiment === "bearish"
+                            ? "arrow_downward"
+                            : "arrow_upward"
+                          : pattern.type === "continuation"
+                            ? "trending_flat"
+                            : "remove"}
                       </span>
                       <h4 className="text-slate-100 font-bold text-base font-display">{pattern.name}</h4>
+                      {pattern.rare ? (
+                        <span
+                          className="text-[9px] font-mono uppercase tracking-wide rounded border border-amber-500/60 text-amber-600 px-1 py-0.5"
+                          title="Advanced / rare: infrequent and less reliable than the core patterns. Confirm before acting."
+                        >
+                          Advanced / rare
+                        </span>
+                      ) : null}
                     </div>
                     <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
                       &gt; {pattern.type.toUpperCase()}_PATTERN<br />

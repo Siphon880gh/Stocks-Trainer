@@ -12,6 +12,8 @@ import {
 import YouTubeSearchLink from "./YouTubeSearchLink";
 import JargonText from "./JargonText";
 import { PATTERN_OHLC, SAMPLE_OHLC } from "../lib/ohlcData";
+import { mergeAnnotations } from "../lib/chartAnnotations";
+import { BUY_SELL_DISCLAIMER, SCENARIO_PAD_BARS } from "../lib/buySellDrill";
 import { getLiteracyTerm } from "../lib/literacyTerms";
 import { completeMilestoneFromQuiz } from "../lib/progressStore";
 import { getOverlay, splitHintTerms } from "../lib/overlays";
@@ -52,6 +54,17 @@ export default function QuizModal({
   const question = questions[currentIndex];
   const accuracy = totalAnswered > 0 ? Math.round((correctCount / totalAnswered) * 100) : 0;
   const groupName = QUIZ_GROUPS.find((g) => g.id === groupId)?.name ?? "Quiz";
+  const isLargeChart = question?.chartSize === "large";
+  // Annotations that would give the answer away stay hidden until the answer is submitted.
+  const heroAnnotations = question
+    ? submitted
+      ? mergeAnnotations(question.annotations ?? {}, question.revealAnnotations ?? {})
+      : question.annotations
+    : undefined;
+  const optionLabel = (o: QuizOption | undefined) =>
+    o ? (question?.optionsAreCharts && o.chartKey ? `Chart ${o.label}` : o.label) : "";
+  const correctOption = question?.options.find((o) => o.id === question.correctAnswer);
+  const pickedOption = question?.options.find((o) => o.id === selectedOption);
 
   const handleSubmit = useCallback(() => {
     if (!selectedOption || submitted) return;
@@ -170,6 +183,14 @@ export default function QuizModal({
 
         {/* Quiz Content */}
         <div className="p-6 space-y-6">
+          {groupId === "buy-or-sell" ? (
+            <p className="text-[12px] text-muted border border-line rounded-lg px-4 py-2">
+              <span className="font-semibold text-ink">{BUY_SELL_DISCLAIMER}</span> Read the candles only: is there a
+              confirmed reason to buy, a confirmed reason to sell, or no clear edge (wait)? Every answer explains the
+              pattern, the confirmation, and where the idea would be wrong.
+            </p>
+          ) : null}
+
           {/* Question */}
           <div className="bg-surface border border-line rounded-xl p-6">
             <span className="text-xs text-muted">Question {question.id}</span>
@@ -184,7 +205,10 @@ export default function QuizModal({
             <FinancialSnapshotCard snapshotId={question.snapshotId} />
           ) : question.overlayId || question.patternKey ? (
             <div className="overflow-hidden">
-              <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">SAMPLE chart · educational</p>
+              <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">
+                SAMPLE chart · educational
+                {question.revealAnnotations && !submitted ? " · levels and plan appear after you answer" : ""}
+              </p>
               {question.overlayId ? (
                   <MarketChart
                     data={SAMPLE_OHLC}
@@ -199,10 +223,12 @@ export default function QuizModal({
                 ) : (
                   <CandlestickChart
                     data={PATTERN_OHLC[question.patternKey ?? "hammer"] ?? PATTERN_OHLC.hammer}
-                    height={260}
+                    height={isLargeChart ? 380 : 260}
                     highlightIndex={question.highlightIndex ?? 2}
                     showScaleControls={false}
                     markers={question.priceMarkers}
+                    annotations={heroAnnotations}
+                    padRightBars={isLargeChart ? SCENARIO_PAD_BARS : undefined}
                   />
                 )}
             </div>
@@ -220,6 +246,8 @@ export default function QuizModal({
                     </span>{" "}
                     beside a phrase if you want the definition, then pick the best read.
                   </>
+                ) : groupId === "price-action" || groupId === "supply-demand" || groupId === "buy-or-sell" ? (
+                  <>Concept check: no chart needed for this one. Answer from the definitions, then read the debrief.</>
                 ) : (
                   <>
                     Equities vocabulary drill — no chart required. Answer from definitions, then read the
@@ -275,6 +303,24 @@ export default function QuizModal({
                   {selectedOption === question.correctAnswer ? "CORRECT" : "INCORRECT"}
                 </p>
               </div>
+              <div className="flex gap-2">
+                <span className="text-primary opacity-50">&gt;</span>
+                <p className="text-ink not-italic">
+                  {selectedOption === question.correctAnswer ? "Your answer" : "Correct answer"}:{" "}
+                  <span className="font-semibold">{optionLabel(correctOption)}</span>
+                  {selectedOption !== question.correctAnswer && pickedOption ? (
+                    <span className="text-muted"> (you picked {optionLabel(pickedOption)})</span>
+                  ) : null}
+                </p>
+              </div>
+              {selectedOption !== question.correctAnswer && pickedOption?.feedback ? (
+                <div className="flex gap-2">
+                  <span className="text-primary opacity-50">&gt;</span>
+                  <p className="text-accent-red/90">
+                    Why not {optionLabel(pickedOption)}: <JargonText text={pickedOption.feedback} />
+                  </p>
+                </div>
+              ) : null}
               <div className="flex gap-2">
                 <span className="text-primary opacity-50">&gt;</span>
                 <p className="text-slate-300 italic">

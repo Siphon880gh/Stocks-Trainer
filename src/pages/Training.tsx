@@ -151,6 +151,9 @@ export default function Training() {
                   g.id === "candle-anatomy" ||
                   g.id === "candle-reading" ||
                   g.id === "candle-pattern-book" ||
+                  g.id === "buy-or-sell" ||
+                  g.id === "price-action" ||
+                  g.id === "supply-demand" ||
                   g.id === "indicators" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
@@ -281,6 +284,51 @@ export default function Training() {
                 Answer sheet
               </button>
             )}
+          </div>
+        </div>
+
+        {/* Buy or Sell? drill — its own section so it is easy to find */}
+        <div className="w-full max-w-xl panel p-6 space-y-3" aria-labelledby="buy-sell-title">
+          <div className="flex items-center gap-4">
+            <span className="material-symbols-outlined text-4xl text-primary">swap_vert</span>
+            <div>
+              <h2 id="buy-sell-title" className="text-xl font-semibold">
+                Buy or Sell?
+              </h2>
+              <p className="text-muted text-sm mt-1">
+                Read the candles and choose Buy, Sell, or Wait. Every candlestick pattern in both directions, cases
+                where waiting is right, and larger charts (double tops, head and shoulders, trendlines, breakouts,
+                supply and demand zones) whose levels and trade plan appear after you answer.
+              </p>
+            </div>
+          </div>
+          <p className="text-[12px] text-muted">
+            Learning drill, not trading advice. SAMPLE charts; no orders or real money.{" "}
+            {getQuestionsForGroup("buy-or-sell").length} questions.
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedGroup("buy-or-sell");
+                setQuizStartIndex(undefined);
+                setIsQuizOpen(true);
+              }}
+              className="bg-primary hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg flex items-center gap-2"
+            >
+              <span className="material-symbols-outlined">play_arrow</span>
+              Start Buy or Sell?
+            </button>
+            <span className="text-[13px] text-muted">
+              Warm up with{" "}
+              <button type="button" className="underline text-primary" onClick={() => setSelectedGroup("price-action")}>
+                Price Action
+              </button>{" "}
+              and{" "}
+              <button type="button" className="underline text-primary" onClick={() => setSelectedGroup("supply-demand")}>
+                Supply &amp; Demand
+              </button>
+            </span>
           </div>
         </div>
 

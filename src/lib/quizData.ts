@@ -1,4 +1,15 @@
 import type { AssetClass } from "./samplePacks";
+import type { ChartAnnotations } from "./chartAnnotations";
+import {
+  EXTRA_FAMILY_QUESTIONS,
+  LONG_SHORT_CANDLE_QUESTIONS,
+  PRICE_ACTION_QUESTIONS,
+  SUPPLY_DEMAND_QUESTIONS,
+} from "./quizCandleExtras";
+import { BUY_SELL_QUESTIONS } from "./buySellDrill";
+import { ADVANCED_QUESTIONS, ADVANCED_RARE_KEYS, familyKeys } from "./advancedPatterns";
+
+export { PRICE_ACTION_QUESTIONS, SUPPLY_DEMAND_QUESTIONS, BUY_SELL_QUESTIONS };
 
 export type PatternId =
   | "doji"
@@ -40,7 +51,69 @@ export type PatternId =
   | "falling-three-methods"
   | "mat-hold"
   | "upside-tasuki-gap"
-  | "downside-tasuki-gap";
+  | "downside-tasuki-gap"
+  | "long-green-candle"
+  | "long-red-candle"
+  | "short-green-candle"
+  | "short-red-candle"
+  | "bullish-closing-marubozu"
+  | "bearish-closing-marubozu"
+  | "bullish-opening-marubozu"
+  | "bearish-opening-marubozu"
+  | "long-legged-doji"
+  | "cross-doji"
+  | "inverted-cross-doji"
+  | "dragonfly-doji"
+  | "gravestone-doji"
+  | "bullish-kicker"
+  | "bearish-kicker"
+  | "bullish-abandoned-baby"
+  | "bearish-abandoned-baby"
+  | "bullish-tri-star"
+  | "bearish-tri-star"
+  | "two-crows"
+  | "upside-gap-two-crows"
+  | "bullish-three-line-strike"
+  | "bearish-three-line-strike"
+  | "bullish-breakaway"
+  | "bearish-breakaway"
+  | "bullish-separating-lines"
+  | "bearish-separating-lines"
+  | "bullish-side-by-side-white-lines"
+  | "bearish-side-by-side-white-lines"
+  | "in-neck"
+  | "thrusting"
+  | "upside-gap-three-methods"
+  | "downside-gap-three-methods"
+  | "bearish-mat-hold"
+  | "inverse-head-shoulders"
+  | "supply-zone"
+  | "demand-zone"
+  | "bullish-harami-cross"
+  | "bearish-harami-cross"
+  | "morning-doji-star"
+  | "evening-doji-star"
+  | "high-wave"
+  | "rickshaw-man"
+  | "stick-sandwich"
+  | "homing-pigeon"
+  | "ladder-bottom"
+  | "concealing-baby-swallow"
+  | "unique-three-river-bottom"
+  | "advance-block"
+  | "deliberation"
+  | "matching-low"
+  | "three-stars-in-the-south"
+  | "identical-three-crows"
+  | "takuri-line"
+  | "last-engulfing-bottom"
+  | "last-engulfing-top"
+  | "above-the-stomach"
+  | "below-the-stomach"
+  | "bullish-hikkake"
+  | "bearish-hikkake"
+  | "triple-top"
+  | "triple-bottom";
 
 export interface QuizOption {
   id: "A" | "B" | "C" | "D" | "E";
@@ -50,6 +123,8 @@ export interface QuizOption {
   /** When set, this option is a selectable mini chart (pick-the-chart questions). */
   chartKey?: string;
   chartHighlightIndex?: number;
+  /** Shown after a wrong pick of this option: why this choice does not fit. */
+  feedback?: string;
 }
 
 export interface QuizQuestion {
@@ -73,6 +148,12 @@ export interface QuizQuestion {
   samplePackId?: string;
   /** Optional labeled price lines on the hero candle chart (e.g. Open / Close). */
   priceMarkers?: Array<{ price: number; label: string }>;
+  /** Chart annotations shown before and after answering (levels, zones, markers). */
+  annotations?: ChartAnnotations;
+  /** Chart annotations shown only after the answer is submitted (they would give the answer away). */
+  revealAnnotations?: ChartAnnotations;
+  /** "large" = wide scenario chart (40–70 bars) with room on the right for the plan boxes. */
+  chartSize?: "large";
 }
 
 /** Build numbered chart choices (1…n) for “which chart is the pattern?” questions. */
@@ -1206,7 +1287,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     prompt: "Which description matches a Rising Wedge?",
     correctAnswer: "A",
     options: RISING_WEDGE_DESC_OPTIONS,
-    explanation: "Upward converging lines. SAMPLE: a break of the lower line still needs later bars.",
+    explanation: "Upward converging lines: buying is tiring, so it is usually read as bearish (a reversal after an uptrend, or a continuation bounce in a downtrend). A break of the lower line still needs later bars. SAMPLE teaching.",
     patternKey: "rising-wedge",
   },
   {
@@ -1838,7 +1919,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     prompt: "Three rising green bodies in a row after a decline. Name it.",
     correctAnswer: "C",
     options: THREE_WHITE_NAME_OPTIONS,
-    explanation: "Three White Soldiers. Not a Morning Star and not one engulfing bar.",
+    explanation: "Three White Soldiers: a bullish reversal after a decline. Not a Morning Star and not one engulfing bar.",
     patternKey: "three-white-soldiers",
     highlightIndex: 3,
   },
@@ -1910,7 +1991,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     prompt: "Three falling red bodies in a row after a rally. Name it.",
     correctAnswer: "B",
     options: THREE_CROWS_NAME_OPTIONS,
-    explanation: "Three Black Crows. Not an Evening Star and not one engulfing bar.",
+    explanation: "Three Black Crows: a bearish reversal after a rally. Not an Evening Star and not one engulfing bar.",
     patternKey: "three-black-crows",
     highlightIndex: 3,
   },
@@ -2117,7 +2198,7 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     prompt: "Which description matches a Falling Wedge?",
     correctAnswer: "A",
     options: FALLING_WEDGE_DESC_OPTIONS,
-    explanation: "Downward converging lines. SAMPLE: a break of the upper line still needs later bars.",
+    explanation: "Downward converging lines: selling is tiring, so it is usually read as bullish (a reversal after a downtrend, or a continuation pullback in an uptrend). A break of the upper line still needs later bars. SAMPLE teaching.",
     patternKey: "falling-wedge",
   },
   {
@@ -2656,6 +2737,9 @@ export const QUIZ_QUESTIONS: QuizQuestion[] = [
     highlightIndex: 5,
     glossaryTermId: "pattern-confirmation",
   },
+  // New families (doji / marubozu variants, gap reversals, crows & strikes, gap continuations, neck patterns, inverse H&S)
+  ...EXTRA_FAMILY_QUESTIONS,
+  ...ADVANCED_QUESTIONS,
 ];
 
 /** Candlestick anatomy — OHLC parts and red/green (no pattern ID). */
@@ -3062,6 +3146,8 @@ export const CANDLE_READING_QUESTIONS: QuizQuestion[] = [
     highlightIndex: 3,
     glossaryTermId: "strong-move-candle",
   },
+  // Long vs short candles (OC-18 … OC-22)
+  ...LONG_SHORT_CANDLE_QUESTIONS,
 ];
 
 /** Candlestick pattern book — reading rules and pattern criteria from the PDF lessons (cross-links existing families). */
@@ -5221,6 +5307,12 @@ export type QuizGroupId =
   | "counterattack-on-neck"
   | "continuation-methods"
   | "candle-pattern-book"
+  | "gap-reversals"
+  | "crows-and-strikes"
+  | "advanced-rare"
+  | "price-action"
+  | "supply-demand"
+  | "buy-or-sell"
   | "indicators"
   | "equity-patterns"
   | "equity-literacy"
@@ -5291,6 +5383,24 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     icon: "menu_book",
   },
   {
+    id: "buy-or-sell",
+    name: "Buy or Sell?",
+    description: "Read the candles and choose Buy, Sell, or Wait. Every pattern plus larger scenario charts. Learning drill, not trading advice.",
+    icon: "swap_vert",
+  },
+  {
+    id: "price-action",
+    name: "Price Action",
+    description: "Support / resistance, HH-HL / LH-LL, breakout & retest, entry / stop / target, BOS, sweeps, order blocks",
+    icon: "timeline",
+  },
+  {
+    id: "supply-demand",
+    name: "Supply & Demand Zones",
+    description: "Base candle, impulse departure, fresh vs tested zones, zone flips",
+    icon: "layers",
+  },
+  {
     id: "equity-patterns",
     name: "Equity Pack Drills",
     description: "Candle/indicator drills tagged to E1 equity SAMPLE packs (post-P0)",
@@ -5306,25 +5416,33 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   { id: "inverted-hammer", name: "Inverted Hammer", description: "Long upper shadow, bottom reversal", icon: "vertical_align_bottom" },
   { id: "morning-star", name: "Morning Star", description: "Three-candle bullish reversal", icon: "nightlight" },
   { id: "tweezer-bottom", name: "Tweezer Bottom", description: "Two candles share a similar low after a decline", icon: "vertical_align_bottom" },
-  { id: "rising-wedge", name: "Rising Wedge", description: "Upward converging lines — buying is tiring", icon: "trending_up" },
+  { id: "rising-wedge", name: "Rising Wedge", description: "Upward converging lines — buying is tiring (usually bearish)", icon: "trending_up" },
   { id: "bull-flag", name: "Bull Flag", description: "Sharp rise, then a tight pause", icon: "flag" },
-  { id: "double-top", name: "Double Top", description: "Two similar highs with a dip between", icon: "keyboard_double_arrow_up" },
-  { id: "double-bottom", name: "Double Bottom", description: "Two similar lows with a bounce between", icon: "keyboard_double_arrow_down" },
+  { id: "double-top", name: "Double & Triple Top", description: "Two or three similar highs; bearish once the neckline breaks", icon: "keyboard_double_arrow_up" },
+  { id: "double-bottom", name: "Double & Triple Bottom", description: "Two or three similar lows; bullish once the neckline breaks", icon: "keyboard_double_arrow_down" },
   { id: "triangle", name: "Triangle", description: "Highs and lows squeeze — wait for the break", icon: "change_history" },
   { id: "hanging-man", name: "Hanging Man", description: "Long lower wick after a rally — wait for the next print", icon: "vertical_align_bottom" },
   { id: "evening-star", name: "Evening Star", description: "Green · small · red at the highs", icon: "nightlight" },
   { id: "piercing-line", name: "Piercing Line", description: "Green closes into the prior red body", icon: "trending_up" },
   { id: "dark-cloud-cover", name: "Dark Cloud Cover", description: "Red closes into the prior green body", icon: "trending_down" },
-  { id: "three-white-soldiers", name: "Three White Soldiers", description: "Three rising green bodies in a row", icon: "trending_up" },
-  { id: "three-black-crows", name: "Three Black Crows", description: "Three falling red bodies in a row", icon: "trending_down" },
+  { id: "three-white-soldiers", name: "Three White Soldiers", description: "Three rising green bodies after a decline — bullish reversal", icon: "trending_up" },
+  { id: "three-black-crows", name: "Three Black Crows", description: "Three falling red bodies after a rally — bearish reversal", icon: "trending_down" },
   { id: "harami", name: "Harami", description: "Small body nested inside the prior larger body (bullish and bearish)", icon: "compare_arrows" },
   { id: "tweezer-top", name: "Tweezer Top", description: "Two candles share a similar high after a rally", icon: "vertical_align_top" },
-  { id: "falling-wedge", name: "Falling Wedge", description: "Downward converging lines — selling is tiring", icon: "trending_down" },
+  { id: "falling-wedge", name: "Falling Wedge", description: "Downward converging lines — selling is tiring (usually bullish)", icon: "trending_down" },
   { id: "head-shoulders", name: "Head and Shoulders", description: "Three peaks; the center peak is highest", icon: "account_tree" },
   { id: "marubozu", name: "Marubozu", description: "Tall body, no wicks—one side controlled the whole period", icon: "crop_portrait" },
   { id: "three-inside-outside", name: "Three Inside / Outside", description: "Harami or engulfing, then a confirming third candle", icon: "view_week" },
   { id: "counterattack-on-neck", name: "Counterattack & On-Neck", description: "Second candle closes right back at the prior close", icon: "horizontal_rule" },
-  { id: "continuation-methods", name: "Three Methods, Mat Hold & Tasuki", description: "Pauses inside a trend that often resolve the same way", icon: "trending_up" },
+  { id: "continuation-methods", name: "Continuation Patterns", description: "Three methods, mat holds, tasuki & gap three methods, separating and side-by-side lines", icon: "trending_up" },
+  { id: "gap-reversals", name: "Kickers, Abandoned Babies & Tri-Stars", description: "Gap reversals and rare doji tops / bottoms", icon: "swap_vert" },
+  { id: "crows-and-strikes", name: "Crows, Strikes & Breakaways", description: "Two crows, upside gap two crows, three-line strike, breakaway", icon: "stacked_line_chart" },
+  {
+    id: "advanced-rare",
+    name: "Advanced & Rare Patterns",
+    description: "Stick sandwich, homing pigeon, ladder bottom, baby swallow, three river, advance block, hikkake and more. Infrequent and less reliable: always confirm.",
+    icon: "auto_awesome",
+  },
   {
     id: "futures-literacy",
     name: "Futures Literacy",
@@ -5353,19 +5471,73 @@ export const QUIZ_GROUPS: QuizGroup[] = [
 
 function patternKeysForGroup(groupId: QuizGroupId): string[] {
   if (groupId === "engulfing") return ["engulfing", "bullish-engulfing", "bearish-engulfing"];
-  if (groupId === "doji") return ["doji", "spinning-top"];
-  if (groupId === "harami") return ["harami", "bearish-harami"];
-  if (groupId === "marubozu") return ["white-marubozu", "black-marubozu"];
+  if (groupId === "doji")
+    return [
+      "doji",
+      "spinning-top",
+      "long-legged-doji",
+      "cross-doji",
+      "inverted-cross-doji",
+      "dragonfly-doji",
+      "gravestone-doji",
+      ...familyKeys("doji"),
+    ];
+  if (groupId === "head-shoulders") return ["head-shoulders", "inverse-head-shoulders"];
+  if (groupId === "harami") return ["harami", "bearish-harami", ...familyKeys("harami")];
+  if (groupId === "morning-star") return ["morning-star", ...familyKeys("morning-star")];
+  if (groupId === "evening-star") return ["evening-star", ...familyKeys("evening-star")];
+  if (groupId === "double-top") return ["double-top", "triple-top"];
+  if (groupId === "double-bottom") return ["double-bottom", "triple-bottom"];
+  if (groupId === "rising-wedge") return ["rising-wedge", "sc-rising-wedge"];
+  if (groupId === "falling-wedge") return ["falling-wedge", "sc-falling-wedge"];
+  if (groupId === "advanced-rare") return ADVANCED_RARE_KEYS;
+  if (groupId === "marubozu")
+    return [
+      "white-marubozu",
+      "black-marubozu",
+      "bullish-closing-marubozu",
+      "bearish-closing-marubozu",
+      "bullish-opening-marubozu",
+      "bearish-opening-marubozu",
+    ];
   if (groupId === "three-inside-outside")
     return ["three-inside-up", "three-inside-down", "three-outside-up", "three-outside-down"];
-  if (groupId === "counterattack-on-neck") return ["bullish-counterattack", "bearish-counterattack", "on-neck"];
+  if (groupId === "counterattack-on-neck")
+    return ["bullish-counterattack", "bearish-counterattack", "on-neck", "in-neck", "thrusting"];
   if (groupId === "continuation-methods")
-    return ["rising-three-methods", "falling-three-methods", "mat-hold", "upside-tasuki-gap", "downside-tasuki-gap"];
+    return [
+      "rising-three-methods",
+      "falling-three-methods",
+      "mat-hold",
+      "bearish-mat-hold",
+      "upside-tasuki-gap",
+      "downside-tasuki-gap",
+      "upside-gap-three-methods",
+      "downside-gap-three-methods",
+      "bullish-separating-lines",
+      "bearish-separating-lines",
+      "bullish-side-by-side-white-lines",
+      "bearish-side-by-side-white-lines",
+    ];
+  if (groupId === "gap-reversals")
+    return ["bullish-kicker", "bearish-kicker", "bullish-abandoned-baby", "bearish-abandoned-baby", "bullish-tri-star", "bearish-tri-star"];
+  if (groupId === "crows-and-strikes")
+    return [
+      "two-crows",
+      "upside-gap-two-crows",
+      "bullish-three-line-strike",
+      "bearish-three-line-strike",
+      "bullish-breakaway",
+      "bearish-breakaway",
+    ];
   return [groupId];
 }
 
 function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
+  if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
+  if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
+  if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
   if (groupId === "candle-reading") return CANDLE_READING_QUESTIONS;
   if (groupId === "candle-pattern-book") return PATTERN_BOOK_QUESTIONS;
@@ -5384,6 +5556,9 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
 
 export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
+  if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
+  if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
+  if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
   if (groupId === "candle-reading") return CANDLE_READING_QUESTIONS;
   if (groupId === "candle-pattern-book") return PATTERN_BOOK_QUESTIONS;

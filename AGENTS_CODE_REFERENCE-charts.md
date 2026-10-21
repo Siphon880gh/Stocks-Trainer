@@ -64,7 +64,7 @@ Colors: bullish `#38ff14`, bearish `#ff3814` (constants near top).
 
 ## CandlestickChart (SVG)
 
-**Props:** `data: OHLC[]`, `height?`, `highlightIndex?`.
+**Props:** `data: OHLC[]`, `height?`, `highlightIndex?`, `markers?`, `annotations?: ChartAnnotations` (levels, trendlines, zones, labeled points from `src/lib/chartAnnotations.ts`; tones map supply/risk → down color, demand/reward → up color, entry → highlight), `padRightBars?` (empty slots on the right for zones / risk-reward boxes). More than 24 slots switches to a dense 720px-wide layout.
 
 Custom scale math near top (`y()` / `x()` helpers); hover tooltip state; candles as SVG rects + wicks in the render body. `highlightIndex` draws emphasis for quiz “which candle?” prompts.
 

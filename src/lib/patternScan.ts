@@ -427,7 +427,7 @@ function scanStructuresOnWindow(data: OHLC[]): DetectedPattern[] {
     push(
       "Rising Wedge",
       82,
-      "Price rises inside two upward, converging lines. SAMPLE read — buying is tiring.",
+      "Price rises inside two upward, converging lines. SAMPLE read — buying is tiring; usually bearish once the lower line breaks.",
     );
   }
   if (isTriangle(data)) {
@@ -440,7 +440,7 @@ function scanStructuresOnWindow(data: OHLC[]): DetectedPattern[] {
     push(
       "Falling Wedge",
       82,
-      "Price consolidates between two downward, converging lines. SAMPLE teaching.",
+      "Price falls inside two downward, converging lines. SAMPLE read — selling is tiring; usually bullish once the upper line breaks.",
     );
   }
   return out;
@@ -565,7 +565,7 @@ export function scanPatterns(data: OHLC[]): DetectedPattern[] {
         index: i,
         name: "Three White Soldiers",
         confidence: 87,
-        description: "Three rising green bodies in a row. SAMPLE read: buyers in control.",
+        description: "Three rising green bodies in a row. SAMPLE read: after a decline, a bullish reversal (buyers in control).",
       });
     }
     if (isThreeBlackCrows(data, i)) {
@@ -573,7 +573,7 @@ export function scanPatterns(data: OHLC[]): DetectedPattern[] {
         index: i,
         name: "Three Black Crows",
         confidence: 87,
-        description: "Three falling red bodies in a row. SAMPLE read: sellers in control.",
+        description: "Three falling red bodies in a row. SAMPLE read: after a rally, a bearish reversal (sellers in control).",
       });
     }
     if (
