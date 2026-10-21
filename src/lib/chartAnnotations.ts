@@ -80,3 +80,29 @@ export function trendlinePriceAt(t: ChartTrendline, index: number): number {
   const slope = (t.to.price - t.from.price) / (t.to.index - t.from.index);
   return t.from.price + slope * (index - t.from.index);
 }
+
+/** One step of a stair-step line: from `fromIndex` the line sits at `price` until the next step. */
+export interface ChartStep {
+  fromIndex: number;
+  price: number;
+}
+
+/**
+ * A stair-step line (e.g. a trailing stop raised under each new higher low) as plain trendlines:
+ * a flat segment per step plus a vertical riser where the level changes. The last step runs to the
+ * right edge. Only the last segment carries `label`, so the chart is not cluttered.
+ */
+export function stairStepLines(steps: ChartStep[], opts: { label?: string; tone?: AnnotationTone } = {}): ChartTrendline[] {
+  const tone = opts.tone ?? "risk";
+  const lines: ChartTrendline[] = [];
+  steps.forEach((s, i) => {
+    const next = steps[i + 1];
+    if (next) {
+      lines.push({ from: { index: s.fromIndex, price: s.price }, to: { index: next.fromIndex, price: s.price }, tone });
+      lines.push({ from: { index: next.fromIndex, price: s.price }, to: { index: next.fromIndex, price: next.price }, tone });
+    } else {
+      lines.push({ from: { index: s.fromIndex, price: s.price }, to: { index: s.fromIndex + 1, price: s.price }, tone, extend: true, label: opts.label });
+    }
+  });
+  return lines;
+}

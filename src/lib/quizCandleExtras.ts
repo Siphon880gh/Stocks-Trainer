@@ -900,7 +900,7 @@ const rr = (key: string) => {
   return (Math.abs(p.target - p.entry) / Math.abs(p.entry - p.stop)).toFixed(1);
 };
 
-/** Price action: S/R, structure, breakouts, entries / stops / targets, SMC labels. */
+/** Price action: S/R, structure, breakouts, entries / stops / targets, SMC labels, trade management (PA-18+). */
 export const PRICE_ACTION_QUESTIONS: QuizQuestion[] = [
   {
     id: "PA-01",
@@ -1147,7 +1147,205 @@ export const PRICE_ACTION_QUESTIONS: QuizQuestion[] = [
     explanation: "Retests improve the odds and give a clear invalidation point. They do not guarantee anything.",
     glossaryTermId: "breakout-retest",
   },
+  ...tradeManagementQuestions(),
 ];
+
+/** Trade management (framework: wait through uncertainty → entry from a defined edge → stop at invalidation → trailing stop → profit target). Numbers come from the scenario facts. */
+function tradeManagementQuestions(): QuizQuestion[] {
+  const n = (v: number) => v.toLocaleString("en-US");
+  const rg = sf("sc-range-middle");
+  const pb = sf("sc-pullback-entry");
+  const pbPlan = plan("sc-pullback-entry");
+  const t = sf("sc-trailing-stop");
+  const risk0 = t.entry - t.baseStop;
+  const locked = t.stop3 - t.entry;
+  const left = t.target - t.close;
+  const riskLeft = t.close - t.stop3;
+  const planned = (t.target - t.entry) / risk0;
+  const trail = { patternKey: "sc-trailing-stop", highlightIndex: lastIdx("sc-trailing-stop"), chartSize: "large" as const, revealAnnotations: sc("sc-trailing-stop").reveal };
+  return [
+    {
+      id: "PA-18",
+      prompt: `Price has chopped between about ${n(rg.rangeBottom)} and ${n(rg.rangeTop)} for weeks, and the latest candle sits in the middle. What would turn this uncertainty into a clear signal?`,
+      correctAnswer: "A",
+      options: textOptions([
+        [`A close above ${n(rg.rangeTop)} (or below ${n(rg.rangeBottom)}), ideally with a retest that holds`, "Price leaves the chop at an edge."],
+        ["One more green candle in the middle of the range", "The middle has no edge in either direction."],
+        ["Time: after enough sideways weeks, a move is due", "Time alone is not a signal."],
+      ]),
+      explanation:
+        "Chop in the middle of a range is the no-trade zone: no nearby place to be wrong and no clear target. A close through an edge (or a confirmed reaction at one) is the clear signal; until then, waiting is the decision.",
+      patternKey: "sc-range-middle",
+      highlightIndex: lastIdx("sc-range-middle"),
+      chartSize: "large",
+      revealAnnotations: sc("sc-range-middle").reveal,
+      glossaryTermId: "no-trade-zone",
+    },
+    {
+      id: "PA-19",
+      prompt: "Which of these is NOT an entry from a defined edge?",
+      correctAnswer: "C",
+      options: textOptions([
+        ["Buying a breakout retest that holds above the old resistance", "Breakout: wrong if price closes back under the level."],
+        ["Buying a bounce off a higher low in an uptrend after a green confirmation", "Pullback: wrong if the higher low breaks."],
+        ["Buying because the stock has fallen a lot and \"feels cheap\"", "An opinion with no price where the idea is wrong."],
+      ]),
+      explanation:
+        "Breakout, pullback and reversal entries each come with a price that proves the idea wrong, so the stop has an obvious home. \"Feels cheap\" has no such price.",
+      glossaryTermId: "entry-types",
+    },
+    {
+      id: "PA-20",
+      prompt: `Uptrend: higher lows at about ${n(pb.l1)} and ${n(pb.l2)} along a rising trendline. Price dipped to ${n(pb.pbLow)}, at the trendline and near the old swing high, and the last candle closed green. Which entry type is this?`,
+      correctAnswer: "B",
+      options: textOptions([
+        ["Breakout", "No level is being closed through; price is dipping, not breaking out."],
+        ["Pullback: buying a higher low inside an existing uptrend", "Trend, dip to support, confirmation."],
+        ["Reversal", "The trend is not changing direction; it is continuing."],
+      ]),
+      explanation:
+        "A pullback entry buys a dip inside a trend at a defined level (here the rising trendline and the old swing high) once a candle confirms. The reveal shows the higher lows, the trendline and the plan.",
+      patternKey: "sc-pullback-entry",
+      highlightIndex: lastIdx("sc-pullback-entry"),
+      chartSize: "large",
+      revealAnnotations: sc("sc-pullback-entry").reveal,
+      glossaryTermId: "entry-types",
+    },
+    {
+      id: "PA-21",
+      prompt: "A downtrend makes a double bottom at support, then closes above the neckline. Which entry type is that?",
+      correctAnswer: "C",
+      options: textOptions([
+        ["Pullback", "A pullback buys a dip inside an uptrend; here the trend was down."],
+        ["Breakout of a range top", "There was no range top being broken; it is a pattern at support."],
+        ["Reversal: a confirmed pattern at a level turns the trend", "The neckline close is the confirmation."],
+      ]),
+      explanation:
+        "Reversal entries come from a completed pattern at a level (double bottom, inverse head and shoulders, hammer plus confirmation at support). The edge is the pattern's low: below it, the reversal idea is wrong.",
+      patternKey: "sc-double-bottom",
+      highlightIndex: lastIdx("sc-double-bottom"),
+      chartSize: "large",
+      revealAnnotations: sc("sc-double-bottom").reveal,
+      glossaryTermId: "entry-types",
+    },
+    {
+      id: "PA-22",
+      prompt: `SAMPLE pullback trade: entry ${n(pbPlan.entry)}, stop ${n(pbPlan.stop)}. Why does the stop sit there?`,
+      correctAnswer: "A",
+      options: textOptions([
+        [`Just under the pullback low (${n(pb.pbLow)}): a close below it breaks the higher-low structure, so the idea is wrong`, "Invalidation."],
+        ["It is a round amount the trader is comfortable losing", "The stop goes where the idea fails, then the size fits the stop."],
+        ["As far away as possible so it never gets hit", "Wide stops make the losses big."],
+      ]),
+      explanation: `Risk = ${n(pbPlan.entry)} − ${n(pbPlan.stop)} = ${n(pbPlan.entry - pbPlan.stop)}; the 2R target is ${n(pbPlan.target)}. The stop is set by the chart (where the thesis is invalidated), which keeps the loss small and known before entry.`,
+      patternKey: "sc-pullback-entry",
+      highlightIndex: lastIdx("sc-pullback-entry"),
+      chartSize: "large",
+      revealAnnotations: sc("sc-pullback-entry").reveal,
+      glossaryTermId: "risk-reward",
+    },
+    {
+      id: "PA-23",
+      prompt: "Price is drifting toward your stop. What keeps the loss small?",
+      correctAnswer: "A",
+      options: textOptions([
+        ["Leave the stop where the idea is wrong and accept the planned loss", "Small, known loss."],
+        ["Move the stop lower to give the trade more room", "That turns a small planned loss into a bigger unplanned one."],
+        ["Cancel the stop and wait for price to come back", "Hope is not a plan; losses can grow without limit."],
+      ]),
+      explanation: "The stop was placed at invalidation before entry. Moving it away only makes the loss larger when the idea is already failing.",
+      glossaryTermId: "risk-reward",
+    },
+    {
+      id: "PA-24",
+      prompt: `SAMPLE long: bought the breakout at ${n(t.entry)}, first stop ${n(t.baseStop)} (back under the ${n(t.breakLevel)} base top). The trend then printed higher lows at ${n(t.hl1)}, ${n(t.hl2)} and ${n(t.hl3)}. Trailing the stop 40 under each new higher low, where is it now?`,
+      correctAnswer: "B",
+      options: textOptions([
+        [n(t.baseStop), "That is the original stop; it was never raised."],
+        [n(t.stop3), "40 under the latest higher low."],
+        [n(t.stop1), "That was the first step; two higher lows came after it."],
+      ]),
+      explanation: `The stop climbs in steps: ${n(t.baseStop)} → ${n(t.stop1)} → ${n(t.stop2)} → ${n(t.stop3)}. The reveal draws it as a red stair-step under price.`,
+      ...trail,
+      glossaryTermId: "trailing-stop",
+    },
+    {
+      id: "PA-25",
+      prompt: "Why trail the stop up instead of leaving it at the original stop?",
+      correctAnswer: "A",
+      options: textOptions([
+        ["It protects open profit while still letting the trend run", "Lock in, stay in."],
+        ["It guarantees a bigger win", "A trailed stop gives back some profit when it is hit."],
+        ["It lets you sell at the exact top", "No stop does that; it exits after the turn."],
+      ]),
+      explanation: "Once price has moved away from a new higher low, a stop under that low turns part of the open profit into a locked-in gain. The trade stays on as long as the trend keeps making higher lows.",
+      glossaryTermId: "trailing-stop",
+    },
+    {
+      id: "PA-26",
+      prompt: "On a long trade, when may the trailing stop move down?",
+      correctAnswer: "C",
+      options: textOptions([
+        ["When price pulls back toward it", "That is exactly when the stop is doing its job."],
+        ["After a big red candle, to avoid getting stopped out", "Lowering the stop raises the loss."],
+        ["Never: a long's trailing stop only moves up (or stays)", "One-way ratchet."],
+      ]),
+      explanation: "A trailing stop is a ratchet. Raising it protects profit; lowering it undoes the plan and turns a small loss into a big one.",
+      glossaryTermId: "trailing-stop",
+    },
+    {
+      id: "PA-27",
+      prompt: `Same trade: the stop now sits at ${n(t.stop3)}. If price closes below it, how does the trade end versus the ${n(t.entry)} entry?`,
+      correctAnswer: "A",
+      options: textOptions([
+        [`A locked-in gain of about ${n(locked)} (${(locked / risk0).toFixed(1)}R on the ${n(risk0)} first risk)`, "Stop above entry = profit protected."],
+        [`A loss of ${n(risk0)}`, "That was the first stop, before it was trailed."],
+        ["Nothing happens; trailing stops only work in downtrends", "They work in any trend you are trading with."],
+      ]),
+      explanation: `${n(t.stop3)} − ${n(t.entry)} = ${n(locked)}. Once the trailed stop is above entry, the worst case is a gain.`,
+      ...trail,
+      glossaryTermId: "trailing-stop",
+    },
+    {
+      id: "PA-28",
+      prompt: `Price is ${n(t.close)}, just under the planned target ${n(t.target)} (the old high); the trailed stop is ${n(t.stop3)}. What does the plan say?`,
+      correctAnswer: "B",
+      options: textOptions([
+        ["Hold for more: the trend is strong", "The reward left is now smaller than the risk left."],
+        [`Take profit (or tighten the stop): about ${n(left)} left to gain versus ${n(riskLeft)} to lose (≈${(left / riskLeft).toFixed(1)}:1)`, "Reward no longer justifies risk."],
+        ["Add to the position at the old high", "Buying into resistance with little room left."],
+      ]),
+      explanation: `Reward left = ${n(t.target)} − ${n(t.close)} = ${n(left)}; risk to the trailed stop = ${n(t.close)} − ${n(t.stop3)} = ${n(riskLeft)}. When what is left to gain is smaller than what you can give back, the target has done its job. The reveal shows both boxes.`,
+      ...trail,
+      glossaryTermId: "taking-profit",
+    },
+    {
+      id: "PA-29",
+      prompt: `Before buying the breakout at ${n(t.entry)} with the stop at ${n(t.baseStop)}, what reward-to-risk did the old high at ${n(t.target)} offer?`,
+      correctAnswer: "A",
+      options: textOptions([
+        [`About ${planned.toFixed(1)}:1 (${n(t.target - t.entry)} reward vs ${n(risk0)} risk), worth taking`, "Planned before entry."],
+        ["About 1:1", `The target is ${n(t.target - t.entry)} away and the stop only ${n(risk0)}.`],
+        ["You only know after the trade", "Target and stop are both known before entry."],
+      ]),
+      explanation: "Plan the reward before entry: find the target (here the old high) and the stop, and only take the trade if the ratio is worth it.",
+      ...trail,
+      glossaryTermId: "taking-profit",
+    },
+    {
+      id: "PA-30",
+      prompt: "A breakout looks good, but the next resistance is only 150 above the entry and the stop at invalidation is 300 below. What does planning the reward first say?",
+      correctAnswer: "C",
+      options: textOptions([
+        ["Take it: breakouts usually run", "The plan says the payoff is too small."],
+        ["Take it, but move the stop to 150 so the ratio looks like 1:1", "The stop belongs at invalidation, not where the math looks nice."],
+        ["Skip it or wait for a better entry: 150 / 300 is only 0.5:1", "Reward does not justify the risk."],
+      ]),
+      explanation: "If the realistic target is closer than the stop, one loss wipes out two wins. Skip it, or wait for a retest that gives a closer stop or for the resistance to break.",
+      glossaryTermId: "taking-profit",
+    },
+  ];
+}
 
 const zoneShade = (top: number, bottom: number, label: string): ChartAnnotations => ({
   zones: [{ fromIndex: 3, top, bottom, label, tone: "neutral" }],

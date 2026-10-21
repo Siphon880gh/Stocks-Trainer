@@ -390,6 +390,38 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
       "Entry: where the idea starts (often after the confirmation candle). Stop loss: the price that proves the idea wrong (beyond the pattern's extreme, the retest wick, or the zone). Target: a realistic area such as the next level. Risk:reward compares the distance to target with the distance to stop; 1:2 means aiming for twice what you risk. A good R:R does not make a trade likely to win; it only means one winner can pay for more than one loser. SAMPLE process, not advice.",
   },
   {
+    id: "no-trade-zone",
+    name: "Uncertainty: the no-trade zone",
+    category: "process",
+    summary: "Choppy price with no edge nearby is a reason to wait, not a reason to guess.",
+    detail:
+      "When price chops sideways, overlaps candle to candle and sits far from support or resistance, there is no defined place to be wrong and no clear target, so any entry is an opinion. Waiting is a valid decision. The picture changes when price reaches an edge or gives a clear signal: a close through the range, a held retest, or a confirmed reversal at a level. SAMPLE process, not advice.",
+  },
+  {
+    id: "entry-types",
+    name: "Entry types: breakout, pullback, reversal",
+    category: "process",
+    summary: "Enter from a defined edge, not an opinion.",
+    detail:
+      "Breakout: price closes through a level it failed at before (often bought on the retest). Pullback: in an uptrend (higher highs and higher lows), price dips to a higher low, a rising trendline or an old swing high and a candle confirms the bounce. Reversal: a confirmed pattern at a level (double bottom, inverse head and shoulders, hammer plus confirmation at support). Each one gives an edge: a price where the idea is clearly wrong, so the stop has an obvious home. \"It looks cheap\" or \"it has to go up\" are opinions with no such price. SAMPLE process, not advice.",
+  },
+  {
+    id: "trailing-stop",
+    name: "Trailing stop",
+    category: "process",
+    summary: "Raise the exit as price trends higher (never lower it) to protect open profit.",
+    detail:
+      "Start with the stop at invalidation (for example back under the broken level). Each time the trend prints a new higher low and moves away from it, raise the stop to just under that low, so it climbs in steps under price. Some traders trail under a moving average or a fixed distance instead. A long's trailing stop only moves up; moving it down turns a small loss into a big one. A trailed stop gives back some profit when it is hit, and that is the cost of staying in the trend. SAMPLE process, not advice.",
+  },
+  {
+    id: "taking-profit",
+    name: "Profit target and taking profit",
+    category: "process",
+    summary: "Plan the reward before entry; take gains when what is left no longer justifies the risk.",
+    detail:
+      "Before entering, find a realistic target (the next resistance, an old high, a measured move) and check that the reward is worth the risk, for example at least 2:1. If the next level is barely further than your stop, skip the trade or wait for a better entry. During the trade, compare the reward left (target minus price) with the risk left (price minus the current stop). When price is at the target and the reward left is smaller than the risk to the stop, taking profit or tightening the stop is the plan; hoping for more is not. SAMPLE process, not advice.",
+  },
+  {
     id: "trendline",
     name: "Trendline",
     category: "process",

@@ -552,6 +552,15 @@ const SCENARIO_TEXT: ScenarioText[] = [
     sell: "Selling here fights a falling wedge that just closed above its upper line: the downtrend lost its ceiling.",
     wait: "The wedge has broken with a close above the upper line and a green follow-through. That is the confirmation.",
     term: "wedge",
+  },  {
+    id: "BS-SC-18",
+    key: "sc-pullback-entry",
+    prompt: SCENARIO_PROMPT,
+    walkthrough: `Structure: an uptrend of higher highs and higher lows (about ${fmt(f("sc-pullback-entry").l1)}, then ${fmt(f("sc-pullback-entry").l2)}) along a rising trendline. Price pulled back to ${fmt(f("sc-pullback-entry").pbLow)}, where the trendline meets the old swing high near ${fmt(f("sc-pullback-entry").h2)}, and held. Confirmation: the decision candle closed green off that level. This is a pullback entry: the edge is the pullback low, so the stop goes just under it.`,
+    buy: "",
+    sell: "Selling here fights an intact uptrend: the higher low held at the trendline and the candle closed green.",
+    wait: "The trend, the level and the confirming green close are all in place. A close below the pullback low would have changed the answer.",
+    term: "entry-types",
   },
 ];
 

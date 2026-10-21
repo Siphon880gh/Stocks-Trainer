@@ -5,7 +5,7 @@
  * `reveal` holds the levels / entry / stop / target drawn after the learner answers.
  */
 import type { OHLC } from "./ohlcData";
-import { trendlinePriceAt, type ChartAnnotations, type ChartTrendline } from "./chartAnnotations";
+import { stairStepLines, trendlinePriceAt, type ChartAnnotations, type ChartTrendline } from "./chartAnnotations";
 
 export type ScenarioDecision = "buy" | "sell" | "wait";
 
@@ -919,6 +919,134 @@ function wedge(rising: boolean): ScenarioChart {
   };
 }
 
+// ---------- Uptrend pullback to the rising trendline + old swing high → buy (pullback entry) ----------
+function pullbackEntry(): ScenarioChart {
+  const L1 = 63300;
+  const L2 = 63700;
+  const { bars, marks: m } = walk(62900, [
+    { to: 63750, bars: 6, mark: "h1" },
+    { to: L1 + 70, bars: 4, mark: "l1" },
+    { to: 64150, bars: 6, mark: "h2" },
+    { to: L2 + 70, bars: 4, mark: "l2" },
+    { to: 64600, bars: 6, mark: "h3" },
+    { to: 64230, bars: 5, mark: "pb" },
+    { to: 64420, bars: 1, mark: "decision" },
+  ], 401);
+  setBar(bars, m.l1, bars[m.l1].open, bars[m.l1].open + 30, L1, L1 + 70);
+  setBar(bars, m.l2, bars[m.l2].open, bars[m.l2].open + 30, L2, L2 + 70);
+  const line: ChartTrendline = { from: { index: m.l1, price: L1 }, to: { index: m.l2, price: L2 }, label: "Rising trendline (higher lows)", tone: "demand", extend: true };
+  const at = (i: number) => r5(trendlinePriceAt(line, i));
+  floorLow(bars, m.l1 + 1, m.pb - 1, (i) => at(i) + 40, [m.l2]);
+  const pbLow = at(m.pb) + 10;
+  setBar(bars, m.pb, bars[m.pb].open, bars[m.pb].open + 30, pbLow, pbLow + 90);
+  setBar(bars, m.decision, pbLow + 90, 64460, pbLow + 60, 64420);
+  const h2 = maxHigh(bars, m.l1 + 1, m.l2 - 1);
+  const plan = buyPlan(bars[m.decision].close, pbLow);
+  return {
+    key: "sc-pullback-entry",
+    bars,
+    decision: "buy",
+    plan,
+    trendline: line,
+    facts: { l1: L1, l2: L2, pbLow, h2, l1Index: m.l1, l2Index: m.l2, pbIndex: m.pb },
+    reveal: merge(
+      {
+        trendlines: [line],
+        levels: [{ price: h2, label: "Old swing high → support", tone: "neutral" }],
+        points: [
+          { index: m.l1, price: L1, label: "HL", tone: "demand" },
+          { index: m.l2, price: L2, label: "HL", tone: "demand" },
+          { index: m.pb, price: pbLow, label: "Pullback holds", tone: "demand" },
+        ],
+      },
+      planAnnotations(plan, m.decision)
+    ),
+  };
+}
+
+// ---------- Breakout long managed with a trailing stop into the planned target (trade management) ----------
+function trailingStop(): ScenarioChart {
+  const T = 65450;
+  const B = 64000;
+  const L = [64250, 64600, 64900];
+  const { bars, marks: m } = walk(65300, [
+    { to: 63750, bars: 8, mark: "drop" },
+    { to: 63950, bars: 4 },
+    { to: 63680, bars: 4, mark: "baseLow" },
+    { to: 63960, bars: 4 },
+    { to: 64300, bars: 2, mark: "brk" },
+    { to: 64700, bars: 4, mark: "sh1" },
+    { to: L[0] + 70, bars: 3, mark: "hl1" },
+    { to: 65000, bars: 4, mark: "sh2" },
+    { to: L[1] + 70, bars: 3, mark: "hl2" },
+    { to: 65250, bars: 4, mark: "sh3" },
+    { to: L[2] + 70, bars: 3, mark: "hl3" },
+    { to: 65300, bars: 3, mark: "decision" },
+  ], 409);
+  setBar(bars, 0, 65380, T, 65150, 65200);
+  capHigh(bars, 1, m.decision - 1, T - 80);
+  capHigh(bars, m.drop + 1, m.brk - 1, B);
+  floorLow(bars, m.drop + 1, m.brk - 1, 63600, [m.baseLow]);
+  setBar(bars, m.baseLow, bars[m.baseLow].open, bars[m.baseLow].open + 30, 63600, 63680);
+  const brkOpen = bars[m.brk - 1].close;
+  setBar(bars, m.brk, brkOpen, 64340, brkOpen - 10, 64300);
+  // Initial stop: back under the broken level, where the breakout idea fails.
+  const baseStop = r5(B - 40);
+  const stops = L.map((l) => r5(l - 40));
+  const hl = [m.hl1, m.hl2, m.hl3];
+  const sh = [m.sh1, m.sh2, m.sh3];
+  floorLow(bars, m.brk + 1, m.sh1, L[0] + 30);
+  hl.forEach((h, k) => {
+    floorLow(bars, sh[k] + 1, h - 1, L[k] + 30);
+    setBar(bars, h, bars[h].open, bars[h].open + 30, L[k], L[k] + 70);
+    const end = k < 2 ? sh[k + 1] : m.decision - 1;
+    floorLow(bars, h + 1, end, L[k] + 40);
+  });
+  setBar(bars, m.decision, bars[m.decision].open, T - 10, 65180, 65300);
+  const entry = bars[m.brk].close;
+  const close = bars[m.decision].close;
+  const steps = [{ fromIndex: m.brk, price: baseStop }, ...hl.map((h, k) => ({ fromIndex: h + 1, price: stops[k] }))];
+  const trail = stops[2];
+  return {
+    key: "sc-trailing-stop",
+    bars,
+    // Trade-management chart (Learn only, not in the Buy-or-Sell drill): the decision is to take profit on the long.
+    decision: "sell",
+    facts: {
+      target: T,
+      breakLevel: B,
+      entry,
+      baseStop,
+      hl1: L[0],
+      hl2: L[1],
+      hl3: L[2],
+      stop1: stops[0],
+      stop2: stops[1],
+      stop3: stops[2],
+      close,
+      brkIndex: m.brk,
+      hl1Index: m.hl1,
+      hl2Index: m.hl2,
+      hl3Index: m.hl3,
+    },
+    reveal: {
+      levels: [
+        { price: T, label: "Planned target: old high", tone: "supply" },
+        { price: B, label: "Base top (breakout level)", tone: "neutral" },
+      ],
+      trendlines: stairStepLines(steps, { label: "Trailing stop", tone: "risk" }),
+      zones: [
+        { fromIndex: m.decision, top: T, bottom: close, label: "Reward left", tone: "reward", labelAt: "top" },
+        { fromIndex: m.decision, top: close, bottom: trail, label: "Risk to trailed stop", tone: "risk", labelAt: "bottom" },
+      ],
+      points: [
+        { index: m.brk, price: entry, label: "Entry (breakout)", tone: "entry" },
+        ...hl.map((h, k) => ({ index: h, price: L[k], label: `HL ${k + 1}`, tone: "demand" as const })),
+      ],
+    },
+  };
+}
+
 const ALL = [
   doubleTop(),
   doubleBottom(),
@@ -937,6 +1065,8 @@ const ALL = [
   tripleBottom(),
   wedge(true),
   wedge(false),
+  pullbackEntry(),
+  trailingStop(),
 ];
 
 /** Empty slots on the right of scenario charts so risk/reward boxes have room. */

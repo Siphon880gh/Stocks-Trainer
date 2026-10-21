@@ -85,6 +85,8 @@ Backward-compatible API any feature can reuse (earnings reactions, macro release
 
 **Consumers:** `src/lib/financials/reactionCharts.ts` (earnings reaction charts) via the Read the Print game.
 
+**Stair-step lines:** `stairStepLines(steps, { label?, tone? })` in `chartAnnotations.ts` turns `{ fromIndex, price }[]` into plain `trendlines` (flat segment + vertical riser per step; the last step extends right and carries the label). No renderer change. Used for the trailing stop on `sc-trailing-stop`.
+
 ---
 
 ## Code flow (charts)
