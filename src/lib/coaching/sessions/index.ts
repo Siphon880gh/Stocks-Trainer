@@ -69,6 +69,7 @@ import { trailingStopExitSession } from "./trailing-stop-exit";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
 import { candleNeedsContextSession } from "./candle-needs-context";
 import { rsiVsTrendSession } from "./rsi-vs-trend";
+import { firstPaperTradeSession } from "./first-paper-trade";
 
 /** Folder export — add new session modules here (or extend via authoring skill). */
 export const COACHING_SESSION_MODULES: CoachingSession[] = [
@@ -142,4 +143,5 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   supplyDemandZoneRetestSession,
   candleNeedsContextSession,
   rsiVsTrendSession,
+  firstPaperTradeSession,
 ];

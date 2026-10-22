@@ -23,6 +23,7 @@ import {
   type CoachingSession,
 } from "./index.ts";
 import { chaseVsFadeSession } from "./sessions/chase-vs-fade.ts";
+import { firstPaperTradeSession } from "./sessions/first-paper-trade.ts";
 import { cryptoSolAltHypeSession } from "./sessions/crypto-sol-alt-hype.ts";
 import { coachSessionMatchesClass } from "../marketNavigator.ts";
 import type { AssetClass } from "../samplePacks.ts";
@@ -81,6 +82,11 @@ describe("coaching validation", () => {
 });
 
 describe("coaching discovery", () => {
+  it("accepts the Beginner Academy first-paper-trade session and lists it", () => {
+    const r = validateCoachingSession(firstPaperTradeSession);
+    assert.equal(r.ok, true, JSON.stringify(r.issues));
+    assert.ok(listSessions().some((x) => x.slug === "first-paper-trade"), "first-paper-trade listed");
+  });
   it("lists valid sessions including sample", () => {
     const list = listSessions();
     assert.ok(list.length >= 4);

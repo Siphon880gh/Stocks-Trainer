@@ -3,8 +3,8 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA10.M4.S1
-- `status`: in progress — BA0–BA8.M3, BA9 and BA10.M1–M3 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4 PENDING WENG SIGN-OFF
+- `current_story`: BA10.M5.S1
+- `status`: in progress — BA0–BA8.M3, BA9 and BA10.M1–M4 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4 PENDING WENG SIGN-OFF
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
 - `checkpoint_mode`: continue
@@ -170,4 +170,10 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - Milestone-specific: every fill answer is produced by running the order through `placeOrder` + `stepBar`; P&L answers by `applyFill` / `unrealizedPnl` / `realizedPnl` / `equity` / `maxDrawdown`; options answers by `summarize` / `payoffPerContract`. The test recomputes all 50 numeric answers with plain arithmetic. Ids unique across every Learn bank, unit quiz and options check; letters A 17 · B 16 · C 16 · D 14; glossary chips resolve; no banned or Greeks wording.
 - Decision: no AppChrome nav item. The header nav is a fixed six-item set (Home, Learn, Charts, Cases, Coach, Playbooks); the Academy is reached from the Home placement and Today cards, the Training card (BA10.M4) and unit chips, per the BA10.M1 "else a Training card" rule.
 - Next: BA10.M4.S1 (coach session first-paper-trade, Training card, Home tip).
+
+### 2026-10-22 01:15 PT · BA10.M4 · PASS (one local commit)
+- Changed: src/lib/coaching/sessions/first-paper-trade.ts (new: dip entry → buy limit, size from the stop, stop placed with the entry, gap through the stop fills at the open; every wrong turn rewinds) + sessions/index.ts (registered); coaching.test.ts (+1 case: validator accepts it and `listSessions` lists it); src/lib/academy/homeTip.ts + components/academy/AcademyHomeTip.tsx (new; Dashboard line under the Macro tip); components/academy/AcademyTrainingCard.tsx (new; Training page after the Macro card; the three Academy quiz groups also highlighted in the group picker); components/QuizModal.tsx (+3 lines: an Academy-specific line in the no-chart "Literacy" box instead of "Equities vocabulary drill"); integration.render.test.tsx (new).
+- Verify: lint 0 · test:coaching 25/25 · test:lib 164/164 · test:financials 333/333 · test:macro 72/72 · test:academy 146/146 · check:build ok · dist/ untouched.
+- Screenshots (checkpoints/): ba10-training-card.png, ba10-coach-first-paper-trade.png, ba10-home-tip.png, ba10-learn-orders-fills.png.
+- Next: BA10.M5.S1 (docs + floors audit).
 

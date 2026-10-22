@@ -23,6 +23,7 @@ import MarketChart from "./MarketChart";
 import FinancialSnapshotCard from "./FinancialSnapshotCard";
 import FinancialsQuizExhibit from "./financials/FinancialsQuizExhibit";
 import MacroQuizExhibit from "./macro/MacroQuizExhibit";
+import { isAcademyQuizGroup } from "../lib/academy/quiz/groups";
 import IndicatorDetailModal from "./IndicatorDetailModal";
 
 interface QuizModalProps {
@@ -256,6 +257,8 @@ export default function QuizModal({
                   </>
                 ) : groupId === "price-action" || groupId === "supply-demand" || groupId === "buy-or-sell" ? (
                   <>Concept check: no chart needed for this one. Answer from the definitions, then read the debrief.</>
+                ) : isAcademyQuizGroup(groupId) ? (
+                  <>Beginner Academy drill on SAMPLE prices with SIMULATED money: no chart needed. Work it out, then read the debrief.</>
                 ) : (
                   <>
                     Equities vocabulary drill — no chart required. Answer from definitions, then read the

@@ -21,6 +21,8 @@ import FinancialsTrainingCard from "../components/financials/FinancialsTrainingC
 import { isFinancialsQuizGroup } from "../lib/financials/quizBanks";
 import MacroTrainingCard from "../components/macro/MacroTrainingCard";
 import { isMacroQuizGroup } from "../lib/macro/quiz/banks";
+import AcademyTrainingCard from "../components/academy/AcademyTrainingCard";
+import { isAcademyQuizGroup } from "../lib/academy/quiz/groups";
 import { hasGradedPracticeDraw } from "../lib/practiceDraw";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 
@@ -166,7 +168,8 @@ export default function Training() {
                   g.id === "earnings-jargon" ||
                   g.id === "financial-drills" ||
                   isFinancialsQuizGroup(g.id) ||
-                  isMacroQuizGroup(g.id);
+                  isMacroQuizGroup(g.id) ||
+                  isAcademyQuizGroup(g.id);
                 return (
                   <span key={g.id} className="group/yt inline-flex items-center gap-1">
                     <button
@@ -341,6 +344,8 @@ export default function Training() {
         <FinancialsTrainingCard onSelectGroup={setSelectedGroup} />
 
         <MacroTrainingCard onSelectGroup={setSelectedGroup} />
+
+        <AcademyTrainingCard onSelectGroup={setSelectedGroup} />
 
         <div className="w-full max-w-xl panel p-4 text-sm space-y-2">
           <p className="font-semibold">Misc Practices</p>

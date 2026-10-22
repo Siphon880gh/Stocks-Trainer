@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import MacroHomeTip from "../components/macro/MacroHomeTip";
 import PlacementCard from "../components/academy/PlacementCard";
 import TodayCard from "../components/academy/TodayCard";
+import AcademyHomeTip from "../components/academy/AcademyHomeTip";
 import { Link } from "react-router-dom";
 import GoalPicker from "../components/GoalPicker";
 import JargonText from "../components/JargonText";
@@ -390,6 +391,7 @@ export default function Dashboard() {
       </details>
 
       <MacroHomeTip />
+      <AcademyHomeTip />
 
       {(recoveryMessage || drawTip) && (
         <section className="text-[12px] text-muted space-y-1">

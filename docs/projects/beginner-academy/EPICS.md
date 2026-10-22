@@ -261,7 +261,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - **Build:** groups `orders-and-fills` (`BA-OF-`), `paper-pnl` (`BA-PL-`), `options-ladder` (`BA-OL-`) spread into `QUIZ_GROUPS` after the macro groups (type-only import pattern, `isAcademyQuizGroup` short-circuit). Numeric answers computed by the engine / payoff math.
 - **Verify:** BASE + `academyQuiz.test.ts` (recompute numeric answers, ids unique across all banks, letter balance).
 
-### [ ] BA10.M4 — Coach session + Training card + Home tip
+### [x] BA10.M4 — Coach session + Training card + Home tip
 - **Build:** coach session `first-paper-trade` (deterministic decision graph per `coaching/types.ts`), `AcademyTrainingCard` on Training, a Home tip line.
 - **Verify:** BASE (`test:coaching` must include the new session via the existing validator) + render tests.
 
