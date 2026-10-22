@@ -583,6 +583,42 @@ const flows = {
     await p.goto(base + "/training?group=missing-wicks", { waitUntil: "networkidle" });
     check(/Missing Wicks/.test(await p.locator("main").innerText()), `mw: Learn group missing @${w}`);
   },
+  async "Record-setting traders: banner, Verified by + source on every card, reported box, verdict, drill"(p, w) {
+    await p.goto(base + "/practice/record-traders", { waitUntil: "networkidle" });
+    const banner = p.getByTestId("rt-banner");
+    check((await banner.innerText()).trim() === "This section includes only feats a neutral third party confirmed, with the verifier and source shown for each.", `rt: banner text @${w}`);
+    const bb = await banner.boundingBox();
+    const firstCard = await p.getByTestId("rt-card").first().boundingBox();
+    check(bb && firstCard && bb.y < firstCard.y, `rt: banner not above cards @${w}`);
+    const n = await p.getByTestId("rt-card").count();
+    check(n >= 10, `rt: only ${n} cards @${w}`);
+    for (let i = 0; i < n; i++) {
+      const card = p.getByTestId("rt-card").nth(i);
+      check(/^Verified by: \S/.test((await card.getByTestId("rt-verifier").innerText()).trim()), `rt: card ${i} verifier @${w}`);
+      check(/^https:\/\//.test((await card.getByTestId("rt-source").getAttribute("href")) ?? ""), `rt: card ${i} source @${w}`);
+    }
+    const cards = await p.getByTestId("rt-cards").innerText();
+    check(!/Simons|Medallion|Livermore/.test(cards), `rt: unaudited entry inside verified cards @${w}`);
+    check(/not publicly audited/.test(await p.getByTestId("rt-reported").innerText()), `rt: reported box @${w}`);
+    check((await p.getByTestId("rt-reported").getByText("Verified by").count()) === 0, `rt: reported box has Verified by @${w}`);
+    await p.getByTestId("rt-more-zanger").click();
+    const z = await p.getByTestId("rt-detail-zanger").innerText();
+    check(/20–35%/.test(z) && /2:1 margin/.test(z) && /same day/.test(z), `rt: zanger rules @${w}`);
+    check(/58%/.test(await p.getByTestId("rt-verdict").innerText()), `rt: verdict evidence @${w}`);
+    check((await p.locator('[data-testid="rt-checklist"] input[type=checkbox]').count()) === 10, `rt: checklist @${w}`);
+    for (let i = 0; i < 5; i++) {
+      const c = p.getByTestId(`rt-claim-${i}`);
+      await p.getByTestId(`rt-claim-${i}-${i % 2 ? "strong" : "weak"}`).click();
+      check(/Right\.|Not quite/.test(await c.innerText()), `rt: claim ${i} feedback @${w}`);
+    }
+    check(/5\/5 answered · 5 right/.test(await p.getByTestId("rt-drill-score").innerText()), `rt: drill score @${w}`);
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("record-traders"), `rt: practice not marked done @${w}`);
+    check((await overflow(p)) <= 1, `rt overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/record-traders-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=record-traders", { waitUntil: "networkidle" });
+    check(/record-setting traders/i.test(await p.locator("main").innerText()), `rt: Learn group missing @${w}`);
+  },
 };
 
 
