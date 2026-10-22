@@ -24,6 +24,7 @@ import MarketChart from "./MarketChart";
 import FinancialSnapshotCard from "./FinancialSnapshotCard";
 import FinancialsQuizExhibit from "./financials/FinancialsQuizExhibit";
 import MacroQuizExhibit from "./macro/MacroQuizExhibit";
+import OscillatorQuizExhibit from "./practice/OscillatorQuizExhibit";
 import { isAcademyQuizGroup } from "../lib/academy/quiz/groups";
 import IndicatorDetailModal from "./IndicatorDetailModal";
 
@@ -213,6 +214,8 @@ export default function QuizModal({
             <FinancialsQuizExhibit exhibit={question.financialsExhibit} revealed={submitted} />
           ) : question.macroExhibit ? (
             <MacroQuizExhibit exhibit={question.macroExhibit} revealed={submitted} />
+          ) : question.oscillatorExhibit ? (
+            <OscillatorQuizExhibit exhibit={question.oscillatorExhibit} revealed={submitted} />
           ) : question.snapshotId ? (
             <FinancialSnapshotCard snapshotId={question.snapshotId} />
           ) : question.overlayId || question.patternKey ? (

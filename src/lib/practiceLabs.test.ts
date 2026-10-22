@@ -40,6 +40,7 @@ describe("misc practice catalog", () => {
       "Invalidation",
       "Support and resistance",
       "EMA, SMA and MACD (long charts)",
+      "Oscillators & volatility stop",
     ]);
   });
 });

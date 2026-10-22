@@ -75,6 +75,8 @@ Other market types ship as SAMPLE browse (**E9**). **E10** adds a **Market Navig
 | **Options basics** *(education only)* | Covered calls to spreads, one level at a time | **Options ladder** (`/academy/options`) | Level check passed (80%); approves nothing |
 | **Strategy kits** | One setup from an authoritative source: strategy, coaching, case, chart | **Playbooks** (`/playbooks`) | Kit read; linked case / coach opened |
 | **Indicator & chart labs** | EMA / SMA / MACD on long charts; levels, lookalikes, invalidation, replay | Practice labs (`/practice/*`) | Lab round scored; done mark on Learn |
+| **Oscillators & volatility stops** | RSI, MACD, fast / slow stochastic, KDJ, ATR and an ATR volatility stop; why same-family oscillators are not independent confirmation | **Oscillators & volatility stop** lab (`/practice/oscillators`) + Learn **Oscillators & Volatility Stops** | Computed chart questions answered; indicators treated as support, not signals |
+| **Float, short-dated options & risk** | Float and float turnover, short-dated option risk, position sizing, why the same market gives different results | Learn **Float, Short-Dated Options & Risk** | Quiz passed (70%) |
 
 ---
 
@@ -180,6 +182,7 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | `/practice-draw` | Sketch + grade |
 | `/practice/flashcards` · `/practice/label` · `/practice/regime` · `/practice/replay` · `/practice/plan` · `/practice/hunt` · `/practice/lookalike` · `/practice/invalidation` · `/practice/levels` | Practice labs (flashcards, labelling, trend vs range, bar replay, mark the plan, pattern hunt, lookalikes, invalidation, support & resistance) |
 | `/practice/ema-macd` | EMA, SMA and MACD lab on long SIMULATED charts |
+| `/practice/oscillators` | Oscillators & volatility stop lab: RSI, fast / slow stochastic, KDJ, ATR volatility stop on long SIMULATED charts |
 | `/practice/statements` | Statements lab · 13-week cash forecast · biotech readout day |
 | `/practice/read-the-print` · `/practice/mark-the-band` | Earnings reaction game · expected-move band |
 | `/coach` · `/coach/:slug` | Step-by-step coaching (decision trees · no LLM) |
@@ -223,7 +226,7 @@ Beginner training modelled on how broker apps such as Webull teach new investors
 - **Paper trading** (`/paper`, SIMULATED): 8 SAMPLE tapes; market, limit, stop, stop-limit and trailing-stop orders (Day / GTC); **bracket / OCO** exits; **short selling**; **fractional and dollar** buys; **fees and slippage**; a **trade journal with CSV export**; **multiple portfolios**.
 - **Challenges** (`/paper/challenges`): 10 challenges plus a challenge of the week; a half-played challenge is saved with **Resume** / **Restart**.
 - **Rewards:** virtual points, 10 ranks and 24 badges.
-- **Options ladder** (`/academy/options`): 4 levels, 13 strategies with P&L-at-expiration charts; each level opens after an 8-question check (80%, 3 attempts per 24 h). It approves nothing.
+- **Options ladder** (`/academy/options`): 4 levels, 13 strategies with P&L-at-expiration charts; each level opens after an 8-question check (80%, 3 attempts per 24 h). It approves nothing. A **short-dated options** note explains that holding an option briefly is not the same as buying a contract near expiration.
 - Learn groups **Orders & Fills**, **Paper P&L**, **Options Ladder**, and Coach **Your first paper trade**.
 
 ### Financials & earnings
@@ -239,6 +242,14 @@ Beginner training modelled on how broker apps such as Webull teach new investors
 - **Buy or Sell?** drill: 119 questions — patterns, wait cases and scenarios; reveals use large charts.
 - **Supply & Demand Zones** and **Price Action**, including trade management: entry types, stops at invalidation, targets and trailing stops.
 - **EMA, SMA and MACD lab** (`/practice/ema-macd`): 3 long SIMULATED charts (120 bars) with 11 questions computed from the chart.
+
+### Oscillators & volatility stop (`/practice/oscillators`)
+
+- 3 long SIMULATED charts (120 bars): a strong climb, a choppy range, and a climb followed by a gap down. Each has its own lower panel (RSI + fast %K, fast vs slow stochastic, KDJ, or the volatility stop with ATR) and 11 questions computed from the chart.
+- Teaches: RSI 70 / 30 and why overbought can last in a strong trend; MACD signal-line crosses (often paired with RSI); the **fast stochastic** (%K, %D = SMA(3) of %K, 80 / 20) vs the **slow stochastic**; **KDJ** (K and D smoothed from the stochastic, J = 3K − 2D); why RSI, the stochastic and KDJ agreeing is not independent confirmation; **ATR** and an ATR **volatility stop** (a rule-based trailing stop) and why a stop level is not a guaranteed fill on a gap.
+- The rule throughout: indicators support a decision; they are not buy or sell signals. An entry still needs a position size, an exit plan and a defined risk limit.
+- Indicator formulas live in `src/lib/oscillators.ts` (tests check them against independent reference implementations); every cited source is listed on the page and in `src/lib/oscillatorSources.ts`.
+- Learn groups **Oscillators & Volatility Stops** (24 questions, including the lab's chart questions with the same SIMULATED chart) and **Float, Short-Dated Options & Risk** (14 questions: float and float turnover, short-dated options, position sizing, and why the same market can give very different results by sector, timing and risk management), plus 11 glossary terms in Archive.
 
 ### Playbooks (`/playbooks`)
 

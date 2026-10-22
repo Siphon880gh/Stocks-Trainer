@@ -13,6 +13,8 @@ import type { FinancialsExhibit } from "./financials/quizExhibit";
 import { MACRO_QUESTION_BANKS, MACRO_QUIZ_GROUPS, isMacroQuizGroup, type MacroQuizGroupId } from "./macro/quiz/banks";
 import type { MacroExhibit } from "./macro/quiz/exhibit";
 import { ACADEMY_QUESTION_BANKS, ACADEMY_QUIZ_GROUPS, isAcademyQuizGroup, type AcademyQuizGroupId } from "./academy/quiz/banks";
+import { OSCILLATOR_QUESTIONS, TRADING_RISK_QUESTIONS } from "./oscillatorQuiz";
+import type { OscChartId, OscPanel } from "./oscillatorLab";
 
 export { PRICE_ACTION_QUESTIONS, SUPPLY_DEMAND_QUESTIONS, BUY_SELL_QUESTIONS };
 
@@ -163,6 +165,8 @@ export interface QuizQuestion {
   financialsExhibit?: FinancialsExhibit;
   /** MF7: release / reaction-chart / curve exhibit from src/lib/macro (rendered by MacroQuizExhibit). */
   macroExhibit?: MacroExhibit;
+  /** Oscillators lab chart (SIMULATED) with one lower panel; `mark` is shown only after the answer. */
+  oscillatorExhibit?: { chartId: OscChartId; panel: OscPanel; mark?: number };
 }
 
 /** Build numbered chart choices (1…n) for “which chart is the pattern?” questions. */
@@ -5366,6 +5370,8 @@ export type QuizGroupId =
   | "supply-demand"
   | "buy-or-sell"
   | "indicators"
+  | "oscillators"
+  | "trading-risk"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5422,6 +5428,18 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   ...MACRO_QUIZ_GROUPS,
   ...ACADEMY_QUIZ_GROUPS,
   { id: "indicators", name: "Indicators", description: "Identify SMA, EMA, RSI, MACD, Bollinger Bands", icon: "show_chart" },
+  {
+    id: "oscillators",
+    name: "Oscillators & Volatility Stops",
+    description: "RSI, MACD, fast / slow stochastic, KDJ, ATR and the volatility stop, with SIMULATED chart questions. Not trading advice.",
+    icon: "ssid_chart",
+  },
+  {
+    id: "trading-risk",
+    name: "Float, Short-Dated Options & Risk",
+    description: "Float and float turnover, short-dated option risk, position sizing, and why the same market gives different results",
+    icon: "shield",
+  },
   {
     id: "candle-anatomy",
     name: "Candlestick Basics",
@@ -5596,6 +5614,8 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
   if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
+  if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
+  if (groupId === "trading-risk") return TRADING_RISK_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5620,6 +5640,8 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
   if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
+  if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
+  if (groupId === "trading-risk") return TRADING_RISK_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;

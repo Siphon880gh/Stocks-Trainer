@@ -39,7 +39,7 @@ export const OVERLAYS: OverlayDef[] = [
     name: "RSI",
     fullName: "Relative Strength Index",
     description:
-      "Oscillator 0–100. Measures speed of price changes. RSI above 70 = overbought; RSI below 30 = oversold. Divergences can signal reversals.",
+      "Oscillator 0–100. Measures speed of price changes. RSI above 70 = overbought; RSI below 30 = oversold. Overbought is not a reversal call: in a strong trend RSI can stay above 70 for a long time. Divergences can signal reversals.",
     useCase: "Overbought/oversold zones, momentum confirmation.",
   },
   {
@@ -48,7 +48,7 @@ export const OVERLAYS: OverlayDef[] = [
     name: "MACD",
     fullName: "Moving Average Convergence Divergence",
     description:
-      "Difference between fast and slow EMA. Signal line = EMA of MACD. Histogram shows momentum. Crossovers = potential entry/exit.",
+      "Difference between fast and slow EMA. Signal line = EMA of MACD. Histogram shows momentum. A cross above the signal line is commonly read as bullish, a cross below as bearish; often paired with RSI, and the two can disagree.",
     useCase: "Trend changes, momentum shifts, crossover signals.",
   },
   {

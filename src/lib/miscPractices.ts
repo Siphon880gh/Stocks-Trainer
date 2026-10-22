@@ -18,6 +18,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "invalidation", title: "Invalidation", to: "/practice/invalidation" },
   { id: "levels", title: "Support and resistance", to: "/practice/levels" },
   { id: "ema-macd", title: "EMA, SMA and MACD (long charts)", to: "/practice/ema-macd" },
+  { id: "oscillators", title: "Oscillators & volatility stop", to: "/practice/oscillators" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

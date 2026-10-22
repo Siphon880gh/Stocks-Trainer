@@ -30,6 +30,7 @@ export const APP_ROUTES: readonly string[] = [
   "/practice/invalidation",
   "/practice/levels",
   "/practice/ema-macd",
+  "/practice/oscillators",
   "/practice/statements",
   "/practice/read-the-print",
   "/practice/mark-the-band",

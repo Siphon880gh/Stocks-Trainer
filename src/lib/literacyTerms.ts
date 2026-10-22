@@ -2,6 +2,7 @@ import { ADVANCED_TERMS } from "./advancedPatterns";
 import { FINANCIAL_TERMS } from "./financials/terms";
 import { MACRO_TERMS } from "./macro/glossary";
 import { ACADEMY_TERMS } from "./academy/terms";
+import { OSCILLATOR_TERMS } from "./oscillatorTerms";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
@@ -412,7 +413,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "process",
     summary: "Raise the exit as price trends higher (never lower it) to protect open profit.",
     detail:
-      "Start with the stop at invalidation (for example back under the broken level). Each time the trend prints a new higher low and moves away from it, raise the stop to just under that low, so it climbs in steps under price. Some traders trail under a moving average or a fixed distance instead. A long's trailing stop only moves up; moving it down turns a small loss into a big one. A trailed stop gives back some profit when it is hit, and that is the cost of staying in the trend. SAMPLE process, not advice.",
+      "Start with the stop at invalidation (for example back under the broken level). Each time the trend prints a new higher low and moves away from it, raise the stop to just under that low, so it climbs in steps under price. Some traders trail under a moving average, a fixed distance, or a volatility stop (the best close minus ATR × a multiplier) instead. A long's trailing stop only moves up; moving it down turns a small loss into a big one. A trailed stop gives back some profit when it is hit, and that is the cost of staying in the trend. SAMPLE process, not advice.",
   },
   {
     id: "taking-profit",
@@ -650,6 +651,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...FINANCIAL_TERMS,
   ...MACRO_TERMS,
   ...ACADEMY_TERMS,
+  ...OSCILLATOR_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

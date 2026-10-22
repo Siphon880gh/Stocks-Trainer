@@ -31,6 +31,9 @@ const { getQuestionsForGroup } = await load("/src/lib/quizData.ts");
 const { UNIT_QUIZ_ITEMS } = await load("/src/lib/academy/content/unitQuizzes.ts");
 const { UNIT_ORDER } = await load("/src/lib/academy/content/levels.ts");
 const { emptyAcademy, ACADEMY_KEY } = await load("/src/lib/academy/storage.ts");
+const { oscQuestions } = await load("/src/lib/oscillatorLab.ts");
+/** Optional: QA_SHOTS=<dir> saves a screenshot of the oscillators lab at each width (never committed). */
+const SHOTS = process.env.QA_SHOTS;
 const stored = (p, key) => p.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "null"), key);
 const browser = await chromium.launch({ executablePath: CHROME, headless: true });
 const failures = [];
@@ -219,6 +222,26 @@ const flows = {
     await p.keyboard.press("Escape");
     await row.locator("button").first().click();
     check((await mainText()) !== before, `centre tap on the choice did nothing @${w}`);
+  },
+  async "Oscillators lab: volatility stop chart, computed key, Learn groups"(p, w) {
+    await p.goto(base + "/practice/oscillators", { waitUntil: "networkidle" });
+    check(/SIMULATED/.test(await p.locator("main").innerText()), `oscillators: no SIMULATED label @${w}`);
+    await p.getByTestId("osc-tab-climb-then-gap").click();
+    check((await p.locator('[data-testid="oscillator-chart"] [data-line="vstop"]').count()) === 1, `oscillators: no volatility stop line @${w}`);
+    const q = oscQuestions().find((x) => x.id === "gap-flip");
+    const card = p.locator(`[data-question="${q.id}"]`);
+    const key = q.options.find((o) => o.id === q.correct);
+    await card.locator("button", { hasText: key.label }).first().click();
+    check(/^Right\./.test(await card.getByTestId("osc-feedback").innerText()), `oscillators: computed key not graded right @${w}`);
+    check((await p.locator(`[data-testid="oscillator-chart"] [data-mark="${q.mark}"]`).count()) === 1, `oscillators: answer bar not marked @${w}`);
+    if (w < 600) {
+      const b = await card.getByRole("button").first().boundingBox();
+      check(b.height >= 44, `oscillators: choice target ${b.height}px tall @${w}`);
+    }
+    check((await overflow(p)) <= 1, `oscillators overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/oscillators-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=trading-risk", { waitUntil: "networkidle" });
+    check(/Float, Short-Dated Options & Risk/.test(await p.locator("main").innerText()), `Learn: trading-risk group missing @${w}`);
   },
 };
 
