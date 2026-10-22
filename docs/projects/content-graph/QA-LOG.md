@@ -175,3 +175,12 @@ Screenshots (box only): `/workspace/checkpoints/qa/technique-narratives{,-popove
 | Learn `missing-wicks` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/missing-wicks{,-popover,-explore}-{390,1280}.png`.
+
+## 2026-10-22 Record-setting traders (#14 + #15)
+
+| Flow | Result |
+|---|---|
+| `/practice/record-traders`, 390 and 1280 (e2e) | Banner text exact and above the cards; every card shows "Verified by:" and an https source link; Medallion/Livermore absent from the verified cards; reported box has no Verified by; Zanger detail shows 20–35% cup, 2:1 margin, same-day exit; verdict cites the 58% post-publication decline; 10 checklist items; 5-claim drill scores 5/5 and marks practice done; no overflow. |
+| Learn `record-traders` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/record-traders-{390,1280}.png`.
