@@ -184,3 +184,14 @@ Screenshots (box only): `/workspace/checkpoints/qa/missing-wicks{,-popover,-expl
 | Learn `record-traders` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/record-traders-{390,1280}.png`.
+
+## 2026-10-22 Pattern themes (#17)
+
+| Flow | Result |
+|---|---|
+| `/practice/pattern-themes`, 390 and 1280 (e2e) | 17 theme chips; selecting Failure lists Bull Trap; 19 quick-map rows; 5-step checklist completes and marks practice done; no overflow. |
+| `/archive?theme=failure` (e2e) | Only tagged patterns (bull/bear trap, hikkake…), no Morning Star; no horizontal overflow at 390 (card title rows now wrap their crypto/rare tags; tab row scrolls). The e2e overflow helper now measures against the visual viewport, since mobile emulation widened innerWidth and hid overflow. |
+| `/archive?open=hammer` (e2e) | Modal shows "Primary: Rejection" chip. |
+| Learn `pattern-themes` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/pattern-themes{,-modal}-{390,1280}.png`.
