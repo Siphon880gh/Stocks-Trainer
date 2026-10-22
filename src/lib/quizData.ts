@@ -29,6 +29,7 @@ import { FIB_MAP_QUESTIONS } from "./fibDecisionMap";
 import { FUT_OPT_QUESTIONS } from "./futuresOptionsBasics";
 import { NARRATIVE_QUESTIONS } from "./techniqueNarratives";
 import { MW_QUESTIONS } from "./missingWicks";
+import { RT_QUESTIONS } from "./recordTraders";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5404,6 +5405,7 @@ export type QuizGroupId =
   | "futures-vs-options"
   | "technique-narratives"
   | "missing-wicks"
+  | "record-traders"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5537,6 +5539,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Missing Wicks",
     description: "Shaven tops and bottoms, the OHLC rule, aggregating 1m into 15m and 1h, and why two intrabar paths can build the same hourly candle (SIMULATED)",
     icon: "zoom_in",
+  },
+  {
+    id: "record-traders",
+    name: "Record-setting traders",
+    description: "Verified trading records: who verified them, how they traded, whether it still works, and how to judge any track record.",
+    icon: "emoji_events",
   },
   {
     id: "candle-anatomy",
@@ -5743,6 +5751,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "futures-vs-options") return FUT_OPT_QUESTIONS;
   if (groupId === "technique-narratives") return NARRATIVE_QUESTIONS;
   if (groupId === "missing-wicks") return MW_QUESTIONS;
+  if (groupId === "record-traders") return RT_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5783,6 +5792,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "futures-vs-options") return FUT_OPT_QUESTIONS;
   if (groupId === "technique-narratives") return NARRATIVE_QUESTIONS;
   if (groupId === "missing-wicks") return MW_QUESTIONS;
+  if (groupId === "record-traders") return RT_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;

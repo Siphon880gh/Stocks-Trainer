@@ -32,6 +32,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "futures-vs-options", title: "Futures vs options & beginner toolkit", to: "/practice/futures-vs-options" },
   { id: "technique-narratives", title: "Technique narratives", to: "/practice/technique-narratives" },
   { id: "missing-wicks", title: "Missing wicks and zooming in", to: "/practice/missing-wicks" },
+  { id: "record-traders", title: "Record-setting traders", to: "/practice/record-traders" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

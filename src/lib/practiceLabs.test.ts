@@ -54,6 +54,7 @@ describe("misc practice catalog", () => {
       "Futures vs options & beginner toolkit",
       "Technique narratives",
       "Missing wicks and zooming in",
+      "Record-setting traders",
     ]);
   });
 });
