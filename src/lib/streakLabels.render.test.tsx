@@ -48,3 +48,12 @@ test("Home and Training show 'Answer streak' (correct answers in a row) with its
     assert.ok(html.includes(`title="${esc(ANSWER_STREAK_TIP)}"`), Page.name);
   }
 });
+
+test("rewards panel: '1 practice point', not '1 practice points'", async () => {
+  const { emptyRewards, saveRewards } = await import("./academy/storage");
+  const st = memoryStorage();
+  const r = emptyRewards();
+  r.ledger.push({ key: "daily:2026-10-22", source: "daily-goal", points: 1, at: "2026-10-22T09:00:00.000Z" });
+  saveRewards(r, st);
+  assert.match(renderToStaticMarkup(<RewardsPanel storage={st} />), /1 practice point · Rank/);
+});

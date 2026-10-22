@@ -19,7 +19,7 @@ export default function RewardsPanel({ storage, now = new Date() }: { storage?: 
     <section className="panel p-4 space-y-3" aria-label="Rewards" data-testid="rewards-panel">
       <div className="flex flex-wrap items-baseline gap-x-6 gap-y-1">
         <p className="font-semibold">
-          {pts} practice points · Rank {rank.rank}: {rank.name}
+          {pts} practice {pts === 1 ? "point" : "points"} · Rank {rank.rank}: {rank.name}
         </p>
         <p className="text-[13px]" data-testid="streak" title={DAY_STREAK_TIP}>
           <span className="material-symbols-outlined text-base align-middle text-accent-red" aria-hidden>
