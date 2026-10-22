@@ -619,5 +619,7 @@ export const BUY_SELL_QUESTIONS: QuizQuestion[] = interleave(
 
 /** Coverage helpers for docs and validation. */
 export const BUY_SELL_PATTERN_KEYS = Object.keys(INFO);
+/** Why / stop lines per directional pattern (reused by the Which Way? drill). */
+export const BUY_SELL_INFO: Readonly<Record<string, Readonly<PatternInfo>>> = INFO;
 export const BUY_SELL_WAIT_IDS = WAIT_CASES.map((c) => c.id);
 export const BUY_SELL_SCENARIO_KEYS = SCENARIO_TEXT.map((t) => t.key);

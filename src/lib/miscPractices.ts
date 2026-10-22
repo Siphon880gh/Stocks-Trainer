@@ -35,6 +35,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "record-traders", title: "Record-setting traders", to: "/practice/record-traders" },
   { id: "pattern-themes", title: "Pattern themes", to: "/practice/pattern-themes" },
   { id: "essential-candles", title: "Essential candlestick patterns", to: "/practice/essential-candles" },
+  { id: "which-way", title: "Which Way? (Up, Down or Either)", to: "/practice/which-way" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

@@ -57,6 +57,7 @@ describe("misc practice catalog", () => {
       "Record-setting traders",
       "Pattern themes",
       "Essential candlestick patterns",
+      "Which Way? (Up, Down or Either)",
     ]);
   });
 });

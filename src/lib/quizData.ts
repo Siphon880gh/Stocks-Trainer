@@ -32,6 +32,7 @@ import { MW_QUESTIONS } from "./missingWicks";
 import { RT_QUESTIONS } from "./recordTraders";
 import { THEME_QUESTIONS } from "./patternThemes";
 import { EC_QUESTIONS } from "./essentialCandles";
+import { WW_QUESTIONS } from "./whichWay";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5410,6 +5411,7 @@ export type QuizGroupId =
   | "record-traders"
   | "pattern-themes"
   | "essential-candles"
+  | "which-way"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5561,6 +5563,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Essential Candles",
     description: "The 16 candlestick patterns every trader should know, the morning and evening star 50% rule, inside bars, harami vs engulfing and the context rules.",
     icon: "candlestick_chart",
+  },
+  {
+    id: "which-way",
+    name: "Which Way?",
+    description: "Up, Down or Either: where a pattern points once confirmed, given the trend before it.",
+    icon: "swap_vert",
   },
   {
     id: "candle-anatomy",
@@ -5770,6 +5778,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "record-traders") return RT_QUESTIONS;
   if (groupId === "pattern-themes") return THEME_QUESTIONS;
   if (groupId === "essential-candles") return EC_QUESTIONS;
+  if (groupId === "which-way") return WW_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5813,6 +5822,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "record-traders") return RT_QUESTIONS;
   if (groupId === "pattern-themes") return THEME_QUESTIONS;
   if (groupId === "essential-candles") return EC_QUESTIONS;
+  if (groupId === "which-way") return WW_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;

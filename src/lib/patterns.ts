@@ -2,6 +2,7 @@
 import { ADVANCED_PATTERN_DEFS } from "./advancedPatterns";
 import { CHART_BOOK_DEFS } from "./chartPatternBook";
 import { PATTERN_THEMES, THEME_PATTERN_DEFS, type PatternThemes } from "./patternThemes";
+import { POTENTIAL_DIRECTION, type PotentialDirection } from "./patternDirections";
 
 export type PatternSentiment = "bullish" | "bearish" | "neutral";
 
@@ -19,6 +20,8 @@ export interface PatternDef {
   takeaway?: string;
   /** Functional theme tags (patternThemes.ts): one primary, any secondary. Attached to every Archive pattern. */
   themes?: PatternThemes;
+  /** Where price can go once confirmed (patternDirections.ts, #19 Which Way?). Attached to every Archive pattern. */
+  potentialDirection?: PotentialDirection;
 }
 
 // Resolve public images from the loaded document, not from the client-side
@@ -120,7 +123,11 @@ const BASE_PATTERNS: PatternDef[] = [
   ...THEME_PATTERN_DEFS,
 ];
 
-export const PATTERNS: PatternDef[] = BASE_PATTERNS.map((p) => ({ ...p, themes: PATTERN_THEMES[p.id] }));
+export const PATTERNS: PatternDef[] = BASE_PATTERNS.map((p) => ({
+  ...p,
+  themes: PATTERN_THEMES[p.id],
+  potentialDirection: POTENTIAL_DIRECTION[p.id],
+}));
 
 export function getPattern(id: string): PatternDef | undefined {
   return PATTERNS.find((p) => p.id === id);
