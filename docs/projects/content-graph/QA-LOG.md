@@ -59,3 +59,13 @@ Screenshots (box only, not committed): `/workspace/checkpoints/qa/weng-1022-dec{
 
 Screenshots (box only, not committed): `/workspace/checkpoints/qa/oscillators-wilder-{390,1280}.png`.
 
+
+## 2026-10-22 Japanese candlesticks and Heikin-Ashi
+
+| Flow | Result |
+|---|---|
+| `/practice/japanese-candles`, 390 and 1280 (e2e) | Bearish toggle shows 7 rows; Evening Star opens with a SIMULATED illustration ending on the confirmation candle; the Trade tab shows confirmation, entry, stop (invalidation), target and "Not a guarantee"; tabs ≥ 44 px at 390; no console errors, no horizontal overflow. |
+| `/practice/heikin-ashi`, 390 and 1280 (e2e) | Regular / Heikin-Ashi / side-by-side toggle; the computed `ha-calc-close` key grades "Right."; no overflow. |
+| `npm run test:e2e` | 133 checks, 0 failed; its own Vite server closed after. |
+
+Screenshots (box only, not committed): `/workspace/checkpoints/qa/japanese-candles-{390,1280}.png`, `/workspace/checkpoints/qa/heikin-ashi-{390,1280}.png`.

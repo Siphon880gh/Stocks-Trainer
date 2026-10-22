@@ -76,6 +76,7 @@ Other market types ship as SAMPLE browse (**E9**). **E10** adds a **Market Navig
 | **Strategy kits** | One setup from an authoritative source: strategy, coaching, case, chart | **Playbooks** (`/playbooks`) | Kit read; linked case / coach opened |
 | **Indicator & chart labs** | EMA / SMA / MACD on long charts; levels, lookalikes, invalidation, replay | Practice labs (`/practice/*`) | Lab round scored; done mark on Learn |
 | **Oscillators & volatility stops** | RSI, MACD, fast / slow stochastic, KDJ, ATR and an ATR volatility stop; why same-family oscillators are not independent confirmation | **Oscillators & volatility stop** lab (`/practice/oscillators`) + Learn **Oscillators & Volatility Stops** | Computed chart questions answered; indicators treated as support, not signals |
+| **Japanese candlesticks & Heikin-Ashi** | Where candle charts came from, the buyer–seller battle in one candle, the core 14 reversal patterns (recognise · psychology · trade), Heikin-Ashi averaged candles and their limits | **Japanese candlesticks** (`/practice/japanese-candles`) · **Heikin-Ashi** lab (`/practice/heikin-ashi`) · Archive core list + Learn **Japanese Candlesticks: Core 14** and **Heikin-Ashi Candles** | Quiz passed (70%); lab questions answered |
 | **Float, short-dated options & risk** | Float and float turnover, short-dated option risk, position sizing, why the same market gives different results | Learn **Float, Short-Dated Options & Risk** | Quiz passed (70%) |
 
 ---
@@ -183,6 +184,8 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | `/practice/flashcards` · `/practice/label` · `/practice/regime` · `/practice/replay` · `/practice/plan` · `/practice/hunt` · `/practice/lookalike` · `/practice/invalidation` · `/practice/levels` | Practice labs (flashcards, labelling, trend vs range, bar replay, mark the plan, pattern hunt, lookalikes, invalidation, support & resistance) |
 | `/practice/ema-macd` | EMA, SMA and MACD lab on long SIMULATED charts |
 | `/practice/oscillators` | Oscillators & volatility stop lab: RSI, fast / slow stochastic, KDJ, ATR volatility stop on long SIMULATED charts |
+| `/practice/japanese-candles` | Japanese candlesticks: history, the buyer–seller battle, body vs wicks, and the core 14 reversal patterns (Bullish / Bearish toggle) |
+| `/practice/heikin-ashi` | Heikin-Ashi lab: formula, limits, regular vs Heikin-Ashi toggle on one SIMULATED chart, computed questions |
 | `/practice/statements` | Statements lab · 13-week cash forecast · biotech readout day |
 | `/practice/read-the-print` · `/practice/mark-the-band` | Earnings reaction game · expected-move band |
 | `/coach` · `/coach/:slug` | Step-by-step coaching (decision trees · no LLM) |
@@ -250,6 +253,14 @@ Beginner training modelled on how broker apps such as Webull teach new investors
 - The rule throughout: indicators support a decision; they are not buy or sell signals. An entry still needs a position size, an exit plan and a defined risk limit.
 - Indicator formulas live in `src/lib/oscillators.ts` (tests check them against independent reference implementations); RSI is in `src/lib/indicators.ts` and uses Wilder's smoothing, tested against the StockCharts ChartSchool worked example; every cited source is listed on the page and in `src/lib/oscillatorSources.ts`.
 - Learn groups **Oscillators & Volatility Stops** (24 questions, including the lab's chart questions with the same SIMULATED chart) and **Float, Short-Dated Options & Risk** (14 questions: float and float turnover, short-dated options, position sizing, and why the same market can give very different results by sector, timing and risk management), plus 11 glossary terms in Archive.
+
+### Japanese candlesticks (`/practice/japanese-candles`) and Heikin-Ashi (`/practice/heikin-ashi`)
+
+- Framing lesson: candle charts grew out of 18th-century Japanese rice trading (the Dojima rice market in Osaka; Munehisa Homma is traditionally linked to it) and reached Western traders through Steve Nison's articles and his 1991 book. Each candle is a battle between buyers and sellers: the body is open-to-close, the wicks are prices that were tried and rejected, and context (the prior trend) decides what a shape means. Linked from the Academy unit *Reading a candle*.
+- **Core 14** reversal patterns with a Bullish / Bearish toggle (also at the top of Archive → Patterns): Dragonfly Doji, Hammer, Bullish Engulfing, Piercing Line, Tweezer Bottom, Three White Soldiers, Morning Star; Gravestone Doji, Shooting Star, Bearish Engulfing, Dark Cloud Cover, Tweezer Top, Three Black Crows, Evening Star. Textbook rules (Nison / Bulkowski); single-candle and doji signals are taught as needing a confirmation candle.
+- Every pattern detail (all 102 patterns) has three tabs — **How to recognise it**, **What is the psychology?**, **How do we trade it?** (confirmation, entry, stop at invalidation, target or exit, and "not a guarantee") — and a SIMULATED illustration whose last candle is the confirmation. The core 14 have hand-written tabs in `src/lib/patternTabs.ts`; other patterns get a family guide marked as general.
+- **Heikin-Ashi** lab: HA close = (O+H+L+C)/4, HA open = (previous HA open + previous HA close)/2, HA high / low include the HA open and close. `src/lib/heikinAshi.ts` is tested against the StockCharts ChartSchool QQQ worked sheet (23 rows) and an independent implementation. The lab shows one 60-bar SIMULATED chart as regular, Heikin-Ashi or side by side, with 8 questions computed from the chart (smoothing, runs without wicks, lag after the top, a hand calculation, and why HA prices are not traded prices).
+- Learn groups **Japanese Candlesticks: Core 14** (33 questions) and **Heikin-Ashi Candles** (15 questions, 8 with the lab chart), plus 2 glossary terms in Archive.
 
 ### Playbooks (`/playbooks`)
 
