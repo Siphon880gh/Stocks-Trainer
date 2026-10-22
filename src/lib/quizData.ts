@@ -17,6 +17,9 @@ import { OSCILLATOR_QUESTIONS, TRADING_RISK_QUESTIONS } from "./oscillatorQuiz";
 import type { OscChartId, OscPanel } from "./oscillatorLab";
 import { HEIKIN_ASHI_QUESTIONS, JAPANESE_CANDLE_QUESTIONS } from "./candleQuiz";
 import { CHART_BOOK_QUESTIONS } from "./chartPatternBook";
+import { squeezeQuestions } from "./gammaSqueeze";
+
+const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
 export { PRICE_ACTION_QUESTIONS, SUPPLY_DEMAND_QUESTIONS, BUY_SELL_QUESTIONS };
 
@@ -4913,10 +4916,10 @@ export const OPTIONS_LITERACY_QUESTIONS: QuizQuestion[] = [
   },
   {
     id: "OP-06",
-    prompt: "Greeks and a live options chain in this trainer are…",
+    prompt: "On these options-context packs, a live options chain and Greeks are…",
     correctAnswer: "A",
     options: [
-      { id: "A", label: "Out of scope — educational underlying only", description: "Constraint." },
+      { id: "A", label: "Not provided — you grade the underlying only", description: "Constraint." },
       { id: "B", label: "Enabled on Market", description: "They are not." },
       { id: "C", label: "Required before Equities literacy", description: "Opposite curriculum." },
     ],
@@ -5379,6 +5382,7 @@ export type QuizGroupId =
   | "indicators"
   | "oscillators"
   | "trading-risk"
+  | "squeezes"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5446,6 +5450,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Float, Short-Dated Options & Risk",
     description: "Float and float turnover, short-dated option risk, position sizing, and why the same market gives different results",
     icon: "shield",
+  },
+  {
+    id: "squeezes",
+    name: "Squeezes, Options Flow & Survivorship",
+    description: "Gamma and dealer hedging, gamma vs short squeezes, short interest, days to cover, open interest, unusual options activity and survivorship bias, with the SIMULATED gamma squeeze case",
+    icon: "trending_up",
   },
   {
     id: "candle-anatomy",
@@ -5641,6 +5651,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
   if (groupId === "trading-risk") return TRADING_RISK_QUESTIONS;
+  if (groupId === "squeezes") return SQUEEZE_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5670,6 +5681,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
   if (groupId === "trading-risk") return TRADING_RISK_QUESTIONS;
+  if (groupId === "squeezes") return SQUEEZE_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;

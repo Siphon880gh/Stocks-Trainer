@@ -43,6 +43,7 @@ describe("misc practice catalog", () => {
       "Oscillators & volatility stop",
       "Japanese candlesticks",
       "Heikin-Ashi candles",
+      "Gamma squeeze case",
     ]);
   });
 });

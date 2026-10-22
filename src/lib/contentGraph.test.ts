@@ -131,6 +131,7 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "chart-patterns": 140,
   "heikin-ashi": 12,
   "trading-risk": 12,
+  squeezes: 12,
 };
 const NON_FAMILY = new Set<string>([...PHASE_A, ...PHASE_D, ...Object.keys(DEDICATED_FLOORS)]);
 
