@@ -646,6 +646,27 @@ const flows = {
     await p.goto(base + "/training?group=pattern-themes", { waitUntil: "networkidle" });
     check(/Pattern Themes/.test(await p.locator("main").innerText()), `pt: Learn group missing @${w}`);
   },
+  async "Essential candles: 50% takeaway, star diagrams, valid-star drill, inside bar"(p, w) {
+    const { STAR_CASES, starCheck } = await load("/src/lib/essentialCandles.ts");
+    await p.goto(base + "/practice/essential-candles", { waitUntil: "networkidle" });
+    check(/^A morning star is a three-candle pattern where the third \(bullish\) candle closes above the 50% midpoint of the first \(bearish\) candle's body\./.test((await p.getByTestId("ec-takeaway").innerText()).trim()), `ec: takeaway @${w}`);
+    for (const id of ["ec-diagram-morning", "ec-diagram-doji", "ec-diagram-evening"]) check((await p.locator(`[data-testid='${id}'] line[stroke-dasharray]`).count()) === 1, `ec: ${id} 50% line @${w}`);
+    for (let i = 0; i < STAR_CASES.length; i++) {
+      await p.getByTestId(`ec-case-${i}-${starCheck(STAR_CASES[i]).valid ? "valid" : "not-yet"}`).click();
+    }
+    check(new RegExp(`${STAR_CASES.length}/${STAR_CASES.length} answered · ${STAR_CASES.length} right`).test(await p.getByTestId("ec-drill-score").innerText()), `ec: drill score @${w}`);
+    check(/not a valid morning star yet/.test(await p.getByTestId("ec-case-1").innerText()), `ec: near-miss feedback @${w}`);
+    check(/Two candles/.test(await p.locator("[data-testid='ec-card'][data-id='inside-bar']").innerText()), `ec: inside bar two candles @${w}`);
+    check((await p.getByTestId("ec-card").count()) >= 18, `ec: cards @${w}`);
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("essential-candles"), `ec: practice not marked done @${w}`);
+    check((await overflow(p)) <= 1, `ec overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/essential-candles-${w}.png`, fullPage: true });
+    await p.goto(base + "/archive?open=morning-star", { waitUntil: "networkidle" });
+    check(/50% midpoint/.test(await p.getByTestId("pattern-takeaway").innerText()), `ec: archive takeaway @${w}`);
+    await p.goto(base + "/training?group=essential-candles", { waitUntil: "networkidle" });
+    check(/Essential Candles/.test(await p.locator("main").innerText()), `ec: Learn group missing @${w}`);
+  },
 };
 
 

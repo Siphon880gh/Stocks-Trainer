@@ -35,6 +35,7 @@ import PracticeTechniqueNarratives from "./pages/practice/TechniqueNarratives";
 import PracticeMissingWicks from "./pages/practice/MissingWicks";
 import PracticeRecordTraders from "./pages/practice/RecordTraders";
 import PracticePatternThemes from "./pages/practice/PatternThemes";
+import PracticeEssentialCandles from "./pages/practice/EssentialCandles";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
 import Coach from "./pages/Coach";
@@ -101,6 +102,7 @@ export default function App() {
           <Route path="practice/missing-wicks" element={<PracticeMissingWicks />} />
           <Route path="practice/record-traders" element={<PracticeRecordTraders />} />
           <Route path="practice/pattern-themes" element={<PracticePatternThemes />} />
+          <Route path="practice/essential-candles" element={<PracticeEssentialCandles />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />
           <Route path="coach" element={<Coach />} />

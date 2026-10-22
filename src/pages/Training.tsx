@@ -180,6 +180,7 @@ export default function Training() {
                   g.id === "missing-wicks" ||
                   g.id === "record-traders" ||
                   g.id === "pattern-themes" ||
+                  g.id === "essential-candles" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
                   g.id === "financial-literacy" ||
