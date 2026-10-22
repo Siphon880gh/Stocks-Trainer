@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import BrowsePopover from "../components/BrowsePopover";
-import JargonText from "../components/JargonText";
+import JargonText, { GlossaryButtons } from "../components/JargonText";
 import {
   canStartCasePack,
   CHART_GATE_TRAINING_GROUP,
@@ -219,13 +219,14 @@ export default function Cases() {
                       <div className="flex items-center gap-2 border border-line hover:border-line rounded-lg px-4 py-3 font-mono text-sm">
                         <Link to={`/cases/${c.id}`} className="min-w-0 flex-1">
                           <span className="text-primary">
-                            <JargonText text={c.title} />
+                            <JargonText text={c.title} plain />
                           </span>
                           <span className="text-slate-500 text-xs ml-2">
                             {thinkingModeLabel(c.thinkingMode)} ·{" "}
                             {c.difficulty === "beginner" ? "Beginner" : "Intermediate"}
                           </span>
                         </Link>
+                        <GlossaryButtons texts={[c.title]} />
                         <YouTubeSearchLink title={c.title} />
                       </div>
                     ) : (

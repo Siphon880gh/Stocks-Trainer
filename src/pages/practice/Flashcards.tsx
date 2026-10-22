@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import PracticeShell from "../../components/PracticeShell";
-import JargonText from "../../components/JargonText";
+import JargonText, { GlossaryButtons } from "../../components/JargonText";
 import { LITERACY_TERMS } from "../../lib/literacyTerms";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
 
@@ -39,16 +39,17 @@ export default function PracticeFlashcards() {
           {flipped ? (
             <div className="mt-3 space-y-2 text-sm">
               <p>
-                <JargonText text={term.summary} />
+                <JargonText text={term.summary} plain />
               </p>
               <p className="text-muted">
-                <JargonText text={term.detail} />
+                <JargonText text={term.detail} plain />
               </p>
             </div>
           ) : (
             <p className="text-sm text-muted mt-3">Tap to flip</p>
           )}
         </button>
+        {flipped ? <GlossaryButtons texts={[term.summary, term.detail]} /> : null}
         <div className="flex gap-3">
           <button
             type="button"

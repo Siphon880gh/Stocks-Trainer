@@ -13,7 +13,7 @@ import {
 import PatternDetailModal from "../components/PatternDetailModal";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
-import JargonText from "../components/JargonText";
+import JargonText, { GlossaryButtons } from "../components/JargonText";
 
 type FilterType = "all" | "bullish" | "bearish" | "neutral";
 type ArchiveTab = "patterns" | "indicators" | "literacy";
@@ -286,9 +286,10 @@ export default function Archive() {
                 ) : null}
               </div>
               <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
-                <JargonText text={term.summary} />
+                <JargonText text={term.summary} plain />
               </p>
               </button>
+              <GlossaryButtons texts={[term.summary]} />
               <YouTubeSearchLink title={term.name} />
               </div>
               {locked ? (
@@ -361,12 +362,13 @@ export default function Archive() {
                     <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
                       &gt; {pattern.type.toUpperCase()}_PATTERN<br />
                       &gt; CONFIRMATION: {pattern.confirmation.toUpperCase().replace("_", " ")}<br />
-                      <JargonText text={pattern.description} />
+                      <JargonText text={pattern.description} plain />
                     </p>
                   </div>
                 </div>
               </div>
             </button>
+            <GlossaryButtons texts={[pattern.description]} className="mt-1" />
             <YouTubeSearchLink title={pattern.name} className="absolute top-4 right-4" />
             </div>
           ))

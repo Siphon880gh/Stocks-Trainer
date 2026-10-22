@@ -29,7 +29,7 @@ import {
 } from "../lib/beginnerPath";
 import { assetClassFromCoachTags } from "../lib/marketNavigator";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
-import JargonText from "../components/JargonText";
+import JargonText, { WithGlossary } from "../components/JargonText";
 
 const OUTCOME_UI: Record<
   CoachingOutcome,
@@ -285,13 +285,15 @@ export default function CoachSession() {
             <ul className="space-y-2">
               {node.choices.map((choice) => (
                 <li key={`${choice.label}->${choice.next}`}>
+                  <WithGlossary texts={[choice.label]}>
                   <button
                     type="button"
                     onClick={() => onChoose(choice)}
                     className="w-full text-left border border-line bg-canvas hover:bg-primary/10 hover:border-primary px-4 py-3 font-mono text-sm normal-case transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                   >
-                    <JargonText text={choice.label} />
+                    <JargonText text={choice.label} plain />
                   </button>
+                  </WithGlossary>
                 </li>
               ))}
             </ul>

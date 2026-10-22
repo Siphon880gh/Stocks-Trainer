@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { DetectedPattern } from "../lib/patternScan";
-import JargonText from "./JargonText";
+import JargonText, { WithGlossary } from "./JargonText";
 
 interface ScanPatternsModalProps {
   patterns: DetectedPattern[];
@@ -60,8 +60,9 @@ export default function ScanPatternsModal({
               </p>
               <div className="space-y-3">
                 {patterns.map((p, i) => (
+                  <Fragment key={i}>
+                  <WithGlossary texts={[p.description]}>
                   <button
-                    key={i}
                     type="button"
                     className="w-full text-left p-4 rounded-lg border border-line bg-surface hover:border-primary hover:bg-primary/5 transition-colors"
                     onClick={() => onSelectPattern?.(p)}
@@ -71,9 +72,11 @@ export default function ScanPatternsModal({
                       <span className="text-xs font-mono text-primary/70">Candle {p.index + 1} • {p.confidence}%</span>
                     </div>
                     <p className="text-slate-300 text-sm">
-                      <JargonText text={p.description} />
+                      <JargonText text={p.description} plain />
                     </p>
                   </button>
+                  </WithGlossary>
+                  </Fragment>
                 ))}
               </div>
             </>

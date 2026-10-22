@@ -11,7 +11,7 @@ import {
   type QuizOption,
 } from "../lib/quizData";
 import YouTubeSearchLink from "./YouTubeSearchLink";
-import JargonText from "./JargonText";
+import JargonText, { WithGlossary } from "./JargonText";
 import { PATTERN_OHLC } from "../lib/ohlcData";
 import { overlayQuizBars, quizSamplePackName } from "../lib/quizChartData";
 import { mergeAnnotations } from "../lib/chartAnnotations";
@@ -293,14 +293,16 @@ export default function QuizModal({
           >
             {question.options.map((opt) => (
               <span key={opt.id} className="contents">
-                <QuizOptionButton
-                  option={opt}
-                  selected={selectedOption === opt.id}
-                  submitted={Boolean(submitted)}
-                  correctAnswer={question.correctAnswer}
-                  asChart={Boolean(question.optionsAreCharts && opt.chartKey)}
-                  onSelect={() => !submitted && setSelectedOption(opt.id)}
-                />
+                <WithGlossary texts={question.optionsAreCharts && opt.chartKey ? [] : [opt.label, opt.description]}>
+                  <QuizOptionButton
+                    option={opt}
+                    selected={selectedOption === opt.id}
+                    submitted={Boolean(submitted)}
+                    correctAnswer={question.correctAnswer}
+                    asChart={Boolean(question.optionsAreCharts && opt.chartKey)}
+                    onSelect={() => !submitted && setSelectedOption(opt.id)}
+                  />
+                </WithGlossary>
               </span>
             ))}
           </div>
@@ -470,7 +472,7 @@ function QuizOptionButton({
       title={asChart ? `Chart ${option.label}` : option.description}
       aria-label={asChart ? `Chart ${option.label}` : undefined}
       className={cn(
-        "group relative flex flex-col transition-all text-left",
+        "group relative flex flex-col transition-all text-left w-full h-full",
         asChart ? "items-center p-2 rounded-lg" : "items-start p-6 rounded-lg",
         showCorrect && "bg-primary/20 border-2 border-primary",
         showIncorrect && "bg-accent-red/10 border-2 border-accent-red",
@@ -518,7 +520,7 @@ function QuizOptionButton({
             Option {option.id} {selected && "(selected)"}
           </span>
           <span className={cn("text-lg font-bold", selected && "text-primary")}>
-            <JargonText text={option.label} />
+            <JargonText text={option.label} plain />
           </span>
           <p
             className={cn(
@@ -526,7 +528,7 @@ function QuizOptionButton({
               selected ? "text-primary/60" : "text-slate-400 opacity-0 group-hover:opacity-100"
             )}
           >
-            <JargonText text={option.description} />
+            <JargonText text={option.description} plain />
           </p>
           <div
             className={cn(

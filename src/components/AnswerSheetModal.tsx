@@ -1,9 +1,9 @@
-import { useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import { getQuestionsForGroup, QUIZ_GROUPS, type QuizGroupId } from "../lib/quizData";
 import { PATTERN_OHLC } from "../lib/ohlcData";
 import { overlayQuizBars } from "../lib/quizChartData";
 import CandlestickChart from "./CandlestickChart";
-import JargonText from "./JargonText";
+import JargonText, { WithGlossary } from "./JargonText";
 import MarketChart from "./MarketChart";
 
 interface AnswerSheetModalProps {
@@ -75,8 +75,9 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                         const label = opt?.label ?? q.correctAnswer;
                         const globalIdx = allQuestions.findIndex((gq) => gq.id === q.id);
                         return (
+                          <Fragment key={q.id}>
+                          <WithGlossary texts={[label]}>
                           <button
-                            key={q.id}
                             type="button"
                             onClick={() => onPracticeQuestion?.(i, group.id as QuizGroupId)}
                             className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group"
@@ -84,7 +85,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                             <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
                               <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>
                               <span className="font-bold text-primary flex items-center gap-2">
-                                {q.correctAnswer}: <JargonText text={label} />
+                                {q.correctAnswer}: <JargonText text={label} plain />
                                 {onPracticeQuestion && (
                                   <span className="text-xs font-normal text-primary/60">— Click to practice</span>
                                 )}
@@ -137,6 +138,8 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                               )}
                             </div>
                           </button>
+                          </WithGlossary>
+                          </Fragment>
                         );
                       })}
                     </div>
@@ -147,8 +150,9 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                 const opt = q.options.find((o) => o.id === q.correctAnswer);
                 const label = opt?.label ?? q.correctAnswer;
                 return (
+                  <Fragment key={q.id}>
+                  <WithGlossary texts={[label]}>
                   <button
-                    key={q.id}
                     type="button"
                     onClick={() => onPracticeQuestion?.(i, groupId)}
                     className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group"
@@ -156,7 +160,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                     <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
                       <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>
                       <span className="font-bold text-primary flex items-center gap-2">
-                        {q.correctAnswer}: <JargonText text={label} />
+                        {q.correctAnswer}: <JargonText text={label} plain />
                         {onPracticeQuestion && (
                           <span className="text-xs font-normal text-primary/60">— Click to practice</span>
                         )}
@@ -209,6 +213,8 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                       )}
                     </div>
                   </button>
+                  </WithGlossary>
+                  </Fragment>
                 );
               })}
         </div>
