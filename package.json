@@ -15,6 +15,7 @@
     "test:macro": "tsx --test \"src/lib/macro/**/*.test.{ts,tsx}\"",
     "check:macro-sources": "tsx src/lib/macro/checkSources.ts",
     "check:playbook-sources": "tsx src/lib/checkPlaybookSources.ts",
+    "test:e2e": "node e2e/smoke.mjs",
     "test:lib": "tsx --test \"src/lib/*.test.{ts,tsx}\"",
     "test:academy": "tsx --test \"src/lib/academy/**/*.test.{ts,tsx}\"",
     "test:content": "tsx --test src/lib/contentGraph.test.ts",
