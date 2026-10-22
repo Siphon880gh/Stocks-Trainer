@@ -195,3 +195,13 @@ Screenshots (box only): `/workspace/checkpoints/qa/record-traders-{390,1280}.png
 | Learn `pattern-themes` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/pattern-themes{,-modal}-{390,1280}.png`.
+
+## 2026-10-22 Essential candles + star 50% rule (#18 + #20)
+
+| Flow | Result |
+|---|---|
+| `/practice/essential-candles`, 390 and 1280 (e2e) | Takeaway text exact; three star diagrams with a 50% line; 6-case drill scores 6/6 and marks practice done; near-miss feedback says "not a valid morning star yet"; inside bar card says two candles; no overflow. |
+| `/archive?open=morning-star` (e2e) | Modal shows the 50% takeaway. |
+| Learn `essential-candles` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/essential-candles-{390,1280}.png`.
