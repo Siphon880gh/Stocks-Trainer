@@ -5,7 +5,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 **Baseline before edits (HEAD 00e8a5e):** lint 0 · test:coaching 24/24 · src/lib tests 68/68 · test:financials 241/241 · test:macro 72/72.
 
 ## Current pointer
-- `status`: done (2026-10-21). Nothing committed; every change is in the working tree for Weng to review.
+- `status`: done. The 2026-10-21 run left its changes uncommitted for review; Weng has since committed them, and later entries below are local commits.
 - `next`: no open graph gap. `npm run test:content` is the live audit. Re-run it first, and a red check is the next gap. Remaining items need a human (see "Left for Weng").
 
 ## Checklist (implementation order)
@@ -92,3 +92,8 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Decisions: quiz milestones need 70%; cases pay 10 / 5 / 1 once per case; Today pays +5 / +1 and either answer counts the day; "Answer streak" vs "Day streak"; half-played challenges resume (paper key schema v2, lossless migration); glossary ⓘ is a separate button beside choices everywhere.
 - New invariants with tests: a lower quiz score never revokes a completion; case points are paid once per case; no `<JargonText>` without `plain` inside a button / link / label (source guard); the paper key loads v1 and v2 and refuses newer.
 - Still for a human: nothing new. The point values (10 / 5 / 1, +5 / +1) and the 70% mark are my picks under the delegation; each is one constant (`CASE_POINTS`, `POINTS.dailyGoal` / `dailyAttempt`, `QUIZ_PASS_PCT`) if Weng wants them changed.
+
+## 2026-10-22 Oscillators lab and Wilder RSI
+- Oscillators & volatility stop lab (`/practice/oscillators`, misc practice `oscillators`): three seeded 120-bar SIMULATED charts (strong climb, choppy range, climb then gap) with RSI(14) + fast %K, fast vs slow stochastic, KDJ(9, 3, 3), and an ATR(20) × 2 volatility stop. 11 chart questions, each key computed from the chart (`oscillatorLab.test.ts`). Learn groups `oscillators` (24) and `trading-risk` (14), 11 glossary terms, 13 cited sources (`oscillatorSources.ts`). Content-graph floors: oscillators ≥ 18, trading-risk ≥ 12.
+- RSI now uses Wilder's smoothing (`indicators.ts`): the first average is the simple mean of the first n gains / losses, then avg = (prev × (n − 1) + current) / n. `rsi.test.ts` matches all 19 values of the StockCharts ChartSchool worked example (cs-rsi.xls) to 1e-6 and an independent RMA reference for periods 2–21.
+- Consumers rechecked: the MarketChart RSI pane (period 5 on the ~12-bar SAMPLE packs, now `MARKET_CHART_RSI_PERIOD`) and its scan notes, the Learn overlay drills, Indicators / Playbook charts, the Trend vs range RSI windows, the oscillator lab, and the `rsi-vs-trend` Coach session (text only, no computed values). One fix: `IN-08` ("RSI near 80 after a straight grind") charted `eq-cyclical`, whose RSI never went above 57; it now charts the `eq-mega-tech` grind. `rsiQuizClaims.test.ts` checks IN-08, EQ-PAT-03 and EQ-PAT-10 against the drawn RSI. Lab answers that moved: longest RSI > 70 run 25 → 23 bars, first RSI > 70 at D25 → D37, RSI / %K agreement 86% → 92%; every teaching point still holds.

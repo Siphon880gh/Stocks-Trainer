@@ -49,3 +49,13 @@ Spot checks after the changes (dev server on 3078, stopped after):
 | `npm run test:e2e` | 97 checks, 0 failed (6 new flows × 2 widths); its own server on 3190 closed after. |
 
 Screenshots (box only, not committed): `/workspace/checkpoints/qa/weng-1022-dec{1..6}-*-{390,1280}.png`.
+
+## 2026-10-22 Oscillators lab and Wilder RSI
+
+| Flow | Result |
+|---|---|
+| Oscillators & volatility stop lab `/practice/oscillators`, 390 and 1280 (e2e) | SIMULATED label; the climb-then-gap tab draws the volatility stop; the computed `gap-flip` key grades "Right." and marks its bar; choices are ≥ 44 px tall at 390; Learn shows the Float, Short-Dated Options & Risk group; no console errors, no horizontal overflow. Run after the RSI switch. |
+| `npm run test:e2e` | 112 checks, 0 failed; its own Vite server on a free port closed after. |
+
+Screenshots (box only, not committed): `/workspace/checkpoints/qa/oscillators-wilder-{390,1280}.png`.
+
