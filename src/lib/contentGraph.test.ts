@@ -137,6 +137,7 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "charting-apps": 14,
   "crypto-candles": 12,
   "reversal-charts": 12,
+  "one-minute-charts": 12,
 };
 const NON_FAMILY = new Set<string>([...PHASE_A, ...PHASE_D, ...Object.keys(DEDICATED_FLOORS)]);
 

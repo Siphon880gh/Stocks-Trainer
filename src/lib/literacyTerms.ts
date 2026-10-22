@@ -12,6 +12,7 @@ import { CHART_APP_TERMS } from "./chartingApps";
 import { PDT_TERMS } from "./pdtRule";
 import { CRYPTO_TERMS } from "./cryptoCandles";
 import { REVERSAL_TERMS } from "./reversalCharts";
+import { ONE_MIN_TERMS } from "./oneMinuteCharts";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
@@ -670,6 +671,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...PDT_TERMS,
   ...CRYPTO_TERMS,
   ...REVERSAL_TERMS,
+  ...ONE_MIN_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

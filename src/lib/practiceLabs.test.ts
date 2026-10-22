@@ -49,6 +49,7 @@ describe("misc practice catalog", () => {
       "Indicator & charting apps",
       "Candlesticks for crypto",
       "Reversal chart patterns",
+      "Reading 1-minute charts",
     ]);
   });
 });

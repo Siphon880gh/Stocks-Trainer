@@ -27,6 +27,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "charting-apps", title: "Indicator & charting apps", to: "/practice/charting-apps" },
   { id: "crypto-candles", title: "Candlesticks for crypto", to: "/practice/crypto-candles" },
   { id: "reversal-charts", title: "Reversal chart patterns", to: "/practice/reversal-charts" },
+  { id: "one-minute-charts", title: "Reading 1-minute charts", to: "/practice/one-minute-charts" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

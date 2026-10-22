@@ -24,6 +24,7 @@ import { CHART_APP_QUESTIONS } from "./chartingApps";
 import { PDT_QUESTIONS } from "./pdtRule";
 import { CRYPTO_CANDLE_QUESTIONS } from "./cryptoCandles";
 import { REVERSAL_QUESTIONS } from "./reversalCharts";
+import { ONE_MIN_QUESTIONS } from "./oneMinuteCharts";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5394,6 +5395,7 @@ export type QuizGroupId =
   | "charting-apps"
   | "crypto-candles"
   | "reversal-charts"
+  | "one-minute-charts"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5497,6 +5499,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Reversal Chart Patterns",
     description: "Head and shoulders, double and triple tops and bottoms, rising and falling wedges: neckline confirmation, measured moves, retests, invalidation, and why a triple bottom is not a rectangle",
     icon: "candlestick_chart",
+  },
+  {
+    id: "one-minute-charts",
+    name: "Reading 1-Minute Charts",
+    description: "5m and 15m grouping, legs vs sideways, why 1m is risky, MES tick math, TradingView Fib Reverse / Extend Lines, bar count and 78 five-minute bars in a session",
+    icon: "timer",
   },
   {
     id: "candle-anatomy",
@@ -5698,6 +5706,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "charting-apps") return CHART_APP_QUESTIONS;
   if (groupId === "crypto-candles") return CRYPTO_CANDLE_QUESTIONS;
   if (groupId === "reversal-charts") return REVERSAL_QUESTIONS;
+  if (groupId === "one-minute-charts") return ONE_MIN_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5733,6 +5742,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "charting-apps") return CHART_APP_QUESTIONS;
   if (groupId === "crypto-candles") return CRYPTO_CANDLE_QUESTIONS;
   if (groupId === "reversal-charts") return REVERSAL_QUESTIONS;
+  if (groupId === "one-minute-charts") return ONE_MIN_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
