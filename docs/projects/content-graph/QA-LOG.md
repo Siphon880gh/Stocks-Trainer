@@ -120,3 +120,13 @@ Screenshots (box only): `/workspace/checkpoints/qa/algo-trading-{390,1280}.png`,
 | Learn `crypto-candles` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/crypto-candles-{390,1280}.png`, `/workspace/checkpoints/qa/crypto-harami-{390,1280}.png`.
+
+## 2026-10-22 Reversal chart patterns (#9)
+
+| Flow | Result |
+|---|---|
+| `/practice/reversal-charts`, 390 and 1280 (e2e) | 8-pattern gallery, rectangle panel, confirmation drills graded. |
+| Archive double-bottom Trade tab (e2e) | Deepened neckline content. |
+| Learn `reversal-charts` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/reversal-charts-{390,1280}.png`.

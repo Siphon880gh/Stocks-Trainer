@@ -121,3 +121,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## 2026-10-22 Candlesticks for crypto (#8)
 - Audit: almost all cheat-sheet candles already in the registry (belt hold as glossary + opening marubozu; counterattack, three methods, mat hold, three-line strike, ladder, stick sandwich, advance block, three stars in the south present). Added `double-doji`. No crypto fitness tags existed.
 - Added `/practice/crypto-candles` (`src/lib/cryptoCandles.ts`): works / adapted / rare tags on every candlestick pattern, harami takeaway verbatim, Learn group `crypto-candles` (12), Archive crypto filter chips, pattern-card and modal tags.
+
+## 2026-10-22 Reversal chart patterns (#9)
+- Audit: H&S, inverse H&S, double/triple top/bottom, rising/falling wedge already in PATTERNS with thin descriptions; rounding, cup, rectangles already deep in CHART_BOOK. Complex H&S deferred from #4.
+- Deepened via `/practice/reversal-charts` (`src/lib/reversalCharts.ts`): neckline, volume, measured move, retest, invalidation; custom Archive tabs; rectangle ≠ triple bottom panel; Learn group `reversal-charts` (12); 3 new glossary terms (measured-move, pattern-retest, pattern-invalidation; neckline already existed).
