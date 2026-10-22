@@ -177,3 +177,21 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - Screenshots (checkpoints/): ba10-training-card.png, ba10-coach-first-paper-trade.png, ba10-home-tip.png, ba10-learn-orders-fills.png.
 - Next: BA10.M5.S1 (docs + floors audit).
 
+
+### 2026-10-21 22:40 PT · BA10.M5.S1 (part 1: floors) · PASS (one local commit)
+- Changed: src/lib/academy/floors.test.ts (new). It counts every charter §7.3 floor from live data and the engine, and prints a `FLOORS` line.
+- Verify: lint 0 · test:coaching 25/25 · test:lib 164/164 · test:financials 333/333 · test:macro 72/72 · test:academy 154/154 · check:build ok · dist/ untouched.
+
+**Charter floor audit (from the floors.test.ts FLOORS line)**
+
+| Floor (CHARTER §7.3) | Required | Counted | Met |
+|---|---|---|---|
+| Levels / courses / units | ≥ 8 levels, ≥ 40 units; 3–6 cards, 3–5 quiz items, ≥ 1 resolved link per unit | 8 levels · 10 courses · 43 units, every unit within bounds | yes |
+| Placement | 10–12 items, ≥ 4 start levels | 12 items · 5 start levels (L0–L4) | yes |
+| Paper engine | 5 types × buy/sell × Day/GTC; ≥ 30 validation cases | 20/20 combinations tested; 42 validation cases | yes, with one note: a buy trailing stop is rejected (`TRAIL_BUY_NOT_SUPPORTED`), because EPICS BA4 makes trailing stops sell-only in v1 and leaves the buy-side mirror to stretch |
+| Challenges | ≥ 10 across ≥ 4 themes | 10 · 5 themes | yes |
+| Badges | ≥ 20, all reachable | 24 · 24 reached by the scripted learner | yes |
+| Options ladder | 4 levels, ≥ 8 checks per level, payoff math per strategy | 4 levels · 8/8/8/8 · 13 strategies | yes |
+| Glossary + Learn | ≥ 25 terms, ≥ 60 questions | 30 terms · 63 questions | yes |
+
+- Next: BA10.M5.S1 part 2 (AGENTS_CODE_REFERENCE*, QA_User_Flows, LOOPS/README row).
