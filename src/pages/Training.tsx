@@ -176,6 +176,7 @@ export default function Training() {
                   g.id === "one-minute-charts" ||
                   g.id === "fib-decision-map" ||
                   g.id === "futures-vs-options" ||
+                  g.id === "technique-narratives" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
                   g.id === "financial-literacy" ||

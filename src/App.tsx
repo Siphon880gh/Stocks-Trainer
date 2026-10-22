@@ -31,6 +31,7 @@ import PracticeReversalCharts from "./pages/practice/ReversalCharts";
 import PracticeOneMinuteCharts from "./pages/practice/OneMinuteCharts";
 import PracticeFibDecisionMap from "./pages/practice/FibDecisionMap";
 import PracticeFuturesVsOptions from "./pages/practice/FuturesVsOptions";
+import PracticeTechniqueNarratives from "./pages/practice/TechniqueNarratives";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
 import Coach from "./pages/Coach";
@@ -93,6 +94,7 @@ export default function App() {
           <Route path="practice/one-minute-charts" element={<PracticeOneMinuteCharts />} />
           <Route path="practice/fib-decision-map" element={<PracticeFibDecisionMap />} />
           <Route path="practice/futures-vs-options" element={<PracticeFuturesVsOptions />} />
+          <Route path="practice/technique-narratives" element={<PracticeTechniqueNarratives />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />
           <Route path="coach" element={<Coach />} />

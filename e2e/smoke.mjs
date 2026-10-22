@@ -33,6 +33,7 @@ const { UNIT_ORDER } = await load("/src/lib/academy/content/levels.ts");
 const { emptyAcademy, ACADEMY_KEY } = await load("/src/lib/academy/storage.ts");
 const { oscQuestions } = await load("/src/lib/oscillatorLab.ts");
 const { haQuestions } = await load("/src/lib/heikinAshiLab.ts");
+/** Optional: E2E_ONLY=<substring> runs only flows whose name contains it. */
 /** Optional: QA_SHOTS=<dir> saves a screenshot of the oscillators lab at each width (never committed). */
 const SHOTS = process.env.QA_SHOTS;
 const stored = (p, key) => p.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "null"), key);
@@ -486,12 +487,64 @@ const flows = {
     await p.goto(base + "/training?group=futures-vs-options", { waitUntil: "networkidle" });
     check(/Futures vs Options/.test(await p.locator("main").innerText()), `fo: Learn group missing @${w}`);
   },
+  async "Technique narratives: popover on top, Next/Prev/keys, Exit leaves chart clickable"(p, w) {
+    await p.goto(base + "/practice/technique-narratives", { waitUntil: "networkidle" });
+    check((await p.locator("[data-narrative]").count()) >= 6, `nar: fewer than 6 narratives @${w}`);
+    await p.getByTestId("nar-start").click();
+    const pop = p.getByTestId("tour-popover");
+    check(await pop.isVisible(), `nar: popover not visible @${w}`);
+    const onTop = async () => {
+      const b = await pop.boundingBox();
+      return p.evaluate(([x, y]) => !!document.elementFromPoint(x, y)?.closest('[data-testid="tour-popover"]'), [b.x + b.width / 2, b.y + 12]);
+    };
+    check(await onTop(), `nar: popover not topmost @${w}`);
+    for (let i = 0; i < 5; i++) await p.getByTestId("tour-next").click();
+    check(/Step 6 of 8/.test(await p.getByTestId("tour-count").innerText()), `nar: step 6 missing @${w}`);
+    check((await p.locator("[data-side=wrong]").getAttribute("aria-pressed")) === "true", `nar: wrong chart not shown on step 6 @${w}`);
+    check(await onTop(), `nar: popover not topmost on step 6 @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/technique-narratives-popover-${w}.png` });
+    await p.keyboard.press("ArrowLeft");
+    check(/Step 5 of 8/.test(await p.getByTestId("tour-count").innerText()), `nar: ArrowLeft failed @${w}`);
+    await p.getByTestId("tour-prev").click();
+    check(/Step 4 of 8/.test(await p.getByTestId("tour-count").innerText()), `nar: Prev failed @${w}`);
+    await p.keyboard.press("ArrowRight");
+    check(/Step 5 of 8/.test(await p.getByTestId("tour-count").innerText()), `nar: ArrowRight failed @${w}`);
+    await p.getByTestId("tour-exit").click();
+    check((await p.getByTestId("tour-popover").count()) === 0 && (await p.getByTestId("tour-backdrop").count()) === 0, `nar: tour not closed @${w}`);
+    const candle = p.locator('[data-testid="nar-canvas"] svg g[style*="pointer"]').nth(20);
+    await candle.scrollIntoViewIfNeeded();
+    const cb = await candle.boundingBox();
+    const hit = await p.evaluate(([x, y]) => !!document.elementFromPoint(x, y)?.closest('[data-testid="nar-canvas"]'), [cb.x + cb.width / 2, cb.y + cb.height / 2]);
+    check(hit, `nar: chart not reachable after Exit @${w}`);
+    await candle.click();
+    check(/Bar 21:/.test(await p.getByTestId("nar-readout").innerText()), `nar: candle click readout missing @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/technique-narratives-explore-${w}.png` });
+    await p.reload({ waitUntil: "networkidle" });
+    check(/Resume at step 5/.test(await p.getByTestId("nar-resume").innerText()), `nar: resume missing @${w}`);
+    await p.getByTestId("nar-resume").click();
+    await p.keyboard.press("Escape");
+    check((await p.getByTestId("tour-popover").count()) === 0, `nar: Esc did not exit @${w}`);
+    await p.getByTestId("nar-resume").click();
+    for (let i = 0; i < 3; i++) await p.getByTestId("tour-next").click();
+    await p.getByTestId("tour-finish").click();
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("technique-narratives"), `nar: practice not marked done @${w}`);
+    await p.locator("[data-narrative=bollinger-squeeze]").click();
+    await p.locator("[data-side=wrong]").click();
+    check(/−|-/.test(await p.getByTestId("nar-result").innerText()), `nar: wrong-chart loss missing @${w}`);
+    check(/head fake/i.test(await p.getByTestId("nar-fail").innerText()), `nar: fail panel missing @${w}`);
+    check((await overflow(p)) <= 1, `nar overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/technique-narratives-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=technique-narratives", { waitUntil: "networkidle" });
+    check(/Technique Narratives/.test(await p.locator("main").innerText()), `nar: Learn group missing @${w}`);
+  },
 };
 
 
 try {
   for (const w of [390, 1280]) {
     for (const [name, fn] of Object.entries(flows)) {
+      if (process.env.E2E_ONLY && !name.includes(process.env.E2E_ONLY)) continue;
       const { p, ctx, errors } = await page(w);
       try {
         await fn(p, w);
