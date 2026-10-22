@@ -16,7 +16,7 @@ import { overlayQuizBars, quizSamplePackName } from "../lib/quizChartData";
 import { mergeAnnotations } from "../lib/chartAnnotations";
 import { BUY_SELL_DISCLAIMER, SCENARIO_PAD_BARS } from "../lib/buySellDrill";
 import { getLiteracyTerm } from "../lib/literacyTerms";
-import { completeMilestoneFromQuiz } from "../lib/progressStore";
+import { completeMilestoneFromQuiz, recordQuizScore } from "../lib/progressStore";
 import { getOverlay, splitHintTerms } from "../lib/overlays";
 import CandlestickChart from "./CandlestickChart";
 import MarketChart from "./MarketChart";
@@ -88,6 +88,7 @@ export default function QuizModal({
     setStreak(newStreak);
     setCorrectCount(newCorrectCount);
     setTotalAnswered(newTotalAnswered);
+    recordQuizScore({ points: newPoints, streak: newStreak, accuracy: newAccuracy });
     onPointsUpdate?.(newPoints, newStreak, newAccuracy);
   }, [selectedOption, submitted, question, streak, points, correctCount, totalAnswered, onPointsUpdate]);
 

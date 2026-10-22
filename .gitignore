@@ -6,3 +6,6 @@ coverage/
 *.log
 .env*
 !.env.example
+
+# Local QA screenshots (copied to the box, never committed)
+.qa-shots/

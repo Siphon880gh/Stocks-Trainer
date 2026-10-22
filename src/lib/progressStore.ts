@@ -399,6 +399,20 @@ export function setStreaks(streaks: Partial<ProgressStreaks>): ProgressState {
   });
 }
 
+/**
+ * Save the running Training quiz score after every answer. Before this, points / streak / accuracy were only
+ * written when a quiz mapped to a path milestone was finished, so Buy or Sell?, every other group, and any quiz
+ * closed early lost its points on reload (QA 2026-10-22).
+ */
+export function recordQuizScore(opts: { points: number; streak: number; accuracy: number }): ProgressState {
+  const normalized = normalizeProgress(loadProgress().state);
+  return saveProgress({
+    ...normalized,
+    scores: { totalPoints: opts.points, accuracy: opts.accuracy },
+    streaks: { current: opts.streak, best: Math.max(normalized.streaks.best, opts.streak) },
+  });
+}
+
 /** Wipe to first-run Beginner Equities skeleton. */
 export function resetProgress(): ProgressState {
   const state = createDefaultProgress();
