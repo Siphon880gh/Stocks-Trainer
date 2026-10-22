@@ -56,7 +56,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## Left for Weng
 - ~~FE7.M2 / FE8.M1~~: decided by Weng and built 2026-10-21 (financials-earnings PROGRESS).
 - ~~Beginner Academy~~: BA0–BA11 done and signed off 2026-10-21; graph family 14 filled (see the 2026-10-21 sweep below).
-- Playbooks: each needs a real outside source that a human supplies; no loop invents one.
+- ~~Playbooks~~: 8 kits added 2026-10-21 from public authoritative pages Weng asked for (OIC, FINRA, SEC Investor.gov, CME), each fetched and read the same day; see the Playbooks entry below. Future kits still need a real source; no loop invents one.
 - Parked: EMA / MACD regime follow-ups. On these short windows they read the same as SMA and make the trend windows ambiguous.
 - `all-markets` Coach sessions also show on a locked class's `/coach?class=` list (they map to Equities for the lock check). That is intended; flip it if you would rather hide them until peek.
 - Root `AGENTS_LOOP-*.md` milestone queues (Done(global), outside this graph) still verify with a plain build into `dist/`; left as historical.
@@ -66,4 +66,11 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Family 14 `academy` filled: Academy units now link the Learn groups `orders-and-fills` (l3-market-vs-limit, l3-stop-orders, l3-trailing-stop), `paper-pnl` (l0-simulated-vs-real, l3-position-sizing) and `options-ladder` (l6-payoff-at-expiration, l6-options-risk). New check in `contentGraph.test.ts`: every Academy group has questions and is linked from ≥1 unit. CHARTER, LOOP-Graph (family 14 row, stage 2, human-verification line, project statuses), LOOPS/README and LOOP-Cases (FE7.M2 note) refreshed.
 - Chart price-marker labels: `CandlestickChart` gained an opt-in `markerDecimals`; only the paper account passes 2, so its markers read e.g. "Buy limit 52.15". Unset keeps whole-number labels, so every other page is unchanged (the FE4.M1 byte-identity snapshot passes unmodified).
 - Left as intended: the 5 `all-markets` Coach sessions on a locked class's list (no test or plan says otherwise).
-- Still for a human: Playbooks (new kits need a real outside source); EMA / MACD regime follow-ups stay parked (teaching reason above); root `AGENTS_LOOP-*.md` untouched (historical).
+- Still for a human: EMA / MACD regime follow-ups stay parked (teaching reason above); root `AGENTS_LOOP-*.md` untouched (historical).
+
+## 2026-10-21 Playbooks
+- 4 → 12 kits. New: `covered-call`, `cash-secured-put`, `protective-put` (Options Industry Council strategy pages), `dollar-cost-averaging` (FINRA), `rebalance-to-target`, `stop-vs-stop-limit`, `short-with-buy-stop` (SEC Investor.gov), `futures-roll` (CME Group). Every URL was fetched and read on 2026-10-21; each Strategy panel only restates what its page says (figures such as $10,000 → $1,000/month, 60% → 80%, $3.00 stop / $2.50 limit, $60 → $40 / $80, third Friday are the sources' own examples). `source.verifiedOn` records the date.
+- Each kit reuses an existing Coach session, Case and SAMPLE pack whose asset class matches (no new OHLC). Options kits stay underlying-only (no chain).
+- Tests: `src/lib/playbooks.test.ts` (ids, source kind, no channel links, every panel resolves, asset classes match, webpage kits carry `verifiedOn`) and `src/lib/playbookPage.test.tsx` (resource link above the panels, Coach/Case links, list links every kit). Link check: `npm run check:playbook-sources` (network, not in verify; YouTube via oEmbed) — 12/12 ok.
+- Playbook page: webpage kits now read "SAMPLE educational read of a public page — not advice" instead of "not their paid course".
+- Not added (needs Weng): a kit built from his own trading rules or a target asset mix; `rebalance-to-target` teaches the mechanics and leaves the mix to him.

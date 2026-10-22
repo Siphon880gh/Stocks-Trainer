@@ -70,7 +70,7 @@ Prefer **no interval** so each wake adds the next content unit instead of waitin
 
 Milestone-by-milestone projects live in `docs/projects/<name>/` (CHARTER.md · EPICS.md · STORIES.md · PROGRESS.md · loop file). They build new surfaces and stop for human review or repeated failure; do not run them in the same session as the graph or a section loop.
 
-`/playbooks` is not a loop target: each Playbook needs a real outside source that a human supplies. No loop invents one.
+`/playbooks` is not a loop target: each Playbook needs a real outside source (a human-supplied link, or a public authoritative page fetched and read, as in the 2026-10-21 batch). No loop invents one. `npm run check:playbook-sources` re-checks every link.
 
 - [`docs/projects/content-graph/`](../docs/projects/content-graph/CHARTER.md): the content graph orchestrator (last gap audit: [`GAP-AUDIT.md`](../docs/projects/content-graph/GAP-AUDIT.md))
 - [`docs/projects/financials-earnings/`](../docs/projects/financials-earnings/CHARTER.md): financials, expectations and earnings reactions (**done**; FE7.M2 and FE8.M1 decided and built 2026-10-21)

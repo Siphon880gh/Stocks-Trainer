@@ -108,14 +108,14 @@ trainer/
         ├── caseStudies.ts + multiAssetCases.ts  # CASE_STUDIES, CASE_PACKS (16 packs)
         ├── coaching/ (+ sessions/)   # COACHING_SESSION_MODULES (70), validate, navigate
         ├── beginnerPath.ts / learningPaths.ts / thinkingModeTips.ts / marketNavigator.ts
-        ├── playbooks.ts              # Playbook registry (outside sources)
+        ├── playbooks.ts              # Playbook registry (outside sources; playbooks.test.ts + playbookPage.test.tsx)
         ├── financials/ · macro/      # project code (own test scripts)
         ├── academy/                  # Beginner Academy: content/, paper/ engine, rewards/, options/, quiz/, today.ts (npm run test:academy)
         ├── contentGraph.test.ts      # section floors + reference integrity + loop-prompt config (npm run test:content)
         └── progressStore.ts / progressSync.ts / utils.ts
 ```
 
-**Scripts:** `npm run lint` (tsc) · `test:coaching` · `test:lib` (`src/lib/*.test.{ts,tsx}`) · `test:content` · `test:financials` · `test:macro` · `test:academy` · `check:build` (temp outDir, deleted) · `verify` (all of the above). Do not build into `dist/` from a loop.
+**Scripts:** `npm run lint` (tsc) · `test:coaching` · `test:lib` (`src/lib/*.test.{ts,tsx}`) · `test:content` · `test:financials` · `test:macro` · `test:academy` · `check:build` (temp outDir, deleted) · `verify` (all of the above). Network-only, not in verify: `check:macro-sources`, `check:playbook-sources` (every Playbook resource link). Do not build into `dist/` from a loop.
 
 ---
 
