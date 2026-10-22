@@ -1,5 +1,6 @@
 /** Central pattern registry for Archive, Quiz, and Chart annotations */
 import { ADVANCED_PATTERN_DEFS } from "./advancedPatterns";
+import { CHART_BOOK_DEFS } from "./chartPatternBook";
 
 export type PatternSentiment = "bullish" | "bearish" | "neutral";
 
@@ -108,6 +109,8 @@ export const PATTERNS: PatternDef[] = [
   { id: "supply-zone", name: "Supply Zone", type: "reversal", sentiment: "bearish", confirmation: "medium", description: "A price area where sellers overwhelmed buyers: a small base candle (or a few) followed by a big-body drop away. When price returns to a fresh supply zone, sellers often show up again. A strong close above the zone breaks it." },
   { id: "demand-zone", name: "Demand Zone", type: "reversal", sentiment: "bullish", confirmation: "medium", description: "A price area where buyers overwhelmed sellers: a small base candle (or a few) followed by a big-body rally away. When price returns to a fresh demand zone, buyers often show up again. A strong close below the zone breaks it." },
   ...ADVANCED_PATTERN_DEFS,
+  // chart, gap and volume patterns (chartPatternBook.ts)
+  ...CHART_BOOK_DEFS,
 ];
 
 export function getPattern(id: string): PatternDef | undefined {

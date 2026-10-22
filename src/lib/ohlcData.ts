@@ -1,5 +1,6 @@
 import { SCENARIO_OHLC } from "./scenarioCharts";
 import { ADVANCED_OHLC, ADVANCED_DRILL_SPECS } from "./advancedPatterns";
+import { CHART_BOOK_OHLC, CHART_BOOK_DRILL_SPECS } from "./chartPatternBook";
 
 export interface OHLC {
   name: string;
@@ -1130,6 +1131,7 @@ export const PATTERN_OHLC: Record<string, OHLC[]> = {
   "triple-top": SCENARIO_OHLC["sc-triple-top"],
   "triple-bottom": SCENARIO_OHLC["sc-triple-bottom"],
   ...ADVANCED_OHLC,
+  ...CHART_BOOK_OHLC,
   "hammer-no-trend": HAMMER_NO_TREND_OHLC,
   "engulfing-no-trend": ENGULFING_NO_TREND_OHLC,
 };
@@ -1231,6 +1233,8 @@ export const DRILL_CHART_SPECS: ReadonlyArray<{ key: string; end: number; dir: D
   { key: "engulfing-no-trend", end: 4, dir: "open" },
   // harami crosses, doji stars, high-wave / rickshaw man (wait), advanced / rare patterns
   ...ADVANCED_DRILL_SPECS,
+  // chart, gap and volume patterns: the bar that completes the pattern, then one more confirming candle
+  ...CHART_BOOK_DRILL_SPECS,
 ];
 
 /** One confirming candle: opens at the pattern close and closes beyond the pattern's high (up) or low (down) over bars [from, end]. */
@@ -1262,8 +1266,10 @@ for (const spec of DRILL_CHART_SPECS) {
   const source = PATTERN_OHLC[spec.key];
   if (!source) continue;
   const head = source.slice(0, spec.end + 1);
-  PATTERN_OHLC[drillChartKey(spec.key, spec.dir)] =
-    spec.dir === "open" ? head : [...head, confirmationBar(source, spec.end, spec.dir, spec.from ?? spec.end)];
+  const confirm = spec.dir === "open" ? null : confirmationBar(source, spec.end, spec.dir, spec.from ?? spec.end);
+  // Charts with a volume pane keep one: the confirming candle trades the pattern bar's volume.
+  if (confirm && source[spec.end].volume != null) confirm.volume = source[spec.end].volume;
+  PATTERN_OHLC[drillChartKey(spec.key, spec.dir)] = confirm ? [...head, confirm] : head;
 }
 
 /** High/low span across candles (and optional overlay values). */

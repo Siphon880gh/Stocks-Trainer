@@ -9,6 +9,7 @@
  */
 import { confirmationBar, PATTERN_OHLC, type OHLC } from "./ohlcData";
 import { getPattern, type PatternDef } from "./patterns";
+import { getBookPattern } from "./chartPatternBook";
 
 export const NOT_A_GUARANTEE =
   "Not a guarantee: patterns shift the odds a little at best, and many fail. Size the trade so the stop is a loss you can take.";
@@ -362,6 +363,8 @@ function generalTabs(def: PatternDef): PatternTabs {
 export function patternTabs(def: PatternDef): PatternTabs {
   const core = getCorePattern(def.id);
   if (core) return { ...core.tabs, general: false };
+  const book = getBookPattern(def.id);
+  if (book) return { recognise: book.recognise, psychology: book.psychology, trade: book.trade, general: false };
   return generalTabs(def);
 }
 
@@ -370,6 +373,9 @@ export function patternIllustration(id: string): { bars: OHLC[]; highlight?: num
   const core = getCorePattern(id);
   const src = PATTERN_OHLC[core?.chartKey ?? id];
   if (!src) return { bars: [] };
+  const book = getBookPattern(id);
+  // Chart patterns already end on the bar that completes them (the breakout / confirmation).
+  if (book) return { bars: src.slice(0, book.end + 1), highlight: book.mark, confirmIndex: book.end };
   if (!core) return { bars: src };
   const end = core.bars[1];
   const head = src.slice(0, end + 1);

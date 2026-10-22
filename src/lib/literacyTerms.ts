@@ -1,4 +1,5 @@
 import { ADVANCED_TERMS } from "./advancedPatterns";
+import { CHART_BOOK_TERMS } from "./chartPatternBook";
 import { FINANCIAL_TERMS } from "./financials/terms";
 import { MACRO_TERMS } from "./macro/glossary";
 import { ACADEMY_TERMS } from "./academy/terms";
@@ -649,6 +650,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
       "SAMPLE / STYLIZED packs are curated teaching tapes. DELAYED is a labeled delayed adapter when enabled. Neither is a real-time brokerage quote. Equities path still uses SAMPLE packs first.",
   },
   ...ADVANCED_TERMS,
+  ...CHART_BOOK_TERMS,
   ...FINANCIAL_TERMS,
   ...MACRO_TERMS,
   ...ACADEMY_TERMS,

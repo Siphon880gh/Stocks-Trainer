@@ -1,4 +1,5 @@
 /** Core 14 Japanese patterns: registry, textbook shape rules on the SIMULATED illustrations, three tabs for every pattern, Learn bank. */
+import { getBookPattern } from "./chartPatternBook.ts";
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { PATTERN_OHLC, type OHLC } from "./ohlcData.ts";
@@ -69,7 +70,7 @@ describe("core Japanese patterns", () => {
       const t = patternTabs(p);
       assert.ok(t.recognise.length && t.psychology.length, p.id);
       for (const k of ["confirmation", "entry", "stop", "target"] as const) assert.ok(t.trade[k].length > 10, `${p.id} ${k}`);
-      assert.equal(t.general, !CORE_PATTERNS.some((c) => c.id === p.id), p.id);
+      assert.equal(t.general, !CORE_PATTERNS.some((c) => c.id === p.id) && !getBookPattern(p.id), p.id);
     }
     for (const c of CORE_PATTERNS) assert.match(c.tabs.trade.stop, /(below|above)/i, c.id);
     for (const id of ["dragonfly-doji", "gravestone-doji"]) assert.match(getPattern(id)!.description + CORE_PATTERNS.find((c) => c.id === id)!.tabs.trade.confirmation, /confirm/i, id);

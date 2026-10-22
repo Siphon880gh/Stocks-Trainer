@@ -16,6 +16,7 @@ import { ACADEMY_QUESTION_BANKS, ACADEMY_QUIZ_GROUPS, isAcademyQuizGroup, type A
 import { OSCILLATOR_QUESTIONS, TRADING_RISK_QUESTIONS } from "./oscillatorQuiz";
 import type { OscChartId, OscPanel } from "./oscillatorLab";
 import { HEIKIN_ASHI_QUESTIONS, JAPANESE_CANDLE_QUESTIONS } from "./candleQuiz";
+import { CHART_BOOK_QUESTIONS } from "./chartPatternBook";
 
 export { PRICE_ACTION_QUESTIONS, SUPPLY_DEMAND_QUESTIONS, BUY_SELL_QUESTIONS };
 
@@ -5368,6 +5369,7 @@ export type QuizGroupId =
   | "candle-pattern-book"
   | "japanese-candles"
   | "heikin-ashi"
+  | "chart-patterns"
   | "gap-reversals"
   | "crows-and-strikes"
   | "advanced-rare"
@@ -5468,6 +5470,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Heikin-Ashi Candles",
     description: "The averaged Heikin-Ashi formula, reading trends and turns, and its limits (lag, not traded prices), with SIMULATED chart questions",
     icon: "waterfall_chart",
+  },
+  {
+    id: "chart-patterns",
+    name: "Chart, Gap & Volume Patterns",
+    description: "Windows and the four gap types, islands, flags, pennants, triangles, rectangles, channels, cups, rounding, broadening and diamond patterns, plus what volume adds (climax, dry-up, breakout volume, divergence)",
+    icon: "ssid_chart",
   },
   {
     id: "candle-pattern-book",
@@ -5641,6 +5649,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "candle-pattern-book") return PATTERN_BOOK_QUESTIONS;
   if (groupId === "japanese-candles") return JAPANESE_CANDLE_QUESTIONS;
   if (groupId === "heikin-ashi") return HEIKIN_ASHI_QUESTIONS;
+  if (groupId === "chart-patterns") return CHART_BOOK_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
@@ -5669,6 +5678,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "candle-pattern-book") return PATTERN_BOOK_QUESTIONS;
   if (groupId === "japanese-candles") return JAPANESE_CANDLE_QUESTIONS;
   if (groupId === "heikin-ashi") return HEIKIN_ASHI_QUESTIONS;
+  if (groupId === "chart-patterns") return CHART_BOOK_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
