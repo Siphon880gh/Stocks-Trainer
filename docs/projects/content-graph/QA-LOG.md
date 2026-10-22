@@ -130,3 +130,12 @@ Screenshots (box only): `/workspace/checkpoints/qa/crypto-candles-{390,1280}.png
 | Learn `reversal-charts` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/reversal-charts-{390,1280}.png`.
+
+## 2026-10-22 Reading 1-minute charts (#10)
+
+| Flow | Result |
+|---|---|
+| `/practice/one-minute-charts`, 390 and 1280 (e2e) | Grouping + 78 bars, MES calc (1 tick loses, 3 ticks nets), Fib Reverse / Extend Lines, Bar Count Normal 2, legs mark done. |
+| Learn `one-minute-charts` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/one-minute-charts-{390,1280}.png`.

@@ -125,3 +125,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## 2026-10-22 Reversal chart patterns (#9)
 - Audit: H&S, inverse H&S, double/triple top/bottom, rising/falling wedge already in PATTERNS with thin descriptions; rounding, cup, rectangles already deep in CHART_BOOK. Complex H&S deferred from #4.
 - Deepened via `/practice/reversal-charts` (`src/lib/reversalCharts.ts`): neckline, volume, measured move, retest, invalidation; custom Archive tabs; rectangle ≠ triple bottom panel; Learn group `reversal-charts` (12); 3 new glossary terms (measured-move, pattern-retest, pattern-invalidation; neckline already existed).
+
+## 2026-10-22 Reading 1-minute charts (#10)
+- Audit: no dedicated 1m grouping / MES tick / bar-count lesson; fib tool names verified on TradingView (Reverse, Extend Lines Left/Right); MES 0.25 = $1.25 from CME FAQ/rulebook.
+- Added `/practice/one-minute-charts` (`src/lib/oneMinuteCharts.ts`): grouping, open hour, legs drill + SIMULATED 1m chart, MES calculator, fib + bar count, Learn `one-minute-charts` (12), 7 glossary terms.
