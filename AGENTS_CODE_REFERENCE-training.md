@@ -56,7 +56,7 @@ Near the end:
 
 Near the top of `Training.tsx`:
 - Reads `?group=` and `?start=1` from search params.
-- State: selected group, quiz open; points/streak/accuracy seed from `progressStore`.
+- State: selected group, quiz open; points/streak/accuracy seed from `progressStore`. UI calls the quiz streak "Answer streak" and the Academy one "Day streak" (`src/lib/streakLabels.ts`).
 - `start=1` effect opens `QuizModal`.
 
 UI (middle): group picker from `QUIZ_GROUPS`, launch quiz, answer sheet, links to Archive.
@@ -141,7 +141,7 @@ Archive (?tab,&open) → PATTERNS / OVERLAYS → detail modals
 | Challenges | `challenges.ts`, `pages/academy/PaperChallenges.tsx` | 10 challenges, discipline 60 + result 40, fictional benchmark leaderboard |
 | Rewards | `rewards/` (ledger, streak, levels, badges, award, refresh, retro), `components/academy/RewardsPanel.tsx` | virtual points only; 24 badges; retro credit reads older progress keys and writes none of them |
 | Options ladder | `options/` (payoff, ladder, checks, gate), `components/academy/options/*`, `pages/academy/OptionsLadder.tsx` | payoff at expiration only (no chain or Greeks); 4 levels, 8 checks each, 3 attempts per 24 h |
-| Today card | `today.ts`, `components/academy/TodayCard.tsx` | deterministic daily picks; the review answer counts as the streak day |
+| Today card | `today.ts`, `components/academy/TodayCard.tsx` | deterministic daily picks; the review answer (right +5, wrong +1) counts as the Day streak day |
 | Home / Learn / Coach | `homeTip.ts`, `AcademyHomeTip.tsx`, `AcademyTrainingCard.tsx`, `coaching/sessions/first-paper-trade.ts` | additive lines in Dashboard.tsx and Training.tsx; no header nav item |
 | Storage | `storage.ts` | `analysis_core_academy_v1`, `analysis_core_academy_paper_v1`, `analysis_core_academy_rewards_v1`, each with schemaVersion + migrate |
 | Tests | `npm run test:academy` (`src/lib/academy/**/*.test.{ts,tsx}`), incl. `floors.test.ts` (charter floors) and `academyRoutes.render.test.tsx` (every academy href resolves) | |

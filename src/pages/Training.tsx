@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { ANSWER_STREAK_LABEL, ANSWER_STREAK_TIP } from "../lib/streakLabels";
 import { Link, useSearchParams } from "react-router-dom";
 import QuizModal from "../components/QuizModal";
 import AnswerSheetModal from "../components/AnswerSheetModal";
@@ -258,8 +259,8 @@ export default function Training() {
               <p className="text-[12px] text-muted mb-1">Points</p>
               <p className="text-2xl font-semibold tabular-nums">{points}</p>
             </div>
-            <div className="border border-line rounded-lg p-4 text-center bg-canvas">
-              <p className="text-[12px] text-muted mb-1">Streak</p>
+            <div className="border border-line rounded-lg p-4 text-center bg-canvas" title={ANSWER_STREAK_TIP} data-testid="answer-streak">
+              <p className="text-[12px] text-muted mb-1">{ANSWER_STREAK_LABEL}</p>
               <p className="text-2xl font-semibold tabular-nums flex items-center justify-center gap-1">
                 <span className="material-symbols-outlined text-accent-red text-xl">local_fire_department</span>
                 {streak}

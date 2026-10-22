@@ -14,7 +14,7 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 | ID | Goal | Path milestone / surface | Success signal |
 |----|------|--------------------------|----------------|
-| G1 | Choose a learning path and see real progress chrome | GoalPicker + Dashboard | Confirmed path; milestone list matches template; PTS/streak from store |
+| G1 | Choose a learning path and see real progress chrome | GoalPicker + Dashboard | Confirmed path; milestone list matches template; PTS / Answer streak from store |
 | G2 | Equities vocabulary (share, exchange, long/short, risk/horizon) | E4.M1 · quiz `equity-literacy` | Quiz finish → E4.M1 `complete`; E4.M2 unlocks |
 | G3 | Read a simple financial snapshot (revenue, profit vs cash, P/E, margin) | E4.M2 · quiz `financial-literacy` | Quiz finish → E4.M2 `complete`; E4.M0 unlocks |
 | G4 | Candle/indicator fluency (chart soft-gate) | E4.M0 · quiz `indicators` | Quiz finish → E4.M0 `complete`; graded cases unlock |
@@ -344,7 +344,7 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 3. `/academy`: level map with progress, **Continue** to the next unit, paper / challenges / options cards, Today card, rewards panel ("virtual points" disclaimer).
 4. Open a unit (`/academy/<unitId>`): 3–6 cards, a 3-question check; 3/3 masters the unit and shows a points toast; chips link into existing Learn groups, glossary, Coach and Cases.
 5. `/academy/test-out/<levelId>`: no answers before submit; 85% credits the whole level.
-6. Today card: answer the review question once; feedback plus "+5 points · today counts toward your streak"; a second answer the same day is ignored.
+6. Today card: answer the review question once; feedback plus "+5 points for a correct answer · today counts toward your day streak" (a wrong answer gives "+1 point for answering …"); the label reads "Day streak"; a second answer the same day is ignored.
 
 **Pass:** nothing in the existing Beginner path is unlocked or changed by Academy progress; works at 390 px width.
 

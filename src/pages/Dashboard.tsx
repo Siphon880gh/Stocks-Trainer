@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { ANSWER_STREAK_LABEL, ANSWER_STREAK_TIP } from "../lib/streakLabels";
 import MacroHomeTip from "../components/macro/MacroHomeTip";
 import PlacementCard from "../components/academy/PlacementCard";
 import TodayCard from "../components/academy/TodayCard";
@@ -285,7 +286,11 @@ export default function Dashboard() {
           <Link to="/playbooks" className="text-primary hover:underline">Playbooks</Link>
         </div>
         <p className="text-[12px] text-muted tabular-nums">
-          {progress.scores.totalPoints} pts · streak {progress.streaks.current} · {progress.scores.accuracy}% accuracy
+          {progress.scores.totalPoints} pts ·{" "}
+          <span title={ANSWER_STREAK_TIP} data-testid="answer-streak">
+            {ANSWER_STREAK_LABEL} {progress.streaks.current}
+          </span>{" "}
+          · {progress.scores.accuracy}% accuracy
         </p>
       </section>
 

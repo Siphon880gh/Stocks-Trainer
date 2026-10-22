@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DAY_STREAK_LABEL, DAY_STREAK_TIP } from "../../lib/streakLabels";
 import { Link } from "react-router-dom";
 import type { AnswerLetter } from "../../lib/academy/types";
 import { loadAcademy, saveAcademy, type KVStorage } from "../../lib/academy/storage";
@@ -39,8 +40,8 @@ export default function TodayCard({ storage, now = () => new Date(), variant = "
           </span>
           Today in the Academy
         </h2>
-        <span className="text-[12px] text-muted tabular-nums" data-testid="today-streak">
-          Streak {streak.current} {streak.current === 1 ? "day" : "days"}
+        <span className="text-[12px] text-muted tabular-nums" data-testid="today-streak" title={DAY_STREAK_TIP}>
+          {DAY_STREAK_LABEL} {streak.current} {streak.current === 1 ? "day" : "days"}
           {streak.activeToday ? " · done today" : ""}
         </span>
       </div>

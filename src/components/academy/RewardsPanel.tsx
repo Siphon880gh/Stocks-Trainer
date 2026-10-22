@@ -1,4 +1,5 @@
 import { BADGES } from "../../lib/academy/rewards/badges";
+import { DAY_STREAK_LABEL, DAY_STREAK_TIP } from "../../lib/streakLabels";
 import { pointsBySource, totalPoints } from "../../lib/academy/rewards/ledger";
 import { rankForPoints } from "../../lib/academy/rewards/levels";
 import { computeStreak } from "../../lib/academy/rewards/streak";
@@ -20,11 +21,11 @@ export default function RewardsPanel({ storage, now = new Date() }: { storage?: 
         <p className="font-semibold">
           {pts} practice points · Rank {rank.rank}: {rank.name}
         </p>
-        <p className="text-[13px]" data-testid="streak">
+        <p className="text-[13px]" data-testid="streak" title={DAY_STREAK_TIP}>
           <span className="material-symbols-outlined text-base align-middle text-accent-red" aria-hidden>
             local_fire_department
           </span>{" "}
-          {streak.current}-day streak{streak.freezesAvailable ? " · 1 freeze saved" : ""} · best {streak.best}
+          {DAY_STREAK_LABEL} {streak.current} {streak.current === 1 ? "day" : "days"}{streak.freezesAvailable ? " · 1 freeze saved" : ""} · best {streak.best}
         </p>
         <p className="text-[12px] text-muted">
           {earned}/{BADGES.length} badges

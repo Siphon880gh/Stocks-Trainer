@@ -51,7 +51,7 @@ Other market types ship as SAMPLE browse (**E9**). **E10** adds a **Market Navig
 
 | Objective | Plain-language goal | Main surface | Success looks like |
 |-----------|---------------------|--------------|--------------------|
-| **Path & progress** | Pick a track and see real milestones / PTS / streak | Dashboard GoalPicker | Path confirmed; step chrome updates |
+| **Path & progress** | Pick a track and see real milestones / PTS / Answer streak (Academy shows a separate Day streak) | Dashboard GoalPicker | Path confirmed; step chrome updates |
 | **Equities vocabulary** | Share, exchange, long/short, risk & horizon | Training · **Equities Literacy** | Quiz finished; next milestone unlocks |
 | **Statement literacy** | Revenue, profit vs cash, P/E, margin on SAMPLE cards | Training · **Statements Literacy** | Quiz finished; chart gate opens |
 | **Chart fluency** | Candles + SMA/EMA/RSI/MACD/Bollinger | Training · **Indicators** (soft-gate) | Graded cases unlock |

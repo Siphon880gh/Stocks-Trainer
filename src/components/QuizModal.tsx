@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, type ReactElement } from "react";
+import { ANSWER_STREAK_LABEL, ANSWER_STREAK_TIP } from "../lib/streakLabels";
 import { Link } from "react-router-dom";
 import { cn } from "../lib/utils";
 import {
@@ -175,7 +176,9 @@ export default function QuizModal({
               {currentIndex + 1} / {questions.length}
             </span>
             <span className="font-semibold text-ink">{points} pts</span>
-            <span>Streak {streak}</span>
+            <span title={ANSWER_STREAK_TIP}>
+              {ANSWER_STREAK_LABEL} {streak}
+            </span>
             <button
               onClick={handleClose}
               className="p-2 rounded hover:bg-primary/10 text-primary transition-colors"
