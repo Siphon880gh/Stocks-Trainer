@@ -31,6 +31,8 @@ export interface CaseResultRecord {
   action: string;
   grade: CaseResultGrade;
   completedAt: string;
+  /** Points from the first scored play (added 2026-10-22). Replays keep this and earn nothing. */
+  pointsAwarded?: number;
 }
 
 /** Local-only identity shell (E8.M2). No OAuth / paid IdP. */
@@ -581,15 +583,37 @@ export function isMarketExplorerPathComplete(state?: ProgressState): boolean {
   );
 }
 
-export function recordCaseResult(opts: {
+/** Case points by decision quality, on the case grade the player already shows: best / acceptable / poor. */
+export const CASE_POINTS: Record<CaseResultGrade, number> = { correct: 10, partial: 5, incorrect: 1 };
+
+export interface CaseResultOutcome {
+  state: ProgressState;
+  /** Points added by this play (0 on a replay). */
+  pointsAwarded: number;
+  /** True when this case had already paid out, so this play is a replay. */
+  replay: boolean;
+  /** What the first scored play earned (this play's points when it is the first). */
+  firstPoints: number;
+}
+
+/**
+ * Save a case decision. Points are paid once per case (CASE_POINTS by grade) into scores.totalPoints;
+ * replays overwrite the latest action and grade but keep the first award and add nothing. A case saved
+ * before points existed (no pointsAwarded) pays once on its next play.
+ */
+export function recordCaseOutcome(opts: {
   caseId: string;
   action: string;
   grade: CaseResultGrade;
   milestoneId?: string;
-}): ProgressState {
+}): CaseResultOutcome {
   const { state } = loadProgress();
   const normalized = normalizeProgress(state);
   const completedAt = new Date().toISOString();
+  const prior = normalized.caseResults[opts.caseId];
+  const replay = typeof prior?.pointsAwarded === "number";
+  const pointsAwarded = replay ? 0 : CASE_POINTS[opts.grade];
+  const firstPoints = replay ? prior!.pointsAwarded! : pointsAwarded;
   const caseResults = {
     ...normalized.caseResults,
     [opts.caseId]: {
@@ -597,6 +621,7 @@ export function recordCaseResult(opts: {
       action: opts.action,
       grade: opts.grade,
       completedAt,
+      pointsAwarded: firstPoints,
     },
   };
 
@@ -620,11 +645,17 @@ export function recordCaseResult(opts: {
     }
   }
 
-  return saveProgress({
+  const saved = saveProgress({
     ...normalized,
     milestones,
     caseResults,
+    scores: { ...normalized.scores, totalPoints: normalized.scores.totalPoints + pointsAwarded },
   });
+  return { state: saved, pointsAwarded, replay, firstPoints };
+}
+
+export function recordCaseResult(opts: Parameters<typeof recordCaseOutcome>[0]): ProgressState {
+  return recordCaseOutcome(opts).state;
 }
 
 export function isDecisionMakerPathComplete(state?: ProgressState): boolean {

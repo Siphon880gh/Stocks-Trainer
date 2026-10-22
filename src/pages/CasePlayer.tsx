@@ -22,7 +22,8 @@ import {
   type CaseAction,
   type CaseGrade,
 } from "../lib/caseStudies";
-import { recordCaseResult } from "../lib/progressStore";
+import { recordCaseOutcome, type CaseResultOutcome } from "../lib/progressStore";
+import CasePointsLine from "../components/CasePointsLine";
 import {
   coachTipForThinkingMode,
   thinkingModeLabel,
@@ -51,6 +52,7 @@ export default function CasePlayer() {
   const [selected, setSelected] = useState<CaseAction | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [grade, setGrade] = useState<CaseGrade | null>(null);
+  const [award, setAward] = useState<Pick<CaseResultOutcome, "pointsAwarded" | "replay" | "firstPoints"> | null>(null);
   const [explainOpen, setExplainOpen] = useState(false);
   const closeExplain = useCallback(() => setExplainOpen(false), []);
 
@@ -116,12 +118,13 @@ export default function CasePlayer() {
     setGrade(g);
     setSubmitted(true);
     const packMeta = CASE_PACKS.find((p) => p.id === study.packId);
-    recordCaseResult({
+    const out = recordCaseOutcome({
       caseId: study.id,
       action: selected,
       grade: g,
       milestoneId: packMeta?.milestoneId,
     });
+    setAward({ pointsAwarded: out.pointsAwarded, replay: out.replay, firstPoints: out.firstPoints });
   };
 
   return (
@@ -226,6 +229,7 @@ export default function CasePlayer() {
                     : "Incorrect"}
                 {selected ? ` · you chose ${selected}` : ""}
               </p>
+              {award ? <CasePointsLine award={award} /> : null}
               {showAiExplain ? (
                 <button
                   type="button"
@@ -275,3 +279,4 @@ export default function CasePlayer() {
     </div>
   );
 }
+

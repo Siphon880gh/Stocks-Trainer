@@ -108,3 +108,47 @@ describe("Quiz milestone pass mark (Weng 2026-10-22: 70%)", () => {
     assert.equal(quizGroupCompletes("buy-or-sell"), false);
   });
 });
+
+describe("Case points (Weng 2026-10-22: once per case, by grade)", () => {
+  beforeEach(() => {
+    installStorage();
+  });
+
+  it("pays 10 / 5 / 1 for correct / partial / incorrect into totalPoints", async () => {
+    const { recordCaseOutcome, CASE_POINTS } = await import("./progressStore.ts");
+    assert.deepEqual(CASE_POINTS, { correct: 10, partial: 5, incorrect: 1 });
+    const a = recordCaseOutcome({ caseId: "c1", action: "buy", grade: "correct" });
+    const b = recordCaseOutcome({ caseId: "c2", action: "wait", grade: "partial" });
+    const c = recordCaseOutcome({ caseId: "c3", action: "sell", grade: "incorrect" });
+    assert.deepEqual([a.pointsAwarded, b.pointsAwarded, c.pointsAwarded], [10, 5, 1]);
+    assert.equal(c.state.scores.totalPoints, 16);
+    assert.equal(c.state.caseResults.c1!.pointsAwarded, 10);
+  });
+
+  it("a replay earns nothing, keeps the first award and still updates the latest grade", async () => {
+    const { recordCaseOutcome } = await import("./progressStore.ts");
+    recordCaseOutcome({ caseId: "c1", action: "sell", grade: "incorrect" });
+    const r = recordCaseOutcome({ caseId: "c1", action: "buy", grade: "correct" });
+    assert.equal(r.replay, true);
+    assert.equal(r.pointsAwarded, 0);
+    assert.equal(r.firstPoints, 1);
+    assert.equal(r.state.scores.totalPoints, 1);
+    assert.equal(r.state.caseResults.c1!.grade, "correct");
+    assert.equal(r.state.caseResults.c1!.pointsAwarded, 1);
+  });
+
+  it("a case saved before points existed pays once on its next play, then never again", async () => {
+    const { recordCaseOutcome } = await import("./progressStore.ts");
+    const st = loadProgress().state;
+    st.caseResults = { old: { caseId: "old", action: "buy", grade: "correct", completedAt: "2026-10-01T00:00:00.000Z" } };
+    st.scores = { totalPoints: 40, accuracy: 80 };
+    localStorage.setItem(PROGRESS_STORAGE_KEY, JSON.stringify(st));
+    const first = recordCaseOutcome({ caseId: "old", action: "buy", grade: "correct" });
+    assert.equal(first.pointsAwarded, 10);
+    assert.equal(first.state.scores.totalPoints, 50);
+    assert.equal(first.state.scores.accuracy, 80);
+    const again = recordCaseOutcome({ caseId: "old", action: "buy", grade: "correct" });
+    assert.equal(again.pointsAwarded, 0);
+    assert.equal(again.state.scores.totalPoints, 50);
+  });
+});
