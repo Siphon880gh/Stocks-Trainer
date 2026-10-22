@@ -106,3 +106,16 @@ test("sessions keep the option and replay deterministically", () => {
   assert.equal(a.positions["TRWL.S"]!.qty, -20);
   assert.deepEqual(a, replay(JSON.parse(JSON.stringify(log))));
 });
+
+// QA regression: with short selling ON, selling more than a long showed "(no shorting in v1)".
+test("selling past a long explains the no-flip rule, and only says 'no shorting' when shorting is off", () => {
+  const longOn = applyFill(shortAcct(), { orderId: "seed", bar: 0, symbol: SYM, side: "buy", qty: 5, price: 5000 }).state;
+  const on = codes(longOn, sell({ qty: 6 })).errors.find((e) => e.code === "SELL_EXCEEDS_POSITION")!;
+  assert.match(on.message, /sell at most 5/);
+  assert.match(on.message, /never flips you from long to short/);
+  assert.doesNotMatch(on.message, /v1|does not allow/);
+  const longOff = applyFill(createAccount(1_000_000, { [SYM]: 5000 }), { orderId: "seed", bar: 0, symbol: SYM, side: "buy", qty: 5, price: 5000 }).state;
+  const off = codes(longOff, sell({ qty: 6 })).errors.find((e) => e.code === "SELL_EXCEEDS_POSITION")!;
+  assert.match(off.message, /short sale, which the core Academy does not allow/);
+  assert.doesNotMatch(off.message, /v1/);
+});

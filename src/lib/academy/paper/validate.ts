@@ -166,7 +166,13 @@ export function validateOrder(state: AccountState, spec: OrderSpec, ctx: MarketC
   const covers = spec.side === "buy" && held < 0;
   if (spec.side === "sell" && spec.qty > 0) {
     if (held === 0 && !shortOk) e("SHORT_NOT_ALLOWED", "You do not own this stock. Selling it would be a short sale, which the core Academy does not allow.");
-    else if (held > 0 && spec.qty > held) e("SELL_EXCEEDS_POSITION", `You own ${held} shares; you cannot sell ${spec.qty} (no shorting in v1).`);
+    else if (held > 0 && spec.qty > held)
+      e(
+        "SELL_EXCEEDS_POSITION",
+        shortOk
+          ? `You own ${held} shares; sell at most ${held}. One order never flips you from long to short: sell these first, then place a separate short sale.`
+          : `You own ${held} shares; you cannot sell ${spec.qty}. Selling more than you own would be a short sale, which the core Academy does not allow.`,
+      );
     if (opensShort && !Number.isInteger(spec.qty)) e("FRACTIONAL_SHORT", "Fractional shares cannot be sold short; use whole shares.");
     if (opensShort && spec.type === "trailing-stop") e("SHORT_TRAIL_NOT_SUPPORTED", "A trailing stop protects shares you own; it cannot open a short sale.");
   }
