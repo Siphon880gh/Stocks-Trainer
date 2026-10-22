@@ -58,6 +58,7 @@ import { optionsLiteracySession } from "./options-literacy";
 import { optionsPostEventSession } from "./options-post-event";
 import { optionsPreEventChaseSession } from "./options-pre-event-chase";
 import { chasingASqueezeSession } from "./chasing-a-squeeze";
+import { newsDayDecisionSession } from "./news-day-decision";
 import { optionsRiskOffStockSession } from "./options-risk-off-stock";
 import { optionsRumorVsEventSession } from "./options-rumor-vs-event";
 import { optionsUnderlyingHeadlineSession } from "./options-underlying-headline";
@@ -134,6 +135,7 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   optionsLiteracySession,
   optionsPreEventChaseSession,
   chasingASqueezeSession,
+  newsDayDecisionSession,
   optionsHorizonMismatchSession,
   equitiesLiteracySession,
   newsLiteracySession,

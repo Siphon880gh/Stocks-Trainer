@@ -22,6 +22,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "japanese-candles", title: "Japanese candlesticks", to: "/practice/japanese-candles" },
   { id: "heikin-ashi", title: "Heikin-Ashi candles", to: "/practice/heikin-ashi" },
   { id: "gamma-squeeze", title: "Gamma squeeze case", to: "/practice/gamma-squeeze" },
+  { id: "news-biases", title: "News, biases & short-term options", to: "/practice/news-biases" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

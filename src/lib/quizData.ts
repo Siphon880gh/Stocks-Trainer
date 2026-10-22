@@ -18,6 +18,7 @@ import type { OscChartId, OscPanel } from "./oscillatorLab";
 import { HEIKIN_ASHI_QUESTIONS, JAPANESE_CANDLE_QUESTIONS } from "./candleQuiz";
 import { CHART_BOOK_QUESTIONS } from "./chartPatternBook";
 import { squeezeQuestions } from "./gammaSqueeze";
+import { NEWS_BIAS_QUESTIONS } from "./newsBiases";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5383,6 +5384,7 @@ export type QuizGroupId =
   | "oscillators"
   | "trading-risk"
   | "squeezes"
+  | "news-biases"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5456,6 +5458,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Squeezes, Options Flow & Survivorship",
     description: "Gamma and dealer hedging, gamma vs short squeezes, short interest, days to cover, open interest, unusual options activity and survivorship bias, with the SIMULATED gamma squeeze case",
     icon: "trending_up",
+  },
+  {
+    id: "news-biases",
+    name: "News, Biases & Short-Term Options",
+    description: "Expiry length for a news idea (weekly vs about two months vs LEAPS), recency, availability, confirmation, FOMO, loss aversion and anchoring, information overload, over- and underreaction, OCO exits, source checks and the do-nothing rule",
+    icon: "newspaper",
   },
   {
     id: "candle-anatomy",
@@ -5652,6 +5660,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
   if (groupId === "trading-risk") return TRADING_RISK_QUESTIONS;
   if (groupId === "squeezes") return SQUEEZE_QUESTIONS;
+  if (groupId === "news-biases") return NEWS_BIAS_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5682,6 +5691,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
   if (groupId === "trading-risk") return TRADING_RISK_QUESTIONS;
   if (groupId === "squeezes") return SQUEEZE_QUESTIONS;
+  if (groupId === "news-biases") return NEWS_BIAS_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;

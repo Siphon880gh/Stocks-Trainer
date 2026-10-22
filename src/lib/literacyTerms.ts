@@ -6,6 +6,7 @@ import { ACADEMY_TERMS } from "./academy/terms";
 import { OSCILLATOR_TERMS } from "./oscillatorTerms";
 import { CANDLE_TERMS } from "./candleTerms";
 import { SQZ_TERMS } from "./gammaSqueeze";
+import { NEWS_BIAS_TERMS } from "./newsBiases";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
@@ -658,6 +659,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...OSCILLATOR_TERMS,
   ...CANDLE_TERMS,
   ...SQZ_TERMS,
+  ...NEWS_BIAS_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

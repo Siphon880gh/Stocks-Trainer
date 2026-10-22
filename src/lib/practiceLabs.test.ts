@@ -44,6 +44,7 @@ describe("misc practice catalog", () => {
       "Japanese candlesticks",
       "Heikin-Ashi candles",
       "Gamma squeeze case",
+      "News, biases & short-term options",
     ]);
   });
 });
