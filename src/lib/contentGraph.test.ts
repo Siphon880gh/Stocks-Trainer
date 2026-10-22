@@ -135,6 +135,7 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "news-biases": 15,
   "algo-trading": 17,
   "charting-apps": 14,
+  "crypto-candles": 12,
 };
 const NON_FAMILY = new Set<string>([...PHASE_A, ...PHASE_D, ...Object.keys(DEDICATED_FLOORS)]);
 
