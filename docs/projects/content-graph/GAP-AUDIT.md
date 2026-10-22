@@ -113,3 +113,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## 2026-10-22 News, biases & short-term options
 - Audit: no bias content or terms (recency, availability, confirmation, FOMO, loss aversion, anchoring), no LEAPS or information-overload terms; `news-literacy` covers headline reading, `no-trade-zone` and `short-dated-option` terms exist and are linked, paper brackets exist on `/paper`.
 - Added `/practice/news-biases` (`src/lib/newsBiases.ts`), Learn group `news-biases` (17, floor 15), Coach `news-day-decision`, 9 glossary terms, and an optional bias check on the paper order ticket (off by default).
+
+## 2026-10-22 Automated & algo trading, charting apps, PDT
+- Audit: no content on broker APIs, backtesting, bots, webhooks, spoofing or wash trades; stop and stop-limit terms exist in the Academy (reused, not duplicated); no text referred to the pattern day trader rule or the $25,000 minimum, so nothing needed rewording; KDJ term exists (reused); no charting-app comparison, data-feed or log-scale content; no broker-education or PFOF content.
+- Added `/practice/algo-trading` (`src/lib/algoTrading.ts`, `src/lib/pdtRule.ts`), Learn group `algo-trading` (17, floor 17), 5 PDT questions in `trading-risk`; `/practice/charting-apps` (`src/lib/chartingApps.ts`), Learn group `charting-apps` (14, floor 14); 20 glossary terms; two example Webull screenshots as webp in `public/screenshots/`.

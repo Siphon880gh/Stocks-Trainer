@@ -100,3 +100,13 @@ Screenshots (box only): `/workspace/checkpoints/qa/gamma-squeeze-{390,1280}.png`
 | `npm run test:e2e` | 187 checks, 0 failed; its own server closed after. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/news-biases-{390,1280}.png`, `/workspace/checkpoints/qa/news-bias-ticket-{390,1280}.png`.
+
+## 2026-10-22 Automated & algo trading, charting apps, PDT
+
+| Flow | Result |
+|---|---|
+| `/practice/algo-trading`, 390 and 1280 (e2e) | 9 broker rows, PDT panel dates, ATR calculator 33 → 66 shares, playbook marks the practice done; tables scroll inside their panels, no page overflow, no console errors. |
+| `/practice/charting-apps`, 390 and 1280 (e2e) | 11 app rows, spot-the-trap graded, both Webull screenshots load with alt text, lightbox opens and closes with Escape, 5 broker learning links. |
+| Learn `algo-trading`, `charting-apps` (e2e) | Groups listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/algo-trading-{390,1280}.png`, `/workspace/checkpoints/qa/charting-apps-{390,1280}.png`, `/workspace/checkpoints/qa/charting-apps-webull-{390,1280}.png`.

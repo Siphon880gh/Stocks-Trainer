@@ -80,6 +80,8 @@ Other market types ship as SAMPLE browse (**E9**). **E10** adds a **Market Navig
 | **Float, short-dated options & risk** | Float and float turnover, short-dated option risk, position sizing, why the same market gives different results | Learn **Float, Short-Dated Options & Risk** | Quiz passed (70%) |
 | **Squeezes & options flow** | Gamma and dealer hedging, gamma vs short squeezes, short interest, days to cover, open interest, unusual options activity, survivorship bias | **Gamma squeeze case** (`/practice/gamma-squeeze`) + Learn **Squeezes, Options Flow & Survivorship** + Coach **Chasing a squeeze** | Case graded (enter · size · exit); quiz passed (70%) |
 | **News, biases & short-term options** | Expiry length for a news idea (weekly vs about two months vs LEAPS), six biases with news examples and countermeasures, information overload, over- and underreaction, OCO exits, source checks, the do-nothing rule | **News, biases & short-term options** (`/practice/news-biases`) + Learn **News, Biases & Short-Term Options** + Coach **A news-day decision** + optional bias check on the paper ticket | Checkpoints answered; quiz passed (70%) |
+| **Automated & algo trading (2026)** | Broker APIs and paper trading, backtest traps, kill switches, API key safety, spoofing and wash trades, stops vs stop-limits vs trailing stops on news gaps, LULD and circuit breakers, ATR sizing, the PDT rule's replacement by intraday margin | **Automated & algo trading** (`/practice/algo-trading`) + Learn **Automated & Algo Trading** + PDT questions in Learn **Float, Short-Dated Options & Risk** | Playbook ticked; quiz passed (70%) |
+| **Indicator & charting apps** | 11 charting apps compared, how charts mislead, Robinhood vs Webull charting, how broker education works (payment for order flow), reading example Webull P&L and account screens | **Indicator & charting apps** (`/practice/charting-apps`) + Learn **Indicator & Charting Apps** | Spot-the-trap answered; quiz passed (70%) |
 
 ---
 
@@ -190,6 +192,8 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | `/practice/heikin-ashi` | Heikin-Ashi lab: formula, limits, regular vs Heikin-Ashi toggle on one SIMULATED chart, computed questions |
 | `/practice/gamma-squeeze` | Gamma squeeze case: a SIMULATED weekly-call chase with enter / size / exit decisions, reveal, points and a stall counterfactual |
 | `/practice/news-biases` | News, biases & short-term options: expiry trade-off table, six bias cards, over- and underreaction research, OCO / bracket habits, a three-checkpoint news day |
+| `/practice/algo-trading` | Automated & algo trading (2026): broker API table, backtest traps, bot safety, PDT → intraday margin, stops around news, ATR sizing calculator, news-day playbook |
+| `/practice/charting-apps` | Indicator & charting apps: 11-app table, chart traps with a spot-the-trap drill, Robinhood and Webull charting views, example Webull screenshots, learning from broker apps |
 | `/practice/statements` | Statements lab · 13-week cash forecast · biotech readout day |
 | `/practice/read-the-print` · `/practice/mark-the-band` | Earnings reaction game · expected-move band |
 | `/coach` · `/coach/:slug` | Step-by-step coaching (decision trees · no LLM) |
@@ -286,6 +290,23 @@ Beginner training modelled on how broker apps such as Webull teach new investors
 - Habits: OCO and bracket exits (practised on the paper account), seeking contrary evidence, auditing the source (Investor.gov and FINRA pump-and-dump alerts), the do-nothing rule, and a Schwab Trader Talks video on news and trade decisions.
 - The paper order ticket has an optional **bias check** (off by default): six questions that must all be ticked before the order can be placed.
 - Learn **News, Biases & Short-Term Options** (17 questions), Coach **A news-day decision** (bias checkpoints), and 9 glossary terms (the six biases, information overload, overtrading, LEAPS). Content in `src/lib/newsBiases.ts`.
+
+### Automated & algo trading (`/practice/algo-trading`)
+
+- Broker APIs and paper trading as of 2026-10-22 (Alpaca, Interactive Brokers, Schwab, Tradier, tastytrade, Webull, E*TRADE, Robinhood, NinjaTrader / Tradovate), each row with its source. Robinhood has no public stock-trading API; it has a crypto API and, since May 27, 2026, an agentic-trading beta for equities.
+- Why backtests flatter (overfitting, look-ahead bias, survivorship bias, costs, optimistic paper fills, live-only risks), TradingView webhooks and QuantConnect, bot controls (kill switch, loss and position limits), API key safety, and the law on spoofing and wash trades.
+- Day trading on margin: FINRA's intraday margin standards replace the pattern day trader rule (SEC approval April 14, 2026; effective June 4, 2026; brokers switch by October 20, 2027). No $25,000 minimum or trade count; $2,000 still needed for leverage; repeated unmet intraday deficits can restrict an account for up to 90 days. Content in `src/lib/pdtRule.ts`; 5 questions added to Learn **Float, Short-Dated Options & Risk**.
+- Stops around news: stop vs stop-limit vs trailing vs bracket vs a defined-risk option; 8:30 AM ET (5:30 AM PT) releases and the 2026 CPI, jobs and FOMC dates; extended hours; LULD and circuit breakers; an ATR sizing calculator ($200 risk, ATR $2: 66 shares at 1.5×, 33 at 3×); broker-held vs script stops; an eight-step news-day playbook.
+- Learn **Automated & Algo Trading** (17 questions) and 14 glossary terms (12 algo, 2 PDT). Content in `src/lib/algoTrading.ts`.
+
+### Indicator & charting apps (`/practice/charting-apps`)
+
+- 11 apps compared as of 2026-10-22: TradingView, Webull, Robinhood app, Robinhood Legend, thinkorswim, TC2000, TrendSpider, IBKR, Yahoo Finance, Finviz, StockCharts (indicators, scripting, layouts, cost, data notes, sources).
+- How charts mislead (log vs linear, extended hours, bar intervals, line vs candles, data feeds, unadjusted splits, indicator warm-up) with a three-item spot-the-trap drill.
+- Opinion panels, backed by each broker's docs: why the Robinhood app's indicator chart can mislead, and why Webull's is useful (MACD is taught as momentum, not overbought / oversold).
+- Example Webull screenshots (P&L calendar and Assets tab, `public/screenshots/*.webp` with 480 px variants, alt text and a tap-to-enlarge view): daily vs open P&L, cash vs buying power vs settled cash (T+1), separate options buying power, and the Risk Level indicator.
+- Learning from broker apps: Webull Learn, Fidelity, Schwab, Robinhood Learn and tastytrade; why it's free (payment for order flow); a sample path (a month of tutorials, about a year of paper trading, then small real positions) and an optional checklist.
+- Learn **Indicator & Charting Apps** (14 questions) and 6 glossary terms. Content in `src/lib/chartingApps.ts`.
 
 ### Playbooks (`/playbooks`)
 
