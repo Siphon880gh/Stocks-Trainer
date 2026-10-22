@@ -80,7 +80,11 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
                 <p className="text-[10px] text-muted px-2 pt-1">
                   SIMULATED illustration{ill.confirmIndex != null ? " · last candle = confirmation" : ""}
                 </p>
-                <CandlestickChart data={ill.bars} height={150} highlightIndex={ill.highlight} showScaleControls={false} compact />
+                {ill.bars.some((b) => b.volume) ? (
+                  <CandlestickChart data={ill.bars} height={200} highlightIndex={ill.highlight} showScaleControls={false} showVolume />
+                ) : (
+                  <CandlestickChart data={ill.bars} height={150} highlightIndex={ill.highlight} showScaleControls={false} compact />
+                )}
               </div>
             ) : pattern.image ? (
               <img className="h-32 w-full object-contain p-2 rounded-lg border border-line" src={pattern.image} alt={`${pattern.name} pattern`} />

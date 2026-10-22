@@ -248,6 +248,7 @@ export default function QuizModal({
                     markers={question.priceMarkers}
                     annotations={heroAnnotations}
                     padRightBars={isLargeChart ? SCENARIO_PAD_BARS : undefined}
+                    showVolume={(PATTERN_OHLC[question.patternKey ?? "hammer"] ?? []).some((b) => b.volume)}
                   />
                 )}
             </div>

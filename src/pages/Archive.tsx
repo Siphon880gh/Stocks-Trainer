@@ -55,6 +55,8 @@ export default function Archive() {
     }
     const overlay = OVERLAYS.find((o) => o.id === openId);
     if (overlay) setSelectedOverlay(overlay);
+    const pattern = PATTERNS.find((p) => p.id === openId);
+    if (pattern) setSelectedPattern(pattern);
   }, [openId, tab, tabParam, tempBypass]);
 
   const filteredPatterns = PATTERNS.filter((p) => {

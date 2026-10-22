@@ -272,6 +272,22 @@ const flows = {
     check((await overflow(p)) <= 1, `HA overflow @${w}`);
     if (SHOTS) await p.screenshot({ path: `${SHOTS}/heikin-ashi-${w}.png`, fullPage: true });
   },
+
+  async "Chart patterns: Archive deep link, volume pane, three tabs, Learn group"(p, w) {
+    await p.goto(base + "/archive?tab=patterns&open=cup-and-handle", { waitUntil: "networkidle" });
+    const ill = p.getByTestId("pattern-illustration");
+    check((await ill.count()) === 1, `chart patterns: no illustration @${w}`);
+    check((await ill.locator('[aria-label="Volume"]').count()) >= 1, `chart patterns: no volume pane @${w}`);
+    await p.getByTestId("pattern-tab-trade").click();
+    const panel = await p.getByTestId("pattern-tabpanel").innerText();
+    check(/handle/i.test(panel) && /Stop \(invalidation\)/.test(panel), `chart patterns: trade tab incomplete @${w}`);
+    check(!/general guide/i.test(panel), `chart patterns: fell back to the general guide @${w}`);
+    check((await overflow(p)) <= 1, `chart patterns overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/chart-patterns-${w}.png`, fullPage: false });
+    await p.keyboard.press("Escape");
+    await p.goto(base + "/training?group=chart-patterns", { waitUntil: "networkidle" });
+    check(/Chart, Gap & Volume Patterns/.test(await p.locator("main").innerText()), `chart patterns: Learn group missing @${w}`);
+  },
 };
 
 
