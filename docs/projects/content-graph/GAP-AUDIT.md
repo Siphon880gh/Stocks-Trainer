@@ -137,3 +137,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## 2026-10-22 Futures vs options & beginner toolkit (#12)
 - Audit: futures literacy group existed (contract vs stock) but no futures-vs-options comparison, MES/ES notional calculator, SPY beginner card, SMA walk-through, Sharpe calculator, or real-company income statement chain to EBITDA.
 - Added `/practice/futures-vs-options` (`src/lib/futuresOptionsBasics.ts`): comparison table (CFTC, FINRA), MES vs ES table + calculator (CME MES FAQ), SPY facts (State Street), 5m before 1m, SMA with SIMULATED closes, bar count + fib, Sharpe calculator (PortfolioPilot), Apple FY2025 10-K chain to EBITDA (SEC guide, Investopedia); Learn `futures-vs-options` (16); 8 glossary terms.
+
+## 2026-10-22 Technique narratives (#13)
+- Audit: no guided walkthrough component; techniques were taught as static lessons without showing where they fail.
+- Added `src/components/Walkthrough.tsx` (portal, `src/lib/zLayers.ts` tour tokens 1000–1002 above every other layer, Next/Prev/Exit, Esc/←/→, aria-live step count, resume via `src/lib/tourProgress.ts`), `IndicatorPane.tsx`, and `/practice/technique-narratives` (`src/lib/techniqueNarratives.ts`, `narrativeEngine.ts`, `narrativeData.ts`): six SIMULATED narratives (RSI range, MA crossover trend, cup-and-handle volume breakout, VWAP pullback, MACD divergence, Bollinger squeeze), each with computed trades on the right chart and a wrong-chart failure panel; Learn `technique-narratives` (14); 7 glossary terms.

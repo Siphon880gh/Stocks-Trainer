@@ -157,3 +157,12 @@ Screenshots (box only): `/workspace/checkpoints/qa/fib-decision-map-{390,1280}.p
 | Learn `futures-vs-options` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/futures-vs-options-{390,1280}.png`.
+
+## 2026-10-22 Technique narratives (#13)
+
+| Flow | Result |
+|---|---|
+| `/practice/technique-narratives`, 390 and 1280 (e2e) | Popover is the topmost element (elementFromPoint) on steps 1 and 6; Next/Prev/←/→; step 6 switches to the wrong chart; Exit removes backdrop; candle under the old backdrop is hit-testable and click shows a readout; reload offers Resume at step 5; Esc exits; Finish marks practice done; squeeze wrong chart shows a loss and head-fake panel. |
+| Learn `technique-narratives` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/technique-narratives{,-popover,-explore}-{390,1280}.png`.
