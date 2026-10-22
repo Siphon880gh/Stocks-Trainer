@@ -35,7 +35,19 @@ export const awardChallenge = (challengeId: string, passed: boolean, storage?: K
 
 export const awardFirstOrder = (storage?: KVStorage, now = new Date()) => apply(storage, now, (s) => award(s, "first-order", "first-order", POINTS.firstOrder, now));
 
-export const awardDaily = (dateKey: string, storage?: KVStorage, now = new Date()) => apply(storage, now, (s) => award(s, `daily:${dateKey}`, "daily-goal", POINTS.dailyGoal, now));
+/** Today card: +5 for a correct review answer, +1 for a wrong one; either answer counts the day. Once per day. */
+export const dailyPoints = (correct: boolean) => (correct ? POINTS.dailyGoal : POINTS.dailyAttempt);
+
+export const awardDaily = (dateKey: string, storage?: KVStorage, now = new Date(), correct = true) =>
+  apply(storage, now, (s) => award(s, `daily:${dateKey}`, "daily-goal", dailyPoints(correct), now));
+
+/** The Today flash line: which award applied, or that the day was already counted. */
+export function dailyFlash(added: number, correct: boolean): string {
+  if (!added) return "Today already counts toward your day streak";
+  return correct
+    ? `+${added} points for a correct answer · today counts toward your day streak`
+    : `+${added} point for answering (a correct answer earns +${POINTS.dailyGoal}) · today counts toward your day streak`;
+}
 
 export const awardOptionsLevel = (level: number, storage?: KVStorage, now = new Date()) => apply(storage, now, (s) => award(s, `options:L${level}`, "options-level", POINTS.optionsLevel, now));
 

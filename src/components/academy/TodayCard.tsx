@@ -5,7 +5,7 @@ import { loadAcademy, saveAcademy, type KVStorage } from "../../lib/academy/stor
 import { recordDaily, todayPicks } from "../../lib/academy/today";
 import { getUnit } from "../../lib/academy/content/levels";
 import { glossaryHref } from "../../lib/academy/refs";
-import { awardDaily } from "../../lib/academy/rewards/award";
+import { awardDaily, dailyFlash } from "../../lib/academy/rewards/award";
 import { computeStreak } from "../../lib/academy/rewards/streak";
 import { loadRewards } from "../../lib/academy/storage";
 import { cn } from "../../lib/utils";
@@ -26,8 +26,8 @@ export default function TodayCard({ storage, now = () => new Date(), variant = "
     const next = recordDaily(loadAcademy(storage).state, picks.dateKey, q.id, correct, now());
     saveAcademy(next, storage);
     setState(next);
-    const r = awardDaily(picks.dateKey, storage, now());
-    setFlash(r.added ? `+${r.added} points · today counts toward your streak` : "Today already counts toward your streak");
+    const r = awardDaily(picks.dateKey, storage, now(), correct);
+    setFlash(dailyFlash(r.added, correct));
   };
 
   return (

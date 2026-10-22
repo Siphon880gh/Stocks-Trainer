@@ -15,8 +15,10 @@ export const POINTS = {
   testOut: 50,
   challengePassed: 40,
   firstOrder: 10,
-  /** Today card: the daily review question answered. */
+  /** Today card: the daily review question answered correctly. */
   dailyGoal: 5,
+  /** Today card: answered, but wrong (Weng 2026-10-22). Either answer counts toward the day streak. */
+  dailyAttempt: 1,
   optionsLevel: 60,
   /** One-time catch-up for progress made before the Academy existed (rewards/retro.ts). */
   retroMax: 150,

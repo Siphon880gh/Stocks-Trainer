@@ -59,3 +59,21 @@ test("streak integration: answering today's question records daily, awards point
   assert.match(renderText(card(st)), /done today/);
   assert.ok(st.data.has(REWARDS_KEY));
 });
+
+test("Today points (Weng 2026-10-22): +5 correct, +1 wrong, either counts the day streak, the flash names which", async () => {
+  const { dailyFlash, dailyPoints } = await import("./rewards/award");
+  assert.equal(dailyPoints(true), 5);
+  assert.equal(dailyPoints(false), 1);
+  const st = seeded();
+  const picks = todayPicks(loadAcademy(st).state, NOW);
+  saveAcademy(recordDaily(loadAcademy(st).state, picks.dateKey, picks.review!.id, false, NOW), st);
+  const r = awardDaily(picks.dateKey, st, NOW, false);
+  assert.equal(r.added, 1);
+  assert.equal(awardDaily(picks.dateKey, st, NOW, false).added, 0);
+  const after = computeStreak(loadRewards(st).state.streak.days, NOW);
+  assert.equal(after.activeToday, true);
+  assert.equal(after.current, 1);
+  assert.match(dailyFlash(1, false), /^\+1 point for answering \(a correct answer earns \+5\) · today counts toward your day streak$/);
+  assert.match(dailyFlash(5, true), /^\+5 points for a correct answer/);
+  assert.equal(dailyFlash(0, true), "Today already counts toward your day streak");
+});
