@@ -3,8 +3,8 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA9.M1.S1
-- `status`: in progress — BA0–BA8.M3 and BA10.M2 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4 PENDING WENG SIGN-OFF
+- `current_story`: BA10.M1.S1
+- `status`: in progress — BA0–BA8.M3, BA9 and BA10.M2 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4 PENDING WENG SIGN-OFF
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
 - `checkpoint_mode`: continue
@@ -156,4 +156,11 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 | L4 | Naked (uncovered) put (concept only) | short 45 put @ 1.20 | $1.20 | $43.80 | $43.80 | $120.00 / $4,380.00 |
 
 - What to look at: (1) every row above against a textbook; (2) whether 3 attempts per 24 h and the 80% bar feel right; (3) whether L4 naked options should stay concept-only with a check.
+
+### 2026-10-22 00:10 PT · BA9.M1–M2 · PASS (one local commit)
+- Changed: src/lib/academy/today.ts (new: `todayPicks`, `pickReview`, `reviewOrder`, `recentQuestionIds`, `pickTerm`, `recordDaily`), components/academy/TodayCard.tsx (new), pages/Dashboard.tsx (+3 lines: TodayCard after the placement card, only once the goal picker is confirmed), pages/academy/AcademyHub.tsx (TodayCard above the rewards panel); tests today.test.ts and today.render.test.tsx (new).
+- Verify: lint 0 · test:coaching 24/24 · test:lib 161/161 · test:financials 333/333 · test:macro 72/72 · test:academy 135/135 · check:build ok · dist/ untouched.
+- Milestone-specific: picks depend only on the local date key and stored state (hash32, no Math.random); review questions come from mastered units, least recently reviewed (then earliest mastered) first; 30 simulated days with 15 questions never repeat within 7 days; a 3-question pool still returns a question; an answered day keeps its question and ignores a second answer; answering calls `awardDaily` (5 points once per day) and marks the streak day active. Rendering the card writes nothing.
+- Screenshots (checkpoints/): ba9-home-today.png, ba9-today-card.png, ba9-today-answered.png, ba9-today-fresh-mobile.png.
+- Next: BA10.M1.S1 (hub route test: every academy href resolves).
 

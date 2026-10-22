@@ -6,6 +6,7 @@ import { loadAcademy, type KVStorage } from "../../lib/academy/storage";
 import { academySummary, coursePct, isLevelComplete, isLevelUnlocked, levelPct, nextUnit, unitStatus, type UnitStatus } from "../../lib/academy/progress";
 import { TEST_OUT_LEVELS } from "../../lib/academy/testOut";
 import PlacementCard from "../../components/academy/PlacementCard";
+import TodayCard from "../../components/academy/TodayCard";
 import RewardsPanel from "../../components/academy/RewardsPanel";
 import { cn } from "../../lib/utils";
 
@@ -90,6 +91,8 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
           <p className="text-[13px] text-muted">Four levels of options strategies with payoff charts at expiration and a check per level. Education only; it approves you for nothing.</p>
         </Link>
       </section>
+
+      <TodayCard storage={storage} />
 
       <RewardsPanel storage={storage} />
 

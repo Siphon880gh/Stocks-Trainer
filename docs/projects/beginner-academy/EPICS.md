@@ -235,12 +235,12 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 
 ## BA9 — "Today" daily-habit card
 
-### [ ] BA9.M1 — Daily picker
+### [x] BA9.M1 — Daily picker
 - **Build:** `src/lib/academy/today.ts`: from the local date pick (deterministic hash) the next unit, one review question from mastered units (spaced: oldest-mastered first), one glossary term, one challenge-of-the-week link.
 - **Accept:** same date → same picks; no repeat of the review question within 7 days when the pool allows.
 - **Verify:** BASE + `today.test.ts` (fixed clocks).
 
-### [ ] BA9.M2 — Today card on Home + Academy
+### [x] BA9.M2 — Today card on Home + Academy
 - **Build:** `components/academy/TodayCard.tsx`; minimal additive edit in `Dashboard.tsx`; completing the daily question counts as the streak's daily activity.
 - **Verify:** BASE + render test + streak integration test.
 

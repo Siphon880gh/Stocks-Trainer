@@ -63,8 +63,8 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 | 46 | BA8.M2.S1 Knowledge checks + gating | BA8.M2 | ≥ 8 items/level; 3 attempts / 24 h; ordering | done |
 | 47 | BA8.M3.S1 OptionsLadder + PayoffChart | BA8.M3 | Risk statement; no Greeks/chain wording | done |
 | 48 | BA8.M4.S1 🔍 Options accuracy review package | BA8.M4 | Strategy table logged PENDING | pending sign-off |
-| 49 | BA9.M1.S1 Daily picker | BA9.M1 | Same date → same picks; 7-day no-repeat | todo |
-| 50 | BA9.M2.S1 TodayCard on Home + Academy | BA9.M2 | Daily question counts toward streak | todo |
+| 49 | BA9.M1.S1 Daily picker | BA9.M1 | Same date → same picks; 7-day no-repeat | done |
+| 50 | BA9.M2.S1 TodayCard on Home + Academy | BA9.M2 | Daily question counts toward streak | done |
 | 51 | BA10.M1.S1 `/academy` hub + unit route + nav | BA10.M1 | Every academy href resolves | todo |
 | 52 | BA10.M2.S1 ≥ 25 glossary terms | BA10.M2 | No collisions; sibling terms linked not copied | done |
 | 53 | BA10.M3.S1 Learn groups orders-and-fills / paper-pnl / options-ladder | BA10.M3 | ≥ 60 new questions overall; numeric recompute | todo |

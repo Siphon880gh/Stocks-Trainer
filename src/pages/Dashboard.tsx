@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import MacroHomeTip from "../components/macro/MacroHomeTip";
 import PlacementCard from "../components/academy/PlacementCard";
+import TodayCard from "../components/academy/TodayCard";
 import { Link } from "react-router-dom";
 import GoalPicker from "../components/GoalPicker";
 import JargonText from "../components/JargonText";
@@ -132,6 +133,8 @@ export default function Dashboard() {
       {goalPending ? <GoalPicker onConfirmed={refreshProgress} /> : null}
       {/* Beginner Academy (BA3.M3): optional, dismissible, only after the goal picker is confirmed. */}
       {!goalPending ? <PlacementCard variant="home" /> : null}
+      {/* Beginner Academy (BA9.M2): Today card, after the goal picker is confirmed. */}
+      {!goalPending ? <TodayCard variant="home" /> : null}
 
       <section className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">
