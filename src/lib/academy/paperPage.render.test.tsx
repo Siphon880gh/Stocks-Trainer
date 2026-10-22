@@ -186,3 +186,15 @@ test("BA11.M5 journal: the paper page lists fills with their notes and an export
   assert.ok(html.includes('data-testid="journal-csv"'));
   assert.match(renderText(page(withSession(log))), /Bought the trend after a higher low\./);
 });
+
+test("BA11.M6 portfolios: an old store shows Main as the only portfolio; others list with their own summary", () => {
+  const text = renderText(page(withSession()));
+  assert.match(text, /Portfolios/);
+  assert.match(text, /Main · equity \$/);
+  const store = { ...emptyPaper(), session: fixtureLog(), portfolio: { id: "p2", name: "Swing" }, otherPortfolios: [{ id: "main", name: "Main", session: null }] };
+  const html = renderHtml(page(memoryStorage({ [PAPER_KEY]: JSON.stringify(store) })));
+  assert.match(html, /data-testid="portfolio-p2"[^>]*aria-pressed="true"|aria-pressed="true"[^>]*data-testid="portfolio-p2"/);
+  assert.ok(html.includes('data-testid="portfolio-delete-main"'));
+  assert.ok(!html.includes('data-testid="portfolio-delete-p2"'), "the active portfolio has no delete button");
+  assert.match(renderText(page(memoryStorage({ [PAPER_KEY]: JSON.stringify(store) }))), /Main · not started/);
+});

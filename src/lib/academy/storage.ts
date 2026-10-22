@@ -78,6 +78,10 @@ export interface PaperStore {
   challengeAttempts: Record<string, ChallengeAttemptRecord[]>;
   /** Counters used by badges (first limit fill, trailing exits, trades with a stop…). */
   stats: { orders: number; limitFills: number; trailingExits: number; stopProtectedTrades: number; stopLimitNoFills: number };
+  /** BA11.M6: the active portfolio (its session is `session`). A store from before M6 migrates into "Main". */
+  portfolio: { id: string; name: string };
+  /** BA11.M6: the inactive portfolios with their own sessions. */
+  otherPortfolios: { id: string; name: string; session: PaperSessionLog | null }[];
 }
 
 export interface RewardsState {
@@ -110,6 +114,8 @@ export const emptyPaper = (): PaperStore => ({
   session: null,
   challengeAttempts: {},
   stats: { orders: 0, limitFills: 0, trailingExits: 0, stopProtectedTrades: 0, stopLimitNoFills: 0 },
+  portfolio: { id: "main", name: "Main" },
+  otherPortfolios: [],
 });
 export const emptyRewards = (): RewardsState => ({
   schemaVersion: SCHEMA_VERSION,
@@ -148,6 +154,10 @@ export function migratePaper(raw: unknown): PaperStore {
     session: isObj(raw.session) ? (raw.session as unknown as PaperSessionLog) : null,
     challengeAttempts: obj(raw.challengeAttempts, e.challengeAttempts),
     stats: { ...e.stats, ...obj<Partial<PaperStore["stats"]>>(raw.stats, {}) },
+    portfolio: isObj(raw.portfolio) && typeof raw.portfolio.id === "string" && typeof raw.portfolio.name === "string" ? { id: raw.portfolio.id, name: raw.portfolio.name } : e.portfolio,
+    otherPortfolios: arr<Record<string, unknown>>(raw.otherPortfolios)
+      .filter((p) => isObj(p) && typeof p.id === "string" && typeof p.name === "string")
+      .map((p) => ({ id: p.id as string, name: p.name as string, session: isObj(p.session) ? (p.session as unknown as PaperSessionLog) : null })),
   };
 }
 

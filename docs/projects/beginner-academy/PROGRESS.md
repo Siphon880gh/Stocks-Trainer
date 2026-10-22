@@ -3,8 +3,8 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA11.M6.S1
-- `status`: core BA0–BA10 done and signed off (2026-10-21); BA11 stretch approved and in progress
+- `current_story`: none (BA0–BA11 done)
+- `status`: core BA0–BA10 done and signed off (2026-10-21); BA11 stretch (M1–M6) done 2026-10-21
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
 - `checkpoint_mode`: continue
@@ -251,3 +251,10 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - UI: JournalPanel on the free paper page (not in challenges) with a note box per fill (saved on blur) and Export CSV (Blob download).
 - Tests: `paper/journal.test.ts` (3, including a parse-back of the export) + one render test. Screenshot: ba11-journal.png; sample export: checkpoints/ba11-journal-export.csv.
 - Next: BA11.M6.S1 (multiple paper portfolios).
+
+### 2026-10-21 · BA11.M6 Multiple paper portfolios · done
+- `PaperStore` gains `portfolio` (the active one; its session stays in `session`, so every existing reader is unchanged) and `otherPortfolios` (inactive ones with their own sessions). Additive migration, schemaVersion unchanged: a store from before M6 becomes the single portfolio "Main" with its session, attempts and stats intact (tested).
+- `paper/portfolios.ts`: list / create (becomes active, starts empty) / switch / rename / delete (inactive only); names trimmed, 1–24 chars, unique case-insensitive; at most 5. Badge counters (`totalCounters`) now add every portfolio's session.
+- UI: PortfolioBar on /paper (chips with equity or "not started", Add, × with a confirm on inactive ones, inline errors).
+- Tests: `paper/portfolios.test.ts` (4) + one render test. Screenshots: ba11-portfolios-bar.png, ba11-portfolios-switched.png, ba11-portfolios-create.png (duplicate-name error).
+- BA11 complete (M1–M6). Next: none in the Beginner Academy plan.

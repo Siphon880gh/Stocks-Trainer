@@ -29,12 +29,15 @@ export const addCounters = (a: PaperCounters, b: PaperCounters): PaperCounters =
   stopLimitNoFills: a.stopLimitNoFills + b.stopLimitNoFills,
 });
 
-/** Archived totals + the live session. A broken log counts as zero rather than crashing badges. */
+/** Archived totals + the live session (+ BA11.M6 the other portfolios' sessions). A broken log counts as zero rather than crashing badges. */
 export function totalCounters(p: PaperStore): PaperCounters {
-  if (!p.session) return p.stats;
-  try {
-    return addCounters(p.stats, countersFor(replay(p.session)));
-  } catch {
-    return p.stats;
-  }
+  const sessions = [p.session, ...(p.otherPortfolios ?? []).map((o) => o.session)];
+  return sessions.reduce<PaperCounters>((acc, s) => {
+    if (!s) return acc;
+    try {
+      return addCounters(acc, countersFor(replay(s)));
+    } catch {
+      return acc;
+    }
+  }, p.stats);
 }

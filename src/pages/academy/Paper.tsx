@@ -8,7 +8,8 @@ import { START_BAR, newSessionLog, replay } from "../../lib/academy/paper/sessio
 import { addCounters, countersFor } from "../../lib/academy/paper/counters";
 import { money } from "../../lib/academy/paper/describe";
 import type { PaperOptions, PaperSessionLog } from "../../lib/academy/paper/types";
-import { loadPaper, savePaper, type KVStorage } from "../../lib/academy/storage";
+import { loadPaper, savePaper, type KVStorage, type PaperStore } from "../../lib/academy/storage";
+import PortfolioBar from "../../components/academy/paper/PortfolioBar";
 import { awardFirstOrder, refreshStoredBadges } from "../../lib/academy/rewards/award";
 import { cn } from "../../lib/utils";
 
@@ -30,6 +31,14 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
         savePaper(next, storage);
         return next;
       });
+    },
+    [storage],
+  );
+
+  const replaceStore = useCallback(
+    (next: PaperStore) => {
+      savePaper(next, storage);
+      setStore(next);
     },
     [storage],
   );
@@ -75,18 +84,21 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
           </button>
         </p>
       ) : null}
+      <PortfolioBar store={store} onChange={replaceStore} />
       {store.session ? (
-        <PaperSession
-          log={store.session}
-          onLog={onLog}
-          allowBracket
-          journal
-          toolbar={
-            <button type="button" onClick={() => persist(null, store.session!)} className="px-3 py-1.5 rounded-md border border-line text-[13px] hover:border-accent-red" data-testid="paper-reset">
-              New session
-            </button>
-          }
-        />
+        <div key={store.portfolio.id}>
+          <PaperSession
+            log={store.session}
+            onLog={onLog}
+            allowBracket
+            journal
+            toolbar={
+              <button type="button" onClick={() => persist(null, store.session!)} className="px-3 py-1.5 rounded-md border border-line text-[13px] hover:border-accent-red" data-testid="paper-reset">
+                New session
+              </button>
+            }
+          />
+        </div>
       ) : (
         <section className="space-y-3" data-testid="paper-setup">
           <SimulatedBanner />
