@@ -451,6 +451,25 @@ const flows = {
     await p.goto(base + "/training?group=one-minute-charts", { waitUntil: "networkidle" });
     check(/Reading 1-Minute Charts/.test(await p.locator("main").innerText()), `om: Learn group missing @${w}`);
   },
+
+  async "Fib decision map: levels, R:R, plan drill"(p, w) {
+    await p.goto(base + "/practice/fib-decision-map", { waitUntil: "networkidle" });
+    check(/5050/.test(await p.getByTestId("fib-chart").innerText()) && /5000/.test(await p.getByTestId("fib-chart").innerText()), `fib: swing missing @${w}`);
+    check(/61\.8%/.test(await p.getByTestId("fib-levels").innerText()), `fib: 61.8 level missing @${w}`);
+    check(/Reverse/.test(await p.getByTestId("fib-caution").innerText()), `fib: Reverse refresher missing @${w}`);
+    await p.getByTestId("fib-entry").fill("5025");
+    await p.getByTestId("fib-stop").fill("4995");
+    await p.getByTestId("fib-target").fill("5085");
+    check(/R:R ≈ 2/.test(await p.getByTestId("fib-rr-out").innerText()), `fib: R:R 2 missing @${w}`);
+    await p.locator("[data-choice=b]").click();
+    check(/Coherent plan/.test(await p.getByTestId("fib-drill-feedback").innerText()), `fib: correct plan feedback missing @${w}`);
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("fib-decision-map"), `fib: practice not marked done @${w}`);
+    check((await overflow(p)) <= 1, `fib overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/fib-decision-map-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=fib-decision-map", { waitUntil: "networkidle" });
+    check(/Fibonacci Decision Map/.test(await p.locator("main").innerText()), `fib: Learn group missing @${w}`);
+  },
 };
 
 

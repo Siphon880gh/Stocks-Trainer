@@ -174,6 +174,7 @@ export default function Training() {
                   g.id === "crypto-candles" ||
                   g.id === "reversal-charts" ||
                   g.id === "one-minute-charts" ||
+                  g.id === "fib-decision-map" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
                   g.id === "financial-literacy" ||
