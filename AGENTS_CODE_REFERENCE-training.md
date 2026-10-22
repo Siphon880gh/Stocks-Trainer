@@ -46,6 +46,7 @@ Near the end:
 - Question extras: `annotations` (always drawn), `revealAnnotations` (drawn only after submit; use for anything that gives the answer away), `chartSize: "large"` (380px hero + `SCENARIO_PAD_BARS` empty slots on the right). `QuizOption.feedback` is the why-wrong text. After submit, `QuizModal` always shows the correct answer line.
 - Financials & earnings groups (`src/lib/financials/quizBanks.ts`, type-only import of quiz types): `statements-reading` (`FIN-ST-`), `cash-forecast-13wk` (`FIN-CF-`), `earnings-preview` (`FIN-EP-`), `earnings-reaction` (`FIN-ER-`). `FINANCIALS_QUIZ_GROUPS` is spread into `QUIZ_GROUPS` right after `financial-drills`; `isFinancialsQuizGroup` short-circuits `getQuestionsForGroup` / `questionsArrayForGroup`. Questions carry an optional `financialsExhibit` (`statement` / `forecast` / `preview` / `reaction`, type in `quizExhibit.ts`) that `QuizModal` renders with `components/financials/FinancialsQuizExhibit.tsx` before the snapshot branch; forecast breach tint / headroom and reaction teaching marks appear only after submit. All numbers are computed from the fixtures; `financialsQuiz.test.ts` recomputes every numeric answer. Training shows `FinancialsTrainingCard` (Read the Print, Statements lab, forecast, group links) above Misc Practices; routes `/practice/read-the-print` and `/practice/statements`.
 - Macro forces groups (`src/lib/macro/quiz/banks.ts`, ids in `quiz/groups.ts`): `macro-releases` (`MR-`), `rates-curve` (`RC-`), `fed-policy` (`FP-`), `housing-mortgage` (`HM-`), `macro-reactions` (`MX-`, chart-based). `MACRO_QUIZ_GROUPS` is spread into `QUIZ_GROUPS` after the financials groups; `isMacroQuizGroup` short-circuits `getQuestionsForGroup` / `questionsArrayForGroup`. Questions carry an optional `macroExhibit` (`release` / `reaction` / `curve` / `pmms` / `pricing` / `dots`, type in `quiz/exhibit.ts`) rendered by `components/macro/MacroQuizExhibit.tsx` before the snapshot branch; the "Market read" verdict and reaction-chart outcome / annotations appear only after submit. `MACRO_NUMERIC` lists numeric answers; `macroQuiz.test.ts` recomputes them from raw `WORLD` fields. Training shows `MacroTrainingCard` (Macro Desk, reaction game, group links) under the financials card; `CasePlayer` shows `CaseMacroLink` ("Read the real release" + lesson) for cases in `MACRO_CASE_LESSON_LINKS`.
+- Beginner Academy groups (`src/lib/academy/quiz/banks.ts`, ids in `quiz/groups.ts`, type-only import of quiz types): `orders-and-fills` (`BA-OF-`, 22), `paper-pnl` (`BA-PL-`, 20), `options-ladder` (`BA-OL-`, 21). `ACADEMY_QUIZ_GROUPS` is spread into `QUIZ_GROUPS` after the macro groups; `isAcademyQuizGroup` short-circuits `getQuestionsForGroup` / `questionsArrayForGroup`, highlights the groups in the Training picker and gives `QuizModal` an Academy line in the no-chart Literacy box. Fill answers come from running the order through `paper/engine.ts` (`runFill`), P&L answers from `paper/account.ts` / `stats.ts`, options answers from `options/payoff.ts`; `ACADEMY_NUMERIC` lists them and `src/lib/academy/academyQuiz.test.ts` recomputes each by hand. Training shows `components/academy/AcademyTrainingCard.tsx` (Academy, Paper trading, Challenges, Options ladder, coach `first-paper-trade`, group links) under the Macro card.
 - `getQuestionsForGroup(groupId)` — dedicated banks for literacy/drills/indicators; `"all"` → full pattern bank; else filter `patternKey === groupId`.
 - Index helpers: `getQuestionIndexInGroup`, `getGlobalIndexFromGroup`.
 
@@ -126,3 +127,21 @@ Archive (?tab,&open) → PATTERNS / OVERLAYS → detail modals
 ---
 
 > Refer to AGENTS_CODE_REFERENCE.md for high-level context; details are in feature context files.
+
+---
+
+## Beginner Academy (`src/lib/academy/`, project `docs/projects/beginner-academy/`)
+
+| Area | Files | Notes |
+|------|-------|-------|
+| Course map | `content/levels.ts`, `content/units*.ts`, `content/quizzes*.ts`, `progress.ts`, `mastery.ts` | 8 levels, 43 units, 3-item unit checks (mastery 80%); typed refs resolved by `refs.ts` (`APP_ROUTES` must equal App.tsx routes) |
+| Placement / test-out | `placement.ts`, `testOut.ts`, `components/academy/PlacementCard.tsx`, `pages/academy/AcademyTestOut.tsx` | 12 items, 2/3 per level; test-out 85% |
+| Paper trading | `paper/` (account, validate, engine, stats, session, tapes, describe) + `components/academy/paper/*`, `pages/academy/Paper.tsx` | SIMULATED money, SAMPLE tapes, integer cents; fill rules documented at the top of `engine.ts` |
+| Challenges | `challenges.ts`, `pages/academy/PaperChallenges.tsx` | 10 challenges, discipline 60 + result 40, fictional benchmark leaderboard |
+| Rewards | `rewards/` (ledger, streak, levels, badges, award, refresh, retro), `components/academy/RewardsPanel.tsx` | virtual points only; 24 badges; retro credit reads older progress keys and writes none of them |
+| Options ladder | `options/` (payoff, ladder, checks, gate), `components/academy/options/*`, `pages/academy/OptionsLadder.tsx` | payoff at expiration only (no chain or Greeks); 4 levels, 8 checks each, 3 attempts per 24 h |
+| Today card | `today.ts`, `components/academy/TodayCard.tsx` | deterministic daily picks; the review answer counts as the streak day |
+| Home / Learn / Coach | `homeTip.ts`, `AcademyHomeTip.tsx`, `AcademyTrainingCard.tsx`, `coaching/sessions/first-paper-trade.ts` | additive lines in Dashboard.tsx and Training.tsx; no header nav item |
+| Storage | `storage.ts` | `analysis_core_academy_v1`, `analysis_core_academy_paper_v1`, `analysis_core_academy_rewards_v1`, each with schemaVersion + migrate |
+| Tests | `npm run test:academy` (`src/lib/academy/**/*.test.{ts,tsx}`), incl. `floors.test.ts` (charter floors) and `academyRoutes.render.test.tsx` (every academy href resolves) | |
+

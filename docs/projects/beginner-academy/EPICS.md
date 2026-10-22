@@ -265,7 +265,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - **Build:** coach session `first-paper-trade` (deterministic decision graph per `coaching/types.ts`), `AcademyTrainingCard` on Training, a Home tip line.
 - **Verify:** BASE (`test:coaching` must include the new session via the existing validator) + render tests.
 
-### [ ] BA10.M5 — Docs + final audit
+### [x] BA10.M5 — Docs + final audit
 - **Build:** update `AGENTS_CODE_REFERENCE-training.md` (academy section), `AGENTS_CODE_REFERENCE.md` (routes), `QA_User_Flows.md` (academy + paper flows), apply the `LOOPS/README.md` project row, and a charter-floor audit table in PROGRESS.md.
 - **Accept:** every charter floor met with counts produced by a test (`floors.test.ts`).
 - **Verify:** BASE + `floors.test.ts`.

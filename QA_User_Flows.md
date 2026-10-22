@@ -337,6 +337,30 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 
 ---
 
+## Flow UF-21 — Beginner Academy: placement → unit → Today (BA project)
+
+1. Home after the goal picker is confirmed: the optional **placement** card ("Take the placement check" / "I'm brand new" / "Not now") and the **Today in the Academy** card (next unit, term of the day, challenge of the week, one review question once a unit is mastered). Neither blocks the existing path.
+2. Placement: 12 questions, no answers shown before submit; the result names a start level (L0–L4) and lists "Worth a quick review" units. Lower levels count as complete.
+3. `/academy`: level map with progress, **Continue** to the next unit, paper / challenges / options cards, Today card, rewards panel ("virtual points" disclaimer).
+4. Open a unit (`/academy/<unitId>`): 3–6 cards, a 3-question check; 3/3 masters the unit and shows a points toast; chips link into existing Learn groups, glossary, Coach and Cases.
+5. `/academy/test-out/<levelId>`: no answers before submit; 85% credits the whole level.
+6. Today card: answer the review question once; feedback plus "+5 points · today counts toward your streak"; a second answer the same day is ignored.
+
+**Pass:** nothing in the existing Beginner path is unlocked or changed by Academy progress; works at 390 px width.
+
+## Flow UF-22 — Paper trading, challenges and the options ladder (BA project)
+
+1. `/paper`: SIMULATED banner; pick a SAMPLE tape and virtual cash ($10,000 default); the chart shows bars up to the current bar only.
+2. Order ticket: market / limit / stop / stop-limit / trailing stop (sell), Day or GTC. The plain-language preview updates as you type; an invalid order shows its error and disables "Place simulated order".
+3. Step 1 / step 5 / auto-play: fills follow the documented rules (a gap through a stop fills at the open; a stop-limit gapped past its limit does not fill). Positions, open orders, history, equity curve and stats update; reset keeps lifetime counters.
+4. `/paper/challenges`: 10 challenges plus the challenge of the week; play one to the end; result shows discipline / result points, any rule breaches and the rank against fictional benchmarks.
+5. `/academy/options`: the risk statement at the top and bottom; level 1 open, levels 2–4 locked; tick the acknowledgement, take the 8-question check (80% to pass, 3 attempts per 24 h); passing opens the next level. Charts show P&L at expiration from SAMPLE premiums.
+6. Learn → **Beginner Academy** card: Academy, Paper trading, Challenges, Options ladder, Coach "Your first paper trade" and the three quiz groups (Orders & Fills, Paper P&L, Options Ladder).
+
+**Pass:** every number on these pages is labelled SIMULATED or SAMPLE; no broker names, no real-order wording; the options ladder says it approves nothing.
+
+---
+
 ## Flow matrix (goal → primary flow)
 
 | Goal | Primary flow | Secondary |
@@ -358,6 +382,7 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 | G15 Step coaching | UF-18 | UF-06 |
 | G16 Financials & earnings (project) | UF-19 | UF-14 |
 | G17 Macro forces (project) | UF-20 | UF-05–06 |
+| G18 Beginner Academy (project) | UF-21 | UF-22 |
 
 ---
 

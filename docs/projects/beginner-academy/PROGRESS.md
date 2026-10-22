@@ -3,8 +3,8 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA10.M5.S1
-- `status`: in progress — BA0–BA8.M3, BA9 and BA10.M1–M4 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4 PENDING WENG SIGN-OFF
+- `current_story`: none (core BA0–BA10 built; BA11 waits for an approval line)
+- `status`: core built — BA0–BA8.M3, BA9 and BA10 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4 PENDING WENG SIGN-OFF
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
 - `checkpoint_mode`: continue
@@ -195,3 +195,8 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 | Glossary + Learn | ≥ 25 terms, ≥ 60 questions | 30 terms · 63 questions | yes |
 
 - Next: BA10.M5.S1 part 2 (AGENTS_CODE_REFERENCE*, QA_User_Flows, LOOPS/README row).
+
+### 2026-10-21 22:50 PT · BA10.M5.S1 (part 2: docs) · PASS (one local commit)
+- Changed: AGENTS_CODE_REFERENCE.md (project status, `/academy` + `/paper` routes, `academy/` in the file tree, `test:academy` in scripts), AGENTS_CODE_REFERENCE-training.md (Academy quiz groups bullet + a Beginner Academy section), QA_User_Flows.md (UF-21 placement → unit → Today, UF-22 paper / challenges / options ladder, matrix row G18), LOOPS/README.md (project row status).
+- Next: none in the core. Charter §7 item 4 (human sign-offs) is open: BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4. BA11 is not started because the "Stretch BA11 approval" row above has no line.
+

@@ -19,7 +19,7 @@ AI-oriented codebase map for safe modification, feature tracing, and implementat
 
 **Shipped today (E0–E11 Done(global)):** Home path + GoalPicker, Charts (SAMPLE/DELAYED + Navigator), Learn (quiz groups), Cases (decide→reveal), Coach (`/coach`), Archive, Practice Draw (graded canvas) and practice labs, Playbooks (`/playbooks`), local Account export/import. Content drain after milestones lives in `LOOPS/` and the content graph (`docs/projects/content-graph/`), not new epic ids.
 
-**Projects since (in `docs/projects/`):** financials-earnings (Done: statement reader, 13-week forecast, earnings preview, Read the Print, Mark the band), macro-forces (Done: Macro Desk `/macro`, SIMULATED releases, reaction game), trade management (commit 2c93114), beginner-academy (chartered, not started). Latest content-graph gap audit: [`docs/projects/content-graph/GAP-AUDIT.md`](./docs/projects/content-graph/GAP-AUDIT.md).
+**Projects since (in `docs/projects/`):** financials-earnings (Done: statement reader, 13-week forecast, earnings preview, Read the Print, Mark the band), macro-forces (Done: Macro Desk `/macro`, SIMULATED releases, reaction game), trade management (commit 2c93114), beginner-academy (core BA0–BA10 built: `/academy` course map, placement, SIMULATED paper trading `/paper`, challenges, points / badges / streak, options ladder `/academy/options`, Today card; five checkpoints wait for Weng's sign-off, and BA11 stretch is not started). Latest content-graph gap audit: [`docs/projects/content-graph/GAP-AUDIT.md`](./docs/projects/content-graph/GAP-AUDIT.md).
 
 **Do not** treat E1.M1 as the next implementation target. Milestone queues are complete; leftover work is content/coverage, not a new epic.
 
@@ -58,6 +58,8 @@ Browser
                      + project pages: statements, read-the-print, mark-the-band (financials-earnings)
       /playbooks     Playbooks list; /playbooks/:id one outside-source strategy kit (human-supplied source)
       /macro         Macro Desk; /macro/play reaction game; /macro/:lessonId lesson (macro-forces)
+      /academy       Beginner Academy hub; /academy/options options ladder; /academy/test-out/:levelId; /academy/:unitId unit (beginner-academy)
+      /paper         SIMULATED paper trading; /paper/challenges list; /paper/challenges/:challengeId play + result
 
 Data & logic live under src/lib/ (SAMPLE adapters; no paid live API).
 ```
@@ -108,11 +110,12 @@ trainer/
         ├── beginnerPath.ts / learningPaths.ts / thinkingModeTips.ts / marketNavigator.ts
         ├── playbooks.ts              # Playbook registry (outside sources)
         ├── financials/ · macro/      # project code (own test scripts)
+        ├── academy/                  # Beginner Academy: content/, paper/ engine, rewards/, options/, quiz/, today.ts (npm run test:academy)
         ├── contentGraph.test.ts      # section floors + reference integrity + loop-prompt config (npm run test:content)
         └── progressStore.ts / progressSync.ts / utils.ts
 ```
 
-**Scripts:** `npm run lint` (tsc) · `test:coaching` · `test:lib` (`src/lib/*.test.{ts,tsx}`) · `test:content` · `test:financials` · `test:macro` · `check:build` (temp outDir, deleted) · `verify` (all of the above). Do not build into `dist/` from a loop.
+**Scripts:** `npm run lint` (tsc) · `test:coaching` · `test:lib` (`src/lib/*.test.{ts,tsx}`) · `test:content` · `test:financials` · `test:macro` · `test:academy` · `check:build` (temp outDir, deleted) · `verify` (all of the above). Do not build into `dist/` from a loop.
 
 ---
 
@@ -129,7 +132,7 @@ trainer/
 
 8b. **Macro Desk / Playbooks / project practice pages:** see the Architecture block.
 
-Routes live in `src/App.tsx` (Home, Charts, Learn, Cases, Coach, Archive, practice-draw, `/practice/*`, `/playbooks`, `/macro`). Read that file instead of copying a stale snippet.
+Routes live in `src/App.tsx` (Home, Charts, Learn, Cases, Coach, Archive, practice-draw, `/practice/*`, `/playbooks`, `/macro`, `/academy`, `/paper`). Read that file instead of copying a stale snippet.
 
 ---
 
