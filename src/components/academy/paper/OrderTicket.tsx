@@ -6,6 +6,7 @@ import { buyingPower } from "../../../lib/academy/paper/account";
 import { TYPE_LABELS, describeBracket, describeOrder, describeShort, estimatePrice, money } from "../../../lib/academy/paper/describe";
 import { validateBracket } from "../../../lib/academy/paper/linked";
 import { cn } from "../../../lib/utils";
+import { BIAS_CHECKLIST } from "../../../lib/newsBiases";
 
 interface Props {
   state: AccountState;
@@ -65,6 +66,10 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
   const last = state.marks[symbol] ?? 0;
   const [f, setF] = useState<TicketFields>({ side: "buy", type: allowedTypes[0] ?? "market", qty: "10", tif: "gtc", limit: "", stop: "", trailMode: "percent", trail: "5", ...initial });
   const set = (patch: Partial<TicketFields>) => setF({ ...f, ...patch });
+  // Optional bias check (off by default): when on, every box must be ticked before the order can be placed.
+  const [biasOn, setBiasOn] = useState(false);
+  const [biasChecks, setBiasChecks] = useState<Record<string, boolean>>({});
+  const biasOk = !biasOn || BIAS_CHECKLIST.every((c) => biasChecks[c.id]);
   const dollarsOk = !!state.options?.fractional && f.side === "buy" && f.type === "market";
   const spec = specFromFields(dollarsOk ? f : { ...f, qtyMode: "shares" }, symbol, last);
   const ctx = { lastClose: { [symbol]: last } };
@@ -81,7 +86,7 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
       data-testid="order-ticket"
       onSubmit={(e) => {
         e.preventDefault();
-        if (v.ok && !disabled) (bracketOn ? onSubmit(spec, exits) : onSubmit(spec));
+        if (v.ok && !disabled && biasOk) (bracketOn ? onSubmit(spec, exits) : onSubmit(spec));
       }}
     >
       <div className="flex items-baseline justify-between">
@@ -199,7 +204,25 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
           {w.message}
         </p>
       ))}
-      <button type="submit" disabled={!v.ok || disabled} className="w-full py-2 rounded-md bg-sim hover:bg-sim-dim text-white text-[13px] font-semibold disabled:opacity-40" data-testid="ticket-submit">
+      <div className="text-[12px]" data-testid="bias-check">
+        <label className="inline-flex items-center gap-2 min-h-[44px]">
+          <input type="checkbox" checked={biasOn} onChange={(e) => setBiasOn(e.target.checked)} data-testid="bias-check-toggle" />
+          Bias check before placing (optional)
+        </label>
+        {biasOn ? (
+          <ul className="space-y-1 pl-1" data-testid="bias-check-list">
+            {BIAS_CHECKLIST.map((c) => (
+              <li key={c.id}>
+                <label className="inline-flex items-start gap-2">
+                  <input type="checkbox" className="mt-0.5" checked={!!biasChecks[c.id]} onChange={(e) => setBiasChecks({ ...biasChecks, [c.id]: e.target.checked })} data-bias-item={c.id} />
+                  {c.label}
+                </label>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
+      <button type="submit" disabled={!v.ok || disabled || !biasOk} className="w-full py-2 rounded-md bg-sim hover:bg-sim-dim text-white text-[13px] font-semibold disabled:opacity-40" data-testid="ticket-submit">
         Place simulated order
       </button>
     </form>

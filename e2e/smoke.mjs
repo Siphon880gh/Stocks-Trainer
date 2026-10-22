@@ -313,6 +313,29 @@ const flows = {
     if (await sqGate.count()) await sqGate.click();
     check(/Chasing a squeeze/.test(await p.locator("body").innerText()), `squeeze: coach session missing @${w}`);
   },
+
+  async "News & biases: lesson, news-day checkpoints, optional bias check on the paper ticket"(p, w) {
+    await p.goto(base + "/practice/news-biases", { waitUntil: "networkidle" });
+    check((await p.locator("[data-bias]").count()) === 6, `news: six bias cards missing @${w}`);
+    check(/LEAPS/.test(await p.getByTestId("nb-horizon").innerText()), `news: horizon table missing @${w}`);
+    for (const step of await p.locator("[data-step]").all()) await step.locator('[data-pick="good"]').click();
+    check(/3 \/ 3/.test(await p.getByTestId("nb-day-score").innerText()), `news: checkpoints not graded @${w}`);
+    check((await overflow(p)) <= 1, `news overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/news-biases-${w}.png`, fullPage: true });
+    await p.goto(base + "/paper", { waitUntil: "networkidle" });
+    await p.getByTestId("paper-start").click();
+    check((await p.getByTestId("bias-check-list").count()) === 0, `news: bias check should be off by default @${w}`);
+    await p.getByTestId("ticket-qty").fill("10");
+    await p.getByTestId("bias-check-toggle").check();
+    check(await p.getByTestId("ticket-submit").isDisabled(), `news: bias check did not hold the order @${w}`);
+    for (const box of await p.locator("[data-bias-item]").all()) await box.check();
+    check(await p.getByTestId("ticket-submit").isEnabled(), `news: bias check did not release the order @${w}`);
+    if (SHOTS) await p.getByTestId("order-ticket").screenshot({ path: `${SHOTS}/news-bias-ticket-${w}.png` });
+    await p.goto(base + "/coach/news-day-decision", { waitUntil: "networkidle" });
+    const nbGate = p.getByRole("button", { name: "Browse this session" });
+    if (await nbGate.count()) await nbGate.click();
+    check(/A news-day decision/.test(await p.locator("body").innerText()), `news: coach session missing @${w}`);
+  },
 };
 
 

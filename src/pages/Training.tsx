@@ -168,6 +168,7 @@ export default function Training() {
                   g.id === "oscillators" ||
                   g.id === "trading-risk" ||
                   g.id === "squeezes" ||
+                  g.id === "news-biases" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
                   g.id === "financial-literacy" ||
