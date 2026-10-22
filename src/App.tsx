@@ -30,6 +30,7 @@ import AcademyHub from "./pages/academy/AcademyHub";
 import AcademyUnit from "./pages/academy/AcademyUnit";
 import AcademyTestOut from "./pages/academy/AcademyTestOut";
 import Paper from "./pages/academy/Paper";
+import OptionsLadderPage from "./pages/academy/OptionsLadder";
 import PaperChallenges from "./pages/academy/PaperChallenges";
 
 export default function App() {
@@ -75,6 +76,7 @@ export default function App() {
           <Route path="macro/:lessonId" element={<MacroLesson />} />
           <Route path="academy" element={<AcademyHub />} />
           <Route path="academy/test-out/:levelId" element={<AcademyTestOut />} />
+          <Route path="academy/options" element={<OptionsLadderPage />} />
           <Route path="academy/:unitId" element={<AcademyUnit />} />
           <Route path="paper" element={<Paper />} />
           <Route path="paper/challenges" element={<PaperChallenges />} />

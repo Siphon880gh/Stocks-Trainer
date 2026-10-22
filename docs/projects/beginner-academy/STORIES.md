@@ -58,11 +58,11 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 | 41 | BA7.M4.S1 Retro-credit (read-only) | BA7.M4 | Zero writes to foreign keys; idempotent | done |
 | 42 | BA7.M5.S1 RewardsPanel + toast | BA7.M5 | Virtual-only disclaimer; locked hints | done |
 | 43 | BA7.M5.S2 🔍 Rewards review package | BA7.M5 | Point table + screenshots logged PENDING | pending sign-off |
-| 44 | BA8.M1.S1 Ladder data L1–L4 | BA8.M1 | Strategy lists per level | todo |
-| 45 | BA8.M1.S2 Payoff math | BA8.M1 | Hand table + dense-grid property | todo |
-| 46 | BA8.M2.S1 Knowledge checks + gating | BA8.M2 | ≥ 8 items/level; 3 attempts / 24 h; ordering | todo |
-| 47 | BA8.M3.S1 OptionsLadder + PayoffChart | BA8.M3 | Risk statement; no Greeks/chain wording | todo |
-| 48 | BA8.M4.S1 🔍 Options accuracy review package | BA8.M4 | Strategy table logged PENDING | todo |
+| 44 | BA8.M1.S1 Ladder data L1–L4 | BA8.M1 | Strategy lists per level | done |
+| 45 | BA8.M1.S2 Payoff math | BA8.M1 | Hand table + dense-grid property | done |
+| 46 | BA8.M2.S1 Knowledge checks + gating | BA8.M2 | ≥ 8 items/level; 3 attempts / 24 h; ordering | done |
+| 47 | BA8.M3.S1 OptionsLadder + PayoffChart | BA8.M3 | Risk statement; no Greeks/chain wording | done |
+| 48 | BA8.M4.S1 🔍 Options accuracy review package | BA8.M4 | Strategy table logged PENDING | pending sign-off |
 | 49 | BA9.M1.S1 Daily picker | BA9.M1 | Same date → same picks; 7-day no-repeat | todo |
 | 50 | BA9.M2.S1 TodayCard on Home + Academy | BA9.M2 | Daily question counts toward streak | todo |
 | 51 | BA10.M1.S1 `/academy` hub + unit route + nav | BA10.M1 | Every academy href resolves | todo |

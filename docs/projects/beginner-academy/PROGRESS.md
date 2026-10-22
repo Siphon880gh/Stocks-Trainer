@@ -3,8 +3,8 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA8.M1.S1
-- `status`: in progress — BA0–BA7 and BA10.M2 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5 PENDING WENG SIGN-OFF
+- `current_story`: BA9.M1.S1
+- `status`: in progress — BA0–BA8.M3 and BA10.M2 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4 PENDING WENG SIGN-OFF
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
 - `checkpoint_mode`: continue
@@ -124,4 +124,36 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - Point values: unit mastered up to 30 (scaled by best score) · level test-out 50 · challenge passed 40 · first paper order 10 · Today review 5 · options level 60 · one-time catch-up for earlier progress up to 150. Ranks: Newcomer 0 · Learner 100 · Reader 250 · Planner 450 · Practitioner 700 · Disciplined 1000 · Steady hand 1400 · Mentor-ready 1900 · Veteran 2500 · Academy graduate 3200.
 - Badges (24): First Step, Warming Up, Study Habit, Oriented, Share Savvy, Candle Reader, Order Desk, Statement Sleuth, Already Knew It, Know Your Start, Ticket Writer, Price Setter, Trend Follower, Seatbelt On, Gap Lesson, Challenger, Rule Keeper, Well Rounded, Options Curious, Ladder Climbed, Three in a Row, Full Week, Point Collector, Review Regular.
 - What to look at: (1) the point values and rank names; (2) the badge list; (3) challenge scoring at 60 discipline / 40 result.
+
+### 2026-10-21 23:40 PT · BA8.M2.S1 · FIX (attempt 2/3, resolved)
+- Error: optionsGate.test "no banned wording" flagged BA-OPT-L3-01 (distractor "Spreads cannot lose money" contains the banned phrase "cannot lose").
+- Fix: reworded the distractor to "Both options always expire worthless". Test unchanged.
+
+### 2026-10-21 23:40 PT · BA8.M1–M3 · PASS (one local commit)
+- Changed: src/lib/academy/options/ (payoff.ts, ladder.ts, checks.ts, gate.ts + payoff.test.ts, optionsGate.test.ts; new), components/academy/options/ (OptionsLadder.tsx, PayoffChart.tsx; new), pages/academy/OptionsLadder.tsx (new), App.tsx + refs.ts (`/academy/options` route, label), AcademyHub.tsx (options card), unitsL4L7.ts (`route:/academy/options` chip on l6-payoff-at-expiration and l6-options-risk), optionsLadder.render.test.tsx (new).
+- Verify: see the commit entry below for the full list; test:academy green.
+- Milestone-specific: per-share and per-contract (×100) values from `summarize`; max gain / loss match the dense-grid min / max; kinks only at strikes; 8 checks per level, 4 of them numeric and recomputed from payoff.ts; pass at 80%; 3 attempts per rolling 24 h; acknowledgement required per level; L(n) needs L(n−1). Risk statement at the top and bottom of the ladder; chart path points equal `samplePayoff`; no chain or Greeks wording (grep test).
+- Next: BA9.M1.S1 (Today card logic).
+
+### 2026-10-21 23:40 PT · BA8.M4 · PENDING WENG SIGN-OFF (loop continued)
+- Screenshots (checkpoints/): ba8-options-fresh.png, ba8-options-l1-card.png, ba8-options-check-open.png, ba8-options-l2-unlocked.png (level 1 passed + acknowledged), ba8-hub-options-card.png.
+- Strategy table (all premiums are SAMPLE numbers on a $50 stock, payoff at expiration):
+
+| Level | Strategy | Legs (SAMPLE, $50 stock) | Max gain / share | Max loss / share | Breakeven(s) | Per contract gain / loss |
+|---|---|---|---|---|---|---|
+| L1 | Covered call | own shares @ 50; short 55 call @ 1.50 | $6.50 | $48.50 | $48.50 | $650.00 / $4,850.00 |
+| L1 | Buy-write | own shares @ 50; short 52 call @ 2.20 | $4.20 | $47.80 | $47.80 | $420.00 / $4,780.00 |
+| L1 | Cash-secured put | short 45 put @ 1.20 | $1.20 | $43.80 | $43.80 | $120.00 / $4,380.00 |
+| L2 | Long call | long 50 call @ 2.50 | Unlimited | $2.50 | $52.50 | Unlimited / $250.00 |
+| L2 | Long put | long 50 put @ 2.30 | $47.70 | $2.30 | $47.70 | $4,770.00 / $230.00 |
+| L2 | Protective put | own shares @ 50; long 47 put @ 1.10 | Unlimited | $4.10 | $51.10 | Unlimited / $410.00 |
+| L2 | Collar | own shares @ 50; long 47 put @ 1.10; short 55 call @ 1.00 | $4.90 | $3.10 | $50.10 | $490.00 / $310.00 |
+| L3 | Bull call spread (debit) | long 50 call @ 2.50; short 55 call @ 0.90 | $3.40 | $1.60 | $51.60 | $340.00 / $160.00 |
+| L3 | Bull put spread (credit) | short 50 put @ 2.20; long 45 put @ 0.70 | $1.50 | $3.50 | $48.50 | $150.00 / $350.00 |
+| L3 | Iron condor | long 40 put @ 0.40; short 45 put @ 1.00; short 55 call @ 1.10; long 60 call @ 0.45 | $1.25 | $3.75 | $43.75, $56.25 | $125.00 / $375.00 |
+| L3 | Call butterfly | long 45 call @ 6.00; short 2× 50 call @ 2.50; long 55 call @ 0.80 | $3.20 | $1.80 | $46.80, $53.20 | $320.00 / $180.00 |
+| L4 | Naked (uncovered) call (concept only) | short 55 call @ 1.50 | $1.50 | Unlimited | $56.50 | $150.00 / Unlimited |
+| L4 | Naked (uncovered) put (concept only) | short 45 put @ 1.20 | $1.20 | $43.80 | $43.80 | $120.00 / $4,380.00 |
+
+- What to look at: (1) every row above against a textbook; (2) whether 3 attempts per 24 h and the 80% bar feel right; (3) whether L4 naked options should stay concept-only with a check.
 

@@ -212,22 +212,22 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 
 ## BA8 — Options knowledge ladder (education gating)
 
-### [ ] BA8.M1 — Ladder + payoff math
+### [x] BA8.M1 — Ladder + payoff math
 - **Build:** `src/lib/academy/options/ladder.ts`: L1 covered call, buy-write, cash-secured put · L2 long call, long put, protective put, collar · L3 vertical debit / credit spreads, iron condor, butterfly · L4 naked call / put (concept-only, "highest risk"). `options/payoff.ts`: payoff at expiry, max gain, max loss (incl. `Infinity` for naked call), breakevens, given strike(s) + premium(s) (decision D1).
 - **Accept:** formulas documented; per-share and per-contract (×100) both exposed.
 - **Verify:** BASE + `payoff.test.ts` (hand-computed table per strategy; property: payoff(S) piecewise linear with kinks only at strikes; max loss/gain equal the min/max over a dense price grid within tolerance 0).
 
-### [ ] BA8.M2 — Knowledge checks + gating
+### [x] BA8.M2 — Knowledge checks + gating
 - **Build:** ≥ 8 original items per level (ids `BA-OPT-L<n>-NN`), pass ≥ 80%, **max 3 attempts per rolling 24 h** (injectable clock), risk acknowledgement checkbox required before each level's check; L(n) requires L(n−1) passed.
 - **Accept:** gating is pure (`canAttempt`, `isLevelUnlocked`); numeric answers are recomputed from `payoff.ts`.
 - **Verify:** BASE + `optionsGate.test.ts` (attempt window edges, ordering, numeric recompute).
 
-### [ ] BA8.M3 — Ladder UI + payoff chart
+### [x] BA8.M3 — Ladder UI + payoff chart
 - **Build:** `components/academy/options/OptionsLadder.tsx` + `PayoffChart.tsx` (SVG, not a chain), lesson cards per level linking to existing `options-literacy` / options coach sessions.
 - **Accept:** every surface shows the options risk statement; no chain, no Greeks wording.
 - **Verify:** BASE + render tests (risk statement, locked state, chart points equal `payoff.ts` samples) + grep test that academy options files contain none of `delta|gamma|theta|vega|implied volatility surface|option chain`.
 
-### [ ] BA8.M4 — 🔍 HUMAN CHECKPOINT: options accuracy + gating feel
+### [~] BA8.M4 — 🔍 HUMAN CHECKPOINT: options accuracy + gating feel
 - **Build:** screenshots + the strategy table with max gain / loss / breakeven per strategy in PROGRESS.md.
 - **Accept:** Weng signs off (PENDING logged; loop continues). Any doubt on a formula = STOP (a), not a guess.
 

@@ -80,6 +80,15 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
           </p>
           <p className="text-[13px] text-muted">Short scenarios scored mostly on discipline: stops, size and patience.</p>
         </Link>
+        <Link to="/academy/options" className="panel p-4 block hover:border-sim space-y-1 sm:col-span-2" data-testid="hub-options">
+          <p className="font-semibold">
+            <span className="material-symbols-outlined text-sim align-middle mr-1" aria-hidden>
+              stacked_line_chart
+            </span>
+            Options knowledge ladder
+          </p>
+          <p className="text-[13px] text-muted">Four levels of options strategies with payoff charts at expiration and a check per level. Education only; it approves you for nothing.</p>
+        </Link>
       </section>
 
       <RewardsPanel storage={storage} />
