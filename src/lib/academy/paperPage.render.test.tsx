@@ -178,3 +178,11 @@ test("BA11.M4 costs: setup offers fee and slippage (none by default); a costed s
   const core = renderText(page(withSession()));
   assert.ok(!core.includes("Cost of trading") && core.includes("No fees."));
 });
+
+test("BA11.M5 journal: the paper page lists fills with their notes and an export button; challenges do not", () => {
+  const log = { ...fixtureLog(), notes: { o1: "Bought the trend after a higher low." } };
+  const html = renderHtml(page(withSession(log)));
+  assert.ok(html.includes('data-testid="journal"'));
+  assert.ok(html.includes('data-testid="journal-csv"'));
+  assert.match(renderText(page(withSession(log))), /Bought the trend after a higher low\./);
+});

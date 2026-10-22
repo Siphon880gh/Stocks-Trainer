@@ -277,7 +277,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - [x] **BA11.M2** Short selling + margin explainer (borrow, buy-to-cover, unlimited-risk warnings).
 - [x] **BA11.M3** Fractional shares + dollar-amount orders.
 - [x] **BA11.M4** Fees / slippage toggle and a "cost of trading" lesson.
-- **BA11.M5** Trade journal (notes per fill, export CSV) — a gap reviewers flag in the broker.
+- [x] **BA11.M5** Trade journal (notes per fill, export CSV) — a gap reviewers flag in the broker.
 - **BA11.M6** Multiple paper portfolios (e.g. separate futures-style practice account).
 
 Each stretch milestone uses the same Build / Accept / Verify discipline; the loop does not start BA11 without a PROGRESS.md approval line.

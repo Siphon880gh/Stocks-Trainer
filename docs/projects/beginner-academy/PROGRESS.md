@@ -3,7 +3,7 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA11.M5.S1
+- `current_story`: BA11.M6.S1
 - `status`: core BA0–BA10 done and signed off (2026-10-21); BA11 stretch approved and in progress
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
@@ -244,3 +244,10 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - UI: CostPanel (fixed fee vs trade size, slippage, round-trip break-even on a $1,000 trade, net P&L note, totals paid); ticket's estimate shows the fee; the session footnote says costs are on.
 - Tests: `paper/costs.test.ts` (5) + one render test. Screenshots: ba11-costs-setup.png, ba11-costs-session.png.
 - Next: BA11.M5.S1 (trade journal + CSV export).
+
+### 2026-10-21 · BA11.M5 Trade journal + CSV export · done
+- `paper/journal.ts`: `journalRows` (one row per fill: bar, action incl. Sell short / Buy to cover, order type + TIF, shares, price, fee, realised P&L, note), `journalCsv` (RFC 4180: CRLF lines, fields with comma / quote / CR / LF quoted, quotes doubled; every row labelled "SIMULATED (SAMPLE tape)"), `sessionNote` (trimmed, max 500 chars, empty clears), `journalFileName`.
+- Notes live in `PaperSessionLog.notes` keyed by order id; they are not actions, so the replay is unchanged (tested).
+- UI: JournalPanel on the free paper page (not in challenges) with a note box per fill (saved on blur) and Export CSV (Blob download).
+- Tests: `paper/journal.test.ts` (3, including a parse-back of the export) + one render test. Screenshot: ba11-journal.png; sample export: checkpoints/ba11-journal-export.csv.
+- Next: BA11.M6.S1 (multiple paper portfolios).

@@ -8,6 +8,7 @@ import SimulatedBanner from "../SimulatedBanner";
 import OrderTicket, { type BracketExits } from "./OrderTicket";
 import MarginPanel from "./MarginPanel";
 import CostPanel from "./CostPanel";
+import JournalPanel from "./JournalPanel";
 import EquityCurve from "./EquityCurve";
 import { AccountSummary, OpenOrders, OrderHistory, PositionsTable } from "./PaperPanels";
 
@@ -22,10 +23,12 @@ interface Props {
   finished?: ReactNode;
   /** BA11.M1: allow bracket orders on the ticket. */
   allowBracket?: boolean;
+  /** BA11.M5: show the trade journal (free paper page). */
+  journal?: boolean;
 }
 
 /** BA5.M3: chart (bars 0..current only), stepping, ticket and account panels for one paper session. SIMULATED. */
-export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolbar, finished, allowBracket }: Props) {
+export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolbar, finished, allowBracket, journal }: Props) {
   const tape = getTape(log.tapeId)!;
   const end = Math.min(lastBar ?? tape.bars.length - 1, tape.bars.length - 1);
   const state = useMemo(() => replay(log), [log]);
@@ -103,6 +106,7 @@ export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolba
           </div>
           <EquityCurve points={state.equityCurve} startingCash={state.startingCash} />
           <OrderHistory state={state} />
+          {journal ? <JournalPanel state={state} log={log} onLog={(l) => onLog(l, {})} /> : null}
         </div>
         <div className="space-y-3 lg:sticky lg:top-4">
           {atEnd && finished ? finished : <div key={log.actions.length}>

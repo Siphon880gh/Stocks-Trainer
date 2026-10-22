@@ -150,4 +150,6 @@ export interface PaperSessionLog {
   actions: PaperAction[];
   /** BA11 stretch switches for this session (absent = core rules). */
   options?: PaperOptions;
+  /** BA11.M5: journal notes per filled order id (not replayed; they never change the account). */
+  notes?: Record<string, string>;
 }
