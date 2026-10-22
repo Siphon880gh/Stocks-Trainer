@@ -981,7 +981,7 @@ export default function MarketChart({
             Fit
           </button>
           <span>{zoom.toFixed(2)}×</span>
-          <div className="ml-auto flex shrink-0 items-center">
+          <div className="ml-auto flex max-w-full shrink-0 flex-wrap items-center gap-y-2" data-testid="chart-toolbar-right">
             <div ref={explainHelpRef} className="relative">
             <div className="inline-flex h-7 items-stretch overflow-hidden rounded-md border border-[#2962ff]">
               <button
