@@ -31,7 +31,7 @@ test("FE7.M1: Training card links the game, the lab, the forecast and the 4 grou
   assert.ok(html.includes('href="/practice/read-the-print"'));
   assert.ok(html.includes('href="/practice/statements"'));
   assert.ok(html.includes('href="/practice/statements#forecast"'));
-  assert.ok(html.includes("1/14 rounds played · best session 3"));
+  assert.ok(html.includes("1/22 rounds played · best session 3"));
   for (const g of FINANCIALS_QUIZ_GROUPS) {
     assert.ok(html.includes(`data-group="${g.id}"`), g.id);
     assert.ok(html.includes(`href="/training?group=${g.id}&amp;start=1"`), `${g.id} opens the quiz`);

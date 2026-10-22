@@ -30,6 +30,7 @@ import {
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText from "../components/JargonText";
 import CaseMacroLink from "../components/macro/CaseMacroLink";
+import CasePrintLink from "../components/financials/CasePrintLink";
 
 const ACTIONS: { id: CaseAction; label: string }[] = [
   { id: "buy", label: "BUY" },
@@ -152,6 +153,7 @@ export default function CasePlayer() {
             </p>
           ) : null}
           <CaseMacroLink caseId={study.id} />
+          <CasePrintLink caseId={study.id} />
         </div>
 
         {study.statementSnapshot ? (

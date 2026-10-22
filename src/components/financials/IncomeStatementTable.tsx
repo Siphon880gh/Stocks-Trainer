@@ -19,7 +19,11 @@ export default function IncomeStatementTable({ company, start = 0, count, highli
       columns={qs.map((q) => q.label)}
       rows={incomeRows(qs)}
       highlightColumn={highlightColumn}
-      caption="Revenue down to EPS. Parentheses = costs or losses."
+      caption={
+        company.statementStyle === "bank"
+          ? "Bank format: interest income − interest expense = net interest income; + fees − expenses = PPNR; − provision = pretax. Parentheses = costs."
+          : "Revenue down to EPS. Parentheses = costs or losses."
+      }
     />
   );
 }

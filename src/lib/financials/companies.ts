@@ -2,6 +2,7 @@
  * Three fictional companies × 8 quarters (Q1 FY25 … Q4 FY26), generated from drivers so every statement ties.
  * SAMPLE / STYLIZED: invented companies and numbers, for practice only. Not live filings, not advice.
  */
+import { buildBankQuarters, type BankDrivers } from "./bankBuilder";
 import { eps } from "./ties";
 import type { BalanceSheet, CashFlowStatement, Company, IncomeStatement, Kpi, Quarter } from "./types";
 
@@ -360,7 +361,140 @@ const ironbridge: Company = {
   ),
 };
 
-export const COMPANIES: Company[] = [northwind, harbor, ironbridge];
+/* ---------- Bayline Bancorp (FE8.M1): regional bank; deposit costs squeeze the margin, then credit costs rise ---------- */
+
+const BL_LOAN_YIELD = [0.056, 0.0566, 0.0572, 0.058, 0.0588, 0.0595, 0.0602, 0.061];
+const BL_DEPOSIT_COST = [0.016, 0.0195, 0.0225, 0.0235, 0.0235, 0.023, 0.0222, 0.0212];
+const BL_SEC_YIELD = [0.03, 0.03, 0.0305, 0.031, 0.0315, 0.032, 0.0325, 0.033];
+const BL_CASH_YIELD = [0.045, 0.045, 0.044, 0.043, 0.042, 0.041, 0.04, 0.04];
+const BL_DEPOSIT_CHANGE = [30000, -60000, -20000, 40000, 50000, 60000, 60000, 70000];
+const BL_BORROWING_CHANGE = [0, 80000, 40000, -40000, -40000, -20000, 0, 0];
+const BL_NEW_LOANS = [40000, 30000, 20000, 25000, 30000, 30000, 25000, 45000];
+const BL_FEES = [18000, 18200, 18400, 18600, 18800, 19000, 19300, 19600];
+const BL_NONINT_EXP = [60000, 60500, 60800, 61200, 61400, 61800, 62100, 62500];
+const BL_PROVISION = [4500, 5000, 5500, 6000, 9000, 16000, 13000, 8000];
+const BL_NCO = [3500, 4000, 4200, 4600, 5500, 7000, 8000, 7200];
+const BL_NPL = [0.0055, 0.006, 0.0065, 0.007, 0.0085, 0.011, 0.012, 0.0115];
+const baylineDrivers: BankDrivers[] = range(QUARTERS).map((t) => ({
+  loanYield: BL_LOAN_YIELD[t]!,
+  securitiesYield: BL_SEC_YIELD[t]!,
+  cashYield: BL_CASH_YIELD[t]!,
+  depositCost: BL_DEPOSIT_COST[t]!,
+  borrowingRate: 0.05,
+  newLoans: BL_NEW_LOANS[t]!,
+  securitiesChange: -15000,
+  depositChange: BL_DEPOSIT_CHANGE[t]!,
+  borrowingChange: BL_BORROWING_CHANGE[t]!,
+  nonInterestIncome: BL_FEES[t]!,
+  nonInterestExpense: BL_NONINT_EXP[t]!,
+  provision: BL_PROVISION[t]!,
+  netChargeOffs: BL_NCO[t]!,
+  nplRatio: BL_NPL[t]!,
+  depreciation: 2500,
+  stockComp: 1000,
+  capex: 2500,
+  taxRate: 0.21,
+  dividendsPerShare: 0.25,
+  dilutiveShares: 300,
+}));
+
+const bayline: Company = {
+  id: "bayline-bancorp",
+  name: "Bayline Bancorp",
+  ticker: "BAYB.S",
+  archetype: "regional-bank",
+  sector: "Banks (regional)",
+  description:
+    "A regional bank: takes deposits, makes loans, and earns the spread. Its 'revenue' is net interest income plus fees, and its big swing cost is the provision for bad loans.",
+  story: [
+    "Deposit costs rise faster than loan yields through FY25, so the net interest margin (NIM) shrinks and net interest income falls.",
+    "Deposits run off in Q2–Q3 FY25 and the bank borrows to fill the gap, then repays as deposits come back.",
+    "From Q1 FY26 loans keep repricing higher while deposit costs ease, so the margin widens again.",
+    "Credit gets worse in FY26: non-performing loans rise and the provision runs well above net charge-offs (a reserve build), which hits EPS.",
+    "Capital stays strong (simplified CET1 around 11%) and the dividend is paid every quarter.",
+  ],
+  statementStyle: "bank",
+  revenueLabel: "net revenue (NII + fees)",
+  quarters: buildBankQuarters(
+    {
+      cash: 600000, securities: 2000000, grossLoans: 7000000, allowance: 84000, otherCurrentAssets: 40000, ppe: 90000, otherAssets: 150000,
+      deposits: 8400000, borrowings: 300000, accruedLiabilities: 60000, otherLiabilities: 80000, paidInCapital: 420000, sharesBasic: 60000,
+    },
+    baylineDrivers,
+  ),
+};
+
+/* ---------- Kestrel Biotherapeutics (FE8.M1): clinical-stage biotech; royalties, heavy R&D burn, binary trial readouts ---------- */
+
+/** Partner's net sales of the approved drug Kestrel licensed out; Kestrel books a 12% royalty as revenue. */
+const KS_PARTNER_SALES = [50000, 54000, 58000, 62000, 66000, 70000, 63000, 72000];
+export const KESTREL_ROYALTY_RATE = 0.12;
+const KS_RND = [44000, 46000, 49000, 36000, 37000, 39000, 42000, 44000];
+const KS_SGA = [8000, 8200, 8400, 7600, 7800, 9500, 11000, 12500];
+const KS_INTEREST_INCOME = [3800, 3500, 3600, 3200, 2800, 4200, 4500, 4100];
+const KS_ENROLLMENT = [62, 78, 91, 100, 100, 100, 100, 100];
+const KS_PROGRAMS = [4, 4, 3, 3, 3, 3, 4, 4];
+const kestrelDrivers: QuarterDrivers[] = range(QUARTERS).map((t) => {
+  const revenue = r(KS_PARTNER_SALES[t]! * KESTREL_ROYALTY_RATE);
+  return {
+    revenue,
+    cogsPct: 0,
+    rndPct: KS_RND[t]! / revenue,
+    sgaPct: KS_SGA[t]! / revenue,
+    depreciation: 400,
+    stockComp: 4000,
+    taxRate: 0,
+    interestRate: 0,
+    otherIncome: KS_INTEREST_INCOME[t]!,
+    dso: 50,
+    dio: 0,
+    dpo: 0,
+    accruedPct: 0.22,
+    deferredPct: 0,
+    capex: 300,
+    debtIssued: 0,
+    debtRepaid: 0,
+    currentDebt: 0,
+    // Q2 FY25: at-the-market (ATM) sale ~3,000k shares at ~$13. Q2 FY26: follow-on after the Phase 3 win, 11,000k shares at ~$18.18.
+    equityIssued: t === 1 ? 39000 : t === 5 ? 200000 : 0,
+    newShares: t === 1 ? 3000 : t === 5 ? 11000 : 150,
+    dividendsPerShare: 0,
+    dilutiveShares: 0,
+    kpis: [
+      { id: "partner-sales", label: "Partner net sales (royalty base)", value: KS_PARTNER_SALES[t]!, unit: "thousands" },
+      { id: "ph3-enrollment", label: "Phase 3 enrollment", value: KS_ENROLLMENT[t]!, unit: "pct" },
+      { id: "programs", label: "Programs in the clinic", value: KS_PROGRAMS[t]!, unit: "count" },
+    ],
+  };
+});
+
+const kestrel: Company = {
+  id: "kestrel-bio",
+  name: "Kestrel Biotherapeutics",
+  ticker: "KSTL.S",
+  archetype: "clinical-biotech",
+  sector: "Biotech (clinical stage)",
+  description:
+    "A clinical-stage biotech. A small royalty on a partner's approved drug is its only revenue; R&D on its pipeline costs several times that, so it lives on its cash pile and share sales.",
+  story: [
+    "Revenue is a 12% royalty on the partner's sales: small and steady, until the partner destocks in Q3 FY26.",
+    "R&D is far larger than revenue, so it loses money and burns cash every quarter: cash runway is the number that matters.",
+    "A secondary program (KB-207) fails its Phase 2 trial in Q3 FY25; the company stops it and R&D drops by about a quarter from Q4 FY25.",
+    "It sells shares twice: a small at-the-market sale in Q2 FY25, and a large follow-on in Q2 FY26 right after its Phase 3 trial succeeds.",
+    "Each share sale dilutes holders, but raising after good news costs far fewer shares than raising when cash is nearly gone.",
+  ],
+  revenueLabel: "royalty revenue",
+  quarters: buildQuarters(
+    {
+      cash: 330000, receivables: 10000, inventory: 0, otherCurrentAssets: 6000, ppe: 5000, otherAssets: 3000,
+      payables: 0, accruedLiabilities: 11000, deferredRevenue: 0, debt: 0, currentDebt: 0, otherLiabilities: 2000,
+      paidInCapital: 900000, sharesBasic: 70000,
+    },
+    kestrelDrivers,
+  ),
+};
+
+export const COMPANIES: Company[] = [northwind, harbor, ironbridge, bayline, kestrel];
 
 export function companyById(id: string): Company | undefined {
   return COMPANIES.find((c) => c.id === id);

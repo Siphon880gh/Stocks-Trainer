@@ -3,7 +3,7 @@
  * The answer key, step-3 answer, fact list and wrong-option feedback are DERIVED from the event + chart, never typed.
  * SAMPLE / STYLIZED — fictional companies, not a live filing, not trading advice.
  */
-import { EARNINGS_EVENTS, eventById, midpoint, resolveEvent, type EarningsEvent, type GapDirection, type ReactionArchetype } from "./earningsEvents";
+import { EARNINGS_EVENTS, eventById, midpoint, resolveEvent, RevenueLabel, type EarningsEvent, type GapDirection, type ReactionArchetype } from "./earningsEvents";
 import { fmtEps, fmtK } from "./format";
 import { EVENT_INDEX, generateReaction, type ReactionChart } from "./reactionCharts";
 
@@ -83,7 +83,7 @@ function factsFor(event: EarningsEvent): string[] {
   const x = event.expect;
   const facts = [
     `EPS ${fmtEps(r.actualEps)} vs ${fmtEps(x.consensusEps)} expected (${r.eps})`,
-    `Revenue ${fmtK(r.actualRevenue)} vs ${fmtK(x.consensusRevenue)} expected (${r.revenue})`,
+    `${RevenueLabel(r.company)} ${fmtK(r.actualRevenue)} vs ${fmtK(x.consensusRevenue)} expected (${r.revenue})`,
     `Next-quarter guide midpoint ${fmtK(midpoint(event.newGuidance))} vs street ${fmtK(event.nextQuarterConsensusRevenue)} (${r.guidance})`,
     `Run-up into the print ${x.runUpPct > 0 ? "+" : ""}${x.runUpPct}% against an implied move of ±${x.impliedMovePct}%`,
   ];
@@ -130,6 +130,15 @@ export const ROUND_ORDER = [
   "irbg-q3fy26",
   "nwcl-q1fy26",
   "hbpn-q4fy26",
+  // FE8.M1: bank + biotech rounds, appended so existing round numbers and saved progress stay put.
+  "kstl-q2fy25",
+  "bayb-q2fy25",
+  "kstl-q3fy25",
+  "bayb-q4fy25",
+  "kstl-q1fy26",
+  "bayb-q2fy26",
+  "kstl-q3fy26",
+  "bayb-q4fy26",
 ];
 
 export function buildRound(event: EarningsEvent): PrintRound {

@@ -271,4 +271,190 @@ export const FINANCIAL_TERMS: LiteracyTerm[] = [
     detail:
       "Report-day volume is often 3–6× the 20-day average. A gap on heavy volume that holds is a stronger signal than one on light volume. SAMPLE educational definition.",
   },
+  /* ---- FE8.M1: banks ---- */
+  {
+    id: "net-interest-income",
+    name: "Net interest income (NII)",
+    category: "process",
+    summary: "Interest a bank earns on loans and securities minus the interest it pays on deposits and borrowings.",
+    detail:
+      "NII is most of a typical bank's revenue. It grows when the loan book grows or when the spread widens (asset yields rise faster than funding costs) and shrinks when deposit costs catch up. SAMPLE educational definition.",
+  },
+  {
+    id: "net-interest-margin",
+    name: "Net interest margin (NIM)",
+    category: "process",
+    summary: "Annualized net interest income ÷ average earning assets: the bank's spread, in percent.",
+    detail:
+      "A NIM of 3.4% means each $100 of loans, securities and cash earns about $3.40 a year more than the bank pays for its funding. Watch the direction: a few basis points a quarter matter at bank scale. SAMPLE educational definition.",
+  },
+  {
+    id: "deposit-beta",
+    name: "Deposit beta",
+    category: "markets",
+    summary: "How much of a central-bank rate change a bank passes on to depositors.",
+    detail:
+      "A beta of 40% means a 1-point rate rise lifts deposit costs by about 0.4 points. Betas tend to start low and climb as savers move to higher-paying accounts, which is why margins can shrink well after rates stop rising. SAMPLE educational definition.",
+  },
+  {
+    id: "efficiency-ratio",
+    name: "Efficiency ratio",
+    category: "process",
+    summary: "Non-interest expense ÷ net revenue. Lower is better: it is the cost of producing each dollar of revenue.",
+    detail:
+      "Around 55–65% is common for regional banks. The ratio rises when revenue falls faster than costs (for example when the margin compresses), even if spending is flat. SAMPLE educational definition.",
+  },
+  {
+    id: "ppnr",
+    name: "Pre-provision net revenue (PPNR)",
+    category: "process",
+    summary: "Net revenue minus non-interest expense, before the provision for bad loans: a bank's core earning power.",
+    detail:
+      "PPNR is the cushion that absorbs credit losses. Analysts compare it with expected losses: if PPNR easily covers a bad year of charge-offs, capital is protected. SAMPLE educational definition.",
+  },
+  {
+    id: "provision-for-credit-losses",
+    name: "Provision for credit losses",
+    category: "process",
+    summary: "The expense a bank books to top up its reserve for loans it expects to go bad.",
+    detail:
+      "It is a non-cash expense when booked (added back in cash from operations). Under expected-loss accounting it reflects losses the bank expects over the life of its loans, so it can jump before any loan is actually written off. SAMPLE educational definition.",
+  },
+  {
+    id: "net-charge-offs",
+    name: "Net charge-offs (NCOs)",
+    category: "process",
+    summary: "Loans written off as uncollectable, minus recoveries. Usually shown annualized as a percent of loans.",
+    detail:
+      "Charge-offs are the losses actually realized; they reduce both gross loans and the allowance, not earnings directly. Earnings are hit through the provision that refills the allowance. SAMPLE educational definition.",
+  },
+  {
+    id: "reserve-build",
+    name: "Reserve build / release",
+    category: "process",
+    summary: "Provision above net charge-offs grows the loan-loss reserve (a build); below them it shrinks it (a release).",
+    detail:
+      "Provision ÷ net charge-offs above 1× is a build: the bank expects worse credit ahead. Builds lower EPS today; a release later flatters EPS. Separate the one-off reserve build from the run-rate earnings. SAMPLE educational definition.",
+  },
+  {
+    id: "allowance-for-credit-losses",
+    name: "Allowance for credit losses",
+    category: "process",
+    summary: "The reserve set aside against the loan book. Net loans = gross loans − allowance.",
+    detail:
+      "Allowance this quarter = last quarter + provision − net charge-offs. Allowance ÷ loans shows how much loss the bank has already reserved for. SAMPLE educational definition.",
+  },
+  {
+    id: "nonperforming-loans",
+    name: "Non-performing loans (NPLs)",
+    category: "process",
+    summary: "Loans where the borrower has stopped paying (typically 90+ days late or on non-accrual).",
+    detail:
+      "Rising NPLs are an early warning: charge-offs usually follow a few quarters later. Compare them with the allowance to see how much cushion is left. SAMPLE educational definition.",
+  },
+  {
+    id: "loan-to-deposit",
+    name: "Loan-to-deposit ratio",
+    category: "process",
+    summary: "Gross loans ÷ deposits: how much of its deposit base a bank has lent out.",
+    detail:
+      "Around 80–90% is common. Very high ratios mean the bank leans on costlier borrowings; very low ratios mean idle funding earning less. SAMPLE educational definition.",
+  },
+  {
+    id: "bank-deposits",
+    name: "Deposits (bank funding)",
+    category: "process",
+    summary: "Customer money a bank holds. For a bank, deposits are a liability and its main, cheapest source of funding.",
+    detail:
+      "When deposits leave, the bank must shrink, sell securities or borrow at higher rates. Deposit inflows show up in financing cash flow, and new loans in investing cash flow. SAMPLE educational definition.",
+  },
+  {
+    id: "cet1-ratio",
+    name: "CET1 ratio",
+    category: "process",
+    summary: "Common equity tier 1 capital ÷ risk-weighted assets: the main measure of a bank's loss-absorbing capital.",
+    detail:
+      "Regulators set minimums plus buffers (often 7%+ in total for smaller banks, more for large ones). Real CET1 has many adjustments; this app's version is simplified (equity − goodwill ÷ loans + 20% of securities). SAMPLE educational definition.",
+  },
+  {
+    id: "return-on-equity",
+    name: "Return on equity (ROE)",
+    category: "process",
+    summary: "Annualized net income ÷ shareholders' equity: profit generated per dollar of owners' capital.",
+    detail:
+      "For banks, ROE above the cost of equity (often ~10%) is what justifies trading above book value. A provision build or a squeezed margin lowers it. SAMPLE educational definition.",
+  },
+  {
+    id: "tangible-book-value",
+    name: "Tangible book value per share",
+    category: "process",
+    summary: "(Equity − goodwill and intangibles) ÷ shares. Banks are often valued as a multiple of it.",
+    detail:
+      "Price ÷ tangible book (P/TBV) is a standard bank valuation. Goodwill is removed because it cannot absorb losses in a crisis. SAMPLE educational definition.",
+  },
+  /* ---- FE8.M1: biotech ---- */
+  {
+    id: "royalty-revenue",
+    name: "Royalty revenue",
+    category: "process",
+    summary: "A percentage of a partner's sales of a licensed product, booked as revenue with almost no cost of goods.",
+    detail:
+      "A 12% royalty on 50,000k of partner sales is 6,000k of revenue. The company does not control the sales, so partner destocking or pricing changes flow straight into its revenue. SAMPLE educational definition.",
+  },
+  {
+    id: "clinical-trial-phases",
+    name: "Clinical trial phases",
+    category: "process",
+    summary: "Phase 1 tests safety, Phase 2 dose and early efficacy, Phase 3 efficacy at scale before a regulator decides.",
+    detail:
+      "Each phase costs more and takes longer. Many programs that enter Phase 1 never reach approval, which is why pipeline value is uncertain until data arrive. SAMPLE educational definition.",
+  },
+  {
+    id: "topline-readout",
+    name: "Topline readout",
+    category: "markets",
+    summary: "The first public release of a trial's main results: did it hit its primary endpoint or not?",
+    detail:
+      "For a small biotech one readout can move the stock 30–70% in a day, in either direction. The full data come later, at a medical meeting or in a paper. SAMPLE educational definition.",
+  },
+  {
+    id: "primary-endpoint",
+    name: "Primary endpoint",
+    category: "process",
+    summary: "The main pre-specified result a trial is designed to test, such as a symptom score or survival.",
+    detail:
+      "A trial 'succeeds' when the primary endpoint is statistically significant versus the control arm. Wins on secondary endpoints rarely rescue a missed primary. SAMPLE educational definition.",
+  },
+  {
+    id: "binary-event",
+    name: "Binary event",
+    category: "markets",
+    summary: "News with two very different outcomes, like a trial readout or a regulatory decision. It cannot be read from charts.",
+    detail:
+      "The price gaps to a new level and often does not fill. Because the move can be larger than any stop, position size, not a stop-loss, is the main risk control. SAMPLE educational definition.",
+  },
+  {
+    id: "at-the-market-offering",
+    name: "At-the-market (ATM) offering",
+    category: "ownership",
+    summary: "A company quietly sells new shares into the market over time at the going price.",
+    detail:
+      "ATMs raise money gradually and with less price impact than a big deal, but they still dilute holders. Check share count growth each quarter. SAMPLE educational definition.",
+  },
+  {
+    id: "follow-on-offering",
+    name: "Follow-on offering",
+    category: "ownership",
+    summary: "A large sale of new shares by an already-public company, usually priced at a discount to the last close.",
+    detail:
+      "Biotechs often raise right after good data, when the price is high and fewer shares are needed. The stock typically dips toward the offer price the next day. SAMPLE educational definition.",
+  },
+  {
+    id: "cash-runway",
+    name: "Cash runway",
+    category: "process",
+    summary: "Months of operations the company can fund from its cash at the current burn rate: cash ÷ monthly burn.",
+    detail:
+      "Under about 18–24 months, the market expects a share sale soon, which can weigh on the price. Companies extend runway by cutting programs, partnering or raising money. SAMPLE educational definition.",
+  },
 ];

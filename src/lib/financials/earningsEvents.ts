@@ -60,6 +60,11 @@ export interface EarningsEvent {
   extraFacts?: string[];
 }
 
+/** What "revenue" means for this company in previews and facts (FE8.M1: banks report net revenue, Kestrel a royalty). */
+export const revenueLabelOf = (c: Company): string => c.revenueLabel ?? "revenue";
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+export const RevenueLabel = (c: Company): string => capitalize(revenueLabelOf(c));
+
 /* -------------------- computed labels -------------------- */
 
 /** EPS outcome: beat / miss when actual differs from consensus by at least one cent. */
@@ -492,6 +497,186 @@ export const EARNINGS_EVENTS: EarningsEvent[] = [
     nextQuarterConsensusRevenue: 147000,
     reaction: "pead-drift",
     whatMattered: "EPS 17¢ vs 22¢, backlog down to 360,000k, guidance cut, and net leverage up to ~2.7× against a 3.5× covenant: sellers kept coming.",
+    claims: { eps: "miss", revenue: "miss", guidance: "cut" },
+  },
+  /* ---- FE8.M1: Bayline Bancorp (bank). "Revenue" = net revenue (NII + fees); guidance is on next quarter's net revenue. ---- */
+  {
+    id: "bayb-q2fy25",
+    companyId: "bayline-bancorp",
+    quarterIndex: 1,
+    priorClose: 19.5,
+    headline: "Bayline earnings fall as deposit costs climb; outlook lowered",
+    expect: {
+      consensusEps: 0.43,
+      consensusRevenue: 97500,
+      priorGuidance: { low: 97000, high: 99000 },
+      kpiWatch: [{ kpiId: "nim", expected: 3.35, why: "The margin is the spread between loan yields and deposit costs: the core of a bank's earnings." }],
+      impliedMovePct: 6,
+      runUpPct: 1,
+      positioning: "Investors hope deposit costs have peaked.",
+    },
+    newGuidance: { low: 88500, high: 90500 },
+    nextQuarterConsensusRevenue: 95000,
+    reaction: "gap-and-go",
+    whatMattered:
+      "Deposit costs jumped from 1.60% to 1.95%, so the net interest margin fell to 3.17% (3.35% expected) and net interest income dropped; next quarter's net revenue guide came in about 6% below the street.",
+    claims: { eps: "miss", revenue: "miss", guidance: "cut" },
+  },
+  {
+    id: "bayb-q4fy25",
+    companyId: "bayline-bancorp",
+    quarterIndex: 3,
+    priorClose: 16.8,
+    headline: "Bayline results in line; margin stabilizes",
+    expect: {
+      consensusEps: 0.29,
+      consensusRevenue: 89500,
+      priorGuidance: { low: 88500, high: 90500 },
+      kpiWatch: [{ kpiId: "nim", expected: 2.9, why: "A margin that stops falling would mean deposit costs have caught up." }],
+      impliedMovePct: 5,
+      runUpPct: 1,
+      positioning: "Little interest either way after the sell-off.",
+    },
+    newGuidance: { low: 90600, high: 92000 },
+    nextQuarterConsensusRevenue: 91000,
+    reaction: "muted",
+    whatMattered: "EPS, net revenue and the margin (2.91% vs 2.90%) all landed on the estimates and guidance matched the street: nothing new to trade.",
+    claims: { eps: "in-line", revenue: "in-line", guidance: "maintain" },
+  },
+  {
+    id: "bayb-q2fy26",
+    companyId: "bayline-bancorp",
+    quarterIndex: 5,
+    priorClose: 18.2,
+    headline: "Bayline misses on a larger loan-loss provision; reiterates outlook",
+    expect: {
+      consensusEps: 0.27,
+      consensusRevenue: 94000,
+      priorGuidance: { low: 93000, high: 95000 },
+      kpiWatch: [
+        { kpiId: "nim", expected: 3.05, why: "Is the margin still widening as loans reprice?" },
+        { kpiId: "cet1", expected: 11.0, why: "Capital shows how much loss the bank can absorb." },
+      ],
+      impliedMovePct: 6,
+      runUpPct: 2,
+      positioning: "Worries about commercial real estate loans across regional banks.",
+    },
+    newGuidance: { low: 97500, high: 99500 },
+    nextQuarterConsensusRevenue: 98000,
+    reaction: "gap-fill",
+    whatMattered:
+      "EPS missed because the bank built reserves: the provision (16,000k) ran far above net charge-offs (7,000k). Net interest income kept rising, the margin beat at 3.10% and capital held near 11%, so the headline sellers were bought back.",
+    claims: { eps: "miss", revenue: "in-line", guidance: "maintain" },
+  },
+  {
+    id: "bayb-q4fy26",
+    companyId: "bayline-bancorp",
+    quarterIndex: 7,
+    priorClose: 19.8,
+    headline: "Bayline beats as the margin widens; raises outlook",
+    expect: {
+      consensusEps: 0.36,
+      consensusRevenue: 100500,
+      priorGuidance: { low: 99500, high: 101500 },
+      kpiWatch: [{ kpiId: "nim", expected: 3.28, why: "Loans keep repricing higher while deposit costs ease." }],
+      impliedMovePct: 6,
+      runUpPct: -3,
+      positioning: "Many funds cut bank exposure after the credit scare; the stock slid 3% into the print.",
+    },
+    newGuidance: { low: 105000, high: 107000 },
+    nextQuarterConsensusRevenue: 102500,
+    reaction: "pead-drift",
+    whatMattered:
+      "The margin widened to 3.37% (3.28% expected), the provision fell back toward charge-offs, and the net revenue guide came in above the street: underweight funds kept buying for days.",
+    claims: { eps: "beat", revenue: "beat", guidance: "raise" },
+  },
+  /* ---- FE8.M1: Kestrel Biotherapeutics (clinical-stage biotech). Revenue = a 12% royalty; guidance is on next quarter's royalties. ---- */
+  {
+    id: "kstl-q2fy25",
+    companyId: "kestrel-bio",
+    quarterIndex: 1,
+    priorClose: 12.4,
+    headline: "Kestrel royalties top estimates; Phase 3 enrollment ahead of plan",
+    expect: {
+      consensusEps: -0.64,
+      consensusRevenue: 6300,
+      priorGuidance: { low: 6200, high: 6500 },
+      kpiWatch: [{ kpiId: "ph3-enrollment", expected: 72, why: "Faster enrollment brings the Phase 3 readout closer." }],
+      impliedMovePct: 9,
+      runUpPct: 1,
+      positioning: "Quiet; most holders are waiting for the Phase 3 data.",
+    },
+    newGuidance: { low: 6900, high: 7100 },
+    nextQuarterConsensusRevenue: 6750,
+    reaction: "gap-and-go",
+    whatMattered:
+      "Royalties beat by about 3% and the royalty guide was raised, but the bigger news was Phase 3 enrollment at 78% vs 72% expected, which pulls the readout forward.",
+    claims: { eps: "beat", revenue: "beat", guidance: "raise" },
+  },
+  {
+    id: "kstl-q3fy25",
+    companyId: "kestrel-bio",
+    quarterIndex: 2,
+    priorClose: 8.4,
+    headline: "Kestrel loss widens on KB-207 wind-down; outlook reiterated",
+    expect: {
+      consensusEps: -0.6,
+      consensusRevenue: 6950,
+      priorGuidance: { low: 6900, high: 7100 },
+      kpiWatch: [{ kpiId: "ph3-enrollment", expected: 88, why: "Is the lead program still on track after the KB-207 failure?" }],
+      impliedMovePct: 10,
+      runUpPct: -2,
+      positioning: "Already down hard after the failed Phase 2 readout earlier in the quarter.",
+    },
+    newGuidance: { low: 7300, high: 7600 },
+    nextQuarterConsensusRevenue: 7400,
+    reaction: "gap-fill",
+    whatMattered:
+      "The wider loss came from one-time costs to shut down KB-207. Royalties were in line, guidance held, Phase 3 enrollment reached 91%, and management said R&D falls about a quarter from next quarter, stretching runway: the gap down filled.",
+    claims: { eps: "miss", revenue: "in-line", guidance: "maintain" },
+  },
+  {
+    id: "kstl-q1fy26",
+    companyId: "kestrel-bio",
+    quarterIndex: 4,
+    priorClose: 14.6,
+    headline: "Kestrel reports steady quarter; Phase 3 data still expected this year",
+    expect: {
+      consensusEps: -0.47,
+      consensusRevenue: 7900,
+      priorGuidance: { low: 7800, high: 8100 },
+      kpiWatch: [{ kpiId: "ph3-enrollment", expected: 100, why: "Enrollment is complete; the market wants a readout date." }],
+      impliedMovePct: 9,
+      runUpPct: 12,
+      positioning: "Up 12% in two weeks as traders position for the Phase 3 readout.",
+    },
+    newGuidance: { low: 8300, high: 8500 },
+    nextQuarterConsensusRevenue: 8350,
+    reaction: "sell-the-news",
+    whatMattered:
+      "A fine but irrelevant quarter: traders had bid the stock up 12% chasing the Phase 3 readout, the call gave no firm date, and guidance only matched the street, so they sold the news.",
+    claims: { eps: "beat", revenue: "in-line", guidance: "maintain" },
+  },
+  {
+    id: "kstl-q3fy26",
+    companyId: "kestrel-bio",
+    quarterIndex: 6,
+    priorClose: 21,
+    headline: "Kestrel royalties miss as partner destocks; outlook cut",
+    expect: {
+      consensusEps: -0.43,
+      consensusRevenue: 8700,
+      priorGuidance: { low: 8600, high: 8900 },
+      kpiWatch: [{ kpiId: "partner-sales", expected: 72000, why: "Royalties are a fixed 12% of the partner's sales." }],
+      impliedMovePct: 9,
+      runUpPct: 1,
+      positioning: "Crowded long after the Phase 3 win and the follow-on offering.",
+    },
+    newGuidance: { low: 8000, high: 8400 },
+    nextQuarterConsensusRevenue: 9100,
+    reaction: "pead-drift",
+    whatMattered:
+      "The partner destocked: its sales fell to 63,000k vs 72,000k expected, so royalties missed by about 13% and the royalty guide was cut about 10%. Launch-prep spending widened the loss, and crowded holders kept selling for days.",
     claims: { eps: "miss", revenue: "miss", guidance: "cut" },
   },
 ];

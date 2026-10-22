@@ -16,11 +16,11 @@ import {
 const clone = <T,>(x: T): T => JSON.parse(JSON.stringify(x)) as T;
 
 describe("FE3.M1 earnings events", () => {
-  it("has ≥ 12 events, unique ids, every archetype ≥ 2 times, all 3 companies", () => {
+  it("has ≥ 12 events, unique ids, every archetype ≥ 2 times, all 5 companies (FE8.M1 added a bank and a biotech)", () => {
     assert.ok(EARNINGS_EVENTS.length >= 12);
     assert.equal(new Set(EARNINGS_EVENTS.map((e) => e.id)).size, EARNINGS_EVENTS.length);
     for (const a of REACTION_ARCHETYPES) assert.ok(EARNINGS_EVENTS.filter((e) => e.reaction === a).length >= 2, a);
-    assert.equal(new Set(EARNINGS_EVENTS.map((e) => e.companyId)).size, 3);
+    assert.equal(new Set(EARNINGS_EVENTS.map((e) => e.companyId)).size, 5);
     assert.equal(eventById("irbg-q1fy26")?.reaction, "guidance-reversal");
   });
 

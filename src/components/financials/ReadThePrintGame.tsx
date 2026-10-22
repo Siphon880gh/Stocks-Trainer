@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import CandlestickChart from "../CandlestickChart";
 import { eventById, resolveEvent } from "../../lib/financials/earningsEvents";
 import { fmtK, fmtMonths, fmtPct, fmtX, glossaryHref } from "../../lib/financials/format";
+import { bankQuarterMetrics } from "../../lib/financials/bankMetrics";
 import { quarterMetrics } from "../../lib/financials/metrics";
 import { generateReaction, revealAnnotations, EVENT_INDEX } from "../../lib/financials/reactionCharts";
 import {
@@ -23,6 +24,7 @@ import {
   savePrintProgress,
   type ReadThePrintProgress,
 } from "../../lib/financials/readThePrintProgress";
+import { casesForEvent } from "../../lib/financials/caseLinks";
 import { getLiteracyTerm } from "../../lib/literacyTerms";
 import EarningsPreviewCard from "./EarningsPreviewCard";
 import IncomeStatementTable from "./IncomeStatementTable";
@@ -45,12 +47,21 @@ function PriorQuarters({ round }: { round: PrintRound }) {
   const k = r.event.quarterIndex;
   const start = Math.max(0, k - 4);
   const m = quarterMetrics(r.company, k - 1);
-  const chips: [string, string, string][] = [
-    ["Gross margin", fmtPct(m.grossMargin), "gross-margin"],
-    ["Revenue YoY", fmtPct(m.revenueYoY), "income-statement"],
-    ["Free cash flow", fmtK(m.freeCashFlow), "free-cash-flow"],
-    ["Cash", fmtK(r.history[k - 1]!.balance.cash), "balance-sheet"],
-  ];
+  const bm = bankQuarterMetrics(r.company, k - 1);
+  const chips: [string, string, string][] = bm
+    ? [
+        // FE8.M1: a bank is read through its spread, credit and capital, not gross margin or FCF.
+        ["Net interest margin", fmtPct(bm.netInterestMargin, 2), "net-interest-margin"],
+        ["Efficiency ratio", fmtPct(bm.efficiencyRatio), "efficiency-ratio"],
+        ["Provision ÷ charge-offs", fmtX(bm.provisionToChargeOffs), "reserve-build"],
+        ["CET1 (simplified)", fmtPct(bm.cet1), "cet1-ratio"],
+      ]
+    : [
+        ["Gross margin", fmtPct(m.grossMargin), "gross-margin"],
+        ["Revenue YoY", fmtPct(m.revenueYoY), "income-statement"],
+        ["Free cash flow", fmtK(m.freeCashFlow), "free-cash-flow"],
+        ["Cash", fmtK(r.history[k - 1]!.balance.cash), "balance-sheet"],
+      ];
   if (m.runwayMonths !== null) chips.push(["Runway", fmtMonths(m.runwayMonths), "cash-burn"]);
   if (m.netLeverage !== null && m.netDebt > 0) chips.push(["Net leverage", fmtX(m.netLeverage), "net-leverage"]);
   return (
@@ -286,6 +297,19 @@ export default function ReadThePrintGame({
                   {i ? " · " : ""}
                   <Link to={glossaryHref(id)} className="underline decoration-dotted hover:text-primary">
                     {getLiteracyTerm(id)?.name ?? id}
+                  </Link>
+                </span>
+              ))}
+            </p>
+          ) : null}
+          {casesForEvent(event.id).length > 0 ? (
+            <p className="text-[12px] text-muted" data-testid="rtp-related-cases">
+              Same setup in the case library:{" "}
+              {casesForEvent(event.id).map((c, i) => (
+                <span key={c.caseId}>
+                  {i ? " · " : ""}
+                  <Link to={c.href} className="text-primary underline">
+                    {c.title}
                   </Link>
                 </span>
               ))}

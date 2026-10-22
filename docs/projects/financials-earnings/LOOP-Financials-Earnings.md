@@ -5,7 +5,7 @@ COMMIT_MODE: none          # none (default) | local  (local = one local commit p
 ATTEMPT_LIMIT: 3           # consecutive failed attempts on the same milestone before STOP (b)
 ERROR_ROUNDS_PER_ATTEMPT: 3 # fix → re-verify rounds inside one attempt before it counts as failed
 BUILD_CHECK: npx vite build --outDir /tmp/st-build-check-financials --emptyOutDir && rm -rf /tmp/st-build-check-financials
-CHECKPOINT_MODE: continue  # continue (render + log PENDING WENG SIGN-OFF, keep going) | stop. Product decisions (FE7.M2, FE8.M1) always STOP (a) regardless.
+CHECKPOINT_MODE: continue  # continue (render + log PENDING WENG SIGN-OFF, keep going) | stop. Product decisions (FE7.M2, FE8.M1) always STOP (a) regardless. (Both decided by Weng 2026-10-21: FE7.M2 yes; FE8.M1 bank + biotech. Built; see PROGRESS.)
 ```
 
 Autonomous milestone loop for the project in this folder. It picks the next unfinished story, implements it, verifies it automatically, records progress here, and continues. It stops only for human judgment or repeated failure.

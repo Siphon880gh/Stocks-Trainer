@@ -4,7 +4,7 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 
 **Current pointer**
 - `current_story`: DONE
-- `status`: done — all checkpoints signed off 2026-10-21; open product decisions FE7.M2 (cases bridge) and FE8.M1 (4th company) still wait for Weng
+- `status`: done — Done(project). All checkpoints signed off 2026-10-21; Weng decided FE7.M2 (yes) and FE8.M1 (bank + biotech) on 2026-10-21 and both are built
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: none
 
@@ -14,6 +14,9 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 | FE1.M4 reader visual | SIGNED OFF — Weng | 2026-10-21 | Screenshots in checkpoints/fe1-*.png; see entry |
 | FE2.M4 forecast visual | SIGNED OFF — Weng | 2026-10-21 | Screenshots in checkpoints/fe2-*.png; week-9 inventory adjustment approved |
 | FE5.M4 game play-through | SIGNED OFF — Weng | 2026-10-21 | Screenshots in checkpoints/fe5-*.png; follow-through bonus rule approved |
+| FE7.M2 decision | DECIDED — Weng | 2026-10-21 | Yes: tag related cases, link a print's reaction to matching cases |
+| FE8.M1 decision | DECIDED — Weng | 2026-10-21 | Both: simulated bank (NIM, provisions, deposits) and simulated biotech (runway, burn, readouts, dilution) as companies 4 and 5 |
+| FE7.M2 / FE8.M1 visual | PENDING WENG SIGN-OFF | 2026-10-21 | Screenshots in checkpoints/fe7m2-*.png and fe8m1-*.png |
 
 ## Entries
 
@@ -205,3 +208,25 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 ### 2026-10-21 11:05 PT · Sign-offs recorded
 - Weng ("I approve all"): FE1.M4, FE2.M4 (incl. the week-9 inventory adjustment) and FE5.M4 (incl. the follow-through bonus rule) SIGNED OFF.
 - Still open (not decided by the blanket approval): FE7.M2 cases bridge and FE8.M1 4th company. Options are in the FE7.M2 / FE8.M1 entries above.
+
+### 2026-10-21 21:14 PT · Weng decisions on FE7.M2 and FE8.M1
+- FE7.M2: **yes** — bridge the earnings games to the case library (tag related cases; link from a print's reaction to matching cases).
+- FE8.M1: **both** — a simulated bank (NIM, loan-loss provisions, deposits) and a simulated biotech (runway, burn, trial readouts, dilution) as companies 4 and 5, same depth as the first three.
+
+### 2026-10-21 21:14 PT · FE7.M2.S1 · PASS
+- Changed: src/lib/financials/caseLinks.ts (new: 8 earnings cases tagged with 1–2 Read the Print events each + the shared lesson; `printLinksForCase`, `casesForEvent`), src/components/financials/CasePrintLink.tsx (new), src/pages/CasePlayer.tsx (+2: renders `CasePrintLink` after `CaseMacroLink`), src/components/financials/ReadThePrintGame.tsx ("Same setup in the case library" on the reveal, `data-testid=rtp-related-cases`), src/lib/financials/caseLinks.test.tsx (new).
+- Tags live outside the case objects, so `caseStudies.ts` and grading are untouched. The test pins all 12 earnings case ids and their correct answers, checks every tag resolves to a real case and a real round, and that no link renders before the reveal.
+- Checkpoints: checkpoints/fe7m2-case-player-link.png, fe7m2-rtp-reveal-related-cases.png (PENDING WENG SIGN-OFF).
+
+### 2026-10-21 21:14 PT · FE8.M1.S1–S5 · PASS
+- Bank (Bayline Bancorp `BAYB.S`, simulated): optional bank lines in `types.ts` (counted with `?? 0`, so the first three companies are unchanged) + `bankViolations` in `ties.ts`; `bankBuilder.ts` (NII, provision, allowance roll-forward prior + provision − NCO, deposits, securities, simplified CET1 = (equity − other assets) ÷ (loans + 20% securities), labelled simplified); `bankMetrics.ts` (NIM, efficiency, NCO ratio, provision ÷ NCO, allowance ÷ loans, NPL, LDR, ROE, ROA, BVPS, TBVPS). Story: NIM 3.43% → 2.91% as deposit costs reprice and deposits run off, reserve build in FY25, recovery to 3.37% by Q4 FY26. Statements show in bank format (NII → PPNR → provision; loans net of allowance, deposits) with a caption; industrial ratios show n/m.
+- Biotech (Kestrel Biotherapeutics `KSTL.S`, simulated): royalty revenue (12% of partner sales, destocking dip Q3 FY26), R&D burn, KB-207 Phase 2 failure → R&D cut, ATM raise Q2 FY25 (3,000k shares), follow-on Q2 FY26 (11,000k shares at $18.18); runway 19.4 → 34.8 months.
+- 8 earnings events (4 each, archetypes A–E covered for the bank, A–D for the biotech) appended as Read the Print rounds 15–22 (PRINT_ROUNDS 14 → 22); preview / facts use the company's revenue label; bank rounds show NIM, efficiency, provision ÷ charge-offs and CET1 chips.
+- Trial readouts: `trialReadouts.ts` + `TrialReadoutPanel` at `/practice/statements#readouts` (3 readouts: Phase 2 miss, interim continue, Phase 3 met + follow-on). Sizing question = 1% risk budget ÷ implied move; follow-up covers dilution / R&D cut / futility. Separate module, not a 7th archetype.
+- Quiz: `quizBanksSector.ts` appends 12 questions to the existing FE6 groups (statements-reading B1–B4, K1–K4; earnings-preview B1, K1; earnings-reaction B1, K1); answers recompute from raw fields. Glossary: 23 terms (15 bank, 8 biotech).
+- Spec-driven test updates (not weakening): company count 3 → 5 in earningsEvents.test.ts; "1/14 rounds played" → "1/22" in integration.test.tsx. New sectorCompanies.test.tsx (ties, 9 broken bank fixtures, story assertions, metrics, events, rounds, readouts, quizzes, terms, no-leak renders).
+- Verify: lint 0 · test:coaching 24/24 · src/lib tests 161/161 · test:financials 333/333 · test:macro 72/72 · temp build ok (deleted)
+- Docs: EPICS.md (FE7.M2, FE8.M1 [x]), STORIES.md (#34 done; #35–39 added), AGENTS_CODE_REFERENCE-data.md (+1 bullet), QA_User_Flows.md (UF-19 steps 8–9, 1/22).
+- Checkpoints: checkpoints/fe8m1-*.png (PENDING WENG SIGN-OFF).
+- Loop state: every FE0–FE8 milestone done. Done(project).
+

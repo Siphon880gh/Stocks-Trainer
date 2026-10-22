@@ -18,6 +18,8 @@ const BASE_VOLUME: Record<string, number> = {
   "northwind-cloud": 2_400_000,
   "harbor-pine": 3_800_000,
   "ironbridge-industrial": 1_100_000,
+  "bayline-bancorp": 2_000_000,
+  "kestrel-bio": 3_200_000,
 };
 
 export interface ReactionChart {

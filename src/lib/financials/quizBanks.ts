@@ -13,6 +13,7 @@ import { fmtMonths, fmtX } from "./format";
 import { ebitda, monthlyBurn, netLeverage } from "./metrics";
 import type { FinancialsExhibit } from "./quizExhibit";
 import { EVENT_INDEX, generateReaction } from "./reactionCharts";
+import { SECTOR_PREVIEW_QUESTIONS, SECTOR_REACTION_QUESTIONS, SECTOR_STATEMENT_QUESTIONS } from "./quizBanksSector";
 
 export type FinancialsQuizGroupId = "statements-reading" | "cash-forecast-13wk" | "earnings-preview" | "earnings-reaction";
 
@@ -802,10 +803,11 @@ export const EARNINGS_REACTION_QUESTIONS: QuizQuestion[] = [
 ];
 
 export const FINANCIALS_QUESTION_BANKS: Record<FinancialsQuizGroupId, QuizQuestion[]> = {
-  "statements-reading": STATEMENTS_READING_QUESTIONS,
+  // FE8.M1: bank + biotech questions appended to the existing groups.
+  "statements-reading": [...STATEMENTS_READING_QUESTIONS, ...SECTOR_STATEMENT_QUESTIONS],
   "cash-forecast-13wk": CASH_FORECAST_QUESTIONS,
-  "earnings-preview": EARNINGS_PREVIEW_QUESTIONS,
-  "earnings-reaction": EARNINGS_REACTION_QUESTIONS,
+  "earnings-preview": [...EARNINGS_PREVIEW_QUESTIONS, ...SECTOR_PREVIEW_QUESTIONS],
+  "earnings-reaction": [...EARNINGS_REACTION_QUESTIONS, ...SECTOR_REACTION_QUESTIONS],
 };
 
 export const FINANCIALS_QUIZ_GROUPS: { id: FinancialsQuizGroupId; name: string; description: string; icon: string }[] = [

@@ -310,12 +310,14 @@ Click-path scripts for Stock Trainer (ANALYSIS_CORE). Companion: [`AGENTS_LOOP_Q
 ## Flow UF-19 — Financials & earnings: Read the Print (FE project)
 
 1. Learn → **Financials & earnings** card → **Read the Print** (`/practice/read-the-print`).
-2. Round 1/14 shows the earnings preview (consensus, whisper, guidance, KPI watch, implied move, run-up, positioning), the last reported quarters and only the 30 sessions before the report. No actual EPS / revenue / new guidance / reaction name is visible.
+2. Round 1/22 shows the earnings preview (consensus, whisper, guidance, KPI watch, implied move, run-up, positioning), the last reported quarters and only the 30 sessions before the report. No actual EPS / revenue / new guidance / reaction name is visible.
 3. **How does it trade on the report?** pick A–E → pick the follow-through (with / against / chop) → reveal shows the full chart with volume and teaching marks, the actuals, "What mattered", why the other answers don't fit and related glossary terms.
 4. Score = 2 for the call + 1 for the follow-through; refresh keeps rounds played and best session (`analysis_core_read_the_print_v1`).
 5. From the card open **Statements lab** (`/practice/statements`): switch company / tab; `#forecast` toggles what-ifs (delay collections, defer capex, revolver off → breach tint).
 6. From the card open **Reading the Statements** (`/training?group=statements-reading&start=1`): the statement exhibit shows above the options; forecast questions hide the breach tint until submit.
 7. From the card open **Mark the band** (`/practice/mark-the-band`): type band low / high (lines appear on the chart) → **Lock the band** → the report bar appears → type the fill level → **Reveal** shows x/3, the real band and the fill. Coach → **Earnings week** (`/coach/earnings-week`) walks the same kind of report preview → print → reaction.
+8. FE8.M1: Statements lab → **Bayline Bancorp** shows bank-format statements (NII → PPNR → provision; loans, allowance, deposits) and bank metrics (NIM, efficiency, provision ÷ charge-offs, CET1); **Kestrel Biotherapeutics** shows royalty revenue, burn and runway. `#readouts`: pick the position size, **Reveal the readout**, answer the dilution / R&D follow-up. Read the Print rounds 15–22 are the bank and biotech prints.
+9. FE7.M2: an earnings case such as `/cases/case-earn-guidance-cut` shows "Practice a similar setup in Read the Print" links; that round's reveal lists the case under "Same setup in the case library".
 
 **Pass:** SAMPLE / STYLIZED labels on every screen; deep links `?round=n&phase=read|answer|follow|reveal`; nothing about the actuals before the reveal; works at 390 px width.
 

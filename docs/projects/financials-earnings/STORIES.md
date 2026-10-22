@@ -47,8 +47,16 @@ Same shape as the root `IMPLEMENTATION_STORIES.md`. **Status key:** `todo` · `i
 | 31 | FE6.M3.S1 `earnings-preview` ≥ 10 Q | FE6.M3 | Same | done |
 | 32 | FE6.M4.S1 `earnings-reaction` ≥ 10 Q | FE6.M4 | Same + chart refs | done |
 | 33 | FE7.M1.S1 Training card + groups featured | FE7.M1 | Group test green | done |
-| 34 | FE7.M2.S1 Optional case `eventId` bridge | FE7.M2 | Case ids / grades unchanged | skipped: needs product decision (see PROGRESS) |
+| 34 | FE7.M2.S1 Optional case `eventId` bridge | FE7.M2 | Case ids / grades unchanged | done 2026-10-21 (Weng: yes) |
 | 35 | FE7.M3.S1 Docs + loops + QA flow + EPIC_MAP pointer | FE7.M3 | Link check green | done |
 | 36 | FE7.M4.S1 Final audit | FE7.M4 | Floors recorded → Done(project) | done |
 
 Stretch FE8 stories are added only when Weng says go.
+
+| # | Story | Milestone | Verify | Status |
+|---|-------|-----------|--------|--------|
+| 35 | FE8.M1.S1 Bank model: optional bank lines in the types + ties, `bankBuilder.ts`, Bayline Bancorp × 8 quarters, `bankMetrics.ts`, bank-format rows | FE8.M1 | 0 tie violations; 9 broken bank fixtures caught; story assertions (NIM, deposit run-off, reserve build, CET1) | done 2026-10-21 |
+| 36 | FE8.M1.S2 Biotech: Kestrel Biotherapeutics × 8 quarters (royalty, burn, ATM + follow-on) | FE8.M1 | ties; story assertions (12% royalty, burn every quarter, R&D cut, runway before/after) | done 2026-10-21 |
+| 37 | FE8.M1.S3 Events + Read the Print rounds 15–22, revenue labels, bank chips | FE8.M1 | event + chart validators; no-leak render; balanced keys | done 2026-10-21 |
+| 38 | FE8.M1.S4 Trial readouts (`trialReadouts.ts`, `TrialReadoutPanel`) | FE8.M1 | readout validators; sizing + follow-up recompute; no outcome before reveal | done 2026-10-21 |
+| 39 | FE8.M1.S5 Quiz questions + glossary terms | FE8.M1 | answers recompute from raw fields; groups balanced | done 2026-10-21 |

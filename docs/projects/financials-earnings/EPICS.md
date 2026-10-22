@@ -278,9 +278,10 @@ The tests named per milestone live in `src/lib/financials/**/*.test.{ts,tsx}` (n
 - **Build:** a Training card for "Read the Print" + the 4 new groups (featured order after `financial-drills`); the glossary terms appear in the Archive literacy tab.
 - **Verify:** BASE + a test that every new group id is in `QUIZ_GROUPS` and returns ≥ 10 questions via `getQuestionsForGroup`.
 
-### [-] FE7.M2 — Cases bridge (optional, additive) · skipped: needs a product decision, see PROGRESS.md
+### [x] FE7.M2 — Cases bridge (optional, additive) · Weng decided 2026-10-21: yes (tag cases + link both ways)
 - **Build:** the existing earnings cases get an optional `eventId` linking to a richer event (when one exists), so CasePlayer can show the preview card. No change to case grading.
 - **Verify:** BASE + a test that existing case ids / grades are unchanged.
+- **As built:** tags live in `src/lib/financials/caseLinks.ts` (case id → Read the Print events + the shared lesson), not on the case objects, so `caseStudies.ts` is untouched. CasePlayer shows "Practice a similar setup in Read the Print" (`CasePrintLink`); a round's reveal lists "Same setup in the case library". Tested in `caseLinks.test.tsx` (pinned ids + grades).
 
 ### [x] FE7.M3 — Docs + loops
 - **Build:**
@@ -298,6 +299,6 @@ The tests named per milestone live in `src/lib/financials/**/*.test.{ts,tsx}` (n
 ---
 
 ## FE8 — Stretch (only after FE7, only if Weng says go)
-- [-] FE8.M1 (skipped: needs a product decision, see PROGRESS): a 4th archetype company (bank / NII), or a biotech with binary events.
+- [x] FE8.M1 (Weng decided 2026-10-21: both): company 4 = Bayline Bancorp `BAYB.S` (regional bank: NII, NIM, provisions vs charge-offs, deposits, simplified CET1) and company 5 = Kestrel Biotherapeutics `KSTL.S` (clinical-stage biotech: royalty revenue, R&D burn, runway, ATM + follow-on dilution, trial readouts). 4 earnings events each (in Read the Print, rounds 15–22), bank-format statements, 3 binary trial readouts (`/practice/statements#readouts`), 12 quiz questions and 23 glossary terms. Readouts are a separate module, not a 7th Read the Print archetype.
 - [x] FE8.M2: Coach decision tree "earnings week" (preview → print → reaction), using existing coaching infra.
 - [x] FE8.M3: Practice: draw the expected gap band / fill level on a reaction chart.

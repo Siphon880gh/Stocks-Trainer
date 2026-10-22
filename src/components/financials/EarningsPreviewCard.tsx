@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { midpoint, resolveEvent, type EarningsEvent, type Outcome } from "../../lib/financials/earningsEvents";
+import { midpoint, resolveEvent, revenueLabelOf, RevenueLabel, type EarningsEvent, type Outcome } from "../../lib/financials/earningsEvents";
 import { FIN_DISCLAIMER, fmtEps, fmtK, fmtPct, glossaryHref } from "../../lib/financials/format";
 import type { GuidanceRange } from "../../lib/financials/types";
 
@@ -103,7 +103,7 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
                 </tr>
               ) : null}
               <tr>
-                <td className="text-slate-300 py-0.5">Revenue</td>
+                <td className="text-slate-300 py-0.5">{RevenueLabel(r.company)}</td>
                 <td className="text-right text-ink">{fmtK(x.consensusRevenue)}</td>
                 {revealActuals ? (
                   <td className="text-right pl-3" data-testid="actual-revenue">
@@ -122,7 +122,7 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
 
         <div className="space-y-1 text-[12px]">
           <p className="text-[10px] uppercase tracking-wider text-muted">
-            <Term id="guidance">Company guidance</Term> for {r.quarter.label} revenue
+            <Term id="guidance">Company guidance</Term> for {r.quarter.label} {revenueLabelOf(r.company)}
           </p>
           <p className="font-mono tabular-nums text-ink">
             {fmtK(x.priorGuidance.low)} – {fmtK(x.priorGuidance.high)}

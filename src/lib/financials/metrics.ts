@@ -100,6 +100,18 @@ export interface QuarterMetrics {
 
 export function quarterMetrics(c: Company, index: number): QuarterMetrics {
   const q = c.quarters[index];
+  const base = standardQuarterMetrics(c, index, q);
+  if (c.statementStyle !== "bank") return base;
+  // FE8.M1: industrial-company ratios do not apply to a bank (no COGS, no inventory, loans are its product,
+  // deposits are its funding). Show them as n/m; banks use bankQuarterMetrics instead.
+  return {
+    ...base,
+    grossMargin: null, dso: null, dio: null, dpo: null, cashConversionCycle: null, currentRatio: null,
+    interestCoverage: null, netLeverage: null, runwayMonths: null, monthlyBurn: 0,
+  };
+}
+
+function standardQuarterMetrics(c: Company, index: number, q: Quarter): QuarterMetrics {
   return {
     label: q.label,
     grossMargin: grossMargin(q.income),

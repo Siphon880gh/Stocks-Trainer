@@ -52,6 +52,12 @@ export interface BalanceSheet {
   retainedEarnings: Thousands;
   totalEquity: Thousands;
   totalLiabilitiesAndEquity: Thousands;
+  /** Banks only (FE8.M1): investment securities. Counted in total assets. */
+  securities?: Thousands;
+  /** Banks only: gross loans minus the allowance for credit losses. Counted in total assets. */
+  loansNet?: Thousands;
+  /** Banks only: customer deposits. Counted in total liabilities. */
+  deposits?: Thousands;
 }
 
 export interface CashFlowStatement {
@@ -77,6 +83,14 @@ export interface CashFlowStatement {
   netChangeInCash: Thousands;
   beginningCash: Thousands;
   endingCash: Thousands;
+  /** Banks only (FE8.M1): provision for credit losses added back in CFO (a non-cash expense). */
+  provisionAddback?: Thousands;
+  /** Banks only: net new loans made (investing; negative when the loan book grows). */
+  changeLoans?: Thousands;
+  /** Banks only: securities bought (negative) or run off / sold (positive). */
+  changeSecurities?: Thousands;
+  /** Banks only: deposits taken in (financing; positive when deposits grow). */
+  changeDeposits?: Thousands;
 }
 
 export type KpiUnit = "pct" | "thousands" | "count" | "ratio";
@@ -97,9 +111,40 @@ export interface Quarter {
   balance: BalanceSheet;
   cashFlow: CashFlowStatement;
   kpis: Kpi[];
+  /** Banks only (FE8.M1): the bank-format lines behind the generic statements. */
+  bank?: BankLines;
 }
 
-export type CompanyArchetype = "saas-burner" | "seasonal-retailer" | "levered-industrial";
+/**
+ * Bank-format income statement and loan book for one quarter (FE8.M1). The generic statements map onto it:
+ * revenue = net interest income + non-interest income, SG&A = non-interest expense, operating income = PPNR,
+ * other income = −provision, and the generic interest-expense line is 0 (a bank's interest cost sits inside NII).
+ */
+export interface BankLines {
+  interestIncome: Thousands;
+  /** Interest paid on deposits and borrowings. */
+  interestExpense: Thousands;
+  netInterestIncome: Thousands;
+  provision: Thousands;
+  nonInterestIncome: Thousands;
+  nonInterestExpense: Thousands;
+  /** Pre-provision net revenue = NII + non-interest income − non-interest expense. */
+  ppnr: Thousands;
+  grossLoans: Thousands;
+  /** Allowance for credit losses (reserve held against the loan book). */
+  allowance: Thousands;
+  netChargeOffs: Thousands;
+  nonperformingLoans: Thousands;
+  securities: Thousands;
+  deposits: Thousands;
+  borrowings: Thousands;
+  /** Average of opening and closing earning assets (cash + securities + gross loans). */
+  averageEarningAssets: Thousands;
+  /** SIMPLIFIED risk-weighted assets: 100% of gross loans + 20% of securities. */
+  riskWeightedAssets: Thousands;
+}
+
+export type CompanyArchetype = "saas-burner" | "seasonal-retailer" | "levered-industrial" | "regional-bank" | "clinical-biotech";
 
 export interface Company {
   id: string;
@@ -114,6 +159,10 @@ export interface Company {
   quarters: Quarter[];
   /** Optional debt covenant (levered names). */
   covenant?: { maxNetLeverage: number; minCash: Thousands };
+  /** "bank" switches the statement reader to bank-format rows (FE8.M1). Default: standard. */
+  statementStyle?: "standard" | "bank";
+  /** What the "revenue" line and revenue guidance mean for this company, e.g. "net revenue (NII + fees)". Default "revenue". */
+  revenueLabel?: string;
 }
 
 /** Guidance range for a metric, e.g. next-quarter revenue. */
