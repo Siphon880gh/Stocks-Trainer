@@ -64,6 +64,11 @@ import { optionsVolSpikeSession } from "./options-vol-spike";
 import { shortVsSellSession } from "./short-vs-sell";
 import { statementSnapshotSession } from "./statement-snapshot";
 import { supplyShockSession } from "./supply-shock";
+import { tradePlanBeforeEntrySession } from "./trade-plan-before-entry";
+import { trailingStopExitSession } from "./trailing-stop-exit";
+import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
+import { candleNeedsContextSession } from "./candle-needs-context";
+import { rsiVsTrendSession } from "./rsi-vs-trend";
 
 /** Folder export — add new session modules here (or extend via authoring skill). */
 export const COACHING_SESSION_MODULES: CoachingSession[] = [
@@ -132,4 +137,9 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   shortVsSellSession,
   earningsWeekSession,
   cpiMorningSession,
+  tradePlanBeforeEntrySession,
+  trailingStopExitSession,
+  supplyDemandZoneRetestSession,
+  candleNeedsContextSession,
+  rsiVsTrendSession,
 ];

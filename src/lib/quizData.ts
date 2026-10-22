@@ -3653,6 +3653,49 @@ export const EQUITY_PATTERN_QUIZ_QUESTIONS: QuizQuestion[] = [
     assetClass: "equity",
     samplePackId: "eq-squeeze",
   },
+  {
+    id: "EQ-PAT-09",
+    prompt:
+      "SAMPLE failed-rally pack: four green pushes, a stall at the high, then closes keep slipping. Which indicator compares a fast and a slow average to show the rally's momentum rolling over?",
+    correctAnswer: "D",
+    options: INDICATOR_OPTIONS,
+    explanation:
+      "MACD is the gap between a fast and a slow average (plus a signal line). When the rally stalls, the fast average stops pulling away and the MACD line turns down through its signal: momentum is fading. It is a warning about the rally, not an order to short. Tied to eq-fail-rally.",
+    overlayId: "macd",
+    assetClass: "equity",
+    samplePackId: "eq-fail-rally",
+  },
+  {
+    id: "EQ-PAT-10",
+    prompt:
+      "SAMPLE dividend-cut telco pack: the tape gaps lower and closes keep slipping, so RSI sits low. What is the process read?",
+    correctAnswer: "B",
+    options: [
+      {
+        id: "A",
+        label: "RSI is low, so buy the bounce now",
+        description: "Treats one oscillator reading as a buy signal.",
+        feedback: "Oversold is not a trigger. In a fresh downtrend RSI can stay low while price keeps sliding.",
+      },
+      {
+        id: "B",
+        label: "Low RSI in a fresh downtrend can stay low; wait for a base or a reclaim",
+        description: "Trend first, oscillator second.",
+      },
+      {
+        id: "C",
+        label: "Low RSI means the gap will fill",
+        description: "Reads a promise into an oscillator.",
+        feedback: "RSI measures recent stretch. It says nothing about whether a gap fills.",
+      },
+    ],
+    explanation:
+      "RSI measures how stretched recent closes are. After a payout-cut gap that stays offered, the trend is down, and RSI can sit near its lows for many bars. The process is: respect the trend, then wait for a base, a higher low or a reclaim of the gap area before treating oversold as a setup. Tied to eq-div-cut.",
+    overlayId: "rsi",
+    assetClass: "equity",
+    samplePackId: "eq-div-cut",
+    glossaryTermId: "trend-vs-range",
+  },
 ];
 
 export const POINTS_PER_CORRECT = 50;

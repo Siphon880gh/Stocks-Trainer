@@ -1,6 +1,15 @@
 # LOOP — Class asymmetry (keep filling past section floors)
 
-The exhaustive section loops (`LOOP-Cases.md`, `LOOP-Charts.md`, `LOOP-Learn.md`, `LOOP-Coach.md`, `LOOP-Archive.md`) stop when **per-pack / per-group floors** are met. Equities still win on volume because Equities own **four** Case packs (earnings, company-news, macro-news, combined) while Futures / Forex / Crypto / Options context each own **one**.
+```text
+COMMIT_MODE: none            # none (default) | local (one local commit per PASSed unit; NEVER push, NEVER PR)
+ATTEMPT_LIMIT: 3             # consecutive failed attempts on the same unit before STOP (same rule as the project loops)
+ERROR_ROUNDS_PER_ATTEMPT: 3  # fix → re-verify rounds inside one attempt before it counts as failed
+BUILD_CHECK: npx vite build --outDir /tmp/st-build-check-asymmetry --emptyOutDir && rm -rf /tmp/st-build-check-asymmetry
+VERIFY: npm run lint && npm run test:content && BUILD_CHECK  (+ npm run test:coaching on Coach ticks)
+CHECKPOINT_MODE: continue    # no visual checkpoints here; a human-judgment STOP still stops
+```
+
+The exhaustive section loops (`LOOP-Cases.md`, `LOOP-Charts.md`, `LOOP-Learn.md`, `LOOP-Coach.md`, `LOOP-Archive.md`) stop when **per-pack / per-group floors** are met. Equities used to win on volume because Equities owned **four** Case packs (earnings, company-news, macro-news, combined) while Futures / Forex / Crypto / Options context each owned **one**. Stage B gave each expansion class `<class>-tape` and `<class>-macro` packs.
 
 This loop ignores those floors. It keeps adding content until expansion classes are no longer thin next to Equities.
 
@@ -19,15 +28,15 @@ Companions: [`LOOP-Cases.md`](./LOOP-Cases.md) · [`LOOP-Charts.md`](./LOOP-Char
 Prefer **no interval** (dynamic). One content unit per tick.
 
 **Before starting**
-1. Leave working `npm run dev` alone; verify with `npm run lint` + `npm run build`.
+1. Leave working `npm run dev` alone; verify with the VERIFY line in the config block (temp build dir, never `dist/`).
 2. Do **not** also run the content graph ([`docs/projects/content-graph/LOOP-Graph.md`](../docs/projects/content-graph/LOOP-Graph.md)) or a single-section exhaustive loop in this session — those pickers are equities-first and will fight this queue.
-3. Stop yourself anytime; hard-stop on the 10-round error budget or Done(asymmetry).
+3. Stop yourself anytime; hard-stop after ATTEMPT_LIMIT (3) consecutive failed attempts on one unit or Done(asymmetry).
 
 **On each tick**
 - Re-inventory from source (do not trust a stale table).
 - Pick the single largest gap (picker below).
 - Add **exactly one** unit using that surface’s authoring file.
-- Lint + build (+ `npm run test:coaching` if Coach); continue.
+- VERIFY (+ `npm run test:coaching` if Coach); continue.
 
 ---
 
@@ -42,6 +51,18 @@ Snapshot when this file was written (re-count every tick — these numbers will 
 | Learn literacy questions | 12 (`equity-literacy`) | 6 | 6 | 6 | 6 |
 | Coach sessions (tag match) | 15 | 2 | 1 | 1 | 1 |
 | Archive class-specific terms | (spine + 1 flag) | 1 | 1 | 1 | 1 |
+
+**Current (2026-10-21 gap audit) — Done(asymmetry) is true:**
+
+| Surface | Equities | Futures | Forex | Crypto | Options context | Target per expansion class |
+|---------|----------|---------|-------|--------|-----------------|----------------------------|
+| Cases (beginner / intermediate) | 53 (34 / 19) | 96 (77 / 19) | 96 (77 / 19) | 96 (77 / 19) | 96 (77 / 19) | ≥38 (≥24 / ≥14) |
+| Charts SAMPLE packs | 7 | 7 | 7 | 7 | 7 | 7 |
+| Learn `*-literacy` questions | 12 | 12 | 12 | 12 | 12 | 12 |
+| Coach sessions (`coachSessionMatchesClass`) | 22 | 17 | 18 | 17 | 17 | ≥16 |
+| Archive class terms (`literacyTermAssetClass`) | — | 4 | 4 | 4 | 4 | ≥4 |
+
+The five `all-markets` chart-skill Coach sessions count for every class (`ALL_MARKETS_COACH_TAG`), so adding one raises Equities and every expansion class together and never reopens a gap. Adding an **equity-only** Coach session raises `E_coach`: check the 70% target still holds before shipping it (`test:content` → "Asymmetry parity targets" fails when it does not).
 
 `LOOP-Cases.md` already treats `forex` as Done at ≥8 beginner + ≥3 intermediate. `/cases?market=forex` is still one thin list next to `/cases?market=equity` (four packed sections).
 
@@ -63,7 +84,7 @@ Expansion classes = `future`, `forex`, `crypto`, `option_context`.
 | **Coach** | `ceil(0.70 * E_coach)` distinct sessions whose tags match `CLASS_SESSION_TAGS` for that class | Runtime LLM; duplicate framing trees; earnings-statement trees (`beat_miss`, margins, cash, guidance, debt) |
 | **Archive** | ≥4 literacy terms mapped in `LITERACY_TERM_ASSET_CLASS` for that class | Fake overlay ids; investment advice |
 
-**Done(asymmetry):** every expansion class meets every row. Equities may stay larger (30% headroom is intentional).
+**Done(asymmetry):** every expansion class meets every row. Equities may stay larger (30% headroom is intentional). These targets are live tests in `src/lib/contentGraph.test.ts`, so a section loop that grows Equities past the headroom turns `test:content` red and must hand back to this loop.
 
 ---
 
@@ -152,7 +173,7 @@ Skip Stage B for a class that already has ≥3 packs in `CLASS_TO_DECIDE_PACKS`.
 | Coach | `LOOP-Coach.md` + `add-coaching-session` | 1 session file |
 | Archive | `LOOP-Archive.md` Phase A | 1 `LiteracyTerm` + `LITERACY_TERM_ASSET_CLASS` row |
 
-Shared constraints from [`README.md`](./README.md): SAMPLE / STYLIZED only · no LIVE · no brokerage · options = no chain/Greeks · one unit per tick · distinct OHLC · process teaching · lint + build after every change.
+Shared constraints from [`README.md`](./README.md): SAMPLE / STYLIZED only · no LIVE · no brokerage · options = no chain/Greeks · one unit per tick · distinct OHLC · process teaching · lint + test:content + BUILD_CHECK after every change.
 
 ---
 
@@ -173,7 +194,7 @@ Close content asymmetry: Futures, Forex, Crypto, and Options context must reach 
 - Navigator: `CLASS_TO_DECIDE_PACKS` must list every pack the class should show
 - Path lock: `CASE_PACK_ASSET_CLASS` in `beginnerPath.ts` for every new CasePackId
 - Count Learn via `getQuestionsForGroup`, not `getQuestionsByAssetClass`
-- Auto-verify: `npm run lint` && `npm run build`; add `npm run test:coaching` on Coach ticks
+- Auto-verify: VERIFY (`npm run lint` && `npm run test:content` && BUILD_CHECK; add `npm run test:coaching` on Coach ticks)
 - Constraints: SAMPLE only; do not rewrite CasePlayer/QuizModal/Coach runtime; do not unlock shorts on Beginner; do not put expansion packs on the Equities Beginner spine
 
 # STEP-BY-STEP CADENCE
@@ -182,9 +203,9 @@ Close content asymmetry: Futures, Forex, Crypto, and Options context must reach 
    - Compute targets from live Equities counts (70% cases / match charts / match literacy / 70% Coach sessions / Archive 4).
    - Run the picker. Announce class, surface, and why (relative_gap).
 2. **Author one unit** using that surface’s section file (unique ids, distinct tapes, process copy).
-3. **Verify** lint + build (+ coaching tests if Coach). Mentally: `/cases?market=<class>` or `/market?class=` or `/training?group=<class>-literacy` or `/coach?class=` or `/archive?tab=literacy` shows the new unit.
+3. **Verify** VERIFY (+ coaching tests if Coach). Mentally: `/cases?market=<class>` or `/market?class=` or `/training?group=<class>-literacy` or `/coach?class=` or `/archive?tab=literacy` shows the new unit.
 4. **On PASS** — continue to the next gap (same tick only if time remains **and** you re-run the picker after the new counts).
-5. **On FAIL** — fix; max 10 rounds → Error Handoff Summary (class, surface, intended id, files, stderr).
+5. **On FAIL** — fix; ≤3 rounds per attempt, STOP after 3 failed attempts → Error Handoff Summary (class, surface, intended id, files, stderr).
 6. **Skills** — if “add case to existing forex pack” repeats, extend `add-case-pack-by-asset-class` rather than inventing a second workflow.
 
 # VERIFICATION RUBRIC
@@ -194,21 +215,21 @@ PASS only if:
 - [ ] Unique id; wired into the real registry (`CASE_STUDIES` / class pack array / `QUIZ_GROUPS` bank / `COACHING_SESSION_MODULES` / `LITERACY_TERMS`)
 - [ ] Distinct data (no scaled OHLC clone, no paraphrased debrief)
 - [ ] SAMPLE labels honest; options-context has no chain/Greeks
-- [ ] lint + build 0 (and test:coaching if Coach)
+- [ ] lint + test:content + BUILD_CHECK 0 (and test:coaching if Coach)
 - [ ] Beginner Equities unlocks unchanged
 
 # STOP CONDITIONS
 - Done(asymmetry) → STOP with a per-class table (count vs target).
-- Error budget 10 → handoff.
+- 3 consecutive failed attempts on one unit → handoff.
 - Human verification: adding a CaseThinkingMode; paid API; LIVE feed; putting expansion literacy on the Beginner spine.
 - Abort: running Graph or LOOP-Cases exhaustive in the same session; rewriting runtime “for cleanup.”
 
 # TICK OUTPUT (keep short)
 1. class + surface + new id
 2. counts now vs target for that cell
-3. PASS | FIXING (n/10) | STOP
+3. PASS | FIXING (attempt a/3 · round r/3) | STOP
 4. next cell the picker would choose
-5. lint/build/(test:coaching) status
+5. lint / test:content / (test:coaching) / build-check status
 ```
 
 ---

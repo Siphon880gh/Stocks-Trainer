@@ -67,7 +67,7 @@ Implement docs/projects/macro-forces/EPICS.md milestone by milestone (stories in
 4. **Verify (all must exit 0)**
    1. `npm run lint`
    2. `npm run test:coaching`
-   3. `npx tsx --test src/lib/*.test.ts`
+   3. `npm run test:lib` (`src/lib/*.test.{ts,tsx}`, includes the content-graph floors in `contentGraph.test.ts`)
    4. `npm run test:macro` (once MF0.M1.S2 exists; before that, run the new test file directly)
    5. `npm run test:financials` if that script exists (regression guard for the sibling project; failures inside its in-progress files → wait and re-run, not counted)
    6. BUILD_CHECK (temp outDir, then delete it)

@@ -1,5 +1,14 @@
 # LOOP — Archive / Reference (exhaustive glossary)
 
+```text
+COMMIT_MODE: none            # none (default) | local (one local commit per PASSed unit; NEVER push, NEVER PR)
+ATTEMPT_LIMIT: 3             # consecutive failed attempts on the same unit before STOP (same rule as the project loops)
+ERROR_ROUNDS_PER_ATTEMPT: 3  # fix → re-verify rounds inside one attempt before it counts as failed
+BUILD_CHECK: npx vite build --outDir /tmp/st-build-check-archive --emptyOutDir && rm -rf /tmp/st-build-check-archive
+VERIFY: npm run lint && npm run test:content && npm run test:lib && BUILD_CHECK
+CHECKPOINT_MODE: continue    # no visual checkpoints here; a human-judgment STOP still stops
+```
+
 Deepen `/archive` (Reference): Patterns, Indicators, Literacy tabs. Detail modals and quiz deep-links already exist.
 
 Companions: [`src/lib/patterns.ts`](../src/lib/patterns.ts) · [`src/lib/overlays.ts`](../src/lib/overlays.ts) · [`src/lib/literacyTerms.ts`](../src/lib/literacyTerms.ts) · [`src/pages/Archive.tsx`](../src/pages/Archive.tsx) · [`src/lib/patternScan.ts`](../src/lib/patternScan.ts) · [`src/lib/ohlcData.ts`](../src/lib/ohlcData.ts)
@@ -13,13 +22,13 @@ Companions: [`src/lib/patterns.ts`](../src/lib/patterns.ts) · [`src/lib/overlay
 ```
 
 **Before starting**
-1. Leave working `npm run dev` alone; verify with `npm run lint` + `npm run build`.
-2. Stop yourself anytime; hard-stop on 10-round error budget or Done(archive).
+1. Leave working `npm run dev` alone; verify with the VERIFY line in the config block (temp build dir, never `dist/`).
+2. Stop yourself anytime; hard-stop after ATTEMPT_LIMIT (3) consecutive failed attempts on one unit or Done(archive).
 
 **On each tick**
 - Re-inventory `PATTERNS`, `OVERLAYS`, `LITERACY_TERMS`.
 - Add **exactly one** registry entry (one pattern **or** one overlay **or** one literacy term).
-- Wire ids used by quizzes/flashcards; lint + build; continue.
+- Wire ids used by quizzes/flashcards; VERIFY; continue.
 
 ---
 
@@ -47,11 +56,17 @@ Add missing beginner terms before exotic ones. Suggested remaining themes (skip 
 
 Flashcards on `/practice/flashcards` auto-include new `LITERACY_TERMS`.
 
+**Status 2026-10-21:** 193 terms (ownership 5 · markets 89 · position 3 · process 96); every suggested theme above shipped. The id list above is a sample, not an inventory: re-list ids from `LITERACY_TERMS` before adding. Thinnest categories are `position` and `ownership`; prefer a missing beginner idea there over another `markets` term.
+
+**Unique ids, always.** Archive `?open=`, flashcards and `glossaryTermId` all key on the id; a duplicate shows two rows and the later definition wins the modal. Two rows that teach the same idea get merged, not duplicated; a combined row gets its own id (e.g. `high-wave-and-rickshaw-man`, renamed in the 2026-10-21 audit so it no longer collides with the `high-wave` pattern term). `test:content` fails on a duplicate.
+
 ### Phase B — candlestick / chart patterns (floor **≥18** in `PATTERNS`)
 
 Add educational `PatternDef` rows. **Scanner / quiz / draw are optional follow-ups, not required on the same tick.**
 
 Order (skip if id exists): hanging-man, evening-star, piercing-line, dark-cloud-cover, three-white-soldiers, three-black-crows, harami, tweezer-top, tweezer-bottom, rising-wedge, bull-flag, double-top, double-bottom, triangle.
+
+**Status 2026-10-21:** 102 patterns (reversal 66 · continuation 18 · neutral 18), including the `ADVANCED_PATTERN_DEFS` rare set from `advancedPatterns.ts`; every id above shipped. Each pattern has a `PATTERN_OHLC` series (test-enforced, so add the series on the same tick as the row), and each **bullish / bearish** pattern needs a Buy-or-Sell route (drill key, `sc-` scenario or `BS-W-` Wait case; also test-enforced — log it as the Learn follow-up if you cannot add it on this tick). A pattern's `glossaryLink` must name a real literacy term id.
 
 Rules:
 - Unique `id` kebab-case; `type` reversal | continuation | neutral; `sentiment` set.
@@ -65,7 +80,7 @@ Rules:
 
 If chart already supports an overlay missing from the glossary, add the glossary row only.
 
-Existing: sma, ema, rsi, macd, bollinger.
+Existing: sma, ema, rsi, macd, bollinger. `OVERLAYS` must equal the set MarketChart renders (test-enforced); a new overlay is chart-stack work and a human-judgment STOP for this loop.
 
 ---
 
@@ -84,33 +99,33 @@ Make Archive exhaustive: literacy floor, then pattern floor, then honest overlay
 - `src/lib/patterns.ts` — Archive Patterns tab
 - `src/lib/overlays.ts` — Indicators tab + hint term regex (`HINT_TERM_RE`) if you add a new overlay name
 - Navigator literacy deep-links: `marketLiteracyHref` uses existing term ids — do not rename those ids
-- Auto-verify: `npm run lint` && `npm run build` (+ `patternScan` tests if scanner changed)
+- Auto-verify: VERIFY (`npm run lint` && `npm run test:content` && `npm run test:lib` — includes `patternScan` tests — && BUILD_CHECK)
 
 # STEP-BY-STEP CADENCE
-1. **Orient** — counts; first phase below floor; first missing theme.
+1. **Orient** — run `npm run test:content`; counts; first phase below floor; first missing theme. (2026-10-21: all three phases Done; further units are optional depth.)
 2. **Author one entry** — unique id; SAMPLE detail; no LIVE; no advice.
 3. **Do not rename** existing ids (quiz `glossaryTermId` / Archive open=).
-4. **Verify** — lint + build; `/archive?tab=literacy&open=<id>` or patterns tab would show it.
-5. **On FAIL** — ≤10 rounds.
+4. **Verify** — VERIFY; `/archive?tab=literacy&open=<id>` or patterns tab would show it.
+5. **On FAIL** — ≤3 fix rounds per attempt; STOP after 3 failed attempts on the same unit.
 
 # VERIFICATION RUBRIC
 - [ ] One entry; unique id
 - [ ] Closes next Coverage gap
 - [ ] No overlay id without chart support (unless implemented same tick)
 - [ ] Existing deep-link ids unchanged
-- [ ] lint + build 0
+- [ ] lint + test:content + BUILD_CHECK 0
 
 # STOP CONDITIONS
 - Done(archive) → STOP with counts (terms / patterns / overlays).
-- Error budget 10 → handoff.
+- 3 consecutive failed attempts on one unit → handoff.
 - Human verification: adding a new overlay that needs chart work you are unsure about → STOP rather than a dead glossary toggle.
 - Abort: replacing pattern SVGs wholesale; deleting terms quizzes still reference.
 
 # TICK OUTPUT
 1. kind (term|pattern|overlay) + id
-2. PASS | FIXING (n/10) | STOP
+2. PASS | FIXING (attempt a/3 · round r/3) | STOP
 3. Next gap
-4. lint/build status
+4. lint / test:content / build-check status
 ```
 
 ---

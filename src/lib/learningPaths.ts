@@ -49,7 +49,7 @@ export const BEGINNER_EQUITIES_PATH: LearningPathTemplate = {
       contentRefs: ["quiz:financial-literacy", "snapshot:financial"],
       unlockFrom: ["E4.M1"],
       coachTip:
-        "Open Training → Statements literacy, then Coach → Read a SAMPLE company snapshot. Profit vs cash before any earnings case.",
+        "Open Training → Statements literacy, then Coach → Read a SAMPLE company snapshot. Profit vs cash before any earnings case. Going further: Learn → Reading the Statements and the Statements lab.",
     },
     {
       id: "E4.M0",
@@ -57,7 +57,7 @@ export const BEGINNER_EQUITIES_PATH: LearningPathTemplate = {
       contentRefs: ["quiz:indicators", "pack:equity-sample"],
       unlockFrom: ["E4.M2"],
       coachTip:
-        "Open Training → Indicators, then Charts on a SAMPLE equity pack. Coach → Why Indicators come before cases. Optional: Learn → Misc Practices → Lookalikes or Pattern hunt.",
+        "Open Training → Indicators, then Charts on a SAMPLE equity pack. Coach → Why Indicators come before cases, or Oversold is not a buy signal. Optional: Learn → Buy or Sell? and Price Action, or Misc Practices → Lookalikes or Pattern hunt.",
     },
     {
       id: "E5.M3",
@@ -65,7 +65,7 @@ export const BEGINNER_EQUITIES_PATH: LearningPathTemplate = {
       contentRefs: ["cases:earnings"],
       unlockFrom: ["E4.M0"],
       coachTip:
-        "Open Cases → earnings. Start with beat or miss. Coach → Beat vs miss on a SAMPLE report.",
+        "Open Cases → earnings. Start with beat or miss. Coach → Beat vs miss on a SAMPLE report. Warm up with Learn → Earnings Preview or Read the Print.",
     },
     {
       id: "E5.M2",
@@ -91,7 +91,7 @@ export const DECISION_MAKER_PATH: LearningPathTemplate = {
       contentRefs: ["cases:earnings"],
       unlockFrom: [],
       coachTip:
-        "Open Cases → earnings (beginner and intermediate). Coach → Beat vs miss, or Revenue up, margin down.",
+        "Open Cases → earnings (beginner and intermediate). Coach → Beat vs miss on a SAMPLE report, Revenue up, margin down, or Earnings week: preview, print, reaction.",
     },
     {
       id: "E5.M2",
@@ -107,7 +107,7 @@ export const DECISION_MAKER_PATH: LearningPathTemplate = {
       contentRefs: ["cases:macro-news"],
       unlockFrom: ["E5.M2"],
       coachTip:
-        "Open Cases → market-wide news. Coach → Stock versus a scared tape, Map a SAMPLE data print, or Who benefits from a supply shock.",
+        "Open Cases → market-wide news. Coach → Stock versus a scared tape, Map a SAMPLE data print, or Who benefits from a supply shock. The Macro Desk explains each SIMULATED release.",
     },
     {
       id: "E5.M4",
@@ -133,7 +133,7 @@ export const MARKET_EXPLORER_PATH: LearningPathTemplate = {
       contentRefs: ["quiz:indicators"],
       unlockFrom: [],
       coachTip:
-        "Open Training → Indicators before any graded SAMPLE decide pack. Coach → Why Indicators come before cases. Optional: Learn → Misc Practices → Lookalikes or Pattern hunt.",
+        "Open Training → Indicators before any graded SAMPLE decide pack. Coach → Why Indicators come before cases, One candle is not a signal, or Plan the trade before you click (they read the same on any market). Optional: Learn → Misc Practices → Lookalikes or Pattern hunt.",
     },
     {
       id: "E10.M5",

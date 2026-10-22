@@ -341,7 +341,7 @@ const WAIT_CASES: WaitCase[] = [
     explanation: `Wait. A rickshaw man (a long-legged doji with the open/close in the middle of the range) after a short rally: buyers and sellers fought to an exact draw. It warns the rally may stall, but only a later close below its low would make it a sell. ${BUY_SELL_DISCLAIMER}`,
     buy: "The rally stalled into a perfect draw; buying needs a close above the doji's high first.",
     sell: "A doji after a rally is a warning, not a signal: there is no red close below its low yet.",
-    term: "high-wave",
+    term: "rickshaw-man",
   },
 ];
 

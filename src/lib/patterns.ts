@@ -17,9 +17,11 @@ export interface PatternDef {
 
 // Resolve public images from the loaded document, not from the client-side
 // route. This keeps them working with Vite's relative production base.
+// Outside Vite (node:test via tsx) there is no import.meta.env or document,
+// so fall back to "/" and a placeholder origin; the registry still loads.
 const patternImage = (file: string) => new URL(
-  `${import.meta.env.BASE_URL}patterns/${file}`,
-  document.baseURI,
+  `${import.meta.env?.BASE_URL ?? "/"}patterns/${file}`,
+  typeof document === "undefined" ? "http://localhost/" : document.baseURI,
 ).href;
 
 export const PATTERNS: PatternDef[] = [

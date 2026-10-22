@@ -4,7 +4,8 @@
 COMMIT_MODE: none          # none (default) | local  (local = one local commit per PASSed milestone; NEVER push, NEVER PR)
 ATTEMPT_LIMIT: 3           # consecutive failed attempts on the same milestone before STOP (b)
 ERROR_ROUNDS_PER_ATTEMPT: 3 # fix → re-verify rounds inside one attempt before it counts as failed
-BUILD_CHECK: npx vite build --outDir /tmp/st-build-check --emptyOutDir && rm -rf /tmp/st-build-check
+BUILD_CHECK: npx vite build --outDir /tmp/st-build-check-financials --emptyOutDir && rm -rf /tmp/st-build-check-financials
+CHECKPOINT_MODE: continue  # continue (render + log PENDING WENG SIGN-OFF, keep going) | stop. Product decisions (FE7.M2, FE8.M1) always STOP (a) regardless.
 ```
 
 Autonomous milestone loop for the project in this folder. It picks the next unfinished story, implements it, verifies it automatically, records progress here, and continues. It stops only for human judgment or repeated failure.
@@ -65,7 +66,7 @@ Implement docs/projects/financials-earnings/EPICS.md milestone by milestone (sto
 4. **Verify (all must exit 0)**
    1. `npm run lint`
    2. `npm run test:coaching`
-   3. `npx tsx --test src/lib/*.test.ts`
+   3. `npm run test:lib` (`src/lib/*.test.{ts,tsx}`, includes the content-graph floors in `contentGraph.test.ts`)
    4. `npm run test:financials` (once FE0.M1.S3 exists; before that, run the new test file directly with `npx tsx --test <file>`)
    5. BUILD_CHECK (temp outDir, then delete it)
    6. The milestone-specific checks from EPICS.md Verify. The data-consistency invariants below are always on once the code they cover exists.

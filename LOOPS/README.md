@@ -48,8 +48,9 @@ Swap the file for the section you want:
 Prefer **no interval** so each wake adds the next content unit instead of waiting on a timer.
 
 **Before starting**
-1. Is your current server working? If `npm run dev` is already up on port **3001**, leave it alone. These loops verify with `npm run lint` + `npm run build` (and `npm run test:coaching` when Coach content changes).
-2. Stop the loop yourself when you want. The agent also hard-stops on the error budget or Done(section).
+1. Is your current server working? If `npm run dev` is already up on port **3001**, leave it alone. Each loop's config block names its VERIFY line: `npm run lint` + `npm run test:content` + a BUILD_CHECK into a temp `--outDir` (never `dist/`), plus `npm run test:coaching` when Coach content changes and `npm run test:lib` for registry changes. `npm run verify` runs lint, every test suite and the temp build in one go.
+2. Stop the loop yourself when you want. The agent also hard-stops after 3 consecutive failed attempts on one unit (3 fix rounds each), on a human-judgment question, or on Done(section).
+3. Every loop file opens with the same config block: `COMMIT_MODE: none` (commits are Weng's), `ATTEMPT_LIMIT: 3`, `ERROR_ROUNDS_PER_ATTEMPT: 3`, `BUILD_CHECK` (temp outDir), `VERIFY`, `CHECKPOINT_MODE`. `src/lib/contentGraph.test.ts` fails if a loop file drops one of these lines or verifies with a plain build into `dist/`.
 
 ## Shared rules (every section)
 
@@ -59,17 +60,22 @@ Prefer **no interval** so each wake adds the next content unit instead of waitin
 - One content unit per tick (one case, one question, one pack, one session, one term, one template — not a whole pack dump).
 - Distinct data shapes: do not clone-and-rescale existing OHLC or copy-paste debriefs with a renamed title.
 - Process teaching over “price went up.”
-- After any code change: `npm run lint` && `npm run build`.
+- After any code change: run the loop's VERIFY line (lint + `npm run test:content` + temp BUILD_CHECK). Never build into `dist/`.
+- Section floors are tests (`npm run test:content`). When a loop raises a floor, raise it in `src/lib/contentGraph.test.ts` in the same tick; never lower one to pass.
+- Unique ids across registries: a literacy term id, pattern id or case id appears once (a duplicate makes two Archive / flashcard rows).
+- Chart-skill Coach trees that read the same on any SAMPLE chart are tagged `all-markets` so every class's Coach list shows them.
 - Create or adapt `.agents/skills/*` when the same authoring workflow repeats.
 
 ## Project loops
 
 Milestone-by-milestone projects live in `docs/projects/<name>/` (CHARTER.md · EPICS.md · STORIES.md · PROGRESS.md · loop file). They build new surfaces and stop for human review or repeated failure; do not run them in the same session as the graph or a section loop.
 
-- [`docs/projects/content-graph/`](../docs/projects/content-graph/CHARTER.md): the content graph orchestrator
-- [`docs/projects/financials-earnings/`](../docs/projects/financials-earnings/CHARTER.md): financials, expectations and earnings reactions
-- [`docs/projects/macro-forces/`](../docs/projects/macro-forces/CHARTER.md): macro releases (jobs, CPI, FOMC, yields, mortgage rates…) with real-source links, SIMULATED look-alikes and market-reaction game · `/loop macro project using docs/projects/macro-forces/LOOP-Macro-Forces.md`
-- [`docs/projects/beginner-academy/`](../docs/projects/beginner-academy/CHARTER.md): broker-style beginner training — leveled course map with short units, placement check, SIMULATED paper account (market/limit/stop/stop-limit/trailing stop), challenges, virtual points/badges/streak, options knowledge ladder · `/loop beginner academy project using docs/projects/beginner-academy/LOOP-Beginner-Academy.md`
+`/playbooks` is not a loop target: each Playbook needs a real outside source that a human supplies. No loop invents one.
+
+- [`docs/projects/content-graph/`](../docs/projects/content-graph/CHARTER.md): the content graph orchestrator (last gap audit: [`GAP-AUDIT.md`](../docs/projects/content-graph/GAP-AUDIT.md))
+- [`docs/projects/financials-earnings/`](../docs/projects/financials-earnings/CHARTER.md): financials, expectations and earnings reactions (**done**; FE7.M2 and FE8.M1 wait for Weng)
+- [`docs/projects/macro-forces/`](../docs/projects/macro-forces/CHARTER.md): macro releases (jobs, CPI, FOMC, yields, mortgage rates…) with real-source links, SIMULATED look-alikes and market-reaction game (**done**) · `/loop macro project using docs/projects/macro-forces/LOOP-Macro-Forces.md`
+- [`docs/projects/beginner-academy/`](../docs/projects/beginner-academy/CHARTER.md): broker-style beginner training — leveled course map with short units, placement check, SIMULATED paper account (market/limit/stop/stop-limit/trailing stop), challenges, virtual points/badges/streak, options knowledge ladder (**chartered, not started**) · `/loop beginner academy project using docs/projects/beginner-academy/LOOP-Beginner-Academy.md`
 
 ## Not these files
 

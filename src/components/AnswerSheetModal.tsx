@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { getQuestionsForGroup, QUIZ_GROUPS, type QuizGroupId } from "../lib/quizData";
-import { PATTERN_OHLC, SAMPLE_OHLC } from "../lib/ohlcData";
+import { PATTERN_OHLC } from "../lib/ohlcData";
+import { overlayQuizBars } from "../lib/quizChartData";
 import CandlestickChart from "./CandlestickChart";
 import JargonText from "./JargonText";
 import MarketChart from "./MarketChart";
@@ -116,7 +117,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                                 </div>
                               ) : q.overlayId ? (
                                 <MarketChart
-                                  data={SAMPLE_OHLC}
+                                  data={overlayQuizBars(q)}
                                   height={180}
                                   showSMA={q.overlayId === "sma"}
                                   showEMA={q.overlayId === "ema"}
@@ -188,7 +189,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                         </div>
                       ) : q.overlayId ? (
                         <MarketChart
-                          data={SAMPLE_OHLC}
+                          data={overlayQuizBars(q)}
                           height={180}
                           showSMA={q.overlayId === "sma"}
                           showEMA={q.overlayId === "ema"}

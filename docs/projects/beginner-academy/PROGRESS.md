@@ -11,6 +11,8 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 
 **Baseline before BA0 (2026-10-21, from the financials + macro runs):** lint 0 · test:coaching 24/24 · src/lib tests 63/63 · test:financials 241/241 · test:macro 72/72. The loop re-measures on its first tick and records the real numbers here before changing anything.
 
+**Baseline update (2026-10-21, after the content-graph gap audit):** lint 0 · test:coaching 24/24 · test:lib 161/161 (the old 68 `src/lib` tests + 93 `contentGraph.test.ts` checks) · test:financials 241/241 · test:macro 72/72 · check:build ok. `npm run verify` runs the whole list.
+
 ## Human sign-offs
 | Checkpoint | Signed by | Date | Notes |
 |------------|-----------|------|-------|

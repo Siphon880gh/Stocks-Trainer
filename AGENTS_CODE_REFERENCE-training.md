@@ -71,7 +71,7 @@ Near the top: loads `questions = getQuestionsForGroup(groupId)`.
 Submit handler (roughly first third): compare option to `correctAnswer`; update points/streak/accuracy; call `onPointsUpdate`.
 
 Chart preview (middle/lower):
-- If question has `overlayId` → `MarketChart` with that overlay enabled.
+- If question has `overlayId` → `MarketChart` with that overlay enabled, on `overlayQuizBars(question)` (`src/lib/quizChartData.ts`): the tagged `samplePackId` pack's own bars, else `SAMPLE_OHLC`. The caption names the pack. `AnswerSheetModal` uses the same helper.
 - Else → `CandlestickChart` with `PATTERN_OHLC[patternKey]` (fallback `SAMPLE_OHLC`) and `highlightIndex`.
 
 Close on last “Next”; reset index when modal opens (`useEffect` near middle).
@@ -106,7 +106,7 @@ Training (?group,&start)
   → getQuestionsForGroup
   → QuizModal
        → patternKey → PATTERN_OHLC → CandlestickChart
-       → overlayId  → MarketChart (single overlay)
+       → overlayId  → overlayQuizBars → MarketChart (single overlay, tagged pack's bars)
   → onPointsUpdate → Training header PTS / accuracy
 
 Archive (?tab,&open) → PATTERNS / OVERLAYS → detail modals
@@ -120,6 +120,8 @@ Archive (?tab,&open) → PATTERNS / OVERLAYS → detail modals
 - New indicator quiz: ensure overlay id exists in `overlays.ts` + `MarketChart` can show it; add to `INDICATOR_QUIZ_QUESTIONS`.
 - Quiz and case scores write to `analysis_core_progress_v1`. Do not rename that key without a migration.
 - Keep `QuizGroupId` and `patternKey` strings aligned with `PATTERN_OHLC` keys.
+- An `equity-patterns` question with `overlayId` must be true for its tagged pack's tape (it is charted). Every equity pack needs at least one `equity-patterns` question.
+- Floors, id uniqueness and reference integrity for every group are checked by `src/lib/contentGraph.test.ts` (`npm run test:content`).
 
 ---
 

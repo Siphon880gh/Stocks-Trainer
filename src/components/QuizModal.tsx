@@ -11,7 +11,8 @@ import {
 } from "../lib/quizData";
 import YouTubeSearchLink from "./YouTubeSearchLink";
 import JargonText from "./JargonText";
-import { PATTERN_OHLC, SAMPLE_OHLC } from "../lib/ohlcData";
+import { PATTERN_OHLC } from "../lib/ohlcData";
+import { overlayQuizBars, quizSamplePackName } from "../lib/quizChartData";
 import { mergeAnnotations } from "../lib/chartAnnotations";
 import { BUY_SELL_DISCLAIMER, SCENARIO_PAD_BARS } from "../lib/buySellDrill";
 import { getLiteracyTerm } from "../lib/literacyTerms";
@@ -213,11 +214,12 @@ export default function QuizModal({
             <div className="overflow-hidden">
               <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">
                 SAMPLE chart · educational
+                {question.overlayId && quizSamplePackName(question) ? ` · ${quizSamplePackName(question)}` : ""}
                 {question.revealAnnotations && !submitted ? " · levels and plan appear after you answer" : ""}
               </p>
               {question.overlayId ? (
                   <MarketChart
-                    data={SAMPLE_OHLC}
+                    data={overlayQuizBars(question)}
                     height={260}
                     showSMA={question.overlayId === "sma"}
                     showEMA={question.overlayId === "ema"}

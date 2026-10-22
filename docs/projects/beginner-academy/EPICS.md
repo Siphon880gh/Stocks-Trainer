@@ -5,7 +5,7 @@ Charter: [`CHARTER.md`](./CHARTER.md) · Research: [`RESEARCH.md`](./RESEARCH.md
 **Status key:** `[ ]` todo · `[~]` in progress · `[x]` done · `[!]` blocked (see PROGRESS.md). The loop flips the box on the milestone heading line and appends a PROGRESS.md entry.
 
 **Every milestone's verification includes the base gate** (abbreviated **BASE** below):
-`npm run lint` · `npm run test:coaching` · `npx tsx --test src/lib/*.test.ts` · `npm run test:financials` · `npm run test:macro` · `npm run test:academy` (after BA0.M1 adds it) · `npx vite build --outDir /tmp/st-build-check-academy --emptyOutDir` then `rm -rf /tmp/st-build-check-academy` · `git status --short dist/` empty.
+`npm run lint` · `npm run test:coaching` · `npm run test:lib` (= `src/lib/*.test.{ts,tsx}`) · `npm run test:financials` · `npm run test:macro` · `npm run test:academy` (after BA0.M1 adds it) · `npx vite build --outDir /tmp/st-build-check-academy --emptyOutDir` then `rm -rf /tmp/st-build-check-academy` · `git status --short dist/` empty.
 
 Tests named per milestone live in `src/lib/academy/**/*.test.{ts,tsx}` (node:test via tsx; render tests use `react-dom/server`) and stay in the repo.
 

@@ -103,17 +103,29 @@ const CLASS_SESSION_TAGS: Record<AssetClass, string[]> = {
   option_context: ["options", "option_context", "options-context", "options_context"],
 };
 
-export function coachSessionMatchesClass(
-  tags: string[],
-  assetClass: AssetClass,
-): boolean {
+/**
+ * Tag for chart-skill sessions (candles, price action, trade management, indicators)
+ * that read the same on any SAMPLE chart: they list under every `/coach?class=` filter.
+ */
+export const ALL_MARKETS_COACH_TAG = "all-markets";
+
+function tagsNameClass(tags: string[], assetClass: AssetClass): boolean {
   const needles = new Set(CLASS_SESSION_TAGS[assetClass]);
   return tags.some((t) => needles.has(t.trim().toLowerCase()));
 }
 
+export function coachSessionMatchesClass(
+  tags: string[],
+  assetClass: AssetClass,
+): boolean {
+  if (tags.some((t) => t.trim().toLowerCase() === ALL_MARKETS_COACH_TAG)) return true;
+  return tagsNameClass(tags, assetClass);
+}
+
 export function assetClassFromCoachTags(tags: string[]): AssetClass {
+  // An all-markets session has no home class of its own; it reads as equity (the default path).
   for (const cls of EXPANSION_ASSET_CLASSES) {
-    if (coachSessionMatchesClass(tags, cls)) return cls;
+    if (tagsNameClass(tags, cls)) return cls;
   }
   return "equity";
 }

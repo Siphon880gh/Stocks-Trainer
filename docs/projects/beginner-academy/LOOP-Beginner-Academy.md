@@ -25,7 +25,7 @@ Override config on the same line, e.g. `COMMIT_MODE=local`, `ATTEMPT_LIMIT=2` or
 **Before starting**
 1. Leave a running `npm run dev` (port 3001) alone. Checkpoint screenshots use a separate temp dev server (`npx vite --port 3018 --strictPort`), killed afterwards.
 2. Do not run this together with the content graph, a section loop, or another project loop in the same working tree. They edit the same registries (`quizData.ts`, `literacyTerms.ts`, `App.tsx`, `Training.tsx`, `Dashboard.tsx`).
-3. Start from a clean or committed tree for files outside this project (check `git status --short`); if the financials / macro / trade-management work is still uncommitted, record that in PROGRESS.md and touch none of their files.
+3. Start from a clean or committed tree for files outside this project (check `git status --short`); if the financials / macro / trade-management / content-graph work is still uncommitted (the 2026-10-21 graph gap audit left its changes uncommitted for Weng), record that in PROGRESS.md and touch none of their files.
 4. `dist/` is never touched. Builds go to the temp folder only.
 
 ---
@@ -35,7 +35,8 @@ Override config on the same line, e.g. `COMMIT_MODE=local`, `ATTEMPT_LIMIT=2` or
 - This is a **project** loop: it implements EPICS.md milestones (code + content).
 - The content graph ([`../content-graph/LOOP-Graph.md`](../content-graph/LOOP-Graph.md)) and the section loops in `LOOPS/` add **one content unit per tick** to existing surfaces. After BA10.M3, the graph may add more questions to the `orders-and-fills`, `paper-pnl` and `options-ladder` groups and more units to the course map; Academy units must keep linking to (not copying) graph-produced content.
 - The financials (`FE*`) and macro (`MF*`) projects are Done; Academy units **link** into their routes and groups. Never edit their files except the additive integration lines named in EPICS.md (e.g. a new route in `App.tsx`).
-- Trade-management content (stop-loss, trailing stop, profit target, breakout / pullback / reversal entries) is being added by a sibling change. BA1 L3 units and BA10.M2 terms **reference** those ids when they exist (resolver test) and add only what is missing.
+- Trade-management content shipped in commit 2c93114: Archive terms `entry-types`, `trailing-stop`, `taking-profit`, `target-range`, `risk-reward`, `no-trade-zone`, `breakout-retest`; the trade-management questions in Learn `price-action` (`tradeManagement.test.ts`); Practice `/practice/invalidation` and `/practice/levels`; Coach `trade-plan-before-entry` and `trailing-stop-exit` (2026-10-21 graph audit). BA1 L3 units and BA10.M2 terms **reference** those ids (resolver test) and add only what is missing (e.g. `stop-limit`, `time-in-force`).
+- The content graph's echo family `academy` (14) is parked until BA10.M3; the graph will not add Academy units before then. Floors for the content the Academy links to are enforced by `npm run test:content` (`src/lib/contentGraph.test.ts`) — an Academy story must not turn it red.
 - The root `AGENTS_LOOP-*.md` milestone queues (E0–E11) are Done(global); this loop does not touch `.agents/state.json`.
 
 ---
@@ -70,7 +71,7 @@ Implement docs/projects/beginner-academy/EPICS.md milestone by milestone (storie
 4. **Verify (all must exit 0)**
    1. `npm run lint`
    2. `npm run test:coaching`
-   3. `npx tsx --test src/lib/*.test.ts`
+   3. `npm run test:lib` (`src/lib/*.test.{ts,tsx}`, includes `contentGraph.test.ts`)
    4. `npm run test:financials`
    5. `npm run test:macro`
    6. `npm run test:academy` (once BA0.M1.S2 exists; before that, run the new test file directly with `npx tsx --test <file>`)

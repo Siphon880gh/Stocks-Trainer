@@ -25,7 +25,7 @@ A large retail broker's beginner funnel (researched in [`RESEARCH.md`](./RESEARC
 4. a **chart replay** mode for practicing bar by bar;
 5. **options trading levels** (Level 1 covered calls / cash-secured puts → Level 4 naked) unlocked by an application / knowledge assessment.
 
-The app already has deep *content* (≈1,450 quiz items, 100+ patterns, 63 coach sessions, cases, the Buy or Sell drill, the financials and macro projects), but **no structured beginner course map, no short lesson + unit-quiz player, no placement routing, no simulated account with orders, no challenges, no badges/streak-day rewards beyond the quiz streak counter, and no options knowledge ladder.** Independent reviewers also criticise that broker's education for having *no clear learning path* — so the opportunity is to copy the engagement mechanics and beat it on structure. See the audit in [`RESEARCH.md` → Mapping](./RESEARCH.md#mapping-broker-pattern--existing-app-feature--gap--epic).
+The app already has deep *content* (≈1,450 quiz items, 100+ patterns, 70 coach sessions (63 when this charter was written), cases, the Buy or Sell drill, the financials and macro projects), but **no structured beginner course map, no short lesson + unit-quiz player, no placement routing, no simulated account with orders, no challenges, no badges/streak-day rewards beyond the quiz streak counter, and no options knowledge ladder.** Independent reviewers also criticise that broker's education for having *no clear learning path* — so the opportunity is to copy the engagement mechanics and beat it on structure. See the audit in [`RESEARCH.md` → Mapping](./RESEARCH.md#mapping-broker-pattern--existing-app-feature--gap--epic).
 
 ## 2. Goal
 
@@ -82,7 +82,7 @@ A brand-new learner can:
 ## 7. Success criteria (project Done)
 
 1. Every core milestone in `EPICS.md` is `[x]` with its automated verification recorded in `PROGRESS.md`.
-2. `npm run lint`, `npm run test:coaching`, `npx tsx --test src/lib/*.test.ts`, `npm run test:financials`, `npm run test:macro`, `npm run test:academy` and the temp-folder production build all exit 0.
+2. `npm run lint`, `npm run test:coaching`, `npm run test:lib` (= `src/lib/*.test.{ts,tsx}`), `npm run test:financials`, `npm run test:macro`, `npm run test:academy` and the temp-folder production build all exit 0.
 3. Content floors, all validator-checked:
    - ≥ 8 levels / courses and ≥ 40 units, every unit with 3–6 lesson cards, a 3–5 item unit quiz and ≥ 1 resolved link into existing content;
    - placement check of 10–12 items routing to ≥ 4 distinct start levels;

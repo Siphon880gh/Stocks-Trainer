@@ -13,7 +13,11 @@
     "test:coaching": "tsx --test src/lib/coaching/coaching.test.ts",
     "test:financials": "tsx --test \"src/lib/financials/**/*.test.{ts,tsx}\"",
     "test:macro": "tsx --test \"src/lib/macro/**/*.test.{ts,tsx}\"",
-    "check:macro-sources": "tsx src/lib/macro/checkSources.ts"
+    "check:macro-sources": "tsx src/lib/macro/checkSources.ts",
+    "test:lib": "tsx --test \"src/lib/*.test.{ts,tsx}\"",
+    "test:content": "tsx --test src/lib/contentGraph.test.ts",
+    "check:build": "vite build --outDir /tmp/st-build-check --emptyOutDir && rm -rf /tmp/st-build-check",
+    "verify": "npm run lint && npm run test:coaching && npm run test:lib && npm run test:financials && npm run test:macro && npm run check:build"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",

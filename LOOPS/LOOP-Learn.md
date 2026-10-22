@@ -1,5 +1,14 @@
 # LOOP — Learn / Training (exhaustive content)
 
+```text
+COMMIT_MODE: none            # none (default) | local (one local commit per PASSed unit; NEVER push, NEVER PR)
+ATTEMPT_LIMIT: 3             # consecutive failed attempts on the same unit before STOP (same rule as the project loops)
+ERROR_ROUNDS_PER_ATTEMPT: 3  # fix → re-verify rounds inside one attempt before it counts as failed
+BUILD_CHECK: npx vite build --outDir /tmp/st-build-check-learn --emptyOutDir && rm -rf /tmp/st-build-check-learn
+VERIFY: npm run lint && npm run test:content && BUILD_CHECK  (+ test:financials / test:macro if a project bank changed)
+CHECKPOINT_MODE: continue    # no visual checkpoints here; a human-judgment STOP still stops
+```
+
 Deepen quizzes on `/training` (Learn). Path writeback, chart soft-gate, and QuizModal runtime already exist.
 
 Companions: [`src/lib/quizData.ts`](../src/lib/quizData.ts) · [`src/pages/Training.tsx`](../src/pages/Training.tsx) · [`src/components/QuizModal.tsx`](../src/components/QuizModal.tsx) · [`src/lib/ohlcData.ts`](../src/lib/ohlcData.ts) (`PATTERN_OHLC`) · [`src/lib/beginnerPath.ts`](../src/lib/beginnerPath.ts) · [`src/lib/progressStore.ts`](../src/lib/progressStore.ts)
@@ -13,13 +22,13 @@ Companions: [`src/lib/quizData.ts`](../src/lib/quizData.ts) · [`src/pages/Train
 ```
 
 **Before starting**
-1. Leave working `npm run dev` alone; verify with `npm run lint` + `npm run build`.
-2. Stop yourself anytime; hard-stop on 10-round error budget or Done(learn).
+1. Leave working `npm run dev` alone; verify with the VERIFY line in the config block (temp build dir, never `dist/`).
+2. Stop yourself anytime; hard-stop after ATTEMPT_LIMIT (3) consecutive failed attempts on one unit or Done(learn).
 
 **On each tick**
 - Re-count questions per `QuizGroupId`.
 - Add **exactly one** new `QuizQuestion` (or one new group **plus** its first question if you are in the new-groups phase).
-- Wire types/arrays; lint + build; continue.
+- Wire types/arrays; VERIFY; continue.
 
 ---
 
@@ -54,15 +63,28 @@ For each family group, floor **≥6** questions with the existing sort contract 
 
 7. `hammer` · 8. `doji` · 9. `engulfing` · 10. `bullish-engulfing` · 11. `bearish-engulfing` · 12. `shooting-star` · 13. `inverted-hammer` · 14. `morning-star`
 
+Every other family group in `QUIZ_GROUPS` has the same ≥6 floor and sort contract (test-enforced: any group that is not Phase A / C / D, dedicated or project-owned counts as a family): `evening-star`, `hanging-man`, `piercing-line`, `dark-cloud-cover`, `three-white-soldiers`, `three-black-crows`, `tweezer-bottom`, `tweezer-top`, `harami`, `marubozu`, `bull-flag`, `triangle`, `double-top`, `double-bottom`, `rising-wedge`, `falling-wedge`, `head-shoulders`, `three-inside-outside`, `counterattack-on-neck`, `continuation-methods`, `gap-reversals`, `crows-and-strikes`, `advanced-rare`. As of 2026-10-21 all 31 families are at or above the floor.
+
 Multi-key families (one group, several `patternKey`s via `patternKeysForGroup`): `doji` (+`spinning-top` and long-legged / cross / inverted cross / dragonfly / gravestone), `harami` (+`bearish-harami`, bullish / bearish harami cross), `morning-star` / `evening-star` (+doji stars), `double-top` / `double-bottom` (+triple top / bottom), `rising-wedge` / `falling-wedge` (+`sc-` wedge scenarios), `marubozu` (+opening / closing), `head-shoulders` (+inverse), `three-inside-outside`, `counterattack-on-neck` (+in-neck, thrusting), `continuation-methods` (+separating / side-by-side lines, gap three methods, bearish mat hold), `gap-reversals`, `crows-and-strikes`, `advanced-rare` ("Advanced & Rare Patterns": rare textbook patterns from `advancedPatterns.ts`, always labelled "Advanced / rare": infrequent and less reliable, confirm first). The `doji` family also gets high-wave and rickshaw man.
 
-Dedicated banks: `price-action` (`PA-`), `supply-demand` (`SD-`), `buy-or-sell` (`BS-`, see `src/lib/buySellDrill.ts`). Every new directional pattern also needs a `DRILL_CHART_SPECS` entry and an `INFO` row in the drill so Buy-or-Sell keeps full coverage.
+Dedicated banks (own arrays, own prefixes, floors test-enforced):
+
+| Group | Prefix | Floor | Notes |
+|-------|--------|-------|-------|
+| `candle-reading` | `OC-` | ≥12 | one-candle reads (wick rejection, full body, indecision, strong move) |
+| `candle-pattern-book` | `PB-` | ≥12 | the pattern-book tour: name → context → confirmation |
+| `earnings-jargon` | `EJ-` | ≥12 | beat / miss, guide, consensus, whisper; links Archive earnings terms |
+| `price-action` | `PA-` | ≥12 | structure, levels, retests, plus the trade-management questions (`tradeManagement.test.ts`) |
+| `supply-demand` | `SD-` | ≥12 | zones, fresh vs tested, base types |
+| `buy-or-sell` | `BS-P-` / `BS-SC-` / `BS-W-` | ≥60 | `src/lib/buySellDrill.ts`; directional pattern keys, `sc-` scenario charts, `BS-W-` Wait cases |
+
+Check the real prefix in the bank before adding (`grep -n 'id: "' src/lib/quizData.ts`). Every new **directional** Archive pattern needs a Buy-or-Sell route: a `DRILL_CHART_SPECS` entry plus an `INFO` row, an `sc-<id>` scenario, or a `BS-W-<id>` Wait case. `contentGraph.test.ts` fails when one is missing.
 
 If a new Archive pattern ships (from the Archive loop), add `patternKey` + `PATTERN_OHLC` entry **before** family questions that show a chart.
 
 ### Phase C — equity pack drills
 
-15. `equity-patterns` (`EQUITY_PATTERN_QUIZ_QUESTIONS`) floor **≥8**, each tagged `samplePackId` to a real equity SAMPLE pack.
+15. `equity-patterns` (`EQUITY_PATTERN_QUIZ_QUESTIONS`) floor **≥8**, each tagged `samplePackId` to a real equity SAMPLE pack, and **every** equity pack has at least one drill (test-enforced). Overlay drills (`overlayId`) chart the tagged pack's own bars via `overlayQuizBars` (`src/lib/quizChartData.ts`), so the question must be true for that pack's tape.
 
 ### Phase D — new groups (only after A–C floors)
 
@@ -99,19 +121,19 @@ Make Learn exhaustive: every Phase A–C group meets its floor; then add Phase D
 - UI lists `QUIZ_GROUPS` automatically (`Training.tsx`)
 - Path lock: `canStartQuizGroup` — groups **without** a Beginner `trainingGroup` stay free; do not accidentally assign a new group to a locked milestone
 - Progress extras: `news-literacy` / `financial-drills` writeback in `progressStore.ts` — do not break those flags
-- Auto-verify: `npm run lint` && `npm run build`
+- Auto-verify: VERIFY (`npm run lint` && `npm run test:content` && BUILD_CHECK)
 
 # STEP-BY-STEP CADENCE
-1. **Orient** — count `getQuestionsForGroup(id).length` (or array length for dedicated banks). Pick the first group below its floor.
+1. **Orient** — run `npm run test:content` (a red Learn floor is the gap), then count `getQuestionsForGroup(id).length`. Pick the first group below its floor; when all are met, deepen the thinnest family by one missing skill.
 2. **Author one QuizQuestion**
-   - Unique `id` (keep prefixes: `EL-` `FL-` `IN-` `CA-` `NL-` `FD-` `EQ-PAT-` `PR-` or a new prefix for Phase D).
+   - Unique `id` (keep prefixes: `EL-` `FL-` `IN-` `CA-` `NL-` `FD-` `EQ-PAT-` `PR-` (families), `OC-` `PB-` `EJ-` `PA-` `SD-` `BS-`, Phase D `FU-` `FX-` `CR-` `OP-`).
    - 3–5 options A–E; one `correctAnswer`; explanation teaches process.
    - SAMPLE copy; no LIVE claims; no ticker-as-advice.
    - Set `glossaryTermId` when Archive has a matching term; `snapshotId` for statement cards; `overlayId` only for real overlays; `patternKey` / `optionsAreCharts` / `chartKey` for pattern drills.
    - If chart-pick: ensure `PATTERN_OHLC[chartKey]` exists and is a distinct candle story.
 3. **Wire** — push onto the correct exported array; if new group: union type + `QUIZ_GROUPS` + both switch functions.
-4. **Verify** — lint + build; Training group picker shows it; `/training?group=<id>&start=1` would load the new last question.
-5. **On FAIL** — ≤10 fix rounds.
+4. **Verify** — VERIFY; Training group picker shows it; `/training?group=<id>&start=1` would load the new last question.
+5. **On FAIL** — ≤3 fix rounds per attempt; STOP after 3 failed attempts on the same unit.
 6. **Skills** — if “add quiz question to group X” repeats, add `.agents/skills/add-quiz-question/SKILL.md`.
 
 # VERIFICATION RUBRIC
@@ -119,19 +141,19 @@ Make Learn exhaustive: every Phase A–C group meets its floor; then add Phase D
 - [ ] Closes the next Coverage-queue gap
 - [ ] Unique id; correct bank/group wiring
 - [ ] Beginner unlock order unchanged
-- [ ] SAMPLE honest; lint + build 0
+- [ ] SAMPLE honest; lint + test:content + BUILD_CHECK 0
 
 # STOP CONDITIONS
 - Done(learn) → STOP with per-group counts.
-- Error budget 10 → handoff.
+- 3 consecutive failed attempts on one unit → handoff.
 - Human verification: whether a new group should write progress flags (default: no).
 - Abort: rewriting QuizModal; changing POINTS_PER_CORRECT; path milestone rewiring.
 
 # TICK OUTPUT
 1. Group id + new question id
-2. PASS | FIXING (n/10) | STOP
+2. PASS | FIXING (attempt a/3 · round r/3) | STOP
 3. Next gap
-4. lint/build status
+4. lint / test:content / build-check status
 ```
 
 ---
@@ -141,4 +163,6 @@ Make Learn exhaustive: every Phase A–C group meets its floor; then add Phase D
 - Family drills must keep `patternKey` in `patternKeysForGroup` (engulfing group includes bullish/bearish keys).
 - `*-MOVE` ids sort last via `familyDrillOrder`.
 - Do not add overlay quiz items for indicators the chart cannot draw.
+- A question with a `patternKey` and no other exhibit shows `PATTERN_OHLC[patternKey]`; QuizModal falls back to the hammer chart on a typo, so the test checks every key resolves.
+- Ids are unique across a group; every `glossaryTermId` / `snapshotId` / `overlayId` / `samplePackId` must resolve (test-enforced).
 - Wrong answers should be plausible learner mistakes, not jokes.

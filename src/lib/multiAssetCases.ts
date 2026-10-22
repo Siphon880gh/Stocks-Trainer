@@ -45,6 +45,16 @@ const EUR_PRE: OHLC[] = [
   bar("T0", 1.09, 1.093, 1.088, 1.091),
 ];
 
+/** Firm euro with a stall and an upper-wick scare bar (its own shape, not EUR_PRE or a rescaled ES tape). */
+const EUR_ENERGY_PRE: OHLC[] = [
+  bar("T-5", 1.082, 1.0845, 1.0812, 1.0838),
+  bar("T-4", 1.0838, 1.0866, 1.083, 1.0861),
+  bar("T-3", 1.0861, 1.0872, 1.0848, 1.0853),
+  bar("T-2", 1.0853, 1.0884, 1.085, 1.0879),
+  bar("T-1", 1.0879, 1.0896, 1.0871, 1.089),
+  bar("T0", 1.089, 1.0902, 1.0868, 1.0874),
+];
+
 const JPY_PRE: OHLC[] = [
   bar("T-5", 148.2, 148.8, 147.9, 148.4),
   bar("T-4", 148.4, 149.1, 148.0, 148.7),
@@ -3391,6 +3401,187 @@ const CASEMENT_PRE: OHLC[] = [
   bar("T0", 269.848, 273.648, 269.248, 273.286),
 ];
 
+/** Intermediate tapes for the Stage B sibling packs (*-tape / *-macro). Each is its own shape. */
+const CL_INT_HEADLINE_PRE: OHLC[] = [
+  bar("T-5", 76.1, 77.1, 75.9, 76.85),
+  bar("T-4", 76.85, 78, 76.6, 77.7),
+  bar("T-3", 77.7, 78.6, 77.4, 78.4),
+  bar("T-2", 78.4, 79.65, 78.2, 79.3),
+  bar("T-1", 79.3, 80.35, 79.05, 80.05),
+  bar("T0", 80.05, 80.6, 79.5, 79.8),
+];
+
+const ES_INT_RETEST_PRE: OHLC[] = [
+  bar("T-5", 5212, 5216, 5210.25, 5214.5),
+  bar("T-4", 5214.5, 5216.25, 5210.25, 5211.75),
+  bar("T-3", 5211.75, 5216.75, 5210.25, 5215.25),
+  bar("T-2", 5215.25, 5231.5, 5214, 5229.5),
+  bar("T-1", 5229.5, 5235.25, 5228, 5233),
+  bar("T0", 5233, 5234.5, 5216.5, 5219.5),
+];
+
+const ZN_INT_CPI_PRE: OHLC[] = [
+  bar("T-5", 110.25, 110.368, 110.21, 110.328),
+  bar("T-4", 110.328, 110.441, 110.298, 110.391),
+  bar("T-3", 110.391, 110.493, 110.341, 110.453),
+  bar("T-2", 110.453, 110.514, 110.413, 110.484),
+  bar("T-1", 110.484, 110.556, 110.454, 110.516),
+  bar("T0", 110.516, 110.576, 110.092, 110.172),
+];
+
+const GC_INT_HAVEN_PRE: OHLC[] = [
+  bar("T-5", 2318, 2323.6, 2316.2, 2321.4),
+  bar("T-4", 2321.4, 2323.4, 2317.4, 2319.8),
+  bar("T-3", 2319.8, 2330.2, 2317.9, 2327.6),
+  bar("T-2", 2327.6, 2339.9, 2325.4, 2336.9),
+  bar("T-1", 2336.9, 2347.3, 2334.4, 2344.2),
+  bar("T0", 2344.2, 2352.3, 2342.2, 2349.5),
+];
+
+const NG_INT_OUTAGE_PRE: OHLC[] = [
+  bar("T-5", 2.412, 2.424, 2.395, 2.405),
+  bar("T-4", 2.405, 2.428, 2.393, 2.418),
+  bar("T-3", 2.418, 2.429, 2.399, 2.409),
+  bar("T-2", 2.409, 2.433, 2.398, 2.421),
+  bar("T-1", 2.47, 2.714, 2.458, 2.684),
+  bar("T0", 2.684, 2.766, 2.644, 2.731),
+];
+
+const USDJPY_INT_WARN_PRE: OHLC[] = [
+  bar("T-5", 154.62, 155, 154.52, 154.88),
+  bar("T-4", 154.88, 155.35, 154.77, 155.21),
+  bar("T-3", 155.21, 155.57, 155.09, 155.47),
+  bar("T-2", 155.47, 155.98, 155.37, 155.83),
+  bar("T-1", 155.83, 156.28, 155.7, 156.12),
+  bar("T0", 156.12, 156.3, 155.74, 155.94),
+];
+
+const GBPUSD_INT_FAILBREAK_PRE: OHLC[] = [
+  bar("T-5", 1.2648, 1.2669, 1.2641, 1.2661),
+  bar("T-4", 1.2661, 1.2668, 1.2644, 1.2652),
+  bar("T-3", 1.2652, 1.2673, 1.2645, 1.2667),
+  bar("T-2", 1.2667, 1.2675, 1.2652, 1.2658),
+  bar("T-1", 1.2658, 1.2708, 1.2653, 1.2696),
+  bar("T0", 1.2696, 1.2712, 1.2652, 1.2659),
+];
+
+const AUDUSD_INT_PMI_PRE: OHLC[] = [
+  bar("T-5", 0.6602, 0.6617, 0.6597, 0.6611),
+  bar("T-4", 0.6611, 0.6626, 0.6605, 0.6619),
+  bar("T-3", 0.6619, 0.6624, 0.6607, 0.6614),
+  bar("T-2", 0.6614, 0.6634, 0.6609, 0.6627),
+  bar("T-1", 0.6627, 0.6639, 0.6621, 0.6633),
+  bar("T0", 0.6633, 0.6641, 0.6578, 0.6589),
+];
+
+const USDCHF_INT_RISKOFF_PRE: OHLC[] = [
+  bar("T-5", 0.9012, 0.9027, 0.9007, 0.9021),
+  bar("T-4", 0.9021, 0.9026, 0.9008, 0.9015),
+  bar("T-3", 0.9015, 0.9021, 0.8994, 0.9002),
+  bar("T-2", 0.9002, 0.9007, 0.8979, 0.8988),
+  bar("T-1", 0.8988, 0.8995, 0.8963, 0.8971),
+  bar("T0", 0.8971, 0.8977, 0.8944, 0.8954),
+];
+
+const USDCAD_INT_OIL_PRE: OHLC[] = [
+  bar("T-5", 1.3712, 1.3718, 1.3701, 1.3706),
+  bar("T-4", 1.3706, 1.3726, 1.37, 1.3719),
+  bar("T-3", 1.3719, 1.3724, 1.3705, 1.3711),
+  bar("T-2", 1.3711, 1.3717, 1.3695, 1.3702),
+  bar("T-1", 1.3702, 1.3707, 1.3667, 1.3676),
+  bar("T0", 1.3676, 1.3683, 1.3653, 1.3661),
+];
+
+const ETH_INT_UPGRADE_PRE: OHLC[] = [
+  bar("T-5", 3120, 3186, 3105, 3168),
+  bar("T-4", 3168, 3234, 3150, 3214),
+  bar("T-3", 3214, 3279, 3198, 3262),
+  bar("T-2", 3262, 3327, 3245, 3305),
+  bar("T-1", 3305, 3367, 3286, 3348),
+  bar("T0", 3348, 3374, 3317, 3341),
+];
+
+const BTC_INT_SQUEEZE_PRE: OHLC[] = [
+  bar("T-5", 61850, 62010, 61580, 61720),
+  bar("T-4", 61720, 62090, 61570, 61910),
+  bar("T-3", 61910, 62060, 61610, 61780),
+  bar("T-2", 61780, 62010, 61620, 61840),
+  bar("T-1", 61840, 63860, 61720, 63620),
+  bar("T0", 63620, 63820, 63100, 63480),
+];
+
+const BTC_INT_SOFTCPI_PRE: OHLC[] = [
+  bar("T-5", 58200, 58570, 58070, 58420),
+  bar("T-4", 58420, 58560, 58150, 58310),
+  bar("T-3", 58310, 58720, 58170, 58560),
+  bar("T-2", 58560, 58690, 58330, 58480),
+  bar("T-1", 58480, 58800, 58360, 58650),
+  bar("T0", 58650, 59700, 58470, 59480),
+];
+
+const SOL_INT_RISKOFF_PRE: OHLC[] = [
+  bar("T-5", 148.6, 149.5, 147.1, 147.9),
+  bar("T-4", 147.9, 148.7, 145.8, 146.8),
+  bar("T-3", 146.8, 148.4, 146.1, 147.3),
+  bar("T-2", 147.3, 148, 144, 145.2),
+  bar("T-1", 145.2, 146, 142.5, 143.6),
+  bar("T0", 143.6, 144.5, 140.6, 141.9),
+];
+
+const BTC_INT_HASH_PRE: OHLC[] = [
+  bar("T-5", 60400, 60660, 60280, 60520),
+  bar("T-4", 60520, 60650, 60310, 60460),
+  bar("T-3", 60460, 60760, 60330, 60610),
+  bar("T-2", 60610, 60730, 60410, 60550),
+  bar("T-1", 60550, 60830, 60440, 60690),
+  bar("T0", 60690, 60890, 59860, 60120),
+];
+
+const BIOTECH_INT_READOUT_PRE: OHLC[] = [
+  bar("T-5", 42.1, 42.6, 41.88, 42.35),
+  bar("T-4", 42.35, 42.57, 41.7, 41.95),
+  bar("T-3", 41.95, 42.48, 41.74, 42.28),
+  bar("T-2", 42.28, 42.52, 41.85, 42.05),
+  bar("T-1", 42.05, 42.52, 41.81, 42.31),
+  bar("T0", 42.31, 42.54, 41.9, 42.12),
+];
+
+const RETAILER_INT_GAP_PRE: OHLC[] = [
+  bar("T-5", 87.4, 87.95, 87.15, 87.65),
+  bar("T-4", 87.65, 87.93, 87.22, 87.52),
+  bar("T-3", 87.52, 88.12, 87.26, 87.8),
+  bar("T-2", 87.8, 88.05, 87.43, 87.71),
+  bar("T-1", 89.9, 92.6, 89.55, 91.15),
+  bar("T0", 91.15, 91.55, 89.6, 90.2),
+];
+
+const HOMEBUILDER_INT_JOBS_PRE: OHLC[] = [
+  bar("T-5", 118.4, 119.32, 118.05, 118.92),
+  bar("T-4", 118.92, 119.73, 118.52, 119.35),
+  bar("T-3", 119.35, 119.7, 118.68, 119.1),
+  bar("T-2", 119.1, 120.1, 118.74, 119.68),
+  bar("T-1", 119.68, 120.41, 119.28, 120.05),
+  bar("T0", 120.05, 120.55, 116.95, 117.85),
+];
+
+const UTILITY_INT_DEFENSIVE_PRE: OHLC[] = [
+  bar("T-5", 64.2, 64.43, 64.1, 64.31),
+  bar("T-4", 64.31, 64.41, 64.13, 64.25),
+  bar("T-3", 64.25, 64.49, 64.15, 64.38),
+  bar("T-2", 64.38, 64.56, 64.27, 64.44),
+  bar("T-1", 64.44, 64.54, 64.28, 64.4),
+  bar("T0", 64.4, 64.65, 64.3, 64.52),
+];
+
+const AIRLINE_INT_FUEL_PRE: OHLC[] = [
+  bar("T-5", 15.8, 15.88, 15.33, 15.42),
+  bar("T-4", 15.42, 15.49, 15.01, 15.11),
+  bar("T-3", 15.11, 15.17, 14.8, 14.88),
+  bar("T-2", 14.88, 15.03, 14.82, 14.95),
+  bar("T-1", 14.95, 15.21, 14.88, 15.12),
+  bar("T0", 15.12, 15.22, 14.94, 15.06),
+];
+
 export const FUTURES_CASES: CaseStudy[] = [
   {
     id: "case-fut-trend-cont",
@@ -5933,6 +6124,146 @@ export const FUTURES_CASES: CaseStudy[] = [
     difficulty: "beginner",
     assetClass: "future",
   },
+  {
+    id: "case-fut-tape-int-cl-statement-no-barrels",
+    title: "SAMPLE crude rallies into a producer statement with no new barrels",
+    contextType: "news",
+    thinkingMode: "company_headline",
+    brief:
+      "This SAMPLE crude future ran five bars higher into a scheduled producer-group statement, and RSI is stretched. The official text says members will \"monitor the market closely\". It names no cut, no volume and no date. You have Indicators. Is this statement new supply information, or a reason for late buyers to leave? SAMPLE contract only, not a live futures desk.",
+    newsHeadline:
+      "Official statement: producers will monitor the market closely. No cut, no volumes, no date.",
+    preOhlc: CL_INT_HEADLINE_PRE,
+    postOhlc: withAftermath(CL_INT_HEADLINE_PRE, [
+      bar("+1", 79.8, 80.05, 78.7, 79.05),
+      bar("+2", 79.05, 79.35, 78.25, 78.55),
+      bar("+3", 78.55, 79.1, 78.3, 78.7),
+    ]),
+    correctActions: ["hold", "sell"],
+    acceptablePartial: [],
+    debrief: {
+      process:
+        "Separate the author from the content. The statement is official, but it changes no barrels: no cut, no volume, no date. A stretched rally into an empty statement is fade-or-wait territory, so buying here pays for news that did not arrive. Trimming or holding a sized position is the process answer; adding is chasing.",
+      whyMarketMoved: "With nothing new in the text, buyers who bought ahead of the statement sold it, and the SAMPLE contract slipped back.",
+      evidence: "Five-bar SAMPLE crude rally, stretched RSI, and a statement with no supply change.",
+    },
+    allowShort: false,
+    packId: "futures-tape",
+    difficulty: "intermediate",
+    assetClass: "future",
+  },
+  {
+    id: "case-fut-tape-int-es-breakout-retest-holds",
+    title: "SAMPLE index future breaks its range, then the retest holds",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "This SAMPLE index future sat in a tight range under about 5217, broke out on a wide green bar, pushed to 5233, then pulled back to retest the old range top and closed above it. A desk headline says traders are chasing. You have Indicators and a stop idea just under 5216. Chase, wait, or act on the retest?",
+    newsHeadline:
+      "Desk chatter: index buyers chasing the breakout. No new data on the tape.",
+    preOhlc: ES_INT_RETEST_PRE,
+    postOhlc: withAftermath(ES_INT_RETEST_PRE, [
+      bar("+1", 5219.5, 5229.75, 5218.5, 5228),
+      bar("+2", 5228, 5238.5, 5226.5, 5236.5),
+      bar("+3", 5236.5, 5243.5, 5235.25, 5242),
+    ]),
+    correctActions: ["buy"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Not every move is a fade. Chasing the wide breakout bar at the high was late. A retest that holds the old range top is a defined edge: the idea is wrong below about 5216, so the risk is small and known. Buy with that stop and size; HOLD (waiting for more proof) earns partial credit. This is breakout-retest process, not momentum chasing.",
+      whyMarketMoved: "The old range top held as support, and the SAMPLE contract resumed higher from the retest.",
+      evidence: "Tight range, breakout bar, and a retest that closed back above the range top.",
+    },
+    allowShort: false,
+    packId: "futures-tape",
+    difficulty: "intermediate",
+    assetClass: "future",
+  },
+  {
+    id: "case-fut-macro-int-zn-hot-cpi",
+    title: "SAMPLE 10-year note future drops on a hot inflation print",
+    contextType: "news",
+    thinkingMode: "macro_print",
+    brief:
+      "This SAMPLE 10-year note future drifted higher into the inflation release. The SIMULATED print comes in hotter than the consensus, and the note future drops on the bar. A friend says: \"Bonds are cheap now, buy the dip.\" Remember which way prices move when yields rise. SAMPLE contract only.",
+    newsHeadline:
+      "SIMULATED print: inflation above consensus. Yields jump; note futures fall.",
+    preOhlc: ZN_INT_CPI_PRE,
+    postOhlc: withAftermath(ZN_INT_CPI_PRE, [
+      bar("+1", 110.172, 110.222, 109.977, 110.047),
+      bar("+2", 110.047, 110.087, 109.893, 109.953),
+      bar("+3", 109.953, 110.044, 109.913, 109.984),
+    ]),
+    correctActions: ["hold", "sell"],
+    acceptablePartial: [],
+    debrief: {
+      process:
+        "Bond prices move opposite to yields. A hot inflation print pushes rate expectations and yields up, which pushes note futures down. Buying the first drop assumes the repricing is over, but a hot print can keep yields rising for a while. Map the print to the rate path first; wait or reduce, do not buy the dip on reflex.",
+      whyMarketMoved: "Yields kept repricing after the hot print, so the SAMPLE note future stayed under the release bar.",
+      evidence: "Pre-release drift up, a hot SIMULATED print, and a sharp down bar in the note future.",
+    },
+    allowShort: false,
+    packId: "futures-macro",
+    difficulty: "intermediate",
+    assetClass: "future",
+  },
+  {
+    id: "case-fut-macro-int-gc-haven-already-held",
+    title: "Risk-off deepens while you already hold SAMPLE gold",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "You bought a small SAMPLE gold future position before a risk-off week. Index futures keep falling and gold has risen four bars in a row as a haven. The question is not whether gold is a haven, but what to do with a position that is already working. Add, hold, or sell?",
+    newsHeadline:
+      "Risk-off: index futures lower again. Haven demand lifts gold for a fourth session.",
+    preOhlc: GC_INT_HAVEN_PRE,
+    postOhlc: withAftermath(GC_INT_HAVEN_PRE, [
+      bar("+1", 2349.5, 2355.8, 2347.1, 2352.8),
+      bar("+2", 2352.8, 2355.4, 2344.4, 2347.6),
+      bar("+3", 2347.6, 2353.7, 2345, 2351.3),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: ["buy", "sell"],
+    debrief: {
+      process:
+        "A haven bid can persist while risk-off lasts, so a sized position that is working can stay on with a raised stop. Adding a full new line after four up bars is chasing the haven; taking all profit early ignores a move that is still intact. HOLD is the process answer; either extreme earns only partial credit.",
+      whyMarketMoved: "Gold held near its highs and chopped as risk-off continued, without a fresh leg for late buyers.",
+      evidence: "Four-bar haven rally in SAMPLE gold during a risk-off tape.",
+    },
+    allowShort: false,
+    packId: "futures-macro",
+    difficulty: "intermediate",
+    assetClass: "future",
+  },
+  {
+    id: "case-fut-macro-int-ng-outage-with-restart-date",
+    title: "SAMPLE natural gas spikes on an outage that already has a restart date",
+    contextType: "news",
+    thinkingMode: "geopolitics_supply",
+    brief:
+      "A pipeline outage cut flows, and this SAMPLE natural gas future gapped up and extended. The operator's official notice gives a restart date three days out. Buyers of gas (utilities) are hurt by the spike; producers benefit. Is this a lasting supply change, or a temporary one the price already chased?",
+    newsHeadline:
+      "Operator notice: pipeline outage, restart scheduled in three days.",
+    preOhlc: NG_INT_OUTAGE_PRE,
+    postOhlc: withAftermath(NG_INT_OUTAGE_PRE, [
+      bar("+1", 2.731, 2.761, 2.613, 2.648),
+      bar("+2", 2.648, 2.673, 2.553, 2.583),
+      bar("+3", 2.583, 2.603, 2.526, 2.551),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: ["sell"],
+    debrief: {
+      process:
+        "Name the side and the duration. A supply shock that has a known end is temporary, and a gap plus an extension has already priced much of it. Buying the spike pays for a shortage that is scheduled to end. Waiting is the process answer; trimming an existing long earns partial credit.",
+      whyMarketMoved: "With a restart date on record, the SAMPLE contract gave back part of the spike as traders priced the outage as temporary.",
+      evidence: "Flat tape, a gap and extension on the outage, and an official restart date.",
+    },
+    allowShort: false,
+    packId: "futures-macro",
+    difficulty: "intermediate",
+    assetClass: "future",
+  },
 ];
 
 export const FOREX_CASES: CaseStudy[] = [
@@ -6133,18 +6464,18 @@ export const FOREX_CASES: CaseStudy[] = [
     brief:
       "EUR/USD had been firm. An energy-supply scare hits European cost talk. Decide before the next bars.",
     newsHeadline: "Energy-supply scare. European cost talk. Euro in focus.",
-    preOhlc: EUR_PRE,
-    postOhlc: withAftermath(EUR_PRE, [
-      bar("+1", 1.088, 1.09, 1.082, 1.084),
-      bar("+2", 1.084, 1.086, 1.079, 1.081),
-      bar("+3", 1.081, 1.083, 1.077, 1.079),
+    preOhlc: EUR_ENERGY_PRE,
+    postOhlc: withAftermath(EUR_ENERGY_PRE, [
+      bar("+1", 1.0874, 1.088, 1.0842, 1.0848),
+      bar("+2", 1.0848, 1.0858, 1.0829, 1.0836),
+      bar("+3", 1.0836, 1.0851, 1.0826, 1.0845),
     ]),
     correctActions: ["sell", "hold"],
     acceptablePartial: ["hold"],
     debrief: {
       process:
         "A supply scare that raises European costs can hit the euro. Name the channel before you buy a dip.",
-      whyMarketMoved: "The firm euro tape faded with the cost scare.",
+      whyMarketMoved: "The firm euro tape stalled into an upper-wick bar and faded with the cost scare; the small bounce stayed below the scare bar.",
       evidence: "Firm EUR tape plus an energy-supply headline.",
     },
     allowShort: false,
@@ -8476,6 +8807,146 @@ export const FOREX_CASES: CaseStudy[] = [
     allowShort: false,
     packId: "forex-macro",
     difficulty: "beginner",
+    assetClass: "forex",
+  },
+  {
+    id: "case-fx-tape-int-usdjpy-verbal-warning",
+    title: "SAMPLE USD/JPY at the highs as officials warn about excessive moves",
+    contextType: "news",
+    thinkingMode: "company_headline",
+    brief:
+      "SAMPLE USD/JPY climbed five bars. A finance ministry official now says they are watching for \"excessive moves\". That is a verbal warning, not an announced intervention. You have Indicators. Add to longs, hold, or reduce? SAMPLE pair only, not a live FX desk.",
+    newsHeadline:
+      "Official: watching currency moves with urgency; will respond to excessive moves.",
+    preOhlc: USDJPY_INT_WARN_PRE,
+    postOhlc: withAftermath(USDJPY_INT_WARN_PRE, [
+      bar("+1", 155.94, 156.09, 155.27, 155.52),
+      bar("+2", 155.52, 155.91, 155.38, 155.71),
+      bar("+3", 155.71, 155.85, 155.3, 155.48),
+    ]),
+    correctActions: ["hold", "sell"],
+    acceptablePartial: [],
+    debrief: {
+      process:
+        "Verbal warnings and actual intervention are different events. A warning at the highs raises the risk of a sharp drop, so adding new longs into it is poor process even if the trend is up. Hold a sized position with a stop, or reduce; do not add. The official source matters, but the content is a warning, not an action.",
+      whyMarketMoved: "The warning capped the move and the SAMPLE pair chopped lower without a confirmed intervention.",
+      evidence: "Five-bar SAMPLE rally plus an official verbal warning.",
+    },
+    allowShort: false,
+    packId: "forex-tape",
+    difficulty: "intermediate",
+    assetClass: "forex",
+  },
+  {
+    id: "case-fx-tape-int-gbpusd-failed-break",
+    title: "SAMPLE GBP/USD breaks out on a thin headline, then closes back in the range",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "SAMPLE GBP/USD chopped between about 1.2645 and 1.2675. A thin headline pushed it above the range, and you bought the breakout. The next bar closed back inside the range. Your plan said the idea is wrong on a close back inside. Hold and hope, or act on the plan? SAMPLE pair only.",
+    newsHeadline:
+      "Thin chatter: sterling breakout on unnamed sources. No official data.",
+    preOhlc: GBPUSD_INT_FAILBREAK_PRE,
+    postOhlc: withAftermath(GBPUSD_INT_FAILBREAK_PRE, [
+      bar("+1", 1.2659, 1.2668, 1.2631, 1.2641),
+      bar("+2", 1.2641, 1.2649, 1.2619, 1.2628),
+      bar("+3", 1.2628, 1.2642, 1.2621, 1.2632),
+    ]),
+    correctActions: ["sell"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A breakout that closes back inside its range is a failed breakout, and that was your written invalidation. Exiting is the plan working, not a mistake. Holding and hoping turns a small, planned loss into an unplanned one; it earns only partial credit here because the range low has not broken yet.",
+      whyMarketMoved: "With the breakout failed, the SAMPLE pair rotated back toward the range low.",
+      evidence: "Tight range, a thin-headline breakout bar, and a close back inside the range.",
+    },
+    allowShort: false,
+    packId: "forex-tape",
+    difficulty: "intermediate",
+    assetClass: "forex",
+  },
+  {
+    id: "case-fx-macro-int-audusd-weak-china-pmi",
+    title: "SAMPLE AUD/USD drops on a weak China factory survey",
+    contextType: "news",
+    thinkingMode: "macro_print",
+    brief:
+      "SAMPLE AUD/USD was firm. A SIMULATED China manufacturing survey prints below 50 and below expectations, and the Australian dollar drops on the bar. Australia exports a lot of raw materials to China. Is this a dip to buy, or a print that maps directly to this currency?",
+    newsHeadline:
+      "SIMULATED: China factory survey below 50 and below forecast.",
+    preOhlc: AUDUSD_INT_PMI_PRE,
+    postOhlc: withAftermath(AUDUSD_INT_PMI_PRE, [
+      bar("+1", 0.6589, 0.6596, 0.6565, 0.6574),
+      bar("+2", 0.6574, 0.658, 0.656, 0.6568),
+      bar("+3", 0.6568, 0.6588, 0.6562, 0.6579),
+    ]),
+    correctActions: ["hold", "sell"],
+    acceptablePartial: [],
+    debrief: {
+      process:
+        "Map the print to the instrument. A survey below 50 signals contraction, and weaker Chinese demand for raw materials is a direct channel to the Australian dollar. Buying the first drop ignores that channel. Wait for the tape to stabilise or reduce; do not buy on reflex.",
+      whyMarketMoved: "The weak survey kept pressure on the commodity-linked currency, and the SAMPLE pair stayed under the release bar.",
+      evidence: "Firm pre-release tape, a SIMULATED sub-50 survey, and a sharp AUD drop.",
+    },
+    allowShort: false,
+    packId: "forex-macro",
+    difficulty: "intermediate",
+    assetClass: "forex",
+  },
+  {
+    id: "case-fx-macro-int-usdchf-haven-franc",
+    title: "Risk-off lifts the franc while you hold SAMPLE USD/CHF",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "You hold a SAMPLE USD/CHF long. Stocks are falling across the board, and the Swiss franc, a traditional haven currency, is catching a bid, so the pair slides for four bars. Hold the long, or take the risk off?",
+    newsHeadline:
+      "Risk-off: stocks lower; haven currencies bid.",
+    preOhlc: USDCHF_INT_RISKOFF_PRE,
+    postOhlc: withAftermath(USDCHF_INT_RISKOFF_PRE, [
+      bar("+1", 0.8954, 0.896, 0.8928, 0.8937),
+      bar("+2", 0.8937, 0.8944, 0.8921, 0.8929),
+      bar("+3", 0.8929, 0.8934, 0.8909, 0.8918),
+    ]),
+    correctActions: ["sell"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "In risk-off, haven currencies like the franc often strengthen, which pushes USD/CHF down. Your long is on the wrong side of the haven flow. Cutting it is the process answer; holding with a tight stop earns partial credit. The decision is about which side of the haven you are on, not about the US data.",
+      whyMarketMoved: "The haven bid for the franc continued and the SAMPLE pair kept leaking lower.",
+      evidence: "A four-bar slide in SAMPLE USD/CHF during a broad risk-off tape.",
+    },
+    allowShort: false,
+    packId: "forex-macro",
+    difficulty: "intermediate",
+    assetClass: "forex",
+  },
+  {
+    id: "case-fx-macro-int-usdcad-oil-shock",
+    title: "An oil supply shock pulls SAMPLE USD/CAD lower",
+    contextType: "news",
+    thinkingMode: "geopolitics_supply",
+    brief:
+      "A supply disruption sends crude higher. Canada is a large oil exporter, so the Canadian dollar firms and SAMPLE USD/CAD falls for two bars. You are flat and a friend says \"buy the dip in USD/CAD\". Which side of the oil shock is the Canadian dollar on?",
+    newsHeadline:
+      "Supply disruption lifts crude; exporter currencies firm.",
+    preOhlc: USDCAD_INT_OIL_PRE,
+    postOhlc: withAftermath(USDCAD_INT_OIL_PRE, [
+      bar("+1", 1.3661, 1.3667, 1.3641, 1.3649),
+      bar("+2", 1.3649, 1.3664, 1.3643, 1.3655),
+      bar("+3", 1.3655, 1.366, 1.3628, 1.3637),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: [],
+    debrief: {
+      process:
+        "Name the side. Higher oil helps an oil exporter, so the Canadian dollar benefits and USD/CAD falls. Buying USD/CAD here bets against that channel. Staying flat (HOLD) is the process answer until the oil move or the pair's structure changes.",
+      whyMarketMoved: "With crude firm, the Canadian dollar kept its bid and the SAMPLE pair drifted lower.",
+      evidence: "Crude supply headline and a two-bar drop in SAMPLE USD/CAD.",
+    },
+    allowShort: false,
+    packId: "forex-macro",
+    difficulty: "intermediate",
     assetClass: "forex",
   },
 ];
@@ -11053,6 +11524,146 @@ export const CRYPTO_CASES: CaseStudy[] = [
     allowShort: false,
     packId: "crypto-macro",
     difficulty: "beginner",
+    assetClass: "crypto",
+  },
+  {
+    id: "case-crypto-tape-int-eth-upgrade-date",
+    title: "SAMPLE ether ran up into an upgrade date that was already known",
+    contextType: "news",
+    thinkingMode: "company_headline",
+    brief:
+      "SAMPLE ether rose five bars into a network upgrade. The developers' official post now confirms the upgrade went live on the date announced weeks ago. Nothing in the post is a surprise. You have Indicators. Buy the confirmation, hold, or trim? SAMPLE coin only, not a live exchange.",
+    newsHeadline:
+      "Official developer post: upgrade live on the scheduled date.",
+    preOhlc: ETH_INT_UPGRADE_PRE,
+    postOhlc: withAftermath(ETH_INT_UPGRADE_PRE, [
+      bar("+1", 3341, 3361, 3268, 3296),
+      bar("+2", 3296, 3314, 3249, 3271),
+      bar("+3", 3271, 3308, 3253, 3284),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: ["sell"],
+    debrief: {
+      process:
+        "A long-announced event that happens on schedule adds little new information, and a run-up before it means much of it is already priced (\"buy the rumor, sell the news\" risk). Buying the confirmation is late. Hold a sized position with a stop; trimming earns partial credit.",
+      whyMarketMoved: "With no surprise in the post, early buyers took profit and the SAMPLE coin eased back.",
+      evidence: "Five-bar SAMPLE run-up into a scheduled, confirmed upgrade.",
+    },
+    allowShort: false,
+    packId: "crypto-tape",
+    difficulty: "intermediate",
+    assetClass: "crypto",
+  },
+  {
+    id: "case-crypto-tape-int-btc-liquidation-spike",
+    title: "SAMPLE bitcoin squeezes on liquidations, then stalls",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "SAMPLE bitcoin sat flat, then printed one huge green bar as short positions were forced to close. The next bar is an inside bar with a long upper wick. A forum post says \"liquidations mean it goes to the moon\". You are flat. Chase or wait?",
+    newsHeadline:
+      "Forum chatter: shorts liquidated, squeeze has to continue.",
+    preOhlc: BTC_INT_SQUEEZE_PRE,
+    postOhlc: withAftermath(BTC_INT_SQUEEZE_PRE, [
+      bar("+1", 63480, 63740, 62600, 62940),
+      bar("+2", 62940, 63160, 62410, 62710),
+      bar("+3", 62710, 63140, 62470, 62860),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: [],
+    debrief: {
+      process:
+        "Forced buying from liquidations is a one-off flow, not new demand. Once it is done, the bar after a squeeze often stalls or retraces part of it. Chasing the spike buys at the point where that flow has ended. Staying flat (HOLD) and waiting for a retest is the process answer.",
+      whyMarketMoved: "With the forced buying finished, the SAMPLE coin retraced part of the squeeze bar.",
+      evidence: "Flat tape, one liquidation bar, and an inside bar with an upper wick.",
+    },
+    allowShort: false,
+    packId: "crypto-tape",
+    difficulty: "intermediate",
+    assetClass: "crypto",
+  },
+  {
+    id: "case-crypto-macro-int-btc-soft-cpi-break",
+    title: "A soft SIMULATED inflation print lifts SAMPLE bitcoin above its range",
+    contextType: "news",
+    thinkingMode: "macro_print",
+    brief:
+      "SAMPLE bitcoin chopped under a 58,800 range top. A SIMULATED inflation print comes in softer than expected, yields fall, and bitcoin closes above the range top on the release bar. You have Indicators. The idea would be wrong back inside the range. Buy, wait, or sell?",
+    newsHeadline:
+      "SIMULATED print: inflation below consensus. Yields lower; risk assets bid.",
+    preOhlc: BTC_INT_SOFTCPI_PRE,
+    postOhlc: withAftermath(BTC_INT_SOFTCPI_PRE, [
+      bar("+1", 59480, 60040, 59330, 59860),
+      bar("+2", 59860, 60440, 59700, 60240),
+      bar("+3", 60240, 60780, 60100, 60610),
+    ]),
+    correctActions: ["buy"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Map the print: softer inflation lowers expected rates, which tends to help risk assets, and here the coin also closed above its range top. That gives a defined edge and a clear invalidation back inside the range. Buying with that stop and a sized position is the process answer; waiting for a retest earns partial credit.",
+      whyMarketMoved: "Lower yields kept risk appetite up, and the SAMPLE coin held above the old range top and extended.",
+      evidence: "Range under 58,800, a soft SIMULATED print, and a close above the range top.",
+    },
+    allowShort: false,
+    packId: "crypto-macro",
+    difficulty: "intermediate",
+    assetClass: "crypto",
+  },
+  {
+    id: "case-crypto-macro-int-sol-high-beta-risk-off",
+    title: "Risk-off hits high-beta SAMPLE SOL harder than bitcoin",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "Stocks are falling, and the crypto tape is falling with them. Your SAMPLE SOL long is down more than bitcoin, as high-beta coins often are in risk-off. Hold for a bounce, or take the risk off?",
+    newsHeadline:
+      "Risk-off: equities lower; high-beta coins lead crypto down.",
+    preOhlc: SOL_INT_RISKOFF_PRE,
+    postOhlc: withAftermath(SOL_INT_RISKOFF_PRE, [
+      bar("+1", 141.9, 142.8, 138, 139.4),
+      bar("+2", 139.4, 140.5, 137.5, 138.7),
+      bar("+3", 138.7, 139.5, 135.6, 136.9),
+    ]),
+    correctActions: ["sell"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "In risk-off, high-beta assets usually fall more than the market they move with. Your long is the riskiest version of a falling tape. Reducing or exiting is the process answer; holding with a tight stop earns partial credit. Hoping for a bounce is not a plan.",
+      whyMarketMoved: "Risk-off continued and the SAMPLE coin kept underperforming.",
+      evidence: "Falling equity and crypto tape, with SAMPLE SOL weaker than bitcoin.",
+    },
+    allowShort: false,
+    packId: "crypto-macro",
+    difficulty: "intermediate",
+    assetClass: "crypto",
+  },
+  {
+    id: "case-crypto-macro-int-btc-mining-curtailment",
+    title: "A mining-region power curtailment shakes SAMPLE bitcoin",
+    contextType: "news",
+    thinkingMode: "geopolitics_supply",
+    brief:
+      "A large mining region cuts power to miners, and the network's hash rate drops. SAMPLE bitcoin dips on the headline. A post says \"supply shock, bitcoin will be scarce\". Does a hash-rate drop change how many coins get issued? You are flat.",
+    newsHeadline:
+      "Mining region curtails power; network hash rate drops.",
+    preOhlc: BTC_INT_HASH_PRE,
+    postOhlc: withAftermath(BTC_INT_HASH_PRE, [
+      bar("+1", 60120, 60490, 59970, 60310),
+      bar("+2", 60310, 60750, 60180, 60580),
+      bar("+3", 60580, 60790, 60440, 60640),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: [],
+    debrief: {
+      process:
+        "Name the channel. New coins are issued per block on a fixed schedule, and the network adjusts mining difficulty, so a hash-rate drop does not change the planned coin supply. The real channel is miner costs: some miners may sell coins to cover them. That is a cost story, not a scarcity story. Staying flat while the claim is checked is the process answer.",
+      whyMarketMoved: "Once the scarcity claim did not hold up, the SAMPLE coin recovered its dip.",
+      evidence: "Mining curtailment headline, a dip bar, and a fixed issuance schedule.",
+    },
+    allowShort: false,
+    packId: "crypto-macro",
+    difficulty: "intermediate",
     assetClass: "crypto",
   },
 ];
@@ -13650,6 +14261,146 @@ export const OPTIONS_CONTEXT_CASES: CaseStudy[] = [
     allowShort: false,
     packId: "options-macro",
     difficulty: "beginner",
+    assetClass: "option_context",
+  },
+  {
+    id: "case-optctx-tape-int-biotech-readout-date",
+    title: "SAMPLE biotech coils as the trial readout date is confirmed",
+    contextType: "news",
+    thinkingMode: "company_headline",
+    brief:
+      "This SAMPLE biotech stock has chopped in a tight range. The company's official release confirms the date of a trial readout next week, and options context says the implied move into that date is large. This app grades the stock only: no chain, no Greeks. Buy the stock ahead of a binary event, hold, or trim?",
+    newsHeadline:
+      "Company release: trial readout scheduled next week. Options context: implied move elevated.",
+    preOhlc: BIOTECH_INT_READOUT_PRE,
+    postOhlc: withAftermath(BIOTECH_INT_READOUT_PRE, [
+      bar("+1", 42.12, 42.62, 41.92, 42.38),
+      bar("+2", 42.38, 42.6, 41.72, 41.98),
+      bar("+3", 41.98, 42.46, 41.76, 42.21),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: ["sell"],
+    debrief: {
+      process:
+        "A confirmed date for a binary event tells you when risk arrives, not which way. A large implied move means the market expects a big gap either way. Buying the stock ahead of it is a coin flip with a gap risk, not an edge. Hold a small sized position or wait; trimming before the event earns partial credit. Still no chain and no Greeks.",
+      whyMarketMoved: "The stock kept chopping inside its range: the event was still ahead, and no one had new information.",
+      evidence: "Tight SAMPLE range, an official readout date, and an elevated implied-move context.",
+    },
+    allowShort: false,
+    packId: "options-tape",
+    difficulty: "intermediate",
+    assetClass: "option_context",
+  },
+  {
+    id: "case-optctx-tape-int-retailer-upgrade-gap",
+    title: "SAMPLE retailer gaps up on an upgrade, then the next bar turns red",
+    contextType: "news",
+    thinkingMode: "momentum_chase_vs_fade",
+    brief:
+      "You held this SAMPLE retailer stock before an analyst upgrade. It gapped up, left a long upper wick, and the next bar closed red. Options context: chatter about call buying. This app grades the stock only: no chain, no Greeks. Take some profit, hold everything, or add?",
+    newsHeadline:
+      "Analyst upgrade; chatter about call buying. Options context only.",
+    preOhlc: RETAILER_INT_GAP_PRE,
+    postOhlc: withAftermath(RETAILER_INT_GAP_PRE, [
+      bar("+1", 90.2, 90.65, 88.8, 89.35),
+      bar("+2", 89.35, 89.75, 88.4, 88.9),
+      bar("+3", 88.9, 89.6, 88.5, 89.1),
+    ]),
+    correctActions: ["sell"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "A gap on an opinion (an upgrade) that leaves a long upper wick and then a red bar shows buyers could not hold the highs. With a gain already in hand, taking some or all profit is the process answer. Holding with a stop under the gap earns partial credit. Adding after the rejection is chasing. Call chatter is context, not a stock signal.",
+      whyMarketMoved: "Late buyers who chased the gap sold as it failed to extend, and the SAMPLE stock drifted toward the gap.",
+      evidence: "Upgrade gap with a long upper wick, then a red bar, on a held position.",
+    },
+    allowShort: false,
+    packId: "options-tape",
+    difficulty: "intermediate",
+    assetClass: "option_context",
+  },
+  {
+    id: "case-optctx-macro-int-homebuilder-hot-jobs",
+    title: "A hot SIMULATED jobs print drags a SAMPLE homebuilder",
+    contextType: "news",
+    thinkingMode: "macro_print",
+    brief:
+      "A SIMULATED jobs report comes in much stronger than expected. Treasury yields jump, and mortgage-rate expectations rise with them. This SAMPLE homebuilder stock drops on the bar. You are flat. Options context: puts are \"in demand\". This app grades the stock only: no chain, no Greeks. Buy the dip, wait, or sell?",
+    newsHeadline:
+      "SIMULATED jobs report well above consensus. Yields higher; rate-sensitive stocks lower.",
+    preOhlc: HOMEBUILDER_INT_JOBS_PRE,
+    postOhlc: withAftermath(HOMEBUILDER_INT_JOBS_PRE, [
+      bar("+1", 117.85, 118.3, 116.5, 117.1),
+      bar("+2", 117.1, 117.5, 116.15, 116.65),
+      bar("+3", 116.65, 117.5, 116.25, 116.95),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: [],
+    debrief: {
+      process:
+        "Map the print to the stock. Strong jobs can mean higher-for-longer rates, and higher mortgage rates hurt housing demand, so homebuilders are rate-sensitive. Buying the first drop bets the rate move is over. Staying flat (HOLD) is the process answer until rates or the stock's structure stabilise. Put demand is context, not a stock signal.",
+      whyMarketMoved: "Yields stayed higher after the print and the rate-sensitive SAMPLE stock kept leaking.",
+      evidence: "Rally into the release, a hot SIMULATED jobs print, and a sharp drop in a rate-sensitive stock.",
+    },
+    allowShort: false,
+    packId: "options-macro",
+    difficulty: "intermediate",
+    assetClass: "option_context",
+  },
+  {
+    id: "case-optctx-macro-int-utility-holds-risk-off",
+    title: "A SAMPLE utility holds up while the market sells off",
+    contextType: "news",
+    thinkingMode: "risk_off",
+    brief:
+      "The broad market is in risk-off and most stocks are falling. You hold this SAMPLE utility, a defensive stock, and it has edged higher while the market fell. Options context: implied volatility is up across the market. This app grades the stock only: no chain, no Greeks. Sell because \"everything is falling\", hold, or add?",
+    newsHeadline:
+      "Risk-off: broad market lower; defensives outperform. Options context: market volatility up.",
+    preOhlc: UTILITY_INT_DEFENSIVE_PRE,
+    postOhlc: withAftermath(UTILITY_INT_DEFENSIVE_PRE, [
+      bar("+1", 64.52, 64.7, 64.41, 64.58),
+      bar("+2", 64.58, 64.72, 64.36, 64.49),
+      bar("+3", 64.49, 64.77, 64.39, 64.66),
+    ]),
+    correctActions: ["hold"],
+    acceptablePartial: ["sell"],
+    debrief: {
+      process:
+        "Risk-off is not uniform. Defensive sectors such as utilities often hold up better because their demand is steady. Your stock is showing relative strength, so selling it just because the market is falling ignores its own tape. Hold with a stop; trimming earns partial credit. Adding into a market-wide scare is not the default.",
+      whyMarketMoved: "Money rotated toward defensives, and the SAMPLE utility held its gains while the market fell.",
+      evidence: "A rising SAMPLE utility tape during a broad risk-off week.",
+    },
+    allowShort: false,
+    packId: "options-macro",
+    difficulty: "intermediate",
+    assetClass: "option_context",
+  },
+  {
+    id: "case-optctx-macro-int-airline-fuel-shock",
+    title: "An oil supply shock meets a SAMPLE airline that just bounced",
+    contextType: "news",
+    thinkingMode: "geopolitics_supply",
+    brief:
+      "An oil supply disruption sends crude and jet fuel prices higher. This SAMPLE airline stock fell, then bounced for two bars, and you bought the bounce. Airlines buy fuel; they do not sell it. This app grades the stock only: no chain, no Greeks. Hold the bounce, or take the risk off?",
+    newsHeadline:
+      "Supply disruption lifts crude and jet fuel. Fuel buyers under pressure.",
+    preOhlc: AIRLINE_INT_FUEL_PRE,
+    postOhlc: withAftermath(AIRLINE_INT_FUEL_PRE, [
+      bar("+1", 15.06, 15.14, 14.66, 14.78),
+      bar("+2", 14.78, 14.85, 14.51, 14.61),
+      bar("+3", 14.61, 14.67, 14.43, 14.52),
+    ]),
+    correctActions: ["sell"],
+    acceptablePartial: ["hold"],
+    debrief: {
+      process:
+        "Name which side the stock is on. Fuel is one of an airline's largest costs, so higher fuel prices squeeze its margins: the airline is on the buyer side of the shock. A two-bar bounce does not change that. Taking the risk off is the process answer; holding with a tight stop earns partial credit.",
+      whyMarketMoved: "With fuel costs rising, the bounce failed and the SAMPLE airline stock made a lower low.",
+      evidence: "Fuel-supply headline, a two-bar bounce, and an airline on the buyer side.",
+    },
+    allowShort: false,
+    packId: "options-macro",
+    difficulty: "intermediate",
     assetClass: "option_context",
   },
 ];

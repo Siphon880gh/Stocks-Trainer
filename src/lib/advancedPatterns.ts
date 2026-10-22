@@ -188,7 +188,7 @@ export const ADVANCED_PATTERNS: AdvancedPattern[] = [
     stop: "beyond whichever end of the range breaks",
     lookalikes: [["high-wave", 3], ["gravestone-doji", 3]],
     confusers: ["long-legged-doji", "high-wave", "dragonfly-doji", "gravestone-doji"],
-    glossaryLink: "high-wave",
+    glossaryLink: "rickshaw-man",
     bars: bars([
       ...UP_LEAD,
       [63700, 64050, 63550, 64000],
@@ -714,7 +714,8 @@ export const ADVANCED_TERMS: LiteracyTerm[] = [
       "Morning doji star: long red, doji gapped below, long green into the red body. Evening doji star: long green, doji gapped above, long red into the green body. A doji star alone is only a warning; the third candle confirms.",
   },
   {
-    id: "high-wave",
+    // Own id: "high-wave" is already the generated High-Wave Candle term above.
+    id: "high-wave-and-rickshaw-man",
     name: "High-Wave & Rickshaw Man",
     category: "process",
     summary: "Very long shadows both ways around a small body: extreme indecision.",
