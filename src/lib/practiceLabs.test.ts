@@ -41,6 +41,8 @@ describe("misc practice catalog", () => {
       "Support and resistance",
       "EMA, SMA and MACD (long charts)",
       "Oscillators & volatility stop",
+      "Japanese candlesticks",
+      "Heikin-Ashi candles",
     ]);
   });
 });

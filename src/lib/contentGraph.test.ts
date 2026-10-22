@@ -126,6 +126,9 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "macro-reactions": 14,
   // oscillators & volatility stop, float / short-dated options / risk
   oscillators: 18,
+  // Japanese candlesticks core 14 + framing, Heikin-Ashi lesson + lab
+  "japanese-candles": 30,
+  "heikin-ashi": 12,
   "trading-risk": 12,
 };
 const NON_FAMILY = new Set<string>([...PHASE_A, ...PHASE_D, ...Object.keys(DEDICATED_FLOORS)]);
@@ -179,7 +182,7 @@ describe("Learn reference integrity (every group)", () => {
         if (q.overlayId) assert.ok(overlayIds.has(q.overlayId), `${q.id} → ${q.overlayId}`);
         if (q.samplePackId) assert.ok(packIds.has(q.samplePackId), `${q.id} → ${q.samplePackId}`);
         const heroCandle =
-          !q.optionsAreCharts && !q.financialsExhibit && !q.macroExhibit && !q.oscillatorExhibit && !q.snapshotId && !q.overlayId && q.patternKey;
+          !q.optionsAreCharts && !q.financialsExhibit && !q.macroExhibit && !q.oscillatorExhibit && !q.heikinAshiExhibit && !q.snapshotId && !q.overlayId && q.patternKey;
         // QuizModal silently falls back to the hammer chart, so a typo would show the wrong candles.
         if (heroCandle) assert.ok(PATTERN_OHLC[q.patternKey!], `${q.id} chart ${q.patternKey}`);
         if (q.optionsAreCharts) {

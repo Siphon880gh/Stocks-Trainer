@@ -32,6 +32,7 @@ const { UNIT_QUIZ_ITEMS } = await load("/src/lib/academy/content/unitQuizzes.ts"
 const { UNIT_ORDER } = await load("/src/lib/academy/content/levels.ts");
 const { emptyAcademy, ACADEMY_KEY } = await load("/src/lib/academy/storage.ts");
 const { oscQuestions } = await load("/src/lib/oscillatorLab.ts");
+const { haQuestions } = await load("/src/lib/heikinAshiLab.ts");
 /** Optional: QA_SHOTS=<dir> saves a screenshot of the oscillators lab at each width (never committed). */
 const SHOTS = process.env.QA_SHOTS;
 const stored = (p, key) => p.evaluate((k) => JSON.parse(localStorage.getItem(k) ?? "null"), key);
@@ -242,6 +243,34 @@ const flows = {
     if (SHOTS) await p.screenshot({ path: `${SHOTS}/oscillators-${w}.png`, fullPage: true });
     await p.goto(base + "/training?group=trading-risk", { waitUntil: "networkidle" });
     check(/Float, Short-Dated Options & Risk/.test(await p.locator("main").innerText()), `Learn: trading-risk group missing @${w}`);
+  },
+  async "Japanese candles: core list toggle, three-tab detail, Heikin-Ashi lab"(p, w) {
+    await p.goto(base + "/practice/japanese-candles", { waitUntil: "networkidle" });
+    check(/battle between buyers and sellers/.test(await p.locator("main").innerText()), `candles: no framing lesson @${w}`);
+    await p.getByTestId("core-side-bearish").click();
+    check((await p.locator('[data-testid^="core-row-"]').count()) === 7, `candles: bearish list is not 7 rows @${w}`);
+    await p.getByTestId("core-row-evening-star").click();
+    check((await p.getByTestId("pattern-illustration").count()) === 1, `candles: no illustration @${w}`);
+    await p.getByTestId("pattern-tab-trade").click();
+    const panel = await p.getByTestId("pattern-tabpanel").innerText();
+    check(/Stop \(invalidation\)/.test(panel) && /Not a guarantee/.test(panel), `candles: trade tab incomplete @${w}`);
+    if (w < 600) {
+      const b = await p.getByTestId("pattern-tab-psychology").boundingBox();
+      check(b.height >= 44, `candles: tab ${b.height}px tall @${w}`);
+    }
+    check((await overflow(p)) <= 1, `candles overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/japanese-candles-${w}.png`, fullPage: false });
+    await p.keyboard.press("Escape");
+    await p.goto(base + "/practice/heikin-ashi", { waitUntil: "networkidle" });
+    check((await p.getByTestId("ha-chart-regular").count()) === 1 && (await p.getByTestId("ha-chart-ha").count()) === 1, `HA: side by side missing @${w}`);
+    await p.getByTestId("ha-view-ha").click();
+    check((await p.getByTestId("ha-chart-regular").count()) === 0, `HA: view toggle failed @${w}`);
+    const q = haQuestions().find((x) => x.id === "ha-calc-close");
+    const card = p.locator(`[data-question="${q.id}"]`);
+    await card.locator("button", { hasText: q.options.find((o) => o.id === q.correct).label }).first().click();
+    check(/^Right\./.test(await card.getByTestId("ha-feedback").innerText()), `HA: computed key not graded right @${w}`);
+    check((await overflow(p)) <= 1, `HA overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/heikin-ashi-${w}.png`, fullPage: true });
   },
 };
 

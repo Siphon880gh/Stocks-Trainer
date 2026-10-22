@@ -3,6 +3,7 @@ import { FINANCIAL_TERMS } from "./financials/terms";
 import { MACRO_TERMS } from "./macro/glossary";
 import { ACADEMY_TERMS } from "./academy/terms";
 import { OSCILLATOR_TERMS } from "./oscillatorTerms";
+import { CANDLE_TERMS } from "./candleTerms";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
@@ -652,6 +653,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...MACRO_TERMS,
   ...ACADEMY_TERMS,
   ...OSCILLATOR_TERMS,
+  ...CANDLE_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

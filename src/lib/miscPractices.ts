@@ -19,6 +19,8 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "levels", title: "Support and resistance", to: "/practice/levels" },
   { id: "ema-macd", title: "EMA, SMA and MACD (long charts)", to: "/practice/ema-macd" },
   { id: "oscillators", title: "Oscillators & volatility stop", to: "/practice/oscillators" },
+  { id: "japanese-candles", title: "Japanese candlesticks", to: "/practice/japanese-candles" },
+  { id: "heikin-ashi", title: "Heikin-Ashi candles", to: "/practice/heikin-ashi" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

@@ -11,6 +11,7 @@ import {
   setChartGateTemporaryBypass,
 } from "../lib/beginnerPath";
 import PatternDetailModal from "../components/PatternDetailModal";
+import CorePatternList from "../components/CorePatternList";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText, { GlossaryButtons } from "../components/JargonText";
@@ -253,6 +254,18 @@ export default function Archive() {
           </div>
         </div>
 
+        {tab === "patterns" ? (
+          <div className="space-y-2">
+            <CorePatternList />
+            <p className="text-[12px] text-muted px-1">
+              New to candles? Start with the{" "}
+              <Link to="/practice/japanese-candles" className="text-primary underline">
+                Japanese candlesticks lesson
+              </Link>
+              . Every pattern below opens the same three tabs.
+            </p>
+          </div>
+        ) : null}
         <div className="space-y-4">
           {tab === "literacy"
             ? LITERACY_TERMS.map((term) => {

@@ -15,6 +15,7 @@ import type { MacroExhibit } from "./macro/quiz/exhibit";
 import { ACADEMY_QUESTION_BANKS, ACADEMY_QUIZ_GROUPS, isAcademyQuizGroup, type AcademyQuizGroupId } from "./academy/quiz/banks";
 import { OSCILLATOR_QUESTIONS, TRADING_RISK_QUESTIONS } from "./oscillatorQuiz";
 import type { OscChartId, OscPanel } from "./oscillatorLab";
+import { HEIKIN_ASHI_QUESTIONS, JAPANESE_CANDLE_QUESTIONS } from "./candleQuiz";
 
 export { PRICE_ACTION_QUESTIONS, SUPPLY_DEMAND_QUESTIONS, BUY_SELL_QUESTIONS };
 
@@ -167,6 +168,8 @@ export interface QuizQuestion {
   macroExhibit?: MacroExhibit;
   /** Oscillators lab chart (SIMULATED) with one lower panel; `mark` is shown only after the answer. */
   oscillatorExhibit?: { chartId: OscChartId; panel: OscPanel; mark?: number };
+  /** Heikin-Ashi lab chart (SIMULATED), regular and HA side by side; `mark` is shown only after the answer. */
+  heikinAshiExhibit?: { mark?: number };
 }
 
 /** Build numbered chart choices (1…n) for “which chart is the pattern?” questions. */
@@ -5363,6 +5366,8 @@ export type QuizGroupId =
   | "counterattack-on-neck"
   | "continuation-methods"
   | "candle-pattern-book"
+  | "japanese-candles"
+  | "heikin-ashi"
   | "gap-reversals"
   | "crows-and-strikes"
   | "advanced-rare"
@@ -5451,6 +5456,18 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Reading One Candle",
     description: "Price rejected, stability, indecision, and strong moves from wicks and bodies",
     icon: "candlestick_chart",
+  },
+  {
+    id: "japanese-candles",
+    name: "Japanese Candlesticks: Core 14",
+    description: "Where candlesticks come from, buyers vs sellers in each candle, and the psychology, confirmation and stop for the 7 bullish and 7 bearish core patterns",
+    icon: "candlestick_chart",
+  },
+  {
+    id: "heikin-ashi",
+    name: "Heikin-Ashi Candles",
+    description: "The averaged Heikin-Ashi formula, reading trends and turns, and its limits (lag, not traded prices), with SIMULATED chart questions",
+    icon: "waterfall_chart",
   },
   {
     id: "candle-pattern-book",
@@ -5622,6 +5639,8 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
   if (groupId === "candle-reading") return CANDLE_READING_QUESTIONS;
   if (groupId === "candle-pattern-book") return PATTERN_BOOK_QUESTIONS;
+  if (groupId === "japanese-candles") return JAPANESE_CANDLE_QUESTIONS;
+  if (groupId === "heikin-ashi") return HEIKIN_ASHI_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;
@@ -5648,6 +5667,8 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
   if (groupId === "candle-reading") return CANDLE_READING_QUESTIONS;
   if (groupId === "candle-pattern-book") return PATTERN_BOOK_QUESTIONS;
+  if (groupId === "japanese-candles") return JAPANESE_CANDLE_QUESTIONS;
+  if (groupId === "heikin-ashi") return HEIKIN_ASHI_QUESTIONS;
   if (groupId === "equity-patterns") return EQUITY_PATTERN_QUIZ_QUESTIONS;
   if (groupId === "equity-literacy") return EQUITY_LITERACY_QUESTIONS;
   if (groupId === "financial-literacy") return FINANCIAL_LITERACY_QUESTIONS;

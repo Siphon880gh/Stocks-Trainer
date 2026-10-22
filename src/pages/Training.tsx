@@ -158,6 +158,8 @@ export default function Training() {
                   g.id === "candle-anatomy" ||
                   g.id === "candle-reading" ||
                   g.id === "candle-pattern-book" ||
+                  g.id === "japanese-candles" ||
+                  g.id === "heikin-ashi" ||
                   g.id === "buy-or-sell" ||
                   g.id === "price-action" ||
                   g.id === "supply-demand" ||

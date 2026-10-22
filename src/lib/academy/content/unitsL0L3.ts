@@ -163,7 +163,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Green and red", body: "A green (up) candle closed above where it opened. A red (down) candle closed below its open. The colour tells you the direction within the period, not whether price is higher than yesterday.", glossaryTermId: "candle-color" },
       { title: "Bars and sessions", body: "On a daily chart, one candle is one trading day. In the Academy's paper account each candle is one session: orders you place after a candle closes are tested against the next candle." },
     ],
-    refs: ["quiz:candle-anatomy", "glossary:ohlc-anatomy", "glossary:candle-color"],
+    refs: ["quiz:candle-anatomy", "glossary:ohlc-anatomy", "glossary:candle-color", "practice:/practice/japanese-candles"],
   },
   {
     id: "l2-wicks-and-bodies",

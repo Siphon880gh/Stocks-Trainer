@@ -31,6 +31,8 @@ export const APP_ROUTES: readonly string[] = [
   "/practice/levels",
   "/practice/ema-macd",
   "/practice/oscillators",
+  "/practice/japanese-candles",
+  "/practice/heikin-ashi",
   "/practice/statements",
   "/practice/read-the-print",
   "/practice/mark-the-band",

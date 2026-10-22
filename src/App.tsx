@@ -20,6 +20,8 @@ import PracticeReadThePrint from "./pages/practice/ReadThePrint";
 import PracticeMarkTheBand from "./pages/practice/MarkTheBand";
 import PracticeEmaMacd from "./pages/practice/EmaMacd";
 import PracticeOscillators from "./pages/practice/Oscillators";
+import PracticeJapaneseCandles from "./pages/practice/JapaneseCandles";
+import PracticeHeikinAshi from "./pages/practice/HeikinAshi";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
 import Coach from "./pages/Coach";
@@ -71,6 +73,8 @@ export default function App() {
           <Route path="practice/mark-the-band" element={<PracticeMarkTheBand />} />
           <Route path="practice/ema-macd" element={<PracticeEmaMacd />} />
           <Route path="practice/oscillators" element={<PracticeOscillators />} />
+          <Route path="practice/japanese-candles" element={<PracticeJapaneseCandles />} />
+          <Route path="practice/heikin-ashi" element={<PracticeHeikinAshi />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />
           <Route path="coach" element={<Coach />} />

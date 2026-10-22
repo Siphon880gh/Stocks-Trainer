@@ -1025,7 +1025,20 @@ export const ENGULFING_NO_TREND_OHLC: OHLC[] = [
   ohlc("6", 63950, 64150, 63850, 64100),
 ];
 
+/**
+ * Core-lesson hammer: the same shape as HAMMER_OHLC but after a clear decline, as the textbook requires.
+ * (HAMMER_OHLC is shared by many charts and a byte-identity snapshot, so it is left unchanged.)
+ */
+export const CORE_HAMMER_OHLC: OHLC[] = [
+  ohlc("1", 64600, 64700, 64200, 64300),
+  ohlc("2", 64300, 64400, 63800, 63900),
+  ohlc("3", 63900, 64000, 63400, 63500),
+  ohlc("4", 63400, 63550, 62800, 63500), // hammer: body 100, lower wick 600, upper wick 50
+  ohlc("5", 63500, 63900, 63450, 63850),
+];
+
 export const PATTERN_OHLC: Record<string, OHLC[]> = {
+  "core-hammer": CORE_HAMMER_OHLC,
   hammer: HAMMER_OHLC,
   doji: DOJI_OHLC,
   engulfing: ENGULFING_OHLC,
