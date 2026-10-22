@@ -204,3 +204,11 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - Weng signed off all five checkpoints (BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4) and approved BA11 on 2026-10-21. The table above, EPICS boxes and STORIES rows are synced; the checkpoint entries' headings now read SIGNED OFF.
 - Next: BA11.M1.S1 (bracket / OCO / OTO orders).
 
+
+### 2026-10-21 23:10 PT · BA11 plan · decisions (approved stretch; EPICS gives one line per milestone, so the textbook default is used and written down here)
+- M1 bracket / OCO / OTO: `linked.ts` places an OTO bracket (buy entry → sell stop and / or sell limit target, the two exits an OCO pair) and an OCO pair of sells on held shares. Exits wait until the entry fills and start working on the next bar; if the entry expires / is cancelled / rejected, the exits are cancelled. When one OCO order fills the other is cancelled. If one bar touches both the stop and the target, the stop is assumed to fill first (the conservative bar-data convention, because the bar does not show which came first).
+- M2 short selling: off unless the session turns it on. Short sale proceeds go to cash, Reg T style 50% initial margin is held back as a reservation, buy-to-cover closes it, realised P&L = (short price − cover price) × shares. Loss has no ceiling: warnings on the ticket and in the explainer. No borrow fees and no forced buy-ins in the simulator (named in the explainer).
+- M3 fractional + dollar orders: off unless the session turns it on; shares to 4 decimals, market buys by dollar amount (shares = amount ÷ fill price, rounded down to 4 decimals), money still in whole cents.
+- M4 fees / slippage: off by default (D4 unchanged); optional per-order fee and slippage in basis points, applied at the fill (buys pay more, sells receive less, rounded to the cent), plus a "cost of trading" explainer computed from the same function.
+- M5 trade journal: one note per fill, saved with the paper store, CSV export (RFC 4180 quoting).
+- M6 multiple portfolios: up to 5 named paper portfolios, each with its own session; the existing single session migrates into "Main".
