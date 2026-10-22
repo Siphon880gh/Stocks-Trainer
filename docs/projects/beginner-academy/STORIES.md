@@ -8,17 +8,17 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 - New code: `src/lib/academy/` (data + pure logic + tests, subfolders `content/`, `paper/`, `rewards/`, `options/`), `src/components/academy/` (UI), `src/pages/academy/` (routes). Type-only imports into `quizData.ts` / `literacyTerms.ts` (no runtime cycles; same rule as `buySellDrill.ts`, financials and macro).
 - Money is integer cents, shares are integers; formatting only in components.
 - Every paper surface carries `SIMULATED — virtual money, SAMPLE prices, not a brokerage, not trading advice.`; every rewards surface says points are virtual and not redeemable; every options surface carries the options risk statement.
-- New localStorage keys only (`analysis_core_academy_v1`, `analysis_core_paper_v1`, `analysis_core_rewards_v1`). Do not modify `analysis_core_progress_v1`, Beginner unlocks, case grading, or the financials / macro projects' files beyond the additive integration edits named in EPICS.md.
+- New localStorage keys only (`analysis_core_academy_v1`, `analysis_core_academy_paper_v1`, `analysis_core_academy_rewards_v1`). Do not modify `analysis_core_progress_v1`, Beginner unlocks, case grading, or the financials / macro projects' files beyond the additive integration edits named in EPICS.md.
 - All lesson and quiz text is original. No broker names, logos, colours, course titles or quiz wording.
 
 ## Build order
 
 | # | Story | Milestone | Acceptance (short) | Status |
 |---|-------|-----------|--------------------|--------|
-| 1 | BA0.M1.S1 Types | BA0.M1 | Types compile; ContentRef union covers 7 kinds | todo |
-| 2 | BA0.M1.S2 `test:academy` script | BA0.M1 | Dummy failing test proves the glob, then removed | todo |
-| 3 | BA0.M2.S1 Ref resolver + route constant | BA0.M2 | Good/broken ref per kind; route constant ⊇ App.tsx routes | todo |
-| 4 | BA0.M3.S1 Storage keys + migrate + recovery | BA0.M3 | Round-trip, v0→v1, corruption recovery; no foreign-key writes | todo |
+| 1 | BA0.M1.S1 Types | BA0.M1 | Types compile; ContentRef union covers 7 kinds | done |
+| 2 | BA0.M1.S2 `test:academy` script | BA0.M1 | Dummy failing test proves the glob, then removed | done |
+| 3 | BA0.M2.S1 Ref resolver + route constant | BA0.M2 | Good/broken ref per kind; route constant ⊇ App.tsx routes | done |
+| 4 | BA0.M3.S1 Storage keys + migrate + recovery | BA0.M3 | Round-trip, v0→v1, corruption recovery; no foreign-key writes | done |
 | 5 | BA1.M1.S1 Levels L0–L7 + course skeleton | BA1.M1 | 8 levels, unique ids, DAG, all reachable | todo |
 | 6 | BA1.M2.S1 Units L0–L1 | BA1.M2 | ≥ 10 units; card limits; refs resolve | todo |
 | 7 | BA1.M2.S2 Units L2–L3 | BA1.M2 | ≥ 12 more units; refs into candles / plan / order terms | todo |

@@ -4,10 +4,10 @@ Project folder: `docs/projects/beginner-academy/` · Research: [`RESEARCH.md`](.
 
 | Field | Value |
 |-------|-------|
-| **Status** | Chartered (planning). No milestone started. |
+| **Status** | In progress (loop started 2026-10-21). See PROGRESS.md. |
 | **Epic ids** | `BA0`–`BA10` (+ `BA11` stretch). Own namespace; does not reopen E0–E11 (Done(global) in `EPIC_MAP.md`), `FE*` or `MF*`. |
 | **Owner / reviewer** | Weng |
-| **Commit policy** | `COMMIT_MODE: none` (see the loop). Changes stay uncommitted; Weng commits. Never push, never open a PR. |
+| **Commit policy** | `COMMIT_MODE: local` for the 2026-10-21 drain (Weng: "make commits"): local commits per coherent chunk. Never push, never open a PR. |
 | **Code namespace** | `src/lib/academy/` (pure logic + data + tests), `src/components/academy/` (UI), `src/pages/academy/` (routes) |
 | **Test script** | `npm run test:academy` → `tsx --test "src/lib/academy/**/*.test.{ts,tsx}"` (added in BA0.M1) |
 
@@ -77,7 +77,7 @@ A brand-new learner can:
 
 - **Content:** original lesson cards and quiz items in `src/lib/academy/content/`. Units mostly **reference** existing content via typed refs (`quiz:<groupId>`, `glossary:<termId>`, `coach:<slug>`, `practice:<route>`, `case:<id>`, `macro:<lessonId>`, `route:<path>`); a resolver test proves every ref exists.
 - **Paper engine:** pure functions over `OHLC[]` from `samplePacks.ts` / `scenarioCharts.ts` tapes; integer cents for money, integer shares; seeded, deterministic. Fill rules are documented and test-locked (see EPICS BA4).
-- **Persistence:** new keys only — `analysis_core_academy_v1` (course + placement + options ladder), `analysis_core_paper_v1` (accounts, orders, fills), `analysis_core_rewards_v1` (ledger, badges, streak). Each has `schemaVersion` + a migration function and corruption recovery, mirroring `progressStore.ts`. Export/import through `progressSync` is an additive, tested change.
+- **Persistence:** new keys only — `analysis_core_academy_v1` (course + placement + options ladder), `analysis_core_academy_paper_v1` (accounts, orders, fills), `analysis_core_academy_rewards_v1` (ledger, badges, streak). Each has `schemaVersion` + a migration function and corruption recovery, mirroring `progressStore.ts`. Export/import through `progressSync` is an additive, tested change.
 
 ## 7. Success criteria (project Done)
 

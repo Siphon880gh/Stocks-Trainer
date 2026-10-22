@@ -15,18 +15,18 @@ Tests named per milestone live in `src/lib/academy/**/*.test.{ts,tsx}` (node:tes
 
 ## BA0 — Foundations (types, storage, refs, test harness)
 
-### [ ] BA0.M1 — Types + `test:academy` script
+### [x] BA0.M1 — Types + `test:academy` script
 - **Build:** `src/lib/academy/types.ts` (`Level`, `Course`, `Unit`, `LessonCard`, `UnitQuizItem`, `ContentRef`, `PlacementItem`, `Badge`, `PointsEvent`); `package.json` script `"test:academy": "tsx --test \"src/lib/academy/**/*.test.{ts,tsx}\""`.
 - **Accept:** types compile; `ContentRef` is a discriminated union (`quiz` / `glossary` / `coach` / `practice` / `case` / `macro` / `route`).
 - **Verify:** BASE + a deliberately failing dummy test proves the glob picks files up, then is deleted (logged in PROGRESS.md).
 
-### [ ] BA0.M2 — Content-ref resolver
+### [x] BA0.M2 — Content-ref resolver
 - **Build:** `src/lib/academy/refs.ts`: `resolveRef(ref)` → `{ ok, href, label }` using the real registries (`QUIZ_GROUPS`, `LITERACY_TERMS`, `listSessions()`, `MISC_PRACTICE_ITEMS` + practice routes, case ids, macro lesson ids, `App.tsx` route list mirrored in a constant).
 - **Accept:** unknown ids return `ok: false` with a reason; known ids return the same href the app uses today.
 - **Verify:** BASE + `refs.test.ts` (one good + one broken ref per kind; route constant ⊇ every `<Route path>` in `App.tsx`, parsed from source).
 
-### [ ] BA0.M3 — Storage + migrations
-- **Build:** `src/lib/academy/storage.ts` with the three keys (`analysis_core_academy_v1`, `analysis_core_paper_v1`, `analysis_core_rewards_v1`), injectable `KVStorage` (pattern from `macro/macroProgress.ts`), `schemaVersion`, `migrate(raw)`, corruption recovery to empty state with a message.
+### [x] BA0.M3 — Storage + migrations
+- **Build:** `src/lib/academy/storage.ts` with the three keys (`analysis_core_academy_v1`, `analysis_core_academy_paper_v1`, `analysis_core_academy_rewards_v1`), injectable `KVStorage` (pattern from `macro/macroProgress.ts`), `schemaVersion`, `migrate(raw)`, corruption recovery to empty state with a message.
 - **Accept:** never reads or writes `analysis_core_progress_v1`; v0 (missing fields) → v1 migration is lossless; corrupted JSON → empty state, `recovered: true`.
 - **Verify:** BASE + `storage.test.ts` (round-trip, migration fixtures, corruption, a spy storage proving no foreign keys are touched).
 
@@ -148,7 +148,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - **Verify:** BASE + render tests asserting numbers equal `stats.ts` outputs for a fixture session.
 
 ### [ ] BA5.M3 — Paper page with bar-replay stepping
-- **Build:** route `/paper` (`pages/academy/Paper.tsx`): pick tape + starting cash, step / auto-step bars, chart with order lines (entry, stop, limit, trailing level that moves), reset; persisted session via `analysis_core_paper_v1`.
+- **Build:** route `/paper` (`pages/academy/Paper.tsx`): pick tape + starting cash, step / auto-step bars, chart with order lines (entry, stop, limit, trailing level that moves), reset; persisted session via `analysis_core_academy_paper_v1`.
 - **Accept:** future bars never render before stepping (no-leak test); reload restores the session.
 - **Verify:** BASE + `paperPage.render.test.tsx` (leak test, restore from fake storage).
 
