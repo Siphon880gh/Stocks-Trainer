@@ -97,7 +97,7 @@ export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolba
       <div className="grid lg:grid-cols-[1fr_320px] gap-3 items-start">
         <div className="space-y-3 min-w-0">
           <div className="panel p-2">
-            <CandlestickChart data={data} height={320} markers={markers} padRightBars={4} showScaleControls={false} />
+            <CandlestickChart data={data} height={320} markers={markers} markerDecimals={2} padRightBars={4} showScaleControls={false} />
           </div>
           <AccountSummary state={state} />
           <div className="grid md:grid-cols-2 gap-3">

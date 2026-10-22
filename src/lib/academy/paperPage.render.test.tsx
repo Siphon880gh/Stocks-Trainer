@@ -198,3 +198,14 @@ test("BA11.M6 portfolios: an old store shows Main as the only portfolio; others 
   assert.ok(!html.includes('data-testid="portfolio-delete-p2"'), "the active portfolio has no delete button");
   assert.match(renderText(page(memoryStorage({ [PAPER_KEY]: JSON.stringify(store) }))), /Main · not started/);
 });
+
+test("price-marker labels on the paper chart show cents; other charts keep whole-number labels", async () => {
+  const { default: CandlestickChart } = await import("../../components/CandlestickChart");
+  const data = tape.bars.slice(0, 12).map((b, i) => ({ name: `D${i + 1}`, open: b.open / 100, high: b.high / 100, low: b.low / 100, close: b.close / 100 }));
+  const markers = [{ price: 52.15, label: "Sell stop" }];
+  assert.match(renderText(<CandlestickChart data={data} markers={markers} markerDecimals={2} />), /Sell stop 52\.15/);
+  assert.match(renderText(<CandlestickChart data={data} markers={markers} />), /Sell stop 52(?!\.)/);
+  let log = newSessionLog("trend-up", 1_000_000, START_BAR);
+  log = sessionPlace(log, { symbol: tape.symbol, side: "buy", type: "limit", limitPrice: 5215, qty: 5, tif: "gtc" }).log;
+  assert.match(renderText(page(withSession(log))), /Buy limit 52\.15/);
+});

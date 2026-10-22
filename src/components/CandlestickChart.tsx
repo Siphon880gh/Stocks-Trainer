@@ -39,6 +39,11 @@ interface CandlestickChartProps {
    * `compact` or when no bar has `volume`, so existing charts render byte-identically.
    */
   showVolume?: boolean;
+  /**
+   * Decimal places for price-marker labels. Unset = whole numbers (the original look, so existing charts render
+   * byte-identically); the paper account passes 2 so "Sell stop 52.15" shows its exact cents.
+   */
+  markerDecimals?: number;
 }
 
 /** Height (svg units) added below the price pane when the volume sub-pane is on. */
@@ -77,7 +82,9 @@ export default function CandlestickChart({
   annotations,
   padRightBars = 0,
   showVolume = false,
+  markerDecimals,
 }: CandlestickChartProps) {
+  const fmtMarker = (v: number) => (markerDecimals === undefined ? fmt(v) : v.toLocaleString(undefined, { minimumFractionDigits: markerDecimals, maximumFractionDigits: markerDecimals }));
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -341,7 +348,7 @@ export default function CandlestickChart({
                 fontSize={10}
                 fontFamily={CHART.font}
               >
-                {m.label} {fmt(m.price)}
+                {m.label} {fmtMarker(m.price)}
               </text>
             </g>
           );
