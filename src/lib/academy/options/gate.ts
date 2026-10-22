@@ -38,6 +38,18 @@ export function canAttempt(r: OptionsLadderRecord, l: LadderLevel, now: Date): {
 
 export const acknowledge = (r: OptionsLadderRecord, l: LadderLevel, now: Date): OptionsLadderRecord => (r.acknowledged[String(l)] ? r : { ...r, acknowledged: { ...r.acknowledged, [String(l)]: now.toISOString() } });
 
+export type AfterCheck = { kind: "passed" } | { kind: "retry"; remaining: number } | { kind: "blocked"; reason: AttemptBlock; nextAt?: string };
+
+/**
+ * What the check panel offers once a result is on screen. A failed check with attempts left
+ * offers a retry; with none left it says why and when. (QA: the panel used to dead-end.)
+ */
+export function afterCheck(r: OptionsLadderRecord, l: LadderLevel, now: Date): AfterCheck {
+  if (isOptionsLevelPassed(r, l)) return { kind: "passed" };
+  const g = canAttempt(r, l, now);
+  return g.ok ? { kind: "retry", remaining: g.remaining } : { kind: "blocked", reason: g.reason!, ...(g.nextAt ? { nextAt: g.nextAt } : {}) };
+}
+
 /** Records one attempt (only when allowed); a pass sets `passed` once. Returns the record unchanged when blocked. */
 export function recordOptionsAttempt(r: OptionsLadderRecord, l: LadderLevel, passed: boolean, now: Date): OptionsLadderRecord {
   if (!canAttempt(r, l, now).ok) return r;

@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { CHECK_PASS, OPTIONS_CHECKS, checksForLevel, gradeChecks, metricValue } from "./checks";
-import { LADDER, MAX_ATTEMPTS, WINDOW_MS, acknowledge, canAttempt, isOptionsLevelUnlocked, recordOptionsAttempt } from "./gate";
+import { LADDER, MAX_ATTEMPTS, WINDOW_MS, acknowledge, afterCheck, canAttempt, isOptionsLevelUnlocked, recordOptionsAttempt } from "./gate";
 import { getStrategy } from "./ladder";
 import { summarize } from "./payoff";
 import { emptyAcademy } from "../storage";
@@ -100,4 +100,20 @@ test("no Greeks, chain or volatility-surface wording in any academy options file
   }
   assert.ok(files.length >= 4);
   for (const f of files) assert.doesNotMatch(readFileSync(f, "utf8"), /\b(delta|gamma|theta|vega)\b|implied volatility surface|option chain/i, f);
+});
+
+// QA regression: after a failed check the panel had no way to start the next attempt (only a reload did).
+test("afterCheck: retry while attempts remain, then blocked with a time, passed once passed", () => {
+  let r = acknowledge(fresh(), 1, T0);
+  r = recordOptionsAttempt(r, 1, false, T0);
+  assert.deepEqual(afterCheck(r, 1, T0), { kind: "retry", remaining: MAX_ATTEMPTS - 1 });
+  r = recordOptionsAttempt(r, 1, false, at(1000));
+  r = recordOptionsAttempt(r, 1, false, at(2000));
+  const b = afterCheck(r, 1, at(3000));
+  assert.equal(b.kind, "blocked");
+  assert.equal(b.kind === "blocked" && b.reason, "too-many-attempts");
+  assert.equal(b.kind === "blocked" && b.nextAt, new Date(T0.getTime() + WINDOW_MS).toISOString());
+  assert.deepEqual(afterCheck(r, 1, at(WINDOW_MS + 1)), { kind: "retry", remaining: 1 });
+  const p = recordOptionsAttempt(acknowledge(fresh(), 1, T0), 1, true, T0);
+  assert.deepEqual(afterCheck(p, 1, T0), { kind: "passed" });
 });

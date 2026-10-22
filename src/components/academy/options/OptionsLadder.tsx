@@ -4,7 +4,7 @@ import type { AnswerLetter } from "../../../lib/academy/types";
 import { LADDER_LEVELS, strategiesForLevel, type LadderLevel } from "../../../lib/academy/options/ladder";
 import { fmtUsd, summarize } from "../../../lib/academy/options/payoff";
 import { CHECK_PASS, checksForLevel, gradeChecks } from "../../../lib/academy/options/checks";
-import { LADDER, MAX_ATTEMPTS, acknowledge, canAttempt, isOptionsLevelPassed, isOptionsLevelUnlocked, recordOptionsAttempt } from "../../../lib/academy/options/gate";
+import { LADDER, MAX_ATTEMPTS, acknowledge, afterCheck, canAttempt, isOptionsLevelPassed, isOptionsLevelUnlocked, recordOptionsAttempt } from "../../../lib/academy/options/gate";
 import { OPTIONS_RISK_STATEMENT } from "../../../lib/academy/copy";
 import { loadAcademy, saveAcademy, type KVStorage } from "../../../lib/academy/storage";
 import { resolveRef } from "../../../lib/academy/refs";
@@ -107,6 +107,11 @@ export default function OptionsLadder({ storage, now = () => new Date(), initial
                     ))}
                   </div>
                 ) : null}
+                {passed && result?.level === l ? (
+                  <p className="text-[13px] font-semibold text-up border-t border-line pt-3" data-testid="check-result">
+                    {result.correct}/{result.total} · Level {l} passed{l < LADDER.length ? ` · level ${l + 1} is open` : ""}
+                  </p>
+                ) : null}
                 {!passed ? (
                   <div className="space-y-2 border-t border-line pt-3">
                     <label className="flex items-start gap-2 text-[13px]">
@@ -150,9 +155,31 @@ export default function OptionsLadder({ storage, now = () => new Date(), initial
                             Check my answers
                           </button>
                         ) : (
-                          <p className={cn("text-[13px] font-semibold", result.passed ? "text-up" : "text-accent-red")} data-testid="check-result">
-                            {result.correct}/{result.total} · {result.passed ? `Level ${l} passed` : "Not passed yet"}
-                          </p>
+                          <div className="space-y-2">
+                            <p className={cn("text-[13px] font-semibold", result.passed ? "text-up" : "text-accent-red")} data-testid="check-result">
+                              {result.correct}/{result.total} · {result.passed ? `Level ${l} passed` : "Not passed yet"}
+                            </p>
+                            {(() => {
+                              const next = afterCheck(rec, l, now());
+                              if (next.kind === "retry")
+                                return (
+                                  <button type="button" onClick={() => { setAnswers({}); setResult(null); }} className="px-3 py-1.5 rounded-md border border-line text-[13px]" data-testid={`retry-check-${l}`}>
+                                    Try again ({next.remaining} left in 24 h)
+                                  </button>
+                                );
+                              if (next.kind === "blocked")
+                                return (
+                                  <p className="text-[12px] text-muted" data-testid={`blocked-check-${l}`}>
+                                    {BLOCK_TEXT[next.reason]}
+                                    {next.nextAt ? ` Next attempt after ${new Date(next.nextAt).toLocaleString()}.` : ""}{" "}
+                                    <button type="button" onClick={() => { setOpen(null); setAnswers({}); setResult(null); }} className="underline">
+                                      Close
+                                    </button>
+                                  </p>
+                                );
+                              return null;
+                            })()}
+                          </div>
                         )}
                       </div>
                     ) : (
