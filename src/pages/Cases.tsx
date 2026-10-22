@@ -183,7 +183,11 @@ export default function Cases() {
           <Link to="/coach/chase-vs-fade" className="underline text-primary">
             walk through chase vs fade
           </Link>{" "}
-          before the company-news cases.
+          before the company-news cases. Options:{" "}
+          <Link to="/practice/gamma-squeeze" className="underline text-primary" data-testid="cases-gamma-squeeze">
+            gamma squeeze case (SIMULATED)
+          </Link>
+          .
         </p>
 
         {orderedPacks.map((meta) => {

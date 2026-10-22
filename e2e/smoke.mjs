@@ -288,6 +288,31 @@ const flows = {
     await p.goto(base + "/training?group=chart-patterns", { waitUntil: "networkidle" });
     check(/Chart, Gap & Volume Patterns/.test(await p.locator("main").innerText()), `chart patterns: Learn group missing @${w}`);
   },
+
+  async "Gamma squeeze case: enter, size, exit, reveal, stall counterfactual, points"(p, w) {
+    await p.goto(base + "/practice/gamma-squeeze", { waitUntil: "networkidle" });
+    check(/not always net short/.test(await p.getByTestId("sqz-tldr").innerText()), `squeeze: TL;DR missing @${w}`);
+    check((await p.getByTestId("sqz-reveal").count()) === 0, `squeeze: reveal shown before the decisions @${w}`);
+    for (const [step, choice] of [["enter", "plan"], ["size", "small"], ["exit", "sell"]]) {
+      await p.getByTestId(`sqz-step-${step}`).locator(`[data-choice="${choice}"]`).click();
+    }
+    const grade = await p.getByTestId("sqz-grade").innerText();
+    check(/Sound process/.test(grade) && /30 \/ 30/.test(grade) && /\+10 progress points/.test(grade), `squeeze: grade/points wrong (${grade}) @${w}`);
+    const reveal = await p.getByTestId("sqz-reveal").innerText();
+    check(/25 contracts/.test(reveal) && /\$5,075/.test(reveal), `squeeze: reveal numbers wrong @${w}`);
+    check(/whole \$200 is gone/.test(await p.getByTestId("sqz-stall").innerText()), `squeeze: stall panel missing @${w}`);
+    check((await p.getByTestId("sqz-stall-chart").count()) === 1, `squeeze: stall value chart missing @${w}`);
+    const progress = await stored(p, "analysis_core_progress_v1");
+    check(!!progress && JSON.stringify(progress).includes("gamma-squeeze"), `squeeze: case result not saved @${w}`);
+    check((await overflow(p)) <= 1, `squeeze overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/gamma-squeeze-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=squeezes", { waitUntil: "networkidle" });
+    check(/Squeezes, Options Flow & Survivorship/.test(await p.locator("main").innerText()), `squeeze: Learn group missing @${w}`);
+    await p.goto(base + "/coach/chasing-a-squeeze", { waitUntil: "networkidle" });
+    const sqGate = p.getByRole("button", { name: "Browse this session" });
+    if (await sqGate.count()) await sqGate.click();
+    check(/Chasing a squeeze/.test(await p.locator("body").innerText()), `squeeze: coach session missing @${w}`);
+  },
 };
 
 
