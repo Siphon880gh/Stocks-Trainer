@@ -24,3 +24,28 @@ Append-only. Playwright flows on a temp dev server (port 3078), headless Chrome 
 | `npm run test:e2e` (new, not in verify) | Own Vite server on a free port from 3190, 6 regression flows × 2 widths, 34 checks, server closed after. | `e2e/smoke.mjs` |
 | Coach, all 71 sessions, 390 | 71 / 71 clean, same path as 1280; no console errors or overflow. | — |
 | EMA / MACD lab `/practice/ema-macd`, 390 and 1280 | Three chart tabs, every question answered: feedback, D-mark line, score line, `ema-macd` saved in misc practices done; no console errors, no horizontal overflow. | New page; `emaMacdPage.test.tsx` |
+
+## 2026-10-22 Weng's delegation: decisions on the six logged behaviours
+
+Weng: "Make your own picks. Continue your work." Implemented as decided, one commit each, with regression tests. Below, "Before" is the behaviour the interaction QA above logged.
+
+| # | Before | Decision, as built | Tests |
+|---|---|---|---|
+| 1 | A 50% Learn quiz still completed its milestone | `QUIZ_PASS_PCT = 70`. Below that, the attempt is recorded (`score`, `bestScore`, new `attempts`), the milestone and the next one stay as they were, and the last question shows "Score 70% to complete". Saved completions (even old ones under 70%) are never revoked. E10 drill flags use the same pass mark. | `progressStore.test.ts` (6 new); e2e quiz flow |
+| 2 | Cases gave no points | `CASE_POINTS` correct 10 / partial 5 / incorrect 1, mapped onto the existing case grades and paid once per case into `scores.totalPoints` (`pointsAwarded` on the case record). Replays pay nothing; the reveal says "+n pts · paid once per case" or "Replay · no new points". A case saved before points existed pays once on its next play. | `progressStore.test.ts` (3), `casePoints.render.test.tsx`; e2e |
+| 3 | Today gave +5 even for a wrong answer | +5 correct, +1 wrong (`POINTS.dailyAttempt`). Either answer counts toward the Day streak, and the flash names which award applied. | `today.render.test.tsx`; e2e |
+| 4 | "Streak" meant two things | Labels only: "Answer streak" (quiz answers right in a row) on Home, Learn and the quiz header; "Day streak" in the Academy (rewards panel, Today card). Each has a tooltip. Constants are in `src/lib/streakLabels.ts`, and the docs are updated. The logic is unchanged. | `streakLabels.render.test.tsx`; e2e |
+| 5 | A half-played challenge was not saved | Paper key schema v2: `challengeProgress[challengeId]` holds the run's session log after every move. The v1 → v2 migration is lossless (all v1 fields kept, empty `challengeProgress`), and the load guard is per key. On return, Resume / Restart; the list shows "in progress". Finishing or restarting clears it. A saved log that no longer fits its challenge (tape, cash, window, or can't replay) is ignored. | `challengeProgress.test.tsx` (4); e2e |
+| 6 | Glossary ⓘ nested inside choice buttons | In buttons and links, `<JargonText plain>` shows the term with a dotted underline, and the ⓘ becomes its own labelled `<button>` beside the control (`WithGlossary` / `GlossaryButtons`), with stopPropagation. It is 44 × 44 px on mobile and comes right after the choice in Tab order; a tap pins the tip open. Applied in Learn quiz options, Coach choices, the answer sheet, Scan patterns, Archive terms and patterns, Flashcards, and the Cases / Coach / Playbooks list cards. | `glossaryButtons.test.tsx`, including a source guard that fails if any `<JargonText>` inside a button / link / label lacks `plain` (checked by reverting one site) |
+
+Spot checks after the changes (dev server on 3078, stopped after):
+
+| Flow | Result |
+|---|---|
+| Coach, all 71 sessions, **centre** tap on every choice, 390 and 1280 | 71 / 71 clean at both widths. The old script needed a click at the left edge because a centre tap hit the ⓘ; it no longer does. |
+| Coach choice with a term (`chart-soft-gate`) | ⓘ 44 × 44 at 390 (32 × 28 at 1280). Tapping it opens the tip without choosing. Tab from the choice lands on "About The tape", and a centre tap picks the choice. |
+| Quiz 12 × option A, case BUY, half-played challenge reload, Today wrong answer, Archive terms; 390 and 1280 | Pass line, case points, Resume / Restart, the +1 flash and the Day streak all show; no console errors, no overflow. |
+| **Bug found and fixed:** the Academy hub's rewards panel was stale after the Today answer ("Day streak 0" under a card saying "Day streak 1") | `TodayCard onAward` refreshes the panel (9910291). Also fixed "1 practice points" (6aac9b6). |
+| `npm run test:e2e` | 97 checks, 0 failed (6 new flows × 2 widths); its own server on 3190 closed after. |
+
+Screenshots (box only, not committed): `/workspace/checkpoints/qa/weng-1022-dec{1..6}-*-{390,1280}.png`.

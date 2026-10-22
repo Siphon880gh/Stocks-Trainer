@@ -34,7 +34,7 @@ Middle of file:
 - `INDICATOR_QUIZ_QUESTIONS` — identify which overlay is shown (`overlayId`).
 
 Near the end:
-- `POINTS_PER_CORRECT = 50`, `STREAK_BONUS = 10`.
+- `POINTS_PER_CORRECT = 50`, `STREAK_BONUS = 10`. A mapped group completes its milestone only at `QUIZ_PASS_PCT` (70%) or better (progressStore); cases pay `CASE_POINTS` (10 / 5 / 1) once per case.
 - `QuizGroupId` / `QUIZ_GROUPS` — path groups (`equity-literacy`, `financial-literacy`, `indicators`, `news-literacy`, `financial-drills`) plus pattern families.
 - `CANDLE_READING_QUESTIONS` (`candle-reading`, ids `OC-`) — one-candle reads (price rejected, stability, indecision, strong move). Series are `PATTERN_OHLC["candle-rejected-high"|"candle-rejected-low"|"candle-stable-*"|"candle-indecision-*"|"candle-bulls-win"|"candle-bears-win"]`, marked candle at index 3; glossary ids `wick-rejection`, `full-body-candle`, `indecision-candle`, `strong-move-candle`. Optional `priceMarkers` on a question draws labeled lines (e.g. Open / Close) on the hero chart.
 - `PATTERN_BOOK_QUESTIONS` (`candle-pattern-book`, ids `PB-NN`) — reading rules from the candlestick pattern-book lessons (origin, real body, hollow/filled, prior trend, confirmation/invalidation, 50% rules, reversal vs continuation). Family drills for the book's extra patterns live in `QUIZ_QUESTIONS` (ids `PB-MARU-`, `PB-ST-`, `PB-BH-`, `PB-TIO-`, `PB-CA-`, `PB-CONT-`) and are grouped by `patternKeysForGroup`: `doji` (+`spinning-top`), `harami` (+`bearish-harami`), `marubozu`, `three-inside-outside`, `counterattack-on-neck`, `continuation-methods`.
@@ -143,6 +143,6 @@ Archive (?tab,&open) → PATTERNS / OVERLAYS → detail modals
 | Options ladder | `options/` (payoff, ladder, checks, gate), `components/academy/options/*`, `pages/academy/OptionsLadder.tsx` | payoff at expiration only (no chain or Greeks); 4 levels, 8 checks each, 3 attempts per 24 h |
 | Today card | `today.ts`, `components/academy/TodayCard.tsx` | deterministic daily picks; the review answer (right +5, wrong +1) counts as the Day streak day |
 | Home / Learn / Coach | `homeTip.ts`, `AcademyHomeTip.tsx`, `AcademyTrainingCard.tsx`, `coaching/sessions/first-paper-trade.ts` | additive lines in Dashboard.tsx and Training.tsx; no header nav item |
-| Storage | `storage.ts` | `analysis_core_academy_v1`, `analysis_core_academy_paper_v1`, `analysis_core_academy_rewards_v1`, each with schemaVersion + migrate |
+| Storage | `storage.ts` | `analysis_core_academy_v1`, `analysis_core_academy_paper_v1`, `analysis_core_academy_rewards_v1`, each with schemaVersion + migrate (paper is v2 since 2026-10-22: `challengeProgress` for half-played challenges, `challengeProgress.ts`; the others v1) |
 | Tests | `npm run test:academy` (`src/lib/academy/**/*.test.{ts,tsx}`), incl. `floors.test.ts` (charter floors) and `academyRoutes.render.test.tsx` (every academy href resolves) | |
 
