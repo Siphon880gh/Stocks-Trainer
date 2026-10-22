@@ -72,7 +72,7 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 ### 2026-10-21 05:32 PT · MF6.M1.S1–MF6.M2.S1 · PASS
 - Changed: src/lib/macro/lessons.ts (18 lessons), lessons.test.ts, quiz/groups.ts (group ids + labels, questions follow in MF7), pages.test.tsx; src/components/macro/LessonViewer.tsx; src/pages/macro/{MacroDesk,MacroLesson,MacroPlay}.tsx; src/App.tsx (+10/−0: 3 imports + routes /macro, /macro/play, /macro/:lessonId after the existing playbooks routes; the sibling’s practice routes untouched)
 - Verify: lint 0 · test:coaching 24/24 · src/lib tests 63/63 · test:macro 59/59 · test:financials 231/231 · temp build ok · dist/ untouched
-- Milestone-specific: 18 lessons across 6 families, 16 distinct primary sources; every source / alsoSee / viewer / event / round / quiz group / glossary id resolves; all 18 lesson pages render (MemoryRouter) with the real-source link before the SIMULATED look-alike, the quiz deep-link and no NaN/undefined; unknown id → not-found card; /macro/play renders round 1. Event picker drives both the look-alike and the expectations panel.
+- Milestone-specific: 18 lessons across 6 families, 17 distinct primary sources; every source / alsoSee / viewer / event / round / quiz group / glossary id resolves; all 18 lesson pages render (MemoryRouter) with the real-source link before the SIMULATED look-alike, the quiz deep-link and no NaN/undefined; unknown id → not-found card; /macro/play renders round 1. Event picker drives both the look-alike and the expectations panel.
 - Screens (informational, temp dev server :3017, stopped): checkpoints/mf6-macro-hub.png, mf6-lesson-employment-situation.png, mf6-lesson-fomc-decision.png, mf6-lesson-treasury-curve.png, mf6-macro-play.png
 - Next: MF7.M1.S1
 

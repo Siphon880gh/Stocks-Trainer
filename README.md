@@ -66,6 +66,15 @@ Other market types ship as SAMPLE browse (**E9**). **E10** adds a **Market Navig
 | **Muscle memory** | Sketch a candle template, get a coarse grade | Practice Draw | Grade + last-attempt restore |
 | **Keep progress local** | Name, export/import JSON | Home **Account** | Import restores; no fake cloud sync |
 | **Step coaching** *(E11)* | Fail → explain → rewind → succeed on a topic graph | `/coach` catalog + session (no LLM) | Reach a success node; path trail shows choices |
+| **Candles & patterns** | Candle anatomy, one-candle reads, the pattern book, advanced & rare patterns | Learn · **Candlestick Basics** · **Reading One Candle** · **Candlestick Pattern Book** · **Advanced & Rare Patterns** | Quiz passed (70%); pattern links open Archive |
+| **Buy or Sell?** | Call buy / sell / wait on a pattern or scenario, on large SAMPLE charts | Learn · **Buy or Sell?** | Reveal explains the call and when waiting is right |
+| **Price action & trade management** | Supply / demand zones, entry types, stops at invalidation, targets, trailing stops | Learn · **Price Action** · **Supply & Demand Zones** | Quiz passed; plan has an invalidation |
+| **Financials & earnings** | Read statements, a 13-week cash forecast, earnings previews and reactions | Learn · **Financials & earnings** card → Statements lab · Read the Print · Mark the Band | Reveal scores the call; nothing about the actuals before it |
+| **Macro releases** | Read an economic release, consensus vs actual, how rates / dollar / stocks react | **Macro Desk** (`/macro`) + 5 Learn groups | Lesson done; reaction rounds scored |
+| **Beginner Academy** | Webull-style beginner training: short units, checks, paper trading, challenges, rewards | **Academy** (`/academy`) · **Paper trading** (`/paper`) | Units mastered; level test-out; Day streak |
+| **Options basics** *(education only)* | Covered calls to spreads, one level at a time | **Options ladder** (`/academy/options`) | Level check passed (80%); approves nothing |
+| **Strategy kits** | One setup from an authoritative source: strategy, coaching, case, chart | **Playbooks** (`/playbooks`) | Kit read; linked case / coach opened |
+| **Indicator & chart labs** | EMA / SMA / MACD on long charts; levels, lookalikes, invalidation, replay | Practice labs (`/practice/*`) | Lab round scored; done mark on Learn |
 
 ---
 
@@ -129,8 +138,12 @@ Follow these in order the first time you learn; later, jump to the objective you
 | **UF-16 News literacy** *(E10)* | Headline skill | Learn **News Literacy** → finish quiz → Home **News literacy complete** |
 | **UF-17 Multi-market case** *(E10)* | Learn by deciding | Navigator → Futures or Forex **Decide cases** → BUY/SELL/HOLD → reveal |
 | **UF-18 Step coaching** *(E11)* | Fail-and-learn wizard | `/coach` → open session → **Wrong · review** rewind → **Success** restart |
+| **UF-19 Read the Print** *(FE)* | Financials & earnings | Learn **Financials & earnings** → **Read the Print** → call the reaction → follow-through → reveal; Statements lab · Mark the Band |
+| **UF-20 Macro Desk** *(MF)* | Macro releases | Learn **Macro Desk** → lesson → **Visit the real source** → SIMULATED look-alike → consensus vs actual → reaction round; `/macro/play` |
+| **UF-21 Academy** *(BA)* | Beginner Academy | Home placement card → `/academy` → unit → 3-question check → test-out; **Today in the Academy** card |
+| **UF-22 Paper & options** *(BA)* | Paper trading · options basics | `/paper` order ticket → step / auto-play → `/paper/challenges` → `/academy/options` |
 
-Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flows.md). E11 coaching QA is **UF-18**.
+Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flows.md). E11 coaching QA is **UF-18**; financials, Macro Desk and Academy are **UF-19**–**UF-22**.
 
 ---
 
@@ -147,6 +160,9 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | Only chart / indicator practice | Either path, or Market alone | UF-08, UF-04, UF-10, UF-09 |
 | Only theory lookup | Any | UF-09 |
 | Save / move progress on this device | Any | UF-12 |
+| Brand new to investing, step by step | **Beginner Academy** (`/academy`) | UF-21 → UF-22 |
+| Economic releases and rates | **Macro Desk** (`/macro`) | UF-20 |
+| Earnings and financial statements | **Financials & earnings** card on Learn | UF-19 + UF-05 |
 
 **Coaching queue:** `step_coaching_order` · epic **E11** · loop [`AGENTS_LOOP-Step-Coaching.md`](./AGENTS_LOOP-Step-Coaching.md).
 
@@ -156,20 +172,84 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 
 | Route | Role |
 |-------|------|
-| `/` | Home · GoalPicker · path CTA · Account |
-| `/training` | Learn (literacy, indicators, pattern drills, answer sheet) |
+| `/` | Home · GoalPicker · path CTA · Account · Academy placement + **Today** card · Macro tip |
+| `/training` | Learn (literacy, indicators, pattern drills, answer sheet) · Macro Desk, Financials & earnings, Academy and practice cards |
 | `/market` | Charts · Market navigator · SAMPLE / DELAYED overlays |
 | `/archive` | Patterns · Indicators · Literacy |
 | `/cases` · `/cases/:caseId` | Decide-and-reveal case library |
 | `/practice-draw` | Sketch + grade |
+| `/practice/flashcards` · `/practice/label` · `/practice/regime` · `/practice/replay` · `/practice/plan` · `/practice/hunt` · `/practice/lookalike` · `/practice/invalidation` · `/practice/levels` | Practice labs (flashcards, labelling, trend vs range, bar replay, mark the plan, pattern hunt, lookalikes, invalidation, support & resistance) |
+| `/practice/ema-macd` | EMA, SMA and MACD lab on long SIMULATED charts |
+| `/practice/statements` | Statements lab · 13-week cash forecast · biotech readout day |
+| `/practice/read-the-print` · `/practice/mark-the-band` | Earnings reaction game · expected-move band |
 | `/coach` · `/coach/:slug` | Step-by-step coaching (decision trees · no LLM) |
-| `/playbooks` · `/playbooks/:id` | Playbooks — strategy kits from a source URL (four collapsed panels) |
+| `/playbooks` · `/playbooks/:id` | Playbooks — 12 strategy kits, each from fetched source URLs (four collapsed panels: Strategy · Coaching · Case study · Chart look) |
+| `/macro` · `/macro/:lessonId` | Macro Desk — lessons, yield-curve explorer, quiz groups |
+| `/macro/play` | Macro reaction game |
+| `/academy` · `/academy/:unitId` · `/academy/test-out/:levelId` | Beginner Academy — level map, units, level test-outs, rewards |
+| `/academy/options` | Options ladder (education only) |
+| `/paper` · `/paper/challenges` · `/paper/challenges/:challengeId` | Paper trading (SIMULATED) · challenges |
 
-Chrome: **Home** · **Learn** · **Charts** · **Cases** · **Coach** · **Playbooks**.
+Chrome: **Home** · **Learn** · **Charts** · **Cases** · **Coach** · **Playbooks**. On phones (below the `sm` breakpoint) the nav gets its own full-width row under the logo. Macro Desk, Academy, paper trading, financials and the practice labs open from their cards on Learn (and Home).
 
 Teaching formats (quiz, step-by-step, playbook, case, chart pack, reference, practice, snapshot): [`RESOURCES.md`](./RESOURCES.md).
 
-Progress is stored locally (`localStorage` key `analysis_core_progress_v1`).
+Progress is stored locally (`localStorage` key `analysis_core_progress_v1`). Newer areas keep their own keys: `analysis_core_academy_v1`, `analysis_core_academy_paper_v1`, `analysis_core_academy_rewards_v1`, `analysis_core_read_the_print_v1`, `analysis_core_misc_practices_done_v1`, `macro_desk_progress_v1`.
+
+---
+
+## 7. Feature guide
+
+Everything below uses SAMPLE, STYLIZED or SIMULATED data. No live prices, no broker, no real orders.
+
+### Macro Desk (`/macro`)
+
+- **18 lessons** in 6 families: jobs & labor, inflation, growth & spending, the Fed, rates & the dollar, housing & mortgages.
+- Each lesson: **Visit the real source** (official agency site, new tab) → a **SIMULATED look-alike** of the release (16 screen layouts, fictional numbers, no agency logo) → **consensus vs actual** with the surprise → a reaction round.
+- 43 SIMULATED release events across 14 release kinds, each with consensus and actual; 21 also show the **prior revised**, and payrolls show the two-month revision.
+- **44 real sources** listed in [`SOURCES.md`](./docs/projects/macro-forces/SOURCES.md); `npm run check:macro-sources` fetches them (bot-blocked hosts are checked by hand).
+- **Yield-curve explorer:** move the 2-year and 10-year yields and the mortgage spread; the curve shape and the monthly payment on a $400k loan update.
+- **Reaction game** (`/macro/play`): **29 rounds** across **6 environments** (inflation worry, overheating, Fed pivot watch, goldilocks, growth scare, recession fear). Predict the 2y and 10y yields, the dollar, the index and one sector (up / down / muted). Some rounds are **muted** (in line, or mixed details) and some **reverse** after the first move.
+- **In Learn and Training:** 70 questions in 5 groups (**Reading Macro Releases**, **Rates & the Yield Curve**, **Fed Policy & Pricing**, **Housing & Mortgage Rates**, **Macro Market Reactions**), 50 macro glossary terms in Archive, a **Macro Desk** card, and 5 macro cases that link to their lesson and real release.
+- **Extras:** Coach session **CPI morning** (`/coach/cpi-morning`) and a Macro Desk tip on Home.
+
+### Beginner Academy (`/academy`)
+
+Beginner training modelled on how broker apps such as Webull teach new investors, rebuilt with original content:
+
+- **Placement check** (12 questions) on Home picks a start level, or start from zero.
+- **8 levels, 43 units**: short cards and a 3-question check per unit (129 items); a level **test-out** at 85%. Chips link into Learn groups, glossary, Coach and Cases.
+- **Today in the Academy** card: next unit, term of the day, challenge of the week and one review question (+5 points correct, +1 for answering; counts toward the **Day streak**).
+- **Paper trading** (`/paper`, SIMULATED): 8 SAMPLE tapes; market, limit, stop, stop-limit and trailing-stop orders (Day / GTC); **bracket / OCO** exits; **short selling**; **fractional and dollar** buys; **fees and slippage**; a **trade journal with CSV export**; **multiple portfolios**.
+- **Challenges** (`/paper/challenges`): 10 challenges plus a challenge of the week; a half-played challenge is saved with **Resume** / **Restart**.
+- **Rewards:** virtual points, 10 ranks and 24 badges.
+- **Options ladder** (`/academy/options`): 4 levels, 13 strategies with P&L-at-expiration charts; each level opens after an 8-question check (80%, 3 attempts per 24 h). It approves nothing.
+- Learn groups **Orders & Fills**, **Paper P&L**, **Options Ladder**, and Coach **Your first paper trade**.
+
+### Financials & earnings
+
+- **Statements lab** (`/practice/statements`): income, balance, cash flow, metrics and story tabs for 5 fictional companies (SaaS, retail, industrial, **regional bank**, **clinical-stage biotech**), a **13-week cash forecast** with what-ifs, and a biotech readout day.
+- **Read the Print** (`/practice/read-the-print`): 22 rounds — read the preview, call the reaction and the follow-through, then the reveal.
+- **Mark the Band** (`/practice/mark-the-band`): 22 rounds — set the expected-move band before the report, then mark the fill.
+- Learn groups **Earnings Desk Language**, **Reading the Statements**, **13-Week Cash Forecast**, **Earnings Preview**, **Earnings Reactions**; Coach **Earnings week**; earnings cases link to similar Read the Print rounds.
+
+### Candles, patterns and price action
+
+- **102 patterns** (17 rare) in Archive. Learn groups **Candlestick Basics**, **Reading One Candle**, **Candlestick Pattern Book** (16 more patterns) and **Advanced & Rare Patterns** (23 patterns).
+- **Buy or Sell?** drill: 119 questions — patterns, wait cases and scenarios; reveals use large charts.
+- **Supply & Demand Zones** and **Price Action**, including trade management: entry types, stops at invalidation, targets and trailing stops.
+- **EMA, SMA and MACD lab** (`/practice/ema-macd`): 3 long SIMULATED charts (120 bars) with 11 questions computed from the chart.
+
+### Playbooks (`/playbooks`)
+
+12 kits, each built from fetched authoritative sources: gap and go, hold above the average, swing bias from the long average, reclaim the short average, covered call, cash-secured put, protective put, dollar-cost averaging, rebalance to a target mix, stop vs stop-limit on a gap, short sale with a buy stop, and futures offset / roll / settlement. `npm run check:playbook-sources` re-checks the URLs.
+
+### Progress rules
+
+- A Learn quiz counts as **passed at 70%**.
+- A case awards points **once per case** (10 correct · 5 partial · 1 incorrect); replays award 0.
+- **Answer streak** = correct answers in a row; **Day streak** (Academy) = days with a Today answer.
+- The **content graph** test (`npm run test:content`) checks that the links between Learn, Archive, Practice, Cases, Coach and Home still resolve.
 
 ---
 
@@ -181,7 +261,18 @@ Progress is stored locally (`localStorage` key `analysis_core_progress_v1`).
 | `npm run build` | Production build → `dist/` |
 | `npm run preview` | Preview production build |
 | `npm run lint` | TypeScript check |
+| `npm run start` | Serve the built app on `$PORT` (required) |
 | `npm run test:coaching` | E11 coaching validate/nav/path tests |
+| `npm run test:lib` | Unit tests in `src/lib` (includes the content graph) |
+| `npm run test:financials` | Financials & earnings tests |
+| `npm run test:macro` | Macro Desk tests |
+| `npm run test:academy` | Beginner Academy, paper engine and options ladder tests |
+| `npm run test:content` | Content graph only (cross-links and deep-link ids) |
+| `npm run check:macro-sources` | Fetch the Macro Desk real-source URLs |
+| `npm run check:playbook-sources` | Fetch the Playbook source URLs |
+| `npm run check:build` | Production build into a temp folder (leaves `dist/` alone) |
+| `npm run verify` | lint + test:coaching + test:lib + test:financials + test:macro + test:academy + check:build |
+| `npm run test:e2e` | Browser smoke at 390 and 1280 px on a temp port (needs `playwright-core` + Chrome; not in verify) |
 | `npm run clean` | Remove `dist/` |
 
 ---
