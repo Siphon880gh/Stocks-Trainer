@@ -31,6 +31,7 @@ import { NARRATIVE_QUESTIONS } from "./techniqueNarratives";
 import { MW_QUESTIONS } from "./missingWicks";
 import { RT_QUESTIONS } from "./recordTraders";
 import { THEME_QUESTIONS } from "./patternThemes";
+import { EC_QUESTIONS } from "./essentialCandles";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5408,6 +5409,7 @@ export type QuizGroupId =
   | "missing-wicks"
   | "record-traders"
   | "pattern-themes"
+  | "essential-candles"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5553,6 +5555,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Pattern Themes",
     description: "The 17 functional themes behind candlestick and chart patterns: continuation, reversal, compression, rejection, gaps, traps, confirmation and the pre-trade hierarchy.",
     icon: "hub",
+  },
+  {
+    id: "essential-candles",
+    name: "Essential Candles",
+    description: "The 16 candlestick patterns every trader should know, the morning and evening star 50% rule, inside bars, harami vs engulfing and the context rules.",
+    icon: "candlestick_chart",
   },
   {
     id: "candle-anatomy",
@@ -5761,6 +5769,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "missing-wicks") return MW_QUESTIONS;
   if (groupId === "record-traders") return RT_QUESTIONS;
   if (groupId === "pattern-themes") return THEME_QUESTIONS;
+  if (groupId === "essential-candles") return EC_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5803,6 +5812,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "missing-wicks") return MW_QUESTIONS;
   if (groupId === "record-traders") return RT_QUESTIONS;
   if (groupId === "pattern-themes") return THEME_QUESTIONS;
+  if (groupId === "essential-candles") return EC_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;

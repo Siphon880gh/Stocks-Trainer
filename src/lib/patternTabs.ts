@@ -11,6 +11,7 @@ import { confirmationBar, PATTERN_OHLC, type OHLC } from "./ohlcData";
 import { getPattern, type PatternDef } from "./patterns";
 import { getBookPattern } from "./chartPatternBook";
 import { REVERSAL_TABS } from "./reversalCharts";
+import { ESSENTIAL_TABS } from "./essentialCandles";
 
 export const NOT_A_GUARANTEE =
   "Not a guarantee: patterns shift the odds a little at best, and many fail. Size the trade so the stop is a loss you can take.";
@@ -362,6 +363,8 @@ function generalTabs(def: PatternDef): PatternTabs {
 }
 
 export function patternTabs(def: PatternDef): PatternTabs {
+  const ess = ESSENTIAL_TABS[def.id];
+  if (ess) return ess;
   const core = getCorePattern(def.id);
   if (core) return { ...core.tabs, general: false };
   const book = getBookPattern(def.id);

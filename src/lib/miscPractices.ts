@@ -34,6 +34,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "missing-wicks", title: "Missing wicks and zooming in", to: "/practice/missing-wicks" },
   { id: "record-traders", title: "Record-setting traders", to: "/practice/record-traders" },
   { id: "pattern-themes", title: "Pattern themes", to: "/practice/pattern-themes" },
+  { id: "essential-candles", title: "Essential candlestick patterns", to: "/practice/essential-candles" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

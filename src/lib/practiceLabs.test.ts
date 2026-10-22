@@ -56,6 +56,7 @@ describe("misc practice catalog", () => {
       "Missing wicks and zooming in",
       "Record-setting traders",
       "Pattern themes",
+      "Essential candlestick patterns",
     ]);
   });
 });

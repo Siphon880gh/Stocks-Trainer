@@ -73,7 +73,9 @@ function isMorningStar(data: OHLC[], i: number): boolean {
   const thirdUp = third.close > third.open;
   const thirdBody = Math.abs(third.close - third.open);
   const firstBody = Math.abs(first.close - first.open);
-  return firstDown && midSmall && thirdUp && thirdBody > firstBody * 0.5;
+  // 50% rule: the third candle must close above the midpoint of the first candle's body.
+  const firstMid = (first.open + first.close) / 2;
+  return firstDown && midSmall && thirdUp && thirdBody > firstBody * 0.5 && third.close > firstMid;
 }
 
 function bodyLow(c: OHLC): number {

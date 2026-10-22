@@ -19,6 +19,7 @@ import { NARRATIVE_TERMS } from "./techniqueNarratives";
 import { MW_TERMS } from "./missingWicks";
 import { RT_TERMS } from "./recordTraders";
 import { THEME_TERMS } from "./patternThemes";
+import { EC_TERMS } from "./essentialCandles";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
@@ -684,6 +685,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...MW_TERMS,
   ...RT_TERMS,
   ...THEME_TERMS,
+  ...EC_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

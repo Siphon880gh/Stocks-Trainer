@@ -46,6 +46,7 @@ export const APP_ROUTES: readonly string[] = [
   "/practice/missing-wicks",
   "/practice/record-traders",
   "/practice/pattern-themes",
+  "/practice/essential-candles",
   "/practice/statements",
   "/practice/read-the-print",
   "/practice/mark-the-band",

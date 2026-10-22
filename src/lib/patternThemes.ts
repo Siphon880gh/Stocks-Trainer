@@ -399,6 +399,7 @@ export const THEME_PATTERNS: ThemePattern[] = [
     },
     bars: bars([[63000, 63400, 62950, 63350], [63350, 63750, 63300, 63700], [63700, 64500, 63600, 64400], [64300, 64350, 63900, 64000]]),
     end: 3,
+    drill: { dir: "up", from: 2, kind: "inside-bar breakout", why: "The inside bar held inside the mother bar's range, then the next candle closed above the mother bar's high: the coil broke upward.", stop: "below the mother bar's low", term: "inside-bar" },
   },
   {
     def: {
