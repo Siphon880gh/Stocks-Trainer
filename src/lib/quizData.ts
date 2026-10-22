@@ -3540,8 +3540,8 @@ export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
     ],
     explanation: "Trend vs range: moving averages for a grind, RSI-style oscillators for stretch in a range.",
     overlayId: "rsi",
-    assetClass: "equity",
-    samplePackId: "eq-index-proxy",
+    assetClass: "forex",
+    samplePackId: "fx-gbpusd",
     glossaryTermId: "trend-vs-range",
   },
   {
