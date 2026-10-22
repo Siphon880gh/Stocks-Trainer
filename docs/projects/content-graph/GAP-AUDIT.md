@@ -133,3 +133,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## 2026-10-22 Fibonacci as a decision map (#11)
 - Audit: #10 taught Reverse / Extend Lines; no dedicated zone→confirm→stop→target→R:R map. Sources: TradingView 43000518158, Fidelity fib guide, FINRA 2270.
 - Added `/practice/fib-decision-map` (`src/lib/fibDecisionMap.ts`): SIMULATED 5m decline with fib annotations, level table, R:R calculator, plan drill, confluence/VWAP/invalidation; Learn `fib-decision-map` (12); 5 glossary terms.
+
+## 2026-10-22 Futures vs options & beginner toolkit (#12)
+- Audit: futures literacy group existed (contract vs stock) but no futures-vs-options comparison, MES/ES notional calculator, SPY beginner card, SMA walk-through, Sharpe calculator, or real-company income statement chain to EBITDA.
+- Added `/practice/futures-vs-options` (`src/lib/futuresOptionsBasics.ts`): comparison table (CFTC, FINRA), MES vs ES table + calculator (CME MES FAQ), SPY facts (State Street), 5m before 1m, SMA with SIMULATED closes, bar count + fib, Sharpe calculator (PortfolioPilot), Apple FY2025 10-K chain to EBITDA (SEC guide, Investopedia); Learn `futures-vs-options` (16); 8 glossary terms.

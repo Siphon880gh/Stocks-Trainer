@@ -148,3 +148,12 @@ Screenshots (box only): `/workspace/checkpoints/qa/one-minute-charts-{390,1280}.
 | Learn `fib-decision-map` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/fib-decision-map-{390,1280}.png`.
+
+## 2026-10-22 Futures vs options & beginner toolkit (#12)
+
+| Flow | Result |
+|---|---|
+| `/practice/futures-vs-options`, 390 and 1280 (e2e) | Comparison table, MES 4 pts = $20, ES switch = $200, Sharpe 0.6, Apple EBITDA 144,748, practice marked done. |
+| Learn `futures-vs-options` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/futures-vs-options-{390,1280}.png`.
