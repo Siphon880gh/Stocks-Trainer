@@ -19,7 +19,8 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
   const [cash, setCash] = useState(DEFAULT_STARTING_CASH);
   const [note, setNote] = useState<string | null>(null);
   const [options, setOptions] = useState<PaperOptions>({});
-  const toggle = (k: keyof PaperOptions) => setOptions((o) => ({ ...o, [k]: !o[k] }));
+  const toggle = (k: "allowShort" | "fractional") => setOptions((o) => ({ ...o, [k]: !o[k] }));
+  const setNum = (k: "feeCents" | "slippageBps", v: number) => setOptions((o) => ({ ...o, [k]: v }));
 
   const persist = useCallback(
     (session: PaperSessionLog | null, statsFrom?: PaperSessionLog) => {
@@ -123,6 +124,29 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
                   Fractional shares and dollar-amount buys <span className="text-muted">(quantities to 4 decimals; &ldquo;buy $500 of&rdquo; market orders)</span>
                 </span>
               </label>
+              <div className="flex flex-wrap items-center gap-2">
+                <span>Trading costs:</span>
+                <label className="flex items-center gap-1">
+                  fee per fill
+                  <select className="border border-line rounded px-1 py-0.5" value={options.feeCents ?? 0} onChange={(e) => setNum("feeCents", Number(e.target.value))} data-testid="opt-fee">
+                    {[0, 50, 100, 500].map((c) => (
+                      <option key={c} value={c}>
+                        {c ? money(c) : "none"}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex items-center gap-1">
+                  slippage
+                  <select className="border border-line rounded px-1 py-0.5" value={options.slippageBps ?? 0} onChange={(e) => setNum("slippageBps", Number(e.target.value))} data-testid="opt-slippage">
+                    {[0, 5, 10, 25].map((b) => (
+                      <option key={b} value={b}>
+                        {b ? `${b} bps` : "none"}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
             </div>
             <button type="button" onClick={() => persist(newSessionLog(tapeId, cash, START_BAR, options))} className="px-4 py-2 rounded-md bg-sim hover:bg-sim-dim text-white font-semibold text-[13px]" data-testid="paper-start">
               Start the session

@@ -175,6 +175,9 @@ export function validateOrder(state: AccountState, spec: OrderSpec, ctx: MarketC
   let reservation = 0;
   if (last !== undefined && errors.length === 0) {
     reservation = opensShort ? shortReservation(spec, last) : covers ? 0 : reservationFor(spec, last);
+    // BA11.M4: a buy also holds back its fee (a dollar amount already includes it).
+    if (spec.side === "buy" && !covers && spec.amount === undefined) reservation += state.options?.feeCents ?? 0;
+    if (spec.amount !== undefined && spec.amount <= (state.options?.feeCents ?? 0)) e("DOLLAR_AMOUNT_RANGE", `The amount must be more than the ${$(state.options?.feeCents ?? 0)} fee.`);
     if (opensShort) {
       if (reservation > buyingPower(state)) e("INSUFFICIENT_BUYING_POWER", `This short sale needs ${$(reservation)} of margin (50% of its value); you have ${$(buyingPower(state))} of buying power.`);
       w("SHORT_SALE_RISK", "Short sale: you profit if the price falls, but there is no ceiling on how high it can rise, so the possible loss is unlimited. A gap up can jump past a buy stop.");

@@ -70,19 +70,22 @@ export function applyFill(s: AccountState, f: Omit<Fill, "realized">): { state: 
   const pos = s.positions[f.symbol] ?? { symbol: f.symbol, qty: 0, costBasis: 0 };
   const notional = notionalOf(f.qty, f.price);
   const d = f.side === "buy" ? f.qty : -f.qty;
-  const dc = f.side === "buy" ? notional : -notional;
-  const cash = s.cash - dc;
+  const fee = f.fee ?? 0;
+  // Signed cash flow of the fill. Fees go into the cost basis (buys) or come off the proceeds (sells), as on a
+  // broker's cost-basis report, so realised + unrealised = total P&L still holds with costs on.
+  const cf = (f.side === "buy" ? -notional : notional) - fee;
+  const cash = s.cash + cf;
   if (pos.qty === 0 || Math.sign(pos.qty) === Math.sign(d)) {
-    if (d > 0 && notional > s.cash) throw new Error("fill exceeds cash");
+    if (d > 0 && notional + fee > s.cash) throw new Error("fill exceeds cash");
     if (d < 0 && !s.options?.allowShort) throw new Error("sell exceeds position (no shorting in v1)");
-    const next: Position = { symbol: f.symbol, qty: q4(pos.qty + d), costBasis: pos.costBasis + dc };
+    const next: Position = { symbol: f.symbol, qty: q4(pos.qty + d), costBasis: pos.costBasis - cf };
     const fill: Fill = { ...f, realized: 0 };
     return { state: { ...s, cash, positions: { ...s.positions, [f.symbol]: next }, fills: [...s.fills, fill] }, fill };
   }
   const held = Math.abs(pos.qty);
   if (q4(f.qty) > q4(held)) throw new Error(d < 0 ? "sell exceeds position (no shorting in v1)" : "cover exceeds the short position");
   const removed = q4(f.qty) === q4(held) ? pos.costBasis : Math.round((pos.costBasis * f.qty) / held);
-  const realized = -dc - removed;
+  const realized = cf - removed;
   const positions = { ...s.positions };
   if (q4(f.qty) === q4(held)) delete positions[f.symbol];
   else positions[f.symbol] = { symbol: f.symbol, qty: q4(pos.qty + d), costBasis: pos.costBasis - removed };

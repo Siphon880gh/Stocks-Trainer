@@ -7,6 +7,7 @@ import { avgCost } from "../../../lib/academy/paper/account";
 import SimulatedBanner from "../SimulatedBanner";
 import OrderTicket, { type BracketExits } from "./OrderTicket";
 import MarginPanel from "./MarginPanel";
+import CostPanel from "./CostPanel";
 import EquityCurve from "./EquityCurve";
 import { AccountSummary, OpenOrders, OrderHistory, PositionsTable } from "./PaperPanels";
 
@@ -109,9 +110,10 @@ export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolba
             </div>}
           <p className="text-[12px] text-muted">
             Orders placed now are checked against the <strong>next</strong> bar. Fills follow textbook rules on daily bars: market at the open; limits at the limit or
-            better; stops at the stop or worse on a gap. No fees.
+            better; stops at the stop or worse on a gap. {state.options?.feeCents || state.options?.slippageBps ? "Trading costs are on (see below)." : "No fees."}
           </p>
           {state.options?.allowShort ? <MarginPanel state={state} /> : null}
+          {state.options?.feeCents || state.options?.slippageBps ? <CostPanel state={state} /> : null}
         </div>
       </div>
     </div>

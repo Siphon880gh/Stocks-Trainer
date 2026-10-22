@@ -72,7 +72,8 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
   const bracketOn = canBracket && !!f.bracket;
   const exits: BracketExits = { stopPrice: toCents(f.exitStop ?? ""), targetPrice: toCents(f.exitTarget ?? "") };
   const v = bracketOn ? validateBracket(state, spec, exits.stopPrice, exits.targetPrice, ctx) : validateOrder(state, spec, ctx);
-  const est = spec.amount ?? (Number.isFinite(spec.qty) ? Math.round(spec.qty * estimatePrice(spec, last)) : 0);
+  const fee = state.options?.feeCents ?? 0;
+  const est = spec.amount ?? (Number.isFinite(spec.qty) ? Math.round(spec.qty * estimatePrice(spec, last)) + fee : 0);
   const types = allowedTypes.filter((t) => !(t === "trailing-stop" && f.side === "buy"));
   return (
     <form
@@ -181,7 +182,7 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
         </div>
       ) : null}
       <p className="text-[12px] text-muted tabular-nums">
-        Last close {money(last)} · {f.side === "buy" ? `Est. cost ${money(est)} · Buying power ${money(buyingPower(state))}` : `Shares held ${state.positions[symbol]?.qty ?? 0}${state.options?.allowShort ? ` · Buying power ${money(buyingPower(state))}` : ""}`}
+        Last close {money(last)} · {f.side === "buy" ? `Est. cost ${money(est)}${fee ? ` incl. ${money(fee)} fee` : ""} · Buying power ${money(buyingPower(state))}` : `Shares held ${state.positions[symbol]?.qty ?? 0}${state.options?.allowShort ? ` · Buying power ${money(buyingPower(state))}` : ""}`}
       </p>
       <p className="text-[13px] bg-sim/5 border border-sim/30 rounded-md px-2.5 py-2" data-testid="order-preview">
         {v.errors.length ? "Fix the order to see what it will do." : describeOrder(spec, last)}

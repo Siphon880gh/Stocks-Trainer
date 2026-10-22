@@ -78,6 +78,6 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 | S1 | BA11.M1.S1 Bracket / OCO / OTO | BA11.M1 | done |
 | S2 | BA11.M2.S1 Short selling + margin explainer | BA11.M2 | done |
 | S3 | BA11.M3.S1 Fractional + dollar orders | BA11.M3 | done |
-| S4 | BA11.M4.S1 Fees / slippage toggle | BA11.M4 | todo |
+| S4 | BA11.M4.S1 Fees / slippage toggle | BA11.M4 | done |
 | S5 | BA11.M5.S1 Trade journal + CSV export | BA11.M5 | todo |
 | S6 | BA11.M6.S1 Multiple paper portfolios | BA11.M6 | todo |

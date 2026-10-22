@@ -140,3 +140,7 @@ export function performance(s: AccountState): PerformanceStats {
     closedTrips: trips.length,
   };
 }
+
+/** BA11.M4: trading costs paid so far (cents). Both are already inside realised / unrealised P&L. */
+export const feesPaid = (s: AccountState) => s.fills.reduce((a, f) => a + (f.fee ?? 0), 0);
+export const slippagePaid = (s: AccountState) => s.fills.reduce((a, f) => a + (f.slippage ?? 0), 0);

@@ -163,3 +163,18 @@ test("BA11.M3 fractional: dollar sizing only in fractional sessions, for market 
   assert.match(text, /about 10 shares/);
   assert.ok(renderHtml(page(memoryStorage({}))).includes('data-testid="opt-fractional"'));
 });
+
+test("BA11.M4 costs: setup offers fee and slippage (none by default); a costed session shows the cost panel and totals", () => {
+  const setup = renderHtml(page(memoryStorage({})));
+  assert.ok(setup.includes('data-testid="opt-fee"') && setup.includes('data-testid="opt-slippage"'));
+  let log = newSessionLog("trend-up", 1_000_000, START_BAR, { feeCents: 100, slippageBps: 10 });
+  log = sessionPlace(log, { symbol: tape.symbol, side: "buy", type: "market", qty: 20, tif: "day" }).log;
+  log = sessionStep(log, 2);
+  const text = renderText(page(withSession(log)));
+  assert.match(text, /Cost of trading/);
+  assert.match(text, /\$1\.00 per fill and 10 bps \(0\.10%\) slippage/);
+  assert.match(text, /Paid so far: fees \$1\.00/);
+  assert.match(text, /Trading costs are on/);
+  const core = renderText(page(withSession()));
+  assert.ok(!core.includes("Cost of trading") && core.includes("No fees."));
+});

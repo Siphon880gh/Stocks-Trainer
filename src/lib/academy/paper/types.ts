@@ -38,6 +38,10 @@ export interface PaperOptions {
   allowShort?: boolean;
   /** BA11.M3: fractional shares (up to 4 decimals) and dollar-amount market buys. */
   fractional?: boolean;
+  /** BA11.M4: flat fee per fill in cents (0 = none). */
+  feeCents?: number;
+  /** BA11.M4: slippage in basis points on market / stop / trailing-stop fills (0 = none). */
+  slippageBps?: number;
 }
 
 export type OrderStatus = "working" | "filled" | "cancelled" | "expired" | "rejected";
@@ -80,8 +84,14 @@ export interface Fill {
   qty: number;
   /** cents per share */
   price: number;
-  /** Realised P&L of this fill (sells only; 0 for buys). */
+  /** Realised P&L of this fill (sells only; 0 for buys). Net of fees: fees sit in the cost basis / proceeds. */
   realized: number;
+  /** BA11.M4: fee charged on this fill (cents). */
+  fee?: number;
+  /** BA11.M4: cost of slippage on this fill = |fill − untouched price| × qty (cents). */
+  slippage?: number;
+  /** BA11.M4: the price before slippage. */
+  rawPrice?: number;
 }
 
 export interface Position {
