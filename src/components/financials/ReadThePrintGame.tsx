@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import CandlestickChart from "../CandlestickChart";
 import { eventById, resolveEvent } from "../../lib/financials/earningsEvents";
@@ -25,6 +25,7 @@ import {
   type ReadThePrintProgress,
 } from "../../lib/financials/readThePrintProgress";
 import { casesForEvent } from "../../lib/financials/caseLinks";
+import { scrollToTopOf } from "../../lib/scrollReset";
 import { getLiteracyTerm } from "../../lib/literacyTerms";
 import EarningsPreviewCard from "./EarningsPreviewCard";
 import IncomeStatementTable from "./IncomeStatementTable";
@@ -93,6 +94,7 @@ export default function ReadThePrintGame({
   const [choice, setChoice] = useState<PrintOptionId | undefined>(initialChoice);
   const [follow, setFollow] = useState<FollowThrough | null>(initialFollow);
   const [score, setScore] = useState(0);
+  const rootRef = useRef<HTMLElement>(null);
   const [answered, setAnswered] = useState(0);
   const [done, setDone] = useState(false);
   const [progress, setProgress] = useState<ReadThePrintProgress>(() => (persist ? loadPrintProgress() : loadPrintProgress(null)));
@@ -117,6 +119,7 @@ export default function ReadThePrintGame({
   };
 
   const nextRound = () => {
+    scrollToTopOf(rootRef.current, window);
     if (index + 1 >= rounds.length) {
       const fin = finishSession(progress, score);
       setProgress(fin);
@@ -132,7 +135,7 @@ export default function ReadThePrintGame({
 
   if (done) {
     return (
-      <section className="border border-line rounded-lg bg-surface p-4 space-y-2" data-testid="rtp-summary">
+      <section className="border border-line rounded-lg bg-surface p-4 space-y-2" ref={rootRef} data-testid="rtp-summary">
         <h2 className="text-[15px] font-semibold text-ink">Session complete</h2>
         <p className="text-[13px] text-ink">
           Score <b>{score}</b> / {rounds.length * 3} · best ever <b>{progress.bestSessionScore}</b>
@@ -164,7 +167,7 @@ export default function ReadThePrintGame({
   const rightLabel = PRINT_OPTIONS.find((o) => o.id === round.answer)!.label;
 
   return (
-    <section className="space-y-3" data-testid="rtp-game" data-phase={phase}>
+    <section className="space-y-3" ref={rootRef} data-testid="rtp-game" data-phase={phase}>
       <div className="flex flex-wrap items-center gap-2 text-[12px] text-muted">
         <span className="px-2 py-0.5 rounded border border-line bg-surface text-ink">
           Round {index + 1} / {rounds.length}
