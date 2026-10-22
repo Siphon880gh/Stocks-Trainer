@@ -69,3 +69,13 @@ Screenshots (box only, not committed): `/workspace/checkpoints/qa/oscillators-wi
 | `npm run test:e2e` | 133 checks, 0 failed; its own Vite server closed after. |
 
 Screenshots (box only, not committed): `/workspace/checkpoints/qa/japanese-candles-{390,1280}.png`, `/workspace/checkpoints/qa/heikin-ashi-{390,1280}.png`.
+
+## 2026-10-22 Chart, gap and volume patterns
+
+| Flow | Result |
+|---|---|
+| `/archive?tab=patterns&open=cup-and-handle`, 390 and 1280 (e2e) | Deep link opens the detail; SIMULATED illustration with a volume pane; Trade tab shows the handle stop and target (not the general guide); no overflow, no console errors. |
+| `/training?group=chart-patterns` (e2e) | Group listed. |
+| `npm run test:e2e` | 147 checks, 0 failed; its own server closed after. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/chart-patterns-{390,1280}.png`.
