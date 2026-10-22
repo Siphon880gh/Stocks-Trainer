@@ -431,6 +431,26 @@ const flows = {
     await p.goto(base + "/training?group=reversal-charts", { waitUntil: "networkidle" });
     check(/Reversal Chart Patterns/.test(await p.locator("main").innerText()), `rev: Learn group missing @${w}`);
   },
+
+  async "One-minute charts: grouping, MES calculator, legs, fib settings"(p, w) {
+    await p.goto(base + "/practice/one-minute-charts", { waitUntil: "networkidle" });
+    check(/5 × 1-minute = 1 × 5-minute/.test(await p.getByTestId("om-grouping").innerText()), `om: grouping missing @${w}`);
+    check(/\b78\b/.test(await p.getByTestId("om-grouping").innerText()), `om: 78 bars missing @${w}`);
+    check(/\$1\.25/.test(await p.getByTestId("om-mes").innerText()), `om: MES tick missing @${w}`);
+    await p.getByTestId("mes-ticks").fill("1");
+    check(/costs ate the scalp/.test(await p.getByTestId("mes-net").innerText()), `om: 1-tick scalp should lose @${w}`);
+    await p.getByTestId("mes-ticks").fill("3");
+    check(/net \$/.test(await p.getByTestId("mes-net").innerText()), `om: 3-tick net missing @${w}`);
+    check(/Reverse/.test(await p.getByTestId("om-fib").innerText()) && /Extend Lines Left\/Right/.test(await p.getByTestId("om-fib").innerText()), `om: Fib settings missing @${w}`);
+    check(/Bar Count Normal 2/.test(await p.getByTestId("om-barcount").innerText()), `om: bar count name missing @${w}`);
+    for (const leg of await p.locator("[data-leg] button").all()) await leg.click();
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("one-minute-charts"), `om: practice not marked done @${w}`);
+    check((await overflow(p)) <= 1, `om overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/one-minute-charts-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=one-minute-charts", { waitUntil: "networkidle" });
+    check(/Reading 1-Minute Charts/.test(await p.locator("main").innerText()), `om: Learn group missing @${w}`);
+  },
 };
 
 

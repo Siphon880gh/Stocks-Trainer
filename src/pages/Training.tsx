@@ -173,6 +173,7 @@ export default function Training() {
                   g.id === "charting-apps" ||
                   g.id === "crypto-candles" ||
                   g.id === "reversal-charts" ||
+                  g.id === "one-minute-charts" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
                   g.id === "financial-literacy" ||

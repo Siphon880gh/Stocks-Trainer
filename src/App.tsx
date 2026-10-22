@@ -28,6 +28,7 @@ import PracticeAlgoTrading from "./pages/practice/AlgoTrading";
 import PracticeChartingApps from "./pages/practice/ChartingApps";
 import PracticeCryptoCandles from "./pages/practice/CryptoCandles";
 import PracticeReversalCharts from "./pages/practice/ReversalCharts";
+import PracticeOneMinuteCharts from "./pages/practice/OneMinuteCharts";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
 import Coach from "./pages/Coach";
@@ -87,6 +88,7 @@ export default function App() {
           <Route path="practice/charting-apps" element={<PracticeChartingApps />} />
           <Route path="practice/crypto-candles" element={<PracticeCryptoCandles />} />
           <Route path="practice/reversal-charts" element={<PracticeReversalCharts />} />
+          <Route path="practice/one-minute-charts" element={<PracticeOneMinuteCharts />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />
           <Route path="coach" element={<Coach />} />
