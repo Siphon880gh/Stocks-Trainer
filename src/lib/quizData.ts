@@ -25,6 +25,7 @@ import { PDT_QUESTIONS } from "./pdtRule";
 import { CRYPTO_CANDLE_QUESTIONS } from "./cryptoCandles";
 import { REVERSAL_QUESTIONS } from "./reversalCharts";
 import { ONE_MIN_QUESTIONS } from "./oneMinuteCharts";
+import { FIB_MAP_QUESTIONS } from "./fibDecisionMap";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5396,6 +5397,7 @@ export type QuizGroupId =
   | "crypto-candles"
   | "reversal-charts"
   | "one-minute-charts"
+  | "fib-decision-map"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5505,6 +5507,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Reading 1-Minute Charts",
     description: "5m and 15m grouping, legs vs sideways, why 1m is risky, MES tick math, TradingView Fib Reverse / Extend Lines, bar count and 78 five-minute bars in a session",
     icon: "timer",
+  },
+  {
+    id: "fib-decision-map",
+    name: "Fibonacci Decision Map",
+    description: "Retracement as zone → confirm → stop → target → R:R, confluence with VWAP, extensions, and invalidation on a SIMULATED 5m decline",
+    icon: "architecture",
   },
   {
     id: "candle-anatomy",
@@ -5707,6 +5715,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "crypto-candles") return CRYPTO_CANDLE_QUESTIONS;
   if (groupId === "reversal-charts") return REVERSAL_QUESTIONS;
   if (groupId === "one-minute-charts") return ONE_MIN_QUESTIONS;
+  if (groupId === "fib-decision-map") return FIB_MAP_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5743,6 +5752,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "crypto-candles") return CRYPTO_CANDLE_QUESTIONS;
   if (groupId === "reversal-charts") return REVERSAL_QUESTIONS;
   if (groupId === "one-minute-charts") return ONE_MIN_QUESTIONS;
+  if (groupId === "fib-decision-map") return FIB_MAP_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;

@@ -50,6 +50,7 @@ describe("misc practice catalog", () => {
       "Candlesticks for crypto",
       "Reversal chart patterns",
       "Reading 1-minute charts",
+      "Fibonacci as a decision map",
     ]);
   });
 });

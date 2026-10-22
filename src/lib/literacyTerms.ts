@@ -13,6 +13,7 @@ import { PDT_TERMS } from "./pdtRule";
 import { CRYPTO_TERMS } from "./cryptoCandles";
 import { REVERSAL_TERMS } from "./reversalCharts";
 import { ONE_MIN_TERMS } from "./oneMinuteCharts";
+import { FIB_MAP_TERMS } from "./fibDecisionMap";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
@@ -672,6 +673,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...CRYPTO_TERMS,
   ...REVERSAL_TERMS,
   ...ONE_MIN_TERMS,
+  ...FIB_MAP_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {
