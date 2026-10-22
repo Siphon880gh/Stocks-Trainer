@@ -26,6 +26,7 @@ import { CRYPTO_CANDLE_QUESTIONS } from "./cryptoCandles";
 import { REVERSAL_QUESTIONS } from "./reversalCharts";
 import { ONE_MIN_QUESTIONS } from "./oneMinuteCharts";
 import { FIB_MAP_QUESTIONS } from "./fibDecisionMap";
+import { FUT_OPT_QUESTIONS } from "./futuresOptionsBasics";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5398,6 +5399,7 @@ export type QuizGroupId =
   | "reversal-charts"
   | "one-minute-charts"
   | "fib-decision-map"
+  | "futures-vs-options"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5513,6 +5515,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "Fibonacci Decision Map",
     description: "Retracement as zone → confirm → stop → target → R:R, confluence with VWAP, extensions, and invalidation on a SIMULATED 5m decline",
     icon: "architecture",
+  },
+  {
+    id: "futures-vs-options",
+    name: "Futures vs Options",
+    description: "Futures vs options, MES vs ES tick and notional math, SPY for beginners, 5m before 1m, SMA, bar count + fib, Sharpe ratio, and Apple FY2025 income statement to EBITDA",
+    icon: "balance",
   },
   {
     id: "candle-anatomy",
@@ -5716,6 +5724,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "reversal-charts") return REVERSAL_QUESTIONS;
   if (groupId === "one-minute-charts") return ONE_MIN_QUESTIONS;
   if (groupId === "fib-decision-map") return FIB_MAP_QUESTIONS;
+  if (groupId === "futures-vs-options") return FUT_OPT_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5753,6 +5762,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "reversal-charts") return REVERSAL_QUESTIONS;
   if (groupId === "one-minute-charts") return ONE_MIN_QUESTIONS;
   if (groupId === "fib-decision-map") return FIB_MAP_QUESTIONS;
+  if (groupId === "futures-vs-options") return FUT_OPT_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;

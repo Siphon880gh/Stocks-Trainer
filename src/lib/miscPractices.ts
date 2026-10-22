@@ -29,6 +29,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "reversal-charts", title: "Reversal chart patterns", to: "/practice/reversal-charts" },
   { id: "one-minute-charts", title: "Reading 1-minute charts", to: "/practice/one-minute-charts" },
   { id: "fib-decision-map", title: "Fibonacci as a decision map", to: "/practice/fib-decision-map" },
+  { id: "futures-vs-options", title: "Futures vs options & beginner toolkit", to: "/practice/futures-vs-options" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

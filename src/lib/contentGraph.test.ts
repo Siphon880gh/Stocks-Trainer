@@ -139,6 +139,7 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "reversal-charts": 12,
   "one-minute-charts": 12,
   "fib-decision-map": 12,
+  "futures-vs-options": 16,
 };
 const NON_FAMILY = new Set<string>([...PHASE_A, ...PHASE_D, ...Object.keys(DEDICATED_FLOORS)]);
 

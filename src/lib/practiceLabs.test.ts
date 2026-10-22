@@ -51,6 +51,7 @@ describe("misc practice catalog", () => {
       "Reversal chart patterns",
       "Reading 1-minute charts",
       "Fibonacci as a decision map",
+      "Futures vs options & beginner toolkit",
     ]);
   });
 });
