@@ -258,3 +258,8 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - UI: PortfolioBar on /paper (chips with equity or "not started", Add, × with a confirm on inactive ones, inline errors).
 - Tests: `paper/portfolios.test.ts` (4) + one render test. Screenshots: ba11-portfolios-bar.png, ba11-portfolios-switched.png, ba11-portfolios-create.png (duplicate-name error).
 - BA11 complete (M1–M6). Next: none in the Beginner Academy plan.
+
+### 2026-10-21 · Post-BA11 sweep
+- Content graph family 14: Academy units now link `quiz:orders-and-fills`, `quiz:paper-pnl` and `quiz:options-ladder` (7 units); `contentGraph.test.ts` enforces it. The loop note that family 14 was parked is updated.
+- Paper chart price markers show cents via `CandlestickChart` `markerDecimals={2}` (opt-in; other charts unchanged, byte-identity snapshot passes).
+- Docs: AGENTS_CODE_REFERENCE-training.md (BA11 row), QA_User_Flows.md UF-22 step 7.

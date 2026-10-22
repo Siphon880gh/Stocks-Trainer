@@ -73,9 +73,9 @@ Milestone-by-milestone projects live in `docs/projects/<name>/` (CHARTER.md · E
 `/playbooks` is not a loop target: each Playbook needs a real outside source that a human supplies. No loop invents one.
 
 - [`docs/projects/content-graph/`](../docs/projects/content-graph/CHARTER.md): the content graph orchestrator (last gap audit: [`GAP-AUDIT.md`](../docs/projects/content-graph/GAP-AUDIT.md))
-- [`docs/projects/financials-earnings/`](../docs/projects/financials-earnings/CHARTER.md): financials, expectations and earnings reactions (**done**; FE7.M2 and FE8.M1 wait for Weng)
+- [`docs/projects/financials-earnings/`](../docs/projects/financials-earnings/CHARTER.md): financials, expectations and earnings reactions (**done**; FE7.M2 and FE8.M1 decided and built 2026-10-21)
 - [`docs/projects/macro-forces/`](../docs/projects/macro-forces/CHARTER.md): macro releases (jobs, CPI, FOMC, yields, mortgage rates…) with real-source links, SIMULATED look-alikes and market-reaction game (**done**) · `/loop macro project using docs/projects/macro-forces/LOOP-Macro-Forces.md`
-- [`docs/projects/beginner-academy/`](../docs/projects/beginner-academy/CHARTER.md): broker-style beginner training — leveled course map with short units, placement check, SIMULATED paper account (market/limit/stop/stop-limit/trailing stop), challenges, virtual points/badges/streak, options knowledge ladder, Today card (**core BA0–BA10 done and signed off 2026-10-21; BA11 stretch approved**) · `/loop beginner academy project using docs/projects/beginner-academy/LOOP-Beginner-Academy.md`
+- [`docs/projects/beginner-academy/`](../docs/projects/beginner-academy/CHARTER.md): broker-style beginner training — leveled course map with short units, placement check, SIMULATED paper account (market/limit/stop/stop-limit/trailing stop), challenges, virtual points/badges/streak, options knowledge ladder, Today card (**done**: BA0–BA10 signed off 2026-10-21; BA11 stretch — brackets / OCO, shorting + margin, fractional + dollar orders, fees / slippage, journal + CSV, portfolios — done 2026-10-21) · `/loop beginner academy project using docs/projects/beginner-academy/LOOP-Beginner-Academy.md`
 
 ## Not these files
 

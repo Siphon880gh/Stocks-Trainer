@@ -16,7 +16,7 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 | FE5.M4 game play-through | SIGNED OFF — Weng | 2026-10-21 | Screenshots in checkpoints/fe5-*.png; follow-through bonus rule approved |
 | FE7.M2 decision | DECIDED — Weng | 2026-10-21 | Yes: tag related cases, link a print's reaction to matching cases |
 | FE8.M1 decision | DECIDED — Weng | 2026-10-21 | Both: simulated bank (NIM, provisions, deposits) and simulated biotech (runway, burn, readouts, dilution) as companies 4 and 5 |
-| FE7.M2 / FE8.M1 visual | PENDING WENG SIGN-OFF | 2026-10-21 | Screenshots in checkpoints/fe7m2-*.png and fe8m1-*.png |
+| FE7.M2 / FE8.M1 visual | SIGNED OFF — Weng ("I'll just sign off on everything", relayed) | 2026-10-21 | Screenshots in checkpoints/fe7m2-*.png and fe8m1-*.png |
 
 ## Entries
 
@@ -216,7 +216,7 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 ### 2026-10-21 21:14 PT · FE7.M2.S1 · PASS
 - Changed: src/lib/financials/caseLinks.ts (new: 8 earnings cases tagged with 1–2 Read the Print events each + the shared lesson; `printLinksForCase`, `casesForEvent`), src/components/financials/CasePrintLink.tsx (new), src/pages/CasePlayer.tsx (+2: renders `CasePrintLink` after `CaseMacroLink`), src/components/financials/ReadThePrintGame.tsx ("Same setup in the case library" on the reveal, `data-testid=rtp-related-cases`), src/lib/financials/caseLinks.test.tsx (new).
 - Tags live outside the case objects, so `caseStudies.ts` and grading are untouched. The test pins all 12 earnings case ids and their correct answers, checks every tag resolves to a real case and a real round, and that no link renders before the reveal.
-- Checkpoints: checkpoints/fe7m2-case-player-link.png, fe7m2-rtp-reveal-related-cases.png (PENDING WENG SIGN-OFF).
+- Checkpoints: checkpoints/fe7m2-case-player-link.png, fe7m2-rtp-reveal-related-cases.png (SIGNED OFF by Weng 2026-10-21; was PENDING).
 
 ### 2026-10-21 21:14 PT · FE8.M1.S1–S5 · PASS
 - Bank (Bayline Bancorp `BAYB.S`, simulated): optional bank lines in `types.ts` (counted with `?? 0`, so the first three companies are unchanged) + `bankViolations` in `ties.ts`; `bankBuilder.ts` (NII, provision, allowance roll-forward prior + provision − NCO, deposits, securities, simplified CET1 = (equity − other assets) ÷ (loans + 20% securities), labelled simplified); `bankMetrics.ts` (NIM, efficiency, NCO ratio, provision ÷ NCO, allowance ÷ loans, NPL, LDR, ROE, ROA, BVPS, TBVPS). Story: NIM 3.43% → 2.91% as deposit costs reprice and deposits run off, reserve build in FY25, recovery to 3.37% by Q4 FY26. Statements show in bank format (NII → PPNR → provision; loans net of allowance, deposits) with a caption; industrial ratios show n/m.
@@ -227,6 +227,8 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - Spec-driven test updates (not weakening): company count 3 → 5 in earningsEvents.test.ts; "1/14 rounds played" → "1/22" in integration.test.tsx. New sectorCompanies.test.tsx (ties, 9 broken bank fixtures, story assertions, metrics, events, rounds, readouts, quizzes, terms, no-leak renders).
 - Verify: lint 0 · test:coaching 24/24 · src/lib tests 161/161 · test:financials 333/333 · test:macro 72/72 · temp build ok (deleted)
 - Docs: EPICS.md (FE7.M2, FE8.M1 [x]), STORIES.md (#34 done; #35–39 added), AGENTS_CODE_REFERENCE-data.md (+1 bullet), QA_User_Flows.md (UF-19 steps 8–9, 1/22).
-- Checkpoints: checkpoints/fe8m1-*.png (PENDING WENG SIGN-OFF).
+- Checkpoints: checkpoints/fe8m1-*.png (SIGNED OFF by Weng 2026-10-21; was PENDING).
 - Loop state: every FE0–FE8 milestone done. Done(project).
 
+### 2026-10-21 · Sign-off recorded (FE7.M2 / FE8.M1 visuals)
+- Weng ("I'll just sign off on everything", relayed 2026-10-21): the FE7.M2 case-bridge and FE8.M1 bank / biotech screenshots are SIGNED OFF. Every row in the sign-off table is now signed or decided; nothing in this project is open.

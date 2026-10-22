@@ -54,10 +54,16 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 | 23 | Archive (advanced) | Nothing checked that advanced `glossaryLink` / drill terms resolve | Test added (all resolve today) |
 
 ## Left for Weng
-- FE7.M2 (bridge financials content into cases) and FE8.M1 (4th company: bank or biotech): still open. Nothing here decides them.
-- Beginner Academy: recommended as the next drain. It is the only remaining forward plan; every graph floor is met and graph family 14 waits on BA10.M3.
+- ~~FE7.M2 / FE8.M1~~: decided by Weng and built 2026-10-21 (financials-earnings PROGRESS).
+- ~~Beginner Academy~~: BA0–BA11 done and signed off 2026-10-21; graph family 14 filled (see the 2026-10-21 sweep below).
 - Playbooks: each needs a real outside source that a human supplies; no loop invents one.
 - Parked: EMA / MACD regime follow-ups. On these short windows they read the same as SMA and make the trend windows ambiguous.
 - `all-markets` Coach sessions also show on a locked class's `/coach?class=` list (they map to Equities for the lock check). That is intended; flip it if you would rather hide them until peek.
 - Root `AGENTS_LOOP-*.md` milestone queues (Done(global), outside this graph) still verify with a plain build into `dist/`; left as historical.
 - Screenshots: `checkpoints/coach-forex-all-markets.png`, `coach-trade-plan.png`, `coach-rsi-vs-trend.png`, `learn-equity-patterns.png`. Case pages need a session peek click, so none were taken headless.
+
+## 2026-10-21 sweep (after Weng signed off everything)
+- Family 14 `academy` filled: Academy units now link the Learn groups `orders-and-fills` (l3-market-vs-limit, l3-stop-orders, l3-trailing-stop), `paper-pnl` (l0-simulated-vs-real, l3-position-sizing) and `options-ladder` (l6-payoff-at-expiration, l6-options-risk). New check in `contentGraph.test.ts`: every Academy group has questions and is linked from ≥1 unit. CHARTER, LOOP-Graph (family 14 row, stage 2, human-verification line, project statuses), LOOPS/README and LOOP-Cases (FE7.M2 note) refreshed.
+- Chart price-marker labels: `CandlestickChart` gained an opt-in `markerDecimals`; only the paper account passes 2, so its markers read e.g. "Buy limit 52.15". Unset keeps whole-number labels, so every other page is unchanged (the FE4.M1 byte-identity snapshot passes unmodified).
+- Left as intended: the 5 `all-markets` Coach sessions on a locked class's list (no test or plan says otherwise).
+- Still for a human: Playbooks (new kits need a real outside source); EMA / MACD regime follow-ups stay parked (teaching reason above); root `AGENTS_LOOP-*.md` untouched (historical).

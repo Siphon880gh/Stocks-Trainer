@@ -57,7 +57,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "What it teaches well", body: "It teaches how each order type behaves, how buying power is held back, how a gap can jump over a stop, and how average cost and profit are calculated. Those mechanics are the same with real money." },
       { title: "What it cannot show", body: "Real trading adds fees, taxes, partial fills, slippage in fast markets and, most of all, the stress of losing real money. A strategy that looks fine on paper can feel very different live. Treat paper results as practice, not proof." },
     ],
-    refs: ["glossary:paper-trading", "glossary:slippage", "glossary:delayed-vs-sample-feed"],
+    refs: ["glossary:paper-trading", "glossary:slippage", "glossary:delayed-vs-sample-feed", "quiz:paper-pnl"],
   },
   {
     id: "l0-learning-plan",
@@ -242,7 +242,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Limit: your price or better", body: "A buy limit at 50 pays 50 or less; a sell limit at 55 receives 55 or more. If price never reaches the limit, nothing happens. If the next candle opens through your limit, you get the better opening price.", glossaryTermId: "limit-order" },
       { title: "Which one when", body: "Use a market order when getting in or out matters more than a few cents. Use a limit when you have a specific price in mind and are happy to miss the trade if it is not reached.", glossaryTermId: "market-order-vs-limit" },
     ],
-    refs: ["glossary:market-order-vs-limit", "glossary:limit-order", "route:/paper"],
+    refs: ["glossary:market-order-vs-limit", "glossary:limit-order", "route:/paper", "quiz:orders-and-fills"],
   },
   {
     id: "l3-stop-orders",
@@ -255,7 +255,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Gaps fill worse", body: "If you hold shares with a sell stop at 45 and the stock opens at 41 after bad news, the stop fills near 41, not 45. A stop limits a loss, but it cannot cap it exactly.", glossaryTermId: "gap-risk" },
       { title: "Where the stop goes", body: "Put the stop where your idea is proven wrong, such as below support or the last higher low, not at a round number or a random percentage. Then size the trade so that stop distance equals the loss you accept." },
     ],
-    refs: ["glossary:stop-order", "glossary:gap-risk", "practice:/practice/invalidation"],
+    refs: ["glossary:stop-order", "glossary:gap-risk", "practice:/practice/invalidation", "quiz:orders-and-fills"],
   },
   {
     id: "l3-stop-limit",
@@ -281,7 +281,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "An example", body: "Bought at 50 with a $3 trail: the stop starts at 47 if the high is 50. The stock climbs to 58, so the stop rises to 55. It then drops to 54: the stop at 55 triggers and you sell near 55, keeping most of the gain." },
       { title: "Choose the distance", body: "Too tight and normal wiggles stop you out. Too loose and you give back a lot. Many traders trail under structure (the last higher low) instead of a fixed distance." },
     ],
-    refs: ["glossary:trailing-stop", "coach:trailing-stop-exit", "route:/paper"],
+    refs: ["glossary:trailing-stop", "coach:trailing-stop-exit", "route:/paper", "quiz:orders-and-fills"],
   },
   {
     id: "l3-time-in-force",
@@ -307,7 +307,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Divide by the stop distance", body: "Entry 50, stop 48: you risk $2 a share. $100 ÷ $2 = 50 shares. A wider stop means fewer shares for the same risk, not a bigger loss." },
       { title: "Check the position size", body: "50 shares at $50 is $2,500, a quarter of the account. Many beginners also cap any single position, for example at 25% of equity. The paper challenges score you on both rules.", glossaryTermId: "risk-reward" },
     ],
-    refs: ["glossary:position-sizing", "glossary:risk-reward", "practice:/practice/plan"],
+    refs: ["glossary:position-sizing", "glossary:risk-reward", "practice:/practice/plan", "quiz:paper-pnl"],
   },
   {
     id: "l3-trade-plan",

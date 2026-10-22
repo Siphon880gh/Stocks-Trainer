@@ -23,7 +23,7 @@ Fill every app section (Archive, Charts, Learn, Practice, Cases, Coach, Home) to
 |-------|-------------------------------------|
 | 0 | Done(archive) per `LOOPS/LOOP-Archive.md` |
 | 1 | Done(charts) per `LOOPS/LOOP-Charts.md` |
-| 2 | Echo families 1 → 13 (with 2b price-action and 2c trade-management) have no remaining legal hops; family 14 (Academy) stays parked until BA10.M3 |
+| 2 | Echo families 1 → 13 (with 2b price-action and 2c trade-management) have no remaining legal hops; family 14 (Academy) is filled (BA10.M3 shipped; every Academy Learn group is linked from an Academy unit, test-enforced) |
 | 3 | Leftover floors drained: Learn → Practice → Cases → Coach → Home |
 | Done(graph) | Every section file's Done(section) is true and `npm run test:content` is green |
 
@@ -31,7 +31,7 @@ Fill every app section (Archive, Charts, Learn, Practice, Cases, Coach, Home) to
 Every tick runs the chosen section's VERIFY line: `npm run lint` + `npm run test:content` + BUILD_CHECK (a temp `--outDir`; `dist/` is never touched), plus `npm run test:coaching` for Coach ticks and `npm run test:lib` for Archive / Practice ticks, plus the section's rubric. `npm run verify` runs everything (lint, every test suite, temp build). The config block and stop rules live at the top of LOOP-Graph.md.
 
 ## Related projects
-- [`../financials-earnings/`](../financials-earnings/CHARTER.md): **Done.** Statement readers, the 13-week forecast, the earnings preview, Read the Print and Mark the band. Echo family `statements` points at its Learn groups and practice routes. Open decisions for Weng: FE7.M2 (bridge to existing cases) and FE8.M1 (4th company: bank or biotech); the graph does not decide them.
+- [`../financials-earnings/`](../financials-earnings/CHARTER.md): **Done.** Statement readers, the 13-week forecast, the earnings preview, Read the Print and Mark the band. Echo family `statements` points at its Learn groups and practice routes. Weng decided FE7.M2 (yes: earnings cases link to matching Read the Print rounds via `src/lib/financials/caseLinks.ts`) and FE8.M1 (both: simulated bank and biotech) on 2026-10-21; both are built and signed off.
 - [`../macro-forces/`](../macro-forces/CHARTER.md): **Done.** Macro Desk (`/macro`), lessons, the reaction game and five Learn groups. Echo family `macro` points at them.
-- [`../beginner-academy/`](../beginner-academy/CHARTER.md): **Chartered, not started.** Echo family `academy` is parked until BA10.M3; Academy units link to graph content rather than copying it.
+- [`../beginner-academy/`](../beginner-academy/CHARTER.md): **Done** (BA0–BA11, signed off 2026-10-21). Echo family `academy` is filled: Learn `orders-and-fills` / `paper-pnl` / `options-ladder` are linked from Academy units, which link to graph content rather than copying it.
 - Trade management (commit 2c93114): stops at invalidation, entry types, trailing stops and planned targets; echo family `trade-management` (2c).

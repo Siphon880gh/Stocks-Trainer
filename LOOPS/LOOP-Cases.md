@@ -141,7 +141,7 @@ PASS only if:
 # STOP CONDITIONS
 - Done(cases) → STOP with pack counts by difficulty.
 - 3 consecutive failed attempts on one unit → handoff (pack, intended id, files, lint / test excerpt).
-- Human verification: ambiguous product choice (e.g. new pack id vs stuffing an existing pack, a new `CaseThinkingMode`) not already locked here; linking financials-earnings content into cases (that is open decision FE7.M2 — do not decide it).
+- Human verification: ambiguous product choice (e.g. new pack id vs stuffing an existing pack, a new `CaseThinkingMode`) not already locked here; changing how financials-earnings content links into cases (FE7.M2 decided 2026-10-21: tags live in `src/lib/financials/caseLinks.ts`, outside the case objects; tag a new earnings case there).
 - Abort: unrelated dependency upgrades; rewriting CasePlayer “for cleanup.”
 
 # TICK OUTPUT (keep short)

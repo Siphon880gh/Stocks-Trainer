@@ -176,7 +176,7 @@ export const UNITS_L4_L7: Unit[] = [
       { title: "Long put", body: "Buy a 50 put for 1.50. At expiration it is worth max(50 − stock, 0). Breakeven is 48.50. Max loss is the $150 premium; max gain is (50 − 1.50) × 100 if the stock goes to zero." },
       { title: "Charts show it", body: "A payoff chart plots profit at expiration against the stock price. Kinks appear only at strike prices. The Academy's options ladder draws these from the formulas, with premiums given as numbers." },
     ],
-    refs: ["glossary:options-breakeven", "quiz:options-literacy", "coach:options-context-event", "route:/academy/options"],
+    refs: ["glossary:options-breakeven", "quiz:options-literacy", "coach:options-context-event", "route:/academy/options", "quiz:options-ladder"],
   },
   {
     id: "l6-covered-call-and-csp",
@@ -202,7 +202,7 @@ export const UNITS_L4_L7: Unit[] = [
       { title: "Events and volatility", body: "Before earnings, option premiums are often expensive. After the event, they can shrink sharply even if the stock moves. Know what you are paying for.", glossaryTermId: "options-event-vol" },
       { title: "Real approval is separate", body: "Brokers approve customers for options levels through their own application and regulatory process. This app's ladder is education only; passing it does not approve you for anything." },
     ],
-    refs: ["coach:options-pre-event-chase", "glossary:options-event-vol", "coach:options-horizon-mismatch", "route:/academy/options"],
+    refs: ["coach:options-pre-event-chase", "glossary:options-event-vol", "coach:options-horizon-mismatch", "route:/academy/options", "quiz:options-ladder"],
   },
   // ---------------- L7 Other markets ----------------
   {

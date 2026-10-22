@@ -104,7 +104,7 @@ Walk families in this order (equities-first; `2b` and `2c` follow `2`):
 | 2b | `price-action` | Archive process term (`market-structure`, `breakout-retest`, `risk-reward`, SMC terms, `supply-zone` / `demand-zone` …) → Learn `price-action` / `supply-demand` → `buy-or-sell` scenario chart (`scenarioCharts.ts`, reveal annotations; double / triple top & bottom, H&S, wedges, trendline, retests, zones) → Practice `/practice/levels` or `/practice/invalidation` round → Coach `supply-demand-zone-retest` (zones) |
 | 2c | `trade-management` | Archive `entry-types` / `trailing-stop` / `taking-profit` / `risk-reward` / `no-trade-zone` → Learn `price-action` trade-management questions (guarded by `tradeManagement.test.ts`) → `buy-or-sell` `sc-pullback-entry` / trailing-stop chart → Practice `/practice/invalidation` / `/practice/plan` → Coach `trade-plan-before-entry` / `trailing-stop-exit` → Home tip |
 | 3 | `vocab` | Archive ownership/markets/position/process term → Learn `equity-literacy` → Coach literacy session → Home tip |
-| 4 | `statements` | Archive term (FCF, margin, P/E, …) → Learn `financial-literacy` / `financial-drills` / `earnings-jargon` (new snapshot if needed), or the project groups `statements-reading` / `cash-forecast-13wk` / `earnings-preview` / `earnings-reaction` ([financials-earnings](../financials-earnings/CHARTER.md); Practice `/practice/statements`, `/practice/read-the-print`, `/practice/mark-the-band`) → Cases `earnings` case in matching thinking mode (FE7.M2 case bridge is an open decision for Weng; do not link FE content into cases until it is decided) → Coach earnings / statements session (`earnings-week` exists) → Home thinking-mode or milestone tip |
+| 4 | `statements` | Archive term (FCF, margin, P/E, …) → Learn `financial-literacy` / `financial-drills` / `earnings-jargon` (new snapshot if needed), or the project groups `statements-reading` / `cash-forecast-13wk` / `earnings-preview` / `earnings-reaction` ([financials-earnings](../financials-earnings/CHARTER.md); Practice `/practice/statements`, `/practice/read-the-print`, `/practice/mark-the-band`) → Cases `earnings` case in matching thinking mode (FE7.M2 case bridge decided and built 2026-10-21: new earnings cases get a tag in `src/lib/financials/caseLinks.ts`, outside the case objects) → Coach earnings / statements session (`earnings-week` exists) → Home thinking-mode or milestone tip |
 | 5 | `indicators` | Archive overlay row only if chart renders it → Learn `indicators` question → Practice regime window with that overlay (regime follow-ups exist for `sma` / `rsi` / `bollinger` only; an `ema` / `macd` hop goes to a pack-tagged `equity-patterns` drill instead, which charts that pack's own tape) → Coach `rsi-vs-trend` / `chart-soft-gate` |
 | 6 | `news` | Archive term (`rumor-vs-filing`, `priced-in`, `chase-vs-fade`) → Learn `news-literacy` → Cases `company-news` → Coach headline tree (skip if `chase-vs-fade` already covers) → Home tip |
 | 7 | `macro` | Learn project groups `macro-releases` / `rates-curve` / `fed-policy` / `housing-mortgage` / `macro-reactions` ([macro-forces](../macro-forces/CHARTER.md); Macro Desk `/macro`, lesson `/macro/:lessonId`, game `/macro/play`) → Cases `macro-news` (risk-off / print / supply; print cases link their lesson) → Coach macro session (`cpi-morning`, `macro-print`, `macro-risk-off`, `supply-shock` exist) → Home tip (`MacroHomeTip` + the market-wide-news milestone tip exist) |
@@ -114,7 +114,7 @@ Walk families in this order (equities-first; `2b` and `2c` follow `2`):
 | 11 | `forex` | Archive `forex-spot` → Charts `forex` pack → Learn `forex-literacy` → Cases `forex` → Coach forex session → Home |
 | 12 | `crypto` | Archive `crypto-browse` → Charts `crypto` pack → Learn `crypto-literacy` → Cases `crypto` → Coach crypto session → Home |
 | 13 | `options-context` | Archive `options-context` → Charts `option_context` pack → Learn `options-literacy` → Cases `options-context` → Coach options-context session → Home |
-| 14 | `academy` | **Parked** until the Beginner Academy project ships BA10.M3 ([beginner-academy](../beginner-academy/CHARTER.md)). Then: Learn `orders-and-fills` / `paper-pnl` / `options-ladder` questions → Academy course-map units that **link** to (never copy) graph content |
+| 14 | `academy` | Learn `orders-and-fills` / `paper-pnl` / `options-ladder` questions → Academy course-map units that **link** to (never copy) graph content ([beginner-academy](../beginner-academy/CHARTER.md), shipped through BA11). Filled 2026-10-21: every group is linked from ≥1 unit (`contentGraph.test.ts`, family 14) |
 
 **Echo edge rules**
 
@@ -130,7 +130,7 @@ Walk families in this order (equities-first; `2b` and `2c` follow `2`):
 ```text
 Stage 0  DRAIN Archive until Done(archive)
 Stage 1  DRAIN Charts until Done(charts)
-Stage 2  ECHO families 1 → 13 (incl. 2b, 2c; 14 stays parked until BA10.M3) — one unit per tick, follow chain
+Stage 2  ECHO families 1 → 14 (incl. 2b, 2c) — one unit per tick, follow chain
 Stage 3  DRAIN leftover section floors in drain order
          (Learn → Practice → Cases → Coach → Home)
 Done(graph) when every section file’s Done(section) is true
@@ -196,7 +196,7 @@ PASS only if:
 # STOP CONDITIONS
 - Done(graph) → STOP with per-section floors vs counts.
 - 3 consecutive failed attempts on the blocking unit → handoff (stage, family, loop, id, stderr).
-- Human verification: policy change; new pack id vs existing pack; overlay that needs chart work; a new `CaseThinkingMode`; a new `/practice/...` route; a Playbook source; anything that decides FE7.M2 (case bridge) or FE8.M1 (4th company).
+- Human verification: policy change; new pack id vs existing pack; overlay that needs chart work; a new `CaseThinkingMode`; a new `/practice/...` route; a Playbook source; a new financials company or a change to the FE7.M2 case-bridge rule (both decided 2026-10-21).
 - Abort: running two section loops without the picker; rewriting runtime “for cleanup.”
 
 # TICK OUTPUT (keep short)
@@ -218,4 +218,4 @@ PASS only if:
 - Home is last in drain order so copy can name real ids. In echo, a Home hop is allowed **after** that family’s primary surface exists.
 - Milestone `AGENTS_LOOP-*.md` files are out of this graph.
 - Chart-skill Coach trees (candles, price action, trade management, indicators) read the same on any SAMPLE chart; tag them `all-markets` so `/coach?class=` lists them for every class (`ALL_MARKETS_COACH_TAG` in `marketNavigator.ts`). They count once per class in the Asymmetry Coach targets, so they do not reopen class asymmetry.
-- Project loops ([`../financials-earnings/LOOP-Financials-Earnings.md`](../financials-earnings/LOOP-Financials-Earnings.md) Done, [`../macro-forces/LOOP-Macro-Forces.md`](../macro-forces/LOOP-Macro-Forces.md) Done, [`../beginner-academy/LOOP-Beginner-Academy.md`](../beginner-academy/LOOP-Beginner-Academy.md) chartered) build new surfaces milestone by milestone; do not run them in the same session as this graph. Once a project ships its groups, the matching echo family here points at them (families 4, 7, 14).
+- Project loops ([`../financials-earnings/LOOP-Financials-Earnings.md`](../financials-earnings/LOOP-Financials-Earnings.md) Done, [`../macro-forces/LOOP-Macro-Forces.md`](../macro-forces/LOOP-Macro-Forces.md) Done, [`../beginner-academy/LOOP-Beginner-Academy.md`](../beginner-academy/LOOP-Beginner-Academy.md) Done) build new surfaces milestone by milestone; do not run them in the same session as this graph. Once a project ships its groups, the matching echo family here points at them (families 4, 7, 14).

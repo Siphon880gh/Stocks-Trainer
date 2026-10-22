@@ -19,6 +19,8 @@ import { SAMPLE_PACKS_BY_CLASS, EQUITY_SAMPLE_PACKS, type AssetClass } from "./s
 import "./markets.ts"; // pushes the crypto SAMPLE packs into CRYPTO_SAMPLE_PACKS
 import { PATTERN_OHLC, type OHLC } from "./ohlcData.ts";
 import { getFinancialSnapshot } from "./financialSnapshots.ts";
+import { UNITS } from "./academy/content/levels.ts";
+import { ACADEMY_QUIZ_GROUP_IDS } from "./academy/quiz/groups.ts";
 import { QUIZ_GROUPS, getQuestionsForGroup, type QuizGroupId, type QuizQuestion } from "./quizData.ts";
 import { BUY_SELL_PATTERN_KEYS, BUY_SELL_SCENARIO_KEYS, BUY_SELL_WAIT_IDS } from "./buySellDrill.ts";
 import { DRAW_TEMPLATES, parseDrawTemplateId } from "./practiceDraw.ts";
@@ -426,6 +428,17 @@ describe("Loop prompts: config, verification and links", () => {
       for (const m of s.matchAll(/\]\((\.{1,2}\/[^)#\s]+)(?:#[^)]*)?\)/g)) {
         assert.ok(existsSync(resolve(dirname(f), m[1]!)), `${f} → ${m[1]}`);
       }
+    }
+  });
+});
+
+describe("echo family 14 (academy): Learn Academy groups ↔ Academy units", () => {
+  it("every Academy Learn group has questions and is linked (never copied) from at least one Academy unit", () => {
+    for (const g of ACADEMY_QUIZ_GROUP_IDS) {
+      assert.ok(QUIZ_GROUPS.some((q) => q.id === g), `${g} is a Learn group`);
+      assert.ok(getQuestionsForGroup(g as QuizGroupId).length >= 6, `${g} has questions`);
+      const units = UNITS.filter((u) => u.refs.includes(`quiz:${g}`));
+      assert.ok(units.length >= 1, `${g} is linked from an Academy unit`);
     }
   });
 });
