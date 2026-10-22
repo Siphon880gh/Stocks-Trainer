@@ -273,7 +273,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 ---
 
 ## BA11 — Stretch (only after Weng approves in PROGRESS.md)
-- **BA11.M1** Bracket / OCO / OTO orders (engine + ticket).
+- [x] **BA11.M1** Bracket / OCO / OTO orders (engine + ticket).
 - **BA11.M2** Short selling + margin explainer (borrow, buy-to-cover, unlimited-risk warnings).
 - **BA11.M3** Fractional shares + dollar-amount orders.
 - **BA11.M4** Fees / slippage toggle and a "cost of trading" lesson.

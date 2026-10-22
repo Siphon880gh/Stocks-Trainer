@@ -74,3 +74,13 @@ export function estimatePrice(o: OrderSpec, lastClose: number): number {
   if (o.type === "stop") return o.stopPrice ?? lastClose;
   return lastClose;
 }
+
+/** BA11.M1: plain-language line for a bracket's exits. SIMULATED. */
+export function describeBracket(exits: { stopPrice?: number; targetPrice?: number }, qty: number): string {
+  const n = shares(qty);
+  const parts: string[] = [];
+  if (exits.stopPrice !== undefined) parts.push(`a sell stop at ${money(exits.stopPrice)} (caps the loss)`);
+  if (exits.targetPrice !== undefined) parts.push(`a sell limit at ${money(exits.targetPrice)} (takes the profit)`);
+  const both = parts.length === 2 ? " They are one-cancels-other: when one fills, the other is cancelled." : "";
+  return `Only after the buy fills: ${parts.join(" and ")} start working on the next bar for the same ${n}.${both} If the buy never fills, they are cancelled.`;
+}

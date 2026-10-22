@@ -3,7 +3,8 @@ import type { AccountState, OrderSpec, OrderType, Side, TimeInForce } from "../.
 import { ORDER_TYPES } from "../../../lib/academy/paper/types";
 import { validateOrder } from "../../../lib/academy/paper/validate";
 import { buyingPower } from "../../../lib/academy/paper/account";
-import { TYPE_LABELS, describeOrder, estimatePrice, money } from "../../../lib/academy/paper/describe";
+import { TYPE_LABELS, describeBracket, describeOrder, estimatePrice, money } from "../../../lib/academy/paper/describe";
+import { validateBracket } from "../../../lib/academy/paper/linked";
 import { cn } from "../../../lib/utils";
 
 interface Props {
@@ -11,7 +12,9 @@ interface Props {
   symbol: string;
   allowedTypes?: readonly OrderType[];
   disabled?: boolean;
-  onSubmit: (spec: OrderSpec) => void;
+  onSubmit: (spec: OrderSpec, exits?: BracketExits) => void;
+  /** BA11.M1: offer "attach stop / target" (a bracket) on buy orders. */
+  allowBracket?: boolean;
   /** Test / screenshot preset. */
   initial?: Partial<TicketFields>;
 }
@@ -25,6 +28,14 @@ export interface TicketFields {
   stop: string;
   trailMode: "amount" | "percent";
   trail: string;
+  bracket?: boolean;
+  exitStop?: string;
+  exitTarget?: string;
+}
+
+export interface BracketExits {
+  stopPrice?: number;
+  targetPrice?: number;
 }
 
 const toCents = (s: string) => (s.trim() === "" ? undefined : Math.round(Number(s) * 100));
@@ -43,12 +54,16 @@ export function specFromFields(f: TicketFields, symbol: string): OrderSpec {
 const input = "w-full px-2 py-1.5 rounded-md border border-line bg-white text-[13px] tabular-nums";
 
 /** BA5.M1: order ticket with live validation and a generated plain-language preview. SIMULATED. */
-export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES, disabled, onSubmit, initial }: Props) {
+export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES, disabled, onSubmit, initial, allowBracket }: Props) {
   const last = state.marks[symbol] ?? 0;
   const [f, setF] = useState<TicketFields>({ side: "buy", type: allowedTypes[0] ?? "market", qty: "10", tif: "gtc", limit: "", stop: "", trailMode: "percent", trail: "5", ...initial });
   const set = (patch: Partial<TicketFields>) => setF({ ...f, ...patch });
   const spec = specFromFields(f, symbol);
-  const v = validateOrder(state, spec, { lastClose: { [symbol]: last } });
+  const ctx = { lastClose: { [symbol]: last } };
+  const canBracket = !!allowBracket && f.side === "buy" && f.type !== "trailing-stop";
+  const bracketOn = canBracket && !!f.bracket;
+  const exits: BracketExits = { stopPrice: toCents(f.exitStop ?? ""), targetPrice: toCents(f.exitTarget ?? "") };
+  const v = bracketOn ? validateBracket(state, spec, exits.stopPrice, exits.targetPrice, ctx) : validateOrder(state, spec, ctx);
   const est = Number.isFinite(spec.qty) ? spec.qty * estimatePrice(spec, last) : 0;
   const types = allowedTypes.filter((t) => !(t === "trailing-stop" && f.side === "buy"));
   return (
@@ -57,7 +72,7 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
       data-testid="order-ticket"
       onSubmit={(e) => {
         e.preventDefault();
-        if (v.ok && !disabled) onSubmit(spec);
+        if (v.ok && !disabled) (bracketOn ? onSubmit(spec, exits) : onSubmit(spec));
       }}
     >
       <div className="flex items-baseline justify-between">
@@ -121,11 +136,32 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
           </>
         ) : null}
       </div>
+      {canBracket ? (
+        <div className="rounded-md border border-line p-2 space-y-2" data-testid="ticket-bracket">
+          <label className="flex items-center gap-2 text-[12px]">
+            <input type="checkbox" checked={!!f.bracket} onChange={(e) => set({ bracket: e.target.checked })} data-testid="ticket-bracket-toggle" />
+            Attach a stop and / or target (bracket order)
+          </label>
+          {f.bracket ? (
+            <div className="grid grid-cols-2 gap-2">
+              <label className="block text-[12px] text-muted">
+                Protective stop ($)
+                <input className={input} inputMode="decimal" value={f.exitStop ?? ""} placeholder="below entry" onChange={(e) => set({ exitStop: e.target.value })} data-testid="ticket-exit-stop" />
+              </label>
+              <label className="block text-[12px] text-muted">
+                Target ($)
+                <input className={input} inputMode="decimal" value={f.exitTarget ?? ""} placeholder="above entry" onChange={(e) => set({ exitTarget: e.target.value })} data-testid="ticket-exit-target" />
+              </label>
+            </div>
+          ) : null}
+        </div>
+      ) : null}
       <p className="text-[12px] text-muted tabular-nums">
         Last close {money(last)} · {f.side === "buy" ? `Est. cost ${money(est)} · Buying power ${money(buyingPower(state))}` : `Shares held ${state.positions[symbol]?.qty ?? 0}`}
       </p>
       <p className="text-[13px] bg-sim/5 border border-sim/30 rounded-md px-2.5 py-2" data-testid="order-preview">
         {v.errors.length ? "Fix the order to see what it will do." : describeOrder(spec, last)}
+        {bracketOn && !v.errors.length ? <span className="block mt-1" data-testid="bracket-preview">{describeBracket(exits, spec.qty)}</span> : null}
       </p>
       {v.errors.map((e) => (
         <p key={e.code} className="text-[12px] text-accent-red" data-code={e.code}>

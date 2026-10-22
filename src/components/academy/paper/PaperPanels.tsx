@@ -90,6 +90,7 @@ export function OpenOrders({ state, onCancel }: { state: AccountState; onCancel?
               {orderLabel(o)}
               {levelOf(o)}
               {o.reserved ? ` · holds ${money(o.reserved)}` : ""}
+              {o.waiting ? " · waits for its entry to fill" : o.ocoGroup ? " · OCO (one cancels the other)" : ""}
             </span>
             {onCancel ? (
               <button type="button" onClick={() => onCancel(o.id)} className="px-2 py-0.5 rounded border border-line hover:border-accent-red" data-testid={`cancel-${o.id}`}>

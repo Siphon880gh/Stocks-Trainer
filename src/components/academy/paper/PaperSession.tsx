@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import CandlestickChart from "../../CandlestickChart";
 import type { OrderSpec, OrderType, PaperSessionLog } from "../../../lib/academy/paper/types";
-import { replay, sessionCancel, sessionPlace, sessionStep, visibleBars } from "../../../lib/academy/paper/session";
+import { replay, sessionBracket, sessionCancel, sessionPlace, sessionStep, visibleBars } from "../../../lib/academy/paper/session";
 import { getTape } from "../../../lib/academy/paper/tapes";
 import { avgCost } from "../../../lib/academy/paper/account";
 import SimulatedBanner from "../SimulatedBanner";
-import OrderTicket from "./OrderTicket";
+import OrderTicket, { type BracketExits } from "./OrderTicket";
 import EquityCurve from "./EquityCurve";
 import { AccountSummary, OpenOrders, OrderHistory, PositionsTable } from "./PaperPanels";
 
@@ -18,10 +18,12 @@ interface Props {
   toolbar?: ReactNode;
   /** Shown instead of the ticket once the session is over. */
   finished?: ReactNode;
+  /** BA11.M1: allow bracket orders on the ticket. */
+  allowBracket?: boolean;
 }
 
 /** BA5.M3: chart (bars 0..current only), stepping, ticket and account panels for one paper session. SIMULATED. */
-export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolbar, finished }: Props) {
+export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolbar, finished, allowBracket }: Props) {
   const tape = getTape(log.tapeId)!;
   const end = Math.min(lastBar ?? tape.bars.length - 1, tape.bars.length - 1);
   const state = useMemo(() => replay(log), [log]);
@@ -45,7 +47,7 @@ export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolba
     ...state.orders
       .filter((o) => o.status === "working")
       .flatMap((o) => {
-        const side = o.side === "buy" ? "Buy" : "Sell";
+        const side = (o.side === "buy" ? "Buy" : "Sell") + (o.waiting ? " (after entry)" : "");
         if (o.type === "limit") return [{ price: o.limitPrice! / 100, label: `${side} limit` }];
         if (o.type === "stop") return [{ price: o.stopPrice! / 100, label: `${side} stop` }];
         if (o.type === "stop-limit") return [{ price: o.stopPrice! / 100, label: `${side} stop` }, { price: o.limitPrice! / 100, label: `${side} limit` }];
@@ -56,7 +58,11 @@ export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolba
   ];
   const data = bars.map((b, i) => ({ name: b.label ?? `D${i + 1}`, open: b.open / 100, high: b.high / 100, low: b.low / 100, close: b.close / 100 }));
 
-  const place = (spec: OrderSpec) => {
+  const place = (spec: OrderSpec, exits?: BracketExits) => {
+    if (exits) {
+      const b = sessionBracket(log, spec, exits.stopPrice, exits.targetPrice);
+      return onLog(b.log, { placed: true, accepted: b.result.ok });
+    }
     const r = sessionPlace(log, spec);
     onLog(r.log, { placed: true, accepted: r.result.validation.ok });
   };
@@ -98,7 +104,7 @@ export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolba
         </div>
         <div className="space-y-3 lg:sticky lg:top-4">
           {atEnd && finished ? finished : <div key={log.actions.length}>
-              <OrderTicket state={state} symbol={tape.symbol} allowedTypes={allowedTypes} disabled={atEnd} onSubmit={place} />
+              <OrderTicket state={state} symbol={tape.symbol} allowedTypes={allowedTypes} disabled={atEnd} onSubmit={place} allowBracket={allowBracket} />
             </div>}
           <p className="text-[12px] text-muted">
             Orders placed now are checked against the <strong>next</strong> bar. Fills follow textbook rules on daily bars: market at the open; limits at the limit or

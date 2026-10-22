@@ -3,7 +3,7 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA11.M1.S1
+- `current_story`: BA11.M2.S1
 - `status`: core BA0–BA10 done and signed off (2026-10-21); BA11 stretch approved and in progress
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
@@ -212,3 +212,10 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - M4 fees / slippage: off by default (D4 unchanged); optional per-order fee and slippage in basis points, applied at the fill (buys pay more, sells receive less, rounded to the cent), plus a "cost of trading" explainer computed from the same function.
 - M5 trade journal: one note per fill, saved with the paper store, CSV export (RFC 4180 quoting).
 - M6 multiple portfolios: up to 5 named paper portfolios, each with its own session; the existing single session migrates into "Main".
+
+### 2026-10-21 · BA11.M1 Bracket / OCO / OTO · done
+- Engine: `paper/linked.ts` (`validateBracket`, `placeBracket`, `validateOco`, `placeOco`); `engine.ts` skips waiting children and orders activated on the current bar, wakes a filled entry's exits for the next bar, cancels OCO partners on a fill and cancels waiting exits when the entry expires / is cancelled / is rejected. Session actions `bracket` and `oco` replay deterministically.
+- Ticket: buys on the free paper page (`allowBracket`) get "Attach a stop and / or target"; exits are validated (stop below / target above the entry reference) and the preview explains OTO + OCO in plain words. Open orders tag "waits for its entry to fill" / "OCO". Challenges do not offer brackets (their rules are unchanged).
+- Tests: `paper/linked.test.ts` (8: target fill cancels stop, stop fill cancels target, same-bar stop-first, expiry and cancel cascade, OTO with one exit counts as stop-protected, validation codes, OCO pair + OCO_NOT_SELLS, session replay) and one render test in `paperPage.render.test.tsx`.
+- Screenshots: checkpoints/ba11-bracket-ticket.png, ba11-bracket-invalid.png, ba11-bracket-oco-working.png, ba11-bracket-target-filled.png.
+- Next: BA11.M2.S1 (short selling + margin explainer).

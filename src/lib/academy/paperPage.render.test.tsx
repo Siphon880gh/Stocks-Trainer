@@ -7,7 +7,7 @@ import OrderTicket from "../../components/academy/paper/OrderTicket";
 import { AccountSummary, OpenOrders, OrderHistory, PositionsTable } from "../../components/academy/paper/PaperPanels";
 import RewardsPanel from "../../components/academy/RewardsPanel";
 import { PAPER_KEY, REWARDS_KEY, emptyPaper, emptyRewards, memoryStorage } from "./storage";
-import { START_BAR, newSessionLog, replay, sessionPlace, sessionStep } from "./paper/session";
+import { START_BAR, newSessionLog, replay, sessionBracket, sessionPlace, sessionStep } from "./paper/session";
 import { getTape } from "./paper/tapes";
 import { createAccount } from "./paper/account";
 import { performance, symbolPnl } from "./paper/stats";
@@ -114,4 +114,22 @@ test("rewards panel: virtual-only disclaimer; locked badges show the hint, never
   assert.match(html, /data-badge="first-unit" data-earned="true"/);
   for (const b of BADGES.filter((x) => x.id !== "first-unit")) assert.ok(text.includes(b.hint), b.id);
   assert.doesNotMatch(text, /=>|earned\(|\.length\s*>=/);
+});
+
+test("BA11.M1 bracket ticket: opt-in on buys only, validated exits, plain-language preview; open orders show the link", () => {
+  const s = createAccount(1_000_000, { [tape.symbol]: 5000 });
+  assert.ok(!renderHtml(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} />).includes("ticket-bracket"), "off unless allowed");
+  assert.ok(!renderHtml(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} allowBracket initial={{ side: "sell" }} />).includes("ticket-bracket"), "buys only");
+  const bad = renderHtml(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} allowBracket initial={{ bracket: true, exitStop: "51", exitTarget: "55" }} />);
+  assert.ok(bad.includes('data-code="BRACKET_STOP_NOT_BELOW"'));
+  assert.match(bad, /data-testid="ticket-submit"[^>]*disabled|disabled[^>]*data-testid="ticket-submit"/);
+  assert.ok(renderHtml(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} allowBracket initial={{ bracket: true }} />).includes('data-code="BRACKET_NEEDS_EXIT"'));
+  const ok = renderText(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} allowBracket initial={{ bracket: true, exitStop: "48", exitTarget: "55" }} />);
+  assert.match(ok, /Only after the buy fills: a sell stop at \$48\.00 \(caps the loss\) and a sell limit at \$55\.00 \(takes the profit\)/);
+  assert.match(ok, /one-cancels-other/);
+  let log = newSessionLog("trend-up", 1_000_000, START_BAR);
+  const last = tape.bars[START_BAR]!.close;
+  log = sessionBracket(log, { symbol: tape.symbol, side: "buy", type: "limit", limitPrice: last - 500, qty: 5, tif: "gtc" }, last - 900, last + 500).log;
+  const open = renderText(<OpenOrders state={replay(log)} />);
+  assert.equal((open.match(/waits for its entry to fill/g) ?? []).length, 2);
 });

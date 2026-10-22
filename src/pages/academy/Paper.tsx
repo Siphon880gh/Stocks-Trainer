@@ -76,6 +76,7 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
         <PaperSession
           log={store.session}
           onLog={onLog}
+          allowBracket
           toolbar={
             <button type="button" onClick={() => persist(null, store.session!)} className="px-3 py-1.5 rounded-md border border-line text-[13px] hover:border-accent-red" data-testid="paper-reset">
               New session
