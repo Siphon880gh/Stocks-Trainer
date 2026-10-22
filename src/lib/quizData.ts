@@ -3499,7 +3499,7 @@ export const INDICATOR_QUIZ_QUESTIONS: QuizQuestion[] = [
     explanation: "RSI labels stretch vs mean. Trends can stay stretched. SAMPLE: do not treat 70/30 as a button.",
     overlayId: "rsi",
     assetClass: "equity",
-    samplePackId: "eq-cyclical",
+    samplePackId: "eq-mega-tech",
   },
   {
     id: "IN-09",

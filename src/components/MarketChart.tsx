@@ -22,7 +22,7 @@ import {
   chartVerticalScale,
   type OHLC,
 } from "../lib/ohlcData";
-import { sma, ema, rsi, macd, bollingerBands } from "../lib/indicators";
+import { sma, ema, rsi, macd, bollingerBands, MARKET_CHART_RSI_PERIOD } from "../lib/indicators";
 import {
   explainChartProgression,
   type ChartProgressionAnchor,
@@ -529,7 +529,7 @@ export default function MarketChart({
   const closes = data.map((d) => d.close);
   const sma20 = sma(closes, 5);
   const ema12 = ema(closes, 4);
-  const rsi14 = rsi(closes, 5);
+  const rsi14 = rsi(closes, MARKET_CHART_RSI_PERIOD);
   const { macd: macdLine, signal: macdSignal, histogram: macdHist } = macd(
     closes,
     4,

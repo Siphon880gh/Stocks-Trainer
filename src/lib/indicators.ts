@@ -32,25 +32,35 @@ export function ema(closes: number[], period: number): (number | null)[] {
   return result;
 }
 
-/** Relative Strength Index */
+/**
+ * Relative Strength Index with Wilder's smoothing (the standard RSI).
+ * The first average gain / loss is the simple mean of the first `period` close-to-close changes; after that
+ * average = (previous average × (period − 1) + current gain or loss) / period. RSI = 100 − 100 / (1 + avg gain / avg loss);
+ * 100 when the average loss is 0. Values start at index `period` (the first bar with `period` changes behind it).
+ * Source: StockCharts ChartSchool, "Relative Strength Index (RSI)", and its cs-rsi.xls worked example (rsi.test.ts).
+ */
+/** RSI period the SAMPLE MarketChart pane uses: its packs are only ~12 bars, so 14 would leave the pane empty. */
+export const MARKET_CHART_RSI_PERIOD = 5;
+
 export function rsi(closes: number[], period = 14): (number | null)[] {
-  const result: (number | null)[] = [];
-  for (let i = 0; i < closes.length; i++) {
-    if (i < period) {
-      result.push(null);
-    } else {
-      let gains = 0;
-      let losses = 0;
-      for (let j = 1; j <= period; j++) {
-        const diff = closes[i - j + 1]! - closes[i - j]!;
-        if (diff > 0) gains += diff;
-        else losses -= diff;
-      }
-      const avgGain = gains / period;
-      const avgLoss = losses / period;
-      if (avgLoss === 0) result.push(100);
-      else result.push(100 - 100 / (1 + avgGain / avgLoss));
-    }
+  const result: (number | null)[] = closes.map(() => null);
+  if (closes.length <= period) return result;
+  let avgGain = 0;
+  let avgLoss = 0;
+  for (let i = 1; i <= period; i++) {
+    const diff = closes[i]! - closes[i - 1]!;
+    if (diff > 0) avgGain += diff;
+    else avgLoss -= diff;
+  }
+  avgGain /= period;
+  avgLoss /= period;
+  const value = () => (avgLoss === 0 ? 100 : 100 - 100 / (1 + avgGain / avgLoss));
+  result[period] = value();
+  for (let i = period + 1; i < closes.length; i++) {
+    const diff = closes[i]! - closes[i - 1]!;
+    avgGain = (avgGain * (period - 1) + Math.max(diff, 0)) / period;
+    avgLoss = (avgLoss * (period - 1) + Math.max(-diff, 0)) / period;
+    result[i] = value();
   }
   return result;
 }
