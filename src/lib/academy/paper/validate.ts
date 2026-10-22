@@ -14,7 +14,10 @@
  */
 import type { AccountState, OrderSpec } from "./types";
 import { ORDER_TYPES, TIFS } from "./types";
-import { SHORT_INITIAL_MARGIN, buyingPower } from "./account";
+import { FRACTION_DIGITS, SHORT_INITIAL_MARGIN, buyingPower, isQ4 } from "./account";
+
+/** BA11.M3: smallest dollar-amount order. */
+export const MIN_DOLLAR_AMOUNT = 100;
 
 export const MARKET_BUFFER = 0.05;
 export const MAX_TRAIL_PERCENT = 50;
@@ -47,7 +50,12 @@ export type ValidationCode =
   | "LARGE_POSITION"
   | "SHORT_TRAIL_NOT_SUPPORTED"
   | "COVER_EXCEEDS_SHORT"
-  | "SHORT_SALE_RISK";
+  | "SHORT_SALE_RISK"
+  | "QTY_TOO_PRECISE"
+  | "FRACTIONAL_SHORT"
+  | "DOLLAR_NEEDS_FRACTIONAL"
+  | "DOLLAR_BUY_MARKET_ONLY"
+  | "DOLLAR_AMOUNT_RANGE";
 
 export interface Issue {
   code: ValidationCode;
@@ -83,8 +91,10 @@ export function reservationFor(spec: OrderSpec, lastClose: number): number {
   switch (spec.type) {
     case "limit":
     case "stop-limit":
-      return spec.qty * (spec.limitPrice ?? 0);
+      return Math.ceil(spec.qty * (spec.limitPrice ?? 0));
     case "market":
+      // BA11.M3: a dollar-amount buy never spends more than its amount.
+      if (spec.amount !== undefined) return spec.amount;
       return Math.ceil(spec.qty * lastClose * (1 + MARKET_BUFFER));
     case "stop":
       return Math.ceil(spec.qty * (spec.stopPrice ?? 0) * (1 + MARKET_BUFFER));
@@ -104,8 +114,14 @@ export function validateOrder(state: AccountState, spec: OrderSpec, ctx: MarketC
   if (spec.side !== "buy" && spec.side !== "sell") e("UNKNOWN_SIDE", "Choose buy or sell.");
   if (!ORDER_TYPES.includes(spec.type)) e("UNKNOWN_TYPE", "Choose an order type.");
   if (!TIFS.includes(spec.tif)) e("UNKNOWN_TIF", "Choose Day or GTC.");
-  if (!(spec.qty > 0)) e("QTY_NOT_POSITIVE", "Quantity must be at least 1 share.");
-  else if (!Number.isInteger(spec.qty)) e("QTY_NOT_INTEGER", "Whole shares only (fractional shares are not in the core Academy).");
+  const fractional = !!state.options?.fractional;
+  if (spec.amount !== undefined) {
+    if (!fractional) e("DOLLAR_NEEDS_FRACTIONAL", "Dollar-amount orders need fractional shares (a stretch rule chosen when the session starts).");
+    if (spec.side !== "buy" || spec.type !== "market") e("DOLLAR_BUY_MARKET_ONLY", "Dollar amounts work with market buys only; enter shares for other orders.");
+    if (!Number.isInteger(spec.amount) || spec.amount < MIN_DOLLAR_AMOUNT) e("DOLLAR_AMOUNT_RANGE", `Enter at least ${$(MIN_DOLLAR_AMOUNT)}, in whole cents.`);
+  } else if (!(spec.qty > 0)) e("QTY_NOT_POSITIVE", fractional ? "Quantity must be above 0 shares." : "Quantity must be at least 1 share.");
+  else if (!fractional && !Number.isInteger(spec.qty)) e("QTY_NOT_INTEGER", "Whole shares only (fractional shares are not in the core Academy).");
+  else if (fractional && !isQ4(spec.qty)) e("QTY_TOO_PRECISE", `Fractional shares go to ${FRACTION_DIGITS} decimal places at most.`);
 
   const needsLimit = spec.type === "limit" || spec.type === "stop-limit";
   const needsStop = spec.type === "stop" || spec.type === "stop-limit";
@@ -151,6 +167,7 @@ export function validateOrder(state: AccountState, spec: OrderSpec, ctx: MarketC
   if (spec.side === "sell" && spec.qty > 0) {
     if (held === 0 && !shortOk) e("SHORT_NOT_ALLOWED", "You do not own this stock. Selling it would be a short sale, which the core Academy does not allow.");
     else if (held > 0 && spec.qty > held) e("SELL_EXCEEDS_POSITION", `You own ${held} shares; you cannot sell ${spec.qty} (no shorting in v1).`);
+    if (opensShort && !Number.isInteger(spec.qty)) e("FRACTIONAL_SHORT", "Fractional shares cannot be sold short; use whole shares.");
     if (opensShort && spec.type === "trailing-stop") e("SHORT_TRAIL_NOT_SUPPORTED", "A trailing stop protects shares you own; it cannot open a short sale.");
   }
   if (covers && spec.qty > -held) e("COVER_EXCEEDS_SHORT", `You are short ${-held} shares; buy at most ${-held} to cover (one order never flips you from short to long).`);

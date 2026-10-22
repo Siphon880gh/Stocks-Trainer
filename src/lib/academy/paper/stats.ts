@@ -2,7 +2,7 @@
  * BA4.M4: P&L and performance statistics (all in cents unless noted). Pure.
  */
 import type { AccountState, Order } from "./types";
-import { equity, positionValue } from "./account";
+import { equity, positionValue, q4 } from "./account";
 
 /** Unrealised P&L = Σ (qty × mark − cost basis) over open positions. */
 export const unrealizedPnl = (s: AccountState) => Object.values(s.positions).reduce((a, p) => a + positionValue(s, p) - p.costBasis, 0);
@@ -88,10 +88,10 @@ export function roundTrips(s: AccountState): RoundTrip[] {
       trips.push(trip);
       open[f.symbol] = { trip, qty: d };
     } else if (Math.sign(cur.qty) === Math.sign(d)) {
-      cur.qty += d;
+      cur.qty = q4(cur.qty + d);
     } else {
       cur.trip.pnl += f.realized;
-      cur.qty += d;
+      cur.qty = q4(cur.qty + d);
       if (cur.qty === 0) {
         cur.trip.closed = true;
         cur.trip.exitBar = f.bar;

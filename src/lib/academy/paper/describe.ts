@@ -24,6 +24,7 @@ export function orderLabel(o: OrderSpec): string {
     o.type === "trailing-stop" ? (o.trailAmount !== undefined ? ` ${money(o.trailAmount)} trail` : ` ${o.trailPercent}% trail`) : "";
   const o2 = o as OrderSpec & { opensShort?: boolean; covers?: boolean };
   const verb = o2.opensShort ? "Sell short" : o2.covers ? "Buy to cover" : o.side === "buy" ? "Buy" : "Sell";
+  if (o.amount !== undefined) return `${verb} ${money(o.amount)} of ${o.symbol} · ${TYPE_LABELS[o.type]} · ${o.tif === "day" ? "Day" : "GTC"}`;
   return `${verb} ${o.qty} ${o.symbol} · ${TYPE_LABELS[o.type]}${px} · ${o.tif === "day" ? "Day" : "GTC"}`;
 }
 
@@ -34,6 +35,10 @@ export function describeOrder(o: OrderSpec, lastClose?: number): string {
   let body: string;
   switch (o.type) {
     case "market":
+      if (o.amount !== undefined) {
+        body = `Buy ${money(o.amount)} of ${o.symbol} at the next bar's open: you get ${money(o.amount)} ÷ the open price in shares, rounded down to 4 decimals${lastClose ? ` (about ${o.qty} shares at the last close of ${money(lastClose)})` : ""}. Fractional shares are real ownership of part of one share.`;
+        break;
+      }
       body = `${buy ? "Buy" : "Sell"} ${n} of ${o.symbol} at the next bar's open, whatever that price is${lastClose ? ` (the last close was ${money(lastClose)})` : ""}. A market order fills, but the price can differ from the last close, most of all after a gap.`;
       break;
     case "limit": {

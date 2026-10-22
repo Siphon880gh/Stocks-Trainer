@@ -23,7 +23,7 @@
  * - Fees 0, integer cents, integer shares.
  */
 import type { AccountState, Order, OrderSpec, PaperBar } from "./types";
-import { SHORT_INITIAL_MARGIN, applyFill, buyingPower, equity, reservedTotal } from "./account";
+import { SHORT_INITIAL_MARGIN, applyFill, buyingPower, equity, notionalOf, q4, reservedTotal } from "./account";
 import { validateOrder, type MarketContext, type Validation } from "./validate";
 
 export const trailLevel = (peak: number, spec: Pick<OrderSpec, "trailAmount" | "trailPercent">) =>
@@ -74,7 +74,8 @@ function cancelWaitingChildren(s: AccountState, parentId: string, bar: number): 
 /** BA11.M1: after `done` closed on bar t, wake its exits (filled) or cancel them (not filled), and cancel its OCO partners. */
 function settleLinks(s: AccountState, done: Order, t: number): AccountState {
   if (done.status === "filled") {
-    let orders = s.orders.map((o) => (o.parentId === done.id && o.waiting && o.status === "working" ? { ...o, waiting: false, placedAtBar: t } : o));
+    // Exits cover exactly the shares the entry bought (a dollar-amount entry learns its quantity at the fill).
+    let orders = s.orders.map((o) => (o.parentId === done.id && o.waiting && o.status === "working" ? { ...o, waiting: false, placedAtBar: t, qty: q4(done.qty) } : o));
     if (done.ocoGroup) orders = orders.map((o) => (o.id !== done.id && o.ocoGroup === done.ocoGroup && o.status === "working" ? close(o, "cancelled", t, { waiting: false, reason: "Cancelled: the other order in its OCO pair filled." }) : o));
     return { ...s, orders };
   }
@@ -139,6 +140,11 @@ export function stepBar(state: AccountState, bars: Record<string, PaperBar>): Ac
     if (!bar) continue;
     const { price, order } = evaluate(o, bar);
     let next: Order = order;
+    if (price !== null && o.amount !== undefined) {
+      // BA11.M3: a dollar-amount buy turns into shares at the fill price, rounded down to 4 decimals.
+      const qty = Math.floor((o.amount / price) * 10_000) / 10_000;
+      next = { ...order, qty };
+    }
     const held = s.positions[o.symbol]?.qty ?? 0;
     const money$ = (c: number) => `$${(c / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
     if (price !== null && o.opensShort) {
@@ -160,11 +166,11 @@ export function stepBar(state: AccountState, bars: Record<string, PaperBar>): Ac
     } else if (price !== null) {
       if (o.side === "buy") {
         const available = s.cash - (reservedTotal(s) - o.reserved);
-        if (o.qty * price > available) {
+        if (notionalOf(next.qty, price) > available || !(next.qty > 0)) {
           next = close(order, "rejected", t, { reason: `Not enough cash at the fill price $${(price / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} after the price moved (a gap past the reserved amount).` });
         } else {
-          s = applyFill(s, { orderId: o.id, bar: t, symbol: o.symbol, side: "buy", qty: o.qty, price }).state;
-          next = close(order, "filled", t, { fillPrice: price });
+          s = applyFill(s, { orderId: o.id, bar: t, symbol: o.symbol, side: "buy", qty: next.qty, price }).state;
+          next = close(next, "filled", t, { fillPrice: price });
         }
       } else {
         if (o.qty > held) {

@@ -151,3 +151,15 @@ test("BA11.M2 shorting: off by default on setup; ticket explains a short sale; t
   assert.match(text, /-20 \(short\)/);
   assert.ok(!renderText(page(withSession())).includes("Short selling & margin"), "core sessions have no margin panel");
 });
+
+test("BA11.M3 fractional: dollar sizing only in fractional sessions, for market buys; preview explains the rounding", () => {
+  const core = createAccount(1_000_000, { [tape.symbol]: 5000 });
+  assert.ok(!renderHtml(<OrderTicket state={core} symbol={tape.symbol} onSubmit={() => {}} />).includes("ticket-size-dollars"));
+  const s = createAccount(1_000_000, { [tape.symbol]: 5000 }, 0, { fractional: true });
+  assert.ok(renderHtml(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} />).includes("ticket-size-dollars"));
+  assert.ok(!renderHtml(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} initial={{ type: "limit", limit: "49" }} />).includes("ticket-size-dollars"));
+  const text = renderText(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} initial={{ qtyMode: "dollars", amount: "500" }} />);
+  assert.match(text, /Buy \$500\.00 of TRWL\.S at the next bar's open/);
+  assert.match(text, /about 10 shares/);
+  assert.ok(renderHtml(page(memoryStorage({}))).includes('data-testid="opt-fractional"'));
+});

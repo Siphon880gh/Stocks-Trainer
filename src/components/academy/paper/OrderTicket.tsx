@@ -29,6 +29,9 @@ export interface TicketFields {
   trailMode: "amount" | "percent";
   trail: string;
   bracket?: boolean;
+  /** BA11.M3: fractional sessions can size a market buy in dollars. */
+  qtyMode?: "shares" | "dollars";
+  amount?: string;
   exitStop?: string;
   exitTarget?: string;
 }
@@ -40,8 +43,12 @@ export interface BracketExits {
 
 const toCents = (s: string) => (s.trim() === "" ? undefined : Math.round(Number(s) * 100));
 
-export function specFromFields(f: TicketFields, symbol: string): OrderSpec {
+export function specFromFields(f: TicketFields, symbol: string, last = 0): OrderSpec {
   const spec: OrderSpec = { symbol, side: f.side, type: f.type, qty: Number(f.qty), tif: f.tif };
+  if (f.qtyMode === "dollars" && f.side === "buy" && f.type === "market") {
+    spec.amount = toCents(f.amount ?? "") ?? 0;
+    spec.qty = last > 0 ? Math.floor((spec.amount / last) * 10_000) / 10_000 : 0;
+  }
   if (f.type === "limit" || f.type === "stop-limit") spec.limitPrice = toCents(f.limit);
   if (f.type === "stop" || f.type === "stop-limit") spec.stopPrice = toCents(f.stop);
   if (f.type === "trailing-stop") {
@@ -58,13 +65,14 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
   const last = state.marks[symbol] ?? 0;
   const [f, setF] = useState<TicketFields>({ side: "buy", type: allowedTypes[0] ?? "market", qty: "10", tif: "gtc", limit: "", stop: "", trailMode: "percent", trail: "5", ...initial });
   const set = (patch: Partial<TicketFields>) => setF({ ...f, ...patch });
-  const spec = specFromFields(f, symbol);
+  const dollarsOk = !!state.options?.fractional && f.side === "buy" && f.type === "market";
+  const spec = specFromFields(dollarsOk ? f : { ...f, qtyMode: "shares" }, symbol, last);
   const ctx = { lastClose: { [symbol]: last } };
   const canBracket = !!allowBracket && f.side === "buy" && f.type !== "trailing-stop";
   const bracketOn = canBracket && !!f.bracket;
   const exits: BracketExits = { stopPrice: toCents(f.exitStop ?? ""), targetPrice: toCents(f.exitTarget ?? "") };
   const v = bracketOn ? validateBracket(state, spec, exits.stopPrice, exits.targetPrice, ctx) : validateOrder(state, spec, ctx);
-  const est = Number.isFinite(spec.qty) ? spec.qty * estimatePrice(spec, last) : 0;
+  const est = spec.amount ?? (Number.isFinite(spec.qty) ? Math.round(spec.qty * estimatePrice(spec, last)) : 0);
   const types = allowedTypes.filter((t) => !(t === "trailing-stop" && f.side === "buy"));
   return (
     <form
@@ -86,6 +94,15 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
           </button>
         ))}
       </div>
+      {dollarsOk ? (
+        <div className="grid grid-cols-2 gap-1.5 text-[12px]" role="group" aria-label="Size in">
+          {(["shares", "dollars"] as const).map((m) => (
+            <button key={m} type="button" onClick={() => set({ qtyMode: m })} aria-pressed={(f.qtyMode ?? "shares") === m} className={cn("py-1 rounded-md border", (f.qtyMode ?? "shares") === m ? "border-sim bg-sim/10" : "border-line")} data-testid={`ticket-size-${m}`}>
+              {m === "shares" ? "Shares" : "Dollars"}
+            </button>
+          ))}
+        </div>
+      ) : null}
       <label className="block text-[12px] text-muted">
         Order type
         <select className={input} value={f.type} onChange={(e) => set({ type: e.target.value as OrderType })} data-testid="ticket-type">
@@ -97,10 +114,17 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
         </select>
       </label>
       <div className="grid grid-cols-2 gap-2">
-        <label className="block text-[12px] text-muted">
-          Shares
-          <input className={input} inputMode="numeric" value={f.qty} onChange={(e) => set({ qty: e.target.value })} data-testid="ticket-qty" />
-        </label>
+        {dollarsOk && f.qtyMode === "dollars" ? (
+          <label className="block text-[12px] text-muted">
+            Dollar amount ($)
+            <input className={input} inputMode="decimal" value={f.amount ?? ""} onChange={(e) => set({ amount: e.target.value })} data-testid="ticket-amount" />
+          </label>
+        ) : (
+          <label className="block text-[12px] text-muted">
+            Shares{state.options?.fractional ? " (up to 4 decimals)" : ""}
+            <input className={input} inputMode={state.options?.fractional ? "decimal" : "numeric"} value={f.qty} onChange={(e) => set({ qty: e.target.value })} data-testid="ticket-qty" />
+          </label>
+        )}
         <label className="block text-[12px] text-muted">
           Time in force
           <select className={input} value={f.tif} onChange={(e) => set({ tif: e.target.value as TimeInForce })}>

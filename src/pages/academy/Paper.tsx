@@ -117,6 +117,12 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
                   Allow short selling on margin <span className="text-muted">(sell shares you do not own; 50% margin held; unlimited-loss risk)</span>
                 </span>
               </label>
+              <label className="flex items-start gap-2">
+                <input type="checkbox" checked={!!options.fractional} onChange={() => toggle("fractional")} data-testid="opt-fractional" />
+                <span>
+                  Fractional shares and dollar-amount buys <span className="text-muted">(quantities to 4 decimals; &ldquo;buy $500 of&rdquo; market orders)</span>
+                </span>
+              </label>
             </div>
             <button type="button" onClick={() => persist(newSessionLog(tapeId, cash, START_BAR, options))} className="px-4 py-2 rounded-md bg-sim hover:bg-sim-dim text-white font-semibold text-[13px]" data-testid="paper-start">
               Start the session

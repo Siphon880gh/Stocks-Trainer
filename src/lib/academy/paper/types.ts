@@ -27,12 +27,17 @@ export interface OrderSpec {
   trailAmount?: number;
   /** … a percent of the peak (0 < p < 50). */
   trailPercent?: number;
+  /** BA11.M3: dollar-amount market buy (cents). qty is then the estimate at the last close; the fill buys
+   *  floor(amount ÷ fill price) to 4 decimals. */
+  amount?: number;
 }
 
 /** BA11 stretch switches, chosen when a session starts (all off = the core Academy rules). */
 export interface PaperOptions {
   /** BA11.M2: short selling on margin (50% Reg T initial margin reserved; no borrow fees or buy-ins). */
   allowShort?: boolean;
+  /** BA11.M3: fractional shares (up to 4 decimals) and dollar-amount market buys. */
+  fractional?: boolean;
 }
 
 export type OrderStatus = "working" | "filled" | "cancelled" | "expired" | "rejected";

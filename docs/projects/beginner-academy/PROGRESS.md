@@ -3,7 +3,7 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA11.M3.S1
+- `current_story`: BA11.M4.S1
 - `status`: core BA0–BA10 done and signed off (2026-10-21); BA11 stretch approved and in progress
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
@@ -228,3 +228,11 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - UI: ticket labels "Sell short" / "Buy to cover" and a short-sale sentence; positions show "−40 (short)"; MarginPanel explains borrow, unlimited risk, Reg T 50% / 30% maintenance with live numbers, and states the simplifications (no borrow fee, no buy-in).
 - Tests: `paper/short.test.ts` (7) + one render test. Screenshots: ba11-short-setup-option.png, ba11-short-ticket.png, ba11-short-session-margin.png.
 - Next: BA11.M3.S1 (fractional shares + dollar-amount orders).
+
+### 2026-10-21 · BA11.M3 Fractional shares + dollar-amount orders · done
+- Session option `fractional` (setup step 3, off by default). Quantities to 4 decimals (`q4`, `isQ4`); money stays integer cents with `notionalOf = round(qty × price)`; whole-share sessions are unchanged (exact integers).
+- Dollar-amount orders: `OrderSpec.amount` (cents) on market buys only; reservation = the amount; at the fill qty = floor(amount ÷ open) to 4 decimals, so it never spends more than the amount. Bracket exits take the entry's actual filled quantity.
+- Codes: QTY_TOO_PRECISE, FRACTIONAL_SHORT (fractional shares cannot be sold short), DOLLAR_NEEDS_FRACTIONAL, DOLLAR_BUY_MARKET_ONLY, DOLLAR_AMOUNT_RANGE (min $1.00).
+- Ticket: Shares / Dollars toggle on market buys in fractional sessions; preview explains the rounding and the share estimate. Labels read "Buy $500.00 of TRWL.S".
+- Tests: `paper/fractional.test.ts` (5) + one render test. Screenshots: ba11-fractional-dollar-ticket.png, ba11-fractional-session.png.
+- Next: BA11.M4.S1 (fees / slippage toggle + cost-of-trading explainer).
