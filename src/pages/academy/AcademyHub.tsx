@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { Fragment, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { LEVELS, getUnit } from "../../lib/academy/content/levels";
 import { estMinutes } from "../../lib/academy/content/estimate";
@@ -21,6 +21,8 @@ const STATUS: Record<UnitStatus, { label: string; icon: string; cls: string }> =
 /** /academy — Beginner Academy hub: placement, continue, the level map with courses and units. */
 export default function AcademyHub({ storage, extra }: { storage?: KVStorage; extra?: ReactNode }) {
   const state = loadAcademy(storage).state;
+  // the Today answer writes the rewards store; re-read it so points and the Day streak agree with the card
+  const [rewardsTick, setRewardsTick] = useState(0);
   const sum = academySummary(state);
   const next = nextUnit(state);
   const nextU = next ? getUnit(next) : undefined;
@@ -92,9 +94,11 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
         </Link>
       </section>
 
-      <TodayCard storage={storage} />
+      <TodayCard storage={storage} onAward={() => setRewardsTick((t) => t + 1)} />
 
-      <RewardsPanel storage={storage} />
+      <Fragment key={rewardsTick}>
+        <RewardsPanel storage={storage} />
+      </Fragment>
 
       {extra}
 

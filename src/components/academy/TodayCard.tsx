@@ -12,7 +12,8 @@ import { loadRewards } from "../../lib/academy/storage";
 import { cn } from "../../lib/utils";
 
 /** BA9.M2: Today card (Home + Academy hub): next unit, one spaced review question, a term, the challenge of the week. */
-export default function TodayCard({ storage, now = () => new Date(), variant = "hub" }: { storage?: KVStorage; now?: () => Date; variant?: "home" | "hub" }) {
+/** `onAward` lets a host refresh panels that read the same rewards store (the hub's points and Day streak). */
+export default function TodayCard({ storage, now = () => new Date(), variant = "hub", onAward }: { storage?: KVStorage; now?: () => Date; variant?: "home" | "hub"; onAward?: () => void }) {
   const [state, setState] = useState(() => loadAcademy(storage).state);
   const [flash, setFlash] = useState<string | null>(null);
   const picks = todayPicks(state, now());
@@ -29,6 +30,7 @@ export default function TodayCard({ storage, now = () => new Date(), variant = "
     setState(next);
     const r = awardDaily(picks.dateKey, storage, now(), correct);
     setFlash(dailyFlash(r.added, correct));
+    onAward?.();
   };
 
   return (

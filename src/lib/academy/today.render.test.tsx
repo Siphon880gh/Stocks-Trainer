@@ -77,3 +77,11 @@ test("Today points (Weng 2026-10-22): +5 correct, +1 wrong, either counts the da
   assert.match(dailyFlash(5, true), /^\+5 points for a correct answer/);
   assert.equal(dailyFlash(0, true), "Today already counts toward your day streak");
 });
+
+test("TodayCard calls onAward after an answer so the hub can refresh its rewards panel (QA 2026-10-22)", async () => {
+  const src = (await import("node:fs")).readFileSync(new URL("../../components/academy/TodayCard.tsx", import.meta.url), "utf8");
+  assert.match(src, /setFlash\(dailyFlash\(r\.added, correct\)\);\n\s*onAward\?\.\(\);/);
+  const hub = (await import("node:fs")).readFileSync(new URL("../../pages/academy/AcademyHub.tsx", import.meta.url), "utf8");
+  assert.match(hub, /<TodayCard storage=\{storage\} onAward=\{\(\) => setRewardsTick/);
+  assert.match(hub, /<Fragment key=\{rewardsTick\}>\s*<RewardsPanel/);
+});
