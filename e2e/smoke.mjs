@@ -667,6 +667,43 @@ const flows = {
     await p.goto(base + "/training?group=essential-candles", { waitUntil: "networkidle" });
     check(/Essential Candles/.test(await p.locator("main").innerText()), `ec: Learn group missing @${w}`);
   },
+  async "Which Way: Up/Down/Either drill, keys, feedback, resume, modal direction"(p, w) {
+    const { roundsFor } = await load("/src/lib/whichWay.ts");
+    await p.goto(base + "/practice/which-way", { waitUntil: "networkidle" });
+    const deck = roundsFor("candles");
+    check(new RegExp(`Candlesticks \\(${deck.length}\\)`).test(await p.getByTestId("ww-mode-candles").innerText()), `ww: candle deck count @${w}`);
+    check(/Prior trend: (up|down)/.test(await p.getByTestId("ww-prior").innerText()), `ww: prior trend label @${w}`);
+    for (let i = 0; i < 10; i++) {
+      const r = p.getByTestId("ww-round");
+      const ans = await r.getAttribute("data-answer");
+      const id = await r.getAttribute("data-pattern");
+      check(id === deck[i].id, `ww: round ${i} order @${w}`);
+      if (i % 2) await p.keyboard.press(ans === "up" ? "ArrowUp" : ans === "down" ? "ArrowDown" : "e");
+      else await p.getByTestId(`ww-pick-${ans}`).click();
+      const fb = await p.getByTestId("ww-feedback").innerText();
+      check(/Right\./.test(fb) && /Confirmation to wait for: Wait for/.test(fb), `ww: feedback ${i} @${w}`);
+      if (i === 0 && SHOTS) await p.screenshot({ path: `${SHOTS}/which-way-${w}.png`, fullPage: true });
+      if (i < 9) await p.keyboard.press("Enter");
+    }
+    check(/10\/10 right \(100%\)/.test(await p.getByTestId("ww-score").innerText()), `ww: score @${w}`);
+    check(/Answer streak 10/.test(await p.getByTestId("ww-score").innerText()), `ww: streak @${w}`);
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("which-way"), `ww: practice not marked done @${w}`);
+    await p.getByTestId("ww-next").click();
+    await p.getByTestId(`ww-pick-${(await p.getByTestId("ww-round").getAttribute("data-answer")) === "up" ? "down" : "up"}`).click();
+    check(/Not quite/.test(await p.getByTestId("ww-feedback").innerText()), `ww: wrong feedback @${w}`);
+    check(/Answer streak 0/.test(await p.getByTestId("ww-score").innerText()), `ww: streak reset @${w}`);
+    check((await overflow(p)) <= 1, `ww overflow @${w}`);
+    await p.reload({ waitUntil: "networkidle" });
+    check(/11 \/ /.test(await p.getByTestId("ww-position").innerText()) && /10\/11 right/.test(await p.getByTestId("ww-score").innerText()), `ww: resumes @${w}`);
+    await p.getByTestId("ww-mode-charts").click();
+    check(/1 \/ /.test(await p.getByTestId("ww-position").innerText()), `ww: chart deck @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/which-way-charts-${w}.png`, fullPage: true });
+    await p.goto(base + "/archive?open=hanging-man", { waitUntil: "networkidle" });
+    check((await p.getByTestId("pattern-direction").getAttribute("data-direction")) === "down", `ww: modal direction @${w}`);
+    await p.goto(base + "/training?group=which-way", { waitUntil: "networkidle" });
+    check(/Which Way\?/.test(await p.locator("main").innerText()), `ww: Learn group missing @${w}`);
+  },
 };
 
 

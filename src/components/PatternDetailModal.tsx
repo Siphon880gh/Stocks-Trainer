@@ -7,6 +7,7 @@ import CandlestickChart from "./CandlestickChart";
 import { NOT_A_GUARANTEE, patternIllustration, patternTabs } from "../lib/patternTabs";
 import { CRYPTO_FIT_HINT, CRYPTO_FIT_LABEL, cryptoFitFor } from "../lib/cryptoCandles";
 import { getTheme } from "../lib/patternThemes";
+import { DIRECTION_ARROW, DIRECTION_LABEL } from "../lib/patternDirections";
 
 export type PatternTab = "recognise" | "psychology" | "trade";
 export const PATTERN_TAB_LABELS: Record<PatternTab, string> = {
@@ -111,6 +112,15 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
                   </Link>
                 ))}
               </div>
+            ) : null}
+            {pattern.potentialDirection ? (
+              <p className="text-[11px] text-muted" data-testid="pattern-direction" data-direction={pattern.potentialDirection}>
+                <span className="font-mono uppercase tracking-wide text-[10px]">Potential direction</span>{" "}
+                <Link to="/practice/which-way" className="font-semibold text-ink hover:text-primary">
+                  {DIRECTION_ARROW[pattern.potentialDirection]} {DIRECTION_LABEL[pattern.potentialDirection]}
+                </Link>
+                {pattern.potentialDirection === "either" ? " · the break decides" : " · once confirmed"}
+              </p>
             ) : null}
             {pattern.takeaway ? (
               <p className="rounded border border-primary/40 bg-primary/5 px-3 py-2 text-[13px] font-medium" data-testid="pattern-takeaway">

@@ -181,6 +181,7 @@ export default function Training() {
                   g.id === "record-traders" ||
                   g.id === "pattern-themes" ||
                   g.id === "essential-candles" ||
+                  g.id === "which-way" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
                   g.id === "financial-literacy" ||
