@@ -3665,7 +3665,7 @@ export const EQUITY_PATTERN_QUIZ_QUESTIONS: QuizQuestion[] = [
     correctAnswer: "D",
     options: INDICATOR_OPTIONS,
     explanation:
-      "MACD is the gap between a fast and a slow average (plus a signal line). When the rally stalls, the fast average stops pulling away and the MACD line turns down through its signal: momentum is fading. It is a warning about the rally, not an order to short. Tied to eq-fail-rally.",
+      "MACD is the gap between a fast and a slow average (plus a signal line). When the rally stalls, the fast average stops pulling away: on this chart the MACD line turns down, drops below zero and stays under its signal line (negative histogram), so momentum is fading. It is a warning about the rally, not an order to short. Tied to eq-fail-rally.",
     overlayId: "macd",
     assetClass: "equity",
     samplePackId: "eq-fail-rally",

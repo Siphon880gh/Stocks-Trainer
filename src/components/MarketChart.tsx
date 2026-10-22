@@ -22,7 +22,7 @@ import {
   chartVerticalScale,
   type OHLC,
 } from "../lib/ohlcData";
-import { sma, ema, rsi, macd, bollingerBands, MARKET_CHART_RSI_PERIOD } from "../lib/indicators";
+import { sma, ema, rsi, macd, bollingerBands, MARKET_CHART_RSI_PERIOD, MARKET_CHART_MACD, MARKET_CHART_BOLLINGER } from "../lib/indicators";
 import {
   explainChartProgression,
   type ChartProgressionAnchor,
@@ -532,14 +532,14 @@ export default function MarketChart({
   const rsi14 = rsi(closes, MARKET_CHART_RSI_PERIOD);
   const { macd: macdLine, signal: macdSignal, histogram: macdHist } = macd(
     closes,
-    4,
-    6,
-    3
+    MARKET_CHART_MACD.fast,
+    MARKET_CHART_MACD.slow,
+    MARKET_CHART_MACD.signal
   );
   const { middle: bbMid, upper: bbUpper, lower: bbLower } = bollingerBands(
     closes,
-    5,
-    2
+    MARKET_CHART_BOLLINGER.period,
+    MARKET_CHART_BOLLINGER.k
   );
 
   const notes = useMemo(

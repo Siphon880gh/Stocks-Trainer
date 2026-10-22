@@ -41,6 +41,9 @@ export function ema(closes: number[], period: number): (number | null)[] {
  */
 /** RSI period the SAMPLE MarketChart pane uses: its packs are only ~12 bars, so 14 would leave the pane empty. */
 export const MARKET_CHART_RSI_PERIOD = 5;
+/** MACD (fast, slow, signal) and Bollinger (period, k) the SAMPLE MarketChart panes use, shortened for ~12-bar packs. */
+export const MARKET_CHART_MACD = { fast: 4, slow: 6, signal: 3 } as const;
+export const MARKET_CHART_BOLLINGER = { period: 5, k: 2 } as const;
 
 export function rsi(closes: number[], period = 14): (number | null)[] {
   const result: (number | null)[] = closes.map(() => null);
