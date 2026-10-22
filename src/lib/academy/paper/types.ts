@@ -43,6 +43,8 @@ export interface Order extends OrderSpec {
   /** trailing-stop: highest high seen so far and the current stop level. */
   peak?: number;
   trailStop?: number;
+  /** Stop level when the order was placed (trailing-stop: from the price at placement). Used for R. */
+  initialStop?: number;
   closedAtBar?: number;
   fillPrice?: number;
   /** Plain-language reason for a rejection / expiry. */

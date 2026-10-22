@@ -92,6 +92,8 @@ export interface PlacementItem {
   id: string;
   /** The level this item probes. */
   levelId: LevelId;
+  /** The unit to review when this item is missed. */
+  unitId: string;
   prompt: string;
   options: QuizChoice[];
   correctAnswer: AnswerLetter;

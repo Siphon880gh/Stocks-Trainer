@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import MacroHomeTip from "../components/macro/MacroHomeTip";
+import PlacementCard from "../components/academy/PlacementCard";
 import { Link } from "react-router-dom";
 import GoalPicker from "../components/GoalPicker";
 import JargonText from "../components/JargonText";
@@ -129,6 +130,8 @@ export default function Dashboard() {
   return (
     <main className="flex-1 p-4 md:p-8 max-w-3xl mx-auto w-full space-y-8">
       {goalPending ? <GoalPicker onConfirmed={refreshProgress} /> : null}
+      {/* Beginner Academy (BA3.M3): optional, dismissible, only after the goal picker is confirmed. */}
+      {!goalPending ? <PlacementCard variant="home" /> : null}
 
       <section className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">

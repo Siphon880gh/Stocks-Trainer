@@ -26,6 +26,9 @@ import Playbook from "./pages/Playbook";
 import MacroDesk from "./pages/macro/MacroDesk";
 import MacroLesson from "./pages/macro/MacroLesson";
 import MacroPlay from "./pages/macro/MacroPlay";
+import AcademyHub from "./pages/academy/AcademyHub";
+import AcademyUnit from "./pages/academy/AcademyUnit";
+import AcademyTestOut from "./pages/academy/AcademyTestOut";
 
 export default function App() {
   const baseUrl = import.meta.env.BASE_URL;
@@ -68,6 +71,9 @@ export default function App() {
           <Route path="macro" element={<MacroDesk />} />
           <Route path="macro/play" element={<MacroPlay />} />
           <Route path="macro/:lessonId" element={<MacroLesson />} />
+          <Route path="academy" element={<AcademyHub />} />
+          <Route path="academy/test-out/:levelId" element={<AcademyTestOut />} />
+          <Route path="academy/:unitId" element={<AcademyUnit />} />
         </Route>
       </Routes>
     </BrowserRouter>

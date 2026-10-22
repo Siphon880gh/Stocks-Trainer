@@ -3,8 +3,8 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA1.M1.S1
-- `status`: in progress — BA0 done
+- `current_story`: BA5.M1.S1
+- `status`: in progress — BA0–BA4, BA6.M1–M3, BA7.M1–M4, BA10.M2 done; BA1.M4 and BA3.M4 PENDING WENG SIGN-OFF
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
 - `checkpoint_mode`: continue
@@ -62,4 +62,49 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - Verify: lint 0 · test:coaching 24/24 · test:lib 161/161 · test:financials 333/333 · test:macro 72/72 · test:academy 9/9 · build ok (temp dir)
 - Milestone-specific: ContentRef union = 7 kinds; one good + one broken ref per kind with the app's own hrefs; `APP_ROUTES` equals the `<Route path>` list parsed from App.tsx; storage round-trip, v0 → v1 lossless (idempotent re-migration), corrupt / non-object / newer-schema JSON → empty + `recovered: true`; spy storage proves only the three academy keys are read or written.
 - Next: BA1.M1.S1
+
+### 2026-10-21 22:20 PT · BA1–BA4, BA6.M1–M3, BA7.M1–M4, BA10.M2 · PASS (one local commit)
+- Changed (all new unless noted): src/lib/academy/content/ (levels, unitsL0L3, unitsL4L7, quizBuilder, quizzesL0L3, quizzesL4L7, unitQuizzes, banned, estimate + tests), mastery.ts, progress.ts, placement.ts, testOut.ts, terms.ts, copy.ts, challenges.ts, paper/ (account, validate, engine, stats, tapes, session, counters, fixtures + tests), rewards/ (ledger, streak, levels, badges, award, refresh, retro + tests), components/academy/ (UnitPlayer, PlacementCard, SimulatedBanner), pages/academy/ (AcademyHub, AcademyUnit, AcademyTestOut); edited App.tsx (3 routes), refs.ts APP_ROUTES (+3), literacyTerms.ts (spreads ACADEMY_TERMS), Dashboard.tsx (optional PlacementCard after the GoalPicker), index.css (`--color-sim` tokens), types.ts (`PlacementItem.unitId`, `Order.initialStop`).
+- Verify: lint 0 · test:coaching 24/24 · test:lib 161/161 · test:financials 333/333 · test:macro 72/72 · test:academy 98/98 · check:build ok (temp outDir deleted) · dist/ untouched.
+- Milestone-specific: 43 units / 129 unit-quiz items (≤ 35% per letter per level); placement exhaustive 2^12 monotone with 5 distinct starts; validation 42 table cases; engine fill table 29 rows covering every type × side × TIF plus no-OCO, BP release, gap-past-buffer reject, cash conservation and determinism on all 8 tapes; reference play passes and reckless play breaches on all 10 challenges; 24 badges (fresh learner none, scripted learner all); retro credit makes zero writes to the progress, Read-the-Print and Macro keys.
+- Decisions taken under the brief (flag if you disagree):
+  - BA10.M2 glossary terms pulled forward (31 terms) because units and challenges cite them.
+  - Tapes come from a seeded generator, not copied from scenarioCharts; fictional `.S` symbols are checked against a real-ticker blocklist (PRNT, GRND and similar real tickers were avoided).
+  - Placement credit marks lower levels complete; every unit of an unlocked level is open (no unit-by-unit lock).
+  - 3-item units need 3/3 for mastery (80% rounds up).
+  - Paper sessions persist as an action log that replays through the engine.
+  - Sell orders need the shares when placed (long-only, no shorting), so a protective stop goes in once the entry fills.
+  - Two exits on one position are not OCO: the later one is cancelled with "position already closed" (OCO is BA11).
+  - A stop-limit fills on its trigger bar only if the trigger price is inside the limit; after that it works as a plain limit.
+  - No nav item: the Academy is reached by a Training card and a Home tip (BA10.M4), like Macro Desk and financials.
+- Next: BA5.M1.S1 (describeOrder + OrderTicket), then the /paper page.
+
+### 2026-10-21 22:20 PT · BA1.M4 · PENDING WENG SIGN-OFF (loop continued)
+- Screenshots (checkpoints/): ba1-hub-fresh.png (full map, fresh learner), ba1-hub-progress.png (one unit mastered), ba2-unit-card.png, ba2-unit-quiz.png, ba2-unit-mobile.png.
+- Curriculum outline (level · prerequisites · course — units with reading minutes):
+- **L0 Orientation** (needs nothing): Start here — What a market is (2m), How this app teaches (2m), Risk comes first (2m), Simulated vs real money (2m), Build a learning routine (2m)
+- **L1 Stock basics** (needs L0): Stocks and quotes — What a share is (1m), Reading a quote (1m), Why prices move (2m), Long, short and selling (1m), Investing vs trading (2m), Don't put it all in one stock (1m)
+- **L2 Charts & candles** (needs L1): Reading charts — Reading one candle (2m), Wicks and bodies (2m), Trend or range? (1m), Support and resistance (1m), Volume confirms (1m), Patterns need context (1m)
+- **L3 Orders, sizing & risk** (needs L2): Order types — Market vs limit orders (2m), Stop orders (2m), Stop-limit orders (2m), Trailing stops (2m), How long an order lasts (1m); Sizing and planning — How many shares? (1m), Plan before you enter (1m)
+- **L4 Company fundamentals & earnings** (needs L1): Reading statements — The three statements (1m), Profit is not cash (1m), Margins and P/E (1m); Earnings season — Earnings vs expectations (1m), How stocks react to earnings (1m), Debt and balance-sheet risk (1m)
+- **L5 Macro & rates** (needs L1): Macro and rates — Jobs and inflation reports (1m), What the Fed does (1m), Yields and the curve (1m), Reading a macro reaction (1m), Rates, housing and sectors (1m)
+- **L6 Options education** (needs L3): Options basics — What an option is (1m), Payoff at expiration (1m), Covered calls and cash-secured puts (2m), Why options are risky (1m)
+- **L7 Other markets** (needs L1): Beyond single stocks — ETFs (1m), Futures (1m), Currencies (forex) (1m), Crypto (1m)
+- What to look at: (1) whether L4, L5 and L7 should open after L1 (now) or after L3; (2) whether any unit is missing for a true beginner; (3) unit reading lengths (1–2 min each plus a 3-question check).
+
+### 2026-10-21 22:20 PT · BA3.M4 · PENDING WENG SIGN-OFF (loop continued)
+- Screenshots (checkpoints/): ba3-placement-question.png, ba3-test-out.png, ba3-home-fresh.png (Home before the goal picker: the card stays hidden until the path is confirmed).
+- Routing table: 12 items (L0 2, L1 2, L2 3, L3 3, L4 2). A level passes with at least 2/3 of its items right (2 of 2, 2 of 3). Start = the first of L0–L3 that is not passed; all four passed → L4. Placement never routes into L5–L7.
+
+| Result | Start level |
+|--------|-------------|
+| Misses either L0 item | L0 Orientation |
+| L0 passed, misses either L1 item | L1 Stock basics |
+| L0–L1 passed, 2+ L2 items wrong | L2 Charts & candles |
+| L0–L2 passed, 2+ L3 items wrong | L3 Orders, sizing & risk |
+| L0–L3 passed | L4 (the L4 items show the score but cannot route higher) |
+| "I'm brand new" | L0 (skipped) |
+
+- Credited levels with a missed item list that unit under "Worth a quick review".
+- What to look at: (1) the 2/3 pass bar, (2) whether the 2-item levels are too strict at 2/2, (3) the 85% test-out bar (6 of 7).
 

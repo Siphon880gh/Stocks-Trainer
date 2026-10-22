@@ -13,6 +13,9 @@
   --color-line: #d1d4dc;
   --color-up: #089981;
   --color-accent-red: #f23645;
+  /* Beginner Academy: accent for SIMULATED order buttons (our own token, not a broker colour). */
+  --color-sim: #7c3aed;
+  --color-sim-dim: #6d28d9;
   --color-slate-100: #131722;
   --color-slate-200: #2a2e39;
   --color-slate-300: #434651;

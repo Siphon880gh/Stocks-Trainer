@@ -41,6 +41,9 @@ export const APP_ROUTES: readonly string[] = [
   "/macro",
   "/macro/play",
   "/macro/:lessonId",
+  "/academy",
+  "/academy/test-out/:levelId",
+  "/academy/:unitId",
 ];
 
 /** Practice surfaces: the Misc Practices hub items plus the financials practice pages. */
