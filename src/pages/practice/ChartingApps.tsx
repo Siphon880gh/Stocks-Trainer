@@ -139,8 +139,8 @@ export default function PracticeChartingApps() {
         <ul className="list-disc pl-5 space-y-1">{WEBULL_POINTS.map((p) => <li key={p}>{p}</li>)}</ul>
         <p className="text-[12px] space-x-1">{WEBULL_SOURCES.map(ext)}</p>
         <div className="space-y-2" data-testid="ca-webull-shots">
-          <p className="font-semibold">Example Webull screenshots</p>
-          <p className="text-[12px]">What Webull's account and P&L tools look like. They show account tracking, not how accurate any indicator is. Tap an image to enlarge.</p>
+          <p className="font-semibold">Example Webull-style screens</p>
+          <p className="text-[12px]">Look-alike recreations of Webull's account and P&L screens, with illustrative numbers. They show account tracking, not how accurate any indicator is. Tap an image to enlarge.</p>
           <div className="grid sm:grid-cols-2 gap-2">
             {WEBULL_SCREENSHOTS.map((sh) => <Shot key={sh.id} shot={sh} onOpen={() => setOpen(sh)} />)}
           </div>

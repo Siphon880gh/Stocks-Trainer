@@ -203,7 +203,7 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | `/practice/gamma-squeeze` | Gamma squeeze case: a SIMULATED weekly-call chase with enter / size / exit decisions, reveal, points and a stall counterfactual |
 | `/practice/news-biases` | News, biases & short-term options: expiry trade-off table, six bias cards, over- and underreaction research, OCO / bracket habits, a three-checkpoint news day |
 | `/practice/algo-trading` | Automated & algo trading (2026): broker API table, backtest traps, bot safety, PDT → intraday margin, stops around news, ATR sizing calculator, news-day playbook |
-| `/practice/charting-apps` | Indicator & charting apps: 11-app table, chart traps with a spot-the-trap drill, Robinhood and Webull charting views, example Webull screenshots, learning from broker apps |
+| `/practice/charting-apps` | Indicator & charting apps: 11-app table, chart traps with a spot-the-trap drill, Robinhood and Webull charting views, example Webull-style screens, learning from broker apps |
 | `/practice/crypto-candles` | Candlesticks for crypto: every candle pattern tagged works / adapted / rare in 24/7 markets, the harami takeaway |
 | `/practice/reversal-charts` | Reversal chart patterns: H&S, inverse H&S, double / triple tops and bottoms, wedges, rectangle vs triple bottom |
 | `/practice/one-minute-charts` | Reading 1-minute charts: grouping, open hour, legs drill, MES tick calculator, fib tools, bar count |
@@ -326,7 +326,7 @@ Beginner training modelled on how broker apps such as Webull teach new investors
 - 11 apps compared as of 2026-10-22: TradingView, Webull, Robinhood app, Robinhood Legend, thinkorswim, TC2000, TrendSpider, IBKR, Yahoo Finance, Finviz, StockCharts (indicators, scripting, layouts, cost, data notes, sources).
 - How charts mislead (log vs linear, extended hours, bar intervals, line vs candles, data feeds, unadjusted splits, indicator warm-up) with a three-item spot-the-trap drill.
 - Opinion panels, backed by each broker's docs: why the Robinhood app's indicator chart can mislead, and why Webull's is useful (MACD is taught as momentum, not overbought / oversold).
-- Example Webull screenshots (P&L calendar and Assets tab, `public/screenshots/*.webp` with 480 px variants, alt text and a tap-to-enlarge view): daily vs open P&L, cash vs buying power vs settled cash (T+1), separate options buying power, and the Risk Level indicator.
+- Example Webull-style screens (look-alike P&L calendar and Assets tab with illustrative numbers, `public/screenshots/*.webp` with 480 px variants, alt text and a tap-to-enlarge view): daily vs open P&L, cash vs buying power vs settled cash (T+1), separate options buying power, and the Risk Level indicator.
 - Learning from broker apps: Webull Learn, Fidelity, Schwab, Robinhood Learn and tastytrade; why it's free (payment for order flow); a sample path (a month of tutorials, about a year of paper trading, then small real positions) and an optional checklist.
 - Learn **Indicator & Charting Apps** (14 questions) and 6 glossary terms. Content in `src/lib/chartingApps.ts`.
 

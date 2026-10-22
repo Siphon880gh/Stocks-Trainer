@@ -59,7 +59,7 @@ export const WEBULL_SOURCES: Src[] = [
   s("Webull: platform navigation (Script Editor)", "https://www.webull.com/help/faq/11033-General-Platform-Navigation"),
 ];
 
-// ---------------------------------------------------------------- #22 example Webull screenshots
+// ---------------------------------------------------------------- #22 example Webull-style screens (look-alikes, illustrative numbers)
 export interface ScreenshotDef { id: string; src: string; srcSmall: string; width: number; height: number; alt: string; title: string; captions: string[] }
 export const WEBULL_SCREENSHOTS: ScreenshotDef[] = [
   {
@@ -68,7 +68,7 @@ export const WEBULL_SCREENSHOTS: ScreenshotDef[] = [
     srcSmall: "/screenshots/webull-pl-calendar-480.webp",
     width: 640, height: 781,
     title: "P&L Calendar (month view)",
-    alt: "Webull P&L Calendar, month view for February 2025: Monday Jan 27 to Friday Jan 31 show +55.41, +28.44, +61.10, +47.54 and +77.71, and Today shows +267.12, all in green.",
+    alt: "Example Webull-style P&L Calendar with illustrative numbers, month view for August 2026: Monday Jul 27 to Friday Jul 31 show +42.18, +19.65, +73.04, +36.27 and +58.90, and Today shows +184.36, all in green.",
     captions: [
       "Each day shows that day's total profit or loss across your assets: trades closed that day plus the day's change in positions you still hold, after fees.",
       "Useful for spotting overtrading and streaks: a run of busy days, or a habit of trading more after a loss.",
@@ -81,10 +81,10 @@ export const WEBULL_SCREENSHOTS: ScreenshotDef[] = [
     srcSmall: "/screenshots/webull-assets-480.webp",
     width: 1080, height: 1146,
     title: "Assets tab",
-    alt: "Webull Assets tab: Total Account Value $8,751.08; Open P&L −1,528.49 (−14.31%); Day's P&L −48.23 (−0.55%); Market Value 8,543.97; Cash Balance 207.11; Risk Level Safe; Buying Power 407.11; Options BP 7.11; Crypto BP 407.11; Settled Cash 407.11; Unsettled Cash 0.00.",
+    alt: "Example Webull-style Assets tab with illustrative numbers: Total Account Value $6,482.60; Open P&L −1,093.80 (−15.07%); Day's P&L −36.92 (−0.57%); Market Value 6,164.35; Cash Balance 318.25; Risk Level Safe; Buying Power 512.40; Options BP 12.40; Crypto BP 512.40; Settled Cash 512.40; Unsettled Cash 0.00.",
     captions: [
-      "Open P&L (−14.31%) is unrealized: (last price − average cost) × shares, across what you hold now. Day's P&L (−0.55%) is just today's change.",
-      "A calendar of green days can sit alongside −14% open P&L: the days measure change from each prior close, while open P&L still counts from your original cost.",
+      "Open P&L (−15.07%) is unrealized: (last price − average cost) × shares, across what you hold now. Day's P&L (−0.57%) is just today's change.",
+      "A calendar of green days can sit alongside −15% open P&L: the days measure change from each prior close, while open P&L still counts from your original cost.",
       "Cash, Buying Power, and Settled vs Unsettled Cash are different numbers. US stock trades settle T+1 (one business day after the trade, since May 28, 2024), so sale proceeds show as unsettled until then.",
       "Options BP is tracked separately and can be far lower than stock buying power. Check it before an options order.",
       "Risk Level is Webull's margin-call indicator: Safe means no margin call right now, not that the positions are safe from losses.",
@@ -157,8 +157,8 @@ export const CHART_APP_QUESTIONS: QuizQuestion[] = [
   mc("CHA-08", "Why is broker education free?", "D", "Partly because brokers earn when you trade, including payment for order flow", ["Regulators pay for it", "It's always ad-free charity", "Brokers lose money on it on purpose"], "PFOF is legal and disclosed on confirmations. Learn, then decide how often to trade for your own reasons.", "payment-for-order-flow"),
   mc("CHA-09", "Payment for order flow is…", "B", "Payment a broker receives for routing customer orders to a market maker or venue", ["A fee you pay per order", "A tax on day trades", "Interest on cash"], "It must be disclosed on trade confirmations.", "payment-for-order-flow"),
   mc("CHA-10", "A sensible path from zero to real money is…", "A", "Tutorials for a month, about a year of paper trading, then small real positions", ["Real money on day one to learn faster", "One weekend of videos", "Wait for a guaranteed return first"], "No stage promises a result. Options take months to understand."),
-  mc("CHA-11", "In the example Webull Assets screen, Open P&L is −14.31% and Day's P&L is −0.55%. What's the difference?", "C", "Open P&L counts from your average cost on what you still hold; Day's P&L is only today's change", ["They're the same number in different units", "Day's P&L includes deposits", "Open P&L is realized gains"], "Open P&L is unrealized: (last price − average cost) × shares.", "open-pnl"),
-  mc("CHA-12", "The example screen shows Buying Power 407.11 and Options BP 7.11. What does that tell you?", "D", "Options buying power is tracked separately and is much lower here, so check it before an options order", ["You can buy $407 of options", "Options BP is always equal to cash", "The account is in a margin call"], "Stock, options and crypto buying power are separate lines."),
-  mc("CHA-13", "A P&L calendar shows five green days, yet open P&L is −14%. How?", "B", "Daily P&L measures change from each prior close; open P&L still counts from the original cost", ["The calendar is wrong", "Green days are unrealized only", "Open P&L ignores losses"], "A green streak doesn't mean the account is up overall.", "open-pnl"),
+  mc("CHA-11", "In the example Webull Assets screen, Open P&L is −15.07% and Day's P&L is −0.57%. What's the difference?", "C", "Open P&L counts from your average cost on what you still hold; Day's P&L is only today's change", ["They're the same number in different units", "Day's P&L includes deposits", "Open P&L is realized gains"], "Open P&L is unrealized: (last price − average cost) × shares.", "open-pnl"),
+  mc("CHA-12", "The example screen shows Buying Power 512.40 and Options BP 12.40. What does that tell you?", "D", "Options buying power is tracked separately and is much lower here, so check it before an options order", ["You can buy $512 of options", "Options BP is always equal to cash", "The account is in a margin call"], "Stock, options and crypto buying power are separate lines."),
+  mc("CHA-13", "A P&L calendar shows five green days, yet open P&L is −15%. How?", "B", "Daily P&L measures change from each prior close; open P&L still counts from the original cost", ["The calendar is wrong", "Green days are unrealized only", "Open P&L ignores losses"], "A green streak doesn't mean the account is up overall.", "open-pnl"),
   mc("CHA-14", "Since May 28, 2024, US stock trades settle…", "A", "T+1: one business day after the trade", ["Instantly", "T+2", "T+5"], "Sale proceeds show as unsettled until then.", "settled-cash"),
 ];

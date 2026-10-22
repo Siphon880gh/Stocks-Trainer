@@ -371,7 +371,7 @@ const flows = {
       check(ok, `charts: screenshot did not load @${w}`);
       check(((await img.getAttribute("alt")) || "").length > 40, `charts: screenshot alt text missing @${w}`);
     }
-    check(/Example Webull screenshots/.test(await p.getByTestId("ca-webull").innerText()), `charts: screenshot label missing @${w}`);
+    check(/Example Webull-style screens/.test(await p.getByTestId("ca-webull").innerText()), `charts: screenshot label missing @${w}`);
     if (SHOTS) await p.getByTestId("ca-webull").screenshot({ path: `${SHOTS}/charting-apps-webull-${w}.png` });
     await p.locator("[data-shot] button").first().click();
     check((await p.getByTestId("ca-lightbox").count()) === 1, `charts: lightbox did not open @${w}`);
