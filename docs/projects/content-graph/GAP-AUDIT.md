@@ -117,3 +117,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## 2026-10-22 Automated & algo trading, charting apps, PDT
 - Audit: no content on broker APIs, backtesting, bots, webhooks, spoofing or wash trades; stop and stop-limit terms exist in the Academy (reused, not duplicated); no text referred to the pattern day trader rule or the $25,000 minimum, so nothing needed rewording; KDJ term exists (reused); no charting-app comparison, data-feed or log-scale content; no broker-education or PFOF content.
 - Added `/practice/algo-trading` (`src/lib/algoTrading.ts`, `src/lib/pdtRule.ts`), Learn group `algo-trading` (17, floor 17), 5 PDT questions in `trading-risk`; `/practice/charting-apps` (`src/lib/chartingApps.ts`), Learn group `charting-apps` (14, floor 14); 20 glossary terms; two example Webull screenshots as webp in `public/screenshots/`.
+
+## 2026-10-22 Candlesticks for crypto (#8)
+- Audit: almost all cheat-sheet candles already in the registry (belt hold as glossary + opening marubozu; counterattack, three methods, mat hold, three-line strike, ladder, stick sandwich, advance block, three stars in the south present). Added `double-doji`. No crypto fitness tags existed.
+- Added `/practice/crypto-candles` (`src/lib/cryptoCandles.ts`): works / adapted / rare tags on every candlestick pattern, harami takeaway verbatim, Learn group `crypto-candles` (12), Archive crypto filter chips, pattern-card and modal tags.

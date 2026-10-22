@@ -110,3 +110,13 @@ Screenshots (box only): `/workspace/checkpoints/qa/news-biases-{390,1280}.png`, 
 | Learn `algo-trading`, `charting-apps` (e2e) | Groups listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/algo-trading-{390,1280}.png`, `/workspace/checkpoints/qa/charting-apps-{390,1280}.png`, `/workspace/checkpoints/qa/charting-apps-webull-{390,1280}.png`.
+
+## 2026-10-22 Candlesticks for crypto (#8)
+
+| Flow | Result |
+|---|---|
+| `/practice/crypto-candles`, 390 and 1280 (e2e) | Why-lesson, harami takeaway verbatim, filter works/adapted/rare, list ≥80. |
+| Archive `?crypto=works` + harami open (e2e) | Crypto chips, works tags, takeaway and "Works in crypto" on the modal. |
+| Learn `crypto-candles` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/crypto-candles-{390,1280}.png`, `/workspace/checkpoints/qa/crypto-harami-{390,1280}.png`.
