@@ -60,7 +60,9 @@ export default function Playbook() {
           <p className="text-[12px] text-muted">
             {NAVIGATOR_CLASS_LABELS[playbook.assetClass]}
             {playbook.source.kind === "youtube" ? " · YouTube" : " · Webpage"}
-            {" · SAMPLE educational read — not their paid course, not a live desk"}
+            {playbook.source.kind === "youtube"
+              ? " · SAMPLE educational read — not their paid course, not a live desk"
+              : " · SAMPLE educational read of a public page — not advice, not a live desk"}
           </p>
         </div>
 

@@ -107,6 +107,63 @@ export const PLAYBOOKS: Playbook[] = [
     samplePackId: "eq-fail-rally",
     overlayIds: ["ema"],
   },
+  {
+    id: "covered-call",
+    title: "Covered call on shares you own",
+    summary:
+      "Own the shares, sell a call against them for premium, and accept that the stock may be called away at the strike.",
+    assetClass: "option_context",
+    source: {
+      url: "https://www.optionseducation.org/strategies/all-strategies/covered-call-buy-write",
+      kind: "webpage",
+      label: "Options Industry Council · Covered Call (Buy/Write)",
+      verifiedOn: "2026-10-21",
+    },
+    explanation:
+      "SAMPLE teaching of the covered call as the Options Industry Council (OIC) lays it out: you hold 100 shares and write one call against them. The premium is yours whatever happens, gives a small cushion if the stock slides and lifts the return if it rises, but while the call is open you give up most of the upside above the strike.\n\nOIC’s rules of the road: the outlook is neutral to moderately bullish — a steady or slightly rising stock for the life of the option, not a very bearish or very bullish view. Strike plus premium should be a price you are happy to sell at, because assignment is the point, not a failure. If you would regret losing the shares mid-rally, OIC says think carefully first; the only sure way to avoid assignment is to buy the call back, which can cost more when the stock climbs fast. The worst case is still the stock going to zero — the premium only trims that loss. Breakeven at expiration = starting stock price − premium received. And you cannot sell the shares while the call is open without leaving it uncovered.\n\nThis app has no options chain. The Chart look panel is the underlying only: practice asking “is this tape quiet enough to rent out the upside?” The Academy options ladder walks the payoff. Not investment advice.",
+    coachSlug: "options-literacy",
+    caseId: "case-optctx-flag-hold",
+    samplePackId: "opt-ctx-coil",
+    overlayIds: [],
+  },
+  {
+    id: "cash-secured-put",
+    title: "Cash-secured put to buy lower",
+    summary:
+      "Sell a put with the cash set aside to buy the shares, aiming to own the stock at the strike minus the premium.",
+    assetClass: "option_context",
+    source: {
+      url: "https://www.optionseducation.org/strategies/all-strategies/cash-secured-put",
+      kind: "webpage",
+      label: "Options Industry Council · Cash-Secured Put",
+      verifiedOn: "2026-10-21",
+    },
+    explanation:
+      "SAMPLE teaching of the cash-secured put from the Options Industry Council: write an at-the-money or out-of-the-money put and set aside enough cash to buy the stock if you are assigned. OIC calls it a stock acquisition strategy for a price-sensitive investor — you want the shares, and strike minus premium is the price you would happily pay.\n\nThe outlook is neutral to moderately bullish: a short-term dip, then longer-term appreciation. OIC names two principal risks. One, the stock does not just dip but plummets well below the strike — you must be comfortable owning it at the strike no matter how low it goes. Two, the stock keeps climbing and you never get assigned, so you keep the premium but the winner “got away.” Breakeven = strike − premium. The maximum loss is substantial (stock to zero, less the premium), and OIC notes its risk profile matches a covered call.\n\nThe Chart look panel shows a dump that does not reclaim — the first risk OIC warns about. Ask before you write the put: would I still want this stock down here? There is no options chain in this app. Not investment advice.",
+    coachSlug: "options-literacy",
+    caseId: "case-optctx-double-bottom",
+    samplePackId: "opt-ctx-dump",
+    overlayIds: [],
+  },
+  {
+    id: "protective-put",
+    title: "Protective put before a known event",
+    summary:
+      "Keep the shares, buy a put as insurance through an announcement, and accept that the premium is the cost of the floor.",
+    assetClass: "option_context",
+    source: {
+      url: "https://www.optionseducation.org/strategies/all-strategies/protective-put-married-put",
+      kind: "webpage",
+      label: "Options Industry Council · Protective Put (Married Put)",
+      verifiedOn: "2026-10-21",
+    },
+    explanation:
+      "SAMPLE teaching of the protective put from the Options Industry Council: add a long put to a long stock position. The strike sets the floor where protection kicks in; above it you keep the stock’s upside. OIC compares it to homeowner’s insurance — you would rather not need it. (Buying the put at the same time as the shares is called a married put.)\n\nOIC lists when investors consider one: before an imminent news announcement that could send a favorite stock into a slump, when one stock is a large share of the portfolio, when you must protect the value for a set period, when you cannot sell for a while, or to protect large unrealized gains. The outlook is bullish overall but worried about a sharp temporary decline. The cost is real: returns lag by the premium however high the stock goes, and time decay works against you. Maximum loss = stock purchase price − strike + premium paid. Breakeven = starting stock price + premium. If the worst passes, you can sell the put back to recover some of its cost.\n\nThe Chart look panel is the underlying into an event window — practice naming the floor you would want before the print. No options chain, no Greeks engine here. Not investment advice.",
+    coachSlug: "options-context-event",
+    caseId: "case-optctx-headline-into-event",
+    samplePackId: "opt-ctx-event",
+    overlayIds: [],
+  },
 ];
 
 export function listPlaybooks(): Playbook[] {
