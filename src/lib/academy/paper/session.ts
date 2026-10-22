@@ -6,6 +6,7 @@ import type { AccountState, OrderSpec, PaperAction, PaperSessionLog } from "./ty
 import { createAccount } from "./account";
 import { cancelOrder, contextFrom, placeOrder, stepBar, type PlaceResult } from "./engine";
 import { getTape, type Tape } from "./tapes";
+import { placeBracket, placeOco, type LinkedResult } from "./linked";
 
 export function newSessionLog(tapeId: string, startingCash: number, bar = 0): PaperSessionLog {
   return { tapeId, startingCash, bar, actions: [] };
@@ -30,6 +31,8 @@ export function replay(log: PaperSessionLog, tape: Tape | undefined = getTape(lo
 
 function applyAction(s: AccountState, a: PaperAction, _tape: Tape): AccountState {
   if (a.type === "cancel") return cancelOrder(s, a.orderId);
+  if (a.type === "bracket") return placeBracket(s, a.entry, a.stopPrice, a.targetPrice, contextFrom(s)).state;
+  if (a.type === "oco") return placeOco(s, a.a, a.b, contextFrom(s)).state;
   return placeOrder(s, a.spec, contextFrom(s)).state;
 }
 
@@ -49,3 +52,18 @@ export function sessionStep(log: PaperSessionLog, n = 1): PaperSessionLog {
 }
 
 export const visibleBars = (log: PaperSessionLog) => getTape(log.tapeId)!.bars.slice(0, log.bar + 1);
+
+/** BA11.M1: place a bracket (buy entry + stop and / or target) in a session. */
+export function sessionBracket(log: PaperSessionLog, entry: OrderSpec, stopPrice?: number, targetPrice?: number): { log: PaperSessionLog; result: LinkedResult } {
+  const before = replay(log);
+  const result = placeBracket(before, entry, stopPrice, targetPrice, contextFrom(before));
+  return { log: { ...log, actions: [...log.actions, { type: "bracket", atBar: log.bar, entry, stopPrice, targetPrice }] }, result };
+}
+
+/** BA11.M1: place an OCO pair of sells in a session. A rejected pair is not logged (nothing was placed). */
+export function sessionOco(log: PaperSessionLog, a: OrderSpec, b: OrderSpec): { log: PaperSessionLog; result: LinkedResult } {
+  const before = replay(log);
+  const result = placeOco(before, a, b, contextFrom(before));
+  return { log: result.ok ? { ...log, actions: [...log.actions, { type: "oco", atBar: log.bar, a, b }] } : log, result };
+}
+

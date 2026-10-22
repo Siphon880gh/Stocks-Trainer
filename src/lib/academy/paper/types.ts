@@ -49,6 +49,13 @@ export interface Order extends OrderSpec {
   fillPrice?: number;
   /** Plain-language reason for a rejection / expiry. */
   reason?: string;
+  /** BA11.M1 linked orders: an OTO exit waits for its parent entry to fill before it works. */
+  parentId?: string;
+  waiting?: boolean;
+  /** BA11.M1: orders sharing an OCO group cancel each other when one fills. */
+  ocoGroup?: string;
+  /** BA11.M1: the order's part in a bracket. */
+  role?: "entry" | "stop" | "target";
 }
 
 export interface Fill {
@@ -104,7 +111,9 @@ export interface AccountState {
 /** A persisted session is an action log replayed through the deterministic engine. */
 export type PaperAction =
   | { type: "place"; atBar: number; spec: OrderSpec }
-  | { type: "cancel"; atBar: number; orderId: string };
+  | { type: "cancel"; atBar: number; orderId: string }
+  | { type: "bracket"; atBar: number; entry: OrderSpec; stopPrice?: number; targetPrice?: number }
+  | { type: "oco"; atBar: number; a: OrderSpec; b: OrderSpec };
 
 export interface PaperSessionLog {
   tapeId: string;

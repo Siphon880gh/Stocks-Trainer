@@ -56,7 +56,24 @@ export function placeOrder(state: AccountState, spec: OrderSpec, ctx: MarketCont
 const close = (o: Order, status: Order["status"], bar: number, extra: Partial<Order> = {}): Order => ({ ...o, ...extra, status, reserved: 0, closedAtBar: bar });
 
 export function cancelOrder(state: AccountState, orderId: string): AccountState {
-  return { ...state, orders: state.orders.map((o) => (o.id === orderId && o.status === "working" ? close(o, "cancelled", state.bar, { reason: "Cancelled by you." }) : o)) };
+  const target = state.orders.find((o) => o.id === orderId);
+  const s = { ...state, orders: state.orders.map((o) => (o.id === orderId && o.status === "working" ? close(o, "cancelled", state.bar, { reason: "Cancelled by you." }) : o)) };
+  return target && target.status === "working" ? cancelWaitingChildren(s, orderId, state.bar) : s;
+}
+
+/** BA11.M1: an entry that will never fill takes its waiting exits with it. */
+function cancelWaitingChildren(s: AccountState, parentId: string, bar: number): AccountState {
+  return { ...s, orders: s.orders.map((o) => (o.parentId === parentId && o.waiting && o.status === "working" ? close(o, "cancelled", bar, { waiting: false, reason: "Cancelled: its entry order did not fill." }) : o)) };
+}
+
+/** BA11.M1: after `done` closed on bar t, wake its exits (filled) or cancel them (not filled), and cancel its OCO partners. */
+function settleLinks(s: AccountState, done: Order, t: number): AccountState {
+  if (done.status === "filled") {
+    let orders = s.orders.map((o) => (o.parentId === done.id && o.waiting && o.status === "working" ? { ...o, waiting: false, placedAtBar: t } : o));
+    if (done.ocoGroup) orders = orders.map((o) => (o.id !== done.id && o.ocoGroup === done.ocoGroup && o.status === "working" ? close(o, "cancelled", t, { waiting: false, reason: "Cancelled: the other order in its OCO pair filled." }) : o));
+    return { ...s, orders };
+  }
+  return cancelWaitingChildren(s, done.id, t);
 }
 
 /** Cancel + place a new order with the new spec (the old order keeps its history). */
@@ -111,6 +128,8 @@ export function stepBar(state: AccountState, bars: Record<string, PaperBar>): Ac
   const ids = s.orders.filter((o) => o.status === "working" && o.placedAtBar < t).map((o) => o.id);
   for (const id of ids) {
     const o = s.orders.find((x) => x.id === id)!;
+    // An earlier order this bar may have closed it (OCO partner) or it may still wait for its entry (OTO).
+    if (o.status !== "working" || o.waiting || o.placedAtBar >= t) continue;
     const bar = bars[o.symbol];
     if (!bar) continue;
     const { price, order } = evaluate(o, bar);
@@ -137,6 +156,7 @@ export function stepBar(state: AccountState, bars: Record<string, PaperBar>): Ac
       next = close(order, "expired", t, { reason: next.triggered ? "Day stop-limit triggered but the limit was not reached; it expired at the end of the session." : "Day order did not fill and expired at the end of the session." });
     }
     s = { ...s, orders: s.orders.map((x) => (x.id === id ? next : x)) };
+    if (next.status !== "working") s = settleLinks(s, next, t);
   }
   const marks = { ...s.marks };
   for (const [sym, b] of Object.entries(bars)) marks[sym] = b.close;
