@@ -31,6 +31,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "fib-decision-map", title: "Fibonacci as a decision map", to: "/practice/fib-decision-map" },
   { id: "futures-vs-options", title: "Futures vs options & beginner toolkit", to: "/practice/futures-vs-options" },
   { id: "technique-narratives", title: "Technique narratives", to: "/practice/technique-narratives" },
+  { id: "missing-wicks", title: "Missing wicks and zooming in", to: "/practice/missing-wicks" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

@@ -141,6 +141,7 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "fib-decision-map": 12,
   "futures-vs-options": 16,
   "technique-narratives": 14,
+  "missing-wicks": 7,
 };
 const NON_FAMILY = new Set<string>([...PHASE_A, ...PHASE_D, ...Object.keys(DEDICATED_FLOORS)]);
 

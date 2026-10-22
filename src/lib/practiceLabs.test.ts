@@ -53,6 +53,7 @@ describe("misc practice catalog", () => {
       "Fibonacci as a decision map",
       "Futures vs options & beginner toolkit",
       "Technique narratives",
+      "Missing wicks and zooming in",
     ]);
   });
 });

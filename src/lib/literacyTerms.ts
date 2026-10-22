@@ -16,6 +16,7 @@ import { ONE_MIN_TERMS } from "./oneMinuteCharts";
 import { FIB_MAP_TERMS } from "./fibDecisionMap";
 import { FUT_OPT_TERMS } from "./futuresOptionsBasics";
 import { NARRATIVE_TERMS } from "./techniqueNarratives";
+import { MW_TERMS } from "./missingWicks";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
@@ -678,6 +679,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...FIB_MAP_TERMS,
   ...FUT_OPT_TERMS,
   ...NARRATIVE_TERMS,
+  ...MW_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {
