@@ -1,6 +1,7 @@
 import { SCENARIO_OHLC } from "./scenarioCharts";
 import { ADVANCED_OHLC, ADVANCED_DRILL_SPECS } from "./advancedPatterns";
 import { CHART_BOOK_OHLC, CHART_BOOK_DRILL_SPECS } from "./chartPatternBook";
+import { THEME_OHLC, THEME_DRILL_SPECS } from "./patternThemes";
 
 export interface OHLC {
   name: string;
@@ -1132,6 +1133,7 @@ export const PATTERN_OHLC: Record<string, OHLC[]> = {
   "triple-bottom": SCENARIO_OHLC["sc-triple-bottom"],
   ...ADVANCED_OHLC,
   ...CHART_BOOK_OHLC,
+  ...THEME_OHLC,
   "hammer-no-trend": HAMMER_NO_TREND_OHLC,
   "engulfing-no-trend": ENGULFING_NO_TREND_OHLC,
 };
@@ -1235,6 +1237,8 @@ export const DRILL_CHART_SPECS: ReadonlyArray<{ key: string; end: number; dir: D
   ...ADVANCED_DRILL_SPECS,
   // chart, gap and volume patterns: the bar that completes the pattern, then one more confirming candle
   ...CHART_BOOK_DRILL_SPECS,
+  // pattern-theme examples: pipe top/bottom, bull/bear trap, blow-off top
+  ...THEME_DRILL_SPECS,
 ];
 
 /** One confirming candle: opens at the pattern close and closes beyond the pattern's high (up) or low (down) over bars [from, end]. */

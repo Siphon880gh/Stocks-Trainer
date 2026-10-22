@@ -55,6 +55,7 @@ describe("misc practice catalog", () => {
       "Technique narratives",
       "Missing wicks and zooming in",
       "Record-setting traders",
+      "Pattern themes",
     ]);
   });
 });

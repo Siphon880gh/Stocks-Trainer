@@ -143,6 +143,7 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "technique-narratives": 14,
   "missing-wicks": 7,
   "record-traders": 16,
+  "pattern-themes": 18,
 };
 const NON_FAMILY = new Set<string>([...PHASE_A, ...PHASE_D, ...Object.keys(DEDICATED_FLOORS)]);
 

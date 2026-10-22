@@ -1,6 +1,7 @@
 /** Central pattern registry for Archive, Quiz, and Chart annotations */
 import { ADVANCED_PATTERN_DEFS } from "./advancedPatterns";
 import { CHART_BOOK_DEFS } from "./chartPatternBook";
+import { PATTERN_THEMES, THEME_PATTERN_DEFS, type PatternThemes } from "./patternThemes";
 
 export type PatternSentiment = "bullish" | "bearish" | "neutral";
 
@@ -16,6 +17,8 @@ export interface PatternDef {
   rare?: boolean;
   /** Optional key takeaway shown prominently on the detail card. */
   takeaway?: string;
+  /** Functional theme tags (patternThemes.ts): one primary, any secondary. Attached to every Archive pattern. */
+  themes?: PatternThemes;
 }
 
 // Resolve public images from the loaded document, not from the client-side
@@ -27,7 +30,7 @@ const patternImage = (file: string) => new URL(
   typeof document === "undefined" ? "http://localhost/" : document.baseURI,
 ).href;
 
-export const PATTERNS: PatternDef[] = [
+const BASE_PATTERNS: PatternDef[] = [
   { id: "doji", name: "Doji", type: "neutral", sentiment: "neutral", confirmation: "medium", description: "Indecision in the market with equal open/close." },
   { id: "hammer", name: "Hammer", type: "reversal", sentiment: "bullish", confirmation: "high", description: "Bullish reversal pattern with a long lower shadow." },
   { id: "engulfing", name: "Engulfing", type: "reversal", sentiment: "bullish", confirmation: "high", description: "Body of current candle covers previous candle." },
@@ -113,7 +116,11 @@ export const PATTERNS: PatternDef[] = [
   ...ADVANCED_PATTERN_DEFS,
   // chart, gap and volume patterns (chartPatternBook.ts)
   ...CHART_BOOK_DEFS,
+  // example patterns for the pattern themes (patternThemes.ts)
+  ...THEME_PATTERN_DEFS,
 ];
+
+export const PATTERNS: PatternDef[] = BASE_PATTERNS.map((p) => ({ ...p, themes: PATTERN_THEMES[p.id] }));
 
 export function getPattern(id: string): PatternDef | undefined {
   return PATTERNS.find((p) => p.id === id);

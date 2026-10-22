@@ -22,6 +22,7 @@ const NON_CANDLE = new Set<string>([
   "v-bottom", "triple-top", "triple-bottom", "three-pushes", "selling-climax", "volume-dry-up",
   "breakout-volume", "volume-divergence", "rising-window", "falling-window", "breakaway-gap",
   "runaway-gap", "exhaustion-gap", "island-top", "island-bottom",
+  "common-gap", "failed-breakout", "failed-breakdown", "blow-off-top",
 ]);
 
 /** Classic form needs a real gap between candles — uncommon when markets never close. */
@@ -35,6 +36,8 @@ const RARE: ReadonlySet<string> = new Set([
   "bullish-side-by-side-white-lines", "bearish-side-by-side-white-lines",
   "bullish-tri-star", "bearish-tri-star",
   "concealing-baby-swallow",
+  // O = H = L = C needs a bar with almost no trades; liquid 24/7 pairs rarely print one
+  "four-price-doji",
 ]);
 
 /**

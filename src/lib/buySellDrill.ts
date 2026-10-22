@@ -10,6 +10,7 @@ import { DRILL_CHART_SPECS, drillChartKey } from "./ohlcData";
 import { SCENARIOS, SCENARIO_PAD_BARS } from "./scenarioCharts";
 import { ADVANCED_DRILL_INFO } from "./advancedPatterns";
 import { CHART_BOOK_DRILL_INFO } from "./chartPatternBook";
+import { THEME_DRILL_INFO } from "./patternThemes";
 
 export const BUY_SELL_DISCLAIMER = "Learning drill, not trading advice.";
 export { SCENARIO_PAD_BARS };
@@ -108,6 +109,8 @@ const INFO: Record<string, PatternInfo> = {
   ...ADVANCED_DRILL_INFO,
   // chart, gap and volume patterns (chartPatternBook.ts)
   ...CHART_BOOK_DRILL_INFO,
+  // pattern-theme examples (patternThemes.ts)
+  ...THEME_DRILL_INFO,
 };
 
 function patternQuestion(key: string, end: number, dir: "up" | "down"): QuizQuestion {
