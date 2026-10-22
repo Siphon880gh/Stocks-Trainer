@@ -7,6 +7,8 @@ export interface PlaybookSource {
   kind: PlaybookSourceKind;
   /** YouTuber, video title, or site name — shown as the top-of-page link. */
   label: string;
+  /** Day the URL was last fetched and read against the kit (YYYY-MM-DD). `npm run check:playbook-sources` re-checks it loads. */
+  verifiedOn?: string;
 }
 
 /**
