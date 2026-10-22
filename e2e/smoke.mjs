@@ -704,6 +704,42 @@ const flows = {
     await p.goto(base + "/training?group=which-way", { waitUntil: "networkidle" });
     check(/Which Way\?/.test(await p.locator("main").innerText()), `ww: Learn group missing @${w}`);
   },
+  async "Progress map: world / tree / web views, next objective, progress fills in"(p, w) {
+    await p.goto(base + "/", { waitUntil: "networkidle" });
+    await p.getByTestId("nav-map").click();
+    await p.waitForURL(/\/map$/);
+    check((await p.getByTestId("map-next").getAttribute("data-stage")) === "quiz:candle-anatomy", `map: first objective @${w}`);
+    check((await p.getByTestId("map-region").count()) === 12, `map: 12 regions @${w}`);
+    check((await p.locator("[data-testid='map-region'][data-region='candles']").getAttribute("data-pct")) === "0", `map: empty candles @${w}`);
+    check((await overflow(p)) <= 1, `map world overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/map-world-${w}.png`, fullPage: true });
+    await p.getByTestId("map-view-tree").click();
+    await p.waitForSelector("[data-testid='map-tree']");
+    check((await p.getByTestId("tree-node").count()) >= 40, `map: tree nodes @${w}`);
+    check((await p.locator("[data-testid='tree-node'][data-stage='quiz:candle-reading']").getAttribute("data-status")) === "locked", `map: locked reading @${w}`);
+    check(/Unlocks →[^\n]*Reading One Candle/.test(await p.locator("[data-testid='tree-node'][data-stage='quiz:candle-anatomy']").innerText()), `map: unlocks text @${w}`);
+    check((await overflow(p)) <= 1, `map tree overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/map-tree-${w}.png`, fullPage: true });
+    await p.getByTestId("map-view-web").click();
+    await p.waitForSelector("[data-testid='map-web']");
+    check((await p.getByTestId("web-unknown").count()) >= 5, `map: '?' nodes @${w}`);
+    check((await p.locator("[data-testid='web-unknown'][data-stage='quiz:candle-anatomy']").count()) === 1, `map: first objective is a '?' @${w}`);
+    check((await overflow(p)) <= 1, `map web overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/map-web-${w}.png`, fullPage: true });
+    check(/view=web/.test(p.url()), `map: view in URL @${w}`);
+    await p.getByTestId("map-next-link").click();
+    await p.waitForURL(/training\?group=candle-anatomy/);
+    check(/Candlestick Basics/.test(await p.locator("main").innerText()), `map: next objective opens the quiz @${w}`);
+    await p.evaluate(() => {
+      localStorage.setItem("analysis_core_map_v1", JSON.stringify({ visited: ["/", "/map", "/practice/essential-candles"], quiz: { "candle-anatomy": { best: 90, passed: true } } }));
+      localStorage.setItem("analysis_core_misc_practices_done_v1", JSON.stringify(["essential-candles"]));
+    });
+    await p.goto(base + "/map", { waitUntil: "networkidle" });
+    check((await p.getByTestId("map-next").getAttribute("data-stage")) === "quiz:candle-reading", `map: next moves on @${w}`);
+    check(Number(await p.locator("[data-testid='map-region'][data-region='candles']").getAttribute("data-pct")) > 0, `map: candles fills in @${w}`);
+    check((await p.locator("[data-stage='quiz:candle-anatomy'][data-status='done']").count()) === 1, `map: done check @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/map-progress-${w}.png`, fullPage: false });
+  },
 };
 
 

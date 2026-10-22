@@ -3,6 +3,7 @@ import { ANSWER_STREAK_LABEL, ANSWER_STREAK_TIP } from "../lib/streakLabels";
 import MacroHomeTip from "../components/macro/MacroHomeTip";
 import PlacementCard from "../components/academy/PlacementCard";
 import TodayCard from "../components/academy/TodayCard";
+import ProgressMapCard from "../components/ProgressMapCard";
 import AcademyHomeTip from "../components/academy/AcademyHomeTip";
 import { Link } from "react-router-dom";
 import GoalPicker from "../components/GoalPicker";
@@ -137,6 +138,8 @@ export default function Dashboard() {
       {!goalPending ? <PlacementCard variant="home" /> : null}
       {/* Beginner Academy (BA9.M2): Today card, after the goal picker is confirmed. */}
       {!goalPending ? <TodayCard variant="home" /> : null}
+      {/* Progress Map (#23): share done and the next objective. */}
+      {!goalPending ? <ProgressMapCard /> : null}
 
       <section className="flex flex-wrap items-end justify-between gap-4">
         <div className="min-w-0">

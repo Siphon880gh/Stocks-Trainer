@@ -18,6 +18,7 @@ import { mergeAnnotations } from "../lib/chartAnnotations";
 import { BUY_SELL_DISCLAIMER, SCENARIO_PAD_BARS } from "../lib/buySellDrill";
 import PreTradeChecklist from "./PreTradeChecklist";
 import { getLiteracyTerm } from "../lib/literacyTerms";
+import { recordQuizResult } from "../lib/mapProgress";
 import { completeMilestoneFromQuiz, QUIZ_PASS_PCT, quizGroupCompletes, quizPasses, recordQuizScore } from "../lib/progressStore";
 import { getOverlay, splitHintTerms } from "../lib/overlays";
 import CandlestickChart from "./CandlestickChart";
@@ -103,6 +104,7 @@ export default function QuizModal({
       setSubmitted(false);
       setHintOverlayId(null);
     } else {
+      recordQuizResult(groupId, accuracy);
       completeMilestoneFromQuiz({
         groupId,
         points,

@@ -24,6 +24,21 @@ export default function AppChrome({ children }: { children: ReactNode }) {
               <span className="text-[10px] font-normal text-muted tracking-normal">by WengIndustries</span>
             </span>
           </Link>
+          {/* Progress Map (#23): beside the logo on phones, after the six links from sm up. */}
+          <NavLink
+            to="/map"
+            data-testid="nav-map"
+            aria-label="Progress map"
+            className={({ isActive }) =>
+              cn(
+                "ml-auto sm:ml-0 sm:order-last inline-flex items-center gap-1 px-2 py-1.5 text-[13px] rounded-md border whitespace-nowrap transition-colors",
+                isActive ? "text-primary font-semibold bg-primary/10 border-primary/40" : "text-muted border-line hover:text-ink hover:bg-canvas",
+              )
+            }
+          >
+            <span className="material-symbols-outlined text-[16px]" aria-hidden>map</span>
+            Map
+          </NavLink>
           <nav
             data-testid="app-nav"
             className="flex items-center justify-between sm:justify-start w-full sm:w-auto gap-0.5 overflow-x-auto no-scrollbar sm:ml-auto"
