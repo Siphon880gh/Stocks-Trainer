@@ -39,6 +39,7 @@ describe("misc practice catalog", () => {
       "Lookalikes",
       "Invalidation",
       "Support and resistance",
+      "EMA, SMA and MACD (long charts)",
     ]);
   });
 });
