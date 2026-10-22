@@ -9,7 +9,7 @@ VERIFY: npm run lint && npm run test:content && npm run test:lib && BUILD_CHECK
 CHECKPOINT_MODE: continue    # no visual checkpoints here; a human-judgment STOP still stops
 ```
 
-Deepen muscle-memory surfaces linked from Learn: `/practice-draw` and `/practice/*` (flashcards, label, regime, replay, plan, hunt, lookalike, invalidation, levels).
+Deepen muscle-memory surfaces linked from Learn: `/practice-draw` and `/practice/*` (flashcards, label, regime, replay, plan, hunt, lookalike, invalidation, levels, ema-macd).
 
 Project-owned practice pages are **not** this loop's units: `/practice/statements`, `/practice/read-the-print`, `/practice/mark-the-band` grow through [financials-earnings](../docs/projects/financials-earnings/CHARTER.md); `/macro/play` through [macro-forces](../docs/projects/macro-forces/CHARTER.md).
 
@@ -143,5 +143,5 @@ Make Practice exhaustive: Draw templates for taught candle patterns; ≥8 regime
 - Flashcards completeness is Archive’s job (`LITERACY_TERMS`).
 - Label lab is complete unless anatomy types change.
 - Deep links `?template=` / `?contentRef=` must keep working for existing ids.
-- Regime follow-ups stay `sma` / `rsi` / `bollinger`. An `ema` or `macd` follow-up was considered (2026-10-21 audit) and parked: on these short windows it would give the same answer as `sma` and make the trend windows ambiguous. EMA / MACD reading is drilled in Learn `indicators` and the pack-tagged `equity-patterns` overlay drills instead.
+- Regime follow-ups stay `sma` / `rsi` / `bollinger`. An `ema` or `macd` follow-up was considered (2026-10-21 audit) and parked: on these short windows it would give the same answer as `sma` and make the trend windows ambiguous. EMA / MACD reading is drilled in Learn `indicators` and the pack-tagged `equity-patterns` overlay drills instead. Since 2026-10-22, `/practice/ema-macd` (`emaMacdLab.ts`) teaches EMA vs SMA lag and MACD crosses on its own 120-bar SIMULATED charts, with keys computed from the chart. Keep it separate from the regime windows; any new item there needs a key recomputed in `emaMacdLab.test.ts`.
 - Hunt / lookalike / band rounds use their own bars; never rescale another tape (the shape-uniqueness check in `contentGraph.test.ts` covers regime windows).
