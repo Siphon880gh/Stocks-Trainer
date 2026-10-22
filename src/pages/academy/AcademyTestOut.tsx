@@ -105,9 +105,25 @@ export default function AcademyTestOut({ storage, preset }: { storage?: KVStorag
               ))}
             </p>
           ) : null}
-          <Link to="/academy" className="inline-block mt-1 text-[13px] text-primary underline">
-            Back to the Academy
-          </Link>
+          <div className="flex flex-wrap items-center gap-3 mt-1">
+            {!result.passed ? (
+              <button
+                type="button"
+                onClick={() => {
+                  setAnswers({});
+                  setResult(null);
+                  window.scrollTo({ top: 0 });
+                }}
+                className="px-3 py-1.5 rounded-md border border-line text-[13px]"
+                data-testid="test-out-retry"
+              >
+                Try again
+              </button>
+            ) : null}
+            <Link to="/academy" className="text-[13px] text-primary underline">
+              Back to the Academy
+            </Link>
+          </div>
         </div>
       )}
     </main>

@@ -61,3 +61,14 @@ test("test-out page: no answers shown before submit; preset grading renders the 
   assert.match(done, /data-passed="true"/);
   assert.match(renderText(at("/academy/test-out/L0", <AcademyTestOut />, "/academy/test-out/:levelId")), /no test-out for that level/);
 });
+
+// QA regression: a failed test-out only offered "Back to the Academy"; retrying needed a reload.
+test("test-out page: a failed result offers Try again, a pass does not", () => {
+  const items = testOutItems("L2");
+  const wrong = Object.fromEntries(items.map((q) => [q.id, q.correctAnswer === "A" ? "B" : "A"])) as Record<string, "A" | "B">;
+  const failed = renderHtml(at("/academy/test-out/L2", <AcademyTestOut storage={memoryStorage()} preset={wrong} />, "/academy/test-out/:levelId"));
+  assert.match(failed, /data-passed="false"/);
+  assert.match(failed, /data-testid="test-out-retry"/);
+  const right = Object.fromEntries(items.map((q) => [q.id, q.correctAnswer]));
+  assert.doesNotMatch(renderHtml(at("/academy/test-out/L2", <AcademyTestOut storage={memoryStorage()} preset={right} />, "/academy/test-out/:levelId")), /test-out-retry/);
+});
