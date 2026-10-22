@@ -3,7 +3,7 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA11.M2.S1
+- `current_story`: BA11.M3.S1
 - `status`: core BA0–BA10 done and signed off (2026-10-21); BA11 stretch approved and in progress
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
@@ -219,3 +219,12 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - Tests: `paper/linked.test.ts` (8: target fill cancels stop, stop fill cancels target, same-bar stop-first, expiry and cancel cascade, OTO with one exit counts as stop-protected, validation codes, OCO pair + OCO_NOT_SELLS, session replay) and one render test in `paperPage.render.test.tsx`.
 - Screenshots: checkpoints/ba11-bracket-ticket.png, ba11-bracket-invalid.png, ba11-bracket-oco-working.png, ba11-bracket-target-filled.png.
 - Next: BA11.M2.S1 (short selling + margin explainer).
+
+### 2026-10-21 · BA11.M2 Short selling + margin explainer · done
+- Session option `allowShort` (setup step 3, off by default; core sessions carry no `options` key and behave exactly as before).
+- Account: shorts are negative positions with costBasis −proceeds; buying power = cash − reservations − (short value × 1.5); `marginCall` when equity < 30% of the short value (warning only). `applyFill` never flips long ↔ short.
+- Validation: short sale reserves ceil(qty × ref × 1.05 × 50%); codes SHORT_TRAIL_NOT_SUPPORTED, COVER_EXCEEDS_SHORT; warning SHORT_SALE_RISK (unlimited loss, gap past a buy stop). Engine: short fills need a flat / short position and margin at the fill; any buy that fills against a short covers it (positions net, never flip); a long exit after the long closed is still cancelled, never turned into a short.
+- Stats: round trips carry `direction`; a short's protective stop is a buy stop; R uses stop − entry. Exposure is gross (|short value|).
+- UI: ticket labels "Sell short" / "Buy to cover" and a short-sale sentence; positions show "−40 (short)"; MarginPanel explains borrow, unlimited risk, Reg T 50% / 30% maintenance with live numbers, and states the simplifications (no borrow fee, no buy-in).
+- Tests: `paper/short.test.ts` (7) + one render test. Screenshots: ba11-short-setup-option.png, ba11-short-ticket.png, ba11-short-session-margin.png.
+- Next: BA11.M3.S1 (fractional shares + dollar-amount orders).

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import type { AccountState, OrderSpec, OrderType, Side, TimeInForce } from "../../../lib/academy/paper/types";
 import { ORDER_TYPES } from "../../../lib/academy/paper/types";
-import { validateOrder } from "../../../lib/academy/paper/validate";
+import { validateOrder, type Validation } from "../../../lib/academy/paper/validate";
 import { buyingPower } from "../../../lib/academy/paper/account";
-import { TYPE_LABELS, describeBracket, describeOrder, estimatePrice, money } from "../../../lib/academy/paper/describe";
+import { TYPE_LABELS, describeBracket, describeOrder, describeShort, estimatePrice, money } from "../../../lib/academy/paper/describe";
 import { validateBracket } from "../../../lib/academy/paper/linked";
 import { cn } from "../../../lib/utils";
 
@@ -157,10 +157,11 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
         </div>
       ) : null}
       <p className="text-[12px] text-muted tabular-nums">
-        Last close {money(last)} · {f.side === "buy" ? `Est. cost ${money(est)} · Buying power ${money(buyingPower(state))}` : `Shares held ${state.positions[symbol]?.qty ?? 0}`}
+        Last close {money(last)} · {f.side === "buy" ? `Est. cost ${money(est)} · Buying power ${money(buyingPower(state))}` : `Shares held ${state.positions[symbol]?.qty ?? 0}${state.options?.allowShort ? ` · Buying power ${money(buyingPower(state))}` : ""}`}
       </p>
       <p className="text-[13px] bg-sim/5 border border-sim/30 rounded-md px-2.5 py-2" data-testid="order-preview">
         {v.errors.length ? "Fix the order to see what it will do." : describeOrder(spec, last)}
+        {!v.errors.length && !bracketOn && describeShort(v as Validation) ? <span className="block mt-1" data-testid="short-preview">{describeShort(v as Validation)}</span> : null}
         {bracketOn && !v.errors.length ? <span className="block mt-1" data-testid="bracket-preview">{describeBracket(exits, spec.qty)}</span> : null}
       </p>
       {v.errors.map((e) => (

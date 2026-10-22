@@ -7,10 +7,14 @@
  * - buy market / buy stop: ceil(qty × reference × 1.05) where reference = last close (market) or the stop;
  *   the 5% buffer covers a gap at the next open. A gap beyond the buffer is re-checked at the fill.
  * Sells reserve no cash; v1 is long-only, so a sell must not exceed the shares held.
+ * BA11.M2 (session option allowShort): a sell with no long position is a short sale. It reserves
+ * ceil(qty × reference × 1.05 × 50%) (Reg T initial margin; reference = last close, the stop, or the higher of
+ * the limit and the last close) and once filled the short holds back its value + 50% (account.ts). A buy on a
+ * short position covers it (no reservation; it releases margin). One order never flips long ↔ short.
  */
 import type { AccountState, OrderSpec } from "./types";
 import { ORDER_TYPES, TIFS } from "./types";
-import { buyingPower } from "./account";
+import { SHORT_INITIAL_MARGIN, buyingPower } from "./account";
 
 export const MARKET_BUFFER = 0.05;
 export const MAX_TRAIL_PERCENT = 50;
@@ -40,7 +44,10 @@ export type ValidationCode =
   | "MARKETABLE_LIMIT"
   | "BUY_STOP_AT_OR_BELOW_MARKET"
   | "SELL_STOP_AT_OR_ABOVE_MARKET"
-  | "LARGE_POSITION";
+  | "LARGE_POSITION"
+  | "SHORT_TRAIL_NOT_SUPPORTED"
+  | "COVER_EXCEEDS_SHORT"
+  | "SHORT_SALE_RISK";
 
 export interface Issue {
   code: ValidationCode;
@@ -53,6 +60,9 @@ export interface Validation {
   warnings: Issue[];
   /** Cash this order would hold back while working (0 for sells). */
   reservation: number;
+  /** BA11.M2: how this order meets the position (set only when shorting is on or a short is held). */
+  opensShort?: boolean;
+  covers?: boolean;
 }
 
 export interface MarketContext {
@@ -61,6 +71,12 @@ export interface MarketContext {
 }
 
 const $ = (c: number) => `$${(c / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+/** BA11.M2: margin a working short sale holds back. */
+export function shortReservation(spec: OrderSpec, lastClose: number): number {
+  const ref = spec.type === "stop" || spec.type === "stop-limit" ? (spec.stopPrice ?? 0) : spec.type === "limit" ? Math.max(spec.limitPrice ?? 0, lastClose) : lastClose;
+  return Math.ceil(spec.qty * ref * (1 + MARKET_BUFFER) * SHORT_INITIAL_MARGIN);
+}
 
 export function reservationFor(spec: OrderSpec, lastClose: number): number {
   if (spec.side !== "buy") return 0;
@@ -129,15 +145,24 @@ export function validateOrder(state: AccountState, spec: OrderSpec, ctx: MarketC
   }
 
   const held = state.positions[spec.symbol]?.qty ?? 0;
+  const shortOk = !!state.options?.allowShort;
+  const opensShort = spec.side === "sell" && held <= 0 && shortOk;
+  const covers = spec.side === "buy" && held < 0;
   if (spec.side === "sell" && spec.qty > 0) {
-    if (held === 0) e("SHORT_NOT_ALLOWED", "You do not own this stock. Selling it would be a short sale, which the core Academy does not allow.");
-    else if (spec.qty > held) e("SELL_EXCEEDS_POSITION", `You own ${held} shares; you cannot sell ${spec.qty} (no shorting in v1).`);
+    if (held === 0 && !shortOk) e("SHORT_NOT_ALLOWED", "You do not own this stock. Selling it would be a short sale, which the core Academy does not allow.");
+    else if (held > 0 && spec.qty > held) e("SELL_EXCEEDS_POSITION", `You own ${held} shares; you cannot sell ${spec.qty} (no shorting in v1).`);
+    if (opensShort && spec.type === "trailing-stop") e("SHORT_TRAIL_NOT_SUPPORTED", "A trailing stop protects shares you own; it cannot open a short sale.");
   }
+  if (covers && spec.qty > -held) e("COVER_EXCEEDS_SHORT", `You are short ${-held} shares; buy at most ${-held} to cover (one order never flips you from short to long).`);
 
   let reservation = 0;
   if (last !== undefined && errors.length === 0) {
-    reservation = reservationFor(spec, last);
-    if (spec.side === "buy" && reservation > buyingPower(state)) {
+    reservation = opensShort ? shortReservation(spec, last) : covers ? 0 : reservationFor(spec, last);
+    if (opensShort) {
+      if (reservation > buyingPower(state)) e("INSUFFICIENT_BUYING_POWER", `This short sale needs ${$(reservation)} of margin (50% of its value); you have ${$(buyingPower(state))} of buying power.`);
+      w("SHORT_SALE_RISK", "Short sale: you profit if the price falls, but there is no ceiling on how high it can rise, so the possible loss is unlimited. A gap up can jump past a buy stop.");
+    }
+    if (spec.side === "buy" && !covers && reservation > buyingPower(state)) {
       e("INSUFFICIENT_BUYING_POWER", `This order needs ${$(reservation)} of buying power; you have ${$(buyingPower(state))}.`);
     }
     if (spec.type === "limit" && spec.limitPrice) {
@@ -152,5 +177,5 @@ export function validateOrder(state: AccountState, spec: OrderSpec, ctx: MarketC
       w("LARGE_POSITION", "This one order is more than half of your account. Most beginner plans cap a single position well below that.");
     }
   }
-  return { ok: errors.length === 0, errors, warnings, reservation: errors.length === 0 ? reservation : 0 };
+  return { ok: errors.length === 0, errors, warnings, reservation: errors.length === 0 ? reservation : 0, opensShort: opensShort || undefined, covers: covers || undefined };
 }

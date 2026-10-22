@@ -274,7 +274,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 
 ## BA11 — Stretch (only after Weng approves in PROGRESS.md)
 - [x] **BA11.M1** Bracket / OCO / OTO orders (engine + ticket).
-- **BA11.M2** Short selling + margin explainer (borrow, buy-to-cover, unlimited-risk warnings).
+- [x] **BA11.M2** Short selling + margin explainer (borrow, buy-to-cover, unlimited-risk warnings).
 - **BA11.M3** Fractional shares + dollar-amount orders.
 - **BA11.M4** Fees / slippage toggle and a "cost of trading" lesson.
 - **BA11.M5** Trade journal (notes per fill, export CSV) — a gap reviewers flag in the broker.

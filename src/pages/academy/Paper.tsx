@@ -7,7 +7,7 @@ import { CASH_PRESETS, DEFAULT_STARTING_CASH } from "../../lib/academy/paper/acc
 import { START_BAR, newSessionLog, replay } from "../../lib/academy/paper/session";
 import { addCounters, countersFor } from "../../lib/academy/paper/counters";
 import { money } from "../../lib/academy/paper/describe";
-import type { PaperSessionLog } from "../../lib/academy/paper/types";
+import type { PaperOptions, PaperSessionLog } from "../../lib/academy/paper/types";
 import { loadPaper, savePaper, type KVStorage } from "../../lib/academy/storage";
 import { awardFirstOrder, refreshStoredBadges } from "../../lib/academy/rewards/award";
 import { cn } from "../../lib/utils";
@@ -18,6 +18,8 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
   const [tapeId, setTapeId] = useState(TAPES[0]!.id);
   const [cash, setCash] = useState(DEFAULT_STARTING_CASH);
   const [note, setNote] = useState<string | null>(null);
+  const [options, setOptions] = useState<PaperOptions>({});
+  const toggle = (k: keyof PaperOptions) => setOptions((o) => ({ ...o, [k]: !o[k] }));
 
   const persist = useCallback(
     (session: PaperSessionLog | null, statsFrom?: PaperSessionLog) => {
@@ -107,7 +109,16 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
                 </button>
               ))}
             </div>
-            <button type="button" onClick={() => persist(newSessionLog(tapeId, cash, START_BAR))} className="px-4 py-2 rounded-md bg-sim hover:bg-sim-dim text-white font-semibold text-[13px]" data-testid="paper-start">
+            <p className="font-semibold">3. Stretch rules (optional, off by default)</p>
+            <div className="space-y-1.5 text-[13px]" data-testid="paper-options">
+              <label className="flex items-start gap-2">
+                <input type="checkbox" checked={!!options.allowShort} onChange={() => toggle("allowShort")} data-testid="opt-short" />
+                <span>
+                  Allow short selling on margin <span className="text-muted">(sell shares you do not own; 50% margin held; unlimited-loss risk)</span>
+                </span>
+              </label>
+            </div>
+            <button type="button" onClick={() => persist(newSessionLog(tapeId, cash, START_BAR, options))} className="px-4 py-2 rounded-md bg-sim hover:bg-sim-dim text-white font-semibold text-[13px]" data-testid="paper-start">
               Start the session
             </button>
           </div>

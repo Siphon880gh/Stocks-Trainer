@@ -17,10 +17,13 @@
  * - At the fill a buy needs cash − (other orders' reservations) ≥ qty × price (a gap beyond the reservation
  *   buffer can reject it); a sell needs the shares still held (if an earlier exit already sold them, it is
  *   cancelled). Cancel, fill, reject and expire release the reservation exactly.
+ * - BA11.M2 (allowShort): a short sale fills like any sell if the position is still flat / short and the margin
+ *   (50% of qty × fill) fits; a buy to cover fills like any buy if the short is still there (no cash check: it
+ *   releases more margin than it spends). No borrow fees, no forced buy-ins.
  * - Fees 0, integer cents, integer shares.
  */
 import type { AccountState, Order, OrderSpec, PaperBar } from "./types";
-import { applyFill, equity, reservedTotal } from "./account";
+import { SHORT_INITIAL_MARGIN, applyFill, buyingPower, equity, reservedTotal } from "./account";
 import { validateOrder, type MarketContext, type Validation } from "./validate";
 
 export const trailLevel = (peak: number, spec: Pick<OrderSpec, "trailAmount" | "trailPercent">) =>
@@ -42,6 +45,8 @@ export function placeOrder(state: AccountState, spec: OrderSpec, ctx: MarketCont
     order = { ...base, status: "rejected", closedAtBar: state.bar, reason: validation.errors.map((e) => e.message).join(" ") };
   } else {
     order = { ...base, reserved: validation.reservation };
+    if (validation.opensShort) order.opensShort = true;
+    if (validation.covers) order.covers = true;
     if (spec.type === "stop" || spec.type === "stop-limit") order.initialStop = spec.stopPrice;
     if (spec.type === "trailing-stop") {
       const peak = ctx.lastClose[spec.symbol]!;
@@ -134,7 +139,25 @@ export function stepBar(state: AccountState, bars: Record<string, PaperBar>): Ac
     if (!bar) continue;
     const { price, order } = evaluate(o, bar);
     let next: Order = order;
-    if (price !== null) {
+    const held = s.positions[o.symbol]?.qty ?? 0;
+    const money$ = (c: number) => `$${(c / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    if (price !== null && o.opensShort) {
+      // BA11.M2: a short sale needs a flat or short position and margin for the actual fill.
+      const need = Math.ceil(o.qty * price * SHORT_INITIAL_MARGIN);
+      if (held > 0) next = close(order, "cancelled", t, { reason: "You hold shares now; a short sale needs a flat or short position." });
+      else if (need > buyingPower(s) + o.reserved) next = close(order, "rejected", t, { reason: `Not enough buying power for the margin on this short sale at ${money$(price)}.` });
+      else {
+        s = applyFill(s, { orderId: o.id, bar: t, symbol: o.symbol, side: "sell", qty: o.qty, price }).state;
+        next = close(order, "filled", t, { fillPrice: price });
+      }
+    } else if (price !== null && (o.covers || (o.side === "buy" && held < 0))) {
+      // A buy placed while flat that fills against a short covers it (positions net), never flips it.
+      if (held >= 0 || o.qty > -held) next = close(order, "cancelled", t, { reason: held >= 0 ? "The short was already covered by another order." : `Only ${-held} shares were short; one order never flips a short into a long.` });
+      else {
+        s = applyFill(s, { orderId: o.id, bar: t, symbol: o.symbol, side: "buy", qty: o.qty, price }).state;
+        next = close(order, "filled", t, { fillPrice: price });
+      }
+    } else if (price !== null) {
       if (o.side === "buy") {
         const available = s.cash - (reservedTotal(s) - o.reserved);
         if (o.qty * price > available) {
@@ -144,7 +167,6 @@ export function stepBar(state: AccountState, bars: Record<string, PaperBar>): Ac
           next = close(order, "filled", t, { fillPrice: price });
         }
       } else {
-        const held = s.positions[o.symbol]?.qty ?? 0;
         if (o.qty > held) {
           next = close(order, "cancelled", t, { reason: held === 0 ? "The position was already closed by another order." : `Only ${held} shares were left to sell.` });
         } else {

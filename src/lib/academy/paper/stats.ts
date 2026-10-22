@@ -2,7 +2,7 @@
  * BA4.M4: P&L and performance statistics (all in cents unless noted). Pure.
  */
 import type { AccountState, Order } from "./types";
-import { equity, positionValue, positionsValue } from "./account";
+import { equity, positionValue } from "./account";
 
 /** Unrealised P&L = Σ (qty × mark − cost basis) over open positions. */
 export const unrealizedPnl = (s: AccountState) => Object.values(s.positions).reduce((a, p) => a + positionValue(s, p) - p.costBasis, 0);
@@ -41,14 +41,17 @@ export function maxDrawdown(curve: { equity: number }[]): { amount: number; pct:
   return { amount, pct };
 }
 
-/** Exposure = market value of positions ÷ equity (0..1). */
+/** Exposure = gross market value of positions (shorts counted at their absolute value) ÷ equity. */
 export const exposure = (s: AccountState) => {
   const e = equity(s);
-  return e > 0 ? positionsValue(s) / e : 0;
+  const gross = Object.values(s.positions).reduce((a, p) => a + Math.abs(positionValue(s, p)), 0);
+  return e > 0 ? gross / e : 0;
 };
 
 export interface RoundTrip {
   symbol: string;
+  /** BA11.M2: a short trip opens with a sell and closes with buys to cover. */
+  direction: "long" | "short";
   entryBar: number;
   /** Price and quantity of the opening buy fill. */
   entryPrice: number;
@@ -63,30 +66,32 @@ export interface RoundTrip {
   r: number | null;
 }
 
-const isProtective = (o: Order) => o.side === "sell" && (o.type === "stop" || o.type === "stop-limit" || o.type === "trailing-stop");
+const isProtective = (o: Order, direction: RoundTrip["direction"]) =>
+  direction === "long" ? o.side === "sell" && !o.opensShort && (o.type === "stop" || o.type === "stop-limit" || o.type === "trailing-stop") : o.side === "buy" && (o.type === "stop" || o.type === "stop-limit");
 
-/** Protective stop for a trip: a sell stop / stop-limit / trailing stop placed by the end of the entry bar and still working then. */
-export function stopAtEntry(s: AccountState, symbol: string, entryBar: number): number | null {
-  const o = s.orders.find((x) => x.symbol === symbol && isProtective(x) && x.status !== "rejected" && x.placedAtBar <= entryBar && (x.closedAtBar === undefined || x.closedAtBar > entryBar));
+/** Protective stop for a trip: a sell stop / stop-limit / trailing stop (a buy stop for a short) placed by the end of the entry bar and still working then. */
+export function stopAtEntry(s: AccountState, symbol: string, entryBar: number, direction: RoundTrip["direction"] = "long"): number | null {
+  const o = s.orders.find((x) => x.symbol === symbol && isProtective(x, direction) && x.status !== "rejected" && x.placedAtBar <= entryBar && (x.closedAtBar === undefined || x.closedAtBar > entryBar));
   return o?.initialStop ?? null;
 }
 
-/** Splits the fills into round trips: flat → long → flat. */
+/** Splits the fills into round trips: flat → long → flat, or flat → short → flat (BA11.M2). Quantities are signed. */
 export function roundTrips(s: AccountState): RoundTrip[] {
   const trips: RoundTrip[] = [];
   const open: Record<string, { trip: RoundTrip; qty: number }> = {};
   for (const f of s.fills) {
     const cur = open[f.symbol];
-    if (f.side === "buy") {
-      if (cur) cur.qty += f.qty;
-      else {
-        const trip: RoundTrip = { symbol: f.symbol, entryBar: f.bar, entryPrice: f.price, entryQty: f.qty, exitBar: null, pnl: 0, closed: false, stopAtEntry: stopAtEntry(s, f.symbol, f.bar), r: null };
-        trips.push(trip);
-        open[f.symbol] = { trip, qty: f.qty };
-      }
-    } else if (cur) {
+    const d = f.side === "buy" ? f.qty : -f.qty;
+    if (!cur) {
+      const direction = d > 0 ? "long" : "short";
+      const trip: RoundTrip = { symbol: f.symbol, direction, entryBar: f.bar, entryPrice: f.price, entryQty: f.qty, exitBar: null, pnl: 0, closed: false, stopAtEntry: stopAtEntry(s, f.symbol, f.bar, direction), r: null };
+      trips.push(trip);
+      open[f.symbol] = { trip, qty: d };
+    } else if (Math.sign(cur.qty) === Math.sign(d)) {
+      cur.qty += d;
+    } else {
       cur.trip.pnl += f.realized;
-      cur.qty -= f.qty;
+      cur.qty += d;
       if (cur.qty === 0) {
         cur.trip.closed = true;
         cur.trip.exitBar = f.bar;
@@ -95,7 +100,9 @@ export function roundTrips(s: AccountState): RoundTrip[] {
     }
   }
   for (const t of trips) {
-    if (t.closed && t.stopAtEntry !== null && t.entryPrice > t.stopAtEntry) t.r = t.pnl / ((t.entryPrice - t.stopAtEntry) * t.entryQty);
+    if (!t.closed || t.stopAtEntry === null) continue;
+    const risk = t.direction === "long" ? t.entryPrice - t.stopAtEntry : t.stopAtEntry - t.entryPrice;
+    if (risk > 0) t.r = t.pnl / (risk * t.entryQty);
   }
   return trips;
 }

@@ -29,6 +29,12 @@ export interface OrderSpec {
   trailPercent?: number;
 }
 
+/** BA11 stretch switches, chosen when a session starts (all off = the core Academy rules). */
+export interface PaperOptions {
+  /** BA11.M2: short selling on margin (50% Reg T initial margin reserved; no borrow fees or buy-ins). */
+  allowShort?: boolean;
+}
+
 export type OrderStatus = "working" | "filled" | "cancelled" | "expired" | "rejected";
 
 export interface Order extends OrderSpec {
@@ -56,6 +62,9 @@ export interface Order extends OrderSpec {
   ocoGroup?: string;
   /** BA11.M1: the order's part in a bracket. */
   role?: "entry" | "stop" | "target";
+  /** BA11.M2: this sell opens or adds to a short; this buy covers a short. Fixed at placement. */
+  opensShort?: boolean;
+  covers?: boolean;
 }
 
 export interface Fill {
@@ -72,8 +81,9 @@ export interface Fill {
 
 export interface Position {
   symbol: string;
+  /** Shares held; negative = a short position (BA11.M2). */
   qty: number;
-  /** Total cost basis in cents (avg cost = costBasis / qty). */
+  /** Total cost basis in cents (avg cost = costBasis / qty). For a short it is −(sale proceeds). */
   costBasis: number;
 }
 
@@ -106,6 +116,8 @@ export interface AccountState {
   marks: Record<string, number>;
   equityCurve: EquityPoint[];
   nextOrderSeq: number;
+  /** BA11 stretch switches (absent = core rules). */
+  options?: PaperOptions;
 }
 
 /** A persisted session is an action log replayed through the deterministic engine. */
@@ -121,4 +133,6 @@ export interface PaperSessionLog {
   /** Last visible bar index. */
   bar: number;
   actions: PaperAction[];
+  /** BA11 stretch switches for this session (absent = core rules). */
+  options?: PaperOptions;
 }

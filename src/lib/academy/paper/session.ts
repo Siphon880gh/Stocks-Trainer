@@ -2,14 +2,15 @@
  * Paper sessions are persisted as an action log (place / cancel at a bar) and rebuilt by replaying the log
  * through the deterministic engine, so a reload restores exactly the same state.
  */
-import type { AccountState, OrderSpec, PaperAction, PaperSessionLog } from "./types";
+import type { AccountState, OrderSpec, PaperAction, PaperOptions, PaperSessionLog } from "./types";
 import { createAccount } from "./account";
 import { cancelOrder, contextFrom, placeOrder, stepBar, type PlaceResult } from "./engine";
 import { getTape, type Tape } from "./tapes";
 import { placeBracket, placeOco, type LinkedResult } from "./linked";
 
-export function newSessionLog(tapeId: string, startingCash: number, bar = 0): PaperSessionLog {
-  return { tapeId, startingCash, bar, actions: [] };
+export function newSessionLog(tapeId: string, startingCash: number, bar = 0, options?: PaperOptions): PaperSessionLog {
+  const on = options && Object.values(options).some(Boolean);
+  return { tapeId, startingCash, bar, actions: [], ...(on ? { options: { ...options } } : {}) };
 }
 
 /** First bar the learner sees when a session starts (a few bars of history give context). */
@@ -20,7 +21,7 @@ export function replay(log: PaperSessionLog, tape: Tape | undefined = getTape(lo
   const start = Math.min(START_BAR, tape.bars.length - 1);
   const first = log.actions.length ? Math.min(start, ...log.actions.map((a) => a.atBar)) : start;
   const from = Math.min(first, log.bar);
-  let s = createAccount(log.startingCash, { [tape.symbol]: tape.bars[from]!.close }, from);
+  let s = createAccount(log.startingCash, { [tape.symbol]: tape.bars[from]!.close }, from, log.options);
   const last = Math.min(log.bar, tape.bars.length - 1);
   for (let b = from; b <= last; b++) {
     for (const a of log.actions.filter((x) => x.atBar === b)) s = applyAction(s, a, tape);

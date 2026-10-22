@@ -6,6 +6,7 @@ import { getTape } from "../../../lib/academy/paper/tapes";
 import { avgCost } from "../../../lib/academy/paper/account";
 import SimulatedBanner from "../SimulatedBanner";
 import OrderTicket, { type BracketExits } from "./OrderTicket";
+import MarginPanel from "./MarginPanel";
 import EquityCurve from "./EquityCurve";
 import { AccountSummary, OpenOrders, OrderHistory, PositionsTable } from "./PaperPanels";
 
@@ -110,6 +111,7 @@ export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolba
             Orders placed now are checked against the <strong>next</strong> bar. Fills follow textbook rules on daily bars: market at the open; limits at the limit or
             better; stops at the stop or worse on a gap. No fees.
           </p>
+          {state.options?.allowShort ? <MarginPanel state={state} /> : null}
         </div>
       </div>
     </div>

@@ -133,3 +133,21 @@ test("BA11.M1 bracket ticket: opt-in on buys only, validated exits, plain-langua
   const open = renderText(<OpenOrders state={replay(log)} />);
   assert.equal((open.match(/waits for its entry to fill/g) ?? []).length, 2);
 });
+
+test("BA11.M2 shorting: off by default on setup; ticket explains a short sale; the session shows the margin panel", () => {
+  const setup = renderHtml(page(memoryStorage({})));
+  assert.ok(setup.includes('data-testid="opt-short"'));
+  assert.ok(!/data-testid="opt-short"[^>]*checked/.test(setup), "off by default");
+  const s = createAccount(1_000_000, { [tape.symbol]: 5000 }, 0, { allowShort: true });
+  const t = renderHtml(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} initial={{ side: "sell" }} />);
+  assert.ok(!t.includes('data-code="SHORT_NOT_ALLOWED"'));
+  assert.ok(t.includes('data-code="SHORT_SALE_RISK"'));
+  assert.match(renderText(<OrderTicket state={s} symbol={tape.symbol} onSubmit={() => {}} initial={{ side: "sell" }} />), /no limit on the loss/);
+  let log = newSessionLog("trend-up", 1_000_000, START_BAR, { allowShort: true });
+  log = sessionPlace(log, { symbol: tape.symbol, side: "sell", type: "market", qty: 20, tif: "day" }).log;
+  log = sessionStep(log, 2);
+  const text = renderText(page(withSession(log)));
+  assert.match(text, /Short selling & margin/);
+  assert.match(text, /-20 \(short\)/);
+  assert.ok(!renderText(page(withSession())).includes("Short selling & margin"), "core sessions have no margin panel");
+});

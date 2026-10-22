@@ -22,7 +22,9 @@ export function orderLabel(o: OrderSpec): string {
     o.type === "stop" ? ` ${money(o.stopPrice!)}` :
     o.type === "stop-limit" ? ` ${money(o.stopPrice!)} / ${money(o.limitPrice!)}` :
     o.type === "trailing-stop" ? (o.trailAmount !== undefined ? ` ${money(o.trailAmount)} trail` : ` ${o.trailPercent}% trail`) : "";
-  return `${o.side === "buy" ? "Buy" : "Sell"} ${o.qty} ${o.symbol} · ${TYPE_LABELS[o.type]}${px} · ${o.tif === "day" ? "Day" : "GTC"}`;
+  const o2 = o as OrderSpec & { opensShort?: boolean; covers?: boolean };
+  const verb = o2.opensShort ? "Sell short" : o2.covers ? "Buy to cover" : o.side === "buy" ? "Buy" : "Sell";
+  return `${verb} ${o.qty} ${o.symbol} · ${TYPE_LABELS[o.type]}${px} · ${o.tif === "day" ? "Day" : "GTC"}`;
 }
 
 /** Full preview sentence(s). `lastClose` (cents) is used for market estimates and the trailing start level. */
@@ -83,4 +85,11 @@ export function describeBracket(exits: { stopPrice?: number; targetPrice?: numbe
   if (exits.targetPrice !== undefined) parts.push(`a sell limit at ${money(exits.targetPrice)} (takes the profit)`);
   const both = parts.length === 2 ? " They are one-cancels-other: when one fills, the other is cancelled." : "";
   return `Only after the buy fills: ${parts.join(" and ")} start working on the next bar for the same ${n}.${both} If the buy never fills, they are cancelled.`;
+}
+
+/** BA11.M2: the extra sentence a short sale or a buy to cover gets in the preview. */
+export function describeShort(kind: { opensShort?: boolean; covers?: boolean }): string {
+  if (kind.opensShort) return "Short sale: you sell borrowed shares now and must buy them back later. You gain if the price falls and lose if it rises, with no limit on the loss. 50% of the sale value is held as margin.";
+  if (kind.covers) return "Buy to cover: this buys back borrowed shares and closes (part of) your short.";
+  return "";
 }

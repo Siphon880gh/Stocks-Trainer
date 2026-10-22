@@ -59,7 +59,7 @@ export function PositionsTable({ state }: { state: AccountState }) {
               return (
                 <tr key={p.symbol} data-symbol={p.symbol}>
                   <td className={td}>{p.symbol}</td>
-                  <td className={td}>{p.qty}</td>
+                  <td className={td}>{p.qty < 0 ? `${p.qty} (short)` : p.qty}</td>
                   <td className={td}>{money(Math.round(avgCost(p)))}</td>
                   <td className={td}>{money(state.marks[p.symbol] ?? 0)}</td>
                   <td className={cn(td, tone(s.unrealized))} data-unrealized={s.unrealized}>
