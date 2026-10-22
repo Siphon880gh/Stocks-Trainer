@@ -470,6 +470,22 @@ const flows = {
     await p.goto(base + "/training?group=fib-decision-map", { waitUntil: "networkidle" });
     check(/Fibonacci Decision Map/.test(await p.locator("main").innerText()), `fib: Learn group missing @${w}`);
   },
+  async "Futures vs options: MES/ES calculator, Sharpe, Apple chain"(p, w) {
+    await p.goto(base + "/practice/futures-vs-options", { waitUntil: "networkidle" });
+    check(/right, but not the obligation/.test(await p.getByTestId("fo-compare").innerText()), `fo: compare table missing @${w}`);
+    check(/\$20\.00/.test(await p.getByTestId("fo-calc-out").innerText()), `fo: MES 4pt $20 missing @${w}`);
+    await p.locator("[data-contract=ES]").click();
+    check(/\$200\.00/.test(await p.getByTestId("fo-calc-out").innerText()), `fo: ES 4pt $200 missing @${w}`);
+    check(/Sharpe ≈ 0\.60/.test(await p.getByTestId("fo-sharpe-out").innerText()), `fo: Sharpe 0.6 missing @${w}`);
+    check(/144,748/.test(await p.getByTestId("fo-ebitda").innerText()), `fo: EBITDA missing @${w}`);
+    check(/12\.00|SMA\(5\)/.test(await p.getByTestId("fo-sma").innerText()), `fo: SMA missing @${w}`);
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("futures-vs-options"), `fo: practice not marked done @${w}`);
+    check((await overflow(p)) <= 1, `fo overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/futures-vs-options-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=futures-vs-options", { waitUntil: "networkidle" });
+    check(/Futures vs Options/.test(await p.locator("main").innerText()), `fo: Learn group missing @${w}`);
+  },
 };
 
 
