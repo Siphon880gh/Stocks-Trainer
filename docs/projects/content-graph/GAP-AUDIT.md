@@ -109,3 +109,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## 2026-10-22 Gamma squeeze case
 - Audit: no existing content on short or gamma squeezes, short interest, days to cover, open interest, unusual options activity or survivorship bias; gamma and delta appeared only in options-context questions that say those packs have no chain or Greeks (OP-06 reworded to say so for those packs). The Academy options files stay free of Greek terms (`optionsGate.test.ts`), so the case links to the ladder but not the other way.
 - Added `/practice/gamma-squeeze` (`src/lib/gammaSqueeze.ts`, SIMULATED bars, Black-Scholes option path recomputed in `gammaSqueeze.test.ts`, enter / size / exit grading, stall counterfactual, survivorship panel), Learn group `squeezes` (14, floor 12), Coach `chasing-a-squeeze`, 9 glossary terms, a Misc Practices entry and a Cases tip link.
+
+## 2026-10-22 News, biases & short-term options
+- Audit: no bias content or terms (recency, availability, confirmation, FOMO, loss aversion, anchoring), no LEAPS or information-overload terms; `news-literacy` covers headline reading, `no-trade-zone` and `short-dated-option` terms exist and are linked, paper brackets exist on `/paper`.
+- Added `/practice/news-biases` (`src/lib/newsBiases.ts`), Learn group `news-biases` (17, floor 15), Coach `news-day-decision`, 9 glossary terms, and an optional bias check on the paper order ticket (off by default).

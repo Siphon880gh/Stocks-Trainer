@@ -89,3 +89,14 @@ Screenshots (box only): `/workspace/checkpoints/qa/chart-patterns-{390,1280}.png
 | `npm run test:e2e` | 169 checks, 0 failed; its own server closed after. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/gamma-squeeze-{390,1280}.png`.
+
+## 2026-10-22 News, biases & short-term options
+
+| Flow | Result |
+|---|---|
+| `/practice/news-biases`, 390 and 1280 (e2e) | Six bias cards, horizon table with LEAPS, three checkpoints graded 3 / 3; no overflow, no console errors. |
+| `/paper` ticket (e2e) | Bias check off by default; when on, Place is disabled until all six boxes are ticked. |
+| `/coach/news-day-decision` (e2e) | Opens after the options-class peek. |
+| `npm run test:e2e` | 187 checks, 0 failed; its own server closed after. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/news-biases-{390,1280}.png`, `/workspace/checkpoints/qa/news-bias-ticket-{390,1280}.png`.

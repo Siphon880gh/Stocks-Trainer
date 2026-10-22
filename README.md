@@ -79,6 +79,7 @@ Other market types ship as SAMPLE browse (**E9**). **E10** adds a **Market Navig
 | **Japanese candlesticks & Heikin-Ashi** | Where candle charts came from, the buyer–seller battle in one candle, the core 14 reversal patterns (recognise · psychology · trade), Heikin-Ashi averaged candles and their limits | **Japanese candlesticks** (`/practice/japanese-candles`) · **Heikin-Ashi** lab (`/practice/heikin-ashi`) · Archive core list + Learn **Japanese Candlesticks: Core 14** and **Heikin-Ashi Candles** | Quiz passed (70%); lab questions answered |
 | **Float, short-dated options & risk** | Float and float turnover, short-dated option risk, position sizing, why the same market gives different results | Learn **Float, Short-Dated Options & Risk** | Quiz passed (70%) |
 | **Squeezes & options flow** | Gamma and dealer hedging, gamma vs short squeezes, short interest, days to cover, open interest, unusual options activity, survivorship bias | **Gamma squeeze case** (`/practice/gamma-squeeze`) + Learn **Squeezes, Options Flow & Survivorship** + Coach **Chasing a squeeze** | Case graded (enter · size · exit); quiz passed (70%) |
+| **News, biases & short-term options** | Expiry length for a news idea (weekly vs about two months vs LEAPS), six biases with news examples and countermeasures, information overload, over- and underreaction, OCO exits, source checks, the do-nothing rule | **News, biases & short-term options** (`/practice/news-biases`) + Learn **News, Biases & Short-Term Options** + Coach **A news-day decision** + optional bias check on the paper ticket | Checkpoints answered; quiz passed (70%) |
 
 ---
 
@@ -188,6 +189,7 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | `/practice/japanese-candles` | Japanese candlesticks: history, the buyer–seller battle, body vs wicks, and the core 14 reversal patterns (Bullish / Bearish toggle) |
 | `/practice/heikin-ashi` | Heikin-Ashi lab: formula, limits, regular vs Heikin-Ashi toggle on one SIMULATED chart, computed questions |
 | `/practice/gamma-squeeze` | Gamma squeeze case: a SIMULATED weekly-call chase with enter / size / exit decisions, reveal, points and a stall counterfactual |
+| `/practice/news-biases` | News, biases & short-term options: expiry trade-off table, six bias cards, over- and underreaction research, OCO / bracket habits, a three-checkpoint news day |
 | `/practice/statements` | Statements lab · 13-week cash forecast · biotech readout day |
 | `/practice/read-the-print` · `/practice/mark-the-band` | Earnings reaction game · expected-move band |
 | `/coach` · `/coach/:slug` | Step-by-step coaching (decision trees · no LLM) |
@@ -276,6 +278,14 @@ Beginner training modelled on how broker apps such as Webull teach new investors
 - The illustrative story: a trader puts $200 into 25 weekly 24-strike calls at $0.08 at 10:35 AM ET (7:35 AM PT) and sells them for about $5,075 at 1:00 PM ET (10:00 AM PT). Option values are Black-Scholes mids on made-up volatility; `gammaSqueeze.test.ts` recomputes the whole option path with an independent implementation. The counterfactual keeps the same morning, then stalls: the calls are worth $0.03 at 1:00 PM and expire worthless below the strike.
 - Also on the page: the shares dealers would hold IF they were net short the 24-strike open interest, a survivorship-bias panel (100 made-up $200 tickets that lose money overall), short squeeze vs gamma squeeze and how they compound, and what the SEC staff's October 2021 report found for GameStop in January 2021 (no evidence of a gamma squeeze; positive sentiment, not short covering, sustained the rise).
 - Learn **Squeezes, Options Flow & Survivorship** (14 questions), Coach **Chasing a squeeze**, and 9 glossary terms: gamma, delta hedging, gamma squeeze, short squeeze, short interest, days to cover, open interest, unusual options activity, survivorship bias.
+
+### News, biases & short-term options (`/practice/news-biases`)
+
+- Why a news idea often needs weeks, and the expiry trade-off: weeklies are cheapest but need the move at once (time decay is fastest near expiry); about two months gives the story time for more premium; LEAPS (about nine months to three years) cost the most and decay the slowest. Links the short-dated option content, the horizon-mismatch Coach session and the gamma squeeze case.
+- Six biases, each with a definition, a news example and a countermeasure: recency, availability, confirmation, FOMO, loss aversion (Kahneman & Tversky 1979) and anchoring (Tversky & Kahneman 1974). Information overload and overtrading (Hirshleifer, Lim & Teoh 2009), overreaction after no-news moves (Chan 2003), underreaction from limited attention (Hirshleifer, Hsu & Li 2013; Cohen & Frazzini 2008), and the April 2025 tariff headlines as an example of a headline flipping (the S&P 500 rose 9.5% on April 9, 2025).
+- Habits: OCO and bracket exits (practised on the paper account), seeking contrary evidence, auditing the source (Investor.gov and FINRA pump-and-dump alerts), the do-nothing rule, and a Schwab Trader Talks video on news and trade decisions.
+- The paper order ticket has an optional **bias check** (off by default): six questions that must all be ticked before the order can be placed.
+- Learn **News, Biases & Short-Term Options** (17 questions), Coach **A news-day decision** (bias checkpoints), and 9 glossary terms (the six biases, information overload, overtrading, LEAPS). Content in `src/lib/newsBiases.ts`.
 
 ### Playbooks (`/playbooks`)
 
