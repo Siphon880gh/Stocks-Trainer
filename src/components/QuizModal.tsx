@@ -16,6 +16,7 @@ import { PATTERN_OHLC } from "../lib/ohlcData";
 import { overlayQuizBars, quizSamplePackName } from "../lib/quizChartData";
 import { mergeAnnotations } from "../lib/chartAnnotations";
 import { BUY_SELL_DISCLAIMER, SCENARIO_PAD_BARS } from "../lib/buySellDrill";
+import PreTradeChecklist from "./PreTradeChecklist";
 import { getLiteracyTerm } from "../lib/literacyTerms";
 import { completeMilestoneFromQuiz, QUIZ_PASS_PCT, quizGroupCompletes, quizPasses, recordQuizScore } from "../lib/progressStore";
 import { getOverlay, splitHintTerms } from "../lib/overlays";
@@ -199,6 +200,12 @@ export default function QuizModal({
               confirmed reason to buy, a confirmed reason to sell, or no clear edge (wait)? Every answer explains the
               pattern, the confirmation, and where the idea would be wrong.
             </p>
+          ) : null}
+          {groupId === "buy-or-sell" ? (
+            <details className="border border-line rounded-lg px-4 py-2" data-testid="bs-pretrade">
+              <summary className="cursor-pointer text-[12px] font-semibold">Pre-trade checklist (context → location → theme → trigger → risk)</summary>
+              <div className="pt-2"><PreTradeChecklist compact /></div>
+            </details>
           ) : null}
 
           {/* Question */}

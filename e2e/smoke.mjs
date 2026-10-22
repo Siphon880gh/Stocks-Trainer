@@ -53,7 +53,8 @@ async function page(width) {
   p.on("console", (m) => m.type() === "error" && errors.push(m.text()));
   return { p, ctx, errors };
 }
-const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+// Mobile emulation widens innerWidth to the content, so measure against the visual viewport.
+const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - (window.visualViewport?.width ?? innerWidth));
 
 const flows = {
   async "route change starts at the top"(p) {
@@ -618,6 +619,32 @@ const flows = {
     if (SHOTS) await p.screenshot({ path: `${SHOTS}/record-traders-${w}.png`, fullPage: true });
     await p.goto(base + "/training?group=record-traders", { waitUntil: "networkidle" });
     check(/record-setting traders/i.test(await p.locator("main").innerText()), `rt: Learn group missing @${w}`);
+  },
+  async "Pattern themes: 17 themes, chips, quick map, checklist, Archive theme filter + modal chips"(p, w) {
+    await p.goto(base + "/practice/pattern-themes", { waitUntil: "networkidle" });
+    check((await p.locator('[data-testid="pt-chips"] button').count()) === 17, `pt: 17 chips @${w}`);
+    await p.locator("[data-theme='failure']").click();
+    await p.waitForSelector("[data-testid='pt-theme'][data-selected='failure']", { timeout: 5000 }).catch(() => {});
+    check((await p.getByTestId("pt-theme").getAttribute("data-selected")) === "failure", `pt: select theme @${w}`);
+    check(/Bull Trap \(Failed Breakout\)/.test(await p.getByTestId("pt-patterns").innerText()), `pt: failure lists bull trap @${w}`);
+    check((await p.getByTestId("pt-map-row").count()) === 19, `pt: quick map rows @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/pattern-themes-${w}.png`, fullPage: true });
+    for (const id of ["context", "location", "theme", "trigger", "risk"]) await p.getByTestId(`ptc-${id}`).check();
+    check(/All 5 checked/.test(await p.getByTestId("ptc-status").innerText()), `pt: checklist status @${w}`);
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("pattern-themes"), `pt: practice not marked done @${w}`);
+    check((await overflow(p)) <= 1, `pt overflow @${w}`);
+    await p.getByTestId("pt-archive-link").click();
+    await p.waitForURL(/archive\?theme=failure/);
+    await p.waitForSelector("[data-pattern-id='failed-breakout']", { timeout: 5000 }).catch(() => {});
+    check((await overflow(p)) <= 1, `pt: archive overflow @${w}`);
+    const ids = await p.locator("[data-pattern-id]").evaluateAll((els) => els.map((e) => e.getAttribute("data-pattern-id")));
+    check(ids.includes("failed-breakout") && ids.includes("bullish-hikkake") && !ids.includes("morning-star") && ids.length < 20, `pt: archive theme filter (${ids.length}) @${w}`);
+    await p.goto(base + "/archive?open=hammer", { waitUntil: "networkidle" });
+    check(/Primary: Rejection/.test(await p.getByTestId("pattern-theme-primary").innerText()), `pt: modal primary chip @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/pattern-themes-modal-${w}.png` });
+    await p.goto(base + "/training?group=pattern-themes", { waitUntil: "networkidle" });
+    check(/Pattern Themes/.test(await p.locator("main").innerText()), `pt: Learn group missing @${w}`);
   },
 };
 

@@ -6,6 +6,7 @@ import JargonText from "./JargonText";
 import CandlestickChart from "./CandlestickChart";
 import { NOT_A_GUARANTEE, patternIllustration, patternTabs } from "../lib/patternTabs";
 import { CRYPTO_FIT_HINT, CRYPTO_FIT_LABEL, cryptoFitFor } from "../lib/cryptoCandles";
+import { getTheme } from "../lib/patternThemes";
 
 export type PatternTab = "recognise" | "psychology" | "trade";
 export const PATTERN_TAB_LABELS: Record<PatternTab, string> = {
@@ -95,6 +96,22 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
                 );
               })()}
             </div>
+            {pattern.themes ? (
+              <div className="flex flex-wrap items-center gap-1.5" data-testid="pattern-themes">
+                <span className="text-[10px] font-mono uppercase tracking-wide text-muted">Themes</span>
+                {[pattern.themes.primary, ...pattern.themes.secondary].map((id, i) => (
+                  <Link
+                    key={id}
+                    to={`/practice/pattern-themes?theme=${id}`}
+                    data-testid={i === 0 ? "pattern-theme-primary" : "pattern-theme-secondary"}
+                    className={`text-[11px] rounded-full border px-2 py-0.5 ${i === 0 ? "border-primary bg-primary/10 text-primary font-semibold" : "border-line text-muted"}`}
+                    title={getTheme(id)?.question}
+                  >
+                    {i === 0 ? "Primary: " : ""}{getTheme(id)?.short ?? id}
+                  </Link>
+                ))}
+              </div>
+            ) : null}
             {pattern.takeaway ? (
               <p className="rounded border border-primary/40 bg-primary/5 px-3 py-2 text-[13px] font-medium" data-testid="pattern-takeaway">
                 {pattern.takeaway}

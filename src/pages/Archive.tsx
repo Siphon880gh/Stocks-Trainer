@@ -16,6 +16,7 @@ import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText, { GlossaryButtons } from "../components/JargonText";
 import { CRYPTO_FIT_HINT, CRYPTO_FIT_LABEL, cryptoFitFor, isCandlestickPattern, type CryptoFit } from "../lib/cryptoCandles";
+import { THEMES, getTheme, isThemeId } from "../lib/patternThemes";
 
 type FilterType = "all" | "bullish" | "bearish" | "neutral";
 type CryptoFilter = "all" | CryptoFit;
@@ -37,6 +38,8 @@ export default function Archive() {
   const [cryptoFilter, setCryptoFilter] = useState<CryptoFilter>(
     cryptoParam === "works" || cryptoParam === "adapted" || cryptoParam === "rare" ? cryptoParam : "all",
   );
+  const themeParam = searchParams.get("theme");
+  const themeFilter = isThemeId(themeParam) ? themeParam : null;
   const [indicatorFilter, setIndicatorFilter] = useState<OverlayCategory | "all">("all");
   const [tempBypass, setTempBypass] = useState(isChartGateTemporarilyBypassed);
 
@@ -70,6 +73,7 @@ export default function Archive() {
   }, [openId, tab, tabParam, tempBypass]);
 
   const filteredPatterns = PATTERNS.filter((p) => {
+    if (themeFilter && p.themes?.primary !== themeFilter && !p.themes?.secondary.includes(themeFilter)) return false;
     if (cryptoFilter !== "all") {
       if (!isCandlestickPattern(p.id)) return false;
       if (cryptoFitFor(p.id) !== cryptoFilter) return false;
@@ -103,7 +107,7 @@ export default function Archive() {
             </div>
           </label>
         </div>
-        <div className="flex gap-2 px-4 pb-2">
+        <div className="flex gap-2 px-4 pb-2 overflow-x-auto no-scrollbar">
           <button
             type="button"
             onClick={() => {
@@ -219,6 +223,32 @@ export default function Archive() {
             <Link to="/practice/crypto-candles" className="flex h-8 shrink-0 items-center px-3 text-xs font-bold text-primary underline">
               Why crypto tags?
             </Link>
+            <select
+              aria-label="Filter patterns by theme"
+              data-testid="archive-theme-filter"
+              value={themeFilter ?? ""}
+              onChange={(e) => {
+                const next = new URLSearchParams(searchParams);
+                if (e.target.value) next.set("theme", e.target.value);
+                else next.delete("theme");
+                setSearchParams(next, { replace: true });
+              }}
+              className="h-8 shrink-0 rounded border border-line bg-surface px-2 text-xs font-bold"
+            >
+              <option value="">Theme: all</option>
+              {THEMES.map((t) => (
+                <option key={t.id} value={t.id}>{t.n}. {t.short}</option>
+              ))}
+            </select>
+            {themeFilter ? (
+              <Link to={`/practice/pattern-themes?theme=${themeFilter}`} className="flex h-8 shrink-0 items-center px-3 text-xs font-bold text-primary underline" data-testid="archive-theme-about">
+                About “{getTheme(themeFilter)?.name}”
+              </Link>
+            ) : (
+              <Link to="/practice/pattern-themes" className="flex h-8 shrink-0 items-center px-3 text-xs font-bold text-primary underline">
+                What are themes?
+              </Link>
+            )}
           </div>
         ) : null}
       </header>
@@ -371,6 +401,7 @@ export default function Archive() {
             ? filteredPatterns.map((pattern) => (
             <div
               key={pattern.id}
+              data-pattern-id={pattern.id}
               className="relative rounded-xl border border-line bg-surface p-4 hover:border-primary transition-all"
             >
             <button
@@ -393,9 +424,9 @@ export default function Archive() {
                     </span>
                   )}
                 </div>
-                <div className="flex flex-col justify-between py-1 pr-16">
+                <div className="flex min-w-0 flex-col justify-between py-1 pr-16">
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                       <span
                         className={`material-symbols-outlined text-sm ${
                           pattern.sentiment === "bearish" ? "text-accent-red" : pattern.type === "reversal" ? "text-primary" : pattern.type === "continuation" ? "text-primary/70" : "text-primary/60"
@@ -468,9 +499,9 @@ export default function Archive() {
                     {overlay.id === "sma" || overlay.id === "ema" ? "trending_up" : overlay.id === "rsi" || overlay.id === "macd" ? "show_chart" : "bar_chart"}
                   </span>
                 </div>
-                <div className="flex flex-col justify-between py-1 pr-16">
+                <div className="flex min-w-0 flex-col justify-between py-1 pr-16">
                   <div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                       <span className="material-symbols-outlined text-sm text-primary">
                         {overlay.category === "trend" ? "trending_up" : overlay.category === "oscillator" ? "show_chart" : "bar_chart"}
                       </span>

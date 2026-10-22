@@ -179,6 +179,7 @@ export default function Training() {
                   g.id === "technique-narratives" ||
                   g.id === "missing-wicks" ||
                   g.id === "record-traders" ||
+                  g.id === "pattern-themes" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
                   g.id === "financial-literacy" ||
