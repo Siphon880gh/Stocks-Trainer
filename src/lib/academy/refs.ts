@@ -38,6 +38,7 @@ export const APP_ROUTES: readonly string[] = [
   "/practice/algo-trading",
   "/practice/charting-apps",
   "/practice/crypto-candles",
+  "/practice/reversal-charts",
   "/practice/statements",
   "/practice/read-the-print",
   "/practice/mark-the-band",

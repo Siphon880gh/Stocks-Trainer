@@ -26,6 +26,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "algo-trading", title: "Automated & algo trading (2026)", to: "/practice/algo-trading" },
   { id: "charting-apps", title: "Indicator & charting apps", to: "/practice/charting-apps" },
   { id: "crypto-candles", title: "Candlesticks for crypto", to: "/practice/crypto-candles" },
+  { id: "reversal-charts", title: "Reversal chart patterns", to: "/practice/reversal-charts" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

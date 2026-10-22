@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import { PATTERN_OHLC, type OHLC } from "./ohlcData.ts";
 import { PATTERNS, getPattern } from "./patterns.ts";
 import { CORE_PATTERNS, coreBySide, patternIllustration, patternTabs } from "./patternTabs.ts";
+import { REVERSAL_TABS } from "./reversalCharts.ts";
 import { JAPANESE_CANDLE_QUESTIONS } from "./candleQuiz.ts";
 import { getLiteracyTerm } from "./literacyTerms.ts";
 import { CANDLE_TERMS } from "./candleTerms.ts";
@@ -70,7 +71,7 @@ describe("core Japanese patterns", () => {
       const t = patternTabs(p);
       assert.ok(t.recognise.length && t.psychology.length, p.id);
       for (const k of ["confirmation", "entry", "stop", "target"] as const) assert.ok(t.trade[k].length > 10, `${p.id} ${k}`);
-      assert.equal(t.general, !CORE_PATTERNS.some((c) => c.id === p.id) && !getBookPattern(p.id), p.id);
+      assert.equal(t.general, !CORE_PATTERNS.some((c) => c.id === p.id) && !getBookPattern(p.id) && !REVERSAL_TABS[p.id], p.id);
     }
     for (const c of CORE_PATTERNS) assert.match(c.tabs.trade.stop, /(below|above)/i, c.id);
     for (const id of ["dragonfly-doji", "gravestone-doji"]) assert.match(getPattern(id)!.description + CORE_PATTERNS.find((c) => c.id === id)!.tabs.trade.confirmation, /confirm/i, id);

@@ -48,6 +48,7 @@ describe("misc practice catalog", () => {
       "Automated & algo trading (2026)",
       "Indicator & charting apps",
       "Candlesticks for crypto",
+      "Reversal chart patterns",
     ]);
   });
 });
