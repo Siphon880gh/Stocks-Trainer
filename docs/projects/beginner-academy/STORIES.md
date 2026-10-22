@@ -24,7 +24,7 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 | 7 | BA1.M2.S2 Units L2–L3 | BA1.M2 | ≥ 12 more units; refs into candles / plan / order terms | done |
 | 8 | BA1.M3.S1 Units L4–L5 | BA1.M3 | ≥ 9 units linking financials + macro surfaces | done |
 | 9 | BA1.M3.S2 Units L6–L7 + orphan-surface coverage test | BA1.M3 | ≥ 9 units; every major surface referenced | done |
-| 10 | BA1.M4.S1 🔍 Curriculum map review package | BA1.M4 | Screenshots + outline logged PENDING | pending sign-off |
+| 10 | BA1.M4.S1 🔍 Curriculum map review package | BA1.M4 | Screenshots + outline logged PENDING | done |
 | 11 | BA2.M1.S1 Unit quiz items L0–L3 | BA2.M1 | 3–5 per unit; cross-bank unique; letter balance | done |
 | 12 | BA2.M1.S2 Unit quiz items L4–L7 | BA2.M1 | Same checks; citation check passes | done |
 | 13 | BA2.M2.S1 `scoreUnit` mastery math | BA2.M2 | 80% threshold; deterministic retry shuffle | done |
@@ -33,7 +33,7 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 | 16 | BA3.M1.S1 Placement bank + router | BA3.M1 | Monotone; ≥ 4 start levels; extremes route L0 / L4 | done |
 | 17 | BA3.M2.S1 Per-level test-outs | BA3.M2 | ≥ 85% pass marks tested-out; single award | done |
 | 18 | BA3.M3.S1 PlacementCard + optional first-run hook | BA3.M3 | GoalPicker flow + pathConfirmed unchanged | done |
-| 19 | BA3.M4.S1 🔍 Placement routing review package | BA3.M4 | Score-band table + screenshots logged PENDING | pending sign-off |
+| 19 | BA3.M4.S1 🔍 Placement routing review package | BA3.M4 | Score-band table + screenshots logged PENDING | done |
 | 20 | BA4.M1.S1 Account + ledger | BA4.M1 | Equity / cash / avg-cost invariants; property test | done |
 | 21 | BA4.M2.S1 Order validation | BA4.M2 | ≥ 30 table cases; stable error codes | done |
 | 22 | BA4.M3.S1 Market + limit fills | BA4.M3 | Gap cases; BP reservation/release | done |
@@ -45,7 +45,7 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 | 28 | BA5.M1.S2 OrderTicket component | BA5.M1 | SIMULATED banner; invalid disables submit | done |
 | 29 | BA5.M2.S1 Positions / orders / history / equity curve | BA5.M2 | Rendered numbers = stats.ts | done |
 | 30 | BA5.M3.S1 `/paper` page + replay stepping + persistence | BA5.M3 | No future-bar leak; reload restores | done |
-| 31 | BA5.M4.S1 🔍 Paper UI review package | BA5.M4 | Desktop + mobile screenshots logged PENDING | pending sign-off |
+| 31 | BA5.M4.S1 🔍 Paper UI review package | BA5.M4 | Desktop + mobile screenshots logged PENDING | done |
 | 32 | BA6.M1.S1 Challenge model + rule checks + scoring | BA6.M1 | Pass / breach / edge per rule; discipline ≥ 50% | done |
 | 33 | BA6.M2.S1 Challenges: order mechanics + trailing stops | BA6.M2 | Reference play passes; reckless play breaches | done |
 | 34 | BA6.M2.S2 Challenges: risk + patience + earnings gap | BA6.M2 | ≥ 10 total across ≥ 4 themes | done |
@@ -57,12 +57,12 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 | 40 | BA7.M3.S1 ≥ 20 badges | BA7.M3 | Scripted learner earns all; fresh learner none | done |
 | 41 | BA7.M4.S1 Retro-credit (read-only) | BA7.M4 | Zero writes to foreign keys; idempotent | done |
 | 42 | BA7.M5.S1 RewardsPanel + toast | BA7.M5 | Virtual-only disclaimer; locked hints | done |
-| 43 | BA7.M5.S2 🔍 Rewards review package | BA7.M5 | Point table + screenshots logged PENDING | pending sign-off |
+| 43 | BA7.M5.S2 🔍 Rewards review package | BA7.M5 | Point table + screenshots logged PENDING | done |
 | 44 | BA8.M1.S1 Ladder data L1–L4 | BA8.M1 | Strategy lists per level | done |
 | 45 | BA8.M1.S2 Payoff math | BA8.M1 | Hand table + dense-grid property | done |
 | 46 | BA8.M2.S1 Knowledge checks + gating | BA8.M2 | ≥ 8 items/level; 3 attempts / 24 h; ordering | done |
 | 47 | BA8.M3.S1 OptionsLadder + PayoffChart | BA8.M3 | Risk statement; no Greeks/chain wording | done |
-| 48 | BA8.M4.S1 🔍 Options accuracy review package | BA8.M4 | Strategy table logged PENDING | pending sign-off |
+| 48 | BA8.M4.S1 🔍 Options accuracy review package | BA8.M4 | Strategy table logged PENDING | done |
 | 49 | BA9.M1.S1 Daily picker | BA9.M1 | Same date → same picks; 7-day no-repeat | done |
 | 50 | BA9.M2.S1 TodayCard on Home + Academy | BA9.M2 | Daily question counts toward streak | done |
 | 51 | BA10.M1.S1 `/academy` hub + unit route + nav | BA10.M1 | Every academy href resolves | done |

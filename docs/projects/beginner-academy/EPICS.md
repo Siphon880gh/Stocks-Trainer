@@ -48,7 +48,7 @@ Tests named per milestone live in `src/lib/academy/**/*.test.{ts,tsx}` (node:tes
 - **Build:** ≥ 18 units linking to Statements Lab, Read the Print, Mark the Band, earnings cases, Macro Desk lessons, yield-curve explorer, options-literacy, crypto/futures/forex literacy groups and coach sessions.
 - **Accept / Verify:** as BA1.M2; plus every existing major surface (Learn group families, Coach, Cases, Practice labs, Macro Desk, financials routes, Buy or Sell) is referenced by ≥ 1 unit (coverage test lists any orphan surface).
 
-### [~] BA1.M4 — 🔍 HUMAN CHECKPOINT: curriculum map review
+### [x] BA1.M4 — 🔍 HUMAN CHECKPOINT: curriculum map review
 - **Build:** loop renders the course map + 3 sample units (static HTML / screenshots into `checkpoints/`), writes the level → unit outline into PROGRESS.md.
 - **Accept:** Weng signs off order, naming and level boundaries (CHECKPOINT_MODE=continue: log PENDING and keep going).
 - **Verify:** artefacts exist; outline count equals data count.
@@ -91,7 +91,7 @@ Tests named per milestone live in `src/lib/academy/**/*.test.{ts,tsx}` (node:tes
 - **Accept:** existing first-run flow unchanged when the card is dismissed; `pathConfirmed` untouched.
 - **Verify:** BASE + render test + a test asserting `confirmPathSelection` behaviour is unchanged (import + call on a fake storage).
 
-### [~] BA3.M4 — 🔍 HUMAN CHECKPOINT: placement routing review
+### [x] BA3.M4 — 🔍 HUMAN CHECKPOINT: placement routing review
 - **Build:** screenshots of the card + a routing table (score bands → level) in PROGRESS.md.
 - **Accept:** Weng signs off the bands (logged PENDING under CHECKPOINT_MODE=continue).
 
@@ -152,7 +152,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - **Accept:** future bars never render before stepping (no-leak test); reload restores the session.
 - **Verify:** BASE + `paperPage.render.test.tsx` (leak test, restore from fake storage).
 
-### [~] BA5.M4 — 🔍 HUMAN CHECKPOINT: paper UI visual + order-preview wording
+### [x] BA5.M4 — 🔍 HUMAN CHECKPOINT: paper UI visual + order-preview wording
 - **Build:** screenshots (desktop + mobile) of ticket for each type, a trailing stop ratcheting over 3 steps, a stop-limit gap no-fill, history with a rejection.
 - **Accept:** Weng signs off (PENDING logged; loop continues).
 
@@ -203,7 +203,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - **Accept:** never writes those keys; idempotent; missing/corrupt foreign keys → no award, no crash.
 - **Verify:** BASE + `retro.test.ts` (spy storage asserts zero writes to foreign keys).
 
-### [~] BA7.M5 — Rewards UI + 🔍 HUMAN CHECKPOINT: rewards feel
+### [x] BA7.M5 — Rewards UI + 🔍 HUMAN CHECKPOINT: rewards feel
 - **Build:** `components/academy/RewardsPanel.tsx` (points, level bar, streak, badge grid with locked hints), toast on award. Screenshots into `checkpoints/`.
 - **Accept:** copy says points are virtual and not redeemable; Weng signs off point values / badge list (PENDING logged; loop continues).
 - **Verify:** BASE + render test (disclaimer present, locked badges show hint not predicate code).
@@ -227,7 +227,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - **Accept:** every surface shows the options risk statement; no chain, no Greeks wording.
 - **Verify:** BASE + render tests (risk statement, locked state, chart points equal `payoff.ts` samples) + grep test that academy options files contain none of `delta|gamma|theta|vega|implied volatility surface|option chain`.
 
-### [~] BA8.M4 — 🔍 HUMAN CHECKPOINT: options accuracy + gating feel
+### [x] BA8.M4 — 🔍 HUMAN CHECKPOINT: options accuracy + gating feel
 - **Build:** screenshots + the strategy table with max gain / loss / breakeven per strategy in PROGRESS.md.
 - **Accept:** Weng signs off (PENDING logged; loop continues). Any doubt on a formula = STOP (a), not a guess.
 
