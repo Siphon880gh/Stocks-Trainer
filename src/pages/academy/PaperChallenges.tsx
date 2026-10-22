@@ -8,8 +8,9 @@ import { TYPE_LABELS, money } from "../../lib/academy/paper/describe";
 import { addCounters, countersFor } from "../../lib/academy/paper/counters";
 import { replay } from "../../lib/academy/paper/session";
 import type { PaperSessionLog } from "../../lib/academy/paper/types";
-import { loadPaper, savePaper, type KVStorage } from "../../lib/academy/storage";
+import { loadPaper, savePaper, type KVStorage, type PaperStore } from "../../lib/academy/storage";
 import { awardChallenge } from "../../lib/academy/rewards/award";
+import { clearRun, keepRun, savedRun } from "../../lib/academy/challengeProgress";
 import { glossaryHref } from "../../lib/academy/refs";
 import { getLiteracyTerm } from "../../lib/literacyTerms";
 import { cn } from "../../lib/utils";
@@ -89,13 +90,25 @@ export default function PaperChallenges({ storage, now = new Date() }: { storage
   const [store, setStore] = useState(() => loadPaper(storage).state);
   const [log, setLog] = useState<PaperSessionLog | null>(c ? newChallengeLog(c) : null);
   const [result, setResult] = useState<ChallengeScore | null>(null);
+  /** A half-played run waiting for Resume / Restart (Weng 2026-10-22). */
+  const [pending, setPending] = useState<PaperSessionLog | null>(() => (c ? savedRun(c, store) : null));
   const [forId, setForId] = useState(challengeId);
   if (forId !== challengeId) {
     // same component instance across /paper/challenges ↔ /paper/challenges/:id: reset the play state
     setForId(challengeId);
     setLog(c ? newChallengeLog(c) : null);
     setResult(null);
+    setPending(c ? savedRun(c, loadPaper(storage).state) : null);
   }
+  const updateStore = useCallback(
+    (fn: (prev: PaperStore) => PaperStore) =>
+      setStore((prev) => {
+        const upd = fn(prev);
+        if (upd !== prev) savePaper(upd, storage);
+        return upd;
+      }),
+    [storage],
+  );
   const week = challengeOfTheWeek(now);
   const bestOf = (id: string) => {
     const a = store.challengeAttempts[id] ?? [];
@@ -105,19 +118,35 @@ export default function PaperChallenges({ storage, now = new Date() }: { storage
   const onLog = useCallback(
     (next: PaperSessionLog) => {
       setLog(next);
-      if (!c || next.bar < endBar(c)) return;
+      if (!c) return;
+      if (next.bar < endBar(c)) {
+        // half-played: keep the run so a reload or a later visit can resume it
+        updateStore((prev) => keepRun(prev, c.id, next));
+        return;
+      }
       const s = scoreChallenge(c, next);
       setResult(s);
-      setStore((prev) => {
+      updateStore((prev) => {
         const attempts = [...(prev.challengeAttempts[c.id] ?? []), { score: s.score, max: s.max, passed: s.passed, at: new Date().toISOString() }];
-        const upd = { ...prev, challengeAttempts: { ...prev.challengeAttempts, [c.id]: attempts }, stats: addCounters(prev.stats, countersFor(replay(next))) };
-        savePaper(upd, storage);
-        return upd;
+        return clearRun({ ...prev, challengeAttempts: { ...prev.challengeAttempts, [c.id]: attempts }, stats: addCounters(prev.stats, countersFor(replay(next))) }, c.id);
       });
       awardChallenge(c.id, s.passed, storage);
     },
-    [c, storage],
+    [c, storage, updateStore],
   );
+
+  const resume = () => {
+    if (!pending) return;
+    setLog(pending);
+    setPending(null);
+  };
+  const restart = () => {
+    if (!c) return;
+    updateStore((prev) => clearRun(prev, c.id));
+    setLog(newChallengeLog(c));
+    setResult(null);
+    setPending(null);
+  };
 
   if (challengeId && !c) {
     return (
@@ -164,13 +193,30 @@ export default function PaperChallenges({ storage, now = new Date() }: { storage
             <ul className="list-disc pl-4 text-[12px]">{c.goals.map((g, i) => <li key={i}>{goalText(g)}</li>)}</ul>
           </div>
         </div>
-        <PaperSession
-          log={log}
-          onLog={onLog}
-          allowedTypes={c.allowedOrderTypes}
-          lastBar={endBar(c)}
-          finished={result ? <Result c={c} s={result} best={bestOf(c.id)} onAgain={() => { setResult(null); setLog(newChallengeLog(c)); }} /> : undefined}
-        />
+        {pending ? (
+          <div className="panel p-4 space-y-2 border-sim/60" data-testid="challenge-resume" data-bar={pending.bar}>
+            <p className="font-semibold text-[14px]">You have a half-played run</p>
+            <p className="text-[13px] text-muted tabular-nums">
+              Bar {pending.bar - c.startBar} of {c.bars} · {pending.actions.length} {pending.actions.length === 1 ? "move" : "moves"} saved on this device.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              <button type="button" onClick={resume} className="px-4 py-2 min-h-11 rounded-md bg-primary text-white text-[13px] font-semibold" data-testid="challenge-resume-go">
+                Resume
+              </button>
+              <button type="button" onClick={restart} className="px-4 py-2 min-h-11 rounded-md border border-line text-[13px]" data-testid="challenge-restart">
+                Restart
+              </button>
+            </div>
+          </div>
+        ) : (
+          <PaperSession
+            log={log}
+            onLog={onLog}
+            allowedTypes={c.allowedOrderTypes}
+            lastBar={endBar(c)}
+            finished={result ? <Result c={c} s={result} best={bestOf(c.id)} onAgain={() => { setResult(null); setLog(newChallengeLog(c)); }} /> : undefined}
+          />
+        )}
       </main>
     );
   }
@@ -208,7 +254,10 @@ export default function PaperChallenges({ storage, now = new Date() }: { storage
               <p className="font-semibold text-[14px]">
                 {ch.title} {passed ? <span className="material-symbols-outlined text-up text-base align-middle" aria-label="passed">check_circle</span> : null}
               </p>
-              <p className="text-[12px] text-muted">{best === null ? "Not tried yet" : `Best ${best}/${SCORE_MAX}`}</p>
+              <p className="text-[12px] text-muted">
+                {best === null ? "Not tried yet" : `Best ${best}/${SCORE_MAX}`}
+                {savedRun(ch, store) ? <span className="text-sim font-semibold" data-testid="challenge-in-progress"> · in progress</span> : null}
+              </p>
             </Link>
           );
         })}

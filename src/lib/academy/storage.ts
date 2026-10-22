@@ -11,6 +11,8 @@ export const PAPER_KEY = "analysis_core_academy_paper_v1";
 export const REWARDS_KEY = "analysis_core_academy_rewards_v1";
 export const ACADEMY_KEYS = [ACADEMY_KEY, PAPER_KEY, REWARDS_KEY] as const;
 export const SCHEMA_VERSION = 1;
+/** The paper key is at v2 (2026-10-22: `challengeProgress`, half-played challenges). Academy and rewards stay at v1. */
+export const PAPER_SCHEMA_VERSION = 2;
 
 export const RECOVERY_MESSAGE = "Your Academy progress on this device could not be read, so it was reset. Other app progress is untouched.";
 
@@ -82,6 +84,8 @@ export interface PaperStore {
   portfolio: { id: string; name: string };
   /** BA11.M6: the inactive portfolios with their own sessions. */
   otherPortfolios: { id: string; name: string; session: PaperSessionLog | null }[];
+  /** v2: challenge id → the session log of a half-played run (cleared when the run finishes or restarts). */
+  challengeProgress: Record<string, PaperSessionLog>;
 }
 
 export interface RewardsState {
@@ -110,12 +114,13 @@ export const emptyAcademy = (): AcademyState => ({
   updatedAt: EPOCH,
 });
 export const emptyPaper = (): PaperStore => ({
-  schemaVersion: SCHEMA_VERSION,
+  schemaVersion: PAPER_SCHEMA_VERSION,
   session: null,
   challengeAttempts: {},
   stats: { orders: 0, limitFills: 0, trailingExits: 0, stopProtectedTrades: 0, stopLimitNoFills: 0 },
   portfolio: { id: "main", name: "Main" },
   otherPortfolios: [],
+  challengeProgress: {},
 });
 export const emptyRewards = (): RewardsState => ({
   schemaVersion: SCHEMA_VERSION,
@@ -146,11 +151,19 @@ export function migrateAcademy(raw: unknown): AcademyState {
   };
 }
 
+const isLogLike = (v: unknown): v is PaperSessionLog =>
+  isObj(v) && typeof v.tapeId === "string" && typeof v.startingCash === "number" && typeof v.bar === "number" && Array.isArray(v.actions);
+
+/**
+ * v0 / v1 → v2. Keeps every v1 field as it was and adds `challengeProgress` (empty for v1, which never had it).
+ * A v2 store keeps only the progress entries that still look like session logs.
+ */
 export function migratePaper(raw: unknown): PaperStore {
   if (!isObj(raw)) throw new Error("paper: not an object");
   const e = emptyPaper();
+  const progress = Object.fromEntries(Object.entries(obj<Record<string, unknown>>(raw.challengeProgress, {})).filter(([, v]) => isLogLike(v))) as Record<string, PaperSessionLog>;
   return {
-    schemaVersion: SCHEMA_VERSION,
+    schemaVersion: PAPER_SCHEMA_VERSION,
     session: isObj(raw.session) ? (raw.session as unknown as PaperSessionLog) : null,
     challengeAttempts: obj(raw.challengeAttempts, e.challengeAttempts),
     stats: { ...e.stats, ...obj<Partial<PaperStore["stats"]>>(raw.stats, {}) },
@@ -158,6 +171,7 @@ export function migratePaper(raw: unknown): PaperStore {
     otherPortfolios: arr<Record<string, unknown>>(raw.otherPortfolios)
       .filter((p) => isObj(p) && typeof p.id === "string" && typeof p.name === "string")
       .map((p) => ({ id: p.id as string, name: p.name as string, session: isObj(p.session) ? (p.session as unknown as PaperSessionLog) : null })),
+    challengeProgress: progress,
   };
 }
 
@@ -174,7 +188,7 @@ export function migrateRewards(raw: unknown): RewardsState {
   };
 }
 
-function load<T>(key: string, migrate: (raw: unknown) => T, empty: () => T, storage: KVStorage | undefined): Loaded<T> {
+function load<T>(key: string, migrate: (raw: unknown) => T, empty: () => T, storage: KVStorage | undefined, maxVersion = SCHEMA_VERSION): Loaded<T> {
   let raw: string | null = null;
   try {
     raw = storage?.getItem(key) ?? null;
@@ -184,7 +198,7 @@ function load<T>(key: string, migrate: (raw: unknown) => T, empty: () => T, stor
   if (raw == null) return { state: empty(), recovered: false };
   try {
     const parsed = JSON.parse(raw) as unknown;
-    if (isObj(parsed) && typeof parsed.schemaVersion === "number" && parsed.schemaVersion > SCHEMA_VERSION) {
+    if (isObj(parsed) && typeof parsed.schemaVersion === "number" && parsed.schemaVersion > maxVersion) {
       // Written by a newer build: don't guess, start empty but don't overwrite until the learner saves.
       return { state: empty(), recovered: true, message: RECOVERY_MESSAGE };
     }
@@ -204,12 +218,12 @@ function save<T>(key: string, state: T, storage: KVStorage | undefined): T {
 }
 
 export const loadAcademy = (storage: KVStorage | undefined = browserStorage()) => load(ACADEMY_KEY, migrateAcademy, emptyAcademy, storage);
-export const loadPaper = (storage: KVStorage | undefined = browserStorage()) => load(PAPER_KEY, migratePaper, emptyPaper, storage);
+export const loadPaper = (storage: KVStorage | undefined = browserStorage()) => load(PAPER_KEY, migratePaper, emptyPaper, storage, PAPER_SCHEMA_VERSION);
 export const loadRewards = (storage: KVStorage | undefined = browserStorage()) => load(REWARDS_KEY, migrateRewards, emptyRewards, storage);
 
 export const saveAcademy = (s: AcademyState, storage: KVStorage | undefined = browserStorage(), now = new Date()) =>
   save(ACADEMY_KEY, { ...s, schemaVersion: SCHEMA_VERSION, updatedAt: now.toISOString() }, storage);
-export const savePaper = (s: PaperStore, storage: KVStorage | undefined = browserStorage()) => save(PAPER_KEY, { ...s, schemaVersion: SCHEMA_VERSION }, storage);
+export const savePaper = (s: PaperStore, storage: KVStorage | undefined = browserStorage()) => save(PAPER_KEY, { ...s, schemaVersion: PAPER_SCHEMA_VERSION }, storage);
 export const saveRewards = (s: RewardsState, storage: KVStorage | undefined = browserStorage(), now = new Date()) =>
   save(REWARDS_KEY, { ...s, schemaVersion: SCHEMA_VERSION, updatedAt: now.toISOString() }, storage);
 
