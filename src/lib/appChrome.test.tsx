@@ -18,6 +18,11 @@ describe("AppChrome header nav", () => {
     assert.deepEqual(hrefs(nav), ["/", "/training", "/market", "/cases", "/coach", "/playbooks"]);
   });
 
+  it("links the progress map from the header, outside the six-link row", () => {
+    assert.match(html, /data-testid="nav-map"[^>]*>|href="\/map"[^>]*data-testid="nav-map"/);
+    assert.ok(html.indexOf('href="/map"') > -1 && html.indexOf('href="/map"') < html.indexOf('data-testid="app-nav"'));
+  });
+
   it("gives the links a full-width row below sm, so Coach and Playbooks are not hidden off a phone screen", () => {
     const navTag = html.match(/<nav[^>]*data-testid="app-nav"[^>]*>|<nav[^>]*>/)![0];
     assert.match(navTag, /\bw-full\b/);

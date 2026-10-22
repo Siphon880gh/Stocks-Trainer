@@ -59,6 +59,7 @@ export const APP_ROUTES: readonly string[] = [
   "/playbooks/:id",
   "/macro",
   "/macro/play",
+  "/map",
   "/macro/:lessonId",
   "/academy",
   "/academy/test-out/:levelId",
