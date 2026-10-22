@@ -216,3 +216,15 @@ Screenshots (box only): `/workspace/checkpoints/qa/essential-candles-{390,1280}.
 
 Screenshots (box only): `/workspace/checkpoints/qa/which-way{,-charts}-{390,1280}.png`.
 
+## 2026-10-22 Progress Map (#23)
+
+| Flow | Result |
+|---|---|
+| Home → header Map → `/map`, 390 and 1280 (e2e) | New learner: Next objective is Candlestick Basics; 12 regions at 0% (Base camp aside); no overflow. |
+| Skill tree view (e2e) | 40+ nodes; Reading One Candle suggested later; Candlestick Basics shows what it unlocks. |
+| Discovery web view (e2e) | 5+ "?" stages including the first objective; view kept in the URL. |
+| Next objective click (e2e) | Opens `/training?group=candle-anatomy`. |
+| Progress fills in (e2e) | After a stored quiz pass and a practice done, the next objective moves to Reading One Candle and Candle basics shows a percentage. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/map-{world,tree,web,progress}-{390,1280}.png`.
+
