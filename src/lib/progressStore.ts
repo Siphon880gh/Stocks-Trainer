@@ -10,6 +10,8 @@ export interface MilestoneProgress {
   score?: number;
   bestScore?: number;
   completedAt?: string;
+  /** Finished quiz attempts, passed or not (added 2026-10-22; missing on older saves). */
+  attempts?: number;
 }
 
 export interface ProgressScores {
@@ -427,9 +429,22 @@ export const QUIZ_GROUP_MILESTONE: Partial<Record<string, BeginnerEquitiesMilest
   indicators: "E4.M0",
 };
 
+/** A Training quiz completes its milestone (or drill flag) only at this accuracy or better. */
+export const QUIZ_PASS_PCT = 70;
+
+export function quizPasses(accuracy: number): boolean {
+  return accuracy >= QUIZ_PASS_PCT;
+}
+
+/** True when finishing this group's quiz can complete something (a path milestone or an E10 drill flag). */
+export function quizGroupCompletes(groupId: string): boolean {
+  return groupId === "news-literacy" || groupId === "financial-drills" || !!QUIZ_GROUP_MILESTONE[groupId];
+}
+
 /**
- * Mark a path milestone complete after finishing a mapped quiz group;
- * unlock the next locked milestone in Beginner Equities order.
+ * Finish a Training quiz. At QUIZ_PASS_PCT or better the milestone completes (and unlocks the next one);
+ * below it the attempt and score are recorded but the milestone stays as it was. A milestone already
+ * complete is never revoked by a lower score. A pass unlocks the next locked milestone in path order.
  */
 export function completeMilestoneFromQuiz(opts: {
   groupId: string;
@@ -441,11 +456,12 @@ export function completeMilestoneFromQuiz(opts: {
   const normalized = normalizeProgress(state);
 
   // E10 drills: persist flags + scores without touching Equities unlock graph
+  const passed = quizPasses(opts.accuracy);
   if (opts.groupId === "news-literacy" || opts.groupId === "financial-drills") {
     const drillFlags: ProgressDrillFlags = {
       ...normalized.drillFlags,
-      ...(opts.groupId === "news-literacy" ? { newsLiteracy: true } : {}),
-      ...(opts.groupId === "financial-drills" ? { financialDrills: true } : {}),
+      ...(passed && opts.groupId === "news-literacy" ? { newsLiteracy: true } : {}),
+      ...(passed && opts.groupId === "financial-drills" ? { financialDrills: true } : {}),
     };
     return saveProgress({
       ...normalized,
@@ -467,13 +483,24 @@ export function completeMilestoneFromQuiz(opts: {
   const order = milestoneOrderForPathId(normalized.pathId);
   const idx = order.indexOf(milestoneId);
   const milestones = { ...normalized.milestones };
-  milestones[milestoneId] = {
-    ...milestones[milestoneId],
-    status: "complete",
+  const prev = milestones[milestoneId];
+  const recorded = {
+    ...prev,
+    status: prev?.status ?? ("locked" as const),
     score: opts.accuracy,
-    bestScore: Math.max(milestones[milestoneId]?.bestScore ?? 0, opts.accuracy),
-    completedAt: new Date().toISOString(),
+    bestScore: Math.max(prev?.bestScore ?? 0, opts.accuracy),
+    attempts: (prev?.attempts ?? 0) + 1,
   };
+  if (!passed) {
+    milestones[milestoneId] = recorded;
+    return saveProgress({
+      ...normalized,
+      milestones,
+      scores: { totalPoints: opts.points, accuracy: opts.accuracy },
+      streaks: { current: opts.streak, best: Math.max(normalized.streaks.best, opts.streak) },
+    });
+  }
+  milestones[milestoneId] = { ...recorded, status: "complete", completedAt: new Date().toISOString() };
 
   if (idx >= 0 && idx < order.length - 1) {
     const nextId = order[idx + 1]!;

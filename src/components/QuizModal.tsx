@@ -16,7 +16,7 @@ import { overlayQuizBars, quizSamplePackName } from "../lib/quizChartData";
 import { mergeAnnotations } from "../lib/chartAnnotations";
 import { BUY_SELL_DISCLAIMER, SCENARIO_PAD_BARS } from "../lib/buySellDrill";
 import { getLiteracyTerm } from "../lib/literacyTerms";
-import { completeMilestoneFromQuiz, recordQuizScore } from "../lib/progressStore";
+import { completeMilestoneFromQuiz, QUIZ_PASS_PCT, quizGroupCompletes, quizPasses, recordQuizScore } from "../lib/progressStore";
 import { getOverlay, splitHintTerms } from "../lib/overlays";
 import CandlestickChart from "./CandlestickChart";
 import MarketChart from "./MarketChart";
@@ -385,6 +385,20 @@ export default function QuizModal({
               )}
             </div>
           )}
+
+          {submitted && currentIndex === questions.length - 1 && quizGroupCompletes(groupId) ? (
+            <p
+              data-testid="quiz-pass-line"
+              className={cn(
+                "text-[13px] rounded-lg border px-4 py-2",
+                quizPasses(accuracy) ? "border-up/40 text-up" : "border-accent-red/40 text-accent-red",
+              )}
+            >
+              {quizPasses(accuracy)
+                ? `${accuracy}% · Finish completes this milestone.`
+                : `${accuracy}% · Score ${QUIZ_PASS_PCT}% to complete. Your attempt is saved; take the quiz again to finish the milestone.`}
+            </p>
+          ) : null}
 
           {/* Actions */}
           <div className="flex gap-4">
