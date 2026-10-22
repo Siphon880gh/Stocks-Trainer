@@ -336,6 +336,53 @@ const flows = {
     if (await nbGate.count()) await nbGate.click();
     check(/A news-day decision/.test(await p.locator("body").innerText()), `news: coach session missing @${w}`);
   },
+
+  async "Algo trading: broker APIs, PDT replacement, ATR sizing, news-day playbook"(p, w) {
+    await p.goto(base + "/practice/algo-trading", { waitUntil: "networkidle" });
+    check((await p.locator("[data-broker]").count()) === 9, `algo: broker table rows wrong @${w}`);
+    check(/No public stock-trading API/.test(await p.getByTestId("algo-brokers").innerText()), `algo: Robinhood row missing @${w}`);
+    const pdt = await p.getByTestId("algo-pdt").innerText();
+    check(/June 4, 2026/.test(pdt) && /October 20, 2027/.test(pdt) && /\$2,000/.test(pdt), `algo: PDT panel wrong @${w}`);
+    check(/→ 33 shares/.test(await p.getByTestId("atr-result").innerText()), `algo: ATR default should be 33 shares @${w}`);
+    await p.getByTestId("atr-mult").fill("1.5");
+    check(/→ 66 shares/.test(await p.getByTestId("atr-result").innerText()), `algo: ATR recompute wrong @${w}`);
+    for (const box of await p.locator("[data-playbook-item]").all()) await box.check();
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("algo-trading"), `algo: practice not marked done @${w}`);
+    check((await overflow(p)) <= 1, `algo overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/algo-trading-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=algo-trading", { waitUntil: "networkidle" });
+    check(/Automated & Algo Trading/.test(await p.locator("main").innerText()), `algo: Learn group missing @${w}`);
+  },
+
+  async "Charting apps: 11-app table, spot the trap, Webull example screenshots + lightbox, broker learning"(p, w) {
+    await p.goto(base + "/practice/charting-apps", { waitUntil: "networkidle" });
+    check((await p.locator("[data-app]").count()) === 11, `charts: app table rows wrong @${w}`);
+    for (const spot of await p.locator("[data-spot]").all()) await spot.locator("button").first().click();
+    check(/\/ 3 correct/.test(await p.getByTestId("ca-spot-score").innerText()), `charts: spot-the-trap not graded @${w}`);
+    const shots = p.locator("[data-shot] img");
+    check((await shots.count()) === 2, `charts: Webull screenshots missing @${w}`);
+    await p.getByTestId("ca-webull-shots").scrollIntoViewIfNeeded();
+    for (const img of await shots.all()) {
+      await img.evaluate((el) => el.loading = "eager");
+      const ok = await img.evaluate((el) => el.complete ? el.naturalWidth > 0 : new Promise((r) => { el.onload = () => r(el.naturalWidth > 0); el.onerror = () => r(false); }));
+      check(ok, `charts: screenshot did not load @${w}`);
+      check(((await img.getAttribute("alt")) || "").length > 40, `charts: screenshot alt text missing @${w}`);
+    }
+    check(/Example Webull screenshots/.test(await p.getByTestId("ca-webull").innerText()), `charts: screenshot label missing @${w}`);
+    if (SHOTS) await p.getByTestId("ca-webull").screenshot({ path: `${SHOTS}/charting-apps-webull-${w}.png` });
+    await p.locator("[data-shot] button").first().click();
+    check((await p.getByTestId("ca-lightbox").count()) === 1, `charts: lightbox did not open @${w}`);
+    await p.keyboard.press("Escape");
+    check((await p.getByTestId("ca-lightbox").count()) === 0, `charts: lightbox did not close @${w}`);
+    check((await p.getByTestId("ca-learn").locator("a[href^='https://']").count()) >= 5, `charts: broker learning links missing @${w}`);
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("charting-apps"), `charts: practice not marked done @${w}`);
+    check((await overflow(p)) <= 1, `charts overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/charting-apps-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=charting-apps", { waitUntil: "networkidle" });
+    check(/Indicator & Charting Apps/.test(await p.locator("main").innerText()), `charts: Learn group missing @${w}`);
+  },
 };
 
 

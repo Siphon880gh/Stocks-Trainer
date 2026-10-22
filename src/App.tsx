@@ -24,6 +24,8 @@ import PracticeJapaneseCandles from "./pages/practice/JapaneseCandles";
 import PracticeHeikinAshi from "./pages/practice/HeikinAshi";
 import PracticeGammaSqueeze from "./pages/practice/GammaSqueeze";
 import PracticeNewsBiases from "./pages/practice/NewsBiases";
+import PracticeAlgoTrading from "./pages/practice/AlgoTrading";
+import PracticeChartingApps from "./pages/practice/ChartingApps";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
 import Coach from "./pages/Coach";
@@ -79,6 +81,8 @@ export default function App() {
           <Route path="practice/heikin-ashi" element={<PracticeHeikinAshi />} />
           <Route path="practice/gamma-squeeze" element={<PracticeGammaSqueeze />} />
           <Route path="practice/news-biases" element={<PracticeNewsBiases />} />
+          <Route path="practice/algo-trading" element={<PracticeAlgoTrading />} />
+          <Route path="practice/charting-apps" element={<PracticeChartingApps />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />
           <Route path="coach" element={<Coach />} />
