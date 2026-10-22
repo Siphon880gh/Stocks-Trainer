@@ -139,3 +139,12 @@ Screenshots (box only): `/workspace/checkpoints/qa/reversal-charts-{390,1280}.pn
 | Learn `one-minute-charts` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/one-minute-charts-{390,1280}.png`.
+
+## 2026-10-22 Fibonacci as a decision map (#11)
+
+| Flow | Result |
+|---|---|
+| `/practice/fib-decision-map`, 390 and 1280 (e2e) | Swing 5050→5000, 61.8% table, R:R≈2, coherent plan drill marks done. |
+| Learn `fib-decision-map` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/fib-decision-map-{390,1280}.png`.

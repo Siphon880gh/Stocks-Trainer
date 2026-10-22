@@ -129,3 +129,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## 2026-10-22 Reading 1-minute charts (#10)
 - Audit: no dedicated 1m grouping / MES tick / bar-count lesson; fib tool names verified on TradingView (Reverse, Extend Lines Left/Right); MES 0.25 = $1.25 from CME FAQ/rulebook.
 - Added `/practice/one-minute-charts` (`src/lib/oneMinuteCharts.ts`): grouping, open hour, legs drill + SIMULATED 1m chart, MES calculator, fib + bar count, Learn `one-minute-charts` (12), 7 glossary terms.
+
+## 2026-10-22 Fibonacci as a decision map (#11)
+- Audit: #10 taught Reverse / Extend Lines; no dedicated zone→confirm→stop→target→R:R map. Sources: TradingView 43000518158, Fidelity fib guide, FINRA 2270.
+- Added `/practice/fib-decision-map` (`src/lib/fibDecisionMap.ts`): SIMULATED 5m decline with fib annotations, level table, R:R calculator, plan drill, confluence/VWAP/invalidation; Learn `fib-decision-map` (12); 5 glossary terms.
