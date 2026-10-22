@@ -407,6 +407,30 @@ const flows = {
     await p.goto(base + "/training?group=crypto-candles", { waitUntil: "networkidle" });
     check(/Candlesticks for Crypto/.test(await p.locator("main").innerText()), `crypto: Learn group missing @${w}`);
   },
+
+  async "Reversal charts: gallery, rectangle distinction, confirmation drills"(p, w) {
+    await p.goto(base + "/practice/reversal-charts", { waitUntil: "networkidle" });
+    check((await p.locator("[data-rev]").count()) === 8, `rev: gallery missing @${w}`);
+    check(/Triple bottom is not a rectangle/.test(await p.getByTestId("rev-rectangle").innerText()), `rev: rectangle panel missing @${w}`);
+    await p.locator('[data-rev="head-shoulders"]').click();
+    check(/neckline/i.test(await p.getByTestId("rev-detail").innerText()), `rev: H&S detail missing @${w}`);
+    for (const drill of await p.locator("[data-drill]").all()) {
+      const ans = await drill.locator("button").evaluateAll((btns) => {
+        // click the correct-looking option by trying until graded — instead click each until result appears
+        return btns.map((b) => b.textContent || "");
+      });
+      // click first option; if wrong, that's ok — we just need them graded
+      await drill.locator("button").first().click();
+    }
+    check(/\/ 6 correct/.test(await p.getByTestId("rev-score").innerText()), `rev: drills not graded @${w}`);
+    check((await overflow(p)) <= 1, `rev overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/reversal-charts-${w}.png`, fullPage: true });
+    await p.goto(base + "/archive?tab=patterns&open=double-bottom", { waitUntil: "networkidle" });
+    await p.getByTestId("pattern-tab-trade").click();
+    check(/neckline/i.test(await p.locator("[role=dialog]").innerText()), `rev: Archive tabs not deepened @${w}`);
+    await p.goto(base + "/training?group=reversal-charts", { waitUntil: "networkidle" });
+    check(/Reversal Chart Patterns/.test(await p.locator("main").innerText()), `rev: Learn group missing @${w}`);
+  },
 };
 
 
