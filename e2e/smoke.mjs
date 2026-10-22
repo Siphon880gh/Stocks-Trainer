@@ -538,6 +538,51 @@ const flows = {
     await p.goto(base + "/training?group=technique-narratives", { waitUntil: "networkidle" });
     check(/Technique Narratives/.test(await p.locator("main").innerText()), `nar: Learn group missing @${w}`);
   },
+  async "Missing wicks: walkthrough on top, zoom 1h/15m/1m, same hourly candle, explore after Exit"(p, w) {
+    await p.goto(base + "/practice/missing-wicks", { waitUntil: "networkidle" });
+    await p.getByTestId("mw-start").click();
+    const pop = p.getByTestId("tour-popover");
+    const onTop = async () => {
+      const b = await pop.boundingBox();
+      return p.evaluate(([x, y]) => !!document.elementFromPoint(x, y)?.closest('[data-testid="tour-popover"]'), [b.x + b.width / 2, b.y + 12]);
+    };
+    check(await onTop(), `mw: popover not topmost @${w}`);
+    check(/no top wick/.test(await pop.innerText()), `mw: step 1 text @${w}`);
+    await p.getByTestId("tour-next").click();
+    await p.getByTestId("tour-next").click();
+    check((await p.locator("[data-tf='15m']").getAttribute("aria-pressed")) === "true", `mw: step 3 not 15m @${w}`);
+    await p.keyboard.press("ArrowRight");
+    await p.keyboard.press("ArrowRight");
+    check((await p.locator("[data-scn=B]").getAttribute("aria-pressed")) === "true" && (await p.locator("[data-tf='1m']").getAttribute("aria-pressed")) === "true", `mw: step 5 not B/1m @${w}`);
+    check(await onTop(), `mw: popover not topmost on step 5 @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/missing-wicks-popover-${w}.png` });
+    const cmp = await p.getByTestId("mw-compare").innerText();
+    check((cmp.match(/100\.00\s+100\.00\s+97\.00\s+97\.50/g) ?? []).length === 2, `mw: compare rows differ @${w}`);
+    await p.keyboard.press("Escape");
+    check((await p.getByTestId("tour-backdrop").count()) === 0, `mw: Esc did not exit @${w}`);
+    await p.locator("[data-tf='1h']").click();
+    await p.locator("[data-scn=A]").click();
+    const candle = p.locator('[data-testid="mw-canvas"] svg g[style*="pointer"]').nth(3);
+    await candle.scrollIntoViewIfNeeded();
+    const cb = await candle.boundingBox();
+    check(await p.evaluate(([x, y]) => !!document.elementFromPoint(x, y)?.closest('[data-testid="mw-canvas"]'), [cb.x + cb.width / 2, cb.y + cb.height / 2]), `mw: chart not reachable after Exit @${w}`);
+    await candle.click();
+    check(/O 100\.00 · H 100\.00 · L 97\.00 · C 97\.50 · upper wick 0\.00/.test(await p.getByTestId("mw-readout").innerText()), `mw: hourly readout wrong @${w}`);
+    await p.locator("[data-tf='15m']").click();
+    check((await p.locator('[data-testid="mw-canvas"] svg g[style*="pointer"]').count()) === 4, `mw: 15m not 4 candles @${w}`);
+    await p.locator("[data-tf='1m']").click();
+    check((await p.locator('[data-testid="mw-canvas"] svg g[style*="pointer"]').count()) === 60, `mw: 1m not 60 candles @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/missing-wicks-explore-${w}.png` });
+    await p.getByTestId("mw-resume").click();
+    for (let i = 0; i < 3; i++) await p.getByTestId("tour-next").click();
+    await p.getByTestId("tour-finish").click();
+    const done = await stored(p, "analysis_core_misc_practices_done_v1");
+    check(!!done && JSON.stringify(done).includes("missing-wicks"), `mw: practice not marked done @${w}`);
+    check((await overflow(p)) <= 1, `mw overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/missing-wicks-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=missing-wicks", { waitUntil: "networkidle" });
+    check(/Missing Wicks/.test(await p.locator("main").innerText()), `mw: Learn group missing @${w}`);
+  },
 };
 
 
