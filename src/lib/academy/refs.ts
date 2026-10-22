@@ -42,6 +42,7 @@ export const APP_ROUTES: readonly string[] = [
   "/practice/one-minute-charts",
   "/practice/fib-decision-map",
   "/practice/futures-vs-options",
+  "/practice/technique-narratives",
   "/practice/statements",
   "/practice/read-the-print",
   "/practice/mark-the-band",

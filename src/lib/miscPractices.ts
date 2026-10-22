@@ -30,6 +30,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "one-minute-charts", title: "Reading 1-minute charts", to: "/practice/one-minute-charts" },
   { id: "fib-decision-map", title: "Fibonacci as a decision map", to: "/practice/fib-decision-map" },
   { id: "futures-vs-options", title: "Futures vs options & beginner toolkit", to: "/practice/futures-vs-options" },
+  { id: "technique-narratives", title: "Technique narratives", to: "/practice/technique-narratives" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

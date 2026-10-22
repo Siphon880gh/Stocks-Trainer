@@ -52,6 +52,7 @@ describe("misc practice catalog", () => {
       "Reading 1-minute charts",
       "Fibonacci as a decision map",
       "Futures vs options & beginner toolkit",
+      "Technique narratives",
     ]);
   });
 });
