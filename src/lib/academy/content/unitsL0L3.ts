@@ -242,7 +242,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Limit: your price or better", body: "A buy limit at 50 pays 50 or less; a sell limit at 55 receives 55 or more. If price never reaches the limit, nothing happens. If the next candle opens through your limit, you get the better opening price.", glossaryTermId: "limit-order" },
       { title: "Which one when", body: "Use a market order when getting in or out matters more than a few cents. Use a limit when you have a specific price in mind and are happy to miss the trade if it is not reached.", glossaryTermId: "market-order-vs-limit" },
     ],
-    refs: ["glossary:market-order-vs-limit", "glossary:limit-order"],
+    refs: ["glossary:market-order-vs-limit", "glossary:limit-order", "route:/paper"],
   },
   {
     id: "l3-stop-orders",
@@ -268,7 +268,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Price control, fill risk", body: "If the stock gaps from 46 to 40, the stop triggers but the limit of 44 is never reached. The order sits unfilled while you still hold the shares. A plain stop would have sold near 40." },
       { title: "When people use it", body: "Stop-limits make sense when a terrible fill is worse than no fill, for example for a breakout entry you do not want to chase. For protective exits, many traders accept a plain stop's fill risk." },
     ],
-    refs: ["glossary:stop-limit-order", "glossary:gap-risk"],
+    refs: ["glossary:stop-limit-order", "glossary:gap-risk", "route:/paper"],
   },
   {
     id: "l3-trailing-stop",
@@ -281,7 +281,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "An example", body: "Bought at 50 with a $3 trail: the stop starts at 47 if the high is 50. The stock climbs to 58, so the stop rises to 55. It then drops to 54: the stop at 55 triggers and you sell near 55, keeping most of the gain." },
       { title: "Choose the distance", body: "Too tight and normal wiggles stop you out. Too loose and you give back a lot. Many traders trail under structure (the last higher low) instead of a fixed distance." },
     ],
-    refs: ["glossary:trailing-stop", "coach:trailing-stop-exit"],
+    refs: ["glossary:trailing-stop", "coach:trailing-stop-exit", "route:/paper"],
   },
   {
     id: "l3-time-in-force",
@@ -294,7 +294,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Good 'til cancelled", body: "A GTC order keeps working until it fills or you cancel it. Protective stops are usually GTC so they stay in place every session.", glossaryTermId: "good-til-canceled" },
       { title: "Clean up", body: "Old GTC orders can fill when you have forgotten why you placed them. Review open orders whenever your plan changes, and cancel what no longer fits.", glossaryTermId: "time-in-force" },
     ],
-    refs: ["glossary:time-in-force", "glossary:good-til-canceled"],
+    refs: ["glossary:time-in-force", "glossary:good-til-canceled", "route:/paper"],
   },
   {
     id: "l3-position-sizing",

@@ -41,23 +41,23 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 | 24 | BA4.M3.S3 Trailing stop ($ and %) + TIF | BA4.M3 | Ratchet never down; Day expires, GTC persists | done |
 | 25 | BA4.M4.S1 P&L + performance stats | BA4.M4 | Hand-computed P&L, drawdown, R, exposure | done |
 | 26 | BA4.M5.S1 SAMPLE tapes + symbol catalogue | BA4.M5 | ≥ 8 tapes ≥ 60 bars; valid OHLC; blocklist | done |
-| 27 | BA5.M1.S1 `describeOrder` preview | BA5.M1 | Every type/side described from the order object | todo |
-| 28 | BA5.M1.S2 OrderTicket component | BA5.M1 | SIMULATED banner; invalid disables submit | todo |
-| 29 | BA5.M2.S1 Positions / orders / history / equity curve | BA5.M2 | Rendered numbers = stats.ts | todo |
-| 30 | BA5.M3.S1 `/paper` page + replay stepping + persistence | BA5.M3 | No future-bar leak; reload restores | todo |
-| 31 | BA5.M4.S1 🔍 Paper UI review package | BA5.M4 | Desktop + mobile screenshots logged PENDING | todo |
+| 27 | BA5.M1.S1 `describeOrder` preview | BA5.M1 | Every type/side described from the order object | done |
+| 28 | BA5.M1.S2 OrderTicket component | BA5.M1 | SIMULATED banner; invalid disables submit | done |
+| 29 | BA5.M2.S1 Positions / orders / history / equity curve | BA5.M2 | Rendered numbers = stats.ts | done |
+| 30 | BA5.M3.S1 `/paper` page + replay stepping + persistence | BA5.M3 | No future-bar leak; reload restores | done |
+| 31 | BA5.M4.S1 🔍 Paper UI review package | BA5.M4 | Desktop + mobile screenshots logged PENDING | pending sign-off |
 | 32 | BA6.M1.S1 Challenge model + rule checks + scoring | BA6.M1 | Pass / breach / edge per rule; discipline ≥ 50% | done |
 | 33 | BA6.M2.S1 Challenges: order mechanics + trailing stops | BA6.M2 | Reference play passes; reckless play breaches | done |
 | 34 | BA6.M2.S2 Challenges: risk + patience + earnings gap | BA6.M2 | ≥ 10 total across ≥ 4 themes | done |
 | 35 | BA6.M3.S1 Benchmarks + local leaderboard | BA6.M3 | Rank math incl. ties; no network | done |
-| 36 | BA6.M4.S1 Challenges UI + weekly rotation | BA6.M4 | Deterministic week pick; all appear within N weeks | todo |
+| 36 | BA6.M4.S1 Challenges UI + weekly rotation | BA6.M4 | Deterministic week pick; all appear within N weeks | done |
 | 37 | BA7.M1.S1 Points ledger | BA7.M1 | Idempotent; delta-only retries; no redeem API | done |
 | 38 | BA7.M2.S1 Daily streak + freezes | BA7.M2 | DST / midnight clocks; freeze rule | done |
 | 39 | BA7.M2.S2 XP levels | BA7.M2 | Threshold table; monotone | done |
 | 40 | BA7.M3.S1 ≥ 20 badges | BA7.M3 | Scripted learner earns all; fresh learner none | done |
 | 41 | BA7.M4.S1 Retro-credit (read-only) | BA7.M4 | Zero writes to foreign keys; idempotent | done |
-| 42 | BA7.M5.S1 RewardsPanel + toast | BA7.M5 | Virtual-only disclaimer; locked hints | todo |
-| 43 | BA7.M5.S2 🔍 Rewards review package | BA7.M5 | Point table + screenshots logged PENDING | todo |
+| 42 | BA7.M5.S1 RewardsPanel + toast | BA7.M5 | Virtual-only disclaimer; locked hints | done |
+| 43 | BA7.M5.S2 🔍 Rewards review package | BA7.M5 | Point table + screenshots logged PENDING | pending sign-off |
 | 44 | BA8.M1.S1 Ladder data L1–L4 | BA8.M1 | Strategy lists per level | todo |
 | 45 | BA8.M1.S2 Payoff math | BA8.M1 | Hand table + dense-grid property | todo |
 | 46 | BA8.M2.S1 Knowledge checks + gating | BA8.M2 | ≥ 8 items/level; 3 attempts / 24 h; ordering | todo |

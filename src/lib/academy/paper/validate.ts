@@ -60,7 +60,7 @@ export interface MarketContext {
   lastClose: Record<string, number>;
 }
 
-const $ = (c: number) => `$${(c / 100).toFixed(2)}`;
+const $ = (c: number) => `$${(c / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export function reservationFor(spec: OrderSpec, lastClose: number): number {
   if (spec.side !== "buy") return 0;

@@ -44,6 +44,9 @@ export const APP_ROUTES: readonly string[] = [
   "/academy",
   "/academy/test-out/:levelId",
   "/academy/:unitId",
+  "/paper",
+  "/paper/challenges",
+  "/paper/challenges/:challengeId",
 ];
 
 /** Practice surfaces: the Misc Practices hub items plus the financials practice pages. */
@@ -137,6 +140,9 @@ export function resolveRef(ref: ContentRef | RefString | string): ResolvedRef {
 }
 
 const ROUTE_LABELS: Record<string, string> = {
+  "/paper": "Paper trading (simulated)",
+  "/paper/challenges": "Paper-trading challenges",
+  "/academy": "Beginner Academy",
   "/macro": "Macro Desk",
   "/macro/play": "Macro Desk reaction game",
   "/cases": "Case library",

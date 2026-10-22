@@ -138,21 +138,21 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 
 ## BA5 — Paper-trading UI
 
-### [ ] BA5.M1 — Order ticket
+### [x] BA5.M1 — Order ticket
 - **Build:** `components/academy/paper/OrderTicket.tsx`: side, qty, type, price fields per type, TIF, live validation messages, and a **plain-language preview** ("If price trades at or below $X, buy up to N shares at $X or better…"), estimated cost vs buying power. SIMULATED banner + simulated accent.
 - **Accept:** preview text is generated from the order object (pure `describeOrder`), not hand-written per type.
 - **Verify:** BASE + `describeOrder.test.ts` (every type/side) + render test (banner present, invalid order disables submit).
 
-### [ ] BA5.M2 — Positions, orders, history, equity curve
+### [x] BA5.M2 — Positions, orders, history, equity curve
 - **Build:** `PositionsTable`, `OpenOrders` (cancel), `OrderHistory` (filled / cancelled / expired / rejected with reason), `EquityCurve` (existing chart components), account summary (cash, buying power, equity, day + total P&L).
 - **Verify:** BASE + render tests asserting numbers equal `stats.ts` outputs for a fixture session.
 
-### [ ] BA5.M3 — Paper page with bar-replay stepping
+### [x] BA5.M3 — Paper page with bar-replay stepping
 - **Build:** route `/paper` (`pages/academy/Paper.tsx`): pick tape + starting cash, step / auto-step bars, chart with order lines (entry, stop, limit, trailing level that moves), reset; persisted session via `analysis_core_academy_paper_v1`.
 - **Accept:** future bars never render before stepping (no-leak test); reload restores the session.
 - **Verify:** BASE + `paperPage.render.test.tsx` (leak test, restore from fake storage).
 
-### [ ] BA5.M4 — 🔍 HUMAN CHECKPOINT: paper UI visual + order-preview wording
+### [~] BA5.M4 — 🔍 HUMAN CHECKPOINT: paper UI visual + order-preview wording
 - **Build:** screenshots (desktop + mobile) of ticket for each type, a trailing stop ratcheting over 3 steps, a stop-limit gap no-fill, history with a rejection.
 - **Accept:** Weng signs off (PENDING logged; loop continues).
 
@@ -175,7 +175,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - **Accept:** no network; rank math correct incl. ties; learner data stays on the paper key.
 - **Verify:** BASE + `leaderboard.test.ts`.
 
-### [ ] BA6.M4 — Challenges UI + weekly rotation
+### [x] BA6.M4 — Challenges UI + weekly rotation
 - **Build:** `/paper/challenges` list + play view (reuses BA5 components), "challenge of the week" chosen by ISO week (deterministic).
 - **Verify:** BASE + render test + rotation test (same week → same id, all challenges appear within N weeks).
 
@@ -203,7 +203,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - **Accept:** never writes those keys; idempotent; missing/corrupt foreign keys → no award, no crash.
 - **Verify:** BASE + `retro.test.ts` (spy storage asserts zero writes to foreign keys).
 
-### [ ] BA7.M5 — Rewards UI + 🔍 HUMAN CHECKPOINT: rewards feel
+### [~] BA7.M5 — Rewards UI + 🔍 HUMAN CHECKPOINT: rewards feel
 - **Build:** `components/academy/RewardsPanel.tsx` (points, level bar, streak, badge grid with locked hints), toast on award. Screenshots into `checkpoints/`.
 - **Accept:** copy says points are virtual and not redeemable; Weng signs off point values / badge list (PENDING logged; loop continues).
 - **Verify:** BASE + render test (disclaimer present, locked badges show hint not predicate code).

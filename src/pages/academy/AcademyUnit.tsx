@@ -12,6 +12,7 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
   const unit = getUnit(unitId);
   const [attempt, setAttempt] = useState(() => loadAcademy(storage).state.units[unitId]?.attempts ?? 0);
   const [key, setKey] = useState(0);
+  const [toast, setToast] = useState<string | null>(null);
   if (!unit) {
     return (
       <main className="flex-1 px-4 py-6 max-w-3xl mx-auto w-full space-y-3">
@@ -31,6 +32,11 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
         · {unit.levelId} {level.title}
         {status === "locked" ? " · this level is not unlocked yet, but you can still read it" : status === "mastered" ? " · mastered" : ""}
       </p>
+      {toast ? (
+        <p className="panel px-3 py-2 text-[13px] border-sim/40" role="status" data-testid="reward-toast">
+          {toast}
+        </p>
+      ) : null}
       <div key={key}>
       <UnitPlayer
         unit={unit}
@@ -38,7 +44,8 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
         onFinish={(score) => {
           const s = recordUnitAttempt(loadAcademy(storage).state, unit.id, score.correct, score.total);
           saveAcademy(s, storage);
-          awardUnitMastery(unit.id, score, storage);
+          const r = awardUnitMastery(unit.id, score, storage);
+          if (r.added || r.newBadges.length) setToast(`${r.added ? `+${r.added} practice points` : ""}${r.added && r.newBadges.length ? " · " : ""}${r.newBadges.length ? `new badge${r.newBadges.length > 1 ? "s" : ""} earned` : ""}. Points are virtual.`);
         }}
         onRetry={() => {
           setAttempt(attempt + 1);

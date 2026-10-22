@@ -191,7 +191,7 @@ function checkRule(rule: Rule, s: AccountState, c: Challenge): Breach | null {
         const deadline = t.entryBar + rule.bars;
         if (t.closed && t.exitBar! <= deadline) continue;
         const ok = s.orders.some((o) => o.symbol === t.symbol && o.side === "sell" && PROTECTIVE.has(o.type) && o.status !== "rejected" && o.placedAtBar >= t.entryBar && o.placedAtBar <= deadline);
-        if (!ok && s.bar >= deadline) return { rule: rule.kind, bar: deadline, message: `Bar ${deadline}: no protective stop within ${rule.bars} bar(s) of the entry on bar ${t.entryBar}.` };
+        if (!ok && s.bar >= deadline) return { rule: rule.kind, bar: deadline, message: rule.bars === 0 ? `Bar ${deadline}: no protective stop placed on the entry bar (bar ${t.entryBar}).` : `Bar ${deadline}: no protective stop within ${rule.bars} bar${rule.bars === 1 ? "" : "s"} of the entry on bar ${t.entryBar}.` };
       }
       return null;
     }

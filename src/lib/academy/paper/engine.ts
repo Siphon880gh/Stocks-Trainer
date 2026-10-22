@@ -119,7 +119,7 @@ export function stepBar(state: AccountState, bars: Record<string, PaperBar>): Ac
       if (o.side === "buy") {
         const available = s.cash - (reservedTotal(s) - o.reserved);
         if (o.qty * price > available) {
-          next = close(order, "rejected", t, { reason: `Not enough cash at the fill price $${(price / 100).toFixed(2)} after the price moved (a gap past the reserved amount).` });
+          next = close(order, "rejected", t, { reason: `Not enough cash at the fill price $${(price / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} after the price moved (a gap past the reserved amount).` });
         } else {
           s = applyFill(s, { orderId: o.id, bar: t, symbol: o.symbol, side: "buy", qty: o.qty, price }).state;
           next = close(order, "filled", t, { fillPrice: price });

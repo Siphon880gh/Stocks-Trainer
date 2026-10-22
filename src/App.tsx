@@ -29,6 +29,8 @@ import MacroPlay from "./pages/macro/MacroPlay";
 import AcademyHub from "./pages/academy/AcademyHub";
 import AcademyUnit from "./pages/academy/AcademyUnit";
 import AcademyTestOut from "./pages/academy/AcademyTestOut";
+import Paper from "./pages/academy/Paper";
+import PaperChallenges from "./pages/academy/PaperChallenges";
 
 export default function App() {
   const baseUrl = import.meta.env.BASE_URL;
@@ -74,6 +76,9 @@ export default function App() {
           <Route path="academy" element={<AcademyHub />} />
           <Route path="academy/test-out/:levelId" element={<AcademyTestOut />} />
           <Route path="academy/:unitId" element={<AcademyUnit />} />
+          <Route path="paper" element={<Paper />} />
+          <Route path="paper/challenges" element={<PaperChallenges />} />
+          <Route path="paper/challenges/:challengeId" element={<PaperChallenges />} />
         </Route>
       </Routes>
     </BrowserRouter>

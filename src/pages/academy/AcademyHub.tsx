@@ -6,6 +6,7 @@ import { loadAcademy, type KVStorage } from "../../lib/academy/storage";
 import { academySummary, coursePct, isLevelComplete, isLevelUnlocked, levelPct, nextUnit, unitStatus, type UnitStatus } from "../../lib/academy/progress";
 import { TEST_OUT_LEVELS } from "../../lib/academy/testOut";
 import PlacementCard from "../../components/academy/PlacementCard";
+import RewardsPanel from "../../components/academy/RewardsPanel";
 import { cn } from "../../lib/utils";
 
 const STATUS: Record<UnitStatus, { label: string; icon: string; cls: string }> = {
@@ -59,6 +60,29 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
       ) : null}
 
       {!state.placement ? <PlacementCard variant="hub" storage={storage} /> : null}
+
+      <section className="grid sm:grid-cols-2 gap-3" aria-label="Practice with virtual money">
+        <Link to="/paper" className="panel p-4 block hover:border-sim space-y-1" data-testid="hub-paper">
+          <p className="font-semibold">
+            <span className="material-symbols-outlined text-sim align-middle mr-1" aria-hidden>
+              candlestick_chart
+            </span>
+            Paper trading
+          </p>
+          <p className="text-[13px] text-muted">Place market, limit, stop, stop-limit and trailing-stop orders with virtual money on SAMPLE tapes, one bar at a time.</p>
+        </Link>
+        <Link to="/paper/challenges" className="panel p-4 block hover:border-sim space-y-1" data-testid="hub-challenges">
+          <p className="font-semibold">
+            <span className="material-symbols-outlined text-sim align-middle mr-1" aria-hidden>
+              flag
+            </span>
+            Challenges
+          </p>
+          <p className="text-[13px] text-muted">Short scenarios scored mostly on discipline: stops, size and patience.</p>
+        </Link>
+      </section>
+
+      <RewardsPanel storage={storage} />
 
       {extra}
 
