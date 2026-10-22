@@ -141,3 +141,7 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 ## 2026-10-22 Technique narratives (#13)
 - Audit: no guided walkthrough component; techniques were taught as static lessons without showing where they fail.
 - Added `src/components/Walkthrough.tsx` (portal, `src/lib/zLayers.ts` tour tokens 1000–1002 above every other layer, Next/Prev/Exit, Esc/←/→, aria-live step count, resume via `src/lib/tourProgress.ts`), `IndicatorPane.tsx`, and `/practice/technique-narratives` (`src/lib/techniqueNarratives.ts`, `narrativeEngine.ts`, `narrativeData.ts`): six SIMULATED narratives (RSI range, MA crossover trend, cup-and-handle volume breakout, VWAP pullback, MACD divergence, Bollinger squeeze), each with computed trades on the right chart and a wrong-chart failure panel; Learn `technique-narratives` (14); 7 glossary terms.
+
+## 2026-10-22 Missing wicks and zooming in (#21)
+- Audit: wick anatomy was taught on single candles; no lesson aggregated lower-timeframe bars or showed two intrabar paths behind one candle.
+- Added `/practice/missing-wicks` (`src/lib/missingWicks.ts`) using the #13 `Walkthrough`: 8 steps (shaven top, OHLC rule, 4×15m, path A steady selloff, path B failed retest with the identical hourly OHLC, when to drill down, mirror shaven bottom, explore). SIMULATED 1m bars aggregated with real OHLC aggregation (unit-tested); 1h/15m/1m and path toggles with click readouts; Learn `missing-wicks` (7); 4 glossary terms.

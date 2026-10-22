@@ -166,3 +166,12 @@ Screenshots (box only): `/workspace/checkpoints/qa/futures-vs-options-{390,1280}
 | Learn `technique-narratives` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/technique-narratives{,-popover,-explore}-{390,1280}.png`.
+
+## 2026-10-22 Missing wicks and zooming in (#21)
+
+| Flow | Result |
+|---|---|
+| `/practice/missing-wicks`, 390 and 1280 (e2e) | Popover topmost on steps 1 and 5; step 3 switches to 15m, step 5 to path B on 1m; comparison table shows identical hourly OHLC for both paths; Esc exits; hourly candle readout O 100 · H 100 · L 97 · C 97.5 with 0.00 upper wick; 15m shows 4 candles, 1m shows 60; Finish marks practice done. |
+| Learn `missing-wicks` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/missing-wicks{,-popover,-explore}-{390,1280}.png`.
