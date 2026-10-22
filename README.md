@@ -78,6 +78,7 @@ Other market types ship as SAMPLE browse (**E9**). **E10** adds a **Market Navig
 | **Oscillators & volatility stops** | RSI, MACD, fast / slow stochastic, KDJ, ATR and an ATR volatility stop; why same-family oscillators are not independent confirmation | **Oscillators & volatility stop** lab (`/practice/oscillators`) + Learn **Oscillators & Volatility Stops** | Computed chart questions answered; indicators treated as support, not signals |
 | **Japanese candlesticks & Heikin-Ashi** | Where candle charts came from, the buyer–seller battle in one candle, the core 14 reversal patterns (recognise · psychology · trade), Heikin-Ashi averaged candles and their limits | **Japanese candlesticks** (`/practice/japanese-candles`) · **Heikin-Ashi** lab (`/practice/heikin-ashi`) · Archive core list + Learn **Japanese Candlesticks: Core 14** and **Heikin-Ashi Candles** | Quiz passed (70%); lab questions answered |
 | **Float, short-dated options & risk** | Float and float turnover, short-dated option risk, position sizing, why the same market gives different results | Learn **Float, Short-Dated Options & Risk** | Quiz passed (70%) |
+| **Squeezes & options flow** | Gamma and dealer hedging, gamma vs short squeezes, short interest, days to cover, open interest, unusual options activity, survivorship bias | **Gamma squeeze case** (`/practice/gamma-squeeze`) + Learn **Squeezes, Options Flow & Survivorship** + Coach **Chasing a squeeze** | Case graded (enter · size · exit); quiz passed (70%) |
 
 ---
 
@@ -186,6 +187,7 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | `/practice/oscillators` | Oscillators & volatility stop lab: RSI, fast / slow stochastic, KDJ, ATR volatility stop on long SIMULATED charts |
 | `/practice/japanese-candles` | Japanese candlesticks: history, the buyer–seller battle, body vs wicks, and the core 14 reversal patterns (Bullish / Bearish toggle) |
 | `/practice/heikin-ashi` | Heikin-Ashi lab: formula, limits, regular vs Heikin-Ashi toggle on one SIMULATED chart, computed questions |
+| `/practice/gamma-squeeze` | Gamma squeeze case: a SIMULATED weekly-call chase with enter / size / exit decisions, reveal, points and a stall counterfactual |
 | `/practice/statements` | Statements lab · 13-week cash forecast · biotech readout day |
 | `/practice/read-the-print` · `/practice/mark-the-band` | Earnings reaction game · expected-move band |
 | `/coach` · `/coach/:slug` | Step-by-step coaching (decision trees · no LLM) |
@@ -267,6 +269,13 @@ Beginner training modelled on how broker apps such as Webull teach new investors
 - 31 multi-bar patterns from one table, `src/lib/chartPatternBook.ts`: rising and falling windows; breakaway, runaway (measuring) and exhaustion gaps; island tops and bottoms; bear flag, bull and bear pennants, high and tight flag; ascending and descending triangles; bullish and bearish rectangles; ascending and descending channels; rounding bottom and top; cup and handle and the inverted cup; broadening top and bottom; diamond top and bottom; the V bottom (spike reversal); volume patterns (selling climax, volume dry-up, breakout on volume, volume divergence); and three pushes (a price-action term).
 - Each one has a SIMULATED chart with a volume pane, its own Recognise / Psychology / Trade tabs, a glossary card (and flashcard), a Buy-or-Sell drill item when it has a direction, and five Learn questions: identify, psychology, confirmation, stop and target, and a lookalike chart (or what the volume pane adds). `chartPatternBook.test.ts` checks each textbook rule on the bars (gap clear of the prior high, flat triangle top, volume about twice the average on the breakout, and so on).
 - Deep link: `/archive?tab=patterns&open=<pattern-id>`. Process for importing more from screenshots: `.agents/skills/candlestick-screenshot-import/SKILL.md`.
+
+### Gamma squeeze case (`/practice/gamma-squeeze`)
+
+- A SIMULATED Thursday in a made-up stock (SQZ): heavy call buying in Friday's weekly strikes, a fast move through the 24 strike, then a fade. You make three decisions (enter, size, exit), each graded and worth points, and the case pays progress points once (`recordCaseOutcome`, id `gamma-squeeze`).
+- The illustrative story: a trader puts $200 into 25 weekly 24-strike calls at $0.08 at 10:35 AM ET (7:35 AM PT) and sells them for about $5,075 at 1:00 PM ET (10:00 AM PT). Option values are Black-Scholes mids on made-up volatility; `gammaSqueeze.test.ts` recomputes the whole option path with an independent implementation. The counterfactual keeps the same morning, then stalls: the calls are worth $0.03 at 1:00 PM and expire worthless below the strike.
+- Also on the page: the shares dealers would hold IF they were net short the 24-strike open interest, a survivorship-bias panel (100 made-up $200 tickets that lose money overall), short squeeze vs gamma squeeze and how they compound, and what the SEC staff's October 2021 report found for GameStop in January 2021 (no evidence of a gamma squeeze; positive sentiment, not short covering, sustained the rise).
+- Learn **Squeezes, Options Flow & Survivorship** (14 questions), Coach **Chasing a squeeze**, and 9 glossary terms: gamma, delta hedging, gamma squeeze, short squeeze, short interest, days to cover, open interest, unusual options activity, survivorship bias.
 
 ### Playbooks (`/playbooks`)
 

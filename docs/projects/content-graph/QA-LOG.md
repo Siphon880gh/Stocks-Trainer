@@ -79,3 +79,13 @@ Screenshots (box only, not committed): `/workspace/checkpoints/qa/japanese-candl
 | `npm run test:e2e` | 147 checks, 0 failed; its own server closed after. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/chart-patterns-{390,1280}.png`.
+
+## 2026-10-22 Gamma squeeze case
+
+| Flow | Result |
+|---|---|
+| `/practice/gamma-squeeze`, 390 and 1280 (e2e) | TL;DR shown; no reveal before the decisions; plan / small / sell grades "Sound process", 30 / 30, +10 progress points; reveal shows 25 contracts and $5,075; stall panel shows the $200 lost; result saved under `gamma-squeeze`; no overflow, no console errors. |
+| `/training?group=squeezes`, `/coach/chasing-a-squeeze` (e2e) | Group listed; session opens after the options-class peek. |
+| `npm run test:e2e` | 169 checks, 0 failed; its own server closed after. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/gamma-squeeze-{390,1280}.png`.
