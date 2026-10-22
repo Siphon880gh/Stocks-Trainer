@@ -6,6 +6,7 @@ import { getOscChart, OSC_PANELS } from "./oscillatorLab.ts";
 import { getLiteracyTerm, LITERACY_TERMS } from "./literacyTerms.ts";
 import { OSCILLATOR_TERMS } from "./oscillatorTerms.ts";
 import { OSC_SOURCES } from "./oscillatorSources.ts";
+import { PDT_QUESTIONS } from "./pdtRule.ts";
 
 const key = (id: string) => {
   const q = [...OSCILLATOR_QUESTIONS, ...TRADING_RISK_QUESTIONS].find((x) => x.id === id)!;
@@ -16,7 +17,7 @@ describe("oscillators / trading-risk Learn groups", () => {
   it("are registered in Learn with their banks", () => {
     for (const id of ["oscillators", "trading-risk"] as const) assert.ok(QUIZ_GROUPS.some((g) => g.id === id), id);
     assert.equal(getQuestionsForGroup("oscillators"), OSCILLATOR_QUESTIONS);
-    assert.equal(getQuestionsForGroup("trading-risk"), TRADING_RISK_QUESTIONS);
+    assert.deepEqual(getQuestionsForGroup("trading-risk"), [...TRADING_RISK_QUESTIONS, ...PDT_QUESTIONS]);
     assert.ok(OSCILLATOR_QUESTIONS.length >= 18 && TRADING_RISK_QUESTIONS.length >= 12);
   });
   it("numeric keys recompute independently", () => {

@@ -45,6 +45,8 @@ describe("misc practice catalog", () => {
       "Heikin-Ashi candles",
       "Gamma squeeze case",
       "News, biases & short-term options",
+      "Automated & algo trading (2026)",
+      "Indicator & charting apps",
     ]);
   });
 });

@@ -35,6 +35,8 @@ export const APP_ROUTES: readonly string[] = [
   "/practice/heikin-ashi",
   "/practice/gamma-squeeze",
   "/practice/news-biases",
+  "/practice/algo-trading",
+  "/practice/charting-apps",
   "/practice/statements",
   "/practice/read-the-print",
   "/practice/mark-the-band",

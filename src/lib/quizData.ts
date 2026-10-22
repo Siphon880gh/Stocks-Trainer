@@ -19,6 +19,9 @@ import { HEIKIN_ASHI_QUESTIONS, JAPANESE_CANDLE_QUESTIONS } from "./candleQuiz";
 import { CHART_BOOK_QUESTIONS } from "./chartPatternBook";
 import { squeezeQuestions } from "./gammaSqueeze";
 import { NEWS_BIAS_QUESTIONS } from "./newsBiases";
+import { ALGO_QUESTIONS } from "./algoTrading";
+import { CHART_APP_QUESTIONS } from "./chartingApps";
+import { PDT_QUESTIONS } from "./pdtRule";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5385,6 +5388,8 @@ export type QuizGroupId =
   | "trading-risk"
   | "squeezes"
   | "news-biases"
+  | "algo-trading"
+  | "charting-apps"
   | "equity-patterns"
   | "equity-literacy"
   | "financial-literacy"
@@ -5464,6 +5469,18 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     name: "News, Biases & Short-Term Options",
     description: "Expiry length for a news idea (weekly vs about two months vs LEAPS), recency, availability, confirmation, FOMO, loss aversion and anchoring, information overload, over- and underreaction, OCO exits, source checks and the do-nothing rule",
     icon: "newspaper",
+  },
+  {
+    id: "algo-trading",
+    name: "Automated & Algo Trading",
+    description: "Stop vs stop-limit vs trailing stops, 8:30 AM ET release gaps, extended-hours limit orders, bracket legs, LULD and circuit breakers, ATR sizing, backtest traps, paper vs live, kill switches, API keys, spoofing and wash trades",
+    icon: "smart_toy",
+  },
+  {
+    id: "charting-apps",
+    name: "Indicator & Charting Apps",
+    description: "Log vs linear scale, bar intervals behind indicators, adjusted prices, data feeds, indicator warm-up, broker education and payment for order flow, and reading example Webull P&L and account screens",
+    icon: "monitoring",
   },
   {
     id: "candle-anatomy",
@@ -5658,9 +5675,11 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
-  if (groupId === "trading-risk") return TRADING_RISK_QUESTIONS;
+  if (groupId === "trading-risk") return [...TRADING_RISK_QUESTIONS, ...PDT_QUESTIONS];
   if (groupId === "squeezes") return SQUEEZE_QUESTIONS;
   if (groupId === "news-biases") return NEWS_BIAS_QUESTIONS;
+  if (groupId === "algo-trading") return ALGO_QUESTIONS;
+  if (groupId === "charting-apps") return CHART_APP_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
@@ -5689,9 +5708,11 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
-  if (groupId === "trading-risk") return TRADING_RISK_QUESTIONS;
+  if (groupId === "trading-risk") return [...TRADING_RISK_QUESTIONS, ...PDT_QUESTIONS];
   if (groupId === "squeezes") return SQUEEZE_QUESTIONS;
   if (groupId === "news-biases") return NEWS_BIAS_QUESTIONS;
+  if (groupId === "algo-trading") return ALGO_QUESTIONS;
+  if (groupId === "charting-apps") return CHART_APP_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
