@@ -383,6 +383,30 @@ const flows = {
     await p.goto(base + "/training?group=charting-apps", { waitUntil: "networkidle" });
     check(/Indicator & Charting Apps/.test(await p.locator("main").innerText()), `charts: Learn group missing @${w}`);
   },
+
+  async "Crypto candles: why-lesson, harami takeaway, filter tags, Archive crypto chip"(p, w) {
+    await p.goto(base + "/practice/crypto-candles", { waitUntil: "networkidle" });
+    check(/24\/7/.test(await p.getByTestId("cc-why").innerText()), `crypto: why lesson missing @${w}`);
+    const take = await p.getByTestId("cc-harami-takeaway").innerText();
+    check(/A harami candle signals a potential trend reversal by showing market hesitation/.test(take), `crypto: harami takeaway wrong @${w}`);
+    const before = await p.locator("[data-pattern]").count();
+    check(before >= 80, `crypto: pattern list too small (${before}) @${w}`);
+    await p.locator('[data-fit="rare"]').click();
+    const rare = await p.locator("[data-pattern]").count();
+    check(rare > 0 && rare < before, `crypto: rare filter wrong (${rare}/${before}) @${w}`);
+    check((await p.locator('[data-crypto-fit="rare"]').count()) === rare, `crypto: rare tags mismatch @${w}`);
+    check((await overflow(p)) <= 1, `crypto overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/crypto-candles-${w}.png`, fullPage: true });
+    await p.goto(base + "/archive?tab=patterns&crypto=works", { waitUntil: "networkidle" });
+    check((await p.getByTestId("archive-crypto-works").count()) === 1, `crypto: Archive chip missing @${w}`);
+    check((await p.locator("[data-crypto-fit='works']").count()) >= 10, `crypto: Archive works tags missing @${w}`);
+    await p.goto(base + "/archive?tab=patterns&open=harami", { waitUntil: "networkidle" });
+    check(/A harami candle signals a potential trend reversal/.test(await p.getByTestId("pattern-takeaway").innerText()), `crypto: Archive harami takeaway missing @${w}`);
+    check(/works in crypto/i.test(await p.getByTestId("pattern-crypto-fit").innerText()), `crypto: modal crypto tag missing @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/crypto-harami-${w}.png`, fullPage: true });
+    await p.goto(base + "/training?group=crypto-candles", { waitUntil: "networkidle" });
+    check(/Candlesticks for Crypto/.test(await p.locator("main").innerText()), `crypto: Learn group missing @${w}`);
+  },
 };
 
 

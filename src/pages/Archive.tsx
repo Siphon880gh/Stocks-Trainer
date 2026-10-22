@@ -15,8 +15,10 @@ import CorePatternList from "../components/CorePatternList";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText, { GlossaryButtons } from "../components/JargonText";
+import { CRYPTO_FIT_HINT, CRYPTO_FIT_LABEL, cryptoFitFor, isCandlestickPattern, type CryptoFit } from "../lib/cryptoCandles";
 
 type FilterType = "all" | "bullish" | "bearish" | "neutral";
+type CryptoFilter = "all" | CryptoFit;
 type ArchiveTab = "patterns" | "indicators" | "literacy";
 
 export default function Archive() {
@@ -31,6 +33,10 @@ export default function Archive() {
   const [selectedOverlay, setSelectedOverlay] = useState<OverlayDef | null>(null);
   const [selectedTerm, setSelectedTerm] = useState<LiteracyTerm | null>(null);
   const [filter, setFilter] = useState<FilterType>("all");
+  const cryptoParam = searchParams.get("crypto") as CryptoFilter | null;
+  const [cryptoFilter, setCryptoFilter] = useState<CryptoFilter>(
+    cryptoParam === "works" || cryptoParam === "adapted" || cryptoParam === "rare" ? cryptoParam : "all",
+  );
   const [indicatorFilter, setIndicatorFilter] = useState<OverlayCategory | "all">("all");
   const [tempBypass, setTempBypass] = useState(isChartGateTemporarilyBypassed);
 
@@ -38,6 +44,10 @@ export default function Archive() {
     if (tabParam === "indicators" || tabParam === "literacy") setTab(tabParam);
     else if (!tabParam) setTab("patterns");
   }, [tabParam]);
+  useEffect(() => {
+    if (cryptoParam === "works" || cryptoParam === "adapted" || cryptoParam === "rare") setCryptoFilter(cryptoParam);
+    else if (!cryptoParam) setCryptoFilter("all");
+  }, [cryptoParam]);
 
   useEffect(() => {
     if (!openId) return;
@@ -60,6 +70,10 @@ export default function Archive() {
   }, [openId, tab, tabParam, tempBypass]);
 
   const filteredPatterns = PATTERNS.filter((p) => {
+    if (cryptoFilter !== "all") {
+      if (!isCandlestickPattern(p.id)) return false;
+      if (cryptoFitFor(p.id) !== cryptoFilter) return false;
+    }
     if (filter === "all") return true;
     const sentiment = p.sentiment ?? (p.type === "neutral" ? "neutral" : "bullish");
     return sentiment === filter;
@@ -176,6 +190,37 @@ export default function Archive() {
               </p>
             )}
         </div>
+        {tab === "patterns" ? (
+          <div className="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar" data-testid="archive-crypto-filters">
+            {(["all", "works", "adapted", "rare"] as const).map((f) => (
+              <button
+                key={`crypto-${f}`}
+                type="button"
+                data-testid={`archive-crypto-${f}`}
+                onClick={() => {
+                  setCryptoFilter(f);
+                  const next = new URLSearchParams(searchParams);
+                  if (f === "all") next.delete("crypto");
+                  else next.set("crypto", f);
+                  setSearchParams(next, { replace: true });
+                }}
+                className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded px-4 cursor-pointer transition-colors ${
+                  cryptoFilter === f
+                    ? "bg-emerald-600 text-white"
+                    : "bg-emerald-500/10 border border-line text-emerald-700 hover:bg-emerald-500/20"
+                }`}
+                title={f === "all" ? "Show all patterns" : CRYPTO_FIT_HINT[f]}
+              >
+                <p className="text-xs font-bold uppercase tracking-wider">
+                  {f === "all" ? "Crypto: all" : CRYPTO_FIT_LABEL[f]}
+                </p>
+              </button>
+            ))}
+            <Link to="/practice/crypto-candles" className="flex h-8 shrink-0 items-center px-3 text-xs font-bold text-primary underline">
+              Why crypto tags?
+            </Link>
+          </div>
+        ) : null}
       </header>
 
       <main className="flex-1 px-4 py-6 space-y-6 max-w-7xl mx-auto w-full">
@@ -373,6 +418,25 @@ export default function Archive() {
                           Advanced / rare
                         </span>
                       ) : null}
+                      {(() => {
+                        const fit = cryptoFitFor(pattern.id);
+                        if (!fit) return null;
+                        return (
+                          <span
+                            className={`text-[9px] font-mono uppercase tracking-wide rounded border px-1 py-0.5 ${
+                              fit === "works"
+                                ? "border-emerald-500/60 text-emerald-600"
+                                : fit === "adapted"
+                                  ? "border-amber-500/60 text-amber-600"
+                                  : "border-rose-500/60 text-rose-600"
+                            }`}
+                            title={CRYPTO_FIT_HINT[fit]}
+                            data-crypto-fit={fit}
+                          >
+                            {fit}
+                          </span>
+                        );
+                      })()}
                     </div>
                     <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
                       &gt; {pattern.type.toUpperCase()}_PATTERN<br />

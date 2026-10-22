@@ -5,6 +5,7 @@ import YouTubeSearchLink from "./YouTubeSearchLink";
 import JargonText from "./JargonText";
 import CandlestickChart from "./CandlestickChart";
 import { NOT_A_GUARANTEE, patternIllustration, patternTabs } from "../lib/patternTabs";
+import { CRYPTO_FIT_HINT, CRYPTO_FIT_LABEL, cryptoFitFor } from "../lib/cryptoCandles";
 
 export type PatternTab = "recognise" | "psychology" | "trade";
 export const PATTERN_TAB_LABELS: Record<PatternTab, string> = {
@@ -74,7 +75,31 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
                   Advanced / rare
                 </span>
               ) : null}
+              {(() => {
+                const fit = cryptoFitFor(pattern.id);
+                if (!fit) return null;
+                return (
+                  <span
+                    className={`text-[10px] font-mono uppercase tracking-wide rounded border px-1.5 py-0.5 ${
+                      fit === "works"
+                        ? "border-emerald-500/60 text-emerald-600"
+                        : fit === "adapted"
+                          ? "border-amber-500/60 text-amber-600"
+                          : "border-rose-500/60 text-rose-600"
+                    }`}
+                    title={CRYPTO_FIT_HINT[fit]}
+                    data-testid="pattern-crypto-fit"
+                  >
+                    {CRYPTO_FIT_LABEL[fit]}
+                  </span>
+                );
+              })()}
             </div>
+            {pattern.takeaway ? (
+              <p className="rounded border border-primary/40 bg-primary/5 px-3 py-2 text-[13px] font-medium" data-testid="pattern-takeaway">
+                {pattern.takeaway}
+              </p>
+            ) : null}
             {ill.bars.length ? (
               <div className="rounded-lg bg-background-dark border border-line overflow-hidden" data-testid="pattern-illustration">
                 <p className="text-[10px] text-muted px-2 pt-1">

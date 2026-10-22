@@ -66,6 +66,10 @@ export default function PracticeJapaneseCandles() {
           <Link to="/practice/heikin-ashi" className="text-primary underline">
             Heikin-Ashi lab
           </Link>
+          , and which patterns suit 24/7 markets in{" "}
+          <Link to="/practice/crypto-candles" className="text-primary underline">
+            Candlesticks for crypto
+          </Link>
           .
         </p>
       </section>

@@ -171,6 +171,7 @@ export default function Training() {
                   g.id === "news-biases" ||
                   g.id === "algo-trading" ||
                   g.id === "charting-apps" ||
+                  g.id === "crypto-candles" ||
                   g.id === "equity-patterns" ||
                   g.id === "equity-literacy" ||
                   g.id === "financial-literacy" ||
