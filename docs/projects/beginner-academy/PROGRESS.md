@@ -3,8 +3,8 @@
 Append-only. The loop writes one entry per story attempt outcome (PASS, FIX round, PENDING SIGN-OFF, or STOP). Newest at the bottom. Times are America/Los_Angeles.
 
 **Current pointer**
-- `current_story`: BA10.M1.S1
-- `status`: in progress — BA0–BA8.M3, BA9 and BA10.M2 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4 PENDING WENG SIGN-OFF
+- `current_story`: BA10.M4.S1
+- `status`: in progress — BA0–BA8.M3, BA9 and BA10.M1–M3 done; BA1.M4, BA3.M4, BA5.M4, BA7.M5, BA8.M4 PENDING WENG SIGN-OFF
 - `consecutive_failed_attempts`: 0
 - `commit_mode`: local (Weng 2026-10-21: "Then make commits" — one local commit per coherent chunk with verify green; never push)
 - `checkpoint_mode`: continue
@@ -163,4 +163,11 @@ Append-only. The loop writes one entry per story attempt outcome (PASS, FIX roun
 - Milestone-specific: picks depend only on the local date key and stored state (hash32, no Math.random); review questions come from mastered units, least recently reviewed (then earliest mastered) first; 30 simulated days with 15 questions never repeat within 7 days; a 3-question pool still returns a question; an answered day keeps its question and ignores a second answer; answering calls `awardDaily` (5 points once per day) and marks the streak day active. Rendering the card writes nothing.
 - Screenshots (checkpoints/): ba9-home-today.png, ba9-today-card.png, ba9-today-answered.png, ba9-today-fresh-mobile.png.
 - Next: BA10.M1.S1 (hub route test: every academy href resolves).
+
+### 2026-10-22 00:45 PT · BA10.M1 + BA10.M3 · PASS (one local commit)
+- Changed: src/lib/academy/academyRoutes.render.test.tsx (new: renders the hub, all 43 unit pages, all test-out pages, paper, the challenge list and all 10 challenge pages, the options ladder and the Today card, and checks every href is an App route and that unit / level / challenge / glossary params name real items); src/lib/academy/quiz/groups.ts and quiz/banks.ts (new: orders-and-fills 22 · paper-pnl 20 · options-ladder 21 = 63 questions); src/lib/quizData.ts (+5 lines: import, `AcademyQuizGroupId` in the union, `...ACADEMY_QUIZ_GROUPS` after the macro groups, `isAcademyQuizGroup` short-circuit in both lookup functions); academyQuiz.test.ts (new).
+- Verify: lint 0 · test:coaching 24/24 · test:lib 164/164 (content graph picks up the three new groups) · test:financials 333/333 · test:macro 72/72 · test:academy 143/143 · check:build ok · dist/ untouched.
+- Milestone-specific: every fill answer is produced by running the order through `placeOrder` + `stepBar`; P&L answers by `applyFill` / `unrealizedPnl` / `realizedPnl` / `equity` / `maxDrawdown`; options answers by `summarize` / `payoffPerContract`. The test recomputes all 50 numeric answers with plain arithmetic. Ids unique across every Learn bank, unit quiz and options check; letters A 17 · B 16 · C 16 · D 14; glossary chips resolve; no banned or Greeks wording.
+- Decision: no AppChrome nav item. The header nav is a fixed six-item set (Home, Learn, Charts, Cases, Coach, Playbooks); the Academy is reached from the Home placement and Today cards, the Training card (BA10.M4) and unit chips, per the BA10.M1 "else a Training card" rule.
+- Next: BA10.M4.S1 (coach session first-paper-trade, Training card, Home tip).
 

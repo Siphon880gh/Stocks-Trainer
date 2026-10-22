@@ -248,7 +248,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 
 ## BA10 — Integration, glossary, Learn groups, coach, docs
 
-### [ ] BA10.M1 — Academy hub route
+### [x] BA10.M1 — Academy hub route
 - **Build:** `/academy` (`pages/academy/AcademyHub.tsx`): level map, continue button (`nextUnit`), placement card, rewards panel, links to `/paper` and `/paper/challenges`; `/academy/:unitId` unit route. Additive edits: `App.tsx` routes, `AppChrome` nav item (if the nav pattern allows; else a Training card — check convention first).
 - **Verify:** BASE + route test (BA0.M2 route constant updated; every academy href resolves).
 
@@ -257,7 +257,7 @@ Fill rules (test-locked, documented in `paper/README` doc comment):
 - **Accept:** no id collides with existing terms; duplicates of sibling terms are refs, not copies.
 - **Verify:** BASE + `terms.test.ts` (uniqueness across `LITERACY_TERMS`, every academy card glossary chip resolves).
 
-### [ ] BA10.M3 — Learn quiz groups (≥ 60 new questions total)
+### [x] BA10.M3 — Learn quiz groups (≥ 60 new questions total)
 - **Build:** groups `orders-and-fills` (`BA-OF-`), `paper-pnl` (`BA-PL-`), `options-ladder` (`BA-OL-`) spread into `QUIZ_GROUPS` after the macro groups (type-only import pattern, `isAcademyQuizGroup` short-circuit). Numeric answers computed by the engine / payoff math.
 - **Verify:** BASE + `academyQuiz.test.ts` (recompute numeric answers, ids unique across all banks, letter balance).
 

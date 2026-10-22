@@ -65,9 +65,9 @@ Same shape as the root `IMPLEMENTATION_STORIES.md` and the financials / macro pr
 | 48 | BA8.M4.S1 🔍 Options accuracy review package | BA8.M4 | Strategy table logged PENDING | pending sign-off |
 | 49 | BA9.M1.S1 Daily picker | BA9.M1 | Same date → same picks; 7-day no-repeat | done |
 | 50 | BA9.M2.S1 TodayCard on Home + Academy | BA9.M2 | Daily question counts toward streak | done |
-| 51 | BA10.M1.S1 `/academy` hub + unit route + nav | BA10.M1 | Every academy href resolves | todo |
+| 51 | BA10.M1.S1 `/academy` hub + unit route + nav | BA10.M1 | Every academy href resolves | done |
 | 52 | BA10.M2.S1 ≥ 25 glossary terms | BA10.M2 | No collisions; sibling terms linked not copied | done |
-| 53 | BA10.M3.S1 Learn groups orders-and-fills / paper-pnl / options-ladder | BA10.M3 | ≥ 60 new questions overall; numeric recompute | todo |
+| 53 | BA10.M3.S1 Learn groups orders-and-fills / paper-pnl / options-ladder | BA10.M3 | ≥ 60 new questions overall; numeric recompute | done |
 | 54 | BA10.M4.S1 Coach `first-paper-trade` + Training card + Home tip | BA10.M4 | Coaching validator passes | todo |
 | 55 | BA10.M5.S1 Docs + LOOPS README row + floors audit | BA10.M5 | floors.test.ts green | todo |
 

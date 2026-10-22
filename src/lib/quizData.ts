@@ -12,6 +12,7 @@ import { FINANCIALS_QUESTION_BANKS, FINANCIALS_QUIZ_GROUPS, isFinancialsQuizGrou
 import type { FinancialsExhibit } from "./financials/quizExhibit";
 import { MACRO_QUESTION_BANKS, MACRO_QUIZ_GROUPS, isMacroQuizGroup, type MacroQuizGroupId } from "./macro/quiz/banks";
 import type { MacroExhibit } from "./macro/quiz/exhibit";
+import { ACADEMY_QUESTION_BANKS, ACADEMY_QUIZ_GROUPS, isAcademyQuizGroup, type AcademyQuizGroupId } from "./academy/quiz/banks";
 
 export { PRICE_ACTION_QUESTIONS, SUPPLY_DEMAND_QUESTIONS, BUY_SELL_QUESTIONS };
 
@@ -5376,7 +5377,8 @@ export type QuizGroupId =
   | "crypto-literacy"
   | "options-literacy"
   | FinancialsQuizGroupId
-  | MacroQuizGroupId;
+  | MacroQuizGroupId
+  | AcademyQuizGroupId;
 
 export interface QuizGroup {
   id: QuizGroupId;
@@ -5418,6 +5420,7 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   },
   ...FINANCIALS_QUIZ_GROUPS,
   ...MACRO_QUIZ_GROUPS,
+  ...ACADEMY_QUIZ_GROUPS,
   { id: "indicators", name: "Indicators", description: "Identify SMA, EMA, RSI, MACD, Bollinger Bands", icon: "show_chart" },
   {
     id: "candle-anatomy",
@@ -5591,6 +5594,7 @@ function patternKeysForGroup(groupId: QuizGroupId): string[] {
 function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isFinancialsQuizGroup(groupId)) return FINANCIALS_QUESTION_BANKS[groupId];
   if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
+  if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
@@ -5614,6 +5618,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
 export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isFinancialsQuizGroup(groupId)) return FINANCIALS_QUESTION_BANKS[groupId];
   if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
+  if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
