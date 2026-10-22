@@ -205,3 +205,14 @@ Screenshots (box only): `/workspace/checkpoints/qa/pattern-themes{,-modal}-{390,
 | Learn `essential-candles` (e2e) | Group listed. |
 
 Screenshots (box only): `/workspace/checkpoints/qa/essential-candles-{390,1280}.png`.
+
+## 2026-10-22 Which Way? (#19)
+
+| Flow | Result |
+|---|---|
+| `/practice/which-way`, 390 and 1280 (e2e) | Deck count matches the registry; prior-trend label shown; 10 answers by click and keyboard all get direction + why + confirmation; 10/10 and Answer streak 10; practice marked done; a wrong pick resets the streak; reload resumes at 11; chart deck starts at 1; no overflow. |
+| `/archive?open=hanging-man` (e2e) | Modal shows potential direction Down. |
+| Learn `which-way` (e2e) | Group listed. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/which-way{,-charts}-{390,1280}.png`.
+
