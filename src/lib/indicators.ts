@@ -67,8 +67,14 @@ export function macd(
   const macdLine: (number | null)[] = closes.map((_, i) =>
     emaFast[i] != null && emaSlow[i] != null ? emaFast[i]! - emaSlow[i]! : null
   );
-  const macdValues = macdLine.map((v) => v ?? 0);
-  const signalLine = ema(macdValues, signalPeriod).map((v, i) => (macdLine[i] != null ? v : null));
+  // The signal is an EMA of the MACD values themselves, seeded from the first MACD value
+  // (zero-filling the warm-up bars would drag the early signal toward 0).
+  const start = macdLine.findIndex((v) => v != null);
+  const signalLine: (number | null)[] = closes.map(() => null);
+  if (start >= 0) {
+    const sig = ema(macdLine.slice(start).map((v) => v!), signalPeriod);
+    sig.forEach((v, j) => (signalLine[start + j] = v));
+  }
   const histogram: (number | null)[] = macdLine.map((v, i) =>
     v != null && signalLine[i] != null ? v - signalLine[i]! : null
   );
