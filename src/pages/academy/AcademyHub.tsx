@@ -72,7 +72,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
             </span>
             Paper trading
           </p>
-          <p className="text-[13px] text-muted">Place market, limit, stop, stop-limit and trailing-stop orders with virtual money on SAMPLE tapes, one bar at a time.</p>
+          <p className="text-[13px] text-muted">Place market, limit, stop, stop-limit and trailing-stop orders with virtual money, one bar at a time.</p>
         </Link>
         <Link to="/paper/challenges" className="panel p-4 block hover:border-sim space-y-1" data-testid="hub-challenges">
           <p className="font-semibold">

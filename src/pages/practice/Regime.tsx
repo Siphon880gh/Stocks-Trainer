@@ -33,7 +33,8 @@ export default function PracticeRegime() {
   return (
     <PracticeShell
       title="Trend vs range"
-      blurb="Classify the SAMPLE window, then pick a tool that fits that regime. Teaching choice — not the only overlay."
+      blurb="Classify the window, then pick a tool that fits that regime. Teaching choice — not the only overlay."
+      sampleNote
     >
       <section className="panel p-4 space-y-3">
         <p className="text-[12px] text-muted">{window.name}</p>

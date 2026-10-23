@@ -257,7 +257,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Falling Wedge",
     openingBrush: "bearish",
     hint: "candles + two down lines",
-    tip: "Draw the candles, then two downward lines that squeeze together. SAMPLE: wait for a later break — the wedge is not a live fill.",
+    tip: "Draw the candles, then two downward lines that squeeze together. Wait for a later break — the wedge is not a live fill.",
     guides: [
       ...candleGuide({ cx: 0.14, halfW: 0.05, high: 0.1, bodyTop: 0.16, bodyBottom: 0.42, low: 0.5, color: "bearish" }),
       ...candleGuide({ cx: 0.32, halfW: 0.05, high: 0.2, bodyTop: 0.26, bodyBottom: 0.52, low: 0.6, color: "bearish" }),
@@ -301,7 +301,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Rising Wedge",
     openingBrush: "bullish",
     hint: "candles + two up lines",
-    tip: "Higher highs and higher lows that squeeze. SAMPLE: buying is tiring; a break of the lower line needs later bars.",
+    tip: "Higher highs and higher lows that squeeze. Buying is tiring; a break of the lower line needs later bars.",
     guides: [
       ...candleGuide({ cx: 0.14, halfW: 0.05, high: 0.52, bodyTop: 0.56, bodyBottom: 0.78, low: 0.86, color: "bullish" }),
       ...candleGuide({ cx: 0.32, halfW: 0.05, high: 0.42, bodyTop: 0.46, bodyBottom: 0.7, low: 0.78, color: "bullish" }),
@@ -323,7 +323,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Bull Flag",
     openingBrush: "bullish",
     hint: "pole then pause",
-    tip: "Sketch a sharp rise, then a tight downward or sideways pause. SAMPLE: the pause can be a rest if the prior thrust was clean.",
+    tip: "Sketch a sharp rise, then a tight downward or sideways pause. The pause can be a rest if the prior thrust was clean.",
     guides: [
       ...candleGuide({ cx: 0.16, halfW: 0.05, high: 0.58, bodyTop: 0.62, bodyBottom: 0.86, low: 0.9, color: "bullish" }),
       ...candleGuide({ cx: 0.32, halfW: 0.055, high: 0.22, bodyTop: 0.26, bodyBottom: 0.6, low: 0.66, color: "bullish" }),
@@ -345,7 +345,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Double Top",
     openingBrush: "bullish",
     hint: "two highs + neckline",
-    tip: "Two similar highs with a dip between. SAMPLE: the second high failed; a break of the dip is the usual confirmation.",
+    tip: "Two similar highs with a dip between. The second high failed; a break of the dip is the usual confirmation.",
     guides: [
       ...candleGuide({ cx: 0.12, halfW: 0.04, high: 0.5, bodyTop: 0.54, bodyBottom: 0.74, low: 0.8, color: "bullish" }),
       ...candleGuide({ cx: 0.28, halfW: 0.05, high: 0.12, bodyTop: 0.16, bodyBottom: 0.4, low: 0.48, color: "bullish" }),
@@ -363,7 +363,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Double Bottom",
     openingBrush: "bearish",
     hint: "two lows + neckline",
-    tip: "Two similar lows with a bounce between. SAMPLE: the second low held; a break of the bounce high is the usual confirmation.",
+    tip: "Two similar lows with a bounce between. The second low held; a break of the bounce high is the usual confirmation.",
     guides: [
       ...candleGuide({ cx: 0.12, halfW: 0.04, high: 0.22, bodyTop: 0.26, bodyBottom: 0.46, low: 0.52, color: "bearish" }),
       ...candleGuide({ cx: 0.28, halfW: 0.05, high: 0.5, bodyTop: 0.56, bodyBottom: 0.8, low: 0.88, color: "bearish" }),
@@ -381,7 +381,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Triangle",
     openingBrush: "bearish",
     hint: "squeeze + two lines",
-    tip: "Highs and lows squeeze toward a point. SAMPLE: direction is not the triangle — wait for which side breaks.",
+    tip: "Highs and lows squeeze toward a point. Direction is not the triangle — wait for which side breaks.",
     guides: [
       ...candleGuide({ cx: 0.14, halfW: 0.05, high: 0.12, bodyTop: 0.16, bodyBottom: 0.4, low: 0.86, color: "bearish" }),
       ...candleGuide({ cx: 0.32, halfW: 0.045, high: 0.22, bodyTop: 0.26, bodyBottom: 0.48, low: 0.74, color: "bullish" }),
@@ -403,7 +403,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Head and Shoulders",
     openingBrush: "bullish",
     hint: "three peaks + neckline",
-    tip: "Left shoulder, higher head, right shoulder. SAMPLE: a break of the neckline is the usual confirmation — not a live fill.",
+    tip: "Left shoulder, higher head, right shoulder. A break of the neckline is the usual confirmation — not a live fill.",
     guides: [
       ...candleGuide({ cx: 0.12, halfW: 0.04, high: 0.48, bodyTop: 0.52, bodyBottom: 0.7, low: 0.76, color: "bullish" }),
       ...candleGuide({ cx: 0.28, halfW: 0.045, high: 0.28, bodyTop: 0.32, bodyBottom: 0.52, low: 0.6, color: "bullish" }),
@@ -420,7 +420,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     id: "hanging-man",
     name: "Hanging Man",
     openingBrush: "bearish",
-    tip: "Same long lower wick as a hammer, but after a rally. SAMPLE: sellers may be showing up — wait for the next print.",
+    tip: "Same long lower wick as a hammer, but after a rally. Sellers may be showing up — wait for the next print.",
     guides: candleGuide({
       cx: 0.5,
       halfW: 0.1,
@@ -436,7 +436,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Evening Star",
     openingBrush: "bullish",
     hint: "green · small · red",
-    tip: "Three candles: large green, small middle, then large red. SAMPLE teaching — confirm with later bars.",
+    tip: "Three candles: large green, small middle, then large red. Confirm with later bars.",
     guides: [
       ...candleGuide({ cx: 0.22, halfW: 0.08, high: 0.18, bodyTop: 0.22, bodyBottom: 0.72, low: 0.78, color: "bullish" }),
       ...candleGuide({ cx: 0.5, halfW: 0.05, high: 0.14, bodyTop: 0.2, bodyBottom: 0.32, low: 0.4, color: "bullish" }),
@@ -470,7 +470,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Three White Soldiers",
     openingBrush: "bullish",
     hint: "three rising green",
-    tip: "Three rising green bodies in a row after a decline or pause — buyers in control on this SAMPLE read.",
+    tip: "Three rising green bodies in a row after a decline or pause — buyers in control on this read.",
     guides: [
       ...candleGuide({ cx: 0.22, halfW: 0.07, high: 0.48, bodyTop: 0.52, bodyBottom: 0.78, low: 0.84, color: "bullish" }),
       ...candleGuide({ cx: 0.5, halfW: 0.07, high: 0.32, bodyTop: 0.36, bodyBottom: 0.62, low: 0.68, color: "bullish" }),
@@ -482,7 +482,7 @@ export const DRAW_TEMPLATES: DrawTemplate[] = [
     name: "Three Black Crows",
     openingBrush: "bearish",
     hint: "three falling red",
-    tip: "Three falling red bodies in a row after a rally or pause — sellers in control on this SAMPLE read.",
+    tip: "Three falling red bodies in a row after a rally or pause — sellers in control on this read.",
     guides: [
       ...candleGuide({ cx: 0.22, halfW: 0.07, high: 0.16, bodyTop: 0.2, bodyBottom: 0.46, low: 0.52, color: "bearish" }),
       ...candleGuide({ cx: 0.5, halfW: 0.07, high: 0.32, bodyTop: 0.36, bodyBottom: 0.62, low: 0.68, color: "bearish" }),

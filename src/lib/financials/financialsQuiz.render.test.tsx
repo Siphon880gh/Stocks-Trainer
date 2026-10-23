@@ -18,7 +18,7 @@ test("every FE6 question's exhibit renders", () => {
   for (const q of Object.values(FINANCIALS_QUESTION_BANKS).flat()) {
     const out = html({ exhibit: q.financialsExhibit! });
     assert.ok(out.includes(`data-financials-exhibit="${q.financialsExhibit!.kind}"`), q.id);
-    assert.ok(out.includes("SAMPLE / STYLIZED"), `${q.id} disclaimer`);
+    assert.ok(out.includes("does not reflect true market prices"), `${q.id} disclaimer`);
   }
 });
 

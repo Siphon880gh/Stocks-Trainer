@@ -62,7 +62,7 @@ export default function FinancialsQuizExhibit({ exhibit, revealed = false }: Pro
         return (
           <div data-exhibit-bars={data.length}>
             <p className="text-[10px] text-muted px-1 pb-1">
-              SAMPLE chart · {full ? "around the report (with volume)" : "the 30 sessions before the report"}
+              {full ? "Around the report (with volume)" : "The 30 sessions before the report"}
               {full && !revealed ? " · teaching marks appear after you answer" : ""}
             </p>
             <CandlestickChart

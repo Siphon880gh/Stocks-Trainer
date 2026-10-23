@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import OptionsLadderView from "../../components/academy/options/OptionsLadder";
+import SampleDataNote from "../../components/SampleDataNote";
 import { getOscSource } from "../../lib/oscillatorSources";
 
 /** /academy/options — BA8: options knowledge ladder (education gating only). */
@@ -15,8 +16,9 @@ export default function OptionsLadderPage() {
       <h1 className="text-2xl font-semibold tracking-tight">Options knowledge ladder</h1>
       <p className="text-[13px] text-muted max-w-3xl">
         Four levels, in the order brokers usually approve them: covered strategies, buying options, spreads, then naked options as a concept. Every chart is profit or
-        loss per share at expiration, from simple arithmetic on SAMPLE prices. Pass each level's check to open the next.
+        loss per share at expiration, from simple arithmetic. Pass each level's check to open the next.
       </p>
+      <SampleDataNote />
       <OptionsLadderView />
       <section className="panel p-4 space-y-2 text-[13px] max-w-3xl" data-testid="short-dated-risk">
         <h2 className="text-[15px] font-semibold text-ink">Short-dated options: a separate risk</h2>

@@ -30,6 +30,8 @@ import {
 import { assetClassFromCoachTags } from "../lib/marketNavigator";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText, { WithGlossary } from "../components/JargonText";
+import SampleDataNote from "../components/SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 
 const OUTCOME_UI: Record<
   CoachingOutcome,
@@ -219,9 +221,9 @@ export default function CoachSession() {
           </p>
           <div className="flex items-center justify-end gap-2 min-w-0">
             <h1 className="text-sm md:text-base font-semibold truncate">
-              {session.meta.title}
+              {withoutSampleWord(session.meta.title)}
             </h1>
-            <YouTubeSearchLink title={session.meta.title} />
+            <YouTubeSearchLink title={withoutSampleWord(session.meta.title)} />
           </div>
         </div>
       </div>
@@ -273,8 +275,9 @@ export default function CoachSession() {
             id={messageId}
             className="text-sm md:text-base whitespace-pre-wrap leading-relaxed"
           >
-            <JargonText text={node.message} />
+            <JargonText text={withoutSampleWord(node.message)} />
           </p>
+          <SampleDataNote className="text-[12px] text-muted" />
         </div>
 
         {showChoices ? (
@@ -285,13 +288,13 @@ export default function CoachSession() {
             <ul className="space-y-2">
               {node.choices.map((choice) => (
                 <li key={`${choice.label}->${choice.next}`}>
-                  <WithGlossary texts={[choice.label]}>
+                  <WithGlossary texts={[withoutSampleWord(choice.label)]}>
                   <button
                     type="button"
                     onClick={() => onChoose(choice)}
                     className="w-full text-left border border-line bg-canvas hover:bg-primary/10 hover:border-primary px-4 py-3 font-mono text-sm normal-case transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                   >
-                    <JargonText text={choice.label} plain />
+                    <JargonText text={withoutSampleWord(choice.label)} plain />
                   </button>
                   </WithGlossary>
                 </li>

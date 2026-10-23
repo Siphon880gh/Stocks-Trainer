@@ -30,7 +30,8 @@ export default function PracticePlan() {
   return (
     <PracticeShell
       title="Mark the plan"
-      blurb="Tap entry, then stop, then target on this SAMPLE tape. Grade is structure and R:R — not whether price would have worked."
+      blurb="Tap entry, then stop, then target on this tape. Grade is structure and R:R — not whether price would have worked."
+      sampleNote
     >
       <section className="panel p-4 space-y-3">
         <label className="text-[12px] text-muted">

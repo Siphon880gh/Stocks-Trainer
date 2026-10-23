@@ -16,7 +16,8 @@ export default function PracticeLevels() {
   return (
     <PracticeShell
       title="Support and resistance"
-      blurb="Tap the SAMPLE zone — matched highs/lows or the body a later candle closed into. Areas, not magic ticks."
+      blurb="Tap the zone — matched highs/lows or the body a later candle closed into. Areas, not magic ticks."
+      sampleNote
     >
       <section className="panel p-4 space-y-3">
         <label className="text-[12px] text-muted">

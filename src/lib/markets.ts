@@ -237,7 +237,7 @@ const LEGACY_CRYPTO_PACKS: SamplePack[] = [
     id: "crypto-alt",
     symbol: "SOL",
     assetClass: "crypto",
-    displayName: "Alt Chop → Break (SAMPLE)",
+    displayName: "Alt Chop → Break",
     ohlc: ALT_CRYPTO_OHLC,
     educationalNotes:
       "SAMPLE alt-style crypto: tight chop then breakout. Distinct from BTC/ETH. Browse only — SAMPLE/STYLIZED, not LIVE.",
@@ -246,7 +246,7 @@ const LEGACY_CRYPTO_PACKS: SamplePack[] = [
     id: "crypto-stable",
     symbol: "USDC",
     assetClass: "crypto",
-    displayName: "Stable Range (SAMPLE)",
+    displayName: "Stable Range",
     ohlc: STABLE_CRYPTO_OHLC,
     educationalNotes:
       "SAMPLE educational stable-range tape: tiny wicks around a peg. Browse/drill only — not Beginner Equities Path, not LIVE.",
@@ -255,7 +255,7 @@ const LEGACY_CRYPTO_PACKS: SamplePack[] = [
     id: "crypto-dump",
     symbol: "DUMP",
     assetClass: "crypto",
-    displayName: "Dump, No Reclaim (SAMPLE)",
+    displayName: "Dump, No Reclaim",
     ohlc: DUMP_CRYPTO_OHLC,
     educationalNotes:
       "SAMPLE crypto: sharp dump that does not reclaim. Distinct from ETH dump-then-reclaim. STYLIZED — not LIVE.",
@@ -264,7 +264,7 @@ const LEGACY_CRYPTO_PACKS: SamplePack[] = [
     id: "crypto-chop-fail",
     symbol: "CHOP",
     assetClass: "crypto",
-    displayName: "Chop, Failed Break (SAMPLE)",
+    displayName: "Chop, Failed Break",
     ohlc: CHOP_FAIL_CRYPTO_OHLC,
     educationalNotes:
       "SAMPLE crypto: range, upside probe, then fail back through the range. Distinct from alt chop-then-break and dump-no-reclaim. Browse/drill only — not Beginner Equities Path, not LIVE.",
@@ -273,7 +273,7 @@ const LEGACY_CRYPTO_PACKS: SamplePack[] = [
     id: "crypto-round",
     symbol: "ROUND",
     assetClass: "crypto",
-    displayName: "Round Top After a Run (SAMPLE)",
+    displayName: "Round Top After a Run",
     ohlc: ROUND_CRYPTO_OHLC,
     educationalNotes:
       "SAMPLE crypto: impulse then lower highs — a round-top, not a BTC grind, not a SOL breakout, and not a dump-from-the-open. Browse/drill only — not Beginner Equities Path, not LIVE.",

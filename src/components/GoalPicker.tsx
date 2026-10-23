@@ -7,6 +7,8 @@ import {
   type LearningPathTemplate,
 } from "../lib/learningPaths";
 import { confirmPathSelection } from "../lib/progressStore";
+import SampleDataNote from "./SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 
 interface GoalPickerProps {
   onConfirmed: () => void;
@@ -44,7 +46,8 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
       </div>
 
       <div className="border border-line rounded-lg p-4 space-y-2 bg-canvas">
-        <p className="text-sm">{selected.description}</p>
+        <p className="text-sm">{withoutSampleWord(selected.description)}</p>
+        <SampleDataNote />
         {selected.id === BEGINNER_EQUITIES_PATH.id ? (
           <ul className="text-[12px] text-muted space-y-1">
             <li>Who: first-time stock learners. Traditional retail equities stay here.</li>
@@ -61,7 +64,7 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
         ) : null}
         {selected.id === MARKET_EXPLORER_PATH.id ? (
           <ul className="text-[12px] text-muted space-y-1">
-            <li>Who: SAMPLE multi-market practice. This does not replace stock literacy.</li>
+            <li>Who: multi-market practice. This does not replace stock literacy.</li>
             <li>First click after confirm: Training → Indicators, then Cases → futures.</li>
             <li>Done: futures, forex, and crypto packs complete (options context is extra, no chain).</li>
           </ul>
@@ -70,7 +73,7 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
         <ol className="space-y-1 text-sm">
           {selected.milestones.map((m, i) => (
             <li key={m.id}>
-              {i + 1}. {m.title}
+              {i + 1}. {withoutSampleWord(m.title)}
             </li>
           ))}
         </ol>
@@ -81,7 +84,7 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
         ) : null}
         {selected.id === MARKET_EXPLORER_PATH.id ? (
           <p className="text-[12px] text-muted">
-            SAMPLE multi-market practice only. Traditional stocks stay on Beginner
+            Multi-market practice only. Traditional stocks stay on Beginner
             Equities / Decision Maker — Explorer does not replace stock literacy.
           </p>
         ) : null}

@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { Link } from "react-router-dom";
 import JargonText from "./JargonText";
+import SampleDataNote from "./SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 import {
   activePathMilestoneId,
   coachTipForActive,
@@ -107,7 +109,7 @@ export default function PathMapPanel({
                   isActive ? "text-ink" : shownStatus === "locked" ? "text-muted" : "text-ink"
                 }`}
               >
-                {m.title}
+                {withoutSampleWord(m.title)}
               </span>
               <span className="text-[10px] text-muted">
                 {shownStatus}
@@ -158,31 +160,32 @@ export default function PathMapPanel({
       <div className="px-4 pb-4 space-y-2 text-sm border-t border-line pt-3">
         {pathDone ? (
           <p>
-            Credential: {template?.title ?? "Path"} complete (SAMPLE progress, not attested).
+            Credential: {template?.title ?? "Path"} complete. Progress here is not an attested certificate.
           </p>
         ) : active ? (
           <>
             <p className="font-medium">
-              Now · {active.title}
+              Now · {withoutSampleWord(active.title)}
             </p>
             <p className="text-muted">
-              <JargonText text={active.summary} />
+              <JargonText text={withoutSampleWord(active.summary)} />
             </p>
             <p className="text-muted">
-              Coach: <JargonText text={coachTip} />
+              Coach: <JargonText text={withoutSampleWord(coachTip)} />
             </p>
+            <SampleDataNote />
             {active.trainingGroup ? (
               <button
                 type="button"
                 className="text-primary underline"
                 onClick={() => onSelectTrainingGroup(active.trainingGroup!)}
               >
-                Select {active.title} group
+                Select {withoutSampleWord(active.title)} group
               </button>
             ) : null}
             {active.casesPack && !isGradedCasePackLocked(active.id) ? (
               <Link to={`/cases?pack=${active.casesPack}`} className="text-primary underline">
-                Open {active.title}
+                Open {withoutSampleWord(active.title)}
               </Link>
             ) : null}
             {active.isGradedCasePack && isGradedCasePackLocked(active.id) ? (

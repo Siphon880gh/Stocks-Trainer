@@ -17,7 +17,8 @@ export default function PracticeLookalike() {
   return (
     <PracticeShell
       title="Lookalikes"
-      blurb="Two SAMPLE tapes. Pick which one matches the prompt. Context and cover-vs-nest matter more than a single wick."
+      blurb="Two tapes. Pick which one matches the prompt. Context and cover-vs-nest matter more than a single wick."
+      sampleNote
     >
       <section className="panel p-4 space-y-3">
         <label className="text-[12px] text-muted">

@@ -26,7 +26,8 @@ export default function PracticeLabel() {
   return (
     <PracticeShell
       title="Label"
-      blurb="Tap the SAMPLE candle part named below. Color is close vs open — not volume."
+      blurb="Tap the candle part named below. Color is close vs open — not volume."
+      sampleNote
     >
       <section className="panel p-4 space-y-3">
         <p className="text-sm">

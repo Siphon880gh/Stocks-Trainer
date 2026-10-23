@@ -9,7 +9,7 @@ export const chaseVsFadeSession: CoachingSession = {
     slug: "chase-vs-fade",
     title: "Chase vs fade a company headline",
     summary:
-      "Walk a SAMPLE equities headline: size the move, pick a stance, and recover from common chase mistakes.",
+      "Walk an equity headline: size the move, pick a stance, and recover from common chase mistakes.",
     topic: "Company news decisions",
     tags: ["equities", "company-news", "chase-vs-fade", "beginner"],
   },

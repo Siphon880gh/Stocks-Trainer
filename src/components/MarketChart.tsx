@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import JargonText from "./JargonText";
+import SampleDataNote from "./SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 import { createPortal } from "react-dom";
 import {
   ComposedChart,
@@ -410,11 +412,12 @@ function ExplanationPopover({
         </button>
       </div>
       <p className="font-semibold mb-0.5 px-0.5">
-        <JargonText text={note.headline} />
+        <JargonText text={withoutSampleWord(note.headline)} />
       </p>
       <p className="text-[#787b86] px-0.5">
-        <JargonText text={note.detail} />
+        <JargonText text={withoutSampleWord(note.detail)} />
       </p>
+      <SampleDataNote className="mt-1.5 px-0.5 text-[11px] text-[#9aa0ac]" />
     </div>,
     document.body,
   );
@@ -933,7 +936,7 @@ export default function MarketChart({
                     title={
                       f.enabled
                         ? f.label
-                        : `This SAMPLE series is ${nativeHint} bars — ${f.label} needs a finer feed`
+                        : `This series is ${nativeHint} bars — ${f.label} needs a finer feed`
                     }
                     className={cn(
                       scaleBtn,

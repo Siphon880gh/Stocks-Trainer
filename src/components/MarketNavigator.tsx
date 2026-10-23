@@ -70,7 +70,7 @@ export default function MarketNavigator({
         </h2>
         <div className="flex flex-wrap items-center justify-end gap-x-3 gap-y-1.5">
           <p className="text-[12px] text-muted">
-            Charts · literacy · decide · step (SAMPLE)
+            Charts · literacy · decide · step
           </p>
           {selected ? (
             <YouTubeSearchLink
@@ -84,7 +84,7 @@ export default function MarketNavigator({
       <p className="text-[13px] text-muted leading-relaxed">
         Traditional retail ={" "}
         <span className="text-ink font-medium">Equities (stocks)</span>. Other types =
-        SAMPLE browse / decide expansion — not a LIVE desk.
+        extra practice — not a live desk.
       </p>
 
       <div className="flex flex-wrap gap-2">

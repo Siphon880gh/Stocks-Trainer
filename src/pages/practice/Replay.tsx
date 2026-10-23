@@ -38,7 +38,8 @@ export default function PracticeReplay() {
   return (
     <PracticeShell
       title="Bar replay"
-      blurb="SAMPLE tape starts truncated. Wait or take a bias before the next bar. Grade is process, not whether the next close “proved” you."
+      blurb="The tape starts truncated. Wait or take a bias before the next bar. Grade is process, not whether the next close “proved” you."
+      sampleNote
     >
       <section className="panel p-4 space-y-3">
         <p className="text-[12px] text-muted">

@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import MarketChart, { type ChartHighlightMark } from "../components/MarketChart";
+import SampleDataNote from "../components/SampleDataNote";
 import HistoryModal from "../components/HistoryModal";
 import ScanPatternsModal from "../components/ScanPatternsModal";
 import IndicatorGlossary from "../components/IndicatorGlossary";
@@ -189,7 +190,7 @@ export default function Market() {
       <div className="border-b border-line bg-surface px-4 py-3 flex items-center justify-between gap-4">
         <div>
           <h1 className="text-lg font-semibold tracking-tight">Charts</h1>
-          <p className="text-[12px] text-muted">{dataProvider.label} feed</p>
+          <SampleDataNote className="text-[12px] text-muted mt-0.5" />
         </div>
         <label className="flex flex-col text-right gap-0.5">
           <span className="text-[12px] text-muted">Provider</span>
@@ -226,7 +227,7 @@ export default function Market() {
 
         {market?.pack.assetClass === "equity" && !isChartGateComplete() ? (
           <div className="border border-line bg-surface rounded-md px-3 py-2 text-[13px] text-muted flex flex-wrap items-center gap-2">
-            <span>SAMPLE equity pack · Indicators quiz still open on Beginner path.</span>
+            <span>Equity pack · Indicators quiz still open on Beginner path.</span>
             <Link
               to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
               className="underline text-primary"
@@ -239,35 +240,35 @@ export default function Market() {
         {market?.pack.assetClass === "option_context" ? (
           <div className="border border-line bg-surface rounded-md px-3 py-2 text-[13px] text-muted flex flex-wrap items-center gap-2">
             <span>
-              Options context · SAMPLE underlying tape only — not a live chain or Greeks engine.
+              Options context · underlying tape only — not a live chain or Greeks engine.
             </span>
             <Link
               to="/archive?tab=literacy&open=options-context"
               className="underline text-primary"
             >
-              Options context (SAMPLE)
+              Options context
             </Link>
           </div>
         ) : null}
 
         {market?.pack.assetClass === "crypto" ? (
           <div className="border border-line bg-surface rounded-md px-3 py-2 text-[13px] text-muted">
-            Crypto browse · SAMPLE chart drills only — does not replace the Equities (stocks)
+            Crypto browse · chart drills only — does not replace the Equities (stocks)
             Beginner path.
           </div>
         ) : null}
 
         {market?.pack.assetClass === "forex" ? (
           <div className="border border-line bg-surface rounded-md px-3 py-2 text-[13px] text-muted">
-            Forex browse · SAMPLE spot FX — traditional retail stocks track remains{" "}
+            Forex browse · spot FX practice — traditional retail stocks track remains{" "}
             <span className="text-ink">Equities</span> (Class filter).
           </div>
         ) : null}
 
         {assetFilter === "all" || assetFilter === "equity" ? (
           <p className="text-[12px] text-muted">
-            Traditional retail market type = Equities (stocks). Other classes are SAMPLE
-            expansion.
+            Traditional retail market type = Equities (stocks). Other classes are extra
+            practice.
           </p>
         ) : null}
 
@@ -300,7 +301,7 @@ export default function Market() {
             >
               {filteredMarkets.map((m) => (
                 <option key={m.id} value={m.id}>
-                  {m.pack.assetClass === "equity" ? `${m.pair} · SAMPLE` : m.pair}
+                  {m.pair}
                 </option>
               ))}
             </select>
@@ -309,8 +310,7 @@ export default function Market() {
               selectedId={marketInFilter?.id}
               items={filteredMarkets.map((m) => ({
                 id: m.id,
-                label:
-                  m.pack.assetClass === "equity" ? `${m.pair} · SAMPLE` : m.pair,
+                label: m.pair,
                 hint: CLASS_LABELS[m.pack.assetClass],
               }))}
               onSelect={setMarketId}
@@ -356,7 +356,7 @@ export default function Market() {
               assetFilter !== "equity" &&
               !canBrowseAssetClass(assetFilter)
                 ? "Use Browse this session in the navigator above. Equities stays the default path."
-                : "No SAMPLE packs in this asset class yet. Switch to Equities (stocks — traditional retail), Futures, Options context, Forex, or Crypto — or leave Class = All."}
+                : "No packs in this asset class yet. Switch to Equities (stocks — traditional retail), Futures, Options context, Forex, or Crypto — or leave Class = All."}
             </p>
           </div>
         ) : null}
@@ -382,7 +382,7 @@ export default function Market() {
               setHighlights((prev) => prev.filter((h) => h.id !== id));
               setHelpHighlightId((cur) => (cur === id ? null : cur));
             }}
-            statusLabel={`${dataProvider.label} feed`}
+            statusLabel={providerId === "delayed" ? "Delayed feed" : undefined}
             youtubeTitle={market.name}
             frequencies={frequencies}
             frequencyMinutes={resolvedFreq}

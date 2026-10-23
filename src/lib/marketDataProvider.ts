@@ -13,7 +13,7 @@ export type MarketDataProviderId = "sample" | "delayed";
 export interface MarketDataProvider {
   id: MarketDataProviderId;
   mode: MarketDataMode;
-  /** Terminal-tone badge copy — SAMPLE or DELAYED only. */
+  /** Provider menu label. Not a live-feed claim. */
   label: string;
   getOhlc(marketId: string): OHLC[] | undefined;
   listMarketIds(): string[];
@@ -35,7 +35,7 @@ function sampleOhlc(marketId: string): OHLC[] | undefined {
 export const sampleMarketDataProvider: MarketDataProvider = {
   id: "sample",
   mode: "sample",
-  label: "SAMPLE",
+  label: "Practice",
   getOhlc: sampleOhlc,
   listMarketIds: listIds,
 };
@@ -47,7 +47,7 @@ export const sampleMarketDataProvider: MarketDataProvider = {
 export const delayedMarketDataProvider: MarketDataProvider = {
   id: "delayed",
   mode: "delayed",
-  label: "DELAYED",
+  label: "Delayed",
   getOhlc(marketId: string): OHLC[] | undefined {
     const full = sampleOhlc(marketId);
     if (!full || full.length === 0) return full;

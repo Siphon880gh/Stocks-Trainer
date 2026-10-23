@@ -12,6 +12,8 @@ import {
 } from "../lib/quizData";
 import YouTubeSearchLink from "./YouTubeSearchLink";
 import JargonText, { WithGlossary } from "./JargonText";
+import SampleDataNote from "./SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 import { PATTERN_OHLC } from "../lib/ohlcData";
 import { overlayQuizBars, quizSamplePackName } from "../lib/quizChartData";
 import { mergeAnnotations } from "../lib/chartAnnotations";
@@ -71,7 +73,9 @@ export default function QuizModal({
       : question.annotations
     : undefined;
   const optionLabel = (o: QuizOption | undefined) =>
-    o ? (question?.optionsAreCharts && o.chartKey ? `Chart ${o.label}` : o.label) : "";
+    o
+      ? withoutSampleWord(question?.optionsAreCharts && o.chartKey ? `Chart ${o.label}` : o.label)
+      : "";
   const correctOption = question?.options.find((o) => o.id === question.correctAnswer);
   const pickedOption = question?.options.find((o) => o.id === selectedOption);
 
@@ -215,7 +219,7 @@ export default function QuizModal({
             <span className="text-xs text-muted">Question {question.id}</span>
             <h3 className="text-xl font-semibold mt-2 mb-2">Question</h3>
             <p className="text-muted">
-              <JargonText text={question.prompt} />
+              <JargonText text={withoutSampleWord(question.prompt)} />
             </p>
           </div>
 
@@ -232,11 +236,17 @@ export default function QuizModal({
             <FinancialSnapshotCard snapshotId={question.snapshotId} />
           ) : question.overlayId || question.patternKey ? (
             <div className="overflow-hidden">
-              <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">
-                SAMPLE chart · educational
-                {question.overlayId && quizSamplePackName(question) ? ` · ${quizSamplePackName(question)}` : ""}
-                {question.revealAnnotations && !submitted ? " · levels and plan appear after you answer" : ""}
-              </p>
+              <SampleDataNote className="text-[11px] text-[#787b86] px-1 pb-1" />
+              {question.overlayId && quizSamplePackName(question) ? (
+                <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">
+                  {withoutSampleWord(quizSamplePackName(question) ?? "")}
+                  {question.revealAnnotations && !submitted ? " · levels and plan appear after you answer" : ""}
+                </p>
+              ) : question.revealAnnotations && !submitted ? (
+                <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">
+                  Levels and plan appear after you answer
+                </p>
+              ) : null}
               {question.overlayId ? (
                   <MarketChart
                     data={overlayQuizBars(question)}
@@ -278,7 +288,7 @@ export default function QuizModal({
                 ) : groupId === "price-action" || groupId === "supply-demand" || groupId === "buy-or-sell" ? (
                   <>Concept check: no chart needed for this one. Answer from the definitions, then read the debrief.</>
                 ) : isAcademyQuizGroup(groupId) ? (
-                  <>Beginner Academy drill on SAMPLE prices with SIMULATED money: no chart needed. Work it out, then read the debrief.</>
+                  <>Beginner Academy drill with simulated money: no chart needed. Work it out, then read the debrief.</>
                 ) : (
                   <>
                     Equities vocabulary drill — no chart required. Answer from definitions, then read the
@@ -288,7 +298,7 @@ export default function QuizModal({
               </p>
               {question.glossaryTermId && getLiteracyTerm(question.glossaryTermId) ? (
                 <p className="text-primary/70 text-xs font-mono">
-                  Related term: {getLiteracyTerm(question.glossaryTermId)!.name}
+                  Related term: {withoutSampleWord(getLiteracyTerm(question.glossaryTermId)!.name)}
                 </p>
               ) : null}
             </div>
@@ -309,7 +319,7 @@ export default function QuizModal({
           >
             {question.options.map((opt) => (
               <span key={opt.id} className="contents">
-                <WithGlossary texts={question.optionsAreCharts && opt.chartKey ? [] : [opt.label, opt.description]}>
+                <WithGlossary texts={question.optionsAreCharts && opt.chartKey ? [] : [withoutSampleWord(opt.label), withoutSampleWord(opt.description)]}>
                   <QuizOptionButton
                     option={opt}
                     selected={selectedOption === opt.id}
@@ -350,7 +360,7 @@ export default function QuizModal({
                 <div className="flex gap-2">
                   <span className="text-primary opacity-50">&gt;</span>
                   <p className="text-accent-red/90">
-                    Why not {optionLabel(pickedOption)}: <JargonText text={pickedOption.feedback} />
+                    Why not {optionLabel(pickedOption)}: <JargonText text={withoutSampleWord(pickedOption.feedback)} />
                   </p>
                 </div>
               ) : null}
@@ -359,7 +369,7 @@ export default function QuizModal({
                 <p className="text-slate-300 italic">
                   "
                   <JargonText
-                    text={question.explanation}
+                    text={withoutSampleWord(question.explanation)}
                     renderPlain={(chunk) =>
                       splitHintTerms(chunk).map((part, i) =>
                         part.overlayId ? (
@@ -512,7 +522,7 @@ function QuizOptionButton({
               selected || showCorrect ? "text-primary" : "text-primary/70"
             )}
           >
-            {option.label}
+            {withoutSampleWord(option.label)}
           </span>
           {showCorrect && (
             <span className="absolute top-2 right-2 material-symbols-outlined text-primary text-base">
@@ -536,7 +546,7 @@ function QuizOptionButton({
             Option {option.id} {selected && "(selected)"}
           </span>
           <span className={cn("text-lg font-bold", selected && "text-primary")}>
-            <JargonText text={option.label} plain />
+            <JargonText text={withoutSampleWord(option.label)} plain />
           </span>
           <p
             className={cn(
@@ -544,7 +554,7 @@ function QuizOptionButton({
               selected ? "text-primary/60" : "text-slate-400 opacity-0 group-hover:opacity-100"
             )}
           >
-            <JargonText text={option.description} plain />
+            <JargonText text={withoutSampleWord(option.description)} plain />
           </p>
           <div
             className={cn(

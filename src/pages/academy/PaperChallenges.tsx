@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import PaperSession from "../../components/academy/paper/PaperSession";
 import SimulatedBanner from "../../components/academy/SimulatedBanner";
+import SampleDataNote from "../../components/SampleDataNote";
 import { CHALLENGES, SCORE_MAX, THEME_LABELS, challengeOfTheWeek, endBar, getChallenge, leaderboard, newChallengeLog, scoreChallenge, type Challenge, type ChallengeScore, type Goal, type Rule } from "../../lib/academy/challenges";
 import { getTape } from "../../lib/academy/paper/tapes";
 import { TYPE_LABELS, money } from "../../lib/academy/paper/describe";
@@ -235,9 +236,10 @@ export default function PaperChallenges({ storage, now = new Date() }: { storage
       </p>
       <h1 className="text-2xl font-semibold tracking-tight">Paper-trading challenges</h1>
       <p className="text-[13px] text-muted max-w-3xl">
-        Short scenarios on SAMPLE tapes. Following the rules earns 60 of the 100 points, so a disciplined loss beats a lucky rule-break. Benchmarks are fictional scripted
+        Short scenarios. Following the rules earns 60 of the 100 points, so a disciplined loss beats a lucky rule-break. Benchmarks are fictional scripted
         plays.
       </p>
+      <SampleDataNote />
       <SimulatedBanner />
       <Link to={`/paper/challenges/${week.id}`} className="panel p-4 block border-sim/50 hover:border-sim" data-testid="challenge-of-the-week" data-challenge={week.id}>
         <p className="text-[12px] text-sim font-semibold uppercase">Challenge of the week</p>

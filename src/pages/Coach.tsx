@@ -13,6 +13,8 @@ import { isCoachingSessionComplete } from "../lib/progressStore";
 import type { AssetClass } from "../lib/samplePacks";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText, { GlossaryButtons } from "../components/JargonText";
+import SampleDataNote from "../components/SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 
 export default function Coach() {
   const navigate = useNavigate();
@@ -67,8 +69,9 @@ export default function Coach() {
           </h1>
           <p className="text-muted text-sm mt-2">
             Deterministic decision trees. Fail, read the correction, rewind, then finish a success
-            path. SAMPLE / educational only.
+            path.
           </p>
+          <SampleDataNote className="text-[12px] text-muted mt-2" />
           </div>
           <BrowsePopover
             title="Sessions"
@@ -127,9 +130,9 @@ export default function Coach() {
                   <div className="flex flex-wrap items-baseline justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
                       <Link to={`/coach/${meta.slug}`} className="text-lg font-semibold hover:text-primary">
-                        {meta.title}
+                        {withoutSampleWord(meta.title)}
                       </Link>
-                      <YouTubeSearchLink title={meta.title} />
+                      <YouTubeSearchLink title={withoutSampleWord(meta.title)} />
                     </div>
                     <span className="text-[12px] text-muted">
                       {meta.topic}
@@ -138,7 +141,7 @@ export default function Coach() {
                   </div>
                   <Link to={`/coach/${meta.slug}`} className="block space-y-2">
                     <p className="text-sm text-muted">
-                      <JargonText text={meta.summary} plain />
+                      <JargonText text={withoutSampleWord(meta.summary)} plain />
                     </p>
                     <div className="flex flex-wrap gap-2">
                       {meta.tags.map((tag) => (

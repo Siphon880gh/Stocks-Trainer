@@ -16,7 +16,8 @@ export default function PracticeInvalidation() {
   return (
     <PracticeShell
       title="Invalidation"
-      blurb="Tap the price that would cancel this SAMPLE idea. Grade is the zone, not a LIVE stop ticket."
+      blurb="Tap the price that would cancel this idea. Grade is the zone, not a live stop ticket."
+      sampleNote
     >
       <section className="panel p-4 space-y-3">
         <label className="text-[12px] text-muted">

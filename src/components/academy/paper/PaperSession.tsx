@@ -77,7 +77,7 @@ export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolba
       <SimulatedBanner />
       <div className="flex flex-wrap items-center gap-2">
         <p className="font-semibold text-[14px]">
-          {tape.name} <span className="text-muted font-normal">({tape.symbol}, SAMPLE)</span>
+          {tape.name} <span className="text-muted font-normal">({tape.symbol})</span>
         </p>
         <span className="text-[12px] text-muted tabular-nums" data-testid="bar-counter">
           Bar {log.bar + 1} of {end + 1}

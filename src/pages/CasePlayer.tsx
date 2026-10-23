@@ -30,6 +30,8 @@ import {
 } from "../lib/thinkingModeTips";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText from "../components/JargonText";
+import SampleDataNote from "../components/SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 import CaseMacroLink from "../components/macro/CaseMacroLink";
 import CasePrintLink from "../components/financials/CasePrintLink";
 
@@ -141,18 +143,19 @@ export default function CasePlayer() {
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 space-y-4">
         <div className="panel p-4 space-y-2">
           <div className="flex items-center gap-2">
-            <h1 className="text-xl font-semibold">{study.title}</h1>
-            <YouTubeSearchLink title={study.title} />
+            <h1 className="text-xl font-semibold">{withoutSampleWord(study.title)}</h1>
+            <YouTubeSearchLink title={withoutSampleWord(study.title)} />
           </div>
           <p className="text-sm">
-            <JargonText text={study.brief} />
+            <JargonText text={withoutSampleWord(study.brief)} />
           </p>
+          <SampleDataNote />
           <p className="text-[13px] text-muted leading-relaxed">
-            Tip: <JargonText text={coachTipForThinkingMode(study.thinkingMode)} />
+            Tip: <JargonText text={withoutSampleWord(coachTipForThinkingMode(study.thinkingMode))} />
           </p>
           {study.newsHeadline ? (
             <p className="text-sm text-primary/90">
-              Headline: <JargonText text={study.newsHeadline} />
+              Headline: <JargonText text={withoutSampleWord(study.newsHeadline)} />
             </p>
           ) : null}
           <CaseMacroLink caseId={study.id} />
@@ -245,15 +248,15 @@ export default function CasePlayer() {
             </div>
             <p className="text-slate-300">
               <span className="text-primary/50">How to think about it: </span>
-              <JargonText text={study.debrief.process} />
+              <JargonText text={withoutSampleWord(study.debrief.process)} />
             </p>
             <p className="text-slate-300">
               <span className="text-primary/50">Why the price moved: </span>
-              <JargonText text={study.debrief.whyMarketMoved} />
+              <JargonText text={withoutSampleWord(study.debrief.whyMarketMoved)} />
             </p>
             <p className="text-slate-300">
               <span className="text-primary/50">What the numbers showed: </span>
-              <JargonText text={study.debrief.evidence} />
+              <JargonText text={withoutSampleWord(study.debrief.evidence)} />
             </p>
             {grade === "partial" && study.partialOnHorizonMismatch ? (
               <p className="text-yellow-400/90 text-xs">

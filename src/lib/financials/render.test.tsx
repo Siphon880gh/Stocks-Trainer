@@ -74,7 +74,7 @@ describe("FE1.M3 StatementReader", () => {
     for (const c of COMPANIES) assert.ok(m.includes(c.ticker));
     for (const t of ["Income", "Balance sheet", "Cash flow", "Metrics &amp; KPIs", "What the numbers say"]) assert.ok(m.includes(t), t);
     assert.ok(m.includes("Q4 FY26") && !m.includes("Q4 FY25"), "latest four quarters by default");
-    assert.match(m, /SAMPLE \/ STYLIZED/);
+    assert.match(m, /does not reflect true market prices/);
     assert.ok(m.includes('href="/archive?tab=literacy&amp;open=gross-margin"'));
   });
 
@@ -129,7 +129,7 @@ describe("FE2.M3 CashForecastTable + panel", () => {
     assert.ok(m.includes("Below minimum in week 12"));
     assert.ok(m.includes("customers pay one week later"));
     assert.ok(!m.includes("use the revolver"), "no revolver toggle without a line");
-    assert.match(m, /SAMPLE \/ STYLIZED/);
+    assert.match(m, /does not reflect true market prices/);
     const h = html(<CashForecastPanel initialId="harbor-collections-slip" initialWhatIf={{ useRevolver: false }} />);
     assert.ok(h.includes("Below minimum in week 7"));
     assert.ok(h.includes("use the revolver"));
@@ -243,7 +243,7 @@ describe("FE5.M2 Read the Print game phases + no-leak", async () => {
     assert.ok(m.includes("What mattered"));
     for (const f of round.facts) assert.ok(m.includes(f.replace(/&/g, "&amp;")), f);
     assert.ok(m.includes(`Why not “${wrong.label.replace(/&/g, "&amp;")}”?`));
-    assert.match(m, /SAMPLE \/ STYLIZED/);
+    assert.match(m, /does not reflect true market prices/);
   });
 
   it("follow phase asks the bonus question", () => {

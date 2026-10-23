@@ -16,7 +16,7 @@ export default function AcademyTrainingCard({ onSelectGroup, storage }: Props) {
     <div className="w-full max-w-xl panel p-4 text-sm space-y-3" data-testid="academy-training-card">
       <div className="flex items-baseline justify-between gap-2">
         <p className="font-semibold">Beginner Academy</p>
-        <span className="text-[11px] text-muted">SIMULATED money · SAMPLE prices · not trading advice</span>
+        <span className="text-[11px] text-muted">Simulated money · not trading advice</span>
       </div>
       <p className="text-[12px] text-muted">Short units with a 3-question check, a paper-trading simulator with real order types, weekly challenges and an options knowledge ladder.</p>
       <div className="flex flex-wrap gap-x-4 gap-y-2">

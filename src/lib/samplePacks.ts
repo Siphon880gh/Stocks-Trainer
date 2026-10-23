@@ -190,7 +190,7 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
     id: "eq-mega-tech",
     symbol: "AAPL.S",
     assetClass: "equity",
-    displayName: "Mega-Cap Tech (SAMPLE)",
+    displayName: "Mega-Cap Tech",
     ohlc: MEGA_CAP_TECH_OHLC,
     educationalNotes:
       "SAMPLE mega-cap tech path: slow grind up with a mid-session dip. STYLIZED for literacy charts — not a live feed.",
@@ -199,7 +199,7 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
     id: "eq-index-proxy",
     symbol: "SPY.S",
     assetClass: "equity",
-    displayName: "Index Proxy (SAMPLE)",
+    displayName: "Index Proxy",
     ohlc: INDEX_PROXY_OHLC,
     educationalNotes:
       "SAMPLE broad index proxy: tight range, calmer wicks than single-name tech. STYLIZED educational series.",
@@ -208,7 +208,7 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
     id: "eq-cyclical",
     symbol: "XOM.S",
     assetClass: "equity",
-    displayName: "Cyclical Energy (SAMPLE)",
+    displayName: "Cyclical Energy",
     ohlc: CYCLICAL_OHLC,
     educationalNotes:
       "SAMPLE cyclical name: sharp selloff then partial recovery. Shape differs from mega-cap and index packs.",
@@ -217,7 +217,7 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
     id: "eq-gap-go",
     symbol: "NKE.S",
     assetClass: "equity",
-    displayName: "Gap-and-Go Retail (SAMPLE)",
+    displayName: "Gap-and-Go Retail",
     ohlc: GAP_GO_OHLC,
     educationalNotes:
       "SAMPLE single-name: opens with a gap higher, then holds the gap and grinds. STYLIZED — not a live feed. Distinct from mega-cap dip-and-recover.",
@@ -226,7 +226,7 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
     id: "eq-squeeze",
     symbol: "JNJ.S",
     assetClass: "equity",
-    displayName: "Tight Squeeze Defensive (SAMPLE)",
+    displayName: "Tight Squeeze Defensive",
     ohlc: SQUEEZE_OHLC,
     educationalNotes:
       "SAMPLE defensive name: shrinking range (squeeze) then a small break. Distinct from index-proxy quiet range. STYLIZED educational series.",
@@ -235,7 +235,7 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
     id: "eq-fail-rally",
     symbol: "PFE.S",
     assetClass: "equity",
-    displayName: "Failed Rally Pharma (SAMPLE)",
+    displayName: "Failed Rally Pharma",
     ohlc: FAIL_RALLY_OHLC,
     educationalNotes:
       "SAMPLE single-name: a rally that fails and gives back the thrust. Distinct from gap-and-go hold and cyclical dump-then-bounce. STYLIZED — not a live feed.",
@@ -244,7 +244,7 @@ export const EQUITY_SAMPLE_PACKS: SamplePack[] = [
     id: "eq-div-cut",
     symbol: "T.S",
     assetClass: "equity",
-    displayName: "Dividend-Cut Telco (SAMPLE)",
+    displayName: "Dividend-Cut Telco",
     ohlc: DIV_CUT_OHLC,
     educationalNotes:
       "SAMPLE income name: quiet grind, then a gap lower that stays offered. Educational tape for a payout-cut shape — STYLIZED, not a live feed.",
@@ -375,7 +375,7 @@ export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
     id: "fut-index",
     symbol: "ES.F",
     assetClass: "future",
-    displayName: "Index Future (SAMPLE)",
+    displayName: "Index Future",
     ohlc: INDEX_FUTURE_OHLC,
     educationalNotes:
       "SAMPLE index-style future: stair-step grind with a midday pause. STYLIZED educational tape — not a live contract.",
@@ -384,7 +384,7 @@ export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
     id: "fut-energy",
     symbol: "CL.F",
     assetClass: "future",
-    displayName: "Energy Future (SAMPLE)",
+    displayName: "Energy Future",
     ohlc: ENERGY_FUTURE_OHLC,
     educationalNotes:
       "SAMPLE energy-style future: sharp midday dump then partial reclaim. Distinct from index-future grind. STYLIZED — not a live contract.",
@@ -393,7 +393,7 @@ export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
     id: "fut-metals",
     symbol: "GC.F",
     assetClass: "future",
-    displayName: "Metals Future (SAMPLE)",
+    displayName: "Metals Future",
     ohlc: METALS_FUTURE_OHLC,
     educationalNotes:
       "SAMPLE metals-style future: overlapping range, no grind and no dump. STYLIZED educational tape — not a live contract.",
@@ -402,7 +402,7 @@ export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
     id: "fut-rates",
     symbol: "ZN.F",
     assetClass: "future",
-    displayName: "Rates Future (SAMPLE)",
+    displayName: "Rates Future",
     ohlc: RATES_FUTURE_OHLC,
     educationalNotes:
       "SAMPLE rates-style future: slow stair-step lower (distinct from index-future grind up). Not a live contract.",
@@ -411,7 +411,7 @@ export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
     id: "fut-ag",
     symbol: "ZC.F",
     assetClass: "future",
-    displayName: "Ag Future · Squeeze (SAMPLE)",
+    displayName: "Ag Future · Squeeze",
     ohlc: AG_FUTURE_OHLC,
     educationalNotes:
       "SAMPLE agricultural-style future: coil then a one-bar expansion. Distinct from energy dump. STYLIZED — not a live contract.",
@@ -420,7 +420,7 @@ export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
     id: "fut-ng",
     symbol: "NG.F",
     assetClass: "future",
-    displayName: "Nat Gas Future · Dump No Reclaim (SAMPLE)",
+    displayName: "Nat Gas Future · Dump No Reclaim",
     ohlc: NG_FUTURE_OHLC,
     educationalNotes:
       "SAMPLE nat-gas future: dump that keeps leaking — no bounce-back. Distinct from CL dump-reclaim, rates stair-down, and ag coil-expand. STYLIZED — not a live contract.",
@@ -429,7 +429,7 @@ export const FUTURE_SAMPLE_PACKS: SamplePack[] = [
     id: "fut-kc",
     symbol: "KC.F",
     assetClass: "future",
-    displayName: "Coffee Future · Failed Break (SAMPLE)",
+    displayName: "Coffee Future · Failed Break",
     ohlc: KC_FUTURE_OHLC,
     educationalNotes:
       "SAMPLE coffee future: poke through a high that fails, then the tape leaks. Distinct from NG dump-no-reclaim, CL dump-reclaim, and ag coil-expand. STYLIZED — not a live contract.",
@@ -554,7 +554,7 @@ export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
     id: "opt-ctx-event",
     symbol: "UND.OPT",
     assetClass: "option_context",
-    displayName: "Underlying · Event Window (SAMPLE)",
+    displayName: "Underlying · Event Window",
     ohlc: OPT_CTX_EVENT_OHLC,
     educationalNotes:
       "SAMPLE options *context*: underlying tape into an event. Educational chart only — not a LIVE options chain, quotes, or Greeks engine.",
@@ -563,7 +563,7 @@ export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
     id: "opt-ctx-vol",
     symbol: "VOL.OPT",
     assetClass: "option_context",
-    displayName: "Underlying · Vol Spike (SAMPLE)",
+    displayName: "Underlying · Vol Spike",
     ohlc: OPT_CTX_VOL_OHLC,
     educationalNotes:
       "SAMPLE options *context*: wide underlying range after a volatility spike, then settle. Not a LIVE chain / pricing product.",
@@ -572,7 +572,7 @@ export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
     id: "opt-ctx-settle",
     symbol: "SET.OPT",
     assetClass: "option_context",
-    displayName: "Underlying · Post-Event Settle (SAMPLE)",
+    displayName: "Underlying · Post-Event Settle",
     ohlc: OPT_CTX_SETTLE_OHLC,
     educationalNotes:
       "SAMPLE options *context*: after the event print, range shrinks and the underlying settles. Educational chart only — not a LIVE chain or Greeks.",
@@ -581,7 +581,7 @@ export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
     id: "opt-ctx-coil",
     symbol: "COIL.OPT",
     assetClass: "option_context",
-    displayName: "Underlying · Pre-Event Coil (SAMPLE)",
+    displayName: "Underlying · Pre-Event Coil",
     ohlc: OPT_CTX_COIL_OHLC,
     educationalNotes:
       "SAMPLE options *context*: shrinking range into an event. Not a LIVE options chain, quotes, or pricing engine.",
@@ -590,7 +590,7 @@ export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
     id: "opt-ctx-fail",
     symbol: "FAIL.OPT",
     assetClass: "option_context",
-    displayName: "Underlying · Failed Breakout (SAMPLE)",
+    displayName: "Underlying · Failed Breakout",
     ohlc: OPT_CTX_FAIL_OHLC,
     educationalNotes:
       "SAMPLE options *context*: underlying pokes a high then fails back into the range. Educational tape — no chain / Greeks.",
@@ -599,7 +599,7 @@ export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
     id: "opt-ctx-round",
     symbol: "ROUND.OPT",
     assetClass: "option_context",
-    displayName: "Underlying · Round Top (SAMPLE)",
+    displayName: "Underlying · Round Top",
     ohlc: OPT_CTX_ROUND_OHLC,
     educationalNotes:
       "SAMPLE options *context*: the stock rolls over slowly after a high — not a failed poke, not a vol spike, not a coil. Educational tape — no chain / Greeks.",
@@ -608,7 +608,7 @@ export const OPTION_CONTEXT_SAMPLE_PACKS: SamplePack[] = [
     id: "opt-ctx-dump",
     symbol: "DUMP.OPT",
     assetClass: "option_context",
-    displayName: "Underlying · Dump No Reclaim (SAMPLE)",
+    displayName: "Underlying · Dump No Reclaim",
     ohlc: OPT_CTX_DUMP_OHLC,
     educationalNotes:
       "SAMPLE options *context*: the stock gaps down and keeps leaking — no bounce-back. Distinct from failed poke, vol-spike settle, and round-top. Educational tape — no chain / Greeks.",
@@ -733,7 +733,7 @@ export const FOREX_SAMPLE_PACKS: SamplePack[] = [
     id: "fx-eurusd",
     symbol: "EURUSD",
     assetClass: "forex",
-    displayName: "EUR/USD Major (SAMPLE)",
+    displayName: "EUR/USD Major",
     ohlc: FX_MAJOR_OHLC,
     educationalNotes:
       "SAMPLE spot FX major: slow upward drift. STYLIZED — not a LIVE quote. Equities (stocks) remain the traditional retail path in this app.",
@@ -742,7 +742,7 @@ export const FOREX_SAMPLE_PACKS: SamplePack[] = [
     id: "fx-usdjpy",
     symbol: "USDJPY",
     assetClass: "forex",
-    displayName: "USD/JPY Cross (SAMPLE)",
+    displayName: "USD/JPY Cross",
     ohlc: FX_CROSS_OHLC,
     educationalNotes:
       "SAMPLE spot FX cross: risk-off dump then partial reclaim (distinct from EURUSD drift). Not LIVE. Traditional retail stocks = Equities class.",
@@ -751,7 +751,7 @@ export const FOREX_SAMPLE_PACKS: SamplePack[] = [
     id: "fx-audusd",
     symbol: "AUDUSD",
     assetClass: "forex",
-    displayName: "AUD/USD Commodity (SAMPLE)",
+    displayName: "AUD/USD Commodity",
     ohlc: FX_AUDUSD_OHLC,
     educationalNotes:
       "SAMPLE commodity FX: choppy mid-session then a directional leg. STYLIZED — not a LIVE quote. Equities remain the traditional retail path.",
@@ -760,7 +760,7 @@ export const FOREX_SAMPLE_PACKS: SamplePack[] = [
     id: "fx-gbpusd",
     symbol: "GBPUSD",
     assetClass: "forex",
-    displayName: "GBP/USD Range (SAMPLE)",
+    displayName: "GBP/USD Range",
     ohlc: FX_GBPUSD_OHLC,
     educationalNotes:
       "SAMPLE range-bound major: repeated tests of the same band. Distinct from EURUSD drift. Not LIVE.",
@@ -769,7 +769,7 @@ export const FOREX_SAMPLE_PACKS: SamplePack[] = [
     id: "fx-eurjpy",
     symbol: "EURJPY",
     assetClass: "forex",
-    displayName: "EUR/JPY Spike Fade (SAMPLE)",
+    displayName: "EUR/JPY Spike Fade",
     ohlc: FX_EURJPY_OHLC,
     educationalNotes:
       "SAMPLE cross: sharp spike then fade back. Distinct from USDJPY dump-reclaim. Not a live FX desk.",
@@ -778,7 +778,7 @@ export const FOREX_SAMPLE_PACKS: SamplePack[] = [
     id: "fx-usdchf",
     symbol: "USDCHF",
     assetClass: "forex",
-    displayName: "USD/CHF Grind Lower (SAMPLE)",
+    displayName: "USD/CHF Grind Lower",
     ohlc: FX_USDCHF_OHLC,
     educationalNotes:
       "SAMPLE major: slow stair-step lower (CHF bid). Distinct from EURUSD drift up, USDJPY dump-reclaim, GBP range, and EURJPY spike-fade. STYLIZED — not a live FX desk.",
@@ -787,7 +787,7 @@ export const FOREX_SAMPLE_PACKS: SamplePack[] = [
     id: "fx-gbpjpy",
     symbol: "GBPJPY",
     assetClass: "forex",
-    displayName: "GBP/JPY Expanding Range (SAMPLE)",
+    displayName: "GBP/JPY Expanding Range",
     ohlc: FX_GBPJPY_OHLC,
     educationalNotes:
       "SAMPLE cross: range gets wider both ways, not a tight GBP band and not a one-bar EURJPY spike-fade. STYLIZED — not a live FX desk.",

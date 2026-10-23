@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import BrowsePopover from "../components/BrowsePopover";
 import JargonText, { GlossaryButtons } from "../components/JargonText";
+import SampleDataNote from "../components/SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 import {
   canStartCasePack,
   CHART_GATE_TRAINING_GROUP,
@@ -72,7 +74,7 @@ export default function Cases() {
         const unlocked = canStartCasePack(packId);
         return filterPack(packId).map((c) => ({
           id: c.id,
-          label: c.title,
+          label: withoutSampleWord(c.title),
           hint: `${meta.name} · ${
             c.difficulty === "beginner" ? "Beginner" : "Intermediate"
           }`,
@@ -102,6 +104,7 @@ export default function Cases() {
               ? " Your beginner path shows beginner cases only."
               : null}
           </p>
+          <SampleDataNote className="text-[12px] text-muted mt-2" />
           {focusPack ? (
             <p className="text-[11px] text-primary/70 mt-2">
               Showing: {CASE_PACKS.find((p) => p.id === focusPack)?.name ?? focusPack}
@@ -223,22 +226,22 @@ export default function Cases() {
                       <div className="flex items-center gap-2 border border-line hover:border-line rounded-lg px-4 py-3 font-mono text-sm">
                         <Link to={`/cases/${c.id}`} className="min-w-0 flex-1">
                           <span className="text-primary">
-                            <JargonText text={c.title} plain />
+                            <JargonText text={withoutSampleWord(c.title)} plain />
                           </span>
                           <span className="text-slate-500 text-xs ml-2">
                             {thinkingModeLabel(c.thinkingMode)} ·{" "}
                             {c.difficulty === "beginner" ? "Beginner" : "Intermediate"}
                           </span>
                         </Link>
-                        <GlossaryButtons texts={[c.title]} />
-                        <YouTubeSearchLink title={c.title} />
+                        <GlossaryButtons texts={[withoutSampleWord(c.title)]} />
+                        <YouTubeSearchLink title={withoutSampleWord(c.title)} />
                       </div>
                     ) : (
                       <div className="flex items-center gap-2 border border-white/5 rounded-lg px-4 py-3 font-mono text-sm text-slate-600">
                         <span className="min-w-0 flex-1">
-                          <JargonText text={c.title} />
+                          <JargonText text={withoutSampleWord(c.title)} />
                         </span>
-                        <YouTubeSearchLink title={c.title} />
+                        <YouTubeSearchLink title={withoutSampleWord(c.title)} />
                       </div>
                     )}
                   </li>

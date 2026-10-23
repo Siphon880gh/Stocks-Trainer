@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { ANSWER_STREAK_LABEL, ANSWER_STREAK_TIP } from "../lib/streakLabels";
 import { Link, useSearchParams } from "react-router-dom";
 import QuizModal from "../components/QuizModal";
+import SampleDataNote from "../components/SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 import AnswerSheetModal from "../components/AnswerSheetModal";
 import PathMapPanel from "../components/PathMapPanel";
 import BrowsePopover from "../components/BrowsePopover";
@@ -108,7 +110,7 @@ export default function Training() {
             <p className="font-semibold">Decision cases · Packs A–C</p>
             <p className="text-muted">
               After Indicators: earnings, company news, macro intro, and
-              combined news+statements (SAMPLE).
+              combined news and statements.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link to="/cases?pack=earnings" className="text-primary underline">
@@ -218,8 +220,9 @@ export default function Training() {
               })}
             </div>
             <p className="text-muted text-sm">
-              {QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.description}
+              {withoutSampleWord(QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.description ?? "")}
             </p>
+            <SampleDataNote />
             <p className="text-[13px] text-muted">
               Earnings phrases:{" "}
               <button
@@ -238,7 +241,7 @@ export default function Training() {
               >
                 Statements drills
               </button>{" "}
-              · optional SAMPLE snapshot pack
+              · optional snapshot pack
             </p>
             {groupLocked ? (
               <div className="space-y-2">
@@ -333,7 +336,7 @@ export default function Training() {
             </div>
           </div>
           <p className="text-[12px] text-muted">
-            Learning drill, not trading advice. SAMPLE charts; no orders or real money.{" "}
+            Learning drill, not trading advice. No orders or real money.{" "}
             {getQuestionsForGroup("buy-or-sell").length} questions.
           </p>
           <div className="flex flex-wrap items-center gap-3">
@@ -398,7 +401,7 @@ export default function Training() {
             </button>
           )}
         </div>
-        <p className="text-[12px]">SAMPLE · educational</p>
+        <SampleDataNote className="text-[12px] text-muted" />
       </footer>
 
       <QuizModal

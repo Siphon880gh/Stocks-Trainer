@@ -4,6 +4,8 @@ import { WhyNotAutomatic } from "../components/AiExplainModal";
 import BrowsePopover from "../components/BrowsePopover";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText, { GlossaryButtons } from "../components/JargonText";
+import SampleDataNote from "../components/SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 import { NAVIGATOR_CLASS_LABELS } from "../lib/marketNavigator";
 import { buildPlaybookCursorPrompt, classifySourceUrl, type SourceUrlKind } from "../lib/playbookPrompt";
 import { listPlaybooks } from "../lib/playbooks";
@@ -263,9 +265,10 @@ export default function Playbooks() {
           <div className="min-w-0">
             <h1 className="text-2xl font-semibold tracking-tight">Playbooks</h1>
             <p className="text-muted text-sm mt-2">
-              Strategy kits from a YouTube video, Medium post, or other page. SAMPLE /
-              educational only — not a live desk.
+              Strategy kits from a YouTube video, Medium post, or other page.
+              Educational only — not a live desk.
             </p>
+            <SampleDataNote className="text-[12px] text-muted mt-2" />
           </div>
           {hasLibrary ? (
             <BrowsePopover
@@ -347,11 +350,11 @@ export default function Playbooks() {
                     </div>
                     <Link to={`/playbooks/${p.id}`} className="block space-y-2">
                       <p className="text-sm text-muted">
-                        <JargonText text={p.summary} plain />
+                        <JargonText text={withoutSampleWord(p.summary)} plain />
                       </p>
                       <p className="text-[12px] text-muted">{p.source.label}</p>
                     </Link>
-                    <GlossaryButtons texts={[p.summary]} />
+                    <GlossaryButtons texts={[withoutSampleWord(p.summary)]} />
                   </li>
                 ))}
               </ul>

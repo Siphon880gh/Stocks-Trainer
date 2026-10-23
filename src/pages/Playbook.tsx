@@ -9,6 +9,8 @@ import { getOverlay } from "../lib/overlays";
 import { getSamplePack } from "../lib/samplePacks";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText from "../components/JargonText";
+import SampleDataNote from "../components/SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 
 export default function Playbook() {
   const { id = "" } = useParams();
@@ -44,8 +46,9 @@ export default function Playbook() {
             <YouTubeSearchLink title={playbook.title} />
           </div>
           <p className="text-sm text-muted">
-            <JargonText text={playbook.summary} />
+            <JargonText text={withoutSampleWord(playbook.summary)} />
           </p>
+          <SampleDataNote />
           <p className="text-sm">
             <span className="text-muted">Resource · </span>
             <a
@@ -61,8 +64,8 @@ export default function Playbook() {
             {NAVIGATOR_CLASS_LABELS[playbook.assetClass]}
             {playbook.source.kind === "youtube" ? " · YouTube" : " · Webpage"}
             {playbook.source.kind === "youtube"
-              ? " · SAMPLE educational read — not their paid course, not a live desk"
-              : " · SAMPLE educational read of a public page — not advice, not a live desk"}
+              ? " · educational read — not their paid course, not a live desk"
+              : " · educational read of a public page — not advice, not a live desk"}
           </p>
         </div>
 
@@ -70,7 +73,7 @@ export default function Playbook() {
           <PlaybookPanel title="Strategy">
             {playbook.explanation ? (
               <p className="text-sm text-ink whitespace-pre-wrap leading-relaxed">
-                <JargonText text={playbook.explanation} />
+                <JargonText text={withoutSampleWord(playbook.explanation)} />
               </p>
             ) : (
               <p className="text-sm text-muted">
@@ -87,7 +90,7 @@ export default function Playbook() {
                   to={`/coach/${playbook.coachSlug}`}
                   className="text-primary hover:underline"
                 >
-                  {coach.session.meta.title}
+                  {withoutSampleWord(coach.session.meta.title)}
                 </Link>
                 . Same rewind-and-succeed tree as Coach.
               </p>
@@ -110,7 +113,7 @@ export default function Playbook() {
                   to={`/cases/${study.id}`}
                   className="text-primary hover:underline"
                 >
-                  {study.title}
+                  {withoutSampleWord(study.title)}
                 </Link>
                 . Same Case player as Cases.
               </p>
@@ -130,8 +133,8 @@ export default function Playbook() {
               <div className="space-y-3">
                 <p className="text-sm text-muted">
                   <span className="inline-flex items-center gap-2">
-                    {pack.displayName}
-                    <YouTubeSearchLink title={pack.displayName} />
+                    {withoutSampleWord(pack.displayName)}
+                    <YouTubeSearchLink title={withoutSampleWord(pack.displayName)} />
                   </span>
                   {overlays.length > 0
                     ? ` · ${overlays.map((id) => getOverlay(id)?.name ?? id).join(", ")}`
@@ -145,13 +148,12 @@ export default function Playbook() {
                   showRSI={overlays.includes("rsi")}
                   showMACD={overlays.includes("macd")}
                   showBollinger={overlays.includes("bollinger")}
-                  statusLabel="SAMPLE"
                 />
-                <p className="text-[12px] text-muted">{pack.educationalNotes}</p>
+                <p className="text-[12px] text-muted">{withoutSampleWord(pack.educationalNotes)}</p>
               </div>
             ) : (
               <p className="text-sm text-muted">
-                No SAMPLE pack wired yet. The create prompt fills this from{" "}
+                No chart pack wired yet. The create prompt fills this from{" "}
                 <Link to="/market" className="text-primary hover:underline">
                   Charts
                 </Link>

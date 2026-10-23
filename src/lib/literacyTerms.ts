@@ -75,7 +75,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "options-context",
-    name: "Options context (SAMPLE)",
+    name: "Options context",
     category: "markets",
     summary: "Educational underlying charts for options ideas — not a live options chain.",
     detail:
@@ -83,7 +83,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "options-event-vol",
-    name: "Event risk and vol on the stock (SAMPLE)",
+    name: "Event risk and vol on the stock",
     category: "markets",
     summary: "Coil, spike, or settle around a known event is a stock-tape story — still no chain or Greeks.",
     detail:
@@ -91,7 +91,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "options-failed-break",
-    name: "Failed breakout on the underlying (SAMPLE)",
+    name: "Failed breakout on the underlying",
     category: "process",
     summary: "A poke through a level that fails is a stock story — HOLD can be correct; still no calls.",
     detail:
@@ -99,7 +99,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "options-hold-event",
-    name: "HOLD into a known event (SAMPLE)",
+    name: "HOLD into a known event",
     category: "process",
     summary: "A scheduled event does not force a fill — HOLD is allowed, and there are still no calls.",
     detail:
@@ -107,7 +107,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "futures-market",
-    name: "Futures (SAMPLE)",
+    name: "Futures",
     category: "markets",
     summary: "Contracts on an underlying (index, commodity, etc.) — SAMPLE browse class here.",
     detail:
@@ -115,7 +115,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "futures-roll",
-    name: "Roll, contango, backwardation (SAMPLE)",
+    name: "Roll, contango, backwardation",
     category: "markets",
     summary: "Contracts expire; front vs next month is a structure to name, not a trade button.",
     detail:
@@ -123,7 +123,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "futures-underlying",
-    name: "Index vs commodity futures (SAMPLE)",
+    name: "Index vs commodity futures",
     category: "markets",
     summary: "The contract points at an index, energy, metal, or ag — so the tape shape is not one clone.",
     detail:
@@ -131,7 +131,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "futures-harvest",
-    name: "Weather and harvest supply (SAMPLE)",
+    name: "Weather and harvest supply",
     category: "markets",
     summary: "A drought or harvest print is a supply fact on this grain contract — not a 10-Q and not a roll button.",
     detail:
@@ -139,7 +139,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "crypto-browse",
-    name: "Crypto browse (SAMPLE)",
+    name: "Crypto browse",
     category: "markets",
     summary: "Digital-asset SAMPLE charts for candle/indicator drills — not the Beginner stocks path.",
     detail:
@@ -147,7 +147,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "crypto-depeg-scare",
-    name: "Stable depeg scare (SAMPLE)",
+    name: "Stable depeg scare",
     category: "markets",
     summary: "Chat that a peg broke is a source drill — not a live redemption or exchange.",
     detail:
@@ -155,7 +155,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "crypto-weekend",
-    name: "Weekend hours (SAMPLE crypto)",
+    name: "Weekend hours",
     category: "markets",
     summary: "Crypto can print when stock markets are closed — hours are not a must-trade.",
     detail:
@@ -163,7 +163,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "crypto-listing",
-    name: "Listing chat vs official note (SAMPLE)",
+    name: "Listing chat vs official note",
     category: "markets",
     summary: "Venue-listing chatter is rumor until a scheduled exchange note — chat is not a listing.",
     detail:
@@ -171,7 +171,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "forex-spot",
-    name: "Forex / FX (SAMPLE)",
+    name: "Forex / FX",
     category: "markets",
     summary: "Currency pairs (spot FX) as a SAMPLE Market class after equities fluency.",
     detail:
@@ -179,7 +179,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "forex-pip",
-    name: "Pip and spread (SAMPLE FX)",
+    name: "Pip and spread",
     category: "markets",
     summary: "A pip is a tiny FX price step; the spread is a cost of trading the pair.",
     detail:
@@ -187,7 +187,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "forex-major-cross",
-    name: "Majors vs crosses (SAMPLE FX)",
+    name: "Majors vs crosses",
     category: "markets",
     summary: "A major usually includes the dollar; a cross is two non-dollar currencies.",
     detail:
@@ -195,7 +195,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "forex-risk-on",
-    name: "Risk-on vs risk-off (SAMPLE FX)",
+    name: "Risk-on vs risk-off",
     category: "markets",
     summary: "Risk mood maps to a pair — commodity FX often bids on risk-on; funding FX often bids on risk-off.",
     detail:
@@ -659,11 +659,11 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   },
   {
     id: "delayed-vs-sample-feed",
-    name: "SAMPLE vs DELAYED feed",
+    name: "Practice data vs a delayed feed",
     category: "markets",
     summary: "This app labels practice data honestly—never LIVE theater.",
     detail:
-      "SAMPLE / STYLIZED packs are curated teaching tapes. DELAYED is a labeled delayed adapter when enabled. Neither is a real-time brokerage quote. Equities path still uses SAMPLE packs first.",
+      "Practice packs are curated teaching tapes. Delayed is a labeled replay that holds the newest bars back. Neither is a real-time brokerage quote. Equities still come first.",
   },
   ...ADVANCED_TERMS,
   ...CHART_BOOK_TERMS,

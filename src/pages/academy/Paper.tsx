@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import PaperSession from "../../components/academy/paper/PaperSession";
 import SimulatedBanner from "../../components/academy/SimulatedBanner";
+import SampleDataNote from "../../components/SampleDataNote";
 import { TAPES } from "../../lib/academy/paper/tapes";
 import { CASH_PRESETS, DEFAULT_STARTING_CASH } from "../../lib/academy/paper/account";
 import { START_BAR, newSessionLog, replay } from "../../lib/academy/paper/session";
@@ -73,8 +74,9 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
           </Link>
         </div>
         <p className="text-[13px] text-muted max-w-3xl">
-          Practise every order type with virtual money on SAMPLE price tapes. Step one daily bar at a time; nothing after the current bar is shown.
+          Practise every order type with virtual money. Step one daily bar at a time; nothing after the current bar is shown.
         </p>
+        <SampleDataNote />
       </header>
       {note ? (
         <p className="text-[13px] panel px-3 py-2 border-sim/40" role="status" data-testid="reward-toast">
@@ -103,7 +105,7 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
         <section className="space-y-3" data-testid="paper-setup">
           <SimulatedBanner />
           <div className="panel p-4 space-y-3">
-            <p className="font-semibold">1. Pick a SAMPLE tape</p>
+            <p className="font-semibold">1. Pick a tape</p>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2">
               {TAPES.map((t) => (
                 <button key={t.id} type="button" onClick={() => setTapeId(t.id)} aria-pressed={tapeId === t.id} className={cn("text-left panel p-3 space-y-1", tapeId === t.id ? "border-sim ring-1 ring-sim" : "hover:border-sim/60")} data-tape={t.id}>

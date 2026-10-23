@@ -8,6 +8,8 @@ import AcademyHomeTip from "../components/academy/AcademyHomeTip";
 import { Link } from "react-router-dom";
 import GoalPicker from "../components/GoalPicker";
 import JargonText from "../components/JargonText";
+import SampleDataNote from "../components/SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 import {
   DECISION_MAKER_PATH_ID,
   isDecisionMakerPathComplete,
@@ -150,20 +152,20 @@ export default function Dashboard() {
             {pathDone
               ? pathCompleteLabel
               : activeDef
-                ? activeDef.title
+                ? withoutSampleWord(activeDef.title)
                 : pathTemplate?.title ?? "Your path"}
           </h1>
           {pathDone ? (
             <p className="text-sm text-muted mt-2">
               {progress.pathId === DECISION_MAKER_PATH_ID
-                ? "Decision Maker credential: earnings through news plus financials packs are complete (SAMPLE progress, not attested)."
+                ? "Decision Maker credential: earnings through news plus financials packs are complete. Progress here is not an attested certificate."
                 : progress.pathId === MARKET_EXPLORER_PATH_ID
-                  ? "Market Explorer credential: futures, forex, and crypto SAMPLE packs are complete. Traditional stocks stay on Beginner Equities."
-                  : "Beginner Equities credential: literacy, Indicators, earnings pack, and company-news pack are complete (SAMPLE progress, not attested)."}
+                  ? "Market Explorer credential: futures, forex, and crypto packs are complete. Traditional stocks stay on Beginner Equities."
+                  : "Beginner Equities credential: literacy, Indicators, earnings pack, and company-news pack are complete. Progress here is not an attested certificate."}
             </p>
           ) : activeDef ? (
             <p className="text-sm text-muted mt-2">
-              <JargonText text={activeDef.summary} />
+              <JargonText text={withoutSampleWord(activeDef.summary)} />
             </p>
           ) : (
             <p className="text-sm text-muted mt-2">
@@ -172,6 +174,7 @@ export default function Dashboard() {
                 : `Start ${pathTemplate?.title ?? "your path"}.`}
             </p>
           )}
+          <SampleDataNote className="text-[12px] text-muted mt-2" />
         </div>
         <Link
           to={nextHref}
@@ -183,7 +186,7 @@ export default function Dashboard() {
 
       <section className="space-y-4">
         <p className="text-sm">
-          Coach: <JargonText text={coachTip} />
+          Coach: <JargonText text={withoutSampleWord(coachTip)} />
         </p>
         <div className="h-1.5 w-full bg-canvas rounded-full overflow-hidden">
           <div
@@ -201,7 +204,7 @@ export default function Dashboard() {
             const lockedCase = isGradedCasePackLocked(m.id);
             return (
               <li key={m.id} className="flex flex-wrap items-baseline gap-2">
-                <span>{m.title}</span>
+                <span>{withoutSampleWord(m.title)}</span>
                 <span className="text-muted text-[12px]">{status}</span>
                 {lockedCase ? (
                   <span className="text-accent-red text-[12px]">Locked — finish Indicators first</span>
@@ -267,7 +270,7 @@ export default function Dashboard() {
         ) : null}
         {progress.pathId === MARKET_EXPLORER_PATH_ID ? (
           <p className="text-[13px] text-muted">
-            Equities paths remain for traditional stocks. Explorer is SAMPLE multi-market.
+            Equities paths remain for traditional stocks. Explorer is extra multi-market practice.
           </p>
         ) : null}
       </section>

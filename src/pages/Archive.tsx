@@ -15,6 +15,8 @@ import CorePatternList from "../components/CorePatternList";
 import IndicatorDetailModal from "../components/IndicatorDetailModal";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
 import JargonText, { GlossaryButtons } from "../components/JargonText";
+import SampleDataNote from "../components/SampleDataNote";
+import { withoutSampleWord } from "../lib/learnerCopy";
 import { CRYPTO_FIT_HINT, CRYPTO_FIT_LABEL, cryptoFitFor, isCandlestickPattern, type CryptoFit } from "../lib/cryptoCandles";
 import { THEMES, getTheme, isThemeId } from "../lib/patternThemes";
 
@@ -190,7 +192,7 @@ export default function Archive() {
           ))
             : (
               <p className="text-xs text-primary/50 font-mono uppercase tracking-wider py-1">
-                Beginner equities glossary (SAMPLE)
+                Beginner equities glossary
               </p>
             )}
         </div>
@@ -296,7 +298,7 @@ export default function Archive() {
                         const locked = Boolean(cls && !canBrowseAssetClass(cls));
                         return {
                           id: term.id,
-                          label: term.name,
+                          label: withoutSampleWord(term.name),
                           hint: locked ? `${term.category} · locked` : term.category,
                           disabled: locked,
                         };
@@ -369,18 +371,18 @@ export default function Archive() {
               >
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm text-primary">menu_book</span>
-                <h4 className="text-slate-100 font-bold text-base font-display">{term.name}</h4>
+                <h4 className="text-slate-100 font-bold text-base font-display">{withoutSampleWord(term.name)}</h4>
                 <span className="text-[10px] font-mono text-primary/50 uppercase">{term.category}</span>
                 {locked ? (
                   <span className="text-[10px] font-mono text-muted uppercase">locked</span>
                 ) : null}
               </div>
               <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
-                <JargonText text={term.summary} plain />
+                <JargonText text={withoutSampleWord(term.summary)} plain />
               </p>
               </button>
-              <GlossaryButtons texts={[term.summary]} />
-              <YouTubeSearchLink title={term.name} />
+              <GlossaryButtons texts={[withoutSampleWord(term.summary)]} />
+              <YouTubeSearchLink title={withoutSampleWord(term.name)} />
               </div>
               {locked ? (
                 <button
@@ -472,13 +474,13 @@ export default function Archive() {
                     <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
                       &gt; {pattern.type.toUpperCase()}_PATTERN<br />
                       &gt; CONFIRMATION: {pattern.confirmation.toUpperCase().replace("_", " ")}<br />
-                      <JargonText text={pattern.description} plain />
+                      <JargonText text={withoutSampleWord(pattern.description)} plain />
                     </p>
                   </div>
                 </div>
               </div>
             </button>
-            <GlossaryButtons texts={[pattern.description]} className="mt-1" />
+            <GlossaryButtons texts={[withoutSampleWord(pattern.description)]} className="mt-1" />
             <YouTubeSearchLink title={pattern.name} className="absolute top-4 right-4" />
             </div>
           ))
@@ -563,8 +565,8 @@ export default function Archive() {
                   Literacy · {selectedTerm.category}
                 </p>
                 <h3 className="text-xl font-bold text-primary inline-flex items-center gap-2">
-                  {selectedTerm.name}
-                  <YouTubeSearchLink title={selectedTerm.name} />
+                  {withoutSampleWord(selectedTerm.name)}
+                  <YouTubeSearchLink title={withoutSampleWord(selectedTerm.name)} />
                 </h3>
               </div>
               <button
@@ -582,8 +584,9 @@ export default function Archive() {
               </button>
             </div>
             <p className="text-sm text-slate-300">
-              <JargonText text={selectedTerm.detail} />
+              <JargonText text={withoutSampleWord(selectedTerm.detail)} />
             </p>
+            <SampleDataNote />
             <Link
               to="/training?group=equity-literacy&start=1"
               className="inline-flex text-xs font-bold text-primary underline"

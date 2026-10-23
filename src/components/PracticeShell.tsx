@@ -2,14 +2,18 @@ import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import YouTubeSearchLink from "./YouTubeSearchLink";
 import JargonText from "./JargonText";
+import SampleDataNote from "./SampleDataNote";
 
 export default function PracticeShell({
   title,
   blurb,
+  sampleNote = false,
   children,
 }: {
   title: string;
   blurb: string;
+  /** Muted line after the blurb. */
+  sampleNote?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -29,6 +33,7 @@ export default function PracticeShell({
           <p className="text-[13px] text-muted">
             <JargonText text={blurb} />
           </p>
+          {sampleNote ? <SampleDataNote className="text-[12px] text-muted mt-1" /> : null}
         </div>
         {children}
       </main>

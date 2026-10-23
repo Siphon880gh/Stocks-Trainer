@@ -76,7 +76,8 @@ export interface PrintRound {
   disclaimer: string;
 }
 
-export const PRINT_DISCLAIMER = "SAMPLE / STYLIZED — fictional company, not a live filing, not trading advice.";
+export const PRINT_DISCLAIMER =
+  "Note: this is sample data. It does not reflect true market prices or a live filing.";
 
 function factsFor(event: EarningsEvent): string[] {
   const r = resolveEvent(event);

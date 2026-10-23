@@ -60,7 +60,8 @@ export function fmtCell(n: number | null, format: CellFormat): string {
   }
 }
 
-export const FIN_DISCLAIMER = "SAMPLE / STYLIZED — fictional company, not a live filing, not trading advice.";
+export const FIN_DISCLAIMER =
+  "Note: this is sample data. It does not reflect true market prices or a live filing.";
 
 /** Archive deep-link for a glossary term (router path, basename handled by <Link>). */
 export const glossaryHref = (termId: string) => `/archive?tab=literacy&open=${termId}`;

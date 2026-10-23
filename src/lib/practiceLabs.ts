@@ -37,7 +37,7 @@ function bar(name: string, open: number, high: number, low: number, close: numbe
 export const REGIME_WINDOWS: RegimeWindow[] = [
   {
     id: "grind-up",
-    name: "SAMPLE · grind",
+    name: "grind",
     regime: "trend-up",
     overlay: "sma",
     overlayTip: "A moving average is a simple way to stay oriented in a one-way grind.",
@@ -52,7 +52,7 @@ export const REGIME_WINDOWS: RegimeWindow[] = [
   },
   {
     id: "slide-down",
-    name: "SAMPLE · slide",
+    name: "slide",
     regime: "trend-down",
     overlay: "sma",
     overlayTip: "Price walking lower still reads as trend — a moving average tracks that walk.",
@@ -67,7 +67,7 @@ export const REGIME_WINDOWS: RegimeWindow[] = [
   },
   {
     id: "chop",
-    name: "SAMPLE · chop",
+    name: "chop",
     regime: "range",
     overlay: "rsi",
     overlayTip: "In a range, oscillators (RSI) are about stretch vs mean — not a new trend.",
@@ -82,7 +82,7 @@ export const REGIME_WINDOWS: RegimeWindow[] = [
   },
   {
     id: "squeeze",
-    name: "SAMPLE · squeeze",
+    name: "squeeze",
     regime: "range",
     overlay: "bollinger",
     overlayTip: "A squeeze is low volatility. Bollinger-style bands shrink before an expansion.",
@@ -97,7 +97,7 @@ export const REGIME_WINDOWS: RegimeWindow[] = [
   },
   {
     id: "v-reclaim",
-    name: "SAMPLE · V-reclaim",
+    name: "V-reclaim",
     regime: "trend-up",
     overlay: "sma",
     overlayTip: "A sharp dump then reclaim still leaves a rising path a moving average can track.",
@@ -112,7 +112,7 @@ export const REGIME_WINDOWS: RegimeWindow[] = [
   },
   {
     id: "round-top",
-    name: "SAMPLE · round top",
+    name: "round top",
     regime: "trend-down",
     overlay: "sma",
     overlayTip: "After the turn, price walks lower — a moving average still orients the slide.",
@@ -127,7 +127,7 @@ export const REGIME_WINDOWS: RegimeWindow[] = [
   },
   {
     id: "trend-pause",
-    name: "SAMPLE · trend pause",
+    name: "trend pause",
     regime: "trend-up",
     overlay: "sma",
     overlayTip: "A pause inside an uptrend is still trend. SMA keeps you oriented until the grind resumes or fails.",
@@ -142,7 +142,7 @@ export const REGIME_WINDOWS: RegimeWindow[] = [
   },
   {
     id: "gap-fade",
-    name: "SAMPLE · gap fade",
+    name: "gap fade",
     regime: "range",
     overlay: "rsi",
     overlayTip: "A gap that fades back into the prior band is still a range problem — RSI for stretch, not a new trend.",
@@ -223,7 +223,7 @@ export const LABEL_PROMPTS: CandlePart[] = [
 
 /** One tall SAMPLE candle so wick vs body is easy to tap. */
 export const LABEL_CANDLE: OHLC = {
-  name: "SAMPLE",
+  name: "Bar",
   open: 100,
   high: 118,
   low: 88,
@@ -233,24 +233,24 @@ export const LABEL_CANDLE: OHLC = {
 export function gradeRegime(windowId: string, pick: RegimeId): GradeResult {
   const window = getRegimeWindow(windowId);
   if (!window) {
-    return { grade: "incorrect", tip: "Unknown SAMPLE window." };
+    return { grade: "incorrect", tip: "Unknown window." };
   }
   if (pick === window.regime) {
     return {
       grade: "correct",
-      tip: `Yes — this SAMPLE window is ${regimeLabel(window.regime)}.`,
+      tip: `Yes — this window is ${regimeLabel(window.regime)}.`,
     };
   }
   return {
     grade: "incorrect",
-    tip: `This SAMPLE window is ${regimeLabel(window.regime)}, not ${regimeLabel(pick)}.`,
+    tip: `This window is ${regimeLabel(window.regime)}, not ${regimeLabel(pick)}.`,
   };
 }
 
 export function gradeOverlayFollowUp(windowId: string, pick: OverlayFollowUp): GradeResult {
   const window = getRegimeWindow(windowId);
   if (!window) {
-    return { grade: "incorrect", tip: "Unknown SAMPLE window." };
+    return { grade: "incorrect", tip: "Unknown window." };
   }
   if (pick === window.overlay) {
     return { grade: "correct", tip: window.overlayTip };
@@ -287,7 +287,7 @@ export function gradeReplay(actions: ReplayAction[]): GradeResult {
   if (biased) {
     return {
       grade: "partial",
-      tip: "You picked a bias without a Wait. SAMPLE teaching: more bars beat a snap call.",
+      tip: "You picked a bias without a Wait. More bars beat a snap call.",
     };
   }
   return {
@@ -297,10 +297,10 @@ export function gradeReplay(actions: ReplayAction[]): GradeResult {
 }
 
 export const REPLAY_TAPES: { id: string; name: string; bars: OHLC[] }[] = [
-  { id: "replay-sample", name: "SAMPLE · mixed", bars: SAMPLE_OHLC },
+  { id: "replay-sample", name: "mixed", bars: SAMPLE_OHLC },
   {
     id: "replay-slide",
-    name: "SAMPLE · slide",
+    name: "slide",
     bars: [
       bar("09:30", 120, 121, 117, 118),
       bar("10:00", 118, 119, 114, 115),
@@ -317,10 +317,10 @@ export const REPLAY_TAPE: OHLC[] = REPLAY_TAPES[0]!.bars;
 export const REPLAY_START_BARS = 6;
 
 export const PLAN_TAPES: { id: string; name: string; bars: OHLC[] }[] = [
-  { id: "plan-up", name: "SAMPLE · grind", bars: SAMPLE_OHLC },
+  { id: "plan-up", name: "grind", bars: SAMPLE_OHLC },
   {
     id: "plan-down",
-    name: "SAMPLE · slide",
+    name: "slide",
     bars: [
       bar("09:30", 80, 81, 77, 78),
       bar("10:00", 78, 79, 74, 75),
@@ -334,29 +334,29 @@ export const PLAN_TAPES: { id: string; name: string; bars: OHLC[] }[] = [
 export const PLAN_TAPE: OHLC[] = PLAN_TAPES[0]!.bars;
 
 export const HUNT_TAPES: { id: string; name: string; bars: OHLC[] }[] = [
-  { id: "hunt-hammer", name: "SAMPLE · hammer window", bars: PATTERN_OHLC.hammer ?? SAMPLE_OHLC },
-  { id: "hunt-doji", name: "SAMPLE · doji window", bars: PATTERN_OHLC.doji ?? SAMPLE_OHLC },
-  { id: "hunt-hanging-man", name: "SAMPLE · hanging-man window", bars: PATTERN_OHLC["hanging-man"] ?? SAMPLE_OHLC },
-  { id: "hunt-shooting-star", name: "SAMPLE · shooting-star window", bars: PATTERN_OHLC["shooting-star"] ?? SAMPLE_OHLC },
-  { id: "hunt-inverted-hammer", name: "SAMPLE · inverted-hammer window", bars: PATTERN_OHLC["inverted-hammer"] ?? SAMPLE_OHLC },
-  { id: "hunt-morning-star", name: "SAMPLE · morning-star window", bars: PATTERN_OHLC["morning-star"] ?? SAMPLE_OHLC },
-  { id: "hunt-evening-star", name: "SAMPLE · evening-star window", bars: PATTERN_OHLC["evening-star"] ?? SAMPLE_OHLC },
-  { id: "hunt-bullish-engulfing", name: "SAMPLE · bullish-engulfing window", bars: PATTERN_OHLC["bullish-engulfing"] ?? SAMPLE_OHLC },
-  { id: "hunt-bearish-engulfing", name: "SAMPLE · bearish-engulfing window", bars: PATTERN_OHLC["bearish-engulfing"] ?? SAMPLE_OHLC },
-  { id: "hunt-piercing-line", name: "SAMPLE · piercing-line window", bars: PATTERN_OHLC["piercing-line"] ?? SAMPLE_OHLC },
-  { id: "hunt-dark-cloud-cover", name: "SAMPLE · dark-cloud window", bars: PATTERN_OHLC["dark-cloud-cover"] ?? SAMPLE_OHLC },
-  { id: "hunt-three-white-soldiers", name: "SAMPLE · soldiers window", bars: PATTERN_OHLC["three-white-soldiers"] ?? SAMPLE_OHLC },
-  { id: "hunt-three-black-crows", name: "SAMPLE · crows window", bars: PATTERN_OHLC["three-black-crows"] ?? SAMPLE_OHLC },
-  { id: "hunt-harami", name: "SAMPLE · harami window", bars: PATTERN_OHLC.harami ?? SAMPLE_OHLC },
-  { id: "hunt-tweezer-top", name: "SAMPLE · tweezer-top window", bars: PATTERN_OHLC["tweezer-top"] ?? SAMPLE_OHLC },
-  { id: "hunt-tweezer-bottom", name: "SAMPLE · tweezer-bottom window", bars: PATTERN_OHLC["tweezer-bottom"] ?? SAMPLE_OHLC },
-  { id: "hunt-rising-wedge", name: "SAMPLE · rising-wedge window", bars: PATTERN_OHLC["rising-wedge"] ?? SAMPLE_OHLC },
-  { id: "hunt-falling-wedge", name: "SAMPLE · falling-wedge window", bars: PATTERN_OHLC["falling-wedge"] ?? SAMPLE_OHLC },
-  { id: "hunt-bull-flag", name: "SAMPLE · bull-flag window", bars: PATTERN_OHLC["bull-flag"] ?? SAMPLE_OHLC },
-  { id: "hunt-double-top", name: "SAMPLE · double-top window", bars: PATTERN_OHLC["double-top"] ?? SAMPLE_OHLC },
-  { id: "hunt-double-bottom", name: "SAMPLE · double-bottom window", bars: PATTERN_OHLC["double-bottom"] ?? SAMPLE_OHLC },
-  { id: "hunt-triangle", name: "SAMPLE · triangle window", bars: PATTERN_OHLC.triangle ?? SAMPLE_OHLC },
-  { id: "hunt-head-shoulders", name: "SAMPLE · head-shoulders window", bars: PATTERN_OHLC["head-shoulders"] ?? SAMPLE_OHLC },
+  { id: "hunt-hammer", name: "hammer window", bars: PATTERN_OHLC.hammer ?? SAMPLE_OHLC },
+  { id: "hunt-doji", name: "doji window", bars: PATTERN_OHLC.doji ?? SAMPLE_OHLC },
+  { id: "hunt-hanging-man", name: "hanging-man window", bars: PATTERN_OHLC["hanging-man"] ?? SAMPLE_OHLC },
+  { id: "hunt-shooting-star", name: "shooting-star window", bars: PATTERN_OHLC["shooting-star"] ?? SAMPLE_OHLC },
+  { id: "hunt-inverted-hammer", name: "inverted-hammer window", bars: PATTERN_OHLC["inverted-hammer"] ?? SAMPLE_OHLC },
+  { id: "hunt-morning-star", name: "morning-star window", bars: PATTERN_OHLC["morning-star"] ?? SAMPLE_OHLC },
+  { id: "hunt-evening-star", name: "evening-star window", bars: PATTERN_OHLC["evening-star"] ?? SAMPLE_OHLC },
+  { id: "hunt-bullish-engulfing", name: "bullish-engulfing window", bars: PATTERN_OHLC["bullish-engulfing"] ?? SAMPLE_OHLC },
+  { id: "hunt-bearish-engulfing", name: "bearish-engulfing window", bars: PATTERN_OHLC["bearish-engulfing"] ?? SAMPLE_OHLC },
+  { id: "hunt-piercing-line", name: "piercing-line window", bars: PATTERN_OHLC["piercing-line"] ?? SAMPLE_OHLC },
+  { id: "hunt-dark-cloud-cover", name: "dark-cloud window", bars: PATTERN_OHLC["dark-cloud-cover"] ?? SAMPLE_OHLC },
+  { id: "hunt-three-white-soldiers", name: "soldiers window", bars: PATTERN_OHLC["three-white-soldiers"] ?? SAMPLE_OHLC },
+  { id: "hunt-three-black-crows", name: "crows window", bars: PATTERN_OHLC["three-black-crows"] ?? SAMPLE_OHLC },
+  { id: "hunt-harami", name: "harami window", bars: PATTERN_OHLC.harami ?? SAMPLE_OHLC },
+  { id: "hunt-tweezer-top", name: "tweezer-top window", bars: PATTERN_OHLC["tweezer-top"] ?? SAMPLE_OHLC },
+  { id: "hunt-tweezer-bottom", name: "tweezer-bottom window", bars: PATTERN_OHLC["tweezer-bottom"] ?? SAMPLE_OHLC },
+  { id: "hunt-rising-wedge", name: "rising-wedge window", bars: PATTERN_OHLC["rising-wedge"] ?? SAMPLE_OHLC },
+  { id: "hunt-falling-wedge", name: "falling-wedge window", bars: PATTERN_OHLC["falling-wedge"] ?? SAMPLE_OHLC },
+  { id: "hunt-bull-flag", name: "bull-flag window", bars: PATTERN_OHLC["bull-flag"] ?? SAMPLE_OHLC },
+  { id: "hunt-double-top", name: "double-top window", bars: PATTERN_OHLC["double-top"] ?? SAMPLE_OHLC },
+  { id: "hunt-double-bottom", name: "double-bottom window", bars: PATTERN_OHLC["double-bottom"] ?? SAMPLE_OHLC },
+  { id: "hunt-triangle", name: "triangle window", bars: PATTERN_OHLC.triangle ?? SAMPLE_OHLC },
+  { id: "hunt-head-shoulders", name: "head-shoulders window", bars: PATTERN_OHLC["head-shoulders"] ?? SAMPLE_OHLC },
 ];
 export const HUNT_TAPE: OHLC[] = HUNT_TAPES[0]!.bars;
 
@@ -484,7 +484,7 @@ export function gradeLookalike(roundId: string, pick: "A" | "B"): GradeResult {
     return { grade: "incorrect", tip: "Unknown lookalike round." };
   }
   if (pick === round.correct) {
-    return { grade: "correct", tip: "Yes — context and shape both match. SAMPLE teaching." };
+    return { grade: "correct", tip: "Yes — context and shape both match." };
   }
   return {
     grade: "incorrect",
@@ -512,7 +512,7 @@ export const INVALIDATION_ROUNDS: BandRound[] = [
     highlightIndex: 3,
     bandLow: 62720,
     bandHigh: 62880,
-    tip: "The fade is wrong if price holds through the wick low. SAMPLE process, not a LIVE stop.",
+    tip: "The fade is wrong if price holds through the wick low. Process, not a live stop.",
   },
   {
     id: "inv-evening-star",
@@ -522,7 +522,7 @@ export const INVALIDATION_ROUNDS: BandRound[] = [
     highlightIndex: 3,
     bandLow: 63920,
     bandHigh: 64080,
-    tip: "Reclaiming the first green high rewrites the evening-star read. SAMPLE process.",
+    tip: "Reclaiming the first green high rewrites the evening-star read.",
   },
   {
     id: "inv-piercing-line",
@@ -532,7 +532,7 @@ export const INVALIDATION_ROUNDS: BandRound[] = [
     highlightIndex: 3,
     bandLow: 62420,
     bandHigh: 62580,
-    tip: "If the next print loses the pierce low, you do not own a reclaim. SAMPLE process.",
+    tip: "If the next print loses the pierce low, you do not own a reclaim.",
   },
   {
     id: "inv-soldiers",
@@ -542,7 +542,7 @@ export const INVALIDATION_ROUNDS: BandRound[] = [
     highlightIndex: 3,
     bandLow: 62970,
     bandHigh: 63130,
-    tip: "Losing the first soldier is not a soldiers tape anymore. SAMPLE process.",
+    tip: "Losing the first soldier is not a soldiers tape anymore.",
   },
   {
     id: "inv-tweezer-top",
@@ -552,7 +552,7 @@ export const INVALIDATION_ROUNDS: BandRound[] = [
     highlightIndex: 3,
     bandLow: 64720,
     bandHigh: 64880,
-    tip: "A new high after the match cancels the tweezer. SAMPLE process.",
+    tip: "A new high after the match cancels the tweezer.",
   },
   {
     id: "inv-head-shoulders",
@@ -562,7 +562,7 @@ export const INVALIDATION_ROUNDS: BandRound[] = [
     highlightIndex: 3,
     bandLow: 64720,
     bandHigh: 64880,
-    tip: "A new high after the right shoulder is not head-and-shoulders. SAMPLE process.",
+    tip: "A new high after the right shoulder is not head-and-shoulders.",
   },
   {
     id: "inv-falling-wedge",
@@ -572,7 +572,7 @@ export const INVALIDATION_ROUNDS: BandRound[] = [
     highlightIndex: 4,
     bandLow: 62720,
     bandHigh: 62880,
-    tip: "If the next print loses the coil low, you do not own a wedge bounce. SAMPLE process.",
+    tip: "If the next print loses the coil low, you do not own a wedge bounce.",
   },
   {
     id: "inv-bull-flag",
@@ -582,7 +582,7 @@ export const INVALIDATION_ROUNDS: BandRound[] = [
     highlightIndex: 5,
     bandLow: 63670,
     bandHigh: 63830,
-    tip: "A flag that loses its pause low is not a rest. SAMPLE process.",
+    tip: "A flag that loses its pause low is not a rest.",
   },
   {
     id: "inv-rising-wedge",
@@ -592,7 +592,7 @@ export const INVALIDATION_ROUNDS: BandRound[] = [
     highlightIndex: 5,
     bandLow: 64520,
     bandHigh: 64680,
-    tip: "A new high after the coil can cancel the fade. SAMPLE process.",
+    tip: "A new high after the coil can cancel the fade.",
   },
 ];
 
@@ -605,7 +605,7 @@ export const LEVEL_ROUNDS: BandRound[] = [
     highlightIndex: 3,
     bandLow: 62720,
     bandHigh: 62880,
-    tip: "Two neighboring lows are a support zone, not a magic tick. SAMPLE teaching.",
+    tip: "Two neighboring lows are a support zone, not a magic tick.",
   },
   {
     id: "lvl-tweezer-top",
@@ -615,7 +615,7 @@ export const LEVEL_ROUNDS: BandRound[] = [
     highlightIndex: 3,
     bandLow: 64720,
     bandHigh: 64880,
-    tip: "Two neighboring highs are a resistance zone. SAMPLE teaching.",
+    tip: "Two neighboring highs are a resistance zone.",
   },
   {
     id: "lvl-double-bottom",
@@ -625,7 +625,7 @@ export const LEVEL_ROUNDS: BandRound[] = [
     highlightIndex: 3,
     bandLow: 63120,
     bandHigh: 63280,
-    tip: "Two swing lows with a bounce between. SAMPLE zone, not a LIVE bid.",
+    tip: "Two swing lows with a bounce between. A zone, not a live bid.",
   },
   {
     id: "lvl-double-top",
@@ -635,7 +635,7 @@ export const LEVEL_ROUNDS: BandRound[] = [
     highlightIndex: 1,
     bandLow: 64320,
     bandHigh: 64680,
-    tip: "Two similar highs with a dip between. SAMPLE zone, not a LIVE offer.",
+    tip: "Two similar highs with a dip between. A zone, not a live offer.",
   },
   {
     id: "lvl-piercing-zone",
@@ -645,7 +645,7 @@ export const LEVEL_ROUNDS: BandRound[] = [
     highlightIndex: 2,
     bandLow: 62950,
     bandHigh: 63800,
-    tip: "A pierce closes into the prior red body. SAMPLE read, not a fill.",
+    tip: "A pierce closes into the prior red body. Not a fill.",
   },
   {
     id: "lvl-dark-cloud-zone",
@@ -655,7 +655,7 @@ export const LEVEL_ROUNDS: BandRound[] = [
     highlightIndex: 2,
     bandLow: 63500,
     bandHigh: 64450,
-    tip: "A cover closes into the prior green body. SAMPLE read, not a fill.",
+    tip: "A cover closes into the prior green body. Not a fill.",
   },
   {
     id: "lvl-rising-wedge-high",
@@ -665,7 +665,7 @@ export const LEVEL_ROUNDS: BandRound[] = [
     highlightIndex: 5,
     bandLow: 64520,
     bandHigh: 64680,
-    tip: "Converging highs are a zone, not one tick. SAMPLE teaching.",
+    tip: "Converging highs are a zone, not one tick.",
   },
   {
     id: "lvl-triangle-low",
@@ -675,7 +675,7 @@ export const LEVEL_ROUNDS: BandRound[] = [
     highlightIndex: 5,
     bandLow: 63720,
     bandHigh: 63880,
-    tip: "Higher lows squeeze into a zone. SAMPLE teaching.",
+    tip: "Higher lows squeeze into a zone.",
   },
 ];
 
@@ -693,8 +693,8 @@ function gradeBand(round: BandRound | undefined, price: number, kind: "invalidat
       grade: "partial",
       tip:
         kind === "invalidation"
-          ? "Close — the cancel level is nearer the pattern extreme. SAMPLE zone, not one tick."
-          : "Close — treat support and resistance as a zone around the match. SAMPLE teaching.",
+          ? "Close — the cancel level is nearer the pattern extreme. A zone, not one tick."
+          : "Close — treat support and resistance as a zone around the match.",
     };
   }
   return {
@@ -765,11 +765,11 @@ export function gradePlan(plan: PlanMarks, last: OHLC): GradeResult {
 
 export function gradeHunt(markIndex: number, data: OHLC[], tolerance = 1): GradeResult {
   if (markIndex < 0 || markIndex >= data.length) {
-    return { grade: "incorrect", tip: "Tap a bar on the SAMPLE tape." };
+    return { grade: "incorrect", tip: "Tap a bar on the chart." };
   }
   const patterns = scanPatterns(data);
   if (patterns.length === 0) {
-    return { grade: "incorrect", tip: "This SAMPLE window has no textbook scan hit." };
+    return { grade: "incorrect", tip: "This window has no textbook scan hit." };
   }
   let nearest = Infinity;
   let hitAt = patterns[0]!.index;

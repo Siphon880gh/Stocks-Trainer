@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import PracticeShell from "../../components/PracticeShell";
 import JargonText, { GlossaryButtons } from "../../components/JargonText";
 import { LITERACY_TERMS } from "../../lib/literacyTerms";
+import { withoutSampleWord } from "../../lib/learnerCopy";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
 
 export default function PracticeFlashcards() {
@@ -24,7 +25,8 @@ export default function PracticeFlashcards() {
   return (
     <PracticeShell
       title="Flashcards"
-      blurb="Literacy terms from Reference. SAMPLE teaching copy — not a live glossary of filings."
+      blurb="Literacy terms from Reference. Teaching copy — not a live glossary of filings."
+      sampleNote
     >
       <section className="panel p-6 space-y-4">
         <p className="text-[12px] text-muted">
@@ -35,21 +37,21 @@ export default function PracticeFlashcards() {
           onClick={() => setFlipped((f) => !f)}
           className="w-full min-h-[160px] border border-line rounded-lg p-6 text-left hover:bg-canvas"
         >
-          <p className="text-xl font-semibold">{term.name}</p>
+          <p className="text-xl font-semibold">{withoutSampleWord(term.name)}</p>
           {flipped ? (
             <div className="mt-3 space-y-2 text-sm">
               <p>
-                <JargonText text={term.summary} plain />
+                <JargonText text={withoutSampleWord(term.summary)} plain />
               </p>
               <p className="text-muted">
-                <JargonText text={term.detail} plain />
+                <JargonText text={withoutSampleWord(term.detail)} plain />
               </p>
             </div>
           ) : (
             <p className="text-sm text-muted mt-3">Tap to flip</p>
           )}
         </button>
-        {flipped ? <GlossaryButtons texts={[term.summary, term.detail]} /> : null}
+        {flipped ? <GlossaryButtons texts={[withoutSampleWord(term.summary), withoutSampleWord(term.detail)]} /> : null}
         <div className="flex gap-3">
           <button
             type="button"

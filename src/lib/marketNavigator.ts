@@ -168,7 +168,7 @@ export function decideLockCopy(reason: DecideLockReason): string {
     return "LOCKED · earlier path steps first — or browse this session";
   }
   if (reason === "no_pack") {
-    return "LOCKED · SAMPLE decide pack not seeded for this class yet";
+    return "LOCKED · no decide pack for this class yet";
   }
   return "";
 }
