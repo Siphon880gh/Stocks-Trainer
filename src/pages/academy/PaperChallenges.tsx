@@ -224,6 +224,8 @@ export default function PaperChallenges({ storage, now = new Date() }: { storage
 
   return (
     <main className="flex-1 px-4 py-6 max-w-5xl mx-auto w-full space-y-4" data-testid="challenge-list">
+      <div className="relative pr-9">
+      <SampleDataNote />
       <p className="text-[12px] text-muted">
         <Link to="/academy" className="hover:text-ink">
           Academy
@@ -239,7 +241,7 @@ export default function PaperChallenges({ storage, now = new Date() }: { storage
         Short scenarios. Following the rules earns 60 of the 100 points, so a disciplined loss beats a lucky rule-break. Benchmarks are fictional scripted
         plays.
       </p>
-      <SampleDataNote />
+      </div>
       <SimulatedBanner />
       <Link to={`/paper/challenges/${week.id}`} className="panel p-4 block border-sim/50 hover:border-sim" data-testid="challenge-of-the-week" data-challenge={week.id}>
         <p className="text-[12px] text-sim font-semibold uppercase">Challenge of the week</p>

@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { applyWhatIf, computeForecast, type ForecastInput, type WhatIf } from "../../lib/financials/cashForecast";
 import { CASH_FORECASTS } from "../../lib/financials/cashForecastFixtures";
 import { FIN_DISCLAIMER, fmtK } from "../../lib/financials/format";
+import SampleDataNote from "../SampleDataNote";
 import CashForecastTable from "./CashForecastTable";
 
 interface CashForecastPanelProps {
@@ -20,7 +21,8 @@ export default function CashForecastPanel({ forecasts = CASH_FORECASTS, initialI
   const toggle = (k: keyof WhatIf, def: boolean) => setWhatIf((w) => ({ ...w, [k]: !(w[k] ?? def) }));
 
   return (
-    <section className="space-y-3" data-testid="cash-forecast-panel">
+    <section className="relative space-y-3 pr-9" data-testid="cash-forecast-panel">
+      <SampleDataNote text={FIN_DISCLAIMER} />
       <div className="flex flex-wrap gap-2">
         {forecasts.map((f) => (
           <button
@@ -85,7 +87,6 @@ export default function CashForecastPanel({ forecasts = CASH_FORECASTS, initialI
       </fieldset>
 
       <CashForecastTable result={result} />
-      <p className="text-[10px] text-muted">{FIN_DISCLAIMER}</p>
     </section>
   );
 }

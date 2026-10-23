@@ -19,7 +19,7 @@ export default function PracticeShell({
   return (
     <div className="flex-1 flex flex-col">
       <main className="flex-1 px-4 py-6 max-w-4xl mx-auto w-full space-y-4">
-        <div>
+        <div className="relative pr-9">
           <p className="text-[12px] text-muted">
             <Link to="/training" className="hover:text-ink">
               Learn
@@ -33,7 +33,7 @@ export default function PracticeShell({
           <p className="text-[13px] text-muted">
             <JargonText text={blurb} />
           </p>
-          {sampleNote ? <SampleDataNote className="text-[12px] text-muted mt-1" /> : null}
+          {sampleNote ? <SampleDataNote /> : null}
         </div>
         {children}
       </main>

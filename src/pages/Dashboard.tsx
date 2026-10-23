@@ -144,7 +144,8 @@ export default function Dashboard() {
       {!goalPending ? <ProgressMapCard /> : null}
 
       <section className="flex flex-wrap items-end justify-between gap-4">
-        <div className="min-w-0">
+        <div className="relative min-w-0 pr-9">
+          <SampleDataNote />
           <p className="text-[13px] text-muted">
             {pathTemplate?.title ?? "Learning path"} · {pathStepLabel}
           </p>
@@ -174,7 +175,6 @@ export default function Dashboard() {
                 : `Start ${pathTemplate?.title ?? "your path"}.`}
             </p>
           )}
-          <SampleDataNote className="text-[12px] text-muted mt-2" />
         </div>
         <Link
           to={nextHref}

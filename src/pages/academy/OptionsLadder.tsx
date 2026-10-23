@@ -7,6 +7,8 @@ import { getOscSource } from "../../lib/oscillatorSources";
 export default function OptionsLadderPage() {
   return (
     <main className="flex-1 px-4 py-6 max-w-5xl mx-auto w-full space-y-4" data-testid="options-page">
+      <div className="relative pr-9">
+      <SampleDataNote />
       <p className="text-[12px] text-muted">
         <Link to="/academy" className="hover:text-ink">
           Academy
@@ -18,7 +20,7 @@ export default function OptionsLadderPage() {
         Four levels, in the order brokers usually approve them: covered strategies, buying options, spreads, then naked options as a concept. Every chart is profit or
         loss per share at expiration, from simple arithmetic. Pass each level's check to open the next.
       </p>
-      <SampleDataNote />
+      </div>
       <OptionsLadderView />
       <section className="panel p-4 space-y-2 text-[13px] max-w-3xl" data-testid="short-dated-risk">
         <h2 className="text-[15px] font-semibold text-ink">Short-dated options: a separate risk</h2>

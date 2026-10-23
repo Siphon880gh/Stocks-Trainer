@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { midpoint, resolveEvent, revenueLabelOf, RevenueLabel, type EarningsEvent, type Outcome } from "../../lib/financials/earningsEvents";
 import { FIN_DISCLAIMER, fmtEps, fmtK, fmtPct, glossaryHref } from "../../lib/financials/format";
+import SampleDataNote from "../SampleDataNote";
 import type { GuidanceRange } from "../../lib/financials/types";
 
 interface EarningsPreviewCardProps {
@@ -66,7 +67,10 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
           {revealActuals ? "Results vs expectations" : "Earnings preview"} · {r.company.name}{" "}
           <span className="font-mono text-[10px] text-muted">{r.company.ticker}</span> · {r.quarter.label}
         </h3>
-        <span className="text-[10px] text-muted font-mono">EPS in $ · revenue in $ thousands</span>
+        <span className="flex items-center gap-2">
+          <span className="text-[10px] text-muted font-mono">EPS in $ · revenue in $ thousands</span>
+          <SampleDataNote placement="inline" text={FIN_DISCLAIMER} />
+        </span>
       </div>
 
       {revealActuals ? (
@@ -182,7 +186,6 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
           </p>
         </div>
       </div>
-      <p className="px-3 pb-2 text-[10px] text-muted">{FIN_DISCLAIMER}</p>
     </div>
   );
 }

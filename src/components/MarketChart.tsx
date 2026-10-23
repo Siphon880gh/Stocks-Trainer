@@ -373,7 +373,7 @@ function ExplanationPopover({
       ref={ref}
       role="dialog"
       aria-label={`Bar ${note.step} of ${note.of} explanation`}
-      className="fixed z-[200] w-[300px] rounded border border-[#d1d4dc] bg-white shadow-md px-2.5 py-2 text-[12px] leading-relaxed"
+      className="fixed z-[200] w-[300px] rounded border border-[#d1d4dc] bg-white shadow-md px-2.5 py-2 pr-9 text-[12px] leading-relaxed"
       style={{
         left: pos.left,
         top: pos.top,
@@ -417,7 +417,7 @@ function ExplanationPopover({
       <p className="text-[#787b86] px-0.5">
         <JargonText text={withoutSampleWord(note.detail)} />
       </p>
-      <SampleDataNote className="mt-1.5 px-0.5 text-[11px] text-[#9aa0ac]" />
+      <SampleDataNote />
     </div>,
     document.body,
   );

@@ -4,6 +4,7 @@ import { applyWhatIf, computeForecast } from "../../lib/financials/cashForecast"
 import { forecastById } from "../../lib/financials/cashForecastFixtures";
 import { eventById } from "../../lib/financials/earningsEvents";
 import { FIN_DISCLAIMER } from "../../lib/financials/format";
+import SampleDataNote from "../SampleDataNote";
 import type { FinancialsExhibit } from "../../lib/financials/quizExhibit";
 import { EVENT_INDEX, generateReaction, revealAnnotations } from "../../lib/financials/reactionCharts";
 import BalanceSheetTable from "./BalanceSheetTable";
@@ -80,9 +81,9 @@ export default function FinancialsQuizExhibit({ exhibit, revealed = false }: Pro
   })();
   if (!body) return null;
   return (
-    <div className="space-y-1" data-financials-exhibit={exhibit.kind}>
+    <div className="relative pr-9" data-financials-exhibit={exhibit.kind}>
+      <SampleDataNote text={FIN_DISCLAIMER} />
       {body}
-      <p className="text-[10px] text-muted px-1">{FIN_DISCLAIMER}</p>
     </div>
   );
 }

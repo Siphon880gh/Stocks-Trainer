@@ -37,7 +37,8 @@ export default function Playbook() {
   return (
     <div className="flex-1 flex flex-col">
       <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-8 space-y-6">
-        <div className="space-y-2">
+        <div className="relative space-y-2 pr-9">
+          <SampleDataNote />
           <Link to="/playbooks" className="text-sm text-primary hover:underline">
             Back to playbooks
           </Link>
@@ -48,7 +49,6 @@ export default function Playbook() {
           <p className="text-sm text-muted">
             <JargonText text={withoutSampleWord(playbook.summary)} />
           </p>
-          <SampleDataNote />
           <p className="text-sm">
             <span className="text-muted">Resource · </span>
             <a

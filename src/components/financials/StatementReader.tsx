@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { COMPANIES } from "../../lib/financials/companies";
 import { FIN_DISCLAIMER } from "../../lib/financials/format";
+import SampleDataNote from "../SampleDataNote";
 import type { Company } from "../../lib/financials/types";
 import BalanceSheetTable from "./BalanceSheetTable";
 import CashFlowTable from "./CashFlowTable";
@@ -43,7 +44,8 @@ export default function StatementReader({
   const qs = company.quarters.slice(start);
 
   return (
-    <section className="space-y-3" data-testid="statement-reader">
+    <section className="relative space-y-3 pr-9" data-testid="statement-reader">
+      <SampleDataNote text={FIN_DISCLAIMER} />
       <div className="flex flex-wrap gap-2" role="tablist" aria-label="Company">
         {companies.map((c) => (
           <button
@@ -108,7 +110,6 @@ export default function StatementReader({
         </ul>
       )}
 
-      <p className="text-[10px] text-muted">{FIN_DISCLAIMER}</p>
     </section>
   );
 }

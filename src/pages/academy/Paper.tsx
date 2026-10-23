@@ -60,7 +60,8 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
 
   return (
     <main className="flex-1 px-4 py-6 max-w-6xl mx-auto w-full space-y-4" data-testid="paper-page">
-      <header className="space-y-1">
+      <header className="relative space-y-1 pr-9">
+        <SampleDataNote />
         <p className="text-[12px] text-muted">
           <Link to="/academy" className="hover:text-ink">
             Academy
@@ -76,7 +77,6 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
         <p className="text-[13px] text-muted max-w-3xl">
           Practise every order type with virtual money. Step one daily bar at a time; nothing after the current bar is shown.
         </p>
-        <SampleDataNote />
       </header>
       {note ? (
         <p className="text-[13px] panel px-3 py-2 border-sim/40" role="status" data-testid="reward-toast">

@@ -93,7 +93,8 @@ export default function Cases() {
     <div className="flex-1 flex flex-col">
       <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-8 space-y-8">
         <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
+          <div className="relative min-w-0 pr-9">
+          <SampleDataNote />
           <h1 className="text-2xl font-semibold tracking-tight">
             Case studies
           </h1>
@@ -104,7 +105,6 @@ export default function Cases() {
               ? " Your beginner path shows beginner cases only."
               : null}
           </p>
-          <SampleDataNote className="text-[12px] text-muted mt-2" />
           {focusPack ? (
             <p className="text-[11px] text-primary/70 mt-2">
               Showing: {CASE_PACKS.find((p) => p.id === focusPack)?.name ?? focusPack}

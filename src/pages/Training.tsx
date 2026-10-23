@@ -129,7 +129,8 @@ export default function Training() {
           </div>
         )}
         {/* Quiz Launch Card */}
-        <div className="w-full max-w-xl panel p-8 space-y-6">
+        <div className="relative w-full max-w-xl panel p-8 pr-12 space-y-6">
+          <SampleDataNote />
           <div className="flex items-center gap-4">
             <span className="material-symbols-outlined text-4xl text-primary">quiz</span>
             <div>
@@ -222,7 +223,6 @@ export default function Training() {
             <p className="text-muted text-sm">
               {withoutSampleWord(QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.description ?? "")}
             </p>
-            <SampleDataNote />
             <p className="text-[13px] text-muted">
               Earnings phrases:{" "}
               <button
@@ -387,7 +387,7 @@ export default function Training() {
         </div>
       </main>
 
-      <footer className="max-w-5xl mx-auto px-4 py-8 flex items-center justify-between border-t border-line mt-8 w-full text-sm text-muted">
+      <footer className="relative max-w-5xl mx-auto px-4 py-8 pr-14 flex items-center justify-between border-t border-line mt-8 w-full text-sm text-muted">
         <div className="flex gap-6">
           <Link to="/archive" className="hover:text-ink">
             Reference
@@ -401,7 +401,7 @@ export default function Training() {
             </button>
           )}
         </div>
-        <SampleDataNote className="text-[12px] text-muted" />
+        <SampleDataNote />
       </footer>
 
       <QuizModal

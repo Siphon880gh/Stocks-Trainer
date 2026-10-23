@@ -4,6 +4,7 @@ import CandlestickChart from "../CandlestickChart";
 import { mergeAnnotations, type ChartLevel } from "../../lib/chartAnnotations";
 import { eventById, resolveEvent } from "../../lib/financials/earningsEvents";
 import { FIN_DISCLAIMER, glossaryHref } from "../../lib/financials/format";
+import SampleDataNote from "../SampleDataNote";
 import { BAND_ROUNDS, BAND_TOLERANCE, FILL_TOLERANCE, gradeBand } from "../../lib/financials/markTheBand";
 import { EVENT_INDEX, generateReaction, revealAnnotations } from "../../lib/financials/reactionCharts";
 
@@ -70,7 +71,8 @@ export default function MarkTheBand({ initialRoundIndex = 0, initialPhase = "ban
   };
 
   return (
-    <div className="space-y-4" data-testid="mark-the-band" data-phase={phase}>
+    <div className="relative space-y-4 pr-9" data-testid="mark-the-band" data-phase={phase}>
+      <SampleDataNote text={FIN_DISCLAIMER} />
       <div className="flex flex-wrap items-center gap-3 text-[12px] text-muted">
         <span className="rounded border border-line px-2 py-0.5 text-ink">Round {index + 1} / {BAND_ROUNDS.length}</span>
         <span>
@@ -151,7 +153,6 @@ export default function MarkTheBand({ initialRoundIndex = 0, initialPhase = "ban
           </p>
         </div>
       ) : null}
-      <p className="text-[11px] text-muted">{FIN_DISCLAIMER}</p>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import CandlestickChart from "../CandlestickChart";
+import SampleDataNote from "../SampleDataNote";
 import { eventById, resolveEvent } from "../../lib/financials/earningsEvents";
 import { fmtK, fmtMonths, fmtPct, fmtX, glossaryHref } from "../../lib/financials/format";
 import { bankQuarterMetrics } from "../../lib/financials/bankMetrics";
@@ -167,7 +168,8 @@ export default function ReadThePrintGame({
   const rightLabel = PRINT_OPTIONS.find((o) => o.id === round.answer)!.label;
 
   return (
-    <section className="space-y-3" ref={rootRef} data-testid="rtp-game" data-phase={phase}>
+    <section className="relative space-y-3 pr-9" ref={rootRef} data-testid="rtp-game" data-phase={phase}>
+      <SampleDataNote text={round.disclaimer} />
       <div className="flex flex-wrap items-center gap-2 text-[12px] text-muted">
         <span className="px-2 py-0.5 rounded border border-line bg-surface text-ink">
           Round {index + 1} / {rounds.length}
@@ -324,7 +326,6 @@ export default function ReadThePrintGame({
         </div>
       ) : null}
 
-      <p className="text-[10px] text-muted">{round.disclaimer}</p>
     </section>
   );
 }

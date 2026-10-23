@@ -63,7 +63,8 @@ export default function Coach() {
     <div className="flex-1 flex flex-col">
       <main className="flex-grow max-w-3xl mx-auto w-full px-6 py-8 space-y-8">
         <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
+          <div className="relative min-w-0 pr-9">
+          <SampleDataNote />
           <h1 className="text-2xl font-semibold tracking-tight">
             Step coaching
           </h1>
@@ -71,7 +72,6 @@ export default function Coach() {
             Deterministic decision trees. Fail, read the correction, rewind, then finish a success
             path.
           </p>
-          <SampleDataNote className="text-[12px] text-muted mt-2" />
           </div>
           <BrowsePopover
             title="Sessions"

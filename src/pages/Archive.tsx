@@ -569,6 +569,8 @@ export default function Archive() {
                   <YouTubeSearchLink title={withoutSampleWord(selectedTerm.name)} />
                 </h3>
               </div>
+              <div className="flex items-start gap-1">
+              <SampleDataNote placement="inline" />
               <button
                 type="button"
                 className="text-primary hover:bg-primary/10 p-1 rounded"
@@ -582,11 +584,11 @@ export default function Archive() {
               >
                 <span className="material-symbols-outlined">close</span>
               </button>
+              </div>
             </div>
             <p className="text-sm text-slate-300">
               <JargonText text={withoutSampleWord(selectedTerm.detail)} />
             </p>
-            <SampleDataNote />
             <Link
               to="/training?group=equity-literacy&start=1"
               className="inline-flex text-xs font-bold text-primary underline"

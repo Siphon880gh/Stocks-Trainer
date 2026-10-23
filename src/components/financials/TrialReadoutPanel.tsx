@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import CandlestickChart from "../CandlestickChart";
 import type { ChartAnnotations } from "../../lib/chartAnnotations";
 import { FIN_DISCLAIMER, fmtK, fmtMonths, glossaryHref } from "../../lib/financials/format";
+import SampleDataNote from "../SampleDataNote";
 import { freeCashFlow } from "../../lib/financials/metrics";
 import {
   READOUT_INDEX,
@@ -93,7 +94,8 @@ export default function TrialReadoutPanel({ initialId, initialPhase = "setup" }:
   };
 
   return (
-    <section className="space-y-3" data-testid="trial-readout-panel">
+    <section className="relative space-y-3 pr-9" data-testid="trial-readout-panel">
+      <SampleDataNote text={`Invented trials and drugs, not medical information. ${FIN_DISCLAIMER}`} />
       <div className="flex flex-wrap gap-2" role="tablist" aria-label="Readout">
         {TRIAL_READOUTS.map((r) => (
           <button
@@ -161,9 +163,6 @@ export default function TrialReadoutPanel({ initialId, initialPhase = "setup" }:
           <Question q={follow} picked={followPick} onPick={setFollowPick} testId="readout-follow-up" />
         </div>
       ) : null}
-      <p className="text-[10px] text-muted">
-        Invented trials and drugs, not medical information. {FIN_DISCLAIMER}
-      </p>
     </section>
   );
 }

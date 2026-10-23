@@ -242,8 +242,9 @@ export default function CoachSession() {
           tabIndex={-1}
           aria-labelledby={messageId}
           aria-live="polite"
-          className={`border rounded-xl p-4 space-y-3 outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${outcomeUi.panel}`}
+          className={`relative border rounded-xl p-4 pr-12 space-y-3 outline-none focus-visible:ring-2 focus-visible:ring-primary/60 ${outcomeUi.panel}`}
         >
+          <SampleDataNote />
           <div className="flex flex-wrap items-center gap-2">
             <span
               className={`inline-flex items-center gap-1 font-mono text-[10px] tracking-widest border px-2 py-0.5 ${outcomeUi.badge}`}
@@ -277,7 +278,6 @@ export default function CoachSession() {
           >
             <JargonText text={withoutSampleWord(node.message)} />
           </p>
-          <SampleDataNote className="text-[12px] text-muted" />
         </div>
 
         {showChoices ? (

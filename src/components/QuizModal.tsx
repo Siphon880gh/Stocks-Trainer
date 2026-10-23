@@ -235,8 +235,8 @@ export default function QuizModal({
           ) : question.snapshotId ? (
             <FinancialSnapshotCard snapshotId={question.snapshotId} />
           ) : question.overlayId || question.patternKey ? (
-            <div className="overflow-hidden">
-              <SampleDataNote className="text-[11px] text-[#787b86] px-1 pb-1" />
+            <div className="relative">
+              <SampleDataNote />
               {question.overlayId && quizSamplePackName(question) ? (
                 <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">
                   {withoutSampleWord(quizSamplePackName(question) ?? "")}

@@ -188,9 +188,9 @@ export default function Market() {
   return (
     <div className="flex-1 flex flex-col min-h-0 relative">
       <div className="border-b border-line bg-surface px-4 py-3 flex items-center justify-between gap-4">
-        <div>
+        <div className="relative pr-9">
           <h1 className="text-lg font-semibold tracking-tight">Charts</h1>
-          <SampleDataNote className="text-[12px] text-muted mt-0.5" />
+          <SampleDataNote />
         </div>
         <label className="flex flex-col text-right gap-0.5">
           <span className="text-[12px] text-muted">Provider</span>

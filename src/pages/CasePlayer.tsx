@@ -141,7 +141,8 @@ export default function CasePlayer() {
       </div>
 
       <main className="flex-1 max-w-3xl mx-auto w-full p-4 space-y-4">
-        <div className="panel p-4 space-y-2">
+        <div className="relative panel p-4 pr-12 space-y-2">
+          <SampleDataNote />
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold">{withoutSampleWord(study.title)}</h1>
             <YouTubeSearchLink title={withoutSampleWord(study.title)} />
@@ -149,7 +150,6 @@ export default function CasePlayer() {
           <p className="text-sm">
             <JargonText text={withoutSampleWord(study.brief)} />
           </p>
-          <SampleDataNote />
           <p className="text-[13px] text-muted leading-relaxed">
             Tip: <JargonText text={withoutSampleWord(coachTipForThinkingMode(study.thinkingMode))} />
           </p>

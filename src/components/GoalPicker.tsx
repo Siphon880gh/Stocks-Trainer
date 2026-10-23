@@ -45,9 +45,9 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
         ))}
       </div>
 
-      <div className="border border-line rounded-lg p-4 space-y-2 bg-canvas">
-        <p className="text-sm">{withoutSampleWord(selected.description)}</p>
+      <div className="relative border border-line rounded-lg p-4 pr-12 space-y-2 bg-canvas">
         <SampleDataNote />
+        <p className="text-sm">{withoutSampleWord(selected.description)}</p>
         {selected.id === BEGINNER_EQUITIES_PATH.id ? (
           <ul className="text-[12px] text-muted space-y-1">
             <li>Who: first-time stock learners. Traditional retail equities stay here.</li>

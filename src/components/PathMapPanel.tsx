@@ -157,7 +157,8 @@ export default function PathMapPanel({
         })}
       </ol>
 
-      <div className="px-4 pb-4 space-y-2 text-sm border-t border-line pt-3">
+      <div className="relative px-4 pb-4 pr-10 space-y-2 text-sm border-t border-line pt-3">
+        <SampleDataNote />
         {pathDone ? (
           <p>
             Credential: {template?.title ?? "Path"} complete. Progress here is not an attested certificate.
@@ -173,7 +174,6 @@ export default function PathMapPanel({
             <p className="text-muted">
               Coach: <JargonText text={withoutSampleWord(coachTip)} />
             </p>
-            <SampleDataNote />
             {active.trainingGroup ? (
               <button
                 type="button"

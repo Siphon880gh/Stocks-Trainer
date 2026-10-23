@@ -262,13 +262,13 @@ export default function Playbooks() {
     <div className="flex-1 flex flex-col">
       <main className="flex-grow max-w-6xl mx-auto w-full px-6 py-8 space-y-6">
         <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
+          <div className="relative min-w-0 pr-9">
+            <SampleDataNote />
             <h1 className="text-2xl font-semibold tracking-tight">Playbooks</h1>
             <p className="text-muted text-sm mt-2">
               Strategy kits from a YouTube video, Medium post, or other page.
               Educational only — not a live desk.
             </p>
-            <SampleDataNote className="text-[12px] text-muted mt-2" />
           </div>
           {hasLibrary ? (
             <BrowsePopover
