@@ -194,6 +194,37 @@ const RULES: Record<string, Rule> = {
     assert.ok(falling(gains), "each push gains less");
     assert.ok(b[20].close < b[19].low && b[20].close < b[12].low, "close below the reversal bar and the last pullback low");
   },
+  "complex-head-shoulders": (b) => {
+    const highs = H(b, ...span(0, 26));
+    const head = max(highs);
+    const k = highs.indexOf(head);
+    const shoulders = H(b, 5, 9, 21, 25);
+    assert.ok(k >= 14 && k <= 16, "the head is the highest peak, in the middle");
+    assert.ok(shoulders.every((s) => s < head), "every shoulder below the head");
+    assert.ok(near(shoulders, 0.01), "shoulders peak near the same price");
+    assert.ok(near(L(b, 11, 19), 0.01), "near-horizontal neckline through the armpits");
+    assert.ok(b[27].close < min(L(b, 11, 19)), "close below the neckline");
+    assert.ok(avg(V(b, ...span(0, 15))) > avg(V(b, ...span(16, 26))), "volume heavier on the left");
+  },
+  "complex-inverse-head-shoulders": (b) => {
+    const heads = L(b, 11, 15);
+    const shoulders = L(b, 5, 21);
+    assert.ok(min(L(b, ...span(0, 23))) === min(heads), "a head is the lowest trough");
+    assert.ok(near(heads, 0.01), "twin heads bottom near the same price");
+    assert.ok(shoulders.every((s) => s > max(heads)), "shoulders above the heads");
+    assert.ok(near(shoulders, 0.01), "shoulders bottom near each other");
+    assert.ok(b[24].close > max(H(b, 8, 18)), "close above the neckline");
+    assert.ok(avg(V(b, ...span(0, 12))) > avg(V(b, ...span(13, 23))), "volume heavier on the left");
+  },
+  "low-tight-flag": (b) => {
+    const gain = b[12].close / b[0].close - 1;
+    assert.ok(gain >= 0.6 && gain < 0.9, "pole of 60–90%, short of doubling");
+    const top = max(H(b, ...span(0, 24)));
+    assert.ok((top - min(L(b, ...span(13, 24)))) / top <= 0.15, "pause no more than 15% deep");
+    assert.ok(b[25].close > top, "close above the pivot (highest high)");
+    assert.ok(avg(V(b, ...span(13, 24))) < avg(V(b, ...span(6, 12))), "volume quiet in the pause");
+    assert.ok(b[25].volume! > avg(V(b, ...span(13, 24))), "volume picks up on the breakout");
+  },
 };
 
 describe("chart pattern book", () => {

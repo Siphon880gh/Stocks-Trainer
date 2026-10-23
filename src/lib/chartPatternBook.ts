@@ -1,7 +1,8 @@
 /**
  * Chart, gap and volume patterns: windows, the four gap types, island reversals, flags and pennants,
  * triangles, rectangles, channels, rounding tops / bottoms, cups, broadening formations, diamonds,
- * the V bottom, and volume patterns (climax, dry-up, breakout volume, divergence).
+ * the V bottom, volume patterns (climax, dry-up, breakout volume, divergence), complex head-and-shoulders
+ * tops and bottoms, and the low tight flag.
  *
  * One table feeds the Archive (patterns.ts), the glossary and flashcards (literacyTerms.ts), the SIMULATED
  * charts and Buy-or-Sell drill specs (ohlcData.ts, buySellDrill.ts), the three-tab detail (patternTabs.ts)
@@ -30,7 +31,8 @@ export type BookGroup =
   | "diamond"
   | "spike"
   | "volume"
-  | "push";
+  | "push"
+  | "hs";
 
 export interface BookBuild {
   /** Swing points [bar index, close]; closes are interpolated between them. */
@@ -99,6 +101,9 @@ export const CHART_BOOK_SOURCES = {
   roundingTop: "https://thepatternsite.com/roundingtop.html",
   broadb: "https://thepatternsite.com/broadb.html",
   diamond: "https://thepatternsite.com/diamondt.html",
+  chst: "https://thepatternsite.com/chst.html",
+  chsb: "https://thepatternsite.com/chsb.html",
+  ltf: "https://deepvue.com/screener/leif-soreide-screens/",
 } as const;
 const S = CHART_BOOK_SOURCES;
 
@@ -1197,6 +1202,109 @@ export const CHART_BOOK: BookPattern[] = [
     confusers: ["volume-divergence", "rounding-top", "diamond-top"],
     source: "https://doi.org/10.1002/9781119202622.ch5",
     build: { seed: 131, pivots: [[0, 1000], [4, 1050], [6, 1035], [10, 1075], [12, 1062], [16, 1090], [18, 1078], [19, 1070], [20, 1054], [22, 1040]], vol: [[0, 360], [22, 360]], noise: 2 },
+  },
+  // ---------- complex head-and-shoulders (Bulkowski) ----------
+  {
+    id: "complex-head-shoulders",
+    name: "Complex Head and Shoulders Top",
+    group: "hs",
+    sentiment: "bearish",
+    type: "reversal",
+    confirmation: "high",
+    short: "A head-and-shoulders top with extra shoulders (or a double head), confirmed by a close below the neckline.",
+    recognise: [
+      "After an advance, a head-and-shoulders top with more than one shoulder on each side, or more than one head (rarely both). The shoulders peak near the same price and sit about the same distance from the head.",
+      "The neckline joins the lowest troughs (armpits) on either side of the head and is usually close to horizontal. Volume is usually heavier on the left side.",
+      "It confirms only on a close below the neckline; if the neckline slopes down, use a close below the right armpit instead.",
+    ],
+    psychology: [
+      "The head is the last push of the uptrend; each extra shoulder is another rally that fails below it.",
+      "Buyers keep defending the same floor while every bounce runs out of demand at a lower high than the head.",
+      "When the floor finally breaks, the buyers who defended it are trapped and their selling feeds the decline.",
+    ],
+    psy: "Rally after rally stalls below the head while buyers defend one floor, until the floor gives way.",
+    trade: down(
+      "Above the last right shoulder's high.",
+      "The height from the head down to the neckline, projected down from the breakout; treat it as a rough guide, since many breakdowns fall short.",
+      "A close below the neckline (or below the right armpit when the neckline slopes down).",
+    ),
+    stopAt: "above the last right shoulder",
+    mark: 25,
+    end: 27,
+    dir: "down",
+    lookalikes: ["diamond-top", "rounding-top"],
+    confusers: ["diamond-top", "broadening-top", "three-pushes"],
+    source: S.chst,
+    build: { seed: 132, pivots: [[0, 1000], [5, 1080], [7, 1052], [9, 1084], [11, 1048], [15, 1130], [19, 1050], [21, 1083], [23, 1054], [25, 1080], [27, 1036], [29, 1020]], vol: [[0, 420], [15, 400], [25, 260], [27, 380], [29, 340]], noise: 2 },
+  },
+  {
+    id: "complex-inverse-head-shoulders",
+    name: "Complex Head and Shoulders Bottom",
+    group: "hs",
+    sentiment: "bullish",
+    type: "reversal",
+    confirmation: "high",
+    short: "An inverse head-and-shoulders with extra shoulders or a double head, confirmed by a close above the neckline.",
+    recognise: [
+      "After a decline, an inverse head-and-shoulders with more than one head or more than one shoulder on a side (rarely both). Twin heads bottom near the same price, and the shoulders bottom near each other.",
+      "The neckline joins the highest peaks (armpits) on either side of the head(s). Volume is usually heavier on the left side; rising volume into the breakout helps.",
+      "It confirms only on a close above the neckline; if the neckline slopes up, use a close above the right armpit instead.",
+    ],
+    psychology: [
+      "Sellers push to a low, then try again and fail to go meaningfully lower: the second head is a test that holds.",
+      "The shoulders are shallower dips, so sellers are losing force on each attempt.",
+      "A close above the neckline shows buyers taking out the supply that capped every bounce.",
+    ],
+    psy: "Sellers test the low twice and fail, each dip is shallower, and buyers finally clear the ceiling.",
+    trade: up(
+      "Below the right shoulder's low.",
+      "The depth from the lowest head up to the neckline, projected up from the breakout; a rough guide, not a promise.",
+      "A close above the neckline (or above the right armpit when the neckline slopes up).",
+    ),
+    stopAt: "below the right shoulder",
+    mark: 21,
+    end: 24,
+    dir: "up",
+    lookalikes: ["diamond-bottom", "rounding-bottom"],
+    confusers: ["diamond-bottom", "broadening-bottom", "v-bottom"],
+    source: S.chsb,
+    build: { seed: 133, pivots: [[0, 1150], [5, 1070], [8, 1104], [11, 1030], [13, 1062], [15, 1029], [18, 1103], [21, 1071], [23, 1098], [24, 1122], [26, 1136]], vol: [[0, 420], [11, 440], [15, 380], [21, 260], [23, 280], [26, 360]], spikes: { 24: 1.9 }, noise: 2 },
+  },
+  // ---------- low tight flag (momentum-trader setup) ----------
+  {
+    id: "low-tight-flag",
+    name: "Low Tight Flag",
+    group: "flag",
+    sentiment: "bullish",
+    type: "continuation",
+    confirmation: "medium",
+    lessStandard: true,
+    short: "A strong 60–90% run that falls short of doubling, then a tight, shallow pause near the highs.",
+    recognise: [
+      "A momentum traders' setup, less standard than the classic flags: the pole rises about 60% to 90% in roughly eight weeks, short of the high and tight flag's doubling.",
+      "The pause stays near the highs and is no more than about 25% deep (15% or less is preferred). It often needs more than three to five weeks, and volume goes quiet.",
+      "It confirms only on a close above the pattern's highest high (the pivot), ideally on rising volume.",
+    ],
+    psychology: [
+      "A strong run shows real demand, even though it has not doubled.",
+      "Holders refuse to give much back: the pullback stays shallow and volume dries up as sellers run out.",
+      "A close above the pivot shows buyers are ready to push the trend on.",
+    ],
+    psy: "After a 60–90% run, holders give back little: the pause is shallow and quiet.",
+    trade: up(
+      "Below the flag's low.",
+      "The next resistance; momentum leaders can run further, so trail the stop rather than fix a target.",
+      "A close above the highest high in the pattern (the pivot), ideally on above-average volume.",
+      "A buy stop above the pivot, or a close above it.",
+    ),
+    stopAt: "below the flag's low",
+    mark: 25,
+    end: 25,
+    dir: "up",
+    lookalikes: ["high-tight-flag", "bull-pennant"],
+    confusers: ["high-tight-flag", "bull-pennant", "bearish-rectangle"],
+    source: S.ltf,
+    build: { seed: 134, pivots: [[0, 1000], [12, 1700], [15, 1590], [17, 1660], [20, 1560], [22, 1650], [24, 1610], [25, 1760], [27, 1800]], vol: [[0, 320], [12, 600], [13, 340], [24, 200], [25, 560], [27, 420]], noise: 6 },
   },
 ];
 

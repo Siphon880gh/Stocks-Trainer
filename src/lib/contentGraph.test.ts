@@ -128,7 +128,7 @@ const DEDICATED_FLOORS: Record<string, number> = {
   oscillators: 18,
   // Japanese candlesticks core 14 + framing, Heikin-Ashi lesson + lab
   "japanese-candles": 30,
-  "chart-patterns": 140,
+  "chart-patterns": 170,
   "heikin-ashi": 12,
   "trading-risk": 12,
   squeezes: 12,

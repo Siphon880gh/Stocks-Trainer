@@ -349,6 +349,9 @@ export const PATTERN_THEMES: Record<string, PatternThemes> = {
   "diamond-bottom": t("bullish-reversal", "expansion", "convergence"),
   "v-bottom": t("bullish-reversal", "exhaustion"),
   "three-pushes": t("exhaustion", "bearish-reversal"),
+  "complex-head-shoulders": t("bearish-reversal", "measured-move", "basing"),
+  "complex-inverse-head-shoulders": t("bullish-reversal", "measured-move", "basing"),
+  "low-tight-flag": t("continuation", "momentum", "breakout"),
   "supply-zone": t("role-reversal", "bearish-reversal"),
   "demand-zone": t("role-reversal", "bullish-reversal"),
   // gaps and volume

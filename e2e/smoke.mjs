@@ -291,6 +291,27 @@ const flows = {
     check(/Chart, Gap & Volume Patterns/.test(await p.locator("main").innerText()), `chart patterns: Learn group missing @${w}`);
   },
 
+  async "Chart pattern leftovers: complex head-and-shoulders and low tight flag in Archive and Learn"(p, w) {
+    for (const [id, dir, theme, word] of [
+      ["complex-head-shoulders", "down", "bearish-reversal", /neckline/i],
+      ["complex-inverse-head-shoulders", "up", "bullish-reversal", /neckline/i],
+      ["low-tight-flag", "up", "continuation", /pivot/i],
+    ]) {
+      await p.goto(base + `/archive?tab=patterns&open=${id}`, { waitUntil: "networkidle" });
+      check((await p.getByTestId("pattern-illustration").count()) === 1, `leftovers: ${id} illustration @${w}`);
+      check((await p.getByTestId("pattern-direction").getAttribute("data-direction")) === dir, `leftovers: ${id} direction @${w}`);
+      check(/\/practice\/pattern-themes\?theme=/.test((await p.getByTestId("pattern-theme-primary").getAttribute("href")) ?? "") && (await p.getByTestId("pattern-theme-primary").getAttribute("href")).endsWith(theme), `leftovers: ${id} theme @${w}`);
+      await p.getByTestId("pattern-tab-trade").click();
+      const panel = await p.getByTestId("pattern-tabpanel").innerText();
+      check(word.test(panel) && /Stop \(invalidation\)/.test(panel) && !/general guide/i.test(panel), `leftovers: ${id} trade tab @${w}`);
+      check((await overflow(p)) <= 1, `leftovers: ${id} overflow @${w}`);
+      if (SHOTS && id !== "complex-inverse-head-shoulders") await p.screenshot({ path: `${SHOTS}/${id}-${w}.png`, fullPage: false });
+      await p.keyboard.press("Escape");
+    }
+    const qs = getQuestionsForGroup("chart-patterns");
+    check(["complex-head-shoulders", "complex-inverse-head-shoulders", "low-tight-flag"].every((id) => qs.filter((q) => q.id.startsWith(`CP-${id}-`)).length === 5), `leftovers: Learn questions @${w}`);
+  },
+
   async "Gamma squeeze case: enter, size, exit, reveal, stall counterfactual, points"(p, w) {
     await p.goto(base + "/practice/gamma-squeeze", { waitUntil: "networkidle" });
     check(/not always net short/.test(await p.getByTestId("sqz-tldr").innerText()), `squeeze: TL;DR missing @${w}`);

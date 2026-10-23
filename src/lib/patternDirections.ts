@@ -20,7 +20,7 @@ const UP: readonly string[] = [
   "triple-bottom", "rising-window", "breakaway-gap", "runaway-gap", "island-bottom", "bull-pennant",
   "high-tight-flag", "ascending-triangle", "bullish-rectangle", "ascending-channel", "rounding-bottom",
   "cup-and-handle", "diamond-bottom", "v-bottom", "selling-climax", "volume-dry-up", "breakout-volume",
-  "pipe-bottom", "failed-breakdown",
+  "pipe-bottom", "failed-breakdown", "complex-inverse-head-shoulders", "low-tight-flag",
 ];
 
 /** Bearish reversals and bearish continuations. */
@@ -37,6 +37,7 @@ const DOWN: readonly string[] = [
   "falling-window", "exhaustion-gap", "island-top", "bear-flag", "bear-pennant", "descending-triangle",
   "bearish-rectangle", "descending-channel", "rounding-top", "inverse-cup-and-handle", "diamond-top",
   "volume-divergence", "three-pushes", "pipe-top", "failed-breakout", "blow-off-top",
+  "complex-head-shoulders",
 ];
 
 /** Indecision, compression and balance: the break decides. */
