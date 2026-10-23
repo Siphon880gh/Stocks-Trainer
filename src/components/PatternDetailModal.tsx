@@ -8,6 +8,7 @@ import { NOT_A_GUARANTEE, patternIllustration, patternTabs } from "../lib/patter
 import { CRYPTO_FIT_HINT, CRYPTO_FIT_LABEL, cryptoFitFor } from "../lib/cryptoCandles";
 import { getTheme } from "../lib/patternThemes";
 import { DIRECTION_ARROW, DIRECTION_LABEL } from "../lib/patternDirections";
+import { aliasesFor } from "../lib/patternAliases";
 
 export type PatternTab = "recognise" | "psychology" | "trade";
 export const PATTERN_TAB_LABELS: Record<PatternTab, string> = {
@@ -112,6 +113,12 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
                   </Link>
                 ))}
               </div>
+            ) : null}
+            {aliasesFor(pattern.id).length ? (
+              <p className="text-[11px] text-muted" data-testid="pattern-aliases">
+                <span className="font-mono uppercase tracking-wide text-[10px]">Also called</span>{" "}
+                <span className="text-ink">{aliasesFor(pattern.id).join(" · ")}</span>
+              </p>
             ) : null}
             {pattern.potentialDirection ? (
               <p className="text-[11px] text-muted" data-testid="pattern-direction" data-direction={pattern.potentialDirection}>

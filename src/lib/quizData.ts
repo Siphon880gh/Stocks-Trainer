@@ -5710,6 +5710,7 @@ function patternKeysForGroup(groupId: QuizGroupId): string[] {
   if (groupId === "harami") return ["harami", "bearish-harami", ...familyKeys("harami")];
   if (groupId === "morning-star") return ["morning-star", ...familyKeys("morning-star")];
   if (groupId === "evening-star") return ["evening-star", ...familyKeys("evening-star")];
+  if (groupId === "tweezer-top") return ["tweezer-top", "tweezer-star"];
   if (groupId === "double-top") return ["double-top", "triple-top"];
   if (groupId === "double-bottom") return ["double-bottom", "triple-bottom"];
   if (groupId === "rising-wedge") return ["rising-wedge", "sc-rising-wedge"];

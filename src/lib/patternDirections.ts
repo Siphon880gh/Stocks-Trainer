@@ -21,6 +21,7 @@ const UP: readonly string[] = [
   "high-tight-flag", "ascending-triangle", "bullish-rectangle", "ascending-channel", "rounding-bottom",
   "cup-and-handle", "diamond-bottom", "v-bottom", "selling-climax", "volume-dry-up", "breakout-volume",
   "pipe-bottom", "failed-breakdown", "complex-inverse-head-shoulders", "low-tight-flag",
+  "trend-stage-bounce", "measured-move-up", "neckline-retest-bullish", "rectangle-bottom", "step-bottom", "bullish-three-pushes",
 ];
 
 /** Bearish reversals and bearish continuations. */
@@ -38,6 +39,7 @@ const DOWN: readonly string[] = [
   "bearish-rectangle", "descending-channel", "rounding-top", "inverse-cup-and-handle", "diamond-top",
   "volume-divergence", "three-pushes", "pipe-top", "failed-breakout", "blow-off-top",
   "complex-head-shoulders",
+  "tweezer-star", "trendline-breakdown", "measured-move-down", "neckline-retest-bearish", "step-top", "bearish-breakaway-gap", "bearish-runaway-gap",
 ];
 
 /** Indecision, compression and balance: the break decides. */

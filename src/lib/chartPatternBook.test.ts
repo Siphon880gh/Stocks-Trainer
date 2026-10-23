@@ -225,6 +225,105 @@ const RULES: Record<string, Rule> = {
     assert.ok(avg(V(b, ...span(13, 24))) < avg(V(b, ...span(6, 12))), "volume quiet in the pause");
     assert.ok(b[25].volume! > avg(V(b, ...span(13, 24))), "volume picks up on the breakout");
   },
+  // ---------- r27 ----------
+  "trend-stage-bounce": (b) => {
+    assert.ok(rising(L(b, 6, 12, 19)) && rising(H(b, 4, 10, 16)), "higher highs and higher lows");
+    const slope = (b[12].low - b[6].low) / 6;
+    const line = (i: number) => b[12].low + slope * (i - 12);
+    assert.ok(Math.abs(b[19].low - line(19)) / line(19) <= 0.01, "pullback low on the rising trend line");
+    assert.ok(span(13, 18).every((i) => b[i].close > line(i)), "closes above the line into the pullback");
+    const sma = (i: number) => avg(C(b, ...span(i - 9, i)));
+    assert.ok(sma(19) > sma(12) && b[19].close > sma(19), "price above a rising average (Stage 2)");
+    assert.ok(avg(V(b, 17, 18, 19)) < avg(V(b, ...span(13, 16))), "lighter volume on the pullback");
+    assert.ok(b[20].close > b[19].high, "bounce closes above the prior bar's high");
+  },
+  "trendline-breakdown": (b) => {
+    const slope = (b[12].low - b[6].low) / 6;
+    const line = (i: number) => b[12].low + slope * (i - 12);
+    assert.ok(slope > 0, "an uptrend line");
+    assert.ok(Math.abs(b[18].low - line(18)) / line(18) <= 0.004, "third touch on the line (valid)");
+    assert.ok(span(7, 23).every((i) => b[i].close > line(i)), "closes above the line while the trend holds");
+    assert.ok(b[24].close < line(24), "close below the line");
+  },
+  "measured-move-up": (b) => {
+    const A = b[0].close, B = b[8].close, Cc = b[14].close;
+    assert.ok(B / A - 1 >= 0.08, "first leg up");
+    const retrace = (B - Cc) / (B - A);
+    assert.ok(retrace >= 0.3 && retrace <= 0.7, "partial correction");
+    assert.ok(Cc > A, "correction stays above the leg's start");
+    assert.ok(avg(V(b, ...span(9, 14))) < avg(V(b, ...span(1, 8))), "quieter correction");
+    assert.ok(b[15].close > max(H(b, 12, 13, 14)), "close above the correction's last lower high");
+    assert.ok(max(C(b, ...span(16, b.length - 1))) > B, "second leg runs past B");
+  },
+  "measured-move-down": (b) => {
+    const A = b[0].close, B = b[8].close, Cc = b[14].close;
+    assert.ok(1 - B / A >= 0.08, "first leg down");
+    const retrace = (Cc - B) / (A - B);
+    assert.ok(retrace >= 0.3 && retrace <= 0.7, "partial bounce");
+    assert.ok(Cc < A, "bounce stays below the leg's start");
+    assert.ok(b[15].close < min(L(b, 12, 13, 14)), "close below the bounce's last higher low");
+    assert.ok(min(C(b, ...span(16, b.length - 1))) < B, "second leg runs past B");
+  },
+  "neckline-retest-bullish": (b) => {
+    const neck = max(C(b, 7, 13));
+    assert.ok(near(C(b, 7, 13), 0.005), "flat neckline");
+    assert.ok(b[10].close < min(C(b, 4, 16)), "head below the shoulders");
+    assert.ok(b[19].close > neck, "breakout close above the neckline");
+    assert.ok(min(C(b, ...span(20, 24))) >= neck, "closes hold at or above the neckline");
+    assert.ok(Math.abs(b[24].low - neck) / neck <= 0.01, "throwback reaches the neckline");
+    assert.ok(avg(V(b, 22, 23, 24)) < b[19].volume!, "lighter volume on the throwback");
+    assert.ok(b[25].close > b[24].high, "bounce closes above the prior bar's high");
+  },
+  "neckline-retest-bearish": (b) => {
+    const neck = min(C(b, 7, 13));
+    assert.ok(near(C(b, 7, 13), 0.005), "flat neckline");
+    assert.ok(b[10].close > max(C(b, 4, 16)), "head above the shoulders");
+    assert.ok(b[19].close < neck, "breakdown close below the neckline");
+    assert.ok(max(C(b, ...span(20, 24))) <= neck, "closes hold at or below the neckline");
+    assert.ok(Math.abs(b[24].high - neck) / neck <= 0.01, "pullback reaches the neckline");
+    assert.ok(b[25].close < b[24].low, "turn down closes below the prior bar's low");
+  },
+  "rectangle-bottom": (b) => {
+    assert.ok(b[6].close < b[0].close * 0.92, "decline into the pattern");
+    assert.ok(near(C(b, 6, 12, 18), 0.005), "three touches of a flat floor");
+    assert.ok(near(C(b, 9, 15, 21), 0.01), "flat ceiling touched again");
+    const top = max(H(b, ...span(6, 21)));
+    const floor = min(L(b, ...span(6, 21)));
+    assert.ok((top - floor) / floor <= 0.06, "a box, not a trend");
+    assert.ok(avg(V(b, ...span(6, 12))) > avg(V(b, ...span(15, 21))), "volume trends down inside the box");
+    assert.ok(b[22].close > top, "close above the ceiling");
+  },
+  "step-top": (b) => {
+    assert.ok(b[6].close > b[0].close * 1.08, "advance into the top");
+    assert.ok(near(C(b, ...span(7, 11)), 0.01), "flat top shelf");
+    assert.ok(near(C(b, ...span(13, 18)), 0.01), "flat lower shelf");
+    assert.ok(max(H(b, ...span(13, 18))) < min(L(b, ...span(7, 11))), "lower shelf entirely below the top shelf");
+    assert.ok(b[19].close < min(L(b, ...span(13, 18))), "close below the lower shelf");
+  },
+  "step-bottom": (b) => {
+    assert.ok(b[6].close < b[0].close * 0.92, "decline into the bottom");
+    assert.ok(near(C(b, ...span(7, 11)), 0.01), "flat low shelf");
+    assert.ok(near(C(b, ...span(13, 18)), 0.01), "flat higher shelf");
+    assert.ok(min(L(b, ...span(13, 18))) > max(H(b, ...span(7, 11))), "higher shelf entirely above the low shelf");
+    assert.ok(b[19].close > max(H(b, ...span(13, 18))), "close above the higher shelf");
+  },
+  "bullish-three-pushes": (b) => {
+    assert.ok(falling(L(b, 4, 10, 16)), "three lower lows");
+    const losses = [b[0].close - b[4].close, b[6].close - b[10].close, b[12].close - b[16].close];
+    assert.ok(falling(losses), "each push loses less");
+    assert.ok(b[20].close > b[19].high && b[20].close > b[12].high, "close above the reversal bar and the last bounce high");
+  },
+  "bearish-breakaway-gap": (b) => {
+    const range = span(0, 14);
+    assert.ok(near([max(H(b, ...range)), min(L(b, ...range))], 0.05), "a range first");
+    assert.ok(b[15].high < min(L(b, ...range)), "gaps clear below the range");
+    assert.ok(b[15].volume! >= 2 * avg(V(b, ...range)), "volume jumps");
+  },
+  "bearish-runaway-gap": (b) => {
+    assert.ok(b[10].close < b[0].close * 0.95, "downtrend under way");
+    assert.ok(b[11].high < b[10].low, "gap in trend direction");
+    assert.ok(max(H(b, ...span(12, b.length - 1))) < b[10].low, "gap stays open");
+  },
 };
 
 describe("chart pattern book", () => {

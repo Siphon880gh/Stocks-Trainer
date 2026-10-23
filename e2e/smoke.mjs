@@ -312,6 +312,45 @@ const flows = {
     check(["complex-head-shoulders", "complex-inverse-head-shoulders", "low-tight-flag"].every((id) => qs.filter((q) => q.id.startsWith(`CP-${id}-`)).length === 5), `leftovers: Learn questions @${w}`);
   },
 
+  async "Poster names (r27): tweezer star, stage bounce, measured moves, neckline retests, square bottom, steps, aliases"(p, w) {
+    const rows = [
+      ["tweezer-star", "down", "bearish-reversal", /Shooting star tweezers/],
+      ["trend-stage-bounce", "up", "continuation", /Stage 2 pullback/],
+      ["trendline-breakdown", "down", "breakout", null],
+      ["measured-move-up", "up", "continuation", /Three-stage pattern/],
+      ["measured-move-down", "down", "continuation", /Three-stage pattern/],
+      ["neckline-retest-bullish", "up", "role-reversal", /On neckline \(ascending\)/],
+      ["neckline-retest-bearish", "down", "role-reversal", /On neckline \(descending\)/],
+      ["rectangle-bottom", "up", "bullish-reversal", /Square bottom/],
+      ["step-top", "down", "bearish-reversal", /Staircase down/],
+      ["step-bottom", "up", "bullish-reversal", /Staircase up/],
+      ["bullish-three-pushes", "up", "exhaustion", /3 push pattern/],
+      ["bearish-breakaway-gap", "down", "gap", /Breakaway gap \(descending\)/],
+      ["bearish-runaway-gap", "down", "gap", /Measuring gap/],
+      ["bull-flag", "up", null, /Parallelogram/],
+    ];
+    const shots = new Set(["tweezer-star", "trend-stage-bounce", "measured-move-up", "neckline-retest-bullish", "rectangle-bottom", "step-top"]);
+    for (const [id, dir, theme, alias] of rows) {
+      await p.goto(base + `/archive?tab=patterns&open=${id}`, { waitUntil: "networkidle" });
+      check((await p.getByTestId("pattern-illustration").count()) === 1, `r27: ${id} illustration @${w}`);
+      check((await p.getByTestId("pattern-direction").getAttribute("data-direction")) === dir, `r27: ${id} direction @${w}`);
+      if (theme) check(((await p.getByTestId("pattern-theme-primary").getAttribute("href")) ?? "").endsWith(theme), `r27: ${id} theme @${w}`);
+      if (alias) check(alias.test(await p.getByTestId("pattern-aliases").innerText()), `r27: ${id} also-called line @${w}`);
+      check(/SIMULATED/i.test(await p.locator("body").innerText()), `r27: ${id} not labelled SIMULATED @${w}`);
+      if (id !== "tweezer-star" && id !== "bull-flag") {
+        await p.getByTestId("pattern-tab-trade").click();
+        const panel = await p.getByTestId("pattern-tabpanel").innerText();
+        check(/Stop \(invalidation\)/.test(panel) && !/general guide/i.test(panel), `r27: ${id} trade tab @${w}`);
+      }
+      check((await overflow(p)) <= 1, `r27: ${id} overflow @${w}`);
+      if (SHOTS && shots.has(id)) await p.screenshot({ path: `${SHOTS}/r27-${id}-${w}.png`, fullPage: false });
+      await p.keyboard.press("Escape");
+    }
+    const qs = getQuestionsForGroup("chart-patterns");
+    check(rows.slice(1, 13).every(([id]) => qs.filter((q) => q.id.startsWith(`CP-${id}-`)).length === 5), `r27: Learn questions @${w}`);
+    check(getQuestionsForGroup("tweezer-top").some((q) => /tweezer-star/i.test(q.id) || /Tweezer Star/.test(q.prompt ?? "")), `r27: tweezer star Learn questions @${w}`);
+  },
+
   async "Gamma squeeze case: enter, size, exit, reveal, stall counterfactual, points"(p, w) {
     await p.goto(base + "/practice/gamma-squeeze", { waitUntil: "networkidle" });
     check(/not always net short/.test(await p.getByTestId("sqz-tldr").innerText()), `squeeze: TL;DR missing @${w}`);

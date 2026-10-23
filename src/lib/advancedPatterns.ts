@@ -221,6 +221,25 @@ export const ADVANCED_PATTERNS: AdvancedPattern[] = [
       [64048, 64350, 64000, 64300],
     ]),
   },
+  {
+    id: "tweezer-star",
+    name: "Tweezer Star",
+    rare: false,
+    family: "advanced-rare",
+    sentiment: "bearish",
+    confirmation: "medium",
+    signal: "bearish reversal",
+    short: "A tweezer top whose second candle is a shooting star.",
+    shape: "After a rally, a green candle is followed by a shooting star (small body near the low, long upper wick) whose high matches the green candle's high.",
+    read: "Buyers pushed to the same high twice and the second push was sold back down inside the bar: double rejection at one price. Bearish once a red candle closes below the shooting star's low; the read fails on a close above the shared high.",
+    end: 3,
+    dir: "down",
+    stop: "above the shared high",
+    lookalikes: [["tweezer-top", 4], ["shooting-star", 2]],
+    confusers: ["tweezer-top", "shooting-star", "bearish-engulfing", "evening-star"],
+    glossaryLink: "wick-rejection",
+    bars: bars([...UP_LEAD, [63700, 64400, 63650, 64300], [64250, 64400, 64180, 64200], [64180, 64220, 63850, 63900]]),
+  },
   // ---------- advanced / rare ----------
   {
     id: "stick-sandwich",
@@ -655,6 +674,8 @@ const EXISTING: Record<string, [string, string]> = {
   "bearish-counterattack": ["Bearish Counterattack", "Red opens far higher, closes at the green's close."],
   "falling-three-methods": ["Falling Three Methods", "Long red, small bounce, long red."],
   "bull-flag": ["Bull Flag", "Sharp rise, tight pullback, breakout."],
+  "tweezer-top": ["Tweezer Top", "Two candles with matching highs after a rally."],
+  "shooting-star": ["Shooting Star", "Small body at the low, long upper wick after a rally."],
 };
 
 function nameOf(id: string): [string, string] {
