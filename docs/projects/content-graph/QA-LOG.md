@@ -228,3 +228,20 @@ Screenshots (box only): `/workspace/checkpoints/qa/which-way{,-charts}-{390,1280
 
 Screenshots (box only): `/workspace/checkpoints/qa/map-{world,tree,web,progress}-{390,1280}.png`.
 
+## 2026-10-22 Chart pattern book leftovers
+
+| Flow | Result |
+|---|---|
+| `/archive?tab=patterns&open=complex-head-shoulders`, `complex-inverse-head-shoulders`, `low-tight-flag`, 390 and 1280 (e2e) | SIMULATED illustration, potential direction (Down / Up / Up), primary theme chip, trade tab with neckline or pivot confirmation and stop; no overflow. |
+| Learn `chart-patterns` (e2e) | Five questions for each new pattern. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/{complex-head-shoulders,low-tight-flag}-{390,1280}.png`.
+
+## 2026-10-22 Poster names (r27)
+
+| Flow | Result |
+|---|---|
+| `/archive?tab=patterns&open=<id>` for the 13 new patterns and `bull-flag`, 390 and 1280 (e2e) | SIMULATED illustration, potential direction, primary theme chip, "Also called" line, trade tab with confirmation and stop (chart patterns); no overflow. |
+| Learn `chart-patterns` and `tweezer-top` (e2e) | Five questions for each new chart pattern; tweezer star questions in the tweezer-top group. |
+
+Screenshots (box only): `/workspace/checkpoints/qa/r27-{tweezer-star,trend-stage-bounce,measured-move-up,neckline-retest-bullish,rectangle-bottom,step-top}-{390,1280}.png`.
