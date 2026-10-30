@@ -8,6 +8,8 @@ import {
   buildMapModel, emptySnapshot, readSnapshot, stageForRoute, unlocksOf,
 } from "./progressMap";
 import { MAP_PROGRESS_KEY, recordQuizResult, recordVisit, loadMapStore } from "./mapProgress";
+import { ACADEMY_KEY, emptyAcademy, loadAcademy, memoryStorage } from "./academy/storage";
+import { isLevelComplete } from "./academy/progress";
 
 const app = readFileSync(new URL("../App.tsx", import.meta.url), "utf8");
 const routes = [...app.matchAll(/<Route\s+path="([^"]+)"/g)].map((m) => m[1]!).filter((p) => p !== "/");
@@ -74,6 +76,27 @@ test("statuses follow existing progress; next objective moves along the path", (
   assert.equal(all.totals.done, all.totals.total);
   assert.equal(all.next, null);
   assert.ok(all.regions.every((r) => r.finished));
+});
+
+test("regression: Academy placement credit counts on the map like isLevelComplete (tested out too; skipped placement does not)", () => {
+  const mem = new Map<string, string>();
+  const s = { getItem: (k: string) => mem.get(k) ?? null, setItem: (k: string, v: string) => void mem.set(k, v) };
+  const academy = (extra: Record<string, unknown>) =>
+    mem.set(ACADEMY_KEY, JSON.stringify({ ...emptyAcademy(), ...extra }));
+  academy({ placement: { startLevel: "L3", correct: 9, total: 12, skipped: false, at: "2026-10-30T00:00:00Z" } });
+  let snap = readSnapshot(s);
+  const st = loadAcademy(memoryStorage({ [ACADEMY_KEY]: mem.get(ACADEMY_KEY)! })).state;
+  for (const l of ["L0", "L1", "L2"] as const) {
+    assert.ok(isLevelComplete(st, l), l);
+    assert.equal(snap.fractions[`academy:${l}`], 1, `${l} placed past = done on the map`);
+  }
+  assert.equal(snap.fractions["academy:L3"], 0, "the start level itself is not credited");
+  assert.equal(buildMapModel(snap).states["academy:L1"]!.status, "done");
+  academy({ placement: { startLevel: "L0", correct: 0, total: 12, skipped: true, at: "2026-10-30T00:00:00Z" } });
+  snap = readSnapshot(s);
+  assert.equal(snap.fractions["academy:L0"], 0, "skipping placement credits nothing");
+  academy({ testedOut: { L2: { at: "2026-10-30T00:00:00Z", correct: 7, total: 7 } } });
+  assert.equal(readSnapshot(s).fractions["academy:L2"], 1);
 });
 
 test("map store: visits and quiz passes at the pass mark feed readSnapshot", () => {

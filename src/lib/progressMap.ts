@@ -11,6 +11,7 @@
 import { QUIZ_GROUPS } from "./quizData";
 import { MISC_PRACTICE_ITEMS } from "./miscPractices";
 import { LEVELS } from "./academy/content/levels";
+import { LEVEL_IDS } from "./academy/types";
 import { CASE_STUDIES } from "./caseStudies";
 import { listSessions } from "./coaching";
 import { PLAYBOOKS } from "./playbooks";
@@ -379,7 +380,7 @@ function json<T>(storage: KV | undefined, key: string): T | null {
 export function readSnapshot(storage: KV | undefined = typeof window !== "undefined" ? window.localStorage : undefined): MapSnapshot {
   const map = loadMapStore(storage);
   const progress = json<{ caseResults?: Record<string, unknown>; coachingCompleted?: Record<string, boolean> }>(storage, PROGRESS_STORAGE_KEY);
-  const academy = json<{ units?: Record<string, { masteredAt?: string }>; testedOut?: Record<string, unknown>; options?: { passed?: Record<string, string> } }>(storage, ACADEMY_KEY);
+  const academy = json<{ units?: Record<string, { masteredAt?: string }>; testedOut?: Record<string, unknown>; placement?: { startLevel?: string; skipped?: boolean }; options?: { passed?: Record<string, string> } }>(storage, ACADEMY_KEY);
   const paper = json<{ challengeAttempts?: Record<string, Array<{ passed: boolean }>> }>(storage, PAPER_KEY);
   const macro = json<{ rounds?: Record<string, unknown> }>(storage, MACRO_PROGRESS_KEY);
   const labsDone = json<string[]>(storage, "analysis_core_misc_practices_done_v1") ?? [];
@@ -392,9 +393,12 @@ export function readSnapshot(storage: KV | undefined = typeof window !== "undefi
     "hub:macro": share(MACRO_LESSONS.filter((l) => visited.includes(`/macro/${l.id}`)).length, MACRO_LESSONS.length),
     "hub:challenges": share(CHALLENGES.filter((c) => (paper?.challengeAttempts?.[c.id] ?? []).some((a) => a.passed)).length, CHALLENGES.length),
   };
+  // Same rule as academy/progress.ts isLevelComplete: tested out, or a (not skipped) placement started the learner above it.
+  const placedAt = academy?.placement && !academy.placement.skipped ? (LEVEL_IDS as readonly string[]).indexOf(academy.placement.startLevel ?? "") : -1;
   for (const l of LEVELS) {
     const units = l.courses.flatMap((c) => c.unitIds);
-    fractions[`academy:${l.id}`] = academy?.testedOut?.[l.id] ? 1 : share(units.filter((u) => academy?.units?.[u]?.masteredAt).length, units.length);
+    const placed = placedAt > 0 && LEVEL_IDS.indexOf(l.id) < placedAt;
+    fractions[`academy:${l.id}`] = academy?.testedOut?.[l.id] || placed ? 1 : share(units.filter((u) => academy?.units?.[u]?.masteredAt).length, units.length);
   }
   // Options ladder: four knowledge checks.
   const optionsPassed = Object.keys(academy?.options?.passed ?? {}).length;
