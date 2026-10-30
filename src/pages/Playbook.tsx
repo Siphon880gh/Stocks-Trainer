@@ -33,6 +33,13 @@ export default function Playbook() {
   const study = playbook.caseId ? getCaseStudy(playbook.caseId) : undefined;
   const coach = playbook.coachSlug ? loadSession(playbook.coachSlug) : null;
   const overlays = playbook.overlayIds ?? [];
+  // The video is optional: point at the kit's Learn quiz, or else its coach session, as the check that covers it.
+  const learn = playbook.related?.find((l) => l.to.startsWith("/training?group="));
+  const videoCheck = learn
+    ? { to: learn.to, label: `Take the Learn check${learn.label.startsWith("Learn · ") ? ` (${learn.label.slice(8)})` : ""}` }
+    : coach && playbook.coachSlug
+      ? { to: `/coach/${playbook.coachSlug}`, label: "Do the coach session" }
+      : null;
 
   return (
     <div className="flex-1 flex flex-col">
@@ -97,6 +104,20 @@ export default function Playbook() {
               )}
               . Embedded from YouTube; all rights stay with the creator.
             </figcaption>
+            <p className="text-[12px] text-muted" data-testid="playbook-video-optional">
+              Optional. The panels below{videoCheck ? " and the linked check" : ""} cover the same ideas.
+              {videoCheck ? (
+                <>
+                  {" "}Skip the video if you pass:{" "}
+                  <Link to={videoCheck.to} className="text-primary hover:underline" data-testid="playbook-video-check">
+                    {videoCheck.label}
+                  </Link>
+                  .
+                </>
+              ) : (
+                " Skip the video if you already know them."
+              )}
+            </p>
           </figure>
         ) : null}
 

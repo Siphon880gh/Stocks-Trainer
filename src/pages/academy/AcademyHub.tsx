@@ -8,6 +8,7 @@ import { TEST_OUT_LEVELS } from "../../lib/academy/testOut";
 import PlacementCard from "../../components/academy/PlacementCard";
 import TodayCard from "../../components/academy/TodayCard";
 import RewardsPanel from "../../components/academy/RewardsPanel";
+import { VALUE_PROMISE } from "../../lib/academy/copy";
 import { cn } from "../../lib/utils";
 
 const STATUS: Record<UnitStatus, { label: string; icon: string; cls: string }> = {
@@ -36,6 +37,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
           · Beginner Academy
         </p>
         <h1 className="text-2xl font-semibold tracking-tight">Beginner Academy</h1>
+        <p className="text-[14px] text-ink max-w-3xl" data-testid="value-promise">{VALUE_PROMISE}</p>
         <p className="text-[14px] text-muted max-w-3xl">
           Short units from "what is a stock" to order types, statements, earnings and options basics. Each unit is a few cards and a 3-question check, and links into the
           drills, cases and coach sessions already in the app. Educational only; not investment advice.
@@ -137,8 +139,8 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                       const st = unitStatus(state, id);
                       const s = STATUS[st];
                       return (
-                        <li key={id}>
-                          <Link to={`/academy/${id}`} className="flex items-center gap-2 text-[13px] hover:text-primary" data-unit={id} data-status={st}>
+                        <li key={id} className="flex items-center gap-2">
+                          <Link to={`/academy/${id}`} className="flex flex-1 min-w-0 items-center gap-2 text-[13px] hover:text-primary" data-unit={id} data-status={st}>
                             <span className={cn("material-symbols-outlined text-base", s.cls)} aria-hidden>
                               {s.icon}
                             </span>
@@ -147,6 +149,11 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                               {s.label} · {estMinutes(u)} min
                             </span>
                           </Link>
+                          {st !== "mastered" && st !== "tested_out" ? (
+                            <Link to={`/academy/${id}?check=1`} className="text-[11px] text-primary hover:underline shrink-0" data-test-out-unit={id} aria-label={`Test out of ${u.title}`}>
+                              Test out
+                            </Link>
+                          ) : null}
                         </li>
                       );
                     })}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import UnitPlayer from "../../components/academy/UnitPlayer";
 import { getUnit, getLevel } from "../../lib/academy/content/levels";
 import { loadAcademy, saveAcademy, type KVStorage } from "../../lib/academy/storage";
@@ -9,6 +9,9 @@ import { awardUnitMastery } from "../../lib/academy/rewards/award";
 /** /academy/:unitId — one unit: cards, quiz, mastery; progress saved on the academy key. */
 export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
   const { unitId = "" } = useParams();
+  // ?check=1 (Academy hub "Test out"): open straight on the unit check; passing it records mastery as usual.
+  const [params] = useSearchParams();
+  const checkFirst = params.get("check") === "1";
   const unit = getUnit(unitId);
   const [attempt, setAttempt] = useState(() => loadAcademy(storage).state.units[unitId]?.attempts ?? 0);
   const [key, setKey] = useState(0);
@@ -41,6 +44,7 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
       <UnitPlayer
         unit={unit}
         attempt={attempt}
+        initialPhase={checkFirst ? "quiz" : "cards"}
         onFinish={(score) => {
           const s = recordUnitAttempt(loadAcademy(storage).state, unit.id, score.correct, score.total);
           saveAcademy(s, storage);

@@ -2,6 +2,8 @@
 
 Learn how to **read equities**, **read charts**, and **decide before the aftermath**—with SAMPLE data only (no LIVE / REAL_TIME theater).
 
+Earn each credential by passing short checks. Already know it? Test out and move on. No videos required. Credentials are progress saved in your browser, not attested certificates.
+
 **Author:** Weng Fei Fung (Weng)
 
 ---

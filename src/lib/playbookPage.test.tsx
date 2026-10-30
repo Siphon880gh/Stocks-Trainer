@@ -5,6 +5,7 @@ import Playbook from "../pages/Playbook.tsx";
 import Playbooks from "../pages/Playbooks.tsx";
 import { hrefs, renderHtml, renderText } from "./macro/renderHarness.ts";
 import { PLAYBOOKS } from "./playbooks.ts";
+import { routeExists } from "./academy/refs.ts";
 
 const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -56,6 +57,14 @@ describe("Playbook page", () => {
       const links = hrefs(html);
       assert.ok(links.includes(v.watchUrl), "credit links the video");
       if (v.channelUrl) assert.ok(links.includes(v.channelUrl), "credit links the channel");
+      assert.match(text, /Optional\. The panels below/, "video is labelled optional");
+      const learn = p.related?.find((l) => l.to.startsWith("/training?group="));
+      const check = learn?.to ?? (p.coachSlug ? `/coach/${p.coachSlug}` : undefined);
+      if (check) {
+        assert.match(text, /and the linked check cover the same ideas\. Skip the video if you pass/);
+        assert.ok(links.includes(check.replace(/&/g, "&amp;")), `optional label links the check ${check}`);
+        assert.ok(routeExists(check), check);
+      } else assert.match(text, /Skip the video if you already know them/);
     });
   }
 

@@ -10,6 +10,7 @@ import GoalPicker from "../components/GoalPicker";
 import JargonText from "../components/JargonText";
 import SampleDataNote from "../components/SampleDataNote";
 import { withoutSampleWord } from "../lib/learnerCopy";
+import { VALUE_PROMISE } from "../lib/academy/copy";
 import {
   DECISION_MAKER_PATH_ID,
   isDecisionMakerPathComplete,
@@ -135,6 +136,7 @@ export default function Dashboard() {
 
   return (
     <main className="flex-1 p-4 md:p-8 max-w-3xl mx-auto w-full space-y-8">
+      <p className="text-[14px] text-ink" data-testid="value-promise">{VALUE_PROMISE}</p>
       {goalPending ? <GoalPicker onConfirmed={refreshProgress} /> : null}
       {/* Beginner Academy (BA3.M3): optional, dismissible, only after the goal picker is confirmed. */}
       {!goalPending ? <PlacementCard variant="home" /> : null}

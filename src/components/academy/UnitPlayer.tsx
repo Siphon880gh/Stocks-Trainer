@@ -84,6 +84,13 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
               </button>
             )}
           </div>
+          {card === 0 && unit.cards.length > 1 ? (
+            <p className="text-right">
+              <button type="button" onClick={() => setPhase("quiz")} className="text-[12px] text-primary hover:underline" data-testid="skip-to-check">
+                Know this already? Take the check
+              </button>
+            </p>
+          ) : null}
         </section>
       ) : (
         <section className="space-y-3" aria-label="Unit quiz">

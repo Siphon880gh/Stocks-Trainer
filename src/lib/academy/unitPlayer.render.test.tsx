@@ -43,3 +43,40 @@ test("cards phase shows the first card and its glossary chip; submitted preset s
   assert.equal((html.match(/data-correct="true"/g) ?? []).length, qs.length);
   assert.ok(renderText(wrap(<UnitPlayer unit={u} preset={{ answers, submitted: true }} />)).includes(qs[0]!.explanation));
 });
+
+test("test out of a unit: card 1 offers a secondary 'take the check' action; ?check=1 opens straight on the check", async () => {
+  const u = getUnit("l3-trailing-stop")!;
+  const first = renderHtml(wrap(<UnitPlayer unit={u} />));
+  assert.ok(first.includes('data-testid="skip-to-check"'));
+  assert.ok(renderText(wrap(<UnitPlayer unit={u} />)).includes("Know this already? Take the check"));
+  assert.ok(!/data-testid="skip-to-check"[^>]*bg-primary|bg-primary[^>]*data-testid="skip-to-check"/.test(first), "secondary style, not a second primary button");
+  assert.ok(!renderHtml(wrap(<UnitPlayer unit={u} initialCard={1} />)).includes('data-testid="skip-to-check"'), "only on card 1");
+  assert.ok(!renderHtml(wrap(<UnitPlayer unit={u} initialPhase="quiz" />)).includes('data-testid="skip-to-check"'));
+
+  const { Route, Routes } = await import("react-router-dom");
+  const { default: AcademyUnit } = await import("../../pages/academy/AcademyUnit");
+  const { memoryStorage } = await import("./storage");
+  const at = (path: string) => (
+    <MemoryRouter initialEntries={[path]}>
+      <Routes>
+        <Route path="/academy/:unitId" element={<AcademyUnit storage={memoryStorage()} />} />
+      </Routes>
+    </MemoryRouter>
+  );
+  const q0 = quizForUnit(u.id)[0]!.prompt;
+  const checked = renderText(at(`/academy/${u.id}?check=1`));
+  assert.ok(checked.includes(q0), "?check=1 shows the quiz");
+  assert.ok(!checked.includes(u.cards[0]!.body), "and skips the cards");
+  const normal = renderText(at(`/academy/${u.id}`));
+  assert.ok(normal.includes(u.cards[0]!.body) && !normal.includes(q0), "without it the cards come first");
+});
+
+test("a check passed after testing out goes through recordUnitAttempt: mastered, level progress counts", async () => {
+  const { recordUnitAttempt, unitStatus, levelPct } = await import("./progress");
+  const { emptyAcademy } = await import("./storage");
+  const u = getUnit("l3-trailing-stop")!;
+  const n = quizForUnit(u.id).length;
+  const s = recordUnitAttempt(emptyAcademy(), u.id, n, n);
+  assert.equal(unitStatus(s, u.id), "mastered");
+  assert.ok(levelPct(s, u.levelId) > 0);
+});

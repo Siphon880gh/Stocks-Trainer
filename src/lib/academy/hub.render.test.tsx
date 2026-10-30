@@ -72,3 +72,17 @@ test("test-out page: a failed result offers Try again, a pass does not", () => {
   const right = Object.fromEntries(items.map((q) => [q.id, q.correctAnswer]));
   assert.doesNotMatch(renderHtml(at("/academy/test-out/L2", <AcademyTestOut storage={memoryStorage()} preset={right} />, "/academy/test-out/:levelId")), /test-out-retry/);
 });
+
+test("hub: the value promise sits under the title, and every unit not yet done has a 'Test out' link to its check", async () => {
+  const { VALUE_PROMISE } = await import("./copy");
+  const { recordUnitAttempt } = await import("./progress");
+  const u0 = UNITS[0]!;
+  const s = recordUnitAttempt(emptyAcademy(), u0.id, 3, 3);
+  const ui = <MemoryRouter><AcademyHub storage={memoryStorage({ [ACADEMY_KEY]: JSON.stringify(s) })} /></MemoryRouter>;
+  const html = renderHtml(ui);
+  assert.ok(renderText(ui).includes(VALUE_PROMISE));
+  assert.ok(html.indexOf('data-testid="value-promise"') < html.indexOf('data-testid="academy-summary"'));
+  const links = hrefs(html);
+  for (const u of UNITS.slice(1)) assert.ok(links.includes(`/academy/${u.id}?check=1`), u.id);
+  assert.ok(!links.includes(`/academy/${u0.id}?check=1`), "no test-out link for a mastered unit");
+});
