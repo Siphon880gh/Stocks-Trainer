@@ -63,6 +63,7 @@ describe("misc practice catalog", () => {
       "Breakout, pullback and fair value gap",
       "Risk-premium portfolio and the VIX overlay",
       "VIX trading for beginners",
+      "The wheel strategy (cash-secured puts to covered calls)",
     ]);
   });
 });

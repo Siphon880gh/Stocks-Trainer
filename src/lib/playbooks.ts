@@ -3,6 +3,7 @@ import { FP_CREDIBILITY, FP_RELATED, FP_SOURCE } from "./fourPillars";
 import { FVG_CREDIBILITY, FVG_PLAYBOOK_SOURCE, FVG_RELATED } from "./fairValueGap";
 import { RPP_CREDIBILITY, RPP_PLAYBOOK_SOURCE, RPP_RELATED, RPP_VIDEO } from "./riskPremiumPortfolio";
 import { VIX_CREDIBILITY, VIX_PLAYBOOK_EXPLANATION, VIX_PLAYBOOK_SOURCE, VIX_RELATED } from "./vixTrading";
+import { WHEEL_CREDIBILITY, WHEEL_PLAYBOOK_EXPLANATION, WHEEL_PLAYBOOK_SOURCE, WHEEL_RELATED, WHEEL_VIDEO } from "./wheelStrategy";
 
 export type PlaybookSourceKind = "youtube" | "webpage";
 
@@ -172,6 +173,10 @@ export const PLAYBOOKS: Playbook[] = [
     caseId: "case-optctx-flag-hold",
     samplePackId: "opt-ctx-coil",
     overlayIds: [],
+    related: [
+      { label: "Playbook · The wheel: cash-secured puts to covered calls (this is step 3)", to: "/playbooks/wheel-csp-to-covered-call" },
+      { label: "Practice · The wheel strategy", to: "/practice/wheel-strategy" },
+    ],
   },
   {
     id: "cash-secured-put",
@@ -191,6 +196,10 @@ export const PLAYBOOKS: Playbook[] = [
     caseId: "case-optctx-double-bottom",
     samplePackId: "opt-ctx-dump",
     overlayIds: [],
+    related: [
+      { label: "Playbook · The wheel: cash-secured puts to covered calls (this is step 1)", to: "/playbooks/wheel-csp-to-covered-call" },
+      { label: "Practice · The wheel strategy", to: "/practice/wheel-strategy" },
+    ],
   },
   {
     id: "protective-put",
@@ -401,6 +410,27 @@ export const PLAYBOOKS: Playbook[] = [
     overlayIds: [],
     related: VIX_RELATED,
     credibility: VIX_CREDIBILITY,
+  },
+  {
+    id: "wheel-csp-to-covered-call",
+    title: "The wheel: cash-secured puts to covered calls",
+    summary:
+      "Sell a cash-secured put on a stock you want to own, sell covered calls if you are assigned, and start again when the shares are called away. Premium for a capped upside and nearly the stock's downside.",
+    assetClass: "option_context",
+    source: {
+      url: WHEEL_PLAYBOOK_SOURCE.url,
+      kind: "webpage",
+      label: WHEEL_PLAYBOOK_SOURCE.label,
+      verifiedOn: WHEEL_PLAYBOOK_SOURCE.verifiedOn,
+    },
+    explanation: WHEEL_PLAYBOOK_EXPLANATION,
+    coachSlug: "wheel-strategy",
+    caseId: "case-wheel-flat-keep-wheeling",
+    samplePackId: "opt-ctx-coil",
+    overlayIds: [],
+    related: WHEEL_RELATED,
+    video: { ...WHEEL_VIDEO },
+    credibility: WHEEL_CREDIBILITY,
   },
 ];
 

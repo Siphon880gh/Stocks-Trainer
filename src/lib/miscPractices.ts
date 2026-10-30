@@ -41,6 +41,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "fair-value-gap", title: "Breakout, pullback and fair value gap", to: "/practice/fair-value-gap" },
   { id: "risk-premium-portfolio", title: "Risk-premium portfolio and the VIX overlay", to: "/practice/risk-premium-portfolio" },
   { id: "vix-trading", title: "VIX trading for beginners", to: "/practice/vix-trading" },
+  { id: "wheel-strategy", title: "The wheel strategy (cash-secured puts to covered calls)", to: "/practice/wheel-strategy" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

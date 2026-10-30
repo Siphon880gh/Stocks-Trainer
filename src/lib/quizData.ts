@@ -39,6 +39,7 @@ import { FP_QUESTIONS } from "./fourPillars";
 import { FVG_QUESTIONS } from "./fairValueGap";
 import { RPP_QUESTIONS } from "./riskPremiumPortfolio";
 import { VIX_QUESTIONS } from "./vixTrading";
+import { WHEEL_QUESTIONS } from "./wheelStrategy";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5404,6 +5405,7 @@ export type QuizGroupId =
   | "fair-value-gap"
   | "risk-premium-portfolio"
   | "vix-trading"
+  | "wheel-strategy"
   | "supply-demand"
   | "buy-or-sell"
   | "indicators"
@@ -5667,6 +5669,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     icon: "ssid_chart",
   },
   {
+    id: "wheel-strategy",
+    name: "The Wheel: Cash-Secured Puts to Covered Calls",
+    description: "The four steps (sell a cash-secured put, assignment, covered calls, called away), collateral and breakeven math, premium-adjusted basis, annualized yield and what it assumes, delta and DTE choices, the capped upside and nearly full downside, a crash after assignment, earnings gaps, early assignment, Cboe's PUT and BXM indexes, taxes and approval levels, and whether the wheel is a valid strategy",
+    icon: "sync",
+  },
+  {
     id: "supply-demand",
     name: "Supply & Demand Zones",
     description: "Base candle, impulse departure, fresh vs tested zones, zone flips",
@@ -5835,6 +5843,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "fair-value-gap") return FVG_QUESTIONS;
   if (groupId === "risk-premium-portfolio") return RPP_QUESTIONS;
   if (groupId === "vix-trading") return VIX_QUESTIONS;
+  if (groupId === "wheel-strategy") return WHEEL_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
@@ -5885,6 +5894,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "fair-value-gap") return FVG_QUESTIONS;
   if (groupId === "risk-premium-portfolio") return RPP_QUESTIONS;
   if (groupId === "vix-trading") return VIX_QUESTIONS;
+  if (groupId === "wheel-strategy") return WHEEL_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
