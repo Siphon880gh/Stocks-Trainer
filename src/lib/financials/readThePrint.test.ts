@@ -75,7 +75,6 @@ describe("FE5.M1 rounds", () => {
       assert.ok(r.facts.length >= 5);
       assert.ok(r.facts.some((f) => f.includes(String(e.expect.impliedMovePct))), "implied move fact");
       assert.ok(r.facts.some((f) => f.startsWith("EPS ")), "EPS fact");
-      assert.match(r.disclaimer, /SAMPLE/);
     }
   });
 

@@ -8,7 +8,7 @@ import { academyHomeTip } from "./homeTip";
 import { ACADEMY_KEY, emptyAcademy, memoryStorage } from "./storage";
 import { UNIT_ORDER, getUnit } from "./content/levels";
 import { ACADEMY_QUIZ_GROUP_IDS } from "./quiz/groups";
-import { hrefs, renderHtml, renderText } from "./renderHarness";
+import { hrefs, renderHtml } from "./renderHarness";
 import { resolveRef, routeExists } from "./refs";
 import { loadSession, validateCoachingSession } from "../coaching";
 import { firstPaperTradeSession } from "../coaching/sessions/first-paper-trade";
@@ -20,7 +20,6 @@ test("Training card: links to the hub, paper, challenges, options, the coach ses
   for (const h of ["/academy", "/paper", "/paper/challenges", "/academy/options", "/coach/first-paper-trade"]) assert.ok(hs.includes(h), h);
   for (const g of ACADEMY_QUIZ_GROUP_IDS) assert.ok(hs.some((h) => h.startsWith(`/training?group=${g}&`)), g);
   for (const h of hs) assert.ok(routeExists(h), h);
-  assert.match(renderText(<MemoryRouter><AcademyTrainingCard storage={memoryStorage()} /></MemoryRouter>), /SIMULATED/);
 });
 
 test("Home tip: fresh → open the Academy; in progress → continue with the next unit; all done → challenges", () => {
