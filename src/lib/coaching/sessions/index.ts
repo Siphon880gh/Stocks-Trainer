@@ -71,6 +71,8 @@ import { trailingStopExitSession } from "./trailing-stop-exit";
 import { honorTheStopSession } from "./honor-the-stop";
 import { openingRangeBreakoutSession } from "./opening-range-breakout";
 import { breakoutPullbackFvgSession } from "./breakout-pullback-fvg";
+import { readABacktestSession } from "./read-a-backtest";
+import { vixFuturesCurveSession } from "./vix-futures-curve";
 import { fourPillarsSession } from "./four-pillars";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
 import { candleNeedsContextSession } from "./candle-needs-context";
@@ -151,6 +153,8 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   honorTheStopSession,
   openingRangeBreakoutSession,
   breakoutPullbackFvgSession,
+  readABacktestSession,
+  vixFuturesCurveSession,
   fourPillarsSession,
   supplyDemandZoneRetestSession,
   candleNeedsContextSession,

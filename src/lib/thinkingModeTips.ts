@@ -18,6 +18,8 @@ export const THINKING_MODE_LABELS: Record<CaseThinkingMode, string> = {
   opening_range: "Opening range",
   four_pillars: "Map, confirm, invalidate, context",
   fair_value_gap: "Breakout, pullback, gap",
+  vol_risk_premium: "Volatility risk premium",
+  vix_products: "VIX contract, curve and sizing",
 };
 
 export const COACH_TIP_BY_THINKING_MODE: Record<CaseThinkingMode, string> = {
@@ -55,6 +57,10 @@ export const COACH_TIP_BY_THINKING_MODE: Record<CaseThinkingMode, string> = {
     "Map the level, wait for the confirmation you chose in advance (a close, not a wick), know the invalidation price before entry, then let context set the size: full, half or pass. Cases → price action trades.",
   fair_value_gap:
     "The breakout candle is a signal, not an entry. Check for a gap between candle 1's high and candle 3's low, buy only a pullback into it, stop below the gap and the level. Some gaps are never retested: a missed trade is the cost of waiting. Cases → price action trades.",
+  vol_risk_premium:
+    "Short volatility earns a small premium most days and can lose several times the position in a crash. Check the VIX curve (contango or inverted), size for a 400% spike, and never hold a product whose issuer can close it after a one-day collapse. Cases → market-wide news.",
+  vix_products:
+    "Judge the contract you hold, not the headline VIX: a short future pays only if that contract falls. Read the curve's level as well as its slope, size in dollars ($1,000 a point on VX; margin is not the limit), model a fund's daily reset, and plan for gaps through stops. Cases → Futures, Market-wide news.",
 };
 
 export function thinkingModeLabel(mode: CaseThinkingMode): string {

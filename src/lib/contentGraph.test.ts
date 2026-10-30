@@ -115,6 +115,8 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "opening-range": 14,
   "four-pillars": 16,
   "fair-value-gap": 13,
+  "risk-premium-portfolio": 15,
+  "vix-trading": 40,
   "supply-demand": 12,
   "buy-or-sell": 60,
   "equity-patterns": 8,

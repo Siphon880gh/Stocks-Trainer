@@ -51,6 +51,8 @@ export const APP_ROUTES: readonly string[] = [
   "/practice/trade-framework",
   "/practice/opening-range",
   "/practice/fair-value-gap",
+  "/practice/risk-premium-portfolio",
+  "/practice/vix-trading",
   "/practice/statements",
   "/practice/read-the-print",
   "/practice/mark-the-band",

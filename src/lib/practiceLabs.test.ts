@@ -61,6 +61,8 @@ describe("misc practice catalog", () => {
       "Price action trading framework",
       "Opening range breakout (15-minute)",
       "Breakout, pullback and fair value gap",
+      "Risk-premium portfolio and the VIX overlay",
+      "VIX trading for beginners",
     ]);
   });
 });

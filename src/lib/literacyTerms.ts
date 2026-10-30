@@ -23,6 +23,8 @@ import { EC_TERMS } from "./essentialCandles";
 import { WW_TERMS } from "./whichWay";
 import { ORB_TERMS } from "./openingRange";
 import { FVG_TERMS } from "./fairValueGap";
+import { RPP_TERMS } from "./riskPremiumPortfolio";
+import { VIX_TERMS } from "./vixTrading";
 import { FP_TERMS } from "./fourPillars";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
@@ -710,6 +712,8 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...ORB_TERMS,
   ...FP_TERMS,
   ...FVG_TERMS,
+  ...RPP_TERMS,
+  ...VIX_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

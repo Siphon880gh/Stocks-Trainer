@@ -6,6 +6,8 @@ import Playbooks from "../pages/Playbooks.tsx";
 import { hrefs, renderHtml, renderText } from "./macro/renderHarness.ts";
 import { PLAYBOOKS } from "./playbooks.ts";
 
+const escapeRe = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 function page(id: string) {
   return (
     <MemoryRouter initialEntries={[`/playbooks/${id}`]}>
@@ -44,7 +46,7 @@ describe("Playbook page", () => {
       assert.match(iframe, new RegExp(`src="${v.embedUrl}"`));
       assert.match(iframe, /loading="lazy"/);
       assert.match(iframe, /allowfullscreen/i);
-      assert.match(iframe, new RegExp(`title="${v.title}[^"]*${v.creator}`));
+      assert.match(iframe, new RegExp(`title="${escapeRe(v.title)}[^"]*${escapeRe(v.creator)}`));
       assert.match(html, /aspect-video/);
       const at = html.indexOf("<iframe");
       assert.ok(html.indexOf(`href="${p.source.url}"`) < at, "source credit stays above the player");

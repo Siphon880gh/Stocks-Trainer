@@ -170,6 +170,8 @@ export default function Training() {
                   g.id === "opening-range" ||
                   g.id === "four-pillars" ||
                   g.id === "fair-value-gap" ||
+                  g.id === "risk-premium-portfolio" ||
+                  g.id === "vix-trading" ||
                   g.id === "supply-demand" ||
                   g.id === "indicators" ||
                   g.id === "oscillators" ||

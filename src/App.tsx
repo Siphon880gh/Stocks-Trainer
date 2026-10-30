@@ -40,6 +40,8 @@ import PracticeWhichWay from "./pages/practice/WhichWay";
 import PracticeTradeFramework from "./pages/practice/TradeFramework";
 import PracticeOpeningRange from "./pages/practice/OpeningRange";
 import PracticeFairValueGap from "./pages/practice/FairValueGap";
+import PracticeRiskPremiumPortfolio from "./pages/practice/RiskPremiumPortfolio";
+import PracticeVixTrading from "./pages/practice/VixTrading";
 import ProgressMap from "./pages/ProgressMap";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
@@ -112,6 +114,8 @@ export default function App() {
           <Route path="practice/trade-framework" element={<PracticeTradeFramework />} />
           <Route path="practice/opening-range" element={<PracticeOpeningRange />} />
           <Route path="practice/fair-value-gap" element={<PracticeFairValueGap />} />
+          <Route path="practice/risk-premium-portfolio" element={<PracticeRiskPremiumPortfolio />} />
+          <Route path="practice/vix-trading" element={<PracticeVixTrading />} />
           <Route path="map" element={<ProgressMap />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />

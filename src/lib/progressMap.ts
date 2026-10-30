@@ -72,7 +72,7 @@ const QUIZ_REGION: Record<string, RegionId> = Object.fromEntries(
     ["statements", "financial-literacy earnings-jargon financial-drills statements-reading cash-forecast-13wk earnings-preview earnings-reaction"],
     ["macro", "macro-releases rates-curve fed-policy housing-mortgage macro-reactions"],
     ["markets", "equity-literacy futures-literacy forex-literacy crypto-literacy options-literacy futures-vs-options options-ladder"],
-    ["risk", "news-literacy trading-risk squeezes news-biases record-traders"],
+    ["risk", "news-literacy trading-risk squeezes news-biases record-traders risk-premium-portfolio vix-trading"],
     ["paper", "orders-and-fills paper-pnl"],
   ] as Array<[RegionId, string]>).flatMap(([r, ids]) => ids.split(" ").map((id) => [id, r])),
 );
@@ -84,7 +84,7 @@ const LAB_REGION: Record<string, RegionId> = Object.fromEntries(
     ["decisions", "draw regime replay plan invalidation levels reversal-charts pattern-themes which-way trade-framework opening-range fair-value-gap fib-decision-map one-minute-charts technique-narratives"],
     ["indicators", "ema-macd oscillators charting-apps algo-trading"],
     ["markets", "futures-vs-options"],
-    ["risk", "gamma-squeeze news-biases record-traders"],
+    ["risk", "gamma-squeeze news-biases record-traders risk-premium-portfolio vix-trading"],
   ] as Array<[RegionId, string]>).flatMap(([r, ids]) => ids.split(" ").map((id) => [id, r])),
 );
 
@@ -156,6 +156,10 @@ const PREREQS: Record<string, string[]> = {
   "quiz:four-pillars": ["quiz:trade-framework"],
   "lab:fair-value-gap": ["lab:trade-framework"],
   "quiz:fair-value-gap": ["lab:fair-value-gap"],
+  "lab:risk-premium-portfolio": ["lab:algo-trading"],
+  "quiz:risk-premium-portfolio": ["lab:risk-premium-portfolio"],
+  "lab:vix-trading": ["lab:risk-premium-portfolio"],
+  "quiz:vix-trading": ["lab:vix-trading"],
   "lab:levels": ["quiz:price-action"],
   "lab:plan": ["lab:levels", "lab:invalidation"],
   "lab:fib-decision-map": ["lab:levels", "lab:invalidation"],

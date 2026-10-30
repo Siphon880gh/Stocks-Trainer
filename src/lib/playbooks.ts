@@ -1,6 +1,8 @@
 import type { AssetClass } from "./samplePacks";
 import { FP_CREDIBILITY, FP_RELATED, FP_SOURCE } from "./fourPillars";
 import { FVG_CREDIBILITY, FVG_PLAYBOOK_SOURCE, FVG_RELATED } from "./fairValueGap";
+import { RPP_CREDIBILITY, RPP_PLAYBOOK_SOURCE, RPP_RELATED, RPP_VIDEO } from "./riskPremiumPortfolio";
+import { VIX_CREDIBILITY, VIX_PLAYBOOK_EXPLANATION, VIX_PLAYBOOK_SOURCE, VIX_RELATED } from "./vixTrading";
 
 export type PlaybookSourceKind = "youtube" | "webpage";
 
@@ -351,6 +353,54 @@ export const PLAYBOOKS: Playbook[] = [
     overlayIds: [],
     related: FVG_RELATED,
     credibility: FVG_CREDIBILITY,
+  },
+  {
+    id: "etf-north-star-vrp",
+    title: "Risk-premium ETF mix with a VIX overlay",
+    summary:
+      "Spread money across assets that are paid for different risks (stocks, long bonds, gold, a currency, commodities), step aside when a trend breaks, and, if you add a short-volatility overlay at all, size it for a 400% VIX spike.",
+    assetClass: "equity",
+    source: {
+      url: RPP_PLAYBOOK_SOURCE.url,
+      kind: "webpage",
+      label: RPP_PLAYBOOK_SOURCE.label,
+      verifiedOn: RPP_PLAYBOOK_SOURCE.verifiedOn,
+    },
+    explanation:
+      "SAMPLE teaching of a portfolio idea from Predicting Alpha’s YouTube video, embedded above, checked against the public pages listed under “How well-tested is this?”. The resource link above is Bridgewater’s account of its All Weather portfolio, the best-known version of building a portfolio from economic roles.\n\nRead this first. The video’s headline result ($100,000 to $1.2 million, 18.4% a year, Sharpe 1.22) is the creator’s own backtest, shown before a pitch for their paid service. It is not a live or audited track record, and the video leaves out the trend lookbacks, the VIX thresholds and the sizing formula, so nobody outside can reproduce it. The app shows the numbers only as a reading exercise.\n\n1. Hold risk premiums, not bets. The base mix is SPY 35%, TLT 30%, GLD 20%, FXE 10%, DBC 5%: equity risk, duration (rates) risk, a monetary hedge, currency exposure and inflation exposure. The creator says the weights come from each asset’s role, not from what backtested best. Weights tuned to past results tend to fit that history’s noise.\n\n2. Diversify by correlation. Assets that don’t move together lower the portfolio’s swings. The catch: in 2022 stocks and long bonds fell together, so the cushion can fail when you need it.\n\n3. Trend filter. Each asset can move partly to cash when its trend weakens. The video gives no lookback. A common textbook rule (not the video’s) is to hold an asset only while its month-end price is above its 10-month average. Trend rules cut some long declines and lag at turns.\n\n4. The VIX overlay. When the VIX futures curve is in contango and implied volatility is above realized, the strategy shorts VXX to collect the volatility risk premium; when the curve inverts it flips long. The backtest charges $0.005 a share and 3.5% a year to borrow VXX, and trades market-on-close after deciding 30 minutes earlier.\n\nWarning: short volatility. It earns small amounts most days and can lose several times the position in days. The video says VXX rallied more than 400% in the 2020 crash: a short worth 20% of the account would lose about 80% of the account. In February 2018, inverse-VIX notes such as XIV fell more than 90% in one session and the issuer closed XIV. FINRA warns these products are generally unsuitable for buy-and-hold retail investors.\n\nWarning: leverage. With the overlay the exposure is about 120% of the account. Leverage adds to losses and can bring margin calls at the worst moment.\n\nThe app adds a check: the combined numbers imply about 14.8 years, and over that span the ETF-only end value works out to about 7% a year, not the 5.5% shown. Not investment advice.",
+    coachSlug: "read-a-backtest",
+    caseId: "case-vrp-short-vxx-curve-inverts",
+    samplePackId: "eq-index-proxy",
+    overlayIds: [],
+    related: RPP_RELATED,
+    video: {
+      embedUrl: RPP_VIDEO.embedUrl,
+      title: RPP_VIDEO.title,
+      creator: RPP_VIDEO.creator,
+      watchUrl: RPP_VIDEO.watchUrl,
+      channelUrl: RPP_VIDEO.channelUrl,
+    },
+    credibility: RPP_CREDIBILITY,
+  },
+  {
+    id: "vix-curve-carry-paper",
+    title: "VIX futures curve and carry (paper trade first)",
+    summary:
+      "Learn one VIX instrument's contract, read the futures curve's level and slope, write a testable thesis about the contract you'd hold (not spot VIX), size the stress loss in dollars, and judge the record by its worst loss, not its win rate. On paper first, or not at all.",
+    assetClass: "future",
+    source: {
+      url: VIX_PLAYBOOK_SOURCE.url,
+      kind: "webpage",
+      label: VIX_PLAYBOOK_SOURCE.label,
+      verifiedOn: VIX_PLAYBOOK_SOURCE.verifiedOn,
+    },
+    explanation: VIX_PLAYBOOK_EXPLANATION,
+    coachSlug: "vix-futures-curve",
+    caseId: "case-vix-short-future-spot-falls",
+    samplePackId: "fut-index",
+    overlayIds: [],
+    related: VIX_RELATED,
+    credibility: VIX_CREDIBILITY,
   },
 ];
 

@@ -39,6 +39,8 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "trade-framework", title: "Price action trading framework", to: "/practice/trade-framework" },
   { id: "opening-range", title: "Opening range breakout (15-minute)", to: "/practice/opening-range" },
   { id: "fair-value-gap", title: "Breakout, pullback and fair value gap", to: "/practice/fair-value-gap" },
+  { id: "risk-premium-portfolio", title: "Risk-premium portfolio and the VIX overlay", to: "/practice/risk-premium-portfolio" },
+  { id: "vix-trading", title: "VIX trading for beginners", to: "/practice/vix-trading" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

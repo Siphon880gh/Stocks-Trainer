@@ -88,7 +88,7 @@ trainer/
     │   ├── Dashboard.tsx / Market.tsx / Training.tsx / Archive.tsx
     │   ├── Cases.tsx / CasePlayer.tsx / Coach.tsx / CoachSession.tsx
     │   ├── Playbooks.tsx / Playbook.tsx
-    │   ├── PracticeDraw.tsx + practice/* (lab and lesson pages, incl. TradeFramework.tsx, OpeningRange.tsx, FairValueGap.tsx)
+    │   ├── PracticeDraw.tsx + practice/* (lab and lesson pages, incl. TradeFramework.tsx, OpeningRange.tsx, FairValueGap.tsx, RiskPremiumPortfolio.tsx, VixTrading.tsx)
     │   └── macro/*                   # Macro Desk, lesson, play
     ├── components/                   # charts + modals (+ financials/, macro/)
     │   ├── MarketChart.tsx (~1.5k) / CandlestickChart.tsx
@@ -106,11 +106,13 @@ trainer/
         ├── buySellDrill.ts / scenarioCharts.ts  # Buy or Sell? drill
         ├── practiceDraw.ts / practiceLabs.ts / miscPractices.ts
         ├── caseStudies.ts + multiAssetCases.ts + priceActionCases.ts  # CASE_STUDIES, CASE_PACKS (17 packs)
-        ├── coaching/ (+ sessions/)   # COACHING_SESSION_MODULES (77), validate, navigate
+        ├── coaching/ (+ sessions/)   # COACHING_SESSION_MODULES (79), validate, navigate
         ├── tradeFramework.ts         # price action framework lesson + Learn `trade-framework` (tradeFramework.test.ts)
         ├── openingRange.ts           # 15-minute ORB lesson + Learn `opening-range` + ORB_OHLC (openingRange.test.ts)
         ├── fourPillars.ts            # four pillars Playbook copy + Learn `four-pillars` + FP_OHLC (fourPillars.test.ts)
         ├── fairValueGap.ts           # breakout → pullback → fair value gap lesson, Playbook copy + credibility, Learn `fair-value-gap`, FVG_OHLC, detectFairValueGaps (fairValueGap.test.ts)
+        ├── riskPremiumPortfolio.ts   # risk-premium ETF mix + VIX overlay lesson (Predicting Alpha video), Playbook copy + video + credibility, Learn `risk-premium-portfolio`, 3 `vol_risk_premium` cases, cagr/portfolioVol/trendFilter/vrpCall (riskPremiumPortfolio.test.ts)
+        ├── vixTrading.ts             # VIX trading for beginners (article "VIX Trading for Beginners"): vixMonthlySigma/vxPnl/curveShape/optionBreakeven/dailyInverseCompound/recoveryGainNeeded/winRateExpectancy + expected value (expectedSettlement/shortFutureExpectedPnl/longCallExpectedPnl/optionPnlBeforeExpiry/carryRollDown), Learn `vix-trading` (40 `VIX-`), 5 `vix_products` cases, 18 terms, Playbook `vix-curve-carry-paper` copy + credibility
         ├── beginnerPath.ts / learningPaths.ts / thinkingModeTips.ts / marketNavigator.ts
         ├── playbooks.ts              # Playbook registry (outside sources; optional `video` embed + credit, `credibility` note with dated corroborating sources, `related` links; playbooks.test.ts + playbookPage.test.tsx)
         ├── financials/ · macro/      # project code (own test scripts)

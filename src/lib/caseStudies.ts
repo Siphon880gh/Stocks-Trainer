@@ -9,6 +9,8 @@ import {
   OPTIONS_CONTEXT_CASES,
 } from "./multiAssetCases";
 import { FVG_CASES, ORB_CASES, PILLAR_CASES, PRICE_ACTION_CASES } from "./priceActionCases";
+import { RPP_CASES } from "./riskPremiumPortfolio";
+import { VIX_CASES } from "./vixTrading";
 
 /** `chart` = price action only (no headline or statement), e.g. the `price-action` pack. */
 export type CaseContextType = "news" | "financials" | "combined" | "chart";
@@ -29,7 +31,9 @@ export type CaseThinkingMode =
   | "price_action_plan"
   | "opening_range"
   | "four_pillars"
-  | "fair_value_gap";
+  | "fair_value_gap"
+  | "vol_risk_premium"
+  | "vix_products";
 
 export type CaseAction = "buy" | "sell" | "hold" | "short";
 export type CaseGrade = "correct" | "incorrect" | "partial";
@@ -2184,6 +2188,8 @@ export const CASE_STUDIES: CaseStudy[] = [
   ...ORB_CASES,
   ...PILLAR_CASES,
   ...FVG_CASES,
+  ...RPP_CASES,
+  ...VIX_CASES,
   ...FUTURES_CASES,
   ...FOREX_CASES,
   ...CRYPTO_CASES,

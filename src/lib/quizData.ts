@@ -37,6 +37,8 @@ import { TRADE_FRAMEWORK_QUESTIONS } from "./tradeFramework";
 import { ORB_QUESTIONS } from "./openingRange";
 import { FP_QUESTIONS } from "./fourPillars";
 import { FVG_QUESTIONS } from "./fairValueGap";
+import { RPP_QUESTIONS } from "./riskPremiumPortfolio";
+import { VIX_QUESTIONS } from "./vixTrading";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5400,6 +5402,8 @@ export type QuizGroupId =
   | "opening-range"
   | "four-pillars"
   | "fair-value-gap"
+  | "risk-premium-portfolio"
+  | "vix-trading"
   | "supply-demand"
   | "buy-or-sell"
   | "indicators"
@@ -5651,6 +5655,18 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     icon: "unfold_less",
   },
   {
+    id: "risk-premium-portfolio",
+    name: "Risk Premiums, Trend Filters & the VIX",
+    description: "A diversified ETF mix built from risk premiums (stocks, long bonds, gold, a currency, commodities), why low correlation lowers risk, a textbook trend filter, the volatility risk premium and the VIX futures curve, the short-volatility tail, inverse-volatility ETPs, leverage, and how to read a too-good backtest",
+    icon: "balance",
+  },
+  {
+    id: "vix-trading",
+    name: "VIX Trading: Futures, Curve & Products",
+    description: "What the VIX measures (30-day implied, annualized, not direction), what you can trade (VX and Mini futures, VIX options, VIXY, SVIX, SVXY, ETNs), $1,000 a point and margin, SOQ settlement, the curve and its slope, carry and convergence, right forecast but losing trade, option breakevens, daily-reset compounding, win rate vs expectancy, recovery math, stops on a gap, where an edge comes from (expected value vs price, VRO settlement, carry under a stable curve, option P/L and early exit, the underestimated tail, a term premium that can turn negative), and whether VIX is a valid play",
+    icon: "ssid_chart",
+  },
+  {
     id: "supply-demand",
     name: "Supply & Demand Zones",
     description: "Base candle, impulse departure, fresh vs tested zones, zone flips",
@@ -5817,6 +5833,8 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "opening-range") return ORB_QUESTIONS;
   if (groupId === "four-pillars") return FP_QUESTIONS;
   if (groupId === "fair-value-gap") return FVG_QUESTIONS;
+  if (groupId === "risk-premium-portfolio") return RPP_QUESTIONS;
+  if (groupId === "vix-trading") return VIX_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
@@ -5865,6 +5883,8 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "opening-range") return ORB_QUESTIONS;
   if (groupId === "four-pillars") return FP_QUESTIONS;
   if (groupId === "fair-value-gap") return FVG_QUESTIONS;
+  if (groupId === "risk-premium-portfolio") return RPP_QUESTIONS;
+  if (groupId === "vix-trading") return VIX_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
