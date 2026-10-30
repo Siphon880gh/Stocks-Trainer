@@ -36,6 +36,9 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "pattern-themes", title: "Pattern themes", to: "/practice/pattern-themes" },
   { id: "essential-candles", title: "Essential candlestick patterns", to: "/practice/essential-candles" },
   { id: "which-way", title: "Which Way? (Up, Down or Either)", to: "/practice/which-way" },
+  { id: "trade-framework", title: "Price action trading framework", to: "/practice/trade-framework" },
+  { id: "opening-range", title: "Opening range breakout (15-minute)", to: "/practice/opening-range" },
+  { id: "fair-value-gap", title: "Breakout, pullback and fair value gap", to: "/practice/fair-value-gap" },
 ];
 
 const DONE_KEY = "analysis_core_misc_practices_done_v1";

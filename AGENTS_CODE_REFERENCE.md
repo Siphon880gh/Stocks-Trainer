@@ -88,7 +88,7 @@ trainer/
     │   ├── Dashboard.tsx / Market.tsx / Training.tsx / Archive.tsx
     │   ├── Cases.tsx / CasePlayer.tsx / Coach.tsx / CoachSession.tsx
     │   ├── Playbooks.tsx / Playbook.tsx
-    │   ├── PracticeDraw.tsx + practice/* (12 lab pages)
+    │   ├── PracticeDraw.tsx + practice/* (lab and lesson pages, incl. TradeFramework.tsx, OpeningRange.tsx, FairValueGap.tsx)
     │   └── macro/*                   # Macro Desk, lesson, play
     ├── components/                   # charts + modals (+ financials/, macro/)
     │   ├── MarketChart.tsx (~1.5k) / CandlestickChart.tsx
@@ -105,10 +105,14 @@ trainer/
         ├── quizChartData.ts          # overlay quiz bars: the tagged SAMPLE pack, else SAMPLE_OHLC
         ├── buySellDrill.ts / scenarioCharts.ts  # Buy or Sell? drill
         ├── practiceDraw.ts / practiceLabs.ts / miscPractices.ts
-        ├── caseStudies.ts + multiAssetCases.ts  # CASE_STUDIES, CASE_PACKS (16 packs)
-        ├── coaching/ (+ sessions/)   # COACHING_SESSION_MODULES (70), validate, navigate
+        ├── caseStudies.ts + multiAssetCases.ts + priceActionCases.ts  # CASE_STUDIES, CASE_PACKS (17 packs)
+        ├── coaching/ (+ sessions/)   # COACHING_SESSION_MODULES (77), validate, navigate
+        ├── tradeFramework.ts         # price action framework lesson + Learn `trade-framework` (tradeFramework.test.ts)
+        ├── openingRange.ts           # 15-minute ORB lesson + Learn `opening-range` + ORB_OHLC (openingRange.test.ts)
+        ├── fourPillars.ts            # four pillars Playbook copy + Learn `four-pillars` + FP_OHLC (fourPillars.test.ts)
+        ├── fairValueGap.ts           # breakout → pullback → fair value gap lesson, Playbook copy + credibility, Learn `fair-value-gap`, FVG_OHLC, detectFairValueGaps (fairValueGap.test.ts)
         ├── beginnerPath.ts / learningPaths.ts / thinkingModeTips.ts / marketNavigator.ts
-        ├── playbooks.ts              # Playbook registry (outside sources; playbooks.test.ts + playbookPage.test.tsx)
+        ├── playbooks.ts              # Playbook registry (outside sources; optional `video` embed + credit, `credibility` note with dated corroborating sources, `related` links; playbooks.test.ts + playbookPage.test.tsx)
         ├── financials/ · macro/      # project code (own test scripts)
         ├── academy/                  # Beginner Academy: content/, paper/ engine, rewards/, options/, quiz/, today.ts (npm run test:academy)
         ├── contentGraph.test.ts      # section floors + reference integrity + loop-prompt config (npm run test:content)

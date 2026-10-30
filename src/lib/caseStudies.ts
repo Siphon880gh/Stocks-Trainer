@@ -8,8 +8,10 @@ import {
   FUTURES_CASES,
   OPTIONS_CONTEXT_CASES,
 } from "./multiAssetCases";
+import { FVG_CASES, ORB_CASES, PILLAR_CASES, PRICE_ACTION_CASES } from "./priceActionCases";
 
-export type CaseContextType = "news" | "financials" | "combined";
+/** `chart` = price action only (no headline or statement), e.g. the `price-action` pack. */
+export type CaseContextType = "news" | "financials" | "combined" | "chart";
 export type CaseThinkingMode =
   | "beat_miss"
   | "margin_compression"
@@ -23,7 +25,11 @@ export type CaseThinkingMode =
   | "macro_print"
   | "geopolitics_supply"
   | "combined_earnings_headline"
-  | "combined_rumor_filing";
+  | "combined_rumor_filing"
+  | "price_action_plan"
+  | "opening_range"
+  | "four_pillars"
+  | "fair_value_gap";
 
 export type CaseAction = "buy" | "sell" | "hold" | "short";
 export type CaseGrade = "correct" | "incorrect" | "partial";
@@ -44,7 +50,8 @@ export type CasePackId =
   | "crypto-macro"
   | "options-context"
   | "options-tape"
-  | "options-macro";
+  | "options-macro"
+  | "price-action";
 
 export interface CaseDebrief {
   /** Process + theory — not direction-only */
@@ -2173,6 +2180,10 @@ export const CASE_STUDIES: CaseStudy[] = [
   ...MACRO_NEWS_CASES,
   ...COMBINED_CASES,
   ...SCALE_CASES,
+  ...PRICE_ACTION_CASES,
+  ...ORB_CASES,
+  ...PILLAR_CASES,
+  ...FVG_CASES,
   ...FUTURES_CASES,
   ...FOREX_CASES,
   ...CRYPTO_CASES,
@@ -2186,7 +2197,8 @@ export const CASE_PACKS: {
   id: CasePackId;
   name: string;
   description: string;
-  milestoneId: string;
+  /** Path milestone a correct case completes; omitted for packs outside the path spine. */
+  milestoneId?: string;
 }[] = [
   {
     id: "earnings",
@@ -2215,6 +2227,12 @@ export const CASE_PACKS: {
     description:
       "Use both the headline and the snapshot. Your time frame can change the answer.",
     milestoneId: "E5.M4",
+  },
+  {
+    id: "price-action",
+    name: "Price action trades",
+    description:
+      "SAMPLE charts only: the price action framework (wait through chop, enter from an edge, honor the stop, trail it, take profit), the 15-minute opening range breakout, and the four pillars (map, confirmation, invalidation, context).",
   },
   {
     id: "futures",

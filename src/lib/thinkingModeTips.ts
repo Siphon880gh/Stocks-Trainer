@@ -14,6 +14,10 @@ export const THINKING_MODE_LABELS: Record<CaseThinkingMode, string> = {
   geopolitics_supply: "Supply shock",
   combined_earnings_headline: "Earnings plus news",
   combined_rumor_filing: "Rumor vs filing",
+  price_action_plan: "Price action plan",
+  opening_range: "Opening range",
+  four_pillars: "Map, confirm, invalidate, context",
+  fair_value_gap: "Breakout, pullback, gap",
 };
 
 export const COACH_TIP_BY_THINKING_MODE: Record<CaseThinkingMode, string> = {
@@ -43,6 +47,14 @@ export const COACH_TIP_BY_THINKING_MODE: Record<CaseThinkingMode, string> = {
     "Match the filing facts to the headline. A different time frame can earn partial credit. Cases → news plus financials.",
   combined_rumor_filing:
     "Rumor vs filed fact. If they disagree, size for uncertainty. Cases → news plus financials.",
+  price_action_plan:
+    "Trade what's happening, not what you think will happen: enter from an edge, stop where the idea is wrong, trail under higher lows, take profit when reward no longer justifies risk. Cases → price action trades.",
+  opening_range:
+    "Mark the first 30 minutes, wait for a 15-minute close outside it, stop at the other end, 1:1 on the underlying. A wick is not a close, and a wide range means smaller size or no trade. Cases → price action trades.",
+  four_pillars:
+    "Map the level, wait for the confirmation you chose in advance (a close, not a wick), know the invalidation price before entry, then let context set the size: full, half or pass. Cases → price action trades.",
+  fair_value_gap:
+    "The breakout candle is a signal, not an entry. Check for a gap between candle 1's high and candle 3's low, buy only a pullback into it, stop below the gap and the level. Some gaps are never retested: a missed trade is the cost of waiting. Cases → price action trades.",
 };
 
 export function thinkingModeLabel(mode: CaseThinkingMode): string {

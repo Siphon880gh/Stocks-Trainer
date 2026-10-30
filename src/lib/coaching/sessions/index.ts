@@ -68,6 +68,10 @@ import { statementSnapshotSession } from "./statement-snapshot";
 import { supplyShockSession } from "./supply-shock";
 import { tradePlanBeforeEntrySession } from "./trade-plan-before-entry";
 import { trailingStopExitSession } from "./trailing-stop-exit";
+import { honorTheStopSession } from "./honor-the-stop";
+import { openingRangeBreakoutSession } from "./opening-range-breakout";
+import { breakoutPullbackFvgSession } from "./breakout-pullback-fvg";
+import { fourPillarsSession } from "./four-pillars";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
 import { candleNeedsContextSession } from "./candle-needs-context";
 import { rsiVsTrendSession } from "./rsi-vs-trend";
@@ -144,6 +148,10 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   cpiMorningSession,
   tradePlanBeforeEntrySession,
   trailingStopExitSession,
+  honorTheStopSession,
+  openingRangeBreakoutSession,
+  breakoutPullbackFvgSession,
+  fourPillarsSession,
   supplyDemandZoneRetestSession,
   candleNeedsContextSession,
   rsiVsTrendSession,

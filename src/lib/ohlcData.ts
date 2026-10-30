@@ -1,4 +1,7 @@
 import { SCENARIO_OHLC } from "./scenarioCharts";
+import { ORB_OHLC } from "./openingRange";
+import { FVG_OHLC } from "./fairValueGap";
+import { FP_OHLC } from "./fourPillars";
 import { ADVANCED_OHLC, ADVANCED_DRILL_SPECS } from "./advancedPatterns";
 import { CHART_BOOK_OHLC, CHART_BOOK_DRILL_SPECS } from "./chartPatternBook";
 import { THEME_OHLC, THEME_DRILL_SPECS } from "./patternThemes";
@@ -1134,6 +1137,9 @@ export const PATTERN_OHLC: Record<string, OHLC[]> = {
   ...ADVANCED_OHLC,
   ...CHART_BOOK_OHLC,
   ...THEME_OHLC,
+  ...ORB_OHLC,
+  ...FP_OHLC,
+  ...FVG_OHLC,
   "hammer-no-trend": HAMMER_NO_TREND_OHLC,
   "engulfing-no-trend": ENGULFING_NO_TREND_OHLC,
 };

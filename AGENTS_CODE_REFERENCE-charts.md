@@ -87,6 +87,10 @@ Backward-compatible API any feature can reuse (earnings reactions, macro release
 
 **Stair-step lines:** `stairStepLines(steps, { label?, tone? })` in `chartAnnotations.ts` turns `{ fromIndex, price }[]` into plain `trendlines` (flat segment + vertical riser per step; the last step extends right and carries the label). No renderer change. Used for the trailing stop on `sc-trailing-stop`.
 
+**Framework scenarios (Learn / lesson only, not in the Buy-or-Sell drill):** `sc-stop-hit` (breakout long, pullbacks hold above the stop, last bar closes through it; facts `entry`, `stop`, `target`, `top`, `close`) and `sc-target-reversal` (higher-low long rallies into the target zone at the old high, shooting star; facts `target`, `zoneBottom`, `entry`, `stop`, `trail`, `close`). Both `decision: "sell"` (exit / take profit on the long).
+
+**Other lesson series in `PATTERN_OHLC`:** `ORB_OHLC` from `openingRange.ts` (`orb-wick`, `orb-long`, `orb-short`, `orb-wide`, `orb-fail`, each also as `*-pre` ending at the decision candle; 15-minute bars named by ET start time, prices to the cent), `FP_OHLC` from `fourPillars.ts` (`fp-touches`, `fp-wick-close`) and `FVG_OHLC` from `fairValueGap.ts` (`fvg-signal`, `fvg-pullback`, `fvg-no-gap`, `fvg-runaway`, `fvg-fail`, each also as `*-pre`; 5-minute bars named by ET start time). They are not scenario charts and are not in the Buy-or-Sell drill.
+
 ---
 
 ## Code flow (charts)

@@ -58,6 +58,9 @@ describe("misc practice catalog", () => {
       "Pattern themes",
       "Essential candlestick patterns",
       "Which Way? (Up, Down or Either)",
+      "Price action trading framework",
+      "Opening range breakout (15-minute)",
+      "Breakout, pullback and fair value gap",
     ]);
   });
 });

@@ -21,6 +21,9 @@ import { RT_TERMS } from "./recordTraders";
 import { THEME_TERMS } from "./patternThemes";
 import { EC_TERMS } from "./essentialCandles";
 import { WW_TERMS } from "./whichWay";
+import { ORB_TERMS } from "./openingRange";
+import { FVG_TERMS } from "./fairValueGap";
+import { FP_TERMS } from "./fourPillars";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
 
@@ -442,6 +445,22 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
       "Before entering, find a realistic target (the next resistance, an old high, a measured move) and check that the reward is worth the risk, for example at least 2:1. If the next level is barely further than your stop, skip the trade or wait for a better entry. During the trade, compare the reward left (target minus price) with the risk left (price minus the current stop). When price is at the target and the reward left is smaller than the risk to the stop, taking profit or tightening the stop is the plan; hoping for more is not. SAMPLE process, not advice.",
   },
   {
+    id: "stop-loss-invalidation",
+    name: "Stop-loss at invalidation",
+    category: "process",
+    summary: "Exit where the trade thesis is proven wrong, and keep that loss small.",
+    detail:
+      "Every entry has a reason (the breakout holds, the higher low holds, the reversal pattern completes). The stop goes at the price that proves the reason wrong: back inside the base for a breakout, under the pullback low for a pullback entry, beyond the pattern's extreme for a reversal. Set it before entry, then size the position so a stop-out is a small, known loss (for example 1% of the account). Pullbacks that hold above the stop are normal; a close through it ends the idea. Never move a stop further away to avoid being wrong. SAMPLE process, not advice.",
+  },
+  {
+    id: "price-action-framework",
+    name: "Price action trading framework",
+    category: "process",
+    summary: "Trade what's happening, not what you think will happen: entry, stop-loss, trailing stop, profit target.",
+    detail:
+      "Uncertainty (choppy, overlapping candles with no nearby edge) means wait. A clear signal (a close through a level, a held retest, a confirmed pattern at a level) starts the plan. 1 Entry signal: enter from a defined edge (breakout, pullback, reversal), not an opinion. 2 Stop-loss: exit where the trade thesis is invalidated; keep losses small. 3 Trailing stop: raise the exit level as price trends higher to protect open profit. 4 Profit target: plan the reward before entry and take gains when the reward left no longer justifies the risk. Learn → Price Action Framework and Learn → Misc Practices → Price action trading framework. SAMPLE process, not advice.",
+  },
+  {
     id: "trendline",
     name: "Trendline",
     category: "process",
@@ -688,6 +707,9 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...THEME_TERMS,
   ...EC_TERMS,
   ...WW_TERMS,
+  ...ORB_TERMS,
+  ...FP_TERMS,
+  ...FVG_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {

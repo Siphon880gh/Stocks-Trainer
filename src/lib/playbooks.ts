@@ -1,6 +1,45 @@
 import type { AssetClass } from "./samplePacks";
+import { FP_CREDIBILITY, FP_RELATED, FP_SOURCE } from "./fourPillars";
+import { FVG_CREDIBILITY, FVG_PLAYBOOK_SOURCE, FVG_RELATED } from "./fairValueGap";
 
 export type PlaybookSourceKind = "youtube" | "webpage";
+
+/**
+ * Optional embedded video for a kit, shown above the panels with a credit line under the player.
+ * `embedUrl` must be a privacy-enhanced https://www.youtube-nocookie.com/embed/<id> link for the same video as `watchUrl`.
+ */
+export interface PlaybookVideo {
+  embedUrl: string;
+  /** Video title as published; used for the iframe title and the credit line. */
+  title: string;
+  /** Creator / channel name as published. */
+  creator: string;
+  /** Public watch link credited under the player. */
+  watchUrl: string;
+  /** Creator's channel, only when verified (e.g. YouTube oEmbed `author_url`). */
+  channelUrl?: string;
+}
+
+/** One outside page that teaches an idea in the kit (`corroborates`) or only describes the method (`presents`). */
+export interface PlaybookCorroboratingSource {
+  /** Which part of the kit it backs, e.g. "3 · Invalidation". */
+  supports: string;
+  label: string;
+  url: string;
+  /** What the page says that matters here, in one plain sentence. */
+  note: string;
+  role: "corroborates" | "presents";
+  /** Day the URL was fetched and read (YYYY-MM-DD). `npm run check:playbook-sources` re-checks it loads. */
+  verifiedOn: string;
+}
+
+/** Optional "how well-tested is this?" note: an honest verdict plus the outside pages behind each idea. */
+export interface PlaybookCredibility {
+  title: string;
+  /** Short plain-language paragraphs, shown before the sources. */
+  summary: string[];
+  sources: PlaybookCorroboratingSource[];
+}
 
 export interface PlaybookSource {
   url: string;
@@ -31,6 +70,12 @@ export interface Playbook {
   samplePackId?: string;
   /** Overlay ids MarketChart already renders (`sma` `ema` `rsi` `macd` `bollinger`). */
   overlayIds?: string[];
+  /** Optional in-app links shown under the Strategy text (lessons, Learn groups, coach, cases). */
+  related?: { label: string; to: string }[];
+  /** Optional embedded video (with credit) shown above the panels. */
+  video?: PlaybookVideo;
+  /** Optional credibility note rendered as its own panel after Strategy. */
+  credibility?: PlaybookCredibility;
 }
 
 /** Authored playbooks. Append here — the list page reads this array. */
@@ -258,6 +303,54 @@ export const PLAYBOOKS: Playbook[] = [
     caseId: "case-fut-roll-literacy",
     samplePackId: "fut-index",
     overlayIds: [],
+  },
+  {
+    id: "price-action-four-pillars",
+    title: "Price action in four pillars",
+    summary:
+      "Strip the indicators and run four checks in order: map the level, wait for the confirmation you chose, know the invalidation price, then let context set the size.",
+    assetClass: "equity",
+    source: {
+      url: FP_SOURCE.url,
+      kind: "youtube",
+      label: FP_SOURCE.label,
+    },
+    explanation:
+      "SAMPLE teaching of the process in Brando Trades’ public video. The idea: a chart is a record of where buyers and sellers already made decisions. Predictions cost, reactions pay. Simple does not mean safe; it means repeatable. Run the four pillars in this order every time.\n\n1. Map. Draw one precise horizontal line where price touched, reacted and moved away, not a wide zone. One touch is interesting, two is real, three or four is significant. Watch closes against the line: a wick through it is a test, a close through it is a statement. The map tells you where to watch; it does not predict, and a level can still be sliced through.\n\n2. Confirmation. Decide in advance what price must do at the level before you act: a hold, a reclaim, or a break and retest, judged on the close. The level is where to watch; the confirmation is when to act. “It looks strong” is not a confirmation. Confirmation does not make you right; it makes you disciplined. (The creator tells of buying a silver dip before any confirmation and taking a large loss; that is his account, not checked here.)\n\n3. Invalidation. Before entry, know the exact price that proves you wrong. For a reclaim: a daily close back below the reclaimed level. Use closes, not ticks. No moving the stop, no adding to a loser, no negotiating. The distance to invalidation sets the position size: the math controls size, not confidence.\n\n4. Context. Before sizing, check the market (SPX / QQQ daily: trending, extended or choppy?), how extended the stock is (five up days with no pullback vs a fresh breakout from a three-week base), and catalysts (earnings, CPI, the Fed). Context picks full size, half size or pass. It never turns a bad setup into a good one.\n\nThe three setups all start with a level. Hold: old resistance flips to support and a retest from above holds, long above it. Reclaim: support breaks and closes below, then price closes back above it, long on the confirmed reclaim. Rejection: a rally into significant resistance prints a daily candle with a long upper wick, short just under the level.\n\nCommon mistakes: stacking indicators, entering before the confirmation, moving the stop, and ignoring context.\n\nThe video does not give profit-target or trailing-stop rules, so none are attributed to it here. For exits, the links below go to the app’s own price action trading framework. The Chart look panel has no indicators on purpose: practice drawing the levels yourself. Not investment advice.",
+    coachSlug: "four-pillars",
+    caseId: "case-fp-reclaim",
+    samplePackId: "eq-cyclical",
+    overlayIds: [],
+    related: FP_RELATED,
+    video: {
+      embedUrl: FP_SOURCE.embedUrl,
+      title: FP_SOURCE.title,
+      creator: FP_SOURCE.creator,
+      watchUrl: FP_SOURCE.url,
+      channelUrl: FP_SOURCE.channelUrl,
+    },
+    credibility: FP_CREDIBILITY,
+  },
+  {
+    id: "breakout-pullback-fvg",
+    title: "Breakout, pullback and fair value gap",
+    summary:
+      "Don’t buy the breakout candle. Check whether the move left a gap between candle 1’s high and candle 3’s low, buy the pullback into it, and put the stop below the gap and the broken level.",
+    assetClass: "equity",
+    source: {
+      url: FVG_PLAYBOOK_SOURCE.url,
+      kind: "webpage",
+      label: FVG_PLAYBOOK_SOURCE.label,
+      verifiedOn: FVG_PLAYBOOK_SOURCE.verifiedOn,
+    },
+    explanation:
+      "SAMPLE teaching of a breakout setup inspired by a short Facebook trading reel, checked against the public pages listed under “How well-tested is this?”. The resource link above is NinjaTrader’s guide to fair value gaps.\n\n1. Mark the level. Find resistance that has capped price more than once.\n\n2. The breakout candle is a signal, not an entry. Don’t buy as the candle first crosses the level. That is where late buyers chase and where many breakouts reverse.\n\n3. Look for the imbalance. Around the breakout candle, compare candle 1’s high with candle 3’s low. If candle 3’s low is above candle 1’s high, the space between them is a gap: price moved so fast that only buyers traded there. It is commonly called a fair value gap (FVG). If the wicks overlap, even by a cent, there is no gap and no setup.\n\n4. Wait for the pullback into the gap. Enter long when price pulls back into it. That pullback is the confirmation.\n\n5. Stop below the gap and the level. If price closes back below both, the breakout idea has failed. Size from the distance to the stop.\n\nThe reel says these gaps are “often retested”. That is a common trader belief, not a guarantee: some gaps are never revisited, and a missed trade is the cost of waiting. Some pullbacks also keep going through the gap. The reel shows a target well above the entry but gives no rule for it, so none is attributed to it here. For targets and trailing stops, the links below go to the app’s own price action trading framework. Not investment advice.",
+    coachSlug: "breakout-pullback-fvg",
+    caseId: "case-fvg-pullback-into-gap",
+    samplePackId: "eq-mega-tech",
+    overlayIds: [],
+    related: FVG_RELATED,
+    credibility: FVG_CREDIBILITY,
   },
 ];
 

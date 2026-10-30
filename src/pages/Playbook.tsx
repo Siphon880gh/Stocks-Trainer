@@ -69,6 +69,37 @@ export default function Playbook() {
           </p>
         </div>
 
+        {playbook.video ? (
+          <figure className="space-y-2" data-testid="playbook-video">
+            <div className="relative w-full aspect-video overflow-hidden rounded-lg border border-line bg-surface">
+              <iframe
+                src={playbook.video.embedUrl}
+                title={`${playbook.video.title} by ${playbook.video.creator} (YouTube video)`}
+                loading="lazy"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+                className="absolute inset-0 h-full w-full border-0"
+              />
+            </div>
+            <figcaption className="text-[12px] text-muted">
+              Video:{" "}
+              <a href={playbook.video.watchUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                {playbook.video.title}
+              </a>{" "}
+              by{" "}
+              {playbook.video.channelUrl ? (
+                <a href={playbook.video.channelUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                  {playbook.video.creator}
+                </a>
+              ) : (
+                playbook.video.creator
+              )}
+              . Embedded from YouTube; all rights stay with the creator.
+            </figcaption>
+          </figure>
+        ) : null}
+
         <div className="space-y-3">
           <PlaybookPanel title="Strategy">
             {playbook.explanation ? (
@@ -80,7 +111,61 @@ export default function Playbook() {
                 This panel is waiting on the Cursor prompt for this source.
               </p>
             )}
+            {playbook.related?.length ? (
+              <div className="space-y-1" data-testid="playbook-related">
+                <p className="text-[12px] font-medium text-muted">In this app</p>
+                <ul className="list-disc pl-5 space-y-1 text-sm">
+                  {playbook.related.map((l) => (
+                    <li key={l.to}>
+                      <Link to={l.to} className="text-primary hover:underline">
+                        {l.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
           </PlaybookPanel>
+
+          {playbook.credibility ? (
+            <PlaybookPanel title={playbook.credibility.title}>
+              <div className="space-y-3 text-sm" data-testid="playbook-credibility">
+                {playbook.credibility.summary.map((p) => (
+                  <p key={p} className="text-ink leading-relaxed">{p}</p>
+                ))}
+                <ul className="space-y-2">
+                  {playbook.credibility.sources
+                    .filter((s) => s.role === "corroborates")
+                    .map((s) => (
+                      <li key={s.url}>
+                        <span className="text-[12px] font-medium text-muted">{s.supports}</span>
+                        <br />
+                        <a href={s.url} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                          {s.label}
+                        </a>
+                        <span className="text-muted">: {s.note}</span>
+                      </li>
+                    ))}
+                </ul>
+                {playbook.credibility.sources.some((s) => s.role === "presents") ? (
+                  <p className="text-[12px] text-muted">
+                    The method also appears on{" "}
+                    {playbook.credibility.sources
+                      .filter((s) => s.role === "presents")
+                      .map((s, i, all) => (
+                        <span key={s.url}>
+                          {i > 0 ? (i === all.length - 1 ? " and " : ", ") : ""}
+                          <a href={s.url} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                            {s.label}
+                          </a>
+                        </span>
+                      ))}
+                    , which present it rather than evaluate it.
+                  </p>
+                ) : null}
+              </div>
+            </PlaybookPanel>
+          ) : null}
 
           <PlaybookPanel title="Coaching">
             {coach?.ok ? (

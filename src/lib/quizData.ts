@@ -33,6 +33,10 @@ import { RT_QUESTIONS } from "./recordTraders";
 import { THEME_QUESTIONS } from "./patternThemes";
 import { EC_QUESTIONS } from "./essentialCandles";
 import { WW_QUESTIONS } from "./whichWay";
+import { TRADE_FRAMEWORK_QUESTIONS } from "./tradeFramework";
+import { ORB_QUESTIONS } from "./openingRange";
+import { FP_QUESTIONS } from "./fourPillars";
+import { FVG_QUESTIONS } from "./fairValueGap";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5392,6 +5396,10 @@ export type QuizGroupId =
   | "crows-and-strikes"
   | "advanced-rare"
   | "price-action"
+  | "trade-framework"
+  | "opening-range"
+  | "four-pillars"
+  | "fair-value-gap"
   | "supply-demand"
   | "buy-or-sell"
   | "indicators"
@@ -5619,6 +5627,30 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     icon: "timeline",
   },
   {
+    id: "trade-framework",
+    name: "Price Action Framework",
+    description: "Trade what's happening: uncertainty vs a clear signal, entry from a defined edge (breakout, pullback, reversal), stop-loss at invalidation, trailing stop, profit target",
+    icon: "flag",
+  },
+  {
+    id: "opening-range",
+    name: "Opening Range Breakout",
+    description: "15-minute ORB: the first 30 minutes' range, a close outside it (calls above, puts below), stop at the other end, 1:1 on the underlying, and the caveats: close vs next open, wide ranges, option premium, expiry",
+    icon: "schedule",
+  },
+  {
+    id: "four-pillars",
+    name: "Price Action: Four Pillars",
+    description: "Map (level touches, one precise line, close vs wick), confirmation decided in advance, invalidation on closes that sets size, context (full / half / pass); hold, reclaim and rejection setups; common mistakes",
+    icon: "view_column",
+  },
+  {
+    id: "fair-value-gap",
+    name: "Breakout Pullback & Fair Value Gaps",
+    description: "The breakout candle is a signal, not an entry; gap vs no gap in three candles (candle 1's high vs candle 3's low); buy the pullback into the gap, stop below the gap and the level; gaps that never get retested, gaps that fail, and the missing target rule",
+    icon: "unfold_less",
+  },
+  {
     id: "supply-demand",
     name: "Supply & Demand Zones",
     description: "Base candle, impulse departure, fresh vs tested zones, zone flips",
@@ -5781,6 +5813,10 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "essential-candles") return EC_QUESTIONS;
   if (groupId === "which-way") return WW_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
+  if (groupId === "trade-framework") return TRADE_FRAMEWORK_QUESTIONS;
+  if (groupId === "opening-range") return ORB_QUESTIONS;
+  if (groupId === "four-pillars") return FP_QUESTIONS;
+  if (groupId === "fair-value-gap") return FVG_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
@@ -5825,6 +5861,10 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "essential-candles") return EC_QUESTIONS;
   if (groupId === "which-way") return WW_QUESTIONS;
   if (groupId === "price-action") return PRICE_ACTION_QUESTIONS;
+  if (groupId === "trade-framework") return TRADE_FRAMEWORK_QUESTIONS;
+  if (groupId === "opening-range") return ORB_QUESTIONS;
+  if (groupId === "four-pillars") return FP_QUESTIONS;
+  if (groupId === "fair-value-gap") return FVG_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;

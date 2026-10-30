@@ -48,6 +48,48 @@ describe("playbooks registry", () => {
     }
   });
 
+  it("video embeds use youtube-nocookie for the same video as the credited watch link", () => {
+    const id = (u: string) => {
+      const url = new URL(u);
+      return url.hostname.endsWith("youtu.be") ? url.pathname.slice(1) : (url.searchParams.get("v") ?? url.pathname.split("/").pop());
+    };
+    for (const p of PLAYBOOKS.filter((x) => x.video)) {
+      const v = p.video!;
+      assert.match(v.embedUrl, /^https:\/\/www\.youtube-nocookie\.com\/embed\/[\w-]{11}$/, p.id);
+      assert.equal(classifySourceUrl(v.watchUrl), "youtube", p.id);
+      assert.equal(id(v.embedUrl), id(v.watchUrl), `${p.id} embed and watch link are the same video`);
+      assert.ok(v.title.trim() && v.creator.trim(), p.id);
+      if (v.channelUrl) assert.match(v.channelUrl, /^https:\/\/www\.youtube\.com\/(@[\w.-]+|channel\/[\w-]+)$/, p.id);
+    }
+    assert.ok(getPlaybook("price-action-four-pillars")?.video, "four pillars kit embeds its video");
+  });
+
+  it("credibility notes: https webpages with a verification date, mapped to what they support", () => {
+    for (const p of PLAYBOOKS.filter((x) => x.credibility)) {
+      const c = p.credibility!;
+      assert.ok(c.title.trim() && c.summary.length > 0, p.id);
+      assert.equal(new Set(c.sources.map((s) => s.url)).size, c.sources.length, `${p.id} duplicate source`);
+      for (const s of c.sources) {
+        assert.match(s.url, /^https:\/\//, s.url);
+        assert.equal(classifySourceUrl(s.url), "webpage", s.url);
+        assert.match(s.verifiedOn, /^\d{4}-\d{2}-\d{2}$/, s.url);
+        assert.ok(s.supports.trim() && s.label.trim() && s.note.trim(), s.url);
+      }
+      assert.ok(c.sources.some((s) => s.role === "corroborates"), `${p.id} needs at least one corroborating source`);
+    }
+    const fp = getPlaybook("price-action-four-pillars")!.credibility!;
+    assert.match(fp.summary.join(" "), /own framing/);
+    assert.match(fp.summary.join(" "), /no independent reviews or track record/);
+    assert.match(fp.summary.join(" "), /no evidence that this particular version is profitable/);
+    assert.match(fp.summary.join(" "), /Simple is not safe/);
+    const backing = fp.sources.filter((s) => s.role === "corroborates").map((s) => s.supports).join(" | ");
+    for (const pillar of ["1 · Map", "2 · Confirmation", "3 · Invalidation", "4 · Context"]) assert.ok(backing.includes(pillar), pillar);
+    assert.deepEqual(
+      fp.sources.filter((s) => s.role === "presents").map((s) => new URL(s.url).hostname),
+      ["www.tradezella.com", "www.chartfanatics.com"],
+    );
+  });
+
   it("webpage kits researched from public sources carry a verification date", () => {
     for (const p of PLAYBOOKS.filter((x) => x.source.kind === "webpage")) {
       assert.ok(p.source.verifiedOn, `${p.id} needs source.verifiedOn`);

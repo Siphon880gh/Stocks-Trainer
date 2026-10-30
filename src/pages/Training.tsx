@@ -166,6 +166,10 @@ export default function Training() {
                   g.id === "chart-patterns" ||
                   g.id === "buy-or-sell" ||
                   g.id === "price-action" ||
+                  g.id === "trade-framework" ||
+                  g.id === "opening-range" ||
+                  g.id === "four-pillars" ||
+                  g.id === "fair-value-gap" ||
                   g.id === "supply-demand" ||
                   g.id === "indicators" ||
                   g.id === "oscillators" ||
@@ -356,6 +360,10 @@ export default function Training() {
               Warm up with{" "}
               <button type="button" className="underline text-primary" onClick={() => setSelectedGroup("price-action")}>
                 Price Action
+              </button>
+              ,{" "}
+              <button type="button" className="underline text-primary" onClick={() => setSelectedGroup("trade-framework")}>
+                Price Action Framework
               </button>{" "}
               and{" "}
               <button type="button" className="underline text-primary" onClick={() => setSelectedGroup("supply-demand")}>

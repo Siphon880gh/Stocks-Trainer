@@ -281,7 +281,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "An example", body: "Bought at 50 with a $3 trail: the stop starts at 47 if the high is 50. The stock climbs to 58, so the stop rises to 55. It then drops to 54: the stop at 55 triggers and you sell near 55, keeping most of the gain." },
       { title: "Choose the distance", body: "Too tight and normal wiggles stop you out. Too loose and you give back a lot. Many traders trail under structure (the last higher low) instead of a fixed distance." },
     ],
-    refs: ["glossary:trailing-stop", "coach:trailing-stop-exit", "route:/paper", "quiz:orders-and-fills"],
+    refs: ["glossary:trailing-stop", "coach:trailing-stop-exit", "route:/paper", "quiz:orders-and-fills", "quiz:trade-framework"],
   },
   {
     id: "l3-time-in-force",
@@ -320,6 +320,6 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Reward vs risk", body: "Entry 50, stop 48, target 56: risking 2 to make 6 is 3 to 1. A plan with a target closer than the stop needs a very high win rate to pay off.", glossaryTermId: "risk-reward" },
       { title: "Measure results in R", body: "R is the risk you planned. Lose the planned amount: −1R. Make three times it: +3R. Tracking results in R shows whether your winners pay for your losers, whatever the trade size.", glossaryTermId: "r-multiple" },
     ],
-    refs: ["coach:trade-plan-before-entry", "practice:/practice/plan", "glossary:taking-profit"],
+    refs: ["coach:trade-plan-before-entry", "practice:/practice/plan", "glossary:taking-profit", "practice:/practice/trade-framework"],
   },
 ];

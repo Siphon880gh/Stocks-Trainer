@@ -37,6 +37,9 @@ import PracticeRecordTraders from "./pages/practice/RecordTraders";
 import PracticePatternThemes from "./pages/practice/PatternThemes";
 import PracticeEssentialCandles from "./pages/practice/EssentialCandles";
 import PracticeWhichWay from "./pages/practice/WhichWay";
+import PracticeTradeFramework from "./pages/practice/TradeFramework";
+import PracticeOpeningRange from "./pages/practice/OpeningRange";
+import PracticeFairValueGap from "./pages/practice/FairValueGap";
 import ProgressMap from "./pages/ProgressMap";
 import Cases from "./pages/Cases";
 import CasePlayer from "./pages/CasePlayer";
@@ -106,6 +109,9 @@ export default function App() {
           <Route path="practice/pattern-themes" element={<PracticePatternThemes />} />
           <Route path="practice/essential-candles" element={<PracticeEssentialCandles />} />
           <Route path="practice/which-way" element={<PracticeWhichWay />} />
+          <Route path="practice/trade-framework" element={<PracticeTradeFramework />} />
+          <Route path="practice/opening-range" element={<PracticeOpeningRange />} />
+          <Route path="practice/fair-value-gap" element={<PracticeFairValueGap />} />
           <Route path="map" element={<ProgressMap />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />

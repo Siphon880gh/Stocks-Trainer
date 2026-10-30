@@ -8,7 +8,7 @@ import {
 import { CASE_STUDIES, type CasePackId } from "./caseStudies";
 
 export const CLASS_TO_DECIDE_PACKS: Partial<Record<AssetClass, CasePackId[]>> = {
-  equity: ["earnings", "company-news", "macro-news", "combined"],
+  equity: ["earnings", "company-news", "macro-news", "combined", "price-action"],
   future: ["futures", "futures-tape", "futures-macro"],
   forex: ["forex", "forex-tape", "forex-macro"],
   crypto: ["crypto", "crypto-tape", "crypto-macro"],

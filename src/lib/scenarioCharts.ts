@@ -1047,6 +1047,114 @@ function trailingStop(): ScenarioChart {
   };
 }
 
+// ---------- Breakout long that fails: price tops and closes through the stop (framework step 2) ----------
+function stopHit(): ScenarioChart {
+  const B = 52000;
+  const { bars, marks: m } = walk(50900, [
+    { to: 51300, bars: 7 },
+    { to: 51950, bars: 4, mark: "r1" },
+    { to: 51500, bars: 4, mark: "b1" },
+    { to: 51950, bars: 4, mark: "r2" },
+    { to: 51600, bars: 3, mark: "b2" },
+    { to: 51900, bars: 3 },
+    { to: 52150, bars: 1, mark: "brk" },
+    { to: 52650, bars: 6, mark: "top" },
+    { to: 52000, bars: 5 },
+    { to: 51650, bars: 1, mark: "decision" },
+  ], 503);
+  capHigh(bars, 0, m.brk - 1, B, [m.r1, m.r2]);
+  for (const i of [m.r1, m.r2]) setBar(bars, i, bars[i].open, B, Math.min(bars[i].open, B - 140) - 30, B - 110);
+  floorLow(bars, m.r1 + 1, m.brk - 1, 51400);
+  const brkOpen = bars[m.brk - 1].close;
+  setBar(bars, m.brk, brkOpen, B + 190, brkOpen - 20, B + 150);
+  const entry = B + 150;
+  // Stop at invalidation: back inside the base, under the breakout candle.
+  const stop = r5(Math.min(bars[m.brk].low, B) - 60);
+  const target = entry + 2 * (entry - stop);
+  const topHigh = r5(entry + (target - entry) * 0.55);
+  capHigh(bars, m.brk + 1, m.decision, topHigh - 40, [m.top]);
+  floorLow(bars, m.brk + 1, m.decision - 1, stop + 40);
+  setBar(bars, m.top, topHigh - 90, topHigh, topHigh - 170, topHigh - 140);
+  const decOpen = bars[m.decision - 1].close;
+  setBar(bars, m.decision, decOpen, decOpen + 20, stop - 170, stop - 130);
+  const close = stop - 130;
+  return {
+    key: "sc-stop-hit",
+    bars,
+    // Framework chart (Learn only, not in the Buy-or-Sell drill): the long's thesis failed, so the decision is to exit.
+    decision: "sell",
+    plan: { entry, stop, target },
+    facts: { breakLevel: B, entry, stop, target, top: topHigh, close, brkIndex: m.brk, topIndex: m.top },
+    reveal: {
+      levels: [
+        { price: B, label: "Base top (breakout level)", tone: "neutral" },
+        { price: stop, label: "Stop-loss: thesis invalidated", tone: "risk" },
+        { price: target, label: "Planned target (2R), never reached", tone: "reward" },
+      ],
+      points: [
+        { index: m.brk, price: entry, label: "Entry (breakout)", tone: "entry" },
+        { index: m.top, price: topHigh, label: "Top", tone: "supply" },
+        { index: m.decision, price: close, label: "Close below stop: exit", tone: "risk" },
+      ],
+    },
+  };
+}
+
+// ---------- Rally into the planned target zone at the old high, shooting star (framework step 4) ----------
+function targetReversal(): ScenarioChart {
+  const T = 72450;
+  const { bars, marks: m } = walk(71600, [
+    { to: 72300, bars: 5, mark: "oldHigh" },
+    { to: 71300, bars: 6 },
+    { to: 70650, bars: 5, mark: "low" },
+    { to: 70950, bars: 4 },
+    { to: 70800, bars: 3, mark: "hl" },
+    { to: 71050, bars: 2, mark: "entryBar" },
+    { to: 71700, bars: 6 },
+    { to: 72100, bars: 5 },
+    { to: 72230, bars: 1, mark: "decision" },
+  ], 547);
+  setBar(bars, m.oldHigh, bars[m.oldHigh].open, T, bars[m.oldHigh].open - 40, T - 150);
+  const zoneBottom = T - 200;
+  capHigh(bars, m.oldHigh + 1, m.decision - 1, zoneBottom - 20);
+  capHigh(bars, 0, m.oldHigh - 1, T - 60);
+  const low = 70600;
+  floorLow(bars, m.oldHigh + 1, m.decision, low, [m.low]);
+  setBar(bars, m.low, bars[m.low].open, bars[m.low].open + 30, low, low + 190);
+  const hlLow = 70760;
+  floorLow(bars, m.low + 1, m.hl - 1, hlLow + 20);
+  floorLow(bars, m.hl + 1, m.decision, hlLow + 40);
+  setBar(bars, m.hl, bars[m.hl].open, bars[m.hl].open + 30, hlLow, hlLow + 60);
+  const eOpen = bars[m.entryBar - 1].close;
+  setBar(bars, m.entryBar, eOpen, 71090, Math.min(eOpen, hlLow + 60) - 10, 71060);
+  const entry = 71060;
+  const stop = r5(hlLow - 60);
+  const trail = r5(minLow(bars, m.decision - 6, m.decision - 1) - 40);
+  // Shooting star into the zone: small body near the low, long upper wick, high just under the old high.
+  const dOpen = bars[m.decision - 1].close;
+  setBar(bars, m.decision, dOpen, T - 10, dOpen - 30, dOpen + 30);
+  const close = dOpen + 30;
+  return {
+    key: "sc-target-reversal",
+    bars,
+    // Framework chart (Learn only): long from the higher low, planned target reached, so the decision is to take profit.
+    decision: "sell",
+    plan: { entry, stop, target: T },
+    facts: { target: T, zoneBottom, entry, stop, trail, close, low, hlLow, entryIndex: m.entryBar, oldHighIndex: m.oldHigh, lowIndex: m.low, hlIndex: m.hl },
+    reveal: {
+      zones: [
+        { fromIndex: m.oldHigh, top: T, bottom: zoneBottom, label: "Profit target zone (old high)", tone: "reward", labelAt: "top" },
+        { fromIndex: m.decision, top: close, bottom: trail, label: "Risk to trailed stop", tone: "risk", labelAt: "bottom" },
+      ],
+      levels: [{ price: stop, label: "First stop (under the higher low)", tone: "risk" }],
+      points: [
+        { index: m.entryBar, price: entry, label: "Entry (higher low)", tone: "entry" },
+        { index: m.decision, price: T - 10, label: "Shooting star at target", tone: "supply" },
+      ],
+    },
+  };
+}
+
 const ALL = [
   doubleTop(),
   doubleBottom(),
@@ -1067,6 +1175,8 @@ const ALL = [
   wedge(false),
   pullbackEntry(),
   trailingStop(),
+  stopHit(),
+  targetReversal(),
 ];
 
 /** Empty slots on the right of scenario charts so risk/reward boxes have room. */
