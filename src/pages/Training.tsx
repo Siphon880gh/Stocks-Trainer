@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { ANSWER_STREAK_LABEL, ANSWER_STREAK_TIP } from "../lib/streakLabels";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useLocation, useSearchParams } from "react-router-dom";
 import QuizModal from "../components/QuizModal";
 import SampleDataNote from "../components/SampleDataNote";
 import { withoutSampleWord } from "../lib/learnerCopy";
@@ -8,6 +8,7 @@ import AnswerSheetModal from "../components/AnswerSheetModal";
 import PathMapPanel from "../components/PathMapPanel";
 import BrowsePopover from "../components/BrowsePopover";
 import { QUIZ_GROUPS, getQuestionsForGroup, type QuizGroupId } from "../lib/quizData";
+import { conceptQuizGroups, patternQuizGroups } from "../lib/quizKinds";
 import { listPlaybooks } from "../lib/playbooks";
 import { listSessions } from "../lib/coaching";
 import {
@@ -39,6 +40,9 @@ function practiceDone(id: string): boolean {
 
 export default function Training() {
   const [searchParams] = useSearchParams();
+  const { hash } = useLocation();
+  const conceptMode = hash === "#concepts";
+  const visibleGroups = useMemo(() => (conceptMode ? conceptQuizGroups() : patternQuizGroups()), [conceptMode]);
   const groupParam = searchParams.get("group") as QuizGroupId | null;
   const startParam = searchParams.get("start");
   const [selectedGroup, setSelectedGroup] = useState<QuizGroupId>(groupParam && QUIZ_GROUPS.some((g) => g.id === groupParam) ? groupParam : "indicators");
@@ -63,6 +67,14 @@ export default function Training() {
       setSelectedGroup(groupParam);
     }
   }, [groupParam]);
+
+  useEffect(() => {
+    if (groupParam && visibleGroups.some((g) => g.id === groupParam)) return;
+    if (!visibleGroups.some((g) => g.id === selectedGroup)) {
+      const next = visibleGroups[0];
+      if (next) setSelectedGroup(next.id);
+    }
+  }, [visibleGroups, selectedGroup, groupParam]);
 
   useEffect(() => {
     if (startParam === "1" && canStartQuizGroup(selectedGroup)) {
@@ -104,16 +116,21 @@ export default function Training() {
           <AcademyTrainingCard onSelectGroup={setSelectedGroup} />
         </div>
         </TocGroup>
-        <TocGroup id="quiz" label="Pattern recognition">
+        <TocGroup id="quiz" label={conceptMode ? "Quiz (Concepts)" : "Quiz (Patterns)"} aliases={["concepts", "patterns", "quiz"]}>
         <div className="relative w-full max-w-xl panel p-8 pr-12 pb-28 space-y-6 scroll-mt-32">
           <SampleDataNote />
           <div className="flex items-center gap-4">
             <span className="material-symbols-outlined text-4xl text-primary">quiz</span>
             <div>
-              <h2 className="text-xl font-semibold">Pattern recognition quiz</h2>
+              <h2 className="text-xl font-semibold">{conceptMode ? "Quiz (Concepts)" : "Quiz (Patterns)"}</h2>
               <p className="text-muted text-sm mt-1">
-                Identify candlestick patterns on historical chart snapshots to earn points.
+                {conceptMode
+                  ? "Checks on ideas: how a candle is built, statements, indicators, risk and the other markets."
+                  : "Name the candle and chart shapes. Start with Candlestick Basics if the parts of one candle are still new."}
               </p>
+              {conceptMode ? null : (
+                <Link to="/practice/candle-basics" className="text-primary underline text-sm">Candlestick Basics</Link>
+              )}
             </div>
           </div>
 
@@ -123,7 +140,7 @@ export default function Training() {
               <BrowsePopover
                 title="Test groups"
                 selectedId={selectedGroup}
-                items={QUIZ_GROUPS.map((g) => ({
+                items={visibleGroups.map((g) => ({
                   id: g.id,
                   label: g.name,
                   hint: `${getQuestionsForGroup(g.id).length} questions`,
@@ -132,7 +149,7 @@ export default function Training() {
               />
             </div>
             <div className="flex flex-wrap gap-2">
-              {QUIZ_GROUPS.map((g) => {
+              {visibleGroups.map((g) => {
                 const isFeatured =
                   g.id === "candle-anatomy" ||
                   g.id === "candle-reading" ||
@@ -206,6 +223,7 @@ export default function Training() {
             <p className="text-muted text-sm">
               {withoutSampleWord(QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.description ?? "")}
             </p>
+            {conceptMode ? (
             <p className="text-[13px] text-muted">
               Earnings phrases:{" "}
               <button
@@ -226,6 +244,7 @@ export default function Training() {
               </button>{" "}
               · optional snapshot pack
             </p>
+            ) : null}
             {groupLocked ? (
               <div className="space-y-2">
                 <p className="text-accent-red text-sm">
@@ -282,7 +301,7 @@ export default function Training() {
             <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 backdrop-blur-sm">
               <div className="max-w-xl mx-auto px-4 py-3 flex items-center gap-3">
                 <p className="flex-1 min-w-0 text-sm truncate">
-                  {QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.name ?? "Quiz"}
+                  {visibleGroups.find((g) => g.id === selectedGroup)?.name ?? "Quiz"}
                 </p>
                 <button
                   type="button"

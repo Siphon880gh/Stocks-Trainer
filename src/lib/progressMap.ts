@@ -95,6 +95,7 @@ const PAGES: Array<Omit<MapStage, "kind" | "prereqs" | "related"> & { prereqs?: 
   { id: "page:/training", title: "Table of Contents", region: "start", to: "/training", teaser: "Every quiz group and practice, one group at a time." },
   { id: "page:/map", title: "Progress map", region: "start", to: "/map", teaser: "See what you've done and what's next." },
   { id: "page:/market", title: "Charts", region: "start", to: "/market", teaser: "SIMULATED and sample charts with indicators and drawing." },
+  { id: "page:/practice/candle-basics", title: "Candlestick Basics", region: "candles", to: "/practice/candle-basics", teaser: "One candle at a time, with the path of buyers and sellers drawn on it, then a match check." },
   { id: "page:/archive", title: "Library", region: "library", to: "/archive", teaser: "Look up any pattern: shape, themes, direction and a drill." },
   { id: "page:/practice/statements", title: "Statements lab", region: "statements", to: "/practice/statements", teaser: "Five fictional companies whose statements tie out.", prereqs: ["quiz:financial-literacy"] },
   { id: "page:/practice/read-the-print", title: "Read the Print", region: "statements", to: "/practice/read-the-print", teaser: "Read an earnings print the way the desk does.", prereqs: ["quiz:earnings-jargon"] },

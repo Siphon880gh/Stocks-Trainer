@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { APP_NAV, DASHBOARD_MORE, DEEP_STUDY, OTHER_FACTORS, PATTERN_MORE, PRACTICE_MENU, QUICK_DECISIONS } from "../lib/appNav";
+import { ACADEMY_MORE, APP_NAV, DASHBOARD_MORE, DEEP_STUDY, OTHER_FACTORS, PATTERN_MORE, PRACTICE_MENU, QUICK_DECISIONS } from "../lib/appNav";
 import { cn } from "../lib/utils";
 
 function here(to: string, pathname: string, hash: string): boolean {
@@ -115,7 +115,8 @@ export default function AppChrome({ children }: { children: ReactNode }) {
           >
             {APP_NAV.map((item) => {
               if (item.to === "/") return <MenuGroup key={item.to} label={item.label} to={item.to} end items={DASHBOARD_MORE} testId="dashboard-menu" />;
-              if (item.to === "/training#quiz") return <MenuGroup key={item.to} label={item.label} to={item.to} items={PATTERN_MORE} testId="pattern-menu" />;
+              if (item.to === "/academy") return <MenuGroup key={item.to} label={item.label} to={item.to} end items={ACADEMY_MORE} testId="academy-menu" />;
+              if (item.to === "/training#patterns") return <MenuGroup key={item.to} label={item.label} to={item.to} items={PATTERN_MORE} testId="pattern-menu" />;
               if (item.to === "/training#practice") return <MenuGroup key={item.to} label={item.label} to={item.to} items={PRACTICE_MENU} testId="practice-menu" />;
               return (
                 <NavLink

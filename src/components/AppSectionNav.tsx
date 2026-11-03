@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { APP_NAV, DASHBOARD_MORE, DEEP_STUDY, OTHER_FACTORS, PATTERN_MORE, PRACTICE_MENU, QUICK_DECISIONS } from "../lib/appNav";
+import { ACADEMY_MORE, APP_NAV, DASHBOARD_MORE, DEEP_STUDY, OTHER_FACTORS, PATTERN_MORE, PRACTICE_MENU, QUICK_DECISIONS } from "../lib/appNav";
 import { cn } from "../lib/utils";
 
 const [dashboard, ...afterDashboard] = APP_NAV;
@@ -7,6 +7,7 @@ const SECTIONS = [
   dashboard,
   ...DASHBOARD_MORE,
   ...afterDashboard,
+  ...ACADEMY_MORE,
   ...PATTERN_MORE,
   ...PRACTICE_MENU,
   ...DEEP_STUDY,

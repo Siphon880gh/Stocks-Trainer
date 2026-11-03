@@ -5,7 +5,7 @@ export const APP_NAV = [
   { to: "/", label: "Dashboard", end: true },
   { to: "/training", label: "ToC", end: true },
   { to: "/academy", label: "Academy" },
-  { to: "/training#quiz", label: "Pattern recognition" },
+  { to: "/training#patterns", label: "Pattern recognition" },
   { to: "/training#practice", label: "Practice" },
 ] as const;
 
@@ -14,9 +14,16 @@ export const DASHBOARD_MORE = [
   { label: "Map", to: "/map", icon: "map" },
 ] as const;
 
-/** Quiz first, then the pattern library (the page at /archive). */
+/** Lessons, then the concept quizzes. */
+export const ACADEMY_MORE = [
+  { label: "Lessons", to: "/academy", icon: "school" },
+  { label: "Quiz (Concepts)", to: "/training#concepts", icon: "lightbulb" },
+] as const;
+
+/** Basics, then the pattern quizzes, then the library. */
 export const PATTERN_MORE = [
-  { label: "Quiz", to: "/training#quiz", icon: "quiz" },
+  { label: "Candlestick Basics", to: "/practice/candle-basics", icon: "candlestick_chart" },
+  { label: "Quiz (Patterns)", to: "/training#patterns", icon: "quiz" },
   { label: "Library", to: "/archive", icon: "menu_book" },
 ] as const;
 

@@ -21,6 +21,7 @@ import PracticeMarkTheBand from "./pages/practice/MarkTheBand";
 import PracticeEmaMacd from "./pages/practice/EmaMacd";
 import PracticeOscillators from "./pages/practice/Oscillators";
 import PracticeJapaneseCandles from "./pages/practice/JapaneseCandles";
+import CandleBasics from "./pages/practice/CandleBasics";
 import PracticeHeikinAshi from "./pages/practice/HeikinAshi";
 import PracticeGammaSqueeze from "./pages/practice/GammaSqueeze";
 import PracticeNewsBiases from "./pages/practice/NewsBiases";
@@ -95,6 +96,7 @@ export default function App() {
           <Route path="practice/ema-macd" element={<PracticeEmaMacd />} />
           <Route path="practice/oscillators" element={<PracticeOscillators />} />
           <Route path="practice/japanese-candles" element={<PracticeJapaneseCandles />} />
+          <Route path="practice/candle-basics" element={<CandleBasics />} />
           <Route path="practice/heikin-ashi" element={<PracticeHeikinAshi />} />
           <Route path="practice/gamma-squeeze" element={<PracticeGammaSqueeze />} />
           <Route path="practice/news-biases" element={<PracticeNewsBiases />} />

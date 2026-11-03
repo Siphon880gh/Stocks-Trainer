@@ -21,8 +21,11 @@ describe("AppChrome header nav", () => {
     assert.ok(at("/") < at("/map"));
     assert.ok(at("/map") < at("/training"));
     assert.ok(at("/training") < at("/academy"));
-    assert.ok(at("/academy") < at("/training#quiz"));
-    assert.ok(at("/training#quiz") < at("/archive"));
+    assert.ok(at("/academy") < at("/training#concepts"));
+    assert.ok(at("/training#concepts") < at("/training#patterns"));
+    const patternMenu = nav.slice(nav.indexOf('data-testid="pattern-menu"'));
+    assert.deepEqual(hrefs(patternMenu).slice(0, 3), ["/practice/candle-basics", "/training#patterns", "/archive"]);
+    assert.ok(at("/archive") < at("/training#practice"));
     assert.ok(at("/archive") < at("/training#practice"));
     assert.ok(at("/training#practice") < at("/cases"));
     assert.deepEqual(links.slice(at("/cases"), at("/cases") + 3), ["/cases", "/coach", "/playbooks"]);
@@ -51,7 +54,7 @@ describe("AppChrome header nav", () => {
       </MemoryRouter>,
     );
     const mountedNav = underBase.slice(underBase.indexOf('data-testid="app-nav"'), underBase.indexOf("</nav>"));
-    for (const href of ["/playbooks", "/training#quiz", "/archive", "/paper"]) {
+    for (const href of ["/playbooks", "/training#patterns", "/archive", "/paper", "/practice/candle-basics"]) {
       assert.ok(mountedNav.includes(`href="${mounted}${href}"`), href);
     }
     assert.doesNotMatch(mountedNav, /href="\/training#/);
@@ -59,8 +62,10 @@ describe("AppChrome header nav", () => {
 
   it("puts Map in the Dashboard menu and names Learn as ToC", () => {
     assert.match(nav, />Dashboard</);
-    assert.match(nav, />map<\/span>Map/);
-    assert.match(nav, />quiz<\/span>Quiz/);
+    assert.match(nav, />school<\/span>Lessons/);
+    assert.match(nav, />lightbulb<\/span>Quiz \(Concepts\)/);
+    assert.match(nav, />candlestick_chart<\/span>Candlestick Basics/);
+    assert.match(nav, />quiz<\/span>Quiz \(Patterns\)/);
     assert.match(nav, />menu_book<\/span>Library/);
     assert.match(nav, />cases<\/span>Cases/);
     assert.match(nav, />psychology<\/span>Coach/);
