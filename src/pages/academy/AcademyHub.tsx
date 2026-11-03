@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { LEVELS, getUnit } from "../../lib/academy/content/levels";
 import { estMinutes } from "../../lib/academy/content/estimate";
 import { loadAcademy, type KVStorage } from "../../lib/academy/storage";
+import { readAcademyBrowseAll, writeAcademyBrowseAll } from "../../lib/academy/browse";
 import { academySummary, coursePct, isLevelComplete, isLevelUnlocked, levelPct, nextUnit, unitStatus, type UnitStatus } from "../../lib/academy/progress";
 import { TEST_OUT_LEVELS } from "../../lib/academy/testOut";
 import PlacementCard from "../../components/academy/PlacementCard";
@@ -11,8 +12,9 @@ import RewardsPanel from "../../components/academy/RewardsPanel";
 import { VALUE_PROMISE } from "../../lib/academy/copy";
 import { cn } from "../../lib/utils";
 
-const STATUS: Record<UnitStatus, { label: string; icon: string; cls: string }> = {
+const STATUS: Record<UnitStatus | "preview", { label: string; icon: string; cls: string }> = {
   locked: { label: "Locked", icon: "lock", cls: "text-muted" },
+  preview: { label: "Preview", icon: "visibility", cls: "text-primary" },
   available: { label: "Start", icon: "radio_button_unchecked", cls: "text-ink" },
   in_progress: { label: "In progress", icon: "pending", cls: "text-primary" },
   mastered: { label: "Mastered", icon: "check_circle", cls: "text-up" },
@@ -24,6 +26,12 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
   const state = loadAcademy(storage).state;
   // the Today answer writes the rewards store; re-read it so points and the Day streak agree with the card
   const [rewardsTick, setRewardsTick] = useState(0);
+  const [browseAll, setBrowseAll] = useState(() => readAcademyBrowseAll());
+  const toggleBrowse = () => {
+    const on = !browseAll;
+    writeAcademyBrowseAll(on);
+    setBrowseAll(on);
+  };
   const sum = academySummary(state);
   const next = nextUnit(state);
   const nextU = next ? getUnit(next) : undefined;
@@ -45,6 +53,26 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
         <p className="text-[13px]" data-testid="academy-summary">
           {sum.unitsDone}/{sum.units} units done · {sum.levelsComplete}/{sum.levels} levels complete
         </p>
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1">
+          <button
+            type="button"
+            data-testid="academy-browse-all"
+            aria-pressed={browseAll}
+            onClick={toggleBrowse}
+            className={cn(
+              "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[13px] font-semibold",
+              browseAll ? "border-amber-500 bg-amber-500/15 text-amber-700 dark:text-amber-300" : "border-line bg-surface hover:bg-primary/10",
+            )}
+          >
+            <span className="material-symbols-outlined text-[16px]" aria-hidden>{browseAll ? "lock_open" : "lock"}</span>
+            {browseAll ? "Turn off browse all" : "Browse all"}
+          </button>
+          <p className="text-[12px] text-muted" data-testid="academy-browse-note">
+            {browseAll
+              ? "Every locked lesson is open to preview for this tab. A check you pass here is not saved, and this clears when you close the tab."
+              : "Preview every locked lesson for this tab only. Nothing is saved as progress."}
+          </p>
+        </div>
       </header>
 
       {nextU ? (
@@ -107,14 +135,15 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
       {LEVELS.map((lv) => {
         const unlocked = isLevelUnlocked(state, lv.id);
         const complete = isLevelComplete(state, lv.id);
+        const open = unlocked || browseAll;
         return (
-          <section key={lv.id} className={cn("space-y-2", !unlocked && "opacity-80")} aria-label={`${lv.id} ${lv.title}`} data-level={lv.id} data-unlocked={unlocked ? "true" : "false"}>
+          <section key={lv.id} className={cn("space-y-2", !open && "opacity-80")} aria-label={`${lv.id} ${lv.title}`} data-level={lv.id} data-unlocked={open ? "true" : "false"} data-preview={!unlocked && browseAll ? "true" : "false"}>
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <h2 className="text-[15px] font-semibold">
                 {lv.id} · {lv.title}
               </h2>
               <span className="text-[12px] text-muted">
-                {complete ? "Complete" : unlocked ? `${Math.round(levelPct(state, lv.id) * 100)}% done` : `Locked: finish ${lv.prerequisites.join(", ")} first (or test out)`}
+                {complete ? "Complete" : unlocked ? `${Math.round(levelPct(state, lv.id) * 100)}% done` : browseAll ? "Preview for this tab" : `Locked: finish ${lv.prerequisites.join(", ")} first (or test out)`}
               </span>
               {(TEST_OUT_LEVELS as string[]).includes(lv.id) && !complete ? (
                 <Link to={`/academy/test-out/${lv.id}`} className="text-[12px] text-primary underline" data-testid={`test-out-${lv.id}`}>
@@ -137,10 +166,11 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                     {c.unitIds.map((id) => {
                       const u = getUnit(id)!;
                       const st = unitStatus(state, id);
-                      const s = STATUS[st];
+                      const shown = browseAll && st === "locked" ? "preview" : st;
+                      const s = STATUS[shown];
                       return (
                         <li key={id} className="flex items-center gap-2">
-                          <Link to={`/academy/${id}`} className="flex flex-1 min-w-0 items-center gap-2 text-[13px] hover:text-primary" data-unit={id} data-status={st}>
+                          <Link to={`/academy/${id}`} className="flex flex-1 min-w-0 items-center gap-2 text-[13px] hover:text-primary" data-unit={id} data-status={shown}>
                             <span className={cn("material-symbols-outlined text-base", s.cls)} aria-hidden>
                               {s.icon}
                             </span>

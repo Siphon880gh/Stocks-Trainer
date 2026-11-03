@@ -21,15 +21,56 @@ const at = (path: string, el: ReactElement, pattern: string) => (
 );
 
 test("hub: every unit is listed and every link is a real route; fresh learner sees L0 open, L1 locked, placement offered", () => {
-  const store = memoryStorage();
-  const html = renderHtml(<MemoryRouter><AcademyHub storage={store} /></MemoryRouter>);
-  for (const u of UNITS) assert.ok(html.includes(`data-unit="${u.id}"`), u.id);
-  for (const h of hrefs(html)) assert.ok(routeExists(h), h);
-  assert.match(html, /data-level="L0" data-unlocked="true"/);
-  assert.match(html, /data-level="L1" data-unlocked="false"/);
-  assert.ok(html.includes('data-testid="placement-card"'));
-  assert.ok(html.includes('data-testid="academy-continue"'));
-  assert.deepEqual(store.writes, [], "rendering never writes");
+  const prev = Object.getOwnPropertyDescriptor(globalThis, "sessionStorage");
+  const mem = new Map<string, string>();
+  Object.defineProperty(globalThis, "sessionStorage", {
+    configurable: true,
+    value: {
+      getItem: (k: string) => mem.get(k) ?? null,
+      setItem: (k: string, v: string) => void mem.set(k, v),
+      removeItem: (k: string) => void mem.delete(k),
+    },
+  });
+  try {
+    const store = memoryStorage();
+    const html = renderHtml(<MemoryRouter><AcademyHub storage={store} /></MemoryRouter>);
+    for (const u of UNITS) assert.ok(html.includes(`data-unit="${u.id}"`), u.id);
+    for (const h of hrefs(html)) assert.ok(routeExists(h), h);
+    assert.match(html, /data-testid="academy-browse-all"[^>]*aria-pressed="false"/);
+    assert.match(html, /data-level="L0" data-unlocked="true"/);
+    assert.match(html, /data-level="L1" data-unlocked="false"/);
+    assert.ok(html.includes('data-testid="placement-card"'));
+    assert.ok(html.includes('data-testid="academy-continue"'));
+    assert.deepEqual(store.writes, [], "rendering never writes");
+  } finally {
+    if (prev) Object.defineProperty(globalThis, "sessionStorage", prev);
+    else delete (globalThis as { sessionStorage?: unknown }).sessionStorage;
+  }
+});
+
+test("hub browse all: locked levels open as preview for this tab and the academy store is not written", () => {
+  const prev = Object.getOwnPropertyDescriptor(globalThis, "sessionStorage");
+  const mem = new Map<string, string>([["analysis_core_academy_browse_all_v1", "1"]]);
+  Object.defineProperty(globalThis, "sessionStorage", {
+    configurable: true,
+    value: {
+      getItem: (k: string) => mem.get(k) ?? null,
+      setItem: (k: string, v: string) => void mem.set(k, v),
+      removeItem: (k: string) => void mem.delete(k),
+    },
+  });
+  try {
+    const store = memoryStorage();
+    const html = renderHtml(<MemoryRouter><AcademyHub storage={store} /></MemoryRouter>);
+    assert.match(html, /aria-pressed="true"/);
+    assert.match(html, /data-level="L1" data-unlocked="true" data-preview="true"/);
+    assert.match(html, /data-unit="l1-what-is-a-share" data-status="preview"/);
+    assert.match(html, /Preview for this tab/);
+    assert.deepEqual(store.writes, []);
+  } finally {
+    if (prev) Object.defineProperty(globalThis, "sessionStorage", prev);
+    else delete (globalThis as { sessionStorage?: unknown }).sessionStorage;
+  }
 });
 
 test("hub after placement at L3: L0–L2 credited, L3 open, no placement card", () => {

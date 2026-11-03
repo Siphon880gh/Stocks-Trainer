@@ -3,6 +3,7 @@ import { Link, useParams, useSearchParams } from "react-router-dom";
 import UnitPlayer from "../../components/academy/UnitPlayer";
 import { getUnit, getLevel } from "../../lib/academy/content/levels";
 import { loadAcademy, saveAcademy, type KVStorage } from "../../lib/academy/storage";
+import { isAcademyPreview, readAcademyBrowseAll } from "../../lib/academy/browse";
 import { recordUnitAttempt, unitStatus } from "../../lib/academy/progress";
 import { awardUnitMastery } from "../../lib/academy/rewards/award";
 
@@ -25,6 +26,7 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
   }
   const state = loadAcademy(storage).state;
   const status = unitStatus(state, unit.id);
+  const preview = isAcademyPreview(status, readAcademyBrowseAll());
   const level = getLevel(unit.levelId)!;
   return (
     <main className="flex-1 px-4 py-6 max-w-3xl mx-auto w-full space-y-4">
@@ -33,8 +35,13 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
           Academy
         </Link>{" "}
         · {unit.levelId} {level.title}
-        {status === "locked" ? " · this level is not unlocked yet, but you can still read it" : status === "mastered" ? " · mastered" : ""}
+        {preview ? " · preview for this tab, not saved" : status === "locked" ? " · this level is not unlocked yet, but you can still read it" : status === "mastered" ? " · mastered" : ""}
       </p>
+      {preview ? (
+        <p className="rounded-lg border border-amber-500/50 bg-amber-500/10 px-3 py-2 text-[13px]" data-testid="academy-preview-note">
+          Browse all is on for this tab. You can read this lesson and try the check. A pass is not saved as progress.
+        </p>
+      ) : null}
       {toast ? (
         <p className="panel px-3 py-2 text-[13px] border-sim/40" role="status" data-testid="reward-toast">
           {toast}
@@ -46,6 +53,10 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
         attempt={attempt}
         initialPhase={checkFirst ? "quiz" : "cards"}
         onFinish={(score) => {
+          if (isAcademyPreview(unitStatus(loadAcademy(storage).state, unit.id), readAcademyBrowseAll())) {
+            setToast("Preview only. This check was not saved.");
+            return;
+          }
           const s = recordUnitAttempt(loadAcademy(storage).state, unit.id, score.correct, score.total);
           saveAcademy(s, storage);
           const r = awardUnitMastery(unit.id, score, storage);
