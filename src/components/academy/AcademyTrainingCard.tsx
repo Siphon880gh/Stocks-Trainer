@@ -18,19 +18,10 @@ export default function AcademyTrainingCard({ onSelectGroup, storage }: Props) {
         <p className="font-semibold">Beginner Academy</p>
         <span className="text-[11px] text-muted">Simulated money · not trading advice</span>
       </div>
-      <p className="text-[12px] text-muted">Short units with a 3-question check, a paper-trading simulator with real order types, weekly challenges and an options knowledge ladder.</p>
+      <p className="text-[12px] text-muted">Short units from orientation through other markets, each with a 3-question check.</p>
       <div className="flex flex-wrap gap-x-4 gap-y-2">
         <Link to="/academy" className="text-primary underline font-medium" data-testid="academy-link">
           Academy ({s.unitsDone}/{s.units} units)
-        </Link>
-        <Link to="/paper" className="text-primary underline">
-          Paper trading
-        </Link>
-        <Link to="/paper/challenges" className="text-primary underline">
-          Challenges
-        </Link>
-        <Link to="/academy/options" className="text-primary underline">
-          Options ladder
         </Link>
         <Link to="/coach/first-paper-trade" className="text-primary underline">
           Coach: first paper trade

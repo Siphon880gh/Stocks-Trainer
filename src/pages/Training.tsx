@@ -8,6 +8,8 @@ import AnswerSheetModal from "../components/AnswerSheetModal";
 import PathMapPanel from "../components/PathMapPanel";
 import BrowsePopover from "../components/BrowsePopover";
 import { QUIZ_GROUPS, getQuestionsForGroup, type QuizGroupId } from "../lib/quizData";
+import { listPlaybooks } from "../lib/playbooks";
+import { listSessions } from "../lib/coaching";
 import {
   CHART_GATE_MILESTONE_ID,
   CHART_GATE_PREREQ_TIP,
@@ -25,6 +27,7 @@ import { isFinancialsQuizGroup } from "../lib/financials/quizBanks";
 import MacroTrainingCard from "../components/macro/MacroTrainingCard";
 import { isMacroQuizGroup } from "../lib/macro/quiz/banks";
 import AcademyTrainingCard from "../components/academy/AcademyTrainingCard";
+import PanelCarousel, { TocGroup } from "../components/PanelCarousel";
 import { isAcademyQuizGroup } from "../lib/academy/quiz/groups";
 import { hasGradedPracticeDraw } from "../lib/practiceDraw";
 import YouTubeSearchLink from "../components/YouTubeSearchLink";
@@ -71,7 +74,7 @@ export default function Training() {
     <div className="flex-1 flex flex-col">
       <div className="border-b border-line bg-surface">
         <div className="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <h1 className="text-lg font-semibold tracking-tight">Learn</h1>
+          <h1 className="text-lg font-semibold tracking-tight">Table of Contents</h1>
           <div className="flex items-center gap-4">
             <div className="hidden md:flex flex-col items-end">
               <span className="text-[12px] text-muted">Accuracy</span>
@@ -88,48 +91,21 @@ export default function Training() {
       </div>
 
       <main className="max-w-5xl mx-auto px-4 py-8 flex-1 flex flex-col items-center gap-6 w-full">
-        <PathMapPanel
-          selectedGroup={selectedGroup}
-          onSelectTrainingGroup={setSelectedGroup}
-          refreshKey={pathMapTick}
-        />
-        {showChartGateBanner ? (
-          <div className="w-full max-w-xl panel p-4 text-sm space-y-2">
-            <p className="font-semibold">Beginner path · Indicators</p>
-            <p className="text-muted">{CHART_GATE_PREREQ_TIP}</p>
-            <button
-              type="button"
-              className="text-primary underline"
-              onClick={() => setSelectedGroup(CHART_GATE_TRAINING_GROUP)}
-            >
-              Select Indicators group
-            </button>
-          </div>
-        ) : (
-          <div className="w-full max-w-xl panel p-4 text-sm space-y-2">
-            <p className="font-semibold">Decision cases · Packs A–C</p>
-            <p className="text-muted">
-              After Indicators: earnings, company news, macro intro, and
-              combined news and statements.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <Link to="/cases?pack=earnings" className="text-primary underline">
-                Earnings pack
-              </Link>
-              <Link to="/cases?pack=company-news" className="text-primary underline">
-                Company news pack
-              </Link>
-              <Link to="/cases?pack=macro-news" className="text-primary underline">
-                Macro intro pack
-              </Link>
-              <Link to="/cases?pack=combined" className="text-primary underline">
-                Combined pack
-              </Link>
-            </div>
-          </div>
-        )}
-        {/* Quiz Launch Card */}
-        <div className="relative w-full max-w-xl panel p-8 pr-12 space-y-6">
+        <div id="path" className="w-full scroll-mt-32">
+          <PathMapPanel
+            selectedGroup={selectedGroup}
+            onSelectTrainingGroup={setSelectedGroup}
+            refreshKey={pathMapTick}
+          />
+        </div>
+        <PanelCarousel>
+        <TocGroup id="academy" label="Academy">
+        <div className="w-full max-w-xl scroll-mt-32">
+          <AcademyTrainingCard onSelectGroup={setSelectedGroup} />
+        </div>
+        </TocGroup>
+        <TocGroup id="quiz" label="Pattern recognition">
+        <div className="relative w-full max-w-xl panel p-8 pr-12 pb-28 space-y-6 scroll-mt-32">
           <SampleDataNote />
           <div className="flex items-center gap-4">
             <span className="material-symbols-outlined text-4xl text-primary">quiz</span>
@@ -302,89 +278,44 @@ export default function Training() {
             </div>
           </div>
 
-          <div className="flex gap-3">
-            <button
-              onClick={() => {
-                if (groupLocked) return;
-                setQuizStartIndex(undefined);
-                setIsQuizOpen(true);
-              }}
-              disabled={groupLocked}
-              className="flex-1 bg-primary hover:bg-primary-dim text-white font-semibold py-3.5 rounded-lg flex items-center justify-center gap-2 transition-transform active:scale-[0.98] disabled:opacity-40 disabled:cursor-not-allowed"
-            >
-              <span className="material-symbols-outlined">play_arrow</span>
-              {groupLocked ? "Locked" : "Start quiz"}
-            </button>
-            {!isQuizOpen && (
-              <button
-                onClick={() => setAnswerSheetOpen(true)}
-                className="border border-line text-ink px-6 py-3.5 rounded-lg font-medium hover:bg-canvas flex items-center justify-center gap-2"
-              >
-                <span className="material-symbols-outlined">assignment</span>
-                Answer sheet
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Buy or Sell? drill — its own section so it is easy to find */}
-        <div className="w-full max-w-xl panel p-6 space-y-3" aria-labelledby="buy-sell-title">
-          <div className="flex items-center gap-4">
-            <span className="material-symbols-outlined text-4xl text-primary">swap_vert</span>
-            <div>
-              <h2 id="buy-sell-title" className="text-xl font-semibold">
-                Buy or Sell?
-              </h2>
-              <p className="text-muted text-sm mt-1">
-                Read the candles and choose Buy, Sell, or Wait. Every candlestick pattern in both directions, cases
-                where waiting is right, and larger charts (double tops, head and shoulders, trendlines, breakouts,
-                supply and demand zones) whose levels and trade plan appear after you answer.
-              </p>
+          {!isQuizOpen ? (
+            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-line bg-surface/95 backdrop-blur-sm">
+              <div className="max-w-xl mx-auto px-4 py-3 flex items-center gap-3">
+                <p className="flex-1 min-w-0 text-sm truncate">
+                  {QUIZ_GROUPS.find((g) => g.id === selectedGroup)?.name ?? "Quiz"}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setAnswerSheetOpen(true)}
+                  className="border border-line text-ink px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-canvas inline-flex items-center gap-1"
+                >
+                  <span className="material-symbols-outlined text-[18px]">assignment</span>
+                  Answer sheet
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (groupLocked) return;
+                    setQuizStartIndex(undefined);
+                    setIsQuizOpen(true);
+                  }}
+                  disabled={groupLocked}
+                  className="bg-primary hover:bg-primary-dim text-white font-semibold px-4 py-2.5 rounded-lg inline-flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
+                >
+                  <span className="material-symbols-outlined">play_arrow</span>
+                  {groupLocked ? "Locked" : "Start quiz"}
+                </button>
+              </div>
             </div>
-          </div>
-          <p className="text-[12px] text-muted">
-            Learning drill, not trading advice. No orders or real money.{" "}
-            {getQuestionsForGroup("buy-or-sell").length} questions.
-          </p>
-          <div className="flex flex-wrap items-center gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                setSelectedGroup("buy-or-sell");
-                setQuizStartIndex(undefined);
-                setIsQuizOpen(true);
-              }}
-              className="bg-primary hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg flex items-center gap-2"
-            >
-              <span className="material-symbols-outlined">play_arrow</span>
-              Start Buy or Sell?
-            </button>
-            <span className="text-[13px] text-muted">
-              Warm up with{" "}
-              <button type="button" className="underline text-primary" onClick={() => setSelectedGroup("price-action")}>
-                Price Action
-              </button>
-              ,{" "}
-              <button type="button" className="underline text-primary" onClick={() => setSelectedGroup("trade-framework")}>
-                Price Action Framework
-              </button>{" "}
-              and{" "}
-              <button type="button" className="underline text-primary" onClick={() => setSelectedGroup("supply-demand")}>
-                Supply &amp; Demand
-              </button>
-            </span>
-          </div>
+          ) : null}
         </div>
 
-        <FinancialsTrainingCard onSelectGroup={setSelectedGroup} />
-
-        <MacroTrainingCard onSelectGroup={setSelectedGroup} />
-
-        <AcademyTrainingCard onSelectGroup={setSelectedGroup} />
-
-        <div className="w-full max-w-xl panel p-4 text-sm space-y-2">
-          <p className="font-semibold">Misc Practices</p>
+        </TocGroup>
+        <TocGroup id="practice" label="Practice">
+        <div className="w-full max-w-xl panel p-4 text-sm space-y-2 scroll-mt-32">
+          <h2 className="font-semibold">Practice</h2>
           <div className="flex flex-wrap gap-3">
+            <Link to="/academy/options" className="text-primary underline">Options ladder</Link>
             {MISC_PRACTICE_ITEMS.map((item) => (
               <span key={item.id} className="inline-flex items-center gap-1">
                 <Link to={item.to} className="text-primary underline">
@@ -396,12 +327,122 @@ export default function Training() {
             ))}
           </div>
         </div>
+
+        </TocGroup>
+        <TocGroup id="deep-study" label="Deep Study" aliases={["cases", "coach", "playbooks", "paper", "challenges"]}>
+        <section className="w-full max-w-xl space-y-3 scroll-mt-32" aria-labelledby="deep-study-title">
+          <h2 id="deep-study-title" className="text-sm font-semibold tracking-tight">Deep Study</h2>
+          <section id="cases" className="panel p-4 text-sm space-y-2">
+            <h3 className="font-semibold">Cases</h3>
+            {showChartGateBanner ? (
+              <>
+                <p className="text-muted">{CHART_GATE_PREREQ_TIP}</p>
+                <button
+                  type="button"
+                  className="text-primary underline"
+                  onClick={() => setSelectedGroup(CHART_GATE_TRAINING_GROUP)}
+                >
+                  Select Indicators group
+                </button>
+              </>
+            ) : (
+              <p className="text-muted">
+                Earnings, company news, macro intro, and combined news and statements.
+              </p>
+            )}
+            <div className="flex flex-wrap gap-3">
+              <Link to="/cases" className="text-primary underline">Open Cases</Link>
+              <Link to="/cases?pack=earnings" className="text-primary underline">Earnings pack</Link>
+              <Link to="/cases?pack=company-news" className="text-primary underline">Company news pack</Link>
+              <Link to="/cases?pack=macro-news" className="text-primary underline">Macro intro pack</Link>
+              <Link to="/cases?pack=combined" className="text-primary underline">Combined pack</Link>
+            </div>
+          </section>
+          <section id="coach" className="panel p-4 text-sm space-y-2">
+            <h3 className="font-semibold">Coach</h3>
+            <p className="text-muted">Step-by-step coached decisions.</p>
+            <ul className="flex flex-wrap gap-x-4 gap-y-2">
+              {listSessions().map((session) => (
+                <li key={session.slug}>
+                  <Link to={`/coach/${session.slug}`} className="text-primary underline">{session.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section id="playbooks" className="panel p-4 text-sm space-y-2">
+            <h3 className="font-semibold">Playbooks</h3>
+            <p className="text-muted">Setups written as plans: entry, stop, target.</p>
+            <ul className="flex flex-wrap gap-x-4 gap-y-2">
+              {listPlaybooks().map((playbook) => (
+                <li key={playbook.id}>
+                  <Link to={`/playbooks/${playbook.id}`} className="text-primary underline">{playbook.title}</Link>
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section id="paper" className="panel p-4 text-sm space-y-2">
+            <h3 className="font-semibold">Paper trading</h3>
+            <p className="text-muted">SIMULATED orders with stops and brackets.</p>
+            <Link to="/paper" className="text-primary underline">Open paper trading</Link>
+          </section>
+          <section id="challenges" className="panel p-4 text-sm space-y-2">
+            <h3 className="font-semibold">Challenges</h3>
+            <p className="text-muted">Scored challenges: discipline first, result second.</p>
+            <Link to="/paper/challenges" className="text-primary underline">Open challenges</Link>
+          </section>
+        </section>
+
+        </TocGroup>
+        <TocGroup id="other-factors" label="Other factors" aliases={["financials", "macro"]}>
+        <section className="w-full max-w-xl space-y-3 scroll-mt-32" aria-labelledby="other-factors-title">
+          <h2 id="other-factors-title" className="text-sm font-semibold tracking-tight">Other factors</h2>
+          <div id="financials" className="scroll-mt-32">
+            <FinancialsTrainingCard onSelectGroup={setSelectedGroup} />
+          </div>
+          <div id="macro" className="scroll-mt-32">
+            <MacroTrainingCard onSelectGroup={setSelectedGroup} />
+          </div>
+        </section>
+        </TocGroup>
+        <TocGroup id="quick-decisions" label="Quick Decisions" aliases={["charts", "buy-or-sell"]}>
+        <section className="w-full max-w-xl space-y-3 scroll-mt-32" aria-labelledby="quick-decisions-title">
+          <h2 id="quick-decisions-title" className="text-sm font-semibold tracking-tight">Quick Decisions</h2>
+          <section id="charts" className="panel p-4 text-sm space-y-2">
+            <h3 className="font-semibold">Charts</h3>
+            <p className="text-muted">SIMULATED and sample charts with indicators and drawing.</p>
+            <div className="flex flex-wrap gap-3">
+              <Link to="/market" className="text-primary underline">Open Charts</Link>
+              <Link to="/market?nav=1" className="text-primary underline">Market navigator</Link>
+            </div>
+          </section>
+          <section id="buy-or-sell" className="panel p-4 text-sm space-y-2" aria-labelledby="buy-sell-title">
+            <h3 id="buy-sell-title" className="font-semibold">Buy or Sell?</h3>
+            <p className="text-muted">
+              Read the candles and choose Buy, Sell, or Wait. {getQuestionsForGroup("buy-or-sell").length} questions.
+              Learning drill, not trading advice.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setSelectedGroup("buy-or-sell");
+                setQuizStartIndex(undefined);
+                setIsQuizOpen(true);
+              }}
+              className="bg-primary hover:bg-primary-dim text-white font-semibold px-4 py-2 rounded-lg inline-flex items-center gap-1"
+            >
+              <span className="material-symbols-outlined">play_arrow</span>
+              Start Buy or Sell?
+            </button>
+          </section>
+        </section>
+        </TocGroup>
+        </PanelCarousel>
       </main>
 
       <footer className="relative max-w-5xl mx-auto px-4 py-8 pr-14 flex items-center justify-between border-t border-line mt-8 w-full text-sm text-muted">
         <div className="flex gap-6">
           <Link to="/archive" className="hover:text-ink">
-            Reference
+            Library
           </Link>
           {!isQuizOpen && (
             <button

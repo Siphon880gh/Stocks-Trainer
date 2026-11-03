@@ -1,22 +1,105 @@
-import { Link, NavLink } from "react-router-dom";
-import type { ReactNode } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { APP_NAV, DASHBOARD_MORE, DEEP_STUDY, OTHER_FACTORS, PATTERN_MORE, PRACTICE_MENU, QUICK_DECISIONS } from "../lib/appNav";
 import { cn } from "../lib/utils";
 
-const NAV = [
-  { to: "/", label: "Home", end: true },
-  { to: "/training", label: "Learn" },
-  { to: "/academy", label: "Academy" },
-  { to: "/market", label: "Charts" },
-  { to: "/cases", label: "Cases" },
-  { to: "/coach", label: "Coach" },
-  { to: "/playbooks", label: "Playbooks" },
-] as const;
+function here(to: string, pathname: string, hash: string): boolean {
+  const mark = to.indexOf("#");
+  if (mark >= 0) return pathname === to.slice(0, mark) && hash === to.slice(mark);
+  if (to === "/training") return pathname === "/training" && hash === "";
+  return pathname === to || pathname.startsWith(`${to}/`);
+}
+
+function MenuGroup({
+  label,
+  to,
+  end,
+  items,
+  testId,
+}: {
+  label: string;
+  /** When set, the label itself navigates and the chevron opens the rest. */
+  to?: string;
+  end?: boolean;
+  items: readonly { label: string; to: string }[];
+  testId: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const menuId = useId();
+  const { pathname, hash } = useLocation();
+  const groupOn = (to ? here(to, pathname, hash) : false) || items.some((item) => here(item.to, pathname, hash));
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname, hash]);
+  useEffect(() => {
+    if (!open) return;
+    const onPointer = (event: MouseEvent) => {
+      if (!root.current?.contains(event.target as Node)) setOpen(false);
+    };
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+    document.addEventListener("mousedown", onPointer);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onPointer);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+  const buttonClass = cn(
+    "inline-flex items-center gap-0.5 py-1.5 text-[12px] min-[360px]:text-[13px]",
+    groupOn || open ? "text-primary font-semibold bg-primary/10" : "text-muted hover:text-ink hover:bg-canvas",
+  );
+  return (
+    <div ref={root} className="relative inline-flex items-center">
+      {to ? (
+        <NavLink to={to} end={end} className={cn(buttonClass, "rounded-l-md px-1 sm:px-2.5")}>
+          {label}
+        </NavLink>
+      ) : null}
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-controls={menuId}
+        aria-label={`${label} menu`}
+        data-testid={testId}
+        onClick={() => setOpen((value) => !value)}
+        className={cn(buttonClass, to ? "rounded-r-md pr-1" : "rounded-md px-1 sm:px-2.5")}
+      >
+        {to ? null : label}
+        <span className="material-symbols-outlined text-[18px]" aria-hidden>expand_more</span>
+      </button>
+      <div
+        id={menuId}
+        role="menu"
+        hidden={!open}
+        className="absolute left-0 top-full z-50 mt-1 min-w-56 max-h-[70vh] overflow-y-auto rounded-lg border border-line bg-surface py-1 shadow-lg"
+      >
+        {items.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            role="menuitem"
+            className={cn(
+              "block px-3 py-1.5 text-[13px]",
+              here(item.to, pathname, hash) ? "bg-primary/10 text-primary font-semibold" : "text-ink hover:bg-canvas",
+            )}
+            onClick={() => setOpen(false)}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function AppChrome({ children }: { children: ReactNode }) {
+  const { pathname, hash } = useLocation();
   return (
     <div className="min-h-screen flex flex-col bg-canvas text-ink">
       <header className="sticky top-0 z-50 border-b border-line bg-surface/95 backdrop-blur-sm">
-        {/* Below md the links get their own full-width row and wrap, so Academy through Playbooks stay on screen on a phone. */}
         <div className="max-w-7xl mx-auto px-4 py-2 md:py-0 md:h-14 flex flex-wrap md:flex-nowrap items-center gap-x-4 gap-y-1">
           <Link to="/" className="flex items-center gap-2 shrink-0 text-ink hover:opacity-80">
             <span className="material-symbols-outlined text-up text-[22px]">candlestick_chart</span>
@@ -25,42 +108,35 @@ export default function AppChrome({ children }: { children: ReactNode }) {
               <span className="text-[10px] font-normal text-muted tracking-normal">by WengIndustries</span>
             </span>
           </Link>
-          {/* Progress Map (#23): beside the logo on phones, after the links from md up. */}
-          <NavLink
-            to="/map"
-            data-testid="nav-map"
-            aria-label="Progress map"
-            className={({ isActive }) =>
-              cn(
-                "ml-auto md:ml-0 md:order-last inline-flex items-center gap-1 px-2 py-1.5 text-[13px] rounded-md border whitespace-nowrap transition-colors",
-                isActive ? "text-primary font-semibold bg-primary/10 border-primary/40" : "text-muted border-line hover:text-ink hover:bg-canvas",
-              )
-            }
-          >
-            <span className="material-symbols-outlined text-[16px]" aria-hidden>map</span>
-            Map
-          </NavLink>
           <nav
             data-testid="app-nav"
             className="flex flex-wrap md:flex-nowrap items-center justify-start w-full md:w-auto gap-x-0.5 gap-y-0.5 md:ml-auto"
           >
-            {NAV.map((item) => (
-              <NavLink
-                key={item.to}
-                to={item.to}
-                end={item.to === "/"}
-                className={({ isActive }) =>
-                  cn(
-                    "px-1 sm:px-2.5 py-1.5 text-[12px] min-[360px]:text-[13px] rounded-md whitespace-nowrap transition-colors",
-                    isActive
-                      ? "text-primary font-semibold bg-primary/10"
-                      : "text-muted hover:text-ink hover:bg-canvas",
-                  )
-                }
-              >
-                {item.label}
-              </NavLink>
-            ))}
+            {APP_NAV.map((item) => {
+              if (item.to === "/") return <MenuGroup key={item.to} label={item.label} to={item.to} end items={DASHBOARD_MORE} testId="dashboard-menu" />;
+              if (item.to === "/training#quiz") return <MenuGroup key={item.to} label={item.label} to={item.to} items={PATTERN_MORE} testId="pattern-menu" />;
+              if (item.to === "/training#practice") return <MenuGroup key={item.to} label={item.label} to={item.to} items={PRACTICE_MENU} testId="practice-menu" />;
+              return (
+                <NavLink
+                  key={item.to}
+                  to={item.to}
+                  end={"end" in item ? item.end : false}
+                  className={({ isActive }) =>
+                    cn(
+                      "px-1 sm:px-2.5 py-1.5 text-[12px] min-[360px]:text-[13px] rounded-md whitespace-nowrap transition-colors",
+                      (item.to.includes("#") ? here(item.to, pathname, hash) : isActive)
+                        ? "text-primary font-semibold bg-primary/10"
+                        : "text-muted hover:text-ink hover:bg-canvas",
+                    )
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              );
+            })}
+            <MenuGroup label="Deep Study" items={DEEP_STUDY} testId="deep-study-menu" />
+            <MenuGroup label="Other factors" items={OTHER_FACTORS} testId="other-factors-menu" />
+            <MenuGroup label="Quick Decisions" items={QUICK_DECISIONS} testId="quick-decisions-menu" />
           </nav>
         </div>
       </header>

@@ -34,7 +34,7 @@ export interface Region {
 }
 
 export const REGIONS: Region[] = [
-  { id: "start", name: "Base camp", blurb: "Home, Learn and the live-style charts.", icon: "home" },
+  { id: "start", name: "Base camp", blurb: "Dashboard, the table of contents, and the live-style charts.", icon: "home" },
   { id: "academy", name: "Academy", blurb: "The guided levels from orientation to other markets.", icon: "school" },
   { id: "candles", name: "Candle basics", blurb: "Read one candle, then the core shapes.", icon: "candlestick_chart" },
   { id: "library", name: "Pattern library", blurb: "Every named candlestick pattern, family by family.", icon: "menu_book" },
@@ -91,11 +91,11 @@ const LAB_REGION: Record<string, RegionId> = Object.fromEntries(
 
 /** Route pages that are not labs, hubs or levels. */
 const PAGES: Array<Omit<MapStage, "kind" | "prereqs" | "related"> & { prereqs?: string[]; related?: string[] }> = [
-  { id: "page:/", title: "Home", region: "start", to: "/", teaser: "Your dashboard: path, Today card and next steps." },
-  { id: "page:/training", title: "Learn hub", region: "start", to: "/training", teaser: "Every quiz group and practice in one place." },
+  { id: "page:/", title: "Dashboard", region: "start", to: "/", teaser: "Your dashboard: path, Today card and next steps." },
+  { id: "page:/training", title: "Table of Contents", region: "start", to: "/training", teaser: "Every quiz group and practice, one group at a time." },
   { id: "page:/map", title: "Progress map", region: "start", to: "/map", teaser: "See what you've done and what's next." },
   { id: "page:/market", title: "Charts", region: "start", to: "/market", teaser: "SIMULATED and sample charts with indicators and drawing." },
-  { id: "page:/archive", title: "Pattern Archive", region: "library", to: "/archive", teaser: "Look up any pattern: shape, themes, direction and a drill." },
+  { id: "page:/archive", title: "Library", region: "library", to: "/archive", teaser: "Look up any pattern: shape, themes, direction and a drill." },
   { id: "page:/practice/statements", title: "Statements lab", region: "statements", to: "/practice/statements", teaser: "Five fictional companies whose statements tie out.", prereqs: ["quiz:financial-literacy"] },
   { id: "page:/practice/read-the-print", title: "Read the Print", region: "statements", to: "/practice/read-the-print", teaser: "Read an earnings print the way the desk does.", prereqs: ["quiz:earnings-jargon"] },
   { id: "page:/practice/mark-the-band", title: "Mark the band", region: "statements", to: "/practice/mark-the-band", teaser: "Mark the move the options market prices before a report.", prereqs: ["quiz:earnings-preview"] },

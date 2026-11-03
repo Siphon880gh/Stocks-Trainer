@@ -208,7 +208,7 @@ function DiscoveryWeb({ model }: { model: MapModel }) {
 }
 
 /** /map: one progress model shown as a world map, a skill tree and a discovery web, with the next objective. */
-export default function ProgressMap() {
+export default function ProgressMap({ embedded = false }: { embedded?: boolean }) {
   const [params, setParams] = useSearchParams();
   const raw = params.get("view");
   const view: View = isView(raw) ? raw : "world";
@@ -225,15 +225,17 @@ export default function ProgressMap() {
     setParams(n, { replace: true });
   };
   const t = model.totals;
-  return (
-    <main className="flex-1 px-4 py-6 max-w-6xl mx-auto w-full space-y-4">
-      <div>
-        <h1 className="text-lg font-semibold tracking-tight">Progress map</h1>
-        <p className="text-[13px] text-muted" data-testid="map-totals">
-          {t.done} of {t.total} stages done · {t.regionsFinished} of {model.regions.length} regions finished · {t.discovered} explored.
-          {browseAll ? " Browse all is on for this tab and does not change these counts." : " Locked stages are suggestions: every link still opens."}
-        </p>
-      </div>
+  const body = (
+    <>
+      {embedded ? null : (
+        <div>
+          <h1 className="text-lg font-semibold tracking-tight">Progress map</h1>
+          <p className="text-[13px] text-muted" data-testid="map-totals">
+            {t.done} of {t.total} stages done · {t.regionsFinished} of {model.regions.length} regions finished · {t.discovered} explored.
+            {browseAll ? " Browse all is on for this tab and does not change these counts." : " Locked stages are suggestions: every link still opens."}
+          </p>
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
         <button
           type="button"
@@ -283,6 +285,8 @@ export default function ProgressMap() {
           </span>
         ))}
       </p>
-    </main>
+    </>
   );
+  if (embedded) return <div className="space-y-4" data-testid="dashboard-map">{body}</div>;
+  return <main className="flex-1 px-4 py-6 max-w-6xl mx-auto w-full space-y-4">{body}</main>;
 }

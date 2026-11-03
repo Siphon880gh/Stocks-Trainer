@@ -175,9 +175,9 @@ const ROUTE_LABELS: Record<string, string> = {
   "/macro/play": "Macro Desk reaction game",
   "/cases": "Case library",
   "/coach": "Coach",
-  "/training": "Learn",
+  "/training": "Table of Contents",
   "/market": "Charts",
-  "/archive": "Glossary and archive",
+  "/archive": "Library",
   "/playbooks": "Playbooks",
 };
 

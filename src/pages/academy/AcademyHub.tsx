@@ -11,6 +11,7 @@ import TodayCard from "../../components/academy/TodayCard";
 import RewardsPanel from "../../components/academy/RewardsPanel";
 import { VALUE_PROMISE } from "../../lib/academy/copy";
 import { cn } from "../../lib/utils";
+import AppSectionNav from "../../components/AppSectionNav";
 
 const STATUS: Record<UnitStatus | "preview", { label: string; icon: string; cls: string }> = {
   locked: { label: "Locked", icon: "lock", cls: "text-muted" },
@@ -45,6 +46,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
           · Beginner Academy
         </p>
         <h1 className="text-2xl font-semibold tracking-tight">Beginner Academy</h1>
+        <AppSectionNav />
         <p className="text-[14px] text-ink max-w-3xl" data-testid="value-promise">{VALUE_PROMISE}</p>
         <p className="text-[14px] text-muted max-w-3xl">
           Short units from "what is a stock" to order types, statements, earnings and options basics. Each unit is a few cards and a 3-question check, and links into the
@@ -127,7 +129,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
       <TodayCard storage={storage} onAward={() => setRewardsTick((t) => t + 1)} />
 
       <Fragment key={rewardsTick}>
-        <RewardsPanel storage={storage} />
+        <RewardsPanel storage={storage} preview={browseAll} />
       </Fragment>
 
       {extra}

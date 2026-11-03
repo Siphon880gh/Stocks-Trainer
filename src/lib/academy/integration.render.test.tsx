@@ -14,10 +14,10 @@ import { loadSession, validateCoachingSession } from "../coaching";
 import { firstPaperTradeSession } from "../coaching/sessions/first-paper-trade";
 import { bannedIn } from "./content/banned";
 
-test("Training card: links to the hub, paper, challenges, options, the coach session and the three quiz groups", () => {
+test("Training card: links to the hub, the first paper-trade coach, and the academy quiz groups", () => {
   const html = renderHtml(<MemoryRouter><AcademyTrainingCard storage={memoryStorage()} /></MemoryRouter>);
   const hs = hrefs(html);
-  for (const h of ["/academy", "/paper", "/paper/challenges", "/academy/options", "/coach/first-paper-trade"]) assert.ok(hs.includes(h), h);
+  for (const h of ["/academy", "/coach/first-paper-trade"]) assert.ok(hs.includes(h), h);
   for (const g of ACADEMY_QUIZ_GROUP_IDS) assert.ok(hs.some((h) => h.startsWith(`/training?group=${g}&`)), g);
   for (const h of hs) assert.ok(routeExists(h), h);
 });

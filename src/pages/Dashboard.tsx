@@ -53,6 +53,8 @@ import {
   getProgressSyncAdapter,
   importProgressJson,
 } from "../lib/progressSync";
+import AppSectionNav from "../components/AppSectionNav";
+import ProgressMap from "./ProgressMap";
 
 export default function Dashboard() {
   const [{ state: progress, recoveryMessage }, setLoad] = useState(() => {
@@ -144,6 +146,7 @@ export default function Dashboard() {
       {!goalPending ? <TodayCard variant="home" /> : null}
       {/* Progress Map (#23): share done and the next objective. */}
       {!goalPending ? <ProgressMapCard /> : null}
+      {!goalPending ? <ProgressMap embedded /> : null}
 
       <section className="flex flex-wrap items-end justify-between gap-4">
         <div className="relative min-w-0 pr-9">
@@ -277,21 +280,17 @@ export default function Dashboard() {
         ) : null}
       </section>
 
-      <section className="border-t border-line pt-6 space-y-2">
-        <p className="text-[12px] text-muted">Also</p>
+      <section className="border-t border-line pt-6 space-y-3">
+        <AppSectionNav />
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
-          <Link to="/market" className="text-primary hover:underline">Charts</Link>
           <Link to="/market?nav=1" className="text-primary hover:underline">Market navigator</Link>
-          <Link to="/training" className="text-primary hover:underline">Quizzes</Link>
-          <Link to="/archive" className="text-primary hover:underline">Reference</Link>
+          <Link to="/archive" className="text-primary hover:underline">Library</Link>
           <Link to="/practice-draw" className="text-primary hover:underline">
             Draw{drawDone ? " · done" : ""}
           </Link>
           <Link to="/practice/lookalike" className="text-primary hover:underline">Lookalikes</Link>
           <Link to="/practice/hunt" className="text-primary hover:underline">Pattern hunt</Link>
           <Link to="/practice/levels" className="text-primary hover:underline">Support and resistance</Link>
-          <Link to="/coach" className="text-primary hover:underline">Coach</Link>
-          <Link to="/playbooks" className="text-primary hover:underline">Playbooks</Link>
         </div>
         <p className="text-[12px] text-muted tabular-nums">
           {progress.scores.totalPoints} pts ·{" "}

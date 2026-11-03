@@ -1,0 +1,51 @@
+import { MISC_PRACTICE_ITEMS } from "./miscPractices";
+
+/** Top menu, in the same order as the Learn page after the path. */
+export const APP_NAV = [
+  { to: "/", label: "Dashboard", end: true },
+  { to: "/training", label: "ToC", end: true },
+  { to: "/academy", label: "Academy" },
+  { to: "/training#quiz", label: "Pattern recognition" },
+  { to: "/training#practice", label: "Practice" },
+] as const;
+
+/** The progress map lives with the dashboard. The summary line stays on the dashboard page. */
+export const DASHBOARD_MORE = [
+  { label: "Map", to: "/map" },
+] as const;
+
+/** Quiz first, then the pattern library (the page at /archive). */
+export const PATTERN_MORE = [
+  { label: "Quiz", to: "/training#quiz" },
+  { label: "Library", to: "/archive" },
+] as const;
+
+/** Options ladder plus every hands-on lab. */
+export const PRACTICE_MENU = [
+  { label: "Options ladder", to: "/academy/options" },
+  ...MISC_PRACTICE_ITEMS.map((item) => ({ label: item.title, to: item.to })),
+];
+
+export const DEEP_STUDY = [
+  { label: "Cases", to: "/cases" },
+  { label: "Coach", to: "/coach" },
+  { label: "Playbooks", to: "/playbooks" },
+  { label: "Paper trading", to: "/paper" },
+  { label: "Challenges", to: "/paper/challenges" },
+] as const;
+
+export const OTHER_FACTORS = [
+  { label: "Financials", to: "/training#financials" },
+  { label: "Statements lab", to: "/practice/statements" },
+  { label: "Read the Print", to: "/practice/read-the-print" },
+  { label: "Mark the band", to: "/practice/mark-the-band" },
+  { label: "Macro", to: "/training#macro" },
+  { label: "Macro desk", to: "/macro" },
+  { label: "Macro play", to: "/macro/play" },
+] as const;
+
+/** Charts and Buy or Sell, after Other factors. */
+export const QUICK_DECISIONS = [
+  { label: "Charts", to: "/market" },
+  { label: "Buy or Sell", to: "/training#buy-or-sell" },
+] as const;

@@ -91,7 +91,7 @@ export default function Archive() {
     <div className="flex-1 flex flex-col">
       <header className="border-b border-line bg-surface">
         <div className="px-4 py-3">
-          <h1 className="text-lg font-semibold tracking-tight">Reference</h1>
+          <h1 className="text-lg font-semibold tracking-tight">Library</h1>
         </div>
         <div className="px-4 pb-4">
           <label className="flex flex-col w-full">
