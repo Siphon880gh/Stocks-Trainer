@@ -62,13 +62,12 @@ import PaperChallenges from "./pages/academy/PaperChallenges";
 
 export default function App() {
   const baseUrl = import.meta.env.BASE_URL;
-  // A relative Vite base ("./") has no stable URL pathname to use as a router
-  // basename. When the static build is mounted below a variable web-server
-  // prefix, preserve everything before /trainer/stocks-trainer/dist as its basename.
-  const mountedBuild = window.location.pathname.match(
-    /^(.*\/trainer\/stocks-trainer\/dist)(?:\/|$)/,
+  // A relative production base has no fixed basename. The static site is mounted at
+  // .../trainer/stocks-trainer or .../trainer/stocks-trainer/dist, and client routes hang off that.
+  const mounted = window.location.pathname.match(
+    /^(.*\/trainer\/stocks-trainer(?:\/dist)?)(?:\/|$)/,
   )?.[1];
-  const basename = mountedBuild ?? (baseUrl.startsWith("/")
+  const basename = mounted ?? (baseUrl.startsWith("/")
     ? baseUrl.replace(/\/$/, "") || undefined
     : undefined);
   return (

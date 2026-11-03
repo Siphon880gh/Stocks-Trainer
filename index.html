@@ -12,6 +12,16 @@
   </head>
   <body class="bg-canvas text-ink min-h-screen flex flex-col font-sans">
     <div id="root" class="flex-1 flex flex-col"></div>
+    <script>
+      // The PHP server on 8080 serves this folder as a static tree. The built app is in dist/.
+      // Vite dev (port 3001) must not redirect.
+      (function () {
+        if (location.port !== "8080") return;
+        var path = location.pathname.replace(/\/index\.html$/, "");
+        if (!/\/trainer\/stocks-trainer\/?$/.test(path)) return;
+        location.replace(path.replace(/\/?$/, "/") + "dist/");
+      })();
+    </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
