@@ -1,7 +1,7 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import {
-  DEPTH, OBJECTIVE_ORDER, STAGES, STAGE_BY_ID, STATUS_LABEL, TREE_IDS, buildMapModel, readSnapshot, unlocksOf,
+  DEPTH, OBJECTIVE_ORDER, STAGES, STAGE_BY_ID, STATUS_LABEL, TREE_IDS, buildMapModel, readMapBrowseAll, readSnapshot, unlocksOf, writeMapBrowseAll,
   type MapModel, type StageState, type StageStatus,
 } from "../lib/progressMap";
 import { cn } from "../lib/utils";
@@ -165,7 +165,7 @@ function DiscoveryWeb({ model }: { model: MapModel }) {
   return (
     <div className="space-y-3" data-testid="map-web">
       <section className="panel p-3 space-y-2" aria-labelledby="web-unknown">
-        <h2 id="web-unknown" className="text-[14px] font-semibold">You've heard of these: go explore</h2>
+        <h2 id="web-unknown" className="text-[14px] font-semibold">{model.browseAll ? "Every stage you have not opened yet" : "You've heard of these: go explore"}</h2>
         <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
           {unknown.map((s) => (
             <li key={s.id}>
@@ -180,7 +180,7 @@ function DiscoveryWeb({ model }: { model: MapModel }) {
             </li>
           ))}
         </ul>
-        {hidden > 0 ? <p className="text-[12px] text-muted" data-testid="web-hidden">{hidden} more stages are still hidden. Explore a stage to reveal its neighbours.</p> : null}
+        {!model.browseAll && hidden > 0 ? <p className="text-[12px] text-muted" data-testid="web-hidden">{hidden} more stages are still hidden. Explore a stage to reveal its neighbours.</p> : null}
       </section>
       <section className="panel p-3 space-y-2" aria-labelledby="web-known">
         <h2 id="web-known" className="text-[14px] font-semibold">Explored ({known.length})</h2>
@@ -212,7 +212,13 @@ export default function ProgressMap() {
   const [params, setParams] = useSearchParams();
   const raw = params.get("view");
   const view: View = isView(raw) ? raw : "world";
-  const model = useMemo(() => buildMapModel(readSnapshot()), []);
+  const [browseAll, setBrowseAll] = useState(() => readMapBrowseAll());
+  const model = useMemo(() => buildMapModel(readSnapshot(), { browseAll }), [browseAll]);
+  const toggleBrowse = () => {
+    const on = !browseAll;
+    writeMapBrowseAll(on);
+    setBrowseAll(on);
+  };
   const setView = (v: View) => {
     const n = new URLSearchParams(params);
     n.set("view", v);
@@ -224,7 +230,28 @@ export default function ProgressMap() {
       <div>
         <h1 className="text-lg font-semibold tracking-tight">Progress map</h1>
         <p className="text-[13px] text-muted" data-testid="map-totals">
-          {t.done} of {t.total} stages done · {t.regionsFinished} of {model.regions.length} regions finished · {t.discovered} explored. Locked stages are suggestions: every link still opens.
+          {t.done} of {t.total} stages done · {t.regionsFinished} of {model.regions.length} regions finished · {t.discovered} explored.
+          {browseAll ? " Browse all is on for this tab and does not change these counts." : " Locked stages are suggestions: every link still opens."}
+        </p>
+      </div>
+      <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <button
+          type="button"
+          data-testid="map-browse-all"
+          aria-pressed={browseAll}
+          onClick={toggleBrowse}
+          className={cn(
+            "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[13px] font-semibold",
+            browseAll ? "border-amber-500 bg-amber-500/15 text-amber-700 dark:text-amber-300" : "border-line bg-surface hover:bg-primary/10",
+          )}
+        >
+          <span className="material-symbols-outlined text-[16px]" aria-hidden>{browseAll ? "lock_open" : "lock"}</span>
+          {browseAll ? "Turn off browse all" : "Browse all"}
+        </button>
+        <p className="text-[12px] text-muted" data-testid="map-browse-note">
+          {browseAll
+            ? "Every locked stage is open for this tab so you can look around. This does not save as progress, and it clears when you close the tab."
+            : "Open every locked stage for this tab only. Nothing is saved as progress."}
         </p>
       </div>
       <NextObjective model={model} />

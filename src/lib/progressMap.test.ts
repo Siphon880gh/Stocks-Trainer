@@ -5,7 +5,7 @@ import { QUIZ_GROUPS } from "./quizData";
 import { MISC_PRACTICE_ITEMS } from "./miscPractices";
 import {
   DEPTH, FIRST_OBJECTIVE, REGIONS, SPINE, STAGES, STAGE_BY_ID, TREE_IDS, UNMAPPED_GROUPS, UNMAPPED_LABS,
-  buildMapModel, emptySnapshot, readSnapshot, stageForRoute, unlocksOf,
+  buildMapModel, emptySnapshot, readMapBrowseAll, readSnapshot, stageForRoute, unlocksOf, writeMapBrowseAll,
 } from "./progressMap";
 import { MAP_PROGRESS_KEY, recordQuizResult, recordVisit, loadMapStore } from "./mapProgress";
 import { ACADEMY_KEY, emptyAcademy, loadAcademy, memoryStorage } from "./academy/storage";
@@ -42,6 +42,25 @@ test("skill tree: prerequisites exist, no cycles, the main path runs candles →
   assert.ok(d("lab:essential-candles") < d("quiz:buy-or-sell") && d("quiz:buy-or-sell") < d("lab:invalidation") && d("lab:invalidation") < d("lab:fib-decision-map"));
   assert.ok(unlocksOf("quiz:candle-anatomy").includes("quiz:candle-reading"));
   assert.ok(STAGE_BY_ID["lab:fib-decision-map"]!.prereqs.includes("lab:levels"));
+});
+
+test("region bubbles run finished and open lessons before locked ones", () => {
+  const snap = {
+    ...emptySnapshot(),
+    visited: ["/", "/map", "/training", "/market"],
+    quizPassed: ["candle-anatomy", "doji", "equity-literacy"],
+    quizTried: ["candle-anatomy", "doji", "equity-literacy", "candle-reading"],
+    labsDone: ["flashcards"],
+    fractions: { "academy:L0": 1 },
+  };
+  const m = buildMapModel(snap);
+  const rank: Record<string, number> = { done: 0, "in-progress": 1, available: 2, locked: 3 };
+  for (const r of m.regions) {
+    const seq = r.stages.map((s) => rank[s.status]);
+    assert.deepEqual(seq, [...seq].sort((a, b) => a - b), `${r.region.id} has a locked stage before an open one`);
+    const academy = r.region.id === "academy" ? r.stages.map((s) => s.stage.id) : null;
+    if (academy) assert.ok(academy.indexOf("academy:L0") < academy.indexOf("page:/academy/options"), "options ladder follows the levels");
+  }
 });
 
 test("new learner: mostly '?' with the first objective highlighted", () => {
@@ -97,6 +116,35 @@ test("regression: Academy placement credit counts on the map like isLevelComplet
   assert.equal(snap.fractions["academy:L0"], 0, "skipping placement credits nothing");
   academy({ testedOut: { L2: { at: "2026-10-30T00:00:00Z", correct: 7, total: 7 } } });
   assert.equal(readSnapshot(s).fractions["academy:L2"], 1);
+});
+
+test("browse all opens locked stages for this view only and leaves progress counts alone", () => {
+  const snap = { ...emptySnapshot(), visited: ["/", "/map", "/practice/which-way"], quizTried: ["candle-reading"], quizPassed: ["candle-anatomy"] };
+  const real = buildMapModel(snap);
+  const open = buildMapModel(snap, { browseAll: true });
+  assert.equal(real.states["quiz:japanese-candles"]!.status, "locked");
+  assert.equal(open.states["quiz:japanese-candles"]!.status, "available");
+  assert.equal(open.states["quiz:candle-reading"]!.status, "in-progress");
+  assert.equal(open.states["quiz:candle-anatomy"]!.status, "done");
+  assert.equal(open.totals.done, real.totals.done);
+  assert.equal(open.totals.discovered, real.totals.discovered);
+  assert.equal(open.next?.stage.id, real.next?.stage.id);
+  assert.ok(open.regions.every((r) => r.stages.every((s) => s.status !== "locked")));
+  assert.equal(STAGES.length - open.totals.discovered - open.frontier.length, 0, "nothing stays hidden");
+  assert.ok(open.frontier.length > real.frontier.length);
+  const mem = new Map<string, string>();
+  const store = {
+    getItem: (k: string) => mem.get(k) ?? null,
+    setItem: (k: string, v: string) => void mem.set(k, v),
+    removeItem: (k: string) => void mem.delete(k),
+  };
+  assert.equal(readMapBrowseAll(store), false);
+  writeMapBrowseAll(true, store);
+  assert.equal(readMapBrowseAll(store), true);
+  assert.equal([...mem.keys()].some((k) => k.includes("progress")), false);
+  writeMapBrowseAll(false, store);
+  assert.equal(readMapBrowseAll(store), false);
+  assert.equal(mem.size, 0);
 });
 
 test("map store: visits and quiz passes at the pass mark feed readSnapshot", () => {

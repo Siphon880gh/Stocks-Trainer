@@ -6,7 +6,7 @@
  * Learn group or lab exists without a stage. Status comes from EXISTING progress (quiz passes at
  * QUIZ_PASS_PCT, practice-done flags, case results, coaching sessions, Academy units, Macro rounds, paper
  * challenges) plus the visited-routes store in mapProgress.ts. Prerequisites are suggestions: nothing is
- * ever blocked.
+ * ever blocked. Browse all is session-only: it shows locked stages as open and writes no progress.
  */
 import { QUIZ_GROUPS } from "./quizData";
 import { MISC_PRACTICE_ITEMS } from "./miscPractices";
@@ -289,6 +289,8 @@ export function neighboursOf(id: string): string[] {
 // ---------- status from a snapshot of existing progress ----------
 export type StageStatus = "done" | "in-progress" | "available" | "locked";
 export const STATUS_LABEL: Record<StageStatus, string> = { done: "Done", "in-progress": "In progress", available: "Available", locked: "Suggested later" };
+/** World-map bubble order: finished and open lessons before anything still suggested for later. */
+const STATUS_RANK: Record<StageStatus, number> = { done: 0, "in-progress": 1, available: 2, locked: 3 };
 
 export interface MapSnapshot {
   visited: string[];
@@ -312,9 +314,46 @@ export interface MapModel {
   states: Record<string, StageState>;
   regions: Array<{ region: Region; stages: StageState[]; done: number; total: number; pct: number; finished: boolean }>;
   next: StageState | null;
-  /** Undiscovered stages next to discovered ones (the "?" nodes). */
+  /** Undiscovered stages next to discovered ones (the "?" nodes). Browse all lists every undiscovered stage. */
   frontier: string[];
+  /** Session display only: locked stages are shown open. Counts and the next objective stay real. */
+  browseAll: boolean;
   totals: { done: number; total: number; regionsFinished: number; discovered: number };
+}
+
+const MAP_BROWSE_ALL_KEY = "analysis_core_map_browse_all_v1";
+
+type BrowseStore = {
+  getItem(k: string): string | null;
+  setItem(k: string, v: string): void;
+  removeItem(k: string): void;
+};
+
+function browseStore(): BrowseStore | null {
+  try {
+    return typeof sessionStorage !== "undefined" ? sessionStorage : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Browse all is tab-scoped. Closing the tab clears it. It is not path progress. */
+export function readMapBrowseAll(storage: Pick<BrowseStore, "getItem"> | null = browseStore()): boolean {
+  try {
+    return storage?.getItem(MAP_BROWSE_ALL_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function writeMapBrowseAll(enabled: boolean, storage: BrowseStore | null = browseStore()): void {
+  try {
+    if (!storage) return;
+    if (enabled) storage.setItem(MAP_BROWSE_ALL_KEY, "1");
+    else storage.removeItem(MAP_BROWSE_ALL_KEY);
+  } catch {
+    /* private mode / blocked storage */
+  }
 }
 
 function rawStatus(s: MapStage, snap: MapSnapshot, visited: Set<string>): { done: boolean; started: boolean; fraction: number } {
@@ -335,7 +374,8 @@ function rawStatus(s: MapStage, snap: MapSnapshot, visited: Set<string>): { done
   return { done: f >= 1, started: f > 0 || visited.has(s.to), fraction: f };
 }
 
-export function buildMapModel(snap: MapSnapshot): MapModel {
+export function buildMapModel(snap: MapSnapshot, opts?: { browseAll?: boolean }): MapModel {
+  const browseAll = !!opts?.browseAll;
   const visited = new Set(snap.visited);
   const raw = Object.fromEntries(STAGES.map((s) => [s.id, rawStatus(s, snap, visited)]));
   const states: Record<string, StageState> = {};
@@ -344,11 +384,6 @@ export function buildMapModel(snap: MapSnapshot): MapModel {
     const status: StageStatus = r.done ? "done" : r.started ? "in-progress" : s.prereqs.every((p) => raw[p]?.done) ? "available" : "locked";
     states[s.id] = { stage: s, status, discovered: r.started, fraction: r.fraction };
   }
-  const regions = REGIONS.map((region) => {
-    const stages = STAGES.filter((s) => s.region === region.id).map((s) => states[s.id]);
-    const done = stages.filter((x) => x.status === "done").length;
-    return { region, stages, done, total: stages.length, pct: stages.length ? Math.round((done / stages.length) * 100) : 0, finished: stages.length > 0 && done === stages.length };
-  });
   const discovered = STAGES.filter((s) => states[s.id].discovered).map((s) => s.id);
   // New learner: only plain pages opened so far (Home, this map). Show the starting "?" stages.
   const fresh = !STAGES.some((s) => s.kind !== "page" && states[s.id].discovered);
@@ -360,11 +395,32 @@ export function buildMapModel(snap: MapSnapshot): MapModel {
     ? states[FIRST_OBJECTIVE]
     : pick(OBJECTIVE_ORDER.filter((id) => states[id].status === "in-progress")) ?? pick(unlocked) ?? pick(OBJECTIVE_ORDER) ?? pick(STAGES.map((s) => s.id));
   const done = STAGES.filter((s) => states[s.id].status === "done").length;
+  // Display-only: open the locks after the real next objective and counts are fixed.
+  if (browseAll) {
+    for (const id of Object.keys(states)) {
+      if (states[id].status === "locked") states[id] = { ...states[id], status: "available" };
+    }
+  }
+  const shownFrontier = browseAll ? STAGES.map((s) => s.id).filter((id) => !states[id].discovered) : frontier;
+  const regions = REGIONS.map((region) => {
+    // Registration order puts labs (often locked) before the quizzes that unlock them. Read each region
+    // as a path: done, then in progress, then available, then locked; earlier prerequisites within a status.
+    const alongPath = (id: string) => {
+      const i = OBJECTIVE_ORDER.indexOf(id);
+      return i < 0 ? OBJECTIVE_ORDER.length : i;
+    };
+    const stages = STAGES.filter((s) => s.region === region.id)
+      .map((s) => states[s.id])
+      .sort((a, b) => STATUS_RANK[a.status] - STATUS_RANK[b.status] || DEPTH[a.stage.id] - DEPTH[b.stage.id] || alongPath(a.stage.id) - alongPath(b.stage.id));
+    const regionDone = stages.filter((x) => x.status === "done").length;
+    return { region, stages, done: regionDone, total: stages.length, pct: stages.length ? Math.round((regionDone / stages.length) * 100) : 0, finished: stages.length > 0 && regionDone === stages.length };
+  });
   return {
     states,
     regions,
     next,
-    frontier,
+    frontier: shownFrontier,
+    browseAll,
     totals: { done, total: STAGES.length, regionsFinished: regions.filter((r) => r.finished).length, discovered: discovered.length },
   };
 }

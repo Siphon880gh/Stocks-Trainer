@@ -5,6 +5,7 @@ import { cn } from "../lib/utils";
 const NAV = [
   { to: "/", label: "Home", end: true },
   { to: "/training", label: "Learn" },
+  { to: "/academy", label: "Academy" },
   { to: "/market", label: "Charts" },
   { to: "/cases", label: "Cases" },
   { to: "/coach", label: "Coach" },
@@ -15,8 +16,8 @@ export default function AppChrome({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex flex-col bg-canvas text-ink">
       <header className="sticky top-0 z-50 border-b border-line bg-surface/95 backdrop-blur-sm">
-        {/* Below sm the six links get their own full-width row; one row hid Coach and Playbooks behind a scrollbar-less scroll on a 390px phone. */}
-        <div className="max-w-7xl mx-auto px-4 py-2 sm:py-0 sm:h-14 flex flex-wrap sm:flex-nowrap items-center gap-x-4 gap-y-1">
+        {/* Below md the links get their own full-width row and wrap, so Academy through Playbooks stay on screen on a phone. */}
+        <div className="max-w-7xl mx-auto px-4 py-2 md:py-0 md:h-14 flex flex-wrap md:flex-nowrap items-center gap-x-4 gap-y-1">
           <Link to="/" className="flex items-center gap-2 shrink-0 text-ink hover:opacity-80">
             <span className="material-symbols-outlined text-up text-[22px]">candlestick_chart</span>
             <span className="flex flex-col leading-[1.15]">
@@ -24,14 +25,14 @@ export default function AppChrome({ children }: { children: ReactNode }) {
               <span className="text-[10px] font-normal text-muted tracking-normal">by WengIndustries</span>
             </span>
           </Link>
-          {/* Progress Map (#23): beside the logo on phones, after the six links from sm up. */}
+          {/* Progress Map (#23): beside the logo on phones, after the links from md up. */}
           <NavLink
             to="/map"
             data-testid="nav-map"
             aria-label="Progress map"
             className={({ isActive }) =>
               cn(
-                "ml-auto sm:ml-0 sm:order-last inline-flex items-center gap-1 px-2 py-1.5 text-[13px] rounded-md border whitespace-nowrap transition-colors",
+                "ml-auto md:ml-0 md:order-last inline-flex items-center gap-1 px-2 py-1.5 text-[13px] rounded-md border whitespace-nowrap transition-colors",
                 isActive ? "text-primary font-semibold bg-primary/10 border-primary/40" : "text-muted border-line hover:text-ink hover:bg-canvas",
               )
             }
@@ -41,7 +42,7 @@ export default function AppChrome({ children }: { children: ReactNode }) {
           </NavLink>
           <nav
             data-testid="app-nav"
-            className="flex items-center justify-between sm:justify-start w-full sm:w-auto gap-0.5 overflow-x-auto no-scrollbar sm:ml-auto"
+            className="flex flex-wrap md:flex-nowrap items-center justify-start w-full md:w-auto gap-x-0.5 gap-y-0.5 md:ml-auto"
           >
             {NAV.map((item) => (
               <NavLink
