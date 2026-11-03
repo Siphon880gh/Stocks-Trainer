@@ -84,7 +84,10 @@ export default function AiExplainModal({ open, prompt, onClose }: Props) {
   onCloseRef.current = onClose;
   const [draft, setDraft] = useState(prompt);
   const [copied, setCopied] = useState(false);
+  const [copiedPrompt, setCopiedPrompt] = useState<string | null>(null);
   const [cursorHint, setCursorHint] = useState(false);
+  const chatReady = copiedPrompt !== null && copiedPrompt === draft;
+  const chatWhy = copiedPrompt === null ? "Copy the prompt first" : "Prompt changed, copy again";
 
   useEffect(() => {
     if (!open) return undefined;
@@ -107,6 +110,7 @@ export default function AiExplainModal({ open, prompt, onClose }: Props) {
     if (!open) return;
     setDraft(prompt);
     setCopied(false);
+    setCopiedPrompt(null);
     setCursorHint(false);
   }, [open, prompt]);
 
@@ -116,6 +120,7 @@ export default function AiExplainModal({ open, prompt, onClose }: Props) {
     try {
       await navigator.clipboard.writeText(draft);
       setCopied(true);
+      setCopiedPrompt(draft);
       return;
     } catch {
       /* fall through to execCommand */
@@ -129,10 +134,13 @@ export default function AiExplainModal({ open, prompt, onClose }: Props) {
     field.select();
     const ok = document.execCommand("copy");
     setCopied(ok);
+    if (ok) setCopiedPrompt(draft);
   };
 
   const linkClass =
     "inline-flex items-center gap-1.5 text-sm text-ink hover:opacity-80 rounded-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+  const disabledLinkClass =
+    "inline-flex items-center gap-1.5 text-sm text-ink rounded-sm opacity-40 grayscale cursor-not-allowed pointer-events-none";
 
   return (
     <div
@@ -188,24 +196,43 @@ export default function AiExplainModal({ open, prompt, onClose }: Props) {
               {copied ? "Copied" : "Copy prompt"}
             </button>
             <span className="text-sm text-ink">Open in</span>
-            <a
-              href={chatGptShareUrl(draft)}
-              target="_blank"
-              rel="noreferrer"
-              className={linkClass}
-            >
-              <ChatGptMark />
-              ChatGPT
-            </a>
-            <a
-              href={claudeShareUrl(draft)}
-              target="_blank"
-              rel="noreferrer"
-              className={linkClass}
-            >
-              <ClaudeMark />
-              Claude
-            </a>
+            {chatReady ? (
+              <a
+                href={chatGptShareUrl(draft)}
+                target="_blank"
+                rel="noreferrer"
+                className={linkClass}
+              >
+                <ChatGptMark />
+                ChatGPT
+              </a>
+            ) : (
+              <span className={disabledLinkClass} aria-disabled="true" title={chatWhy}>
+                <ChatGptMark />
+                ChatGPT
+              </span>
+            )}
+            {chatReady ? (
+              <a
+                href={claudeShareUrl(draft)}
+                target="_blank"
+                rel="noreferrer"
+                className={linkClass}
+              >
+                <ClaudeMark />
+                Claude
+              </a>
+            ) : (
+              <span className={disabledLinkClass} aria-disabled="true" title={chatWhy}>
+                <ClaudeMark />
+                Claude
+              </span>
+            )}
+            {!chatReady ? (
+              <span className={`basis-full text-xs ${copiedPrompt !== null ? "text-amber-800" : "text-muted"}`} aria-live="polite">
+                {chatWhy}
+              </span>
+            ) : null}
             <button
               type="button"
               aria-expanded={cursorHint}
