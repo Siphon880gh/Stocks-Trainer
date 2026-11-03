@@ -11,13 +11,13 @@ export const APP_NAV = [
 
 /** The progress map lives with the dashboard. The summary line stays on the dashboard page. */
 export const DASHBOARD_MORE = [
-  { label: "Map", to: "/map" },
+  { label: "Map", to: "/map", icon: "map" },
 ] as const;
 
 /** Quiz first, then the pattern library (the page at /archive). */
 export const PATTERN_MORE = [
-  { label: "Quiz", to: "/training#quiz" },
-  { label: "Library", to: "/archive" },
+  { label: "Quiz", to: "/training#quiz", icon: "quiz" },
+  { label: "Library", to: "/archive", icon: "menu_book" },
 ] as const;
 
 /** Options ladder plus every hands-on lab. */
@@ -27,11 +27,11 @@ export const PRACTICE_MENU = [
 ];
 
 export const DEEP_STUDY = [
-  { label: "Cases", to: "/cases" },
-  { label: "Coach", to: "/coach" },
-  { label: "Playbooks", to: "/playbooks" },
-  { label: "Paper trading", to: "/paper" },
-  { label: "Challenges", to: "/paper/challenges" },
+  { label: "Cases", to: "/cases", icon: "cases" },
+  { label: "Coach", to: "/coach", icon: "psychology" },
+  { label: "Playbooks", to: "/playbooks", icon: "auto_stories" },
+  { label: "Paper trading", to: "/paper", icon: "account_balance_wallet" },
+  { label: "Challenges", to: "/paper/challenges", icon: "emoji_events" },
 ] as const;
 
 export const OTHER_FACTORS = [

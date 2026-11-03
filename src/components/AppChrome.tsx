@@ -21,7 +21,7 @@ function MenuGroup({
   /** When set, the label itself navigates and the chevron opens the rest. */
   to?: string;
   end?: boolean;
-  items: readonly { label: string; to: string }[];
+  items: readonly { label: string; to: string; icon?: string }[];
   testId: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -82,11 +82,12 @@ function MenuGroup({
             to={item.to}
             role="menuitem"
             className={cn(
-              "block px-3 py-1.5 text-[13px]",
+              "flex items-center gap-2 px-3 py-1.5 text-[13px]",
               here(item.to, pathname, hash) ? "bg-primary/10 text-primary font-semibold" : "text-ink hover:bg-canvas",
             )}
             onClick={() => setOpen(false)}
           >
+            {item.icon ? <span className="material-symbols-outlined text-[18px]" aria-hidden>{item.icon}</span> : null}
             {item.label}
           </Link>
         ))}

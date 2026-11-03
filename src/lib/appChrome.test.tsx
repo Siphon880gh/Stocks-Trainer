@@ -59,8 +59,14 @@ describe("AppChrome header nav", () => {
 
   it("puts Map in the Dashboard menu and names Learn as ToC", () => {
     assert.match(nav, />Dashboard</);
-    assert.match(nav, />Quiz</);
-    assert.match(nav, />Library</);
+    assert.match(nav, />map<\/span>Map/);
+    assert.match(nav, />quiz<\/span>Quiz/);
+    assert.match(nav, />menu_book<\/span>Library/);
+    assert.match(nav, />cases<\/span>Cases/);
+    assert.match(nav, />psychology<\/span>Coach/);
+    assert.match(nav, />auto_stories<\/span>Playbooks/);
+    assert.match(nav, />account_balance_wallet<\/span>Paper trading/);
+    assert.match(nav, />emoji_events<\/span>Challenges/);
     assert.match(nav, />Quick Decisions</);
     assert.ok(links.includes("/map"));
     assert.ok(html.indexOf('data-testid="app-nav"') < html.indexOf('href="/map"'));
