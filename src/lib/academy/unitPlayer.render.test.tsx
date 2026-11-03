@@ -31,11 +31,13 @@ test("chips link to the resolved hrefs", () => {
   }
 });
 
+const flat = (s: string) => s.replace(/\s+/g, " ").trim();
+
 test("cards phase shows the first card and its glossary chip; submitted preset shows the mastery result", () => {
   const u = getUnit("l3-trailing-stop")!;
-  const t = renderText(wrap(<UnitPlayer unit={u} />));
+  const t = flat(renderText(wrap(<UnitPlayer unit={u} />)));
   assert.ok(t.includes(u.cards[0]!.title));
-  assert.ok(!t.includes(u.cards[1]!.body));
+  assert.ok(!t.includes(flat(u.cards[1]!.body).slice(0, 80)));
   const qs = quizForUnit(u.id);
   const answers = Object.fromEntries(qs.map((q) => [q.id, q.correctAnswer]));
   const html = renderHtml(wrap(<UnitPlayer unit={u} preset={{ answers, submitted: true }} />));
@@ -64,11 +66,11 @@ test("test out of a unit: card 1 offers a secondary 'take the check' action; ?ch
     </MemoryRouter>
   );
   const q0 = quizForUnit(u.id)[0]!.prompt;
-  const checked = renderText(at(`/academy/${u.id}?check=1`));
+  const checked = flat(renderText(at(`/academy/${u.id}?check=1`)));
   assert.ok(checked.includes(q0), "?check=1 shows the quiz");
-  assert.ok(!checked.includes(u.cards[0]!.body), "and skips the cards");
-  const normal = renderText(at(`/academy/${u.id}`));
-  assert.ok(normal.includes(u.cards[0]!.body) && !normal.includes(q0), "without it the cards come first");
+  assert.ok(!checked.includes(flat(u.cards[0]!.body).slice(0, 80)), "and skips the cards");
+  const normal = flat(renderText(at(`/academy/${u.id}`)));
+  assert.ok(normal.includes(flat(u.cards[0]!.body)) && !normal.includes(q0), "without it the cards come first");
 });
 
 test("a check passed after testing out goes through recordUnitAttempt: mastered, level progress counts", async () => {

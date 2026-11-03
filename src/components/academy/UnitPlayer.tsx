@@ -61,7 +61,11 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
             </span>
           </div>
           <h2 className="font-semibold">{c.title}</h2>
-          <p className="text-[14px] leading-relaxed">{c.body}</p>
+          <div className="space-y-3 text-[14px] leading-relaxed">
+            {c.body.split(/\n\n+/).map((para) => (
+              <p key={para.slice(0, 48)}>{para}</p>
+            ))}
+          </div>
           {term ? (
             <Link to={glossaryHref(term.id)} className="inline-flex items-center gap-1 text-[12px] px-2 py-1 rounded-md border border-line hover:border-primary" data-chip="glossary">
               <span className="material-symbols-outlined text-sm" aria-hidden>

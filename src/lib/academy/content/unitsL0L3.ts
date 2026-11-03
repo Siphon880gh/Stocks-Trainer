@@ -1,6 +1,6 @@
 /**
  * BA1.M2: original lesson units for L0 Orientation → L3 Orders, sizing & risk.
- * One idea per card, ≤ 120 words, then a link to where the app lets you practise it.
+ * One idea per card, two paragraphs, then a link to where the app lets you practise it.
  * Educational only; SAMPLE / SIMULATED examples; not trading advice.
  */
 import type { Unit } from "../types";

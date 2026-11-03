@@ -3,7 +3,7 @@ import type { Unit } from "../types";
 import { quizForUnit } from "./unitQuizzes";
 
 export const WORDS_PER_MINUTE = 200;
-export const MAX_CARD_WORDS = 120;
+export const MAX_CARD_WORDS = 150;
 export const wordCount = (s: string) => s.split(/\s+/).filter(Boolean).length;
 
 export function unitWords(u: Unit): number {

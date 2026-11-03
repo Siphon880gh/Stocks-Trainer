@@ -15,7 +15,17 @@ test("unit counts: ≥ 22 in L0–L3, ≥ 18 in L4–L7, ≥ 40 total", () => {
   assert.ok(UNITS.length >= 40);
 });
 
-test("every unit: 3–6 cards, ≤ 120 words per card, estMinutes ≤ 5, a one-sentence objective", () => {
+test("every card has a second paragraph of real explanation, still within the word cap", () => {
+  for (const u of UNITS) {
+    for (const c of u.cards) {
+      const parts = c.body.split(/\n\n+/);
+      assert.equal(parts.length, 2, `${u.id} ${c.title}`);
+      assert.ok(wordCount(parts[1]!) >= 40, `${u.id} ${c.title}: second paragraph is ${wordCount(parts[1]!)} words`);
+    }
+  }
+});
+
+test("every unit: 3–6 cards, within the word cap, estMinutes ≤ 5, a one-sentence objective", () => {
   for (const u of UNITS) {
     assert.ok(u.cards.length >= 3 && u.cards.length <= 6, u.id);
     for (const c of u.cards) {

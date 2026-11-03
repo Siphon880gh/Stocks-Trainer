@@ -29,7 +29,7 @@ export type RefString = `${ContentRefKind}:${string}`;
 
 export interface LessonCard {
   title: string;
-  /** Plain sentence-case English, at most 120 words. */
+  /** Two paragraphs of plain English, at most 150 words together. */
   body: string;
   /** Optional glossary chip under the card (an Archive literacy term id). */
   glossaryTermId?: string;

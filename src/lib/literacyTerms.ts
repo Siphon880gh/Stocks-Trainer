@@ -45,7 +45,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "ownership",
     summary: "A unit of ownership in a company.",
     detail:
-      "Shares represent equity in a business—claims on residual value after debts. SAMPLE educational definition, not investment advice.",
+      "A share is a unit of ownership. Shareholders are paid after lenders if the company is wound up, which is why equity is called a residual claim, and they keep what is left when the business does well, through a higher price, a dividend, or both. If the company has 1,000,000 shares and you own 1,000, you own 0.1%. Buying on an exchange usually pays the seller, not the company. The company receives cash when it issues new shares. SAMPLE educational definition, not investment advice.",
   },
   {
     id: "exchange",
@@ -53,7 +53,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "markets",
     summary: "A venue that helps match buyers and sellers with public prices.",
     detail:
-      "Listed equities trade on exchanges (and related market systems) that support price discovery and liquidity. Not a profit guarantee.",
+      "An exchange lists orders and matches buyers with sellers. It does not own the shares and it does not set a fair value. The published price is the last trade, and the bid and ask are the best live orders. Busy stocks usually have tighter spreads because more people compete to be the best bid and ask. The company gets the cash from a trade only when it is issuing new shares. Not a profit promise.",
   },
   {
     id: "long-vs-short",
@@ -69,7 +69,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "process",
     summary: "Different typical horizons and decision cadences.",
     detail:
-      "Investing usually emphasizes longer multi-month/year theses. Trading emphasizes shorter moves. Match tools and risk to your horizon.",
+      "An investor asks whether this is a sound business at a sensible price and can sit through a large drop if that answer is unchanged. A trader asks for an entry, the price that proves the idea wrong, and a place to take profit, usually over days or weeks. Write the horizon before the order. Relabelling a failed short-term trade as a long-term investment, without a new reason, is a common way to hold a loss that the original plan said to cut.",
   },
   {
     id: "risk-horizon",
@@ -77,7 +77,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "process",
     summary: "Expected return and uncertainty travel together; time frame shapes decisions.",
     detail:
-      "Higher expected returns generally require accepting more uncertainty. Your time horizon filters which moves are noise vs signal. Hold often fits when thesis + horizon still hold.",
+      "Money you need soon cannot sit in an asset that can drop sharply and take years to recover. A long horizon can treat that drop as noise if the reason you own it is intact. A short horizon cannot. Higher expected return generally comes with more uncertainty, not instead of it. If a decline would force a sale for a reason that is not in the plan, the position is too large for the horizon.",
   },
   {
     id: "options-context",
@@ -221,7 +221,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "process",
     summary: "Social chatter is not the same as a disclosed filing or official release.",
     detail:
-      "SAMPLE teaching: treat rumors as low-confidence noise until confirmed by a filing, exchange notice, or company release. Process = source → confidence → decide.",
+      "A social post, a chat rumour, or an unsourced headline is a claim, not a disclosure. A filing, an exchange notice, or a company release is something you can read and cite. Prices often move on the rumour before the document exists, and they often give the move back if the document contradicts it. Process: name the source, decide how much confidence it deserves, then decide. SAMPLE teaching, not a live news desk.",
   },
   {
     id: "priced-in",
@@ -229,7 +229,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "process",
     summary: "Markets may already reflect widely expected news before the headline hits.",
     detail:
-      "If everyone expected the print, the first move after the headline can fade. SAMPLE training asks: what was already known vs what is new?",
+      "Prices are a forecast. If the crowd expected strong earnings and the company reports strong earnings, the new information is small, and the stock may not rise or may fall. A miss against a high estimate can drop the stock even when results grew versus last year. The useful question on every headline is what people already believed, and what is different now. SAMPLE training asks that before you treat the adjective in the title as the trade.",
   },
   {
     id: "ohlc-anatomy",
@@ -573,7 +573,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "markets",
     summary: "Bid is what buyers will pay; ask is what sellers will take.",
     detail:
-      "The spread between bid and ask is a cost of transacting. SAMPLE charts here show OHLC, not a live order book. Educational only.",
+      "The bid is the highest price a buyer is currently offering. The ask is the lowest price a seller will take. A market buy pays about the ask. A market sell receives about the bid. The difference is the spread, and you pay it when you cross from one side to the other. Busy stocks often have a spread of a penny. Thin stocks can have a spread that is a large fraction of the price, which is a cost before any idea works. SAMPLE charts here show OHLC, not a live order book. Educational only.",
   },
   {
     id: "liquidity",
@@ -581,7 +581,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "markets",
     summary: "How easily you can trade without moving the price much.",
     detail:
-      "Thin names can gap and slip. Liquid names absorb size more quietly. SAMPLE tapes are stylized—they do not measure real depth.",
+      "A liquid stock has many shares available near the current price, so a normal order fills close to the quote and the spread stays tight. A thin stock has few shares on the bid and ask, so the same order walks the price and a news gap can jump far past a stop. High volume usually comes with better liquidity, but volume is what already traded and the book is what is available now. SAMPLE tapes are stylized and do not measure real depth.",
   },
   {
     id: "volatility",
@@ -597,7 +597,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "markets",
     summary: "How much traded in the period—not shown as a live tape here.",
     detail:
-      "Volume can confirm a move or warn that a spike had little participation. This trainer’s SAMPLE OHLC packs do not include a live volume feed.",
+      "Volume is the number of shares that changed hands in the period. A break of a level on volume well above the recent typical bar had many participants. The same break on a tiny bar can be a few orders, and it fails more often. A news day often prints the largest volume in months, and that candle's high, low, and gap become the levels people watch afterward. Volume confirms participation. It does not, by itself, say the direction will continue. This trainer’s SAMPLE OHLC packs do not include a live volume feed.",
   },
   {
     id: "support-resistance",
@@ -613,7 +613,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "process",
     summary: "One-way grind versus chopping between levels.",
     detail:
-      "Trend tools (moving averages) fit a grind. Oscillators fit a range. Mixing them blindly is a common SAMPLE drill mistake.",
+      "An uptrend makes higher highs and higher lows. A downtrend makes lower highs and lower lows. A range bounces between a floor and a ceiling without that sequence. Moving averages describe a grind. Oscillators that assume price will snap back describe a range. Using a range tool on a trend, or buying every dip in a downtrend because it looks cheap, is a common mistake. Name the structure before you pick the tool. SAMPLE drill, not a signal service.",
   },
   {
     id: "market-order-vs-limit",
@@ -621,7 +621,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "position",
     summary: "Market seeks a fill now; a limit waits for your price.",
     detail:
-      "Educational contrast only—this app does not route orders. A market order accepts the current bid/ask; a limit order waits. SAMPLE teaching, not a broker tutorial.",
+      "A market order fills at the best available price and does not name a worst price. You are sure to trade, and you are not sure of the fill, especially in a thin stock or right after news. A limit order names the worst price you will accept: a buy limit pays that price or less, a sell limit receives that price or more, and if the market never reaches it you get no fill. Use a market order when being in or out matters more than a few cents. Use a limit when missing the trade is acceptable. This app does not route live orders. SAMPLE teaching.",
   },
   {
     id: "earnings-season",
@@ -629,7 +629,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "process",
     summary: "The clustered window when many companies report results.",
     detail:
-      "Reports can reset the story: beat, miss, margins, cash, guidance. SAMPLE cases use stylized snapshots—not live filings.",
+      "Earnings season is the stretch, several weeks long, when many companies report the quarter. Each report is judged against the consensus estimate and against the company's own guidance for what comes next, not only against last year. A beat with a cut to the outlook can still send the stock down. The day often gaps, and that candle's high, low, and gap become levels people watch afterward. SAMPLE cases use stylized snapshots, not live filings.",
   },
   {
     id: "guidance",
@@ -637,7 +637,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "process",
     summary: "What management says it expects next—not what already happened.",
     detail:
-      "A cut in outlook can matter more than a beat on the last quarter. SAMPLE earnings cases teach you to reread the thesis after guidance changes.",
+      "Guidance is management's forecast for revenue or earnings ahead. The quarter that just ended is already in the past. Holders have to live with the new path. A company can beat the reported quarter and lower the forecast, and the stock often falls because the market reprices what comes next. A small miss with a raised outlook can be the stronger report. Read the outlook with the same care as the earnings line. SAMPLE cases, not live filings.",
   },
   {
     id: "free-cash-flow",
@@ -645,7 +645,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "ownership",
     summary: "Cash from operations minus what the business reinvests to stay running.",
     detail:
-      "Profit on the income statement can diverge from cash. SAMPLE snapshots highlight operating cash and free cash flow so you can question accruals.",
+      "Free cash flow is operating cash flow minus the spending needed to maintain and grow the assets. It is cash that could repay debt, pay a dividend, or buy back shares. Profit can rise while cash falls, because revenue is recorded when a sale is made and cash arrives when the customer pays. Years of profit with negative free cash flow mean the firm must borrow or sell shares to keep going. SAMPLE snapshots are for that comparison, not a live filing.",
   },
   {
     id: "net-margin",
@@ -653,7 +653,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "ownership",
     summary: "Net income as a share of revenue—how much of each sale is kept.",
     detail:
-      "Revenue up with margin down can still be a weaker story. SAMPLE statement cards show netMarginPct for that comparison.",
+      "Net margin is net income divided by revenue. Fifteen of profit on 100 of sales is 15%. Rising sales with a falling margin can mean growth that costs more to deliver. A grocer can be healthy at a low margin. A software firm at the same margin may not be. Compare a company with its own history and with peers, not with a single universal good number. SAMPLE statement cards show netMarginPct for that comparison.",
   },
   {
     id: "pe-ratio",
@@ -669,7 +669,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
     category: "position",
     summary: "Spreading bets so one name or one story cannot sink the whole plan.",
     detail:
-      "SAMPLE teaching: one case is one decision. Position size and how names move together sit outside this trainer’s order ticket—because there is no ticket.",
+      "One company can lose a large fraction of its value on a single report. If it is the whole account, the account moves with it. Several holdings that do not share a customer, a commodity, or a rate sensitivity mean one disaster is a fraction of the account. Five stocks in the same industry often fall together, so the count of names is not the same as diversification. A broad index fund is the simple version of the same idea, and it still falls when the whole market falls. SAMPLE teaching. This app has no live order ticket.",
   },
   {
     id: "correlation",

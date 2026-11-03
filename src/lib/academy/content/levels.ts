@@ -3,10 +3,11 @@
  * Prerequisites always point to earlier levels, so the map is a DAG rooted at L0.
  */
 import type { Level, LevelId, Unit } from "../types";
+import { deepenUnits } from "./cardDepth";
 import { UNITS_L0_L3 } from "./unitsL0L3";
 import { UNITS_L4_L7 } from "./unitsL4L7";
 
-export const UNITS: Unit[] = [...UNITS_L0_L3, ...UNITS_L4_L7];
+export const UNITS: Unit[] = deepenUnits([...UNITS_L0_L3, ...UNITS_L4_L7]);
 
 const ids = (levelId: LevelId, courseId: string) => UNITS.filter((u) => u.levelId === levelId && u.courseId === courseId).map((u) => u.id);
 
