@@ -114,6 +114,10 @@ test("rewards panel: virtual-only disclaimer; locked badges show the hint, never
   assert.match(html, /data-badge="first-unit" data-earned="true"/);
   for (const b of BADGES.filter((x) => x.id !== "first-unit")) assert.ok(text.includes(b.hint), b.id);
   assert.doesNotMatch(text, /=>|earned\(|\.length\s*>=/);
+  const preview = renderHtml(<MemoryRouter><RewardsPanel storage={store} preview /></MemoryRouter>);
+  assert.match(preview, /data-badge="first-unit" data-earned="true"/);
+  assert.match(preview, /data-badge="ten-units" data-earned="false" data-preview="true"/);
+  assert.doesNotMatch(preview, />lock</);
 });
 
 test("BA11.M1 bracket ticket: opt-in on buys only, validated exits, plain-language preview; open orders show the link", () => {

@@ -1,4 +1,5 @@
 import { BADGES } from "../../lib/academy/rewards/badges";
+import { readAcademyBrowseAll } from "../../lib/academy/browse";
 import { DAY_STREAK_LABEL, DAY_STREAK_TIP } from "../../lib/streakLabels";
 import { pointsBySource, totalPoints } from "../../lib/academy/rewards/ledger";
 import { rankForPoints } from "../../lib/academy/rewards/levels";
@@ -8,7 +9,7 @@ import { loadRewards, type KVStorage } from "../../lib/academy/storage";
 import { cn } from "../../lib/utils";
 
 /** BA7.M5: points, rank bar, streak and badge grid. Virtual only. */
-export default function RewardsPanel({ storage, now = new Date() }: { storage?: KVStorage; now?: Date }) {
+export default function RewardsPanel({ storage, now = new Date(), preview = readAcademyBrowseAll() }: { storage?: KVStorage; now?: Date; preview?: boolean }) {
   const r = loadRewards(storage).state;
   const pts = totalPoints(r.ledger);
   const rank = rankForPoints(pts);
@@ -40,13 +41,14 @@ export default function RewardsPanel({ storage, now = new Date() }: { storage?: 
       <ul className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-8 gap-2" aria-label="Badges">
         {BADGES.map((b) => {
           const got = !!r.badges[b.id];
+          const open = got || preview;
           return (
-            <li key={b.id} className={cn("rounded-lg border p-2 text-center space-y-0.5", got ? "border-sim/50 bg-sim/5" : "border-line opacity-70")} data-badge={b.id} data-earned={got ? "true" : "false"} title={got ? b.name : b.hint}>
-              <span className={cn("material-symbols-outlined", got ? "text-sim" : "text-muted")} aria-hidden>
-                {got ? b.icon : "lock"}
+            <li key={b.id} className={cn("rounded-lg border p-2 text-center space-y-0.5", got ? "border-sim/50 bg-sim/5" : open ? "border-primary/40 bg-primary/5" : "border-line opacity-70")} data-badge={b.id} data-earned={got ? "true" : "false"} data-preview={!got && preview ? "true" : "false"} title={got ? b.name : b.hint}>
+              <span className={cn("material-symbols-outlined", got ? "text-sim" : open ? "text-primary" : "text-muted")} aria-hidden>
+                {open ? b.icon : "lock"}
               </span>
               <p className="text-[11px] font-semibold leading-tight">{b.name}</p>
-              {!got ? <p className="text-[10px] text-muted leading-tight">{b.hint}</p> : null}
+              {!got ? <p className="text-[10px] text-muted leading-tight">{preview ? "Preview" : b.hint}</p> : null}
             </li>
           );
         })}
