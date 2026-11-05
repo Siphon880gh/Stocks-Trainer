@@ -27,11 +27,15 @@ export const PATTERN_MORE = [
   { label: "Library", to: "/archive", icon: "menu_book" },
 ] as const;
 
-/** Options ladder plus every hands-on lab. */
-export const PRACTICE_MENU = [
-  { label: "Options ladder", to: "/academy/options" },
-  ...MISC_PRACTICE_ITEMS.map((item) => ({ label: item.title, to: item.to })),
-];
+/**
+ * Same order as the Practice section: stock charts, then futures and options,
+ * then crypto, volatility products, and narrower topics.
+ */
+export const PRACTICE_MENU = MISC_PRACTICE_ITEMS.flatMap((item) => {
+  const row = { id: item.id, label: item.title, to: item.to };
+  if (item.id !== "futures-vs-options") return [row];
+  return [row, { id: "options-ladder", label: "Options ladder", to: "/academy/options" }];
+});
 
 export const DEEP_STUDY = [
   { label: "Cases", to: "/cases", icon: "cases" },

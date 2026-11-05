@@ -9,6 +9,7 @@ import PathMapPanel from "../components/PathMapPanel";
 import BrowsePopover from "../components/BrowsePopover";
 import { QUIZ_GROUPS, getQuestionsForGroup, type QuizGroupId } from "../lib/quizData";
 import { conceptQuizGroups, patternQuizGroups } from "../lib/quizKinds";
+import { PRACTICE_MENU } from "../lib/appNav";
 import { listPlaybooks } from "../lib/playbooks";
 import { listSessions } from "../lib/coaching";
 import {
@@ -22,7 +23,7 @@ import {
   setChartGateTemporaryBypass,
 } from "../lib/beginnerPath";
 import { getMilestoneStatus, loadProgress } from "../lib/progressStore";
-import { MISC_PRACTICE_ITEMS, isMiscPracticeDone } from "../lib/miscPractices";
+import { isMiscPracticeDone } from "../lib/miscPractices";
 import FinancialsTrainingCard from "../components/financials/FinancialsTrainingCard";
 import { isFinancialsQuizGroup } from "../lib/financials/quizBanks";
 import MacroTrainingCard from "../components/macro/MacroTrainingCard";
@@ -334,14 +335,13 @@ export default function Training() {
         <div className="w-full max-w-xl panel p-4 text-sm space-y-2 scroll-mt-32">
           <h2 className="font-semibold">Practice</h2>
           <div className="flex flex-wrap gap-3">
-            <Link to="/academy/options" className="text-primary underline">Options ladder</Link>
-            {MISC_PRACTICE_ITEMS.map((item) => (
-              <span key={item.id} className="inline-flex items-center gap-1">
+            {PRACTICE_MENU.map((item) => (
+              <span key={item.to} className="inline-flex items-center gap-1">
                 <Link to={item.to} className="text-primary underline">
-                  {item.title}
-                  {practiceDone(item.id) ? " · done" : ""}
+                  {item.label}
+                  {item.id !== "options-ladder" && practiceDone(item.id) ? " · done" : ""}
                 </Link>
-                <YouTubeSearchLink title={item.title} />
+                <YouTubeSearchLink title={item.label} />
               </span>
             ))}
           </div>

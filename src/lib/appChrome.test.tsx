@@ -42,6 +42,12 @@ describe("AppChrome header nav", () => {
       assert.ok(links.includes(href), href);
     }
     for (const item of MISC_PRACTICE_ITEMS) assert.ok(links.includes(item.to), item.title);
+    assert.ok(links.indexOf("/practice/japanese-candles") < links.indexOf("/practice/futures-vs-options"));
+    assert.ok(links.indexOf("/practice/futures-vs-options") < links.indexOf("/academy/options"));
+    assert.ok(links.indexOf("/academy/options") < links.indexOf("/practice/wheel-strategy"));
+    assert.ok(links.indexOf("/practice/wheel-strategy") < links.indexOf("/practice/crypto-candles"));
+    assert.ok(links.indexOf("/practice/crypto-candles") < links.indexOf("/practice/vix-trading"));
+    assert.ok(links.indexOf("/practice/vix-trading") < links.indexOf("/practice/algo-trading"));
   });
 
   it("keeps those links under the mounted path", () => {

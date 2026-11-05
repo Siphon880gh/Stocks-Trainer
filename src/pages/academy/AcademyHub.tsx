@@ -96,36 +96,6 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
 
       {!state.placement ? <PlacementCard variant="hub" storage={storage} /> : null}
 
-      <section className="grid sm:grid-cols-2 gap-3" aria-label="Practice with virtual money">
-        <Link to="/paper" className="panel p-4 block hover:border-sim space-y-1" data-testid="hub-paper">
-          <p className="font-semibold">
-            <span className="material-symbols-outlined text-sim align-middle mr-1" aria-hidden>
-              candlestick_chart
-            </span>
-            Paper trading
-          </p>
-          <p className="text-[13px] text-muted">Place market, limit, stop, stop-limit and trailing-stop orders with virtual money, one bar at a time.</p>
-        </Link>
-        <Link to="/paper/challenges" className="panel p-4 block hover:border-sim space-y-1" data-testid="hub-challenges">
-          <p className="font-semibold">
-            <span className="material-symbols-outlined text-sim align-middle mr-1" aria-hidden>
-              flag
-            </span>
-            Challenges
-          </p>
-          <p className="text-[13px] text-muted">Short scenarios scored mostly on discipline: stops, size and patience.</p>
-        </Link>
-        <Link to="/academy/options" className="panel p-4 block hover:border-sim space-y-1 sm:col-span-2" data-testid="hub-options">
-          <p className="font-semibold">
-            <span className="material-symbols-outlined text-sim align-middle mr-1" aria-hidden>
-              stacked_line_chart
-            </span>
-            Options knowledge ladder
-          </p>
-          <p className="text-[13px] text-muted">Four levels of options strategies with payoff charts at expiration and a check per level. Education only; it approves you for nothing.</p>
-        </Link>
-      </section>
-
       <TodayCard storage={storage} onAward={() => setRewardsTick((t) => t + 1)} />
 
       <Fragment key={rewardsTick}>
