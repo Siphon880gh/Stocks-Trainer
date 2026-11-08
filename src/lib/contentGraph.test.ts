@@ -112,7 +112,7 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "earnings-jargon": 12,
   "price-action": 12,
   "trade-framework": 24,
-  "opening-range": 14,
+  "opening-range": 22,
   "four-pillars": 16,
   "fair-value-gap": 13,
   "risk-premium-portfolio": 15,

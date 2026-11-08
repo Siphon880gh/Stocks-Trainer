@@ -1,3 +1,4 @@
+import { ORB_VIDEO } from "./orbConfirmation";
 import type { AssetClass } from "./samplePacks";
 import { FP_CREDIBILITY, FP_RELATED, FP_SOURCE } from "./fourPillars";
 import { FVG_CREDIBILITY, FVG_PLAYBOOK_SOURCE, FVG_RELATED } from "./fairValueGap";
@@ -83,6 +84,33 @@ export interface Playbook {
 
 /** Authored playbooks. Append here — the list page reads this array. */
 export const PLAYBOOKS: Playbook[] = [
+  {
+    id: "orb-context-confirmation",
+    title: "Opening range: context and confirmation",
+    summary: "Choose a completed 15/30-minute stock opening range; separate a retest from a failed break and size the risk.",
+    assetClass: "equity",
+    source: { url: ORB_VIDEO.watchUrl, kind: "youtube", label: "Peachy Investor · ORB Model", verifiedOn: "2026-11-07" },
+    video: ORB_VIDEO,
+    coachSlug: "opening-range-breakout",
+    caseId: "case-orb-wick-only",
+    samplePackId: "eq-index-proxy",
+    explanation: "Define the opening window before the session. On five-minute stock candles, the first three completed candles make a 15-minute range and the first six make a 30-minute range. Freeze each completed range; the entry timeframe is a separate choice. Never use the eventual 30-minute extremes for an earlier decision.\n\nThe video contrasts a simple close-outside trigger with waiting for price-action confirmation. An upside break that retests the old high, holds higher support, then breaks the prior high differs from a breakout that returns inside and forms a lower high. Failed breaks can lead to rotation toward the midpoint or opposite boundary, but neither target is assured. Midpoint = (high + low) / 2. A bearish example uses a rejected midpoint and lower high after an initial leg down.\n\nTreat inside-versus-outside behavior as context, not an all-day trend forecast. Premarket levels and other price areas can add context, but define their windows separately. Compare a structural stop with a full-range stop before entry, then cap shares by risk and buying power. Do not increase risk just because multiple levels align. Costs, adverse fills and missed moves matter; waiting and skipping are valid outcomes.\n\nPractice on the SIMULATED (SAMPLE) stock lab linked below. The Coach and Case panels review the separate legacy close-only ORB rules; the Chart look panel is a general index-proxy tape, not the video's opening range. The chart and prices there are authored examples, not reproductions of the video's trades. Paper-test any chosen rule across losing as well as winning sessions. Options and futures have different mechanics; stock-chart reward/risk is not option-premium reward/risk.",
+    related: [
+      { label: "Interactive ORB context lab", to: "/practice/opening-range#context" },
+      { label: "Opening range quiz", to: "/training?group=opening-range&start=1" },
+      { label: "Failed opening range break", to: "/archive?tab=literacy&open=orb-failed-break" },
+      { label: "Risk and entry framework", to: "/practice/trade-framework" },
+    ],
+    credibility: {
+      title: "A framework to test, not a profit forecast",
+      summary: ["The video supplies a discretionary ORB framework, not verified performance evidence. Waiting for confirmation changes the entry and invalidation; it does not eliminate losses. Real fills and costs can exceed a planned risk allowance."],
+      sources: [
+        { supports: "Session window", label: "NYSE · Hours and calendars", url: "https://www.nyse.com/markets/hours-calendars", note: "The core stock session opens at 06:30 Pacific; a selected opening range must finish before its final extremes are available.", role: "corroborates", verifiedOn: "2026-11-07" },
+        { supports: "Stop execution", label: "Investor.gov · Stop order", url: "https://www.investor.gov/introduction-investing/investing-basics/glossary/stop-order", note: "A triggered stop becomes a market order and its execution price can differ from the stop price.", role: "corroborates", verifiedOn: "2026-11-07" },
+        { supports: "Risk discipline", label: "FINRA · Frequent intraday trading", url: "https://www.finra.org/investors/investing/investment-products/stocks/day-trading", note: "Intraday trading involves significant loss risk and costs; margin can amplify losses beyond deposited funds.", role: "corroborates", verifiedOn: "2026-11-07" },
+      ],
+    },
+  },
   {
     id: "gap-and-go",
     title: "Gap and go",

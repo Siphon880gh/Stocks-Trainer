@@ -46,7 +46,7 @@ describe("misc practice catalog", () => {
       "Mark the plan",
       "Invalidation",
       "Price action trading framework",
-      "Opening range breakout (15-minute)",
+      "Opening range: retests, failed breaks & risk",
       "Breakout, pullback and fair value gap",
       "Fibonacci as a decision map",
       "Reading 1-minute charts",

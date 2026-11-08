@@ -1,3 +1,4 @@
+import OrbContextLab from "../../components/OrbContextLab";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import PracticeShell from "../../components/PracticeShell";
@@ -27,12 +28,13 @@ const term = (id: string, label: string) => (
 
 /** /practice/opening-range: the 15-minute opening range breakout on SAMPLE SPY.S sessions, with the caveats. */
 export default function PracticeOpeningRange() {
+  const [contextComplete, setContextComplete] = useState(false);
   const [picks, setPicks] = useState<Record<string, OrbAnswer>>({});
   const choose = (id: string, v: OrbAnswer) => {
     if (picks[id]) return;
     const next = { ...picks, [id]: v };
     setPicks(next);
-    if (ORB_SESSIONS.every((s) => next[s.id])) markMiscPracticeDone("opening-range");
+    if (contextComplete && ORB_SESSIONS.every((s) => next[s.id])) markMiscPracticeDone("opening-range");
   };
   const right = ORB_SESSIONS.filter((s) => picks[s.id] === s.answer).length;
   const example = ORB_BY_ID["orb-long"]!;
@@ -41,11 +43,15 @@ export default function PracticeOpeningRange() {
 
   return (
     <PracticeShell
-      title="Opening range breakout (15-minute)"
-      blurb={`Mark the first 30 minutes, wait for a 15-minute close outside the range, stop at the other end, target 1:1 on the underlying. ${ORB_DISCLAIMER}`}
+      title="Opening range breakout: context & confirmation"
+      blurb={`Choose a completed opening window, distinguish retests from failed breaks, and compare structural risk before entering. ${ORB_DISCLAIMER}`}
     >
+      <OrbContextLab onComplete={() => {
+        setContextComplete(true);
+        if (ORB_SESSIONS.every(s => picks[s.id])) markMiscPracticeDone("opening-range");
+      }} />
       <section className="panel p-4 space-y-3 text-[13px]" data-testid="orb-rules">
-        <p className="font-semibold text-[14px]">The rules</p>
+        <p className="font-semibold text-[14px]">Legacy close-only model: Opening range breakout (15-minute)</p>
         <ol className="space-y-2">
           {ORB_STEPS.map((s) => (
             <li key={s.n} data-step={s.n}>
@@ -55,7 +61,7 @@ export default function PracticeOpeningRange() {
           ))}
         </ol>
         <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
-          <p className="text-[10px] text-muted px-2 pt-1">SAMPLE SPY.S, 15-minute candles (ET)</p>
+          <p className="text-[10px] text-muted px-2 pt-1">SIMULATED SPY.S, 15-minute candles (ET)</p>
           <CandlestickChart
             data={example.bars}
             annotations={mergeAnnotations(exampleAnn.before, exampleAnn.reveal)}
@@ -90,7 +96,7 @@ export default function PracticeOpeningRange() {
           <table className="text-[12px] w-full" data-testid="orb-option-table">
             <thead>
               <tr className="text-left text-muted">
-                <th className="pr-3 font-medium">{fmt(ORB_OPTION_EXAMPLE.strike)} call (SAMPLE)</th>
+                <th className="pr-3 font-medium">{fmt(ORB_OPTION_EXAMPLE.strike)} call (SIMULATED)</th>
                 <th className="pr-3 font-medium">Delta</th>
                 <th className="pr-3 font-medium">Paid</th>
                 <th className="pr-3 font-medium">At 1:1 target</th>
@@ -118,6 +124,7 @@ export default function PracticeOpeningRange() {
       </section>
 
       <section className="panel p-4 space-y-3 text-[13px]" data-testid="orb-drills">
+        <p className="text-[11px] text-muted">SIMULATED SPY.S · legacy model · 15-minute candles, Eastern start times. These drills test the stated close-only rules, not the confirmation variant above.</p>
         <p className="font-semibold text-[14px]">Your call at the highlighted candle</p>
         {ORB_SESSIONS.map((s) => {
           const picked = picks[s.id];

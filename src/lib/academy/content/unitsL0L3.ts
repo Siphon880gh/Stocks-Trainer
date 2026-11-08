@@ -202,7 +202,7 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Breaks and retests", body: "When price closes clearly through resistance, that level often becomes support on the next pullback. A break that quickly falls back inside is a warning that the breakout failed.", glossaryTermId: "breakout-retest" },
       { title: "Levels place stops", body: "Levels give trades a logical place to be wrong. A long above support can use a stop just below support: if price closes under it, the reason for the trade is gone." },
     ],
-    refs: ["practice:/practice/levels", "glossary:support-resistance", "glossary:breakout-retest", "quiz:supply-demand", "coach:supply-demand-zone-retest"],
+    refs: ["practice:/practice/opening-range", "practice:/practice/levels", "glossary:support-resistance", "glossary:breakout-retest", "quiz:supply-demand", "coach:supply-demand-zone-retest"],
   },
   {
     id: "l2-volume-confirms",

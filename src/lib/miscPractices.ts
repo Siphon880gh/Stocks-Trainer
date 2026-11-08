@@ -24,7 +24,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "plan", title: "Mark the plan", to: "/practice/plan" },
   { id: "invalidation", title: "Invalidation", to: "/practice/invalidation" },
   { id: "trade-framework", title: "Price action trading framework", to: "/practice/trade-framework" },
-  { id: "opening-range", title: "Opening range breakout (15-minute)", to: "/practice/opening-range" },
+  { id: "opening-range", title: "Opening range: retests, failed breaks & risk", to: "/practice/opening-range" },
   { id: "fair-value-gap", title: "Breakout, pullback and fair value gap", to: "/practice/fair-value-gap" },
   { id: "fib-decision-map", title: "Fibonacci as a decision map", to: "/practice/fib-decision-map" },
   { id: "one-minute-charts", title: "Reading 1-minute charts", to: "/practice/one-minute-charts" },

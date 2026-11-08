@@ -1,3 +1,4 @@
+import { ORB_CONTEXT_QUESTIONS, ORB_CONTEXT_TERMS, ORB_CONTEXT_OHLC } from "./orbConfirmation";
 /**
  * Opening range breakout (ORB) on a 15-minute chart, as described in a public Facebook reel about SPY
  * (https://www.facebook.com/reel/1698614037860407): mark the high and low of the first two 15-minute candles
@@ -18,7 +19,7 @@ import type { ChartAnnotations } from "./chartAnnotations";
 import type { LiteracyTerm } from "./literacyTerms";
 import { callDelta, callValue, MINUTES_PER_YEAR } from "./gammaSqueeze";
 
-export const ORB_DISCLAIMER = "SAMPLE 15-minute sessions for learning a process, not trading advice.";
+export const ORB_DISCLAIMER = "SIMULATED sessions for learning a process, not trading advice.";
 export const ORB_SOURCE = {
   label: "Public Facebook reel: SPY 15-minute opening range breakout",
   url: "https://www.facebook.com/reel/1698614037860407",
@@ -196,12 +197,12 @@ export function orbAnnotations(s: OrbSession): { before: ChartAnnotations; revea
 }
 
 /** Chart series for quiz questions: full sessions plus `-pre` versions that stop at the decision candle. */
-export const ORB_OHLC: Record<string, OHLC[]> = Object.fromEntries(
+export const ORB_OHLC: Record<string, OHLC[]> = { ...ORB_CONTEXT_OHLC, ...Object.fromEntries(
   ORB_SESSIONS.flatMap((s) => [
     [s.id, s.bars],
     [`${s.id}-pre`, s.bars.slice(0, s.decisionIndex + 1)],
   ]),
-);
+) };
 
 // ---------------------------------------------------------------- the rules, as taught
 
@@ -301,21 +302,22 @@ export const ORB_CAVEATS: OrbCaveat[] = [
 // ---------------------------------------------------------------- glossary
 
 export const ORB_TERMS: LiteracyTerm[] = [
+  ...ORB_CONTEXT_TERMS,
   {
     id: "opening-range",
     name: "Opening range",
     category: "markets",
     summary: "The high and low of the first part of the session, e.g. the first two 15-minute candles (9:30–10:00 ET).",
     detail:
-      "Traders mark it because the open is where the overnight news gets priced and both sides fight hardest. Some use the first 5, 15 or 30 minutes; the 15-minute version in Practice → Opening range breakout uses the first 30 minutes. Educational, not advice.",
+      "Traders mark it because the open is where the overnight news gets priced and both sides fight hardest. Some use the first 5, 15 or 30 minutes. Practice → Opening range breakout compares 15/30-minute stock windows; its separate legacy model uses two 15-minute candles for a 30-minute range. Educational, not advice.",
   },
   {
     id: "opening-range-breakout",
     name: "Opening range breakout (ORB)",
     category: "process",
-    summary: "Enter when a candle closes outside the opening range; stop at the other end of the range; a fixed reward-to-risk target.",
+    summary: "A strategy family built around price leaving a defined opening-session range; confirmation, stops and targets depend on the plan.",
     detail:
-      "The version taught in Practice → Opening range breakout: 15-minute candles, a close above the range for longs (calls) or below it for shorts (puts), stop at the opposite end, 1:1 target measured on the underlying. A wick through the line is not a signal, and a wide range means a deep stop, so size down or skip. Educational, not advice.",
+      "Practice → Opening range breakout compares 15/30-minute context, retests and failed breaks. Its separate legacy close-only model uses 15-minute candles, a close above the range for longs (calls) or below it for shorts (puts), stop at the opposite end, 1:1 target measured on the underlying. A wick through the line is not a signal, and a wide range means a deep stop, so size down or skip. Educational, not advice.",
   },
   {
     id: "underlying-vs-premium-rr",
@@ -356,7 +358,7 @@ const SHORT = orbPlan(SHORT_S.bars);
 const FAIL = orbPlan(FAIL_S.bars);
 const WICKR = openingRange(WICK.bars);
 
-export const ORB_QUESTIONS: QuizQuestion[] = [
+const LEGACY_ORB_QUESTIONS: QuizQuestion[] = [
   mc("ORB-01", "In this 15-minute opening range breakout, what is the opening range?", "B", "The high and low of the first two 15-minute candles (the first 30 minutes)",
     ["Yesterday's high and low", "The first 1-minute candle only", "The high and low of the whole morning"],
     "Mark the high and low of the 9:30 and 9:45 ET candles. Nothing is decided until a candle closes outside that box.", { glossaryTermId: "opening-range" }),
@@ -401,8 +403,15 @@ export const ORB_QUESTIONS: QuizQuestion[] = [
     "A stop limits the loss only if it fills. A long option's worst case is the whole premium, so size the trade so that loss is affordable."),
 ];
 
+/** Keep each variant explicit when questions are mixed in one Learn group. */
+export const ORB_QUESTIONS: QuizQuestion[] = [
+  ...ORB_CONTEXT_QUESTIONS,
+  ...LEGACY_ORB_QUESTIONS.map(q => ({ ...q, prompt: `Legacy close-only model (15-minute candles, 30-minute range): ${q.prompt}` })),
+];
+
 /** Links from the lesson page to the other ORB surfaces. */
 export const ORB_LINKS: { label: string; to: string }[] = [
+  { label: "Playbook · ORB context and confirmation", to: "/playbooks/orb-context-confirmation" },
   { label: "Learn · Opening Range Breakout", to: "/training?group=opening-range&start=1" },
   { label: "Coach · Trade the opening range", to: "/coach/opening-range-breakout" },
   { label: "Cases · Price action trades (ORB cases)", to: "/cases?pack=price-action" },

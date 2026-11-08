@@ -5641,7 +5641,7 @@ export const QUIZ_GROUPS: QuizGroup[] = [
   {
     id: "opening-range",
     name: "Opening Range Breakout",
-    description: "15-minute ORB: the first 30 minutes' range, a close outside it (calls above, puts below), stop at the other end, 1:1 on the underlying, and the caveats: close vs next open, wide ranges, option premium, expiry",
+    description: "Stock ORB context: completed 15/30-minute windows, retests, failed breaks, midpoint reactions and risk sizing; plus the separate legacy close-only model and option-premium caveats",
     icon: "schedule",
   },
   {
