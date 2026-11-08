@@ -57,6 +57,79 @@ async function page(width) {
 const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - (window.visualViewport?.width ?? innerWidth));
 
 const flows = {
+  async "ORB context deep links: Learn questions, glossary and sourced playbook"(p, w) {
+    const qs = getQuestionsForGroup("opening-range");
+    const { withoutSampleWord } = await load("/src/lib/learnerCopy.ts");
+    await p.goto(base + "/training?group=opening-range&start=1", { waitUntil: "networkidle" });
+    const dlg = p.getByRole("dialog");
+    await dlg.waitFor();
+    const modalCopy = () => dlg.evaluate(el => {
+      const copy = el.cloneNode(true);
+      copy.querySelectorAll('button, [role="tooltip"]').forEach(n => n.remove());
+      return copy.textContent.replace(/\s+/g, " ");
+    });
+    for (const q of qs) {
+      check((await modalCopy()).includes(withoutSampleWord(q.prompt)), `ORB quiz prompt ${q.id} at ${w}`);
+      await dlg.locator("button", { hasText: new RegExp(`^Option ${q.correctAnswer}\\b`) }).click();
+      await dlg.getByRole("button", { name: /Submit/ }).click();
+      check((await modalCopy()).includes(withoutSampleWord(q.explanation)), `ORB quiz explanation ${q.id} at ${w}`);
+      await dlg.getByRole("button", { name: /Next question|Finish/ }).click();
+    }
+    await p.goto(base + "/archive?tab=literacy&open=orb-failed-break", { waitUntil: "networkidle" });
+    check((await p.locator("body").innerText()).includes("Even a close outside can fail"), "ORB failed-break glossary deep-opens");
+    await p.goto(base + "/playbooks/orb-context-confirmation", { waitUntil: "domcontentloaded" });
+    await p.getByRole("heading", { name: "Opening range: context and confirmation", exact: true }).waitFor();
+    check(await p.locator('iframe[src="https://www.youtube-nocookie.com/embed/UI-N7X15bFo"]').count() === 1, "ORB credits supplied video");
+    check(await p.locator('a[href="/practice/opening-range#context"]').count() >= 1, "ORB playbook links to interactive context");
+  },
+  async "ORB context: completed windows, narrative exit, failed breaks and risk"(p, w) {
+    await p.goto(base + "/practice/opening-range", { waitUntil: "networkidle" });
+    const lab = p.getByTestId("orb-context");
+    const status = p.getByTestId("orb-range-status");
+    const next = lab.getByRole("button", { name: "Next candle", exact: true });
+    check((await status.innerText()).includes("incomplete"), `ORB initial range incomplete at ${w}`);
+    check(await lab.locator("[data-context-answer]").first().isDisabled(), "ORB cannot answer before decision");
+    check(await lab.getByTestId("orb-context-result").count() === 0, "ORB future/result hidden before answer");
+    await next.click();
+    check((await status.innerText()).includes("99.00–102.00"), "ORB first three candles freeze 15m range");
+    await lab.getByLabel("Opening window").selectOption("30");
+    check((await status.innerText()).includes("incomplete"), "ORB does not leak eventual 30m range");
+    await lab.getByRole("button", { name: "Walk me through the retest" }).click();
+    check(await p.getByTestId("tour-popover").isVisible(), "ORB narrative opens");
+    check(await p.getByTestId("tour-popover").evaluate(el => Number(getComputedStyle(el).zIndex) >= 1002), "ORB popover above charts");
+    await p.getByTestId("tour-next").click();
+    check((await status.innerText()).includes("99.00–102.00"), "ORB narrative advances chart frame");
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/orb-narrative-${w}.png` });
+    await p.getByTestId("tour-prev").click();
+    check((await status.innerText()).includes("incomplete"), "ORB narrative Prev rewinds chart frame");
+    await p.getByTestId("tour-exit").click();
+    check(await p.getByTestId("tour-backdrop").count() === 0, "ORB exit removes backdrop");
+    await next.click();
+    check((await status.innerText()).includes("99.00–102.00"), "ORB chart controls usable after exit");
+    const { ORB_CONTEXT_CASES } = await load("/src/lib/orbConfirmation.ts");
+    for (let i = 0; i < ORB_CONTEXT_CASES.length; i++) {
+      await lab.getByLabel("ORB context scenario").selectOption(String(i));
+      while (!(await next.isDisabled())) await next.click();
+      check((await status.innerText()).includes("99.00–102.00"), `ORB frozen range at decision ${i}`);
+      check(await lab.getByTestId("orb-context-result").count() === 0, `ORB answer hidden for case ${i}`);
+      await lab.locator(`[data-context-answer="${ORB_CONTEXT_CASES[i].answer}"]`).click();
+      check((await lab.getByTestId("orb-context-result").innerText()).includes("Correct reading"), `ORB correct evidence case ${i}`);
+      check(await lab.locator("[data-context-answer]").first().isDisabled(), "ORB answer locks");
+      await lab.getByLabel("ORB risk budget").fill("0");
+      check((await lab.getByTestId("orb-risk-result").innerText()).includes("positive finite"), "ORB rejects zero budget");
+      await lab.getByLabel("ORB risk budget").fill("100");
+      check((await lab.getByTestId("orb-risk-result").innerText()).includes("shares"), "ORB recalculates valid sizing");
+      while (!(await next.isDisabled())) await next.click();
+      check((await lab.getByTestId("orb-context-result").innerText()).includes(ORB_CONTEXT_CASES[i].outcome), "ORB reveals authored aftermath");
+      if (SHOTS && i === 0) { await lab.scrollIntoViewIfNeeded(); await p.screenshot({ path: `${SHOTS}/orb-reveal-${w}.png`, fullPage: false }); }
+    }
+    check((await lab.getByTestId("orb-context-score").innerText()).includes("3 / 3 answered · 3 correct"), "ORB context score");
+    const done = () => stored(p, "analysis_core_misc_practices_done_v1");
+    check(!(await done() ?? []).includes("opening-range"), "ORB not complete before legacy drills");
+    for (const row of await p.locator("[data-drill]").all()) await row.getByRole("button").first().click();
+    check((await done() ?? []).includes("opening-range"), "ORB complete after both practice sections");
+    check((await overflow(p)) <= 1, `ORB no horizontal overflow at ${w}`);
+  },
   async "route change starts at the top"(p) {
     await p.goto(base + "/training", { waitUntil: "networkidle" });
     await p.evaluate(() => scrollTo(0, 3000));

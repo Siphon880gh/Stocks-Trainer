@@ -42,7 +42,8 @@ function practiceDone(id: string): boolean {
 export default function Training() {
   const [searchParams] = useSearchParams();
   const { hash } = useLocation();
-  const conceptMode = hash === "#concepts";
+  // A direct concept-group link must not be reset to the default patterns category.
+  const conceptMode = hash === "#concepts" || (!hash && conceptQuizGroups().some(g => g.id === searchParams.get("group")));
   const visibleGroups = useMemo(() => (conceptMode ? conceptQuizGroups() : patternQuizGroups()), [conceptMode]);
   const groupParam = searchParams.get("group") as QuizGroupId | null;
   const startParam = searchParams.get("start");
