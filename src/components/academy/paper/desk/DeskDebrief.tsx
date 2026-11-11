@@ -5,7 +5,7 @@ import { DEFAULT_PROMPTS, type GoalResult } from "../../../../lib/academy/paper/
 import type { DeskDividendCredit } from "../../../../lib/academy/paper/desk/session";
 import { performance, roundTrips } from "../../../../lib/academy/paper/stats";
 import { money } from "../../../../lib/academy/paper/describe";
-import { glossaryHref } from "../../../../lib/academy/refs";
+import { glossaryHref, quizHref } from "../../../../lib/academy/refs";
 import { LITERACY_TERMS } from "../../../../lib/literacyTerms";
 import DeskGoals from "./DeskGoals";
 
@@ -65,6 +65,11 @@ export default function DeskDebrief({ scenario, log, state, goals, dividends, on
           ))}
         </p>
       ) : null}
+      <p className="text-[12px]">
+        <Link to={quizHref("paper-desk")} className="underline hover:text-sim" data-testid="debrief-quiz">
+          Check yourself: the Paper desk quiz
+        </Link>
+      </p>
       <div className="space-y-2" data-testid="debrief-journal">
         <p className="font-semibold text-[13px]">Journal</p>
         {prompts.map((p, i) => {

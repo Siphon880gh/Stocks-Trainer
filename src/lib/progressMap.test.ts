@@ -164,3 +164,14 @@ test("map store: visits and quiz passes at the pass mark feed readSnapshot", () 
   assert.deepEqual(snap.labsDone, ["which-way"]);
   assert.equal(snap.fractions["hub:cases"], 0);
 });
+
+test("paper desk hub: progress is the share of desk scenarios finished; the quiz sits in the paper region", async () => {
+  const { DESK_KEY } = await import("./academy/paper/desk/storage");
+  const { DESK_SCENARIOS } = await import("./academy/paper/desk/scenarios");
+  const mem = memoryStorage({ [DESK_KEY]: JSON.stringify({ session: null, completed: { "sim-dividend": 1, "big-tech-2024": 2, "not-a-scenario": 1 }, schemaVersion: 1 }) });
+  const snap = readSnapshot(mem);
+  assert.equal(snap.fractions["hub:desk"], 2 / DESK_SCENARIOS.length);
+  const stage = STAGES.find((s) => s.id === "quiz:paper-desk");
+  assert.ok(stage && stage.region === "paper");
+  assert.equal(stageForRoute("/paper/desk")?.id, "hub:desk");
+});

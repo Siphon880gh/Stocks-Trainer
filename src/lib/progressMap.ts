@@ -21,6 +21,8 @@ import { loadMapStore, type KV } from "./mapProgress";
 import { PROGRESS_STORAGE_KEY } from "./progressStore";
 import { ACADEMY_KEY, PAPER_KEY } from "./academy/storage";
 import { MACRO_PROGRESS_KEY } from "./macro/macroProgress";
+import { DESK_KEY } from "./academy/paper/desk/storage";
+import { DESK_SCENARIOS } from "./academy/paper/desk/scenarios";
 
 export type RegionId =
   | "start" | "academy" | "candles" | "library" | "decisions" | "indicators"
@@ -74,7 +76,7 @@ const QUIZ_REGION: Record<string, RegionId> = Object.fromEntries(
     ["macro", "macro-releases rates-curve fed-policy housing-mortgage macro-reactions"],
     ["markets", "equity-literacy futures-literacy forex-literacy crypto-literacy options-literacy futures-vs-options options-ladder wheel-strategy"],
     ["risk", "news-literacy trading-risk squeezes news-biases record-traders risk-premium-portfolio vix-trading"],
-    ["paper", "orders-and-fills paper-pnl"],
+    ["paper", "orders-and-fills paper-pnl paper-desk"],
   ] as Array<[RegionId, string]>).flatMap(([r, ids]) => ids.split(" ").map((id) => [id, r])),
 );
 
@@ -103,7 +105,6 @@ const PAGES: Array<Omit<MapStage, "kind" | "prereqs" | "related"> & { prereqs?: 
   { id: "page:/macro/play", title: "Macro play", region: "macro", to: "/macro/play", teaser: "Call the market's reaction to SIMULATED releases.", prereqs: ["quiz:macro-reactions"] },
   { id: "page:/academy/options", title: "Options ladder", region: "academy", to: "/academy/options", teaser: "Four knowledge checks before options practice.", prereqs: ["academy:L6"] },
   { id: "page:/paper", title: "Paper account", region: "paper", to: "/paper", teaser: "Place SIMULATED orders with stops and brackets.", prereqs: ["quiz:orders-and-fills"] },
-  { id: "page:/paper/desk", title: "Paper desk", region: "paper", to: "/paper/desk", teaser: "Trade a watchlist through real 2024 earnings, with news and filings that unlock day by day.", prereqs: ["page:/paper"] },
 ];
 
 /** Hubs for routes with a parameter: the stage's progress is the share of items finished. */
@@ -112,6 +113,7 @@ const HUBS: MapStage[] = [
   { id: "hub:coach", kind: "hub", title: "Coach sessions", region: "cases", to: "/coach", prereqs: [], related: ["hub:cases"], teaser: "Step-by-step coached decisions." },
   { id: "hub:playbooks", kind: "hub", title: "Playbooks", region: "cases", to: "/playbooks", prereqs: ["quiz:price-action"], related: ["hub:coach"], teaser: "Setups written as plans: entry, stop, target." },
   { id: "hub:macro", kind: "hub", title: "Macro lessons", region: "macro", to: "/macro", prereqs: [], related: ["quiz:macro-releases"], teaser: "Lessons on jobs, inflation, growth, the Fed and rates." },
+  { id: "hub:desk", kind: "hub", title: "Paper desk", region: "paper", to: "/paper/desk", prereqs: ["page:/paper"], related: ["quiz:paper-desk", "hub:challenges"], teaser: "Replay real 2024 earnings and SIMULATED scenarios on many topics; progress is the share of scenarios finished." },
   { id: "hub:challenges", kind: "hub", title: "Paper challenges", region: "paper", to: "/paper/challenges", prereqs: ["page:/paper"], related: ["quiz:paper-pnl"], teaser: "Scored challenges: discipline first, result second." },
 ];
 
@@ -126,7 +128,7 @@ export const PARAM_ROUTE_STAGE: Record<string, string> = {
   "paper/challenges/:challengeId": "hub:challenges",
 };
 /** Static routes served by a stage whose `to` differs ("/academy" is the level stages' hub). */
-const ROUTE_ALIAS: Record<string, string> = { "/academy": "academy:L0", "/coach": "hub:coach", "/cases": "hub:cases", "/playbooks": "hub:playbooks", "/macro": "hub:macro", "/paper/challenges": "hub:challenges" };
+const ROUTE_ALIAS: Record<string, string> = { "/academy": "academy:L0", "/coach": "hub:coach", "/cases": "hub:cases", "/playbooks": "hub:playbooks", "/macro": "hub:macro", "/paper/challenges": "hub:challenges", "/paper/desk": "hub:desk" };
 
 /** Skill tree: suggested prerequisites (candles → patterns → confirmation → levels → fib / decision map, plus side branches). */
 const PREREQS: Record<string, string[]> = {
@@ -188,6 +190,7 @@ const PREREQS: Record<string, string[]> = {
   "lab:gamma-squeeze": ["quiz:trading-risk"],
   "quiz:futures-vs-options": ["quiz:futures-literacy"],
   "quiz:paper-pnl": ["quiz:orders-and-fills"],
+  "quiz:paper-desk": ["quiz:paper-pnl", "hub:desk"],
 };
 
 const LEVEL_STAGES: MapStage[] = LEVELS.map((l) => ({
@@ -442,6 +445,7 @@ export function readSnapshot(storage: KV | undefined = typeof window !== "undefi
   const progress = json<{ caseResults?: Record<string, unknown>; coachingCompleted?: Record<string, boolean> }>(storage, PROGRESS_STORAGE_KEY);
   const academy = json<{ units?: Record<string, { masteredAt?: string }>; testedOut?: Record<string, unknown>; placement?: { startLevel?: string; skipped?: boolean }; options?: { passed?: Record<string, string> } }>(storage, ACADEMY_KEY);
   const paper = json<{ challengeAttempts?: Record<string, Array<{ passed: boolean }>> }>(storage, PAPER_KEY);
+  const desk = json<{ completed?: Record<string, number> }>(storage, DESK_KEY);
   const macro = json<{ rounds?: Record<string, unknown> }>(storage, MACRO_PROGRESS_KEY);
   const labsDone = json<string[]>(storage, "analysis_core_misc_practices_done_v1") ?? [];
   const visited = map.visited;
@@ -451,6 +455,7 @@ export function readSnapshot(storage: KV | undefined = typeof window !== "undefi
     "hub:coach": share(Object.entries(progress?.coachingCompleted ?? {}).filter(([, v]) => v).length, listSessions().length),
     "hub:playbooks": share(PLAYBOOKS.filter((p) => visited.includes(`/playbooks/${p.id}`)).length, PLAYBOOKS.length),
     "hub:macro": share(MACRO_LESSONS.filter((l) => visited.includes(`/macro/${l.id}`)).length, MACRO_LESSONS.length),
+    "hub:desk": share(DESK_SCENARIOS.filter((x) => (desk?.completed?.[x.id] ?? 0) > 0).length, DESK_SCENARIOS.length),
     "hub:challenges": share(CHALLENGES.filter((c) => (paper?.challengeAttempts?.[c.id] ?? []).some((a) => a.passed)).length, CHALLENGES.length),
   };
   // Same rule as academy/progress.ts isLevelComplete: tested out, or a (not skipped) placement started the learner above it.
