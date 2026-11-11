@@ -54,3 +54,38 @@ test("simulated session: invented items carry the SIMULATED tag", () => {
   assert.ok(!text.includes("quarterly sales jump"));
   assert.ok((text.match(/SIMULATED/g) ?? []).length >= 3);
 });
+
+test("setup groups every scenario by topic with learning goals; glossary links resolve", () => {
+  const mem = memoryStorage();
+  const html = renderHtml(page(mem));
+  for (const t of ["historical", "earnings", "trend", "breakouts", "volatility", "corporate", "events", "macro", "credit", "signals", "execution"]) assert.ok(html.includes(`data-topic="${t}"`), t);
+  assert.ok((html.match(/data-scenario="/g) ?? []).length >= 30);
+  assert.ok(html.includes('data-testid="desk-selected"'));
+  assert.deepEqual(bannedIn(renderText(page(mem))), []);
+});
+
+test("finished scenario shows the debrief: signals, plan, goals, dividends and journal prompts", () => {
+  const s = getDeskScenario("sim-dividend")!;
+  let log = newDeskLog(s.id, 10_000_000);
+  log = deskPlace(log, { symbol: "DVDN.S", side: "buy", type: "market", qty: 100, tif: "day" }).log;
+  while (log.bar < 59) log = deskStep(log, 10);
+  const html = renderHtml(page(withLog(log)));
+  const text = renderText(page(withLog(log)));
+  assert.ok(html.includes('data-testid="desk-debrief"'));
+  assert.ok(html.includes('data-testid="debrief-signals"') && html.includes('data-testid="debrief-plan"'));
+  assert.ok(html.includes('data-testid="debrief-dividends"'));
+  assert.ok(html.includes('data-testid="debrief-note-0"'));
+  assert.ok(text.includes("What a disciplined trade looked like"));
+  assert.ok(html.includes('data-tour="desk-goals"'));
+  for (const h of hrefs(html)) assert.ok(routeExists(h), h);
+  assert.deepEqual(bannedIn(text), []);
+});
+
+test("live session shows the lesson strip, goals and a guided tour button", () => {
+  let log = newDeskLog("sim-short-squeeze", 10_000_000, { allowShort: true });
+  log = deskStep(log, 3);
+  const html = renderHtml(page(withLog(log)));
+  for (const t of ["desk-lesson", "desk-clock", "desk-watchlist", "desk-chart", "desk-ticket", "desk-sizing", "desk-account", "desk-research", "desk-goals"]) assert.ok(html.includes(`data-tour="${t}"`), t);
+  assert.ok(html.includes('data-testid="desk-tour"'));
+  assert.ok(!html.includes('data-testid="desk-debrief"'));
+});

@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 import { Link } from "react-router-dom";
 import DeskSession from "../../components/academy/paper/desk/DeskSession";
 import SimulatedBanner from "../../components/academy/SimulatedBanner";
-import { DESK_SCENARIOS, lastBarOf, getDeskScenario } from "../../lib/academy/paper/desk/scenarios";
+import { DESK_SCENARIOS, lastBarOf, getDeskScenario, scenariosByTopic } from "../../lib/academy/paper/desk/scenarios";
 import { newDeskLog } from "../../lib/academy/paper/desk/session";
 import { loadDesk, saveDesk, type DeskStore } from "../../lib/academy/paper/desk/storage";
 import type { DeskLog } from "../../lib/academy/paper/desk/types";
@@ -20,6 +20,11 @@ export default function PaperDesk({ storage }: { storage?: KVStorage }) {
   const [cash, setCash] = useState<number>(10_000_000);
   const [options, setOptions] = useState<PaperOptions>({});
   const [note, setNote] = useState<string | null>(null);
+  const selected = getDeskScenario(scenarioId);
+  const pick = (id: string) => {
+    setScenarioId(id);
+    setOptions({ ...(getDeskScenario(id)?.options ?? {}) });
+  };
 
   const persist = useCallback(
     (session: DeskLog | null) => {
@@ -88,19 +93,52 @@ export default function PaperDesk({ storage }: { storage?: KVStorage }) {
           <SimulatedBanner />
           <div className="panel p-4 space-y-3">
             <p className="font-semibold">1. Pick a scenario</p>
-            <div className="grid md:grid-cols-2 gap-2">
-              {DESK_SCENARIOS.map((s) => (
-                <button key={s.id} type="button" onClick={() => setScenarioId(s.id)} aria-pressed={scenarioId === s.id} className={cn("text-left panel p-3 space-y-1", scenarioId === s.id ? "border-sim ring-1 ring-sim" : "hover:border-sim/60")} data-scenario={s.id}>
-                  <p className="font-semibold text-[13px]">
-                    {s.title} <span className="text-muted font-normal">· {s.symbols.map((x) => x.symbol).join(", ")}</span>
+            <p className="text-[12px] text-muted">
+              {DESK_SCENARIOS.length} scenarios: one real 2024 replay and {DESK_SCENARIOS.filter((x) => x.kind === "simulated").length} SIMULATED ones with fictional companies, each teaching one topic. Finished{" "}
+              {Object.keys(store.completed).filter((id) => getDeskScenario(id)).length} of {DESK_SCENARIOS.length}.
+            </p>
+            <div className="space-y-3" data-testid="desk-picker">
+              {scenariosByTopic().map((g) => (
+                <div key={g.id} className="space-y-1.5" data-topic={g.id}>
+                  <p className="text-[13px]">
+                    <span className="font-semibold">{g.name}</span> <span className="text-muted">· {g.blurb}</span>
                   </p>
-                  <p className="text-[12px] text-muted">{s.description}</p>
-                  <p className="text-[12px]">{s.lesson}</p>
-                  <p className="text-[11px] text-muted">{s.sourceNote}</p>
-                  {store.completed[s.id] ? <p className="text-[11px] text-up">Finished {store.completed[s.id]}×</p> : null}
-                </button>
+                  <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-2">
+                    {g.scenarios.map((s) => (
+                      <button key={s.id} type="button" onClick={() => pick(s.id)} aria-pressed={scenarioId === s.id} className={cn("text-left panel p-3 space-y-1", scenarioId === s.id ? "border-sim ring-1 ring-sim" : "hover:border-sim/60")} data-scenario={s.id}>
+                        <p className="font-semibold text-[13px]">
+                          {s.title} <span className="text-muted font-normal">· {s.symbols.map((x) => x.symbol).join(", ")}</span>
+                        </p>
+                        <p className="text-[12px] text-muted">{s.description}</p>
+                        {s.learn?.length ? (
+                          <ul className="text-[12px] list-disc pl-4">
+                            {s.learn.map((l) => (
+                              <li key={l}>{l}</li>
+                            ))}
+                          </ul>
+                        ) : null}
+                        {store.completed[s.id] ? <p className="text-[11px] text-up">Finished {store.completed[s.id]}×</p> : null}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               ))}
             </div>
+            {selected ? (
+              <div className="panel p-3 space-y-1 text-[13px] border-sim/50" data-testid="desk-selected" aria-live="polite">
+                <p className="font-semibold">{selected.title}</p>
+                <p>{selected.lesson}</p>
+                {selected.goals?.length ? (
+                  <ul className="text-[12px] list-disc pl-5">
+                    {selected.goals.map((g) => (
+                      <li key={g.text}>{g.text}</li>
+                    ))}
+                  </ul>
+                ) : null}
+                {selected.options ? <p className="text-[12px] text-muted">Suggested rules are pre-set below for this scenario.</p> : null}
+                <p className="text-[11px] text-muted">{selected.sourceNote}</p>
+              </div>
+            ) : null}
             <p className="font-semibold">2. Starting virtual cash</p>
             <div className="flex flex-wrap gap-2">
               {CASH_PRESETS.map((c) => (
@@ -120,7 +158,7 @@ export default function PaperDesk({ storage }: { storage?: KVStorage }) {
               <label className="flex items-center gap-2">
                 Slippage on market and stop fills
                 <select className="border border-line rounded px-1 py-0.5" value={options.slippageBps ?? 0} onChange={(e) => setOptions((o) => ({ ...o, slippageBps: Number(e.target.value) }))} data-testid="desk-opt-slippage">
-                  {[0, 5, 10, 25].map((b) => (
+                  {[0, 5, 10, 25, 50].map((b) => (
                     <option key={b} value={b}>
                       {b ? `${b} bps` : "none"}
                     </option>

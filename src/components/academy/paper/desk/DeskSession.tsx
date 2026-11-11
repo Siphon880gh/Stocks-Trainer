@@ -4,7 +4,15 @@ import type { ChartAnnotations } from "../../../../lib/chartAnnotations";
 import type { OrderSpec } from "../../../../lib/academy/paper/types";
 import type { DeskLog } from "../../../../lib/academy/paper/desk/types";
 import { getDeskScenario, lastBarOf, visibleNews } from "../../../../lib/academy/paper/desk/scenarios";
-import { deskBracket, deskCancel, deskFlatten, deskPlace, deskSetActive, deskStep, replayDesk } from "../../../../lib/academy/paper/desk/session";
+import { deskBracket, deskCancel, deskFlatten, deskPlace, deskSetActive, deskStep, replayDeskDetailed } from "../../../../lib/academy/paper/desk/session";
+import { evaluateGoals } from "../../../../lib/academy/paper/desk/goals";
+import { DESK_TOUR } from "../../../../lib/academy/paper/desk/tour";
+import { glossaryHref } from "../../../../lib/academy/refs";
+import { LITERACY_TERMS } from "../../../../lib/literacyTerms";
+import { Link } from "react-router-dom";
+import Walkthrough from "../../../Walkthrough";
+import DeskGoals from "./DeskGoals";
+import DeskDebrief from "./DeskDebrief";
 import { avgCost, equity } from "../../../../lib/academy/paper/account";
 import SimulatedBanner from "../../SimulatedBanner";
 import OrderTicket, { type BracketExits, type TicketFields } from "../OrderTicket";
@@ -42,7 +50,10 @@ export default function DeskSession({ log, onLog, toolbar }: Props) {
   const end = lastBarOf(scenario);
   const active = log.active && scenario.symbols.some((s) => s.symbol === log.active) ? log.active : scenario.symbols[0]!.symbol;
   const sym = scenario.symbols.find((s) => s.symbol === active)!;
-  const state = useMemo(() => replayDesk(log), [log]);
+  const detailed = useMemo(() => replayDeskDetailed(log), [log]);
+  const state = detailed.state;
+  const goals = useMemo(() => evaluateGoals(scenario, log, state), [scenario, log, state]);
+  const [tour, setTour] = useState<number | null>(null);
   const [range, setRange] = useState(63);
   const [speed, setSpeed] = useState(900);
   const [auto, setAuto] = useState(false);
@@ -105,7 +116,7 @@ export default function DeskSession({ log, onLog, toolbar }: Props) {
           {scenario.kind === "historical" ? "HISTORICAL replay" : "SIMULATED"}
         </span>
         <p className="font-semibold text-[14px]">{scenario.title}</p>
-        <span className="text-[12px] tabular-nums" data-testid="desk-clock">
+        <span className="text-[12px] tabular-nums" data-testid="desk-clock" data-tour="desk-clock">
           {dayLabel(scenario.labels[log.bar]!, true)} · day {log.bar + 1} of {end + 1}
         </span>
         <div className="flex-1" />
@@ -125,11 +136,37 @@ export default function DeskSession({ log, onLog, toolbar }: Props) {
             </option>
           ))}
         </select>
+        <button type="button" onClick={() => setTour(0)} className="px-3 py-1.5 rounded-md border border-line text-[13px]" data-testid="desk-tour">
+          Guided tour
+        </button>
         {toolbar}
       </div>
       <p className="text-[12px] text-muted">{scenario.sourceNote}</p>
+      <div className="panel px-3 py-2 text-[12px] space-y-1" data-testid="desk-lesson" data-tour="desk-lesson">
+        <p>
+          <span className="font-semibold">Lesson: </span>
+          {scenario.lesson}
+        </p>
+        {scenario.learn?.length ? <p className="text-muted">You will practise: {scenario.learn.join(" · ")}</p> : null}
+        {scenario.terms?.length ? (
+          <p>
+            <span className="text-muted">Glossary: </span>
+            {scenario.terms.map((t, i) => (
+              <span key={t}>
+                {i ? " · " : ""}
+                <Link to={glossaryHref(t)} className="underline hover:text-sim" data-term={t}>
+                  {LITERACY_TERMS.find((x) => x.id === t)?.name ?? t}
+                </Link>
+              </span>
+            ))}
+          </p>
+        ) : null}
+      </div>
+      {atEnd ? <DeskDebrief scenario={scenario} log={log} state={state} goals={goals} dividends={detailed.dividends} onNotes={(notes) => onLog({ ...log, notes }, {})} /> : null}
       <div className="grid lg:grid-cols-[180px_minmax(0,1fr)_320px] gap-3 items-start">
-        <DeskWatchlist scenario={scenario} bar={log.bar} active={active} state={state} onPick={(s) => onLog(deskSetActive(log, s), {})} />
+        <div data-tour="desk-watchlist">
+          <DeskWatchlist scenario={scenario} bar={log.bar} active={active} state={state} onPick={(s) => onLog(deskSetActive(log, s), {})} />
+        </div>
         <div className="space-y-3 min-w-0">
           <div className="panel p-2 space-y-1">
             <div className="flex flex-wrap items-baseline gap-2 px-1">
@@ -145,14 +182,16 @@ export default function DeskSession({ log, onLog, toolbar }: Props) {
                 ))}
               </div>
             </div>
-            <div data-testid="desk-chart" data-executions={annotations.points?.length ?? 0} data-events={annotations.events?.length ?? 0}>
+            <div data-testid="desk-chart" data-tour="desk-chart" data-executions={annotations.points?.length ?? 0} data-events={annotations.events?.length ?? 0}>
               <CandlestickChart data={data} height={320} markers={markers} markerDecimals={2} padRightBars={4} showScaleControls={false} annotations={annotations} showVolume={!!sym.volumes} />
             </div>
             <p className="text-[11px] text-muted px-1">B / S circles are your fills; dashed lines are working orders; vertical lines mark news days.</p>
           </div>
           <AccountSummary state={state} />
-          <DeskAccountTabs state={state} labels={scenario.labels} onCancel={atEnd ? undefined : (id) => onLog(deskCancel(log, id), {})} onFlatten={atEnd ? undefined : (s) => onLog(deskFlatten(log, s), {})} />
-          <section className="panel p-3 space-y-2" aria-label="Research">
+          <div data-tour="desk-account">
+            <DeskAccountTabs state={state} labels={scenario.labels} onCancel={atEnd ? undefined : (id) => onLog(deskCancel(log, id), {})} onFlatten={atEnd ? undefined : (s) => onLog(deskFlatten(log, s), {})} />
+          </div>
+          <section className="panel p-3 space-y-2" aria-label="Research" data-tour="desk-research">
             <div className="flex gap-1 text-[12px]" role="tablist" aria-label="Research">
               {(["news", "financials"] as const).map((k) => (
                 <button key={k} type="button" role="tab" aria-selected={research === k} onClick={() => setResearch(k)} className={cn("px-2.5 py-1 rounded-md border", research === k ? "border-sim bg-sim/10 font-semibold" : "border-line")} data-testid={`desk-research-${k}`}>
@@ -166,15 +205,15 @@ export default function DeskSession({ log, onLog, toolbar }: Props) {
         <div className="space-y-3">
           {atEnd ? (
             <div className="panel p-3 text-[13px]" data-testid="desk-finished">
-              End of the replay. Review the closed trades and equity tabs, then start a new session.
+              End of the replay. Read the debrief above, review the closed trades and equity tabs, then start a new session.
             </div>
           ) : (
-            <div key={`${active}-${log.actions.length}-${preset.seq}`}>
+            <div key={`${active}-${log.actions.length}-${preset.seq}`} data-tour="desk-ticket">
               <OrderTicket state={state} symbol={active} onSubmit={place} allowBracket initial={preset.fields} />
             </div>
           )}
           {!atEnd ? (
-            <div key={`${active}-${log.bar}`}>
+            <div key={`${active}-${log.bar}`} data-tour="desk-sizing">
             <DeskSizing
               last={last}
               equity={equity(state)}
@@ -187,11 +226,13 @@ export default function DeskSession({ log, onLog, toolbar }: Props) {
             />
             </div>
           ) : null}
+          <DeskGoals results={goals} final={atEnd} />
           <p className="text-[12px] text-muted">
             Orders placed now are checked against the <strong>next</strong> day for every symbol: market at the open, limits at the limit or better, stops at the stop or worse on a gap.
           </p>
         </div>
       </div>
+      {tour !== null && <Walkthrough label="Paper desk" steps={DESK_TOUR} index={tour} onIndexChange={setTour} onExit={() => setTour(null)} />}
     </div>
   );
 }
