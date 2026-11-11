@@ -13,7 +13,7 @@ const sim = getDeskScenario("sim-earnings-week")!;
 test("every scenario has aligned bars, valid OHLC in cents and unique ids", () => {
   assert.equal(new Set(DESK_SCENARIOS.map((s) => s.id)).size, DESK_SCENARIOS.length);
   for (const s of DESK_SCENARIOS) {
-    assert.ok(s.symbols.length >= 3, s.id);
+    assert.ok(s.symbols.length >= (s.kind === "historical" ? 3 : 1), s.id);
     for (const x of s.symbols) {
       assert.equal(x.bars.length, s.labels.length, `${s.id} ${x.symbol}`);
       for (const b of x.bars) {

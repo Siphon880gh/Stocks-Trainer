@@ -50,6 +50,17 @@ export interface DeskStatement {
   totalAssets?: number;
   totalLiabilities?: number;
   equity?: number;
+  /** SIMULATED series also carry the financing side so the change in cash ties out. */
+  financingCashFlow?: number;
+  debt?: number;
+  sharesDiluted?: number;
+  buybacks?: number;
+  dividendsPaid?: number;
+  stockIssued?: number;
+  /** A filing note (going-concern doubt, restatement …). */
+  note?: string;
+  /** SIMULATED: statements in one series tie out to each other (a restatement or split starts a new one). */
+  series?: string;
 }
 
 export interface DeskSymbol {
@@ -61,7 +72,41 @@ export interface DeskSymbol {
   volumes?: number[];
 }
 
+export type DeskTopicId = "historical" | "earnings" | "trend" | "breakouts" | "volatility" | "corporate" | "events" | "macro" | "credit" | "signals" | "execution";
+
+/** A checkable goal for a scenario (evaluated by goals.ts from the account and the log). */
+export type DeskGoal =
+  | { kind: "stopOnEntries"; text: string }
+  | { kind: "maxDrawdown"; pct: number; text: string }
+  | { kind: "flatAt"; bar: number; symbol?: string; text: string }
+  | { kind: "positive"; text: string }
+  | { kind: "usedType"; type: "limit" | "stop" | "stop-limit" | "trailing-stop"; text: string }
+  | { kind: "maxRiskPct"; pct: number; text: string }
+  | { kind: "maxTrades"; n: number; text: string }
+  | { kind: "traded"; symbol?: string; text: string };
+
+/** Cash dividend: holders at the close before `exBar` receive `cents` per share on the ex-date (shorts pay it). */
+export interface DeskDividend {
+  symbol: string;
+  exBar: number;
+  cents: number;
+}
+
 export interface DeskScenario {
+  /** Topic group for the picker. */
+  topic?: DeskTopicId;
+  /** Learning goals shown on the picker card. */
+  learn?: string[];
+  goals?: DeskGoal[];
+  /** Shown when the replay ends: what the news / filings signalled and what a disciplined trade looked like. */
+  debrief?: { signals: string[]; plan: string[] };
+  /** Glossary term ids (Archive → Literacy). */
+  terms?: string[];
+  /** Journal questions for the debrief. */
+  prompts?: string[];
+  /** Account rules the scenario starts with (the learner can still change them on the setup). */
+  options?: PaperOptions;
+  dividends?: DeskDividend[];
   id: string;
   title: string;
   /** HISTORICAL = real past prices and filings replayed; SIMULATED = fictional tapes and invented news. */

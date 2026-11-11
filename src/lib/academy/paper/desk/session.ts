@@ -26,18 +26,45 @@ function apply(st: AccountState, a: PaperAction): AccountState {
   return st;
 }
 
-export function replayDesk(log: DeskLog, scenario: DeskScenario | undefined = getDeskScenario(log.scenarioId)): AccountState {
+export interface DeskDividendCredit {
+  symbol: string;
+  bar: number;
+  qty: number;
+  cents: number;
+  /** Cash credited (negative for a short, which pays the dividend). */
+  amount: number;
+}
+
+/** Replays the log and also lists every dividend credited on an ex-date (holders at the prior close). */
+export function replayDeskDetailed(log: DeskLog, scenario: DeskScenario | undefined = getDeskScenario(log.scenarioId)): { state: AccountState; dividends: DeskDividendCredit[] } {
   if (!scenario) throw new Error(`unknown desk scenario ${log.scenarioId}`);
   const last = Math.min(log.bar, lastBarOf(scenario));
   const first = log.actions.length ? Math.min(DESK_START_BAR, ...log.actions.map((a) => a.atBar)) : DESK_START_BAR;
   const from = Math.max(0, Math.min(first, last));
+  const dividends: DeskDividendCredit[] = [];
   let st = createAccount(log.startingCash, closesAt(scenario, from), from, log.options);
   for (let b = from; b <= last; b++) {
     for (const a of log.actions.filter((x) => x.atBar === b)) st = apply(st, a);
-    if (b < last) st = stepBar(st, barsAt(scenario, b + 1));
+    if (b < last) {
+      const exs = (scenario.dividends ?? []).filter((d) => d.exBar === b + 1);
+      const held = exs.map((d) => st.positions[d.symbol]?.qty ?? 0);
+      st = stepBar(st, barsAt(scenario, b + 1));
+      exs.forEach((d, i) => {
+        const qty = held[i]!;
+        if (!qty) return;
+        const amount = Math.round(qty * d.cents);
+        dividends.push({ symbol: d.symbol, bar: b + 1, qty, cents: d.cents, amount });
+        const curve = st.equityCurve.slice();
+        const lastPt = curve[curve.length - 1];
+        if (lastPt) curve[curve.length - 1] = { ...lastPt, cash: lastPt.cash + amount, equity: lastPt.equity + amount };
+        st = { ...st, cash: st.cash + amount, equityCurve: curve };
+      });
+    }
   }
-  return st;
+  return { state: st, dividends };
 }
+
+export const replayDesk = (log: DeskLog, scenario?: DeskScenario): AccountState => replayDeskDetailed(log, scenario).state;
 
 export function deskPlace(log: DeskLog, spec: OrderSpec): { log: DeskLog; result: PlaceResult } {
   const before = replayDesk(log);
