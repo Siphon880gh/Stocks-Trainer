@@ -46,7 +46,8 @@ export default function Walkthrough({
     if (el) {
       const r = el.getBoundingClientRect();
       const mobile = window.innerWidth < 640;
-      const want = mobile ? 100 : Math.max(80, (window.innerHeight - r.height) / 2 - 80);
+      const header = document.querySelector<HTMLElement>("header.sticky")?.getBoundingClientRect().bottom ?? 0;
+      const want = Math.max(header + 12, mobile ? 100 : Math.max(80, (window.innerHeight - r.height) / 2 - 80));
       window.scrollTo({ top: Math.max(0, window.scrollY + r.top - want), behavior: "auto" });
     }
     measure();
