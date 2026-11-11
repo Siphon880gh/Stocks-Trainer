@@ -192,6 +192,44 @@ const flows = {
     check((await p.locator('[data-testid="positions"] tr[data-symbol]').count()) === 1, "paper position missing after reload");
     check((await overflow(p)) <= 1, `paper overflows at ${w}`);
   },
+  async "Paper desk: replay clock, sized bracket, executions on the chart, news and filings unlock on their date"(p, w) {
+    await p.goto(base + "/paper/desk", { waitUntil: "networkidle" });
+    await p.getByTestId("desk-start").click();
+    const clock = () => p.getByTestId("desk-clock").innerText();
+    check((await clock()).includes("Jan 17, 2024"), `desk: starts on Jan 17, 2024 @${w}`);
+    const newsIds = () => p.locator("[data-news-id]").evaluateAll((els) => els.map((e) => e.getAttribute("data-news-id")));
+    const newsDate = (id) => id.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? "";
+    check((await newsIds()).length > 0 && (await newsIds()).every((id) => newsDate(id) <= "2024-01-17"), `desk: no future news at the start @${w}`);
+    await p.getByTestId("size-use").click();
+    check((await p.getByTestId("ticket-qty").inputValue()) === (await p.getByTestId("size-result").getAttribute("data-qty")), `desk: sizing fills the ticket @${w}`);
+    await p.getByTestId("ticket-submit").click();
+    await p.getByTestId("desk-step-1").click();
+    check((await p.getByTestId("desk-chart").getAttribute("data-executions")) === "1", `desk: fill marker on the chart @${w}`);
+    check((await p.locator('[data-testid="positions"] tr[data-symbol="AAPL"]').count()) === 1, `desk: AAPL position @${w}`);
+    await p.getByTestId("desk-tab-orders").click();
+    check((await p.locator('[data-testid="open-orders"] [data-order]').count()) === 2, `desk: bracket exits working @${w}`);
+    await p.getByTestId("desk-watchlist").locator('[data-symbol="MSFT"]').click();
+    check((await p.getByTestId("desk-session").getAttribute("data-active")) === "MSFT", `desk: watchlist switches symbol @${w}`);
+    await p.getByTestId("desk-research-financials").click();
+    check(Number(await p.getByTestId("desk-financials").getAttribute("data-count")) >= 1, `desk: MSFT filing before the replay @${w}`);
+    await p.getByTestId("desk-watchlist").locator('[data-symbol="AAPL"]').click();
+    await p.getByTestId("desk-research-news").click();
+    check(!(await newsIds()).includes("AAPL-2024-02-01-earnings"), `desk: Apple results hidden before Feb 1 @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/desk-before-${w}.png`, fullPage: true });
+    for (let i = 0; i < 3; i++) await p.getByTestId("desk-step-5").click();
+    check((await newsIds()).includes("AAPL-2024-02-01-earnings"), `desk: Apple results unlock after Feb 1 @${w}`);
+    const at = await clock();
+    await p.reload({ waitUntil: "networkidle" });
+    check((await clock()) === at, `desk: clock restored on reload @${w}`);
+    check((await overflow(p)) <= 1, `desk overflows at ${w}`);
+    await p.getByTestId("desk-research-financials").click();
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/desk-after-${w}.png`, fullPage: true });
+    await p.getByTestId("desk-reset").click();
+    await p.getByTestId("desk-setup").waitFor();
+    await p.locator('[data-scenario="sim-earnings-week"]').click();
+    await p.getByTestId("desk-start").click();
+    check((await p.getByTestId("desk-kind").innerText()).includes("SIMULATED"), `desk: simulated scenario labelled @${w}`);
+  },
   async "Quiz pass mark: below 70% stays incomplete, 70%+ completes"(p, w) {
     const qs = getQuestionsForGroup("equity-literacy");
     const runQuiz = async (right) => {
