@@ -26,6 +26,7 @@ import { FVG_TERMS } from "./fairValueGap";
 import { RPP_TERMS } from "./riskPremiumPortfolio";
 import { VIX_TERMS } from "./vixTrading";
 import { WHEEL_TERMS } from "./wheelStrategy";
+import { DESK_TERMS } from "./deskTerms";
 import { FP_TERMS } from "./fourPillars";
 
 /** Beginner equities glossary terms for Archive + quiz deep-links (E4.M1.S4). */
@@ -716,6 +717,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...RPP_TERMS,
   ...VIX_TERMS,
   ...WHEEL_TERMS,
+  ...DESK_TERMS,
 ]
 
 export function getLiteracyTerm(id: string): LiteracyTerm | undefined {
