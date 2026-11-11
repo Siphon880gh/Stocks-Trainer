@@ -168,6 +168,7 @@ export default function Training() {
                   g.id === "risk-premium-portfolio" ||
                   g.id === "vix-trading" ||
                   g.id === "wheel-strategy" ||
+                  g.id === "paper-desk" ||
                   g.id === "supply-demand" ||
                   g.id === "indicators" ||
                   g.id === "oscillators" ||

@@ -40,6 +40,7 @@ import { FVG_QUESTIONS } from "./fairValueGap";
 import { RPP_QUESTIONS } from "./riskPremiumPortfolio";
 import { VIX_QUESTIONS } from "./vixTrading";
 import { WHEEL_QUESTIONS } from "./wheelStrategy";
+import { DESK_QUESTIONS } from "./deskQuiz";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
 
@@ -5406,6 +5407,7 @@ export type QuizGroupId =
   | "risk-premium-portfolio"
   | "vix-trading"
   | "wheel-strategy"
+  | "paper-desk"
   | "supply-demand"
   | "buy-or-sell"
   | "indicators"
@@ -5675,6 +5677,12 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     icon: "sync",
   },
   {
+    id: "paper-desk",
+    name: "Paper Desk: Trading the News, Filings and Events",
+    description: "Orders after a report and gaps through stops, stop vs stop-limit on a gap, sell-the-news and post-earnings drift, news vs rumour gaps, failed breakouts, short squeezes, ex-dividend dates, splits, offerings and buybacks, deal spreads, binary events, rate and inflation surprises, recovery math, going-concern and late-filing warnings, insider buying, slippage in thin stocks, trailing-stop width, sizing in a drawdown and time decay on a flat stock",
+    icon: "candlestick_chart",
+  },
+  {
     id: "supply-demand",
     name: "Supply & Demand Zones",
     description: "Base candle, impulse departure, fresh vs tested zones, zone flips",
@@ -5844,6 +5852,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "risk-premium-portfolio") return RPP_QUESTIONS;
   if (groupId === "vix-trading") return VIX_QUESTIONS;
   if (groupId === "wheel-strategy") return WHEEL_QUESTIONS;
+  if (groupId === "paper-desk") return DESK_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
@@ -5895,6 +5904,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (groupId === "risk-premium-portfolio") return RPP_QUESTIONS;
   if (groupId === "vix-trading") return VIX_QUESTIONS;
   if (groupId === "wheel-strategy") return WHEEL_QUESTIONS;
+  if (groupId === "paper-desk") return DESK_QUESTIONS;
   if (groupId === "supply-demand") return SUPPLY_DEMAND_QUESTIONS;
   if (groupId === "buy-or-sell") return BUY_SELL_QUESTIONS;
   if (groupId === "candle-anatomy") return CANDLE_ANATOMY_QUESTIONS;
