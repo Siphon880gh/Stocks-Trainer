@@ -60,7 +60,7 @@ Browser
       /macro         Macro Desk; /macro/play reaction game; /macro/:lessonId lesson (macro-forces)
       /academy       Beginner Academy hub; /academy/options options ladder; /academy/test-out/:levelId; /academy/:unitId unit (beginner-academy)
       /paper         SIMULATED paper trading; /paper/challenges list; /paper/challenges/:challengeId play + result
-      /paper/desk    paper desk: watchlist + chart executions + ticket/sizing + account tabs + news/financials on a replay clock (HISTORICAL 2024 or SIMULATED)
+      /paper/desk    paper desk: watchlist + chart executions + ticket/sizing + account tabs + news/financials on a replay clock (HISTORICAL 2024 + 29 SIMULATED topic scenarios, goals, debrief, tour)
 
 Data & logic live under src/lib/ (SAMPLE adapters; no paid live API).
 ```
