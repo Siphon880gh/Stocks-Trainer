@@ -21,6 +21,7 @@ export default function PaperDesk({ storage }: { storage?: KVStorage }) {
   const [options, setOptions] = useState<PaperOptions>({});
   const [note, setNote] = useState<string | null>(null);
   const selected = getDeskScenario(scenarioId);
+  const [topic, setTopic] = useState("all");
   const pick = (id: string) => {
     setScenarioId(id);
     setOptions({ ...(getDeskScenario(id)?.options ?? {}) });
@@ -97,8 +98,17 @@ export default function PaperDesk({ storage }: { storage?: KVStorage }) {
               {DESK_SCENARIOS.length} scenarios: one real 2024 replay and {DESK_SCENARIOS.filter((x) => x.kind === "simulated").length} SIMULATED ones with fictional companies, each teaching one topic. Finished{" "}
               {Object.keys(store.completed).filter((id) => getDeskScenario(id)).length} of {DESK_SCENARIOS.length}.
             </p>
+            <div className="flex flex-wrap gap-1 text-[12px]" role="group" aria-label="Filter scenarios by topic" data-testid="desk-topic-filter">
+              {[{ id: "all", name: "All topics" }, ...scenariosByTopic()].map((t) => (
+                <button key={t.id} type="button" onClick={() => setTopic(t.id)} aria-pressed={topic === t.id} className={cn("px-2 py-0.5 rounded-full border", topic === t.id ? "border-sim bg-sim/10 font-semibold" : "border-line")} data-topic-filter={t.id}>
+                  {t.name}
+                </button>
+              ))}
+            </div>
             <div className="space-y-3" data-testid="desk-picker">
-              {scenariosByTopic().map((g) => (
+              {scenariosByTopic()
+                .filter((g) => topic === "all" || g.id === topic)
+                .map((g) => (
                 <div key={g.id} className="space-y-1.5" data-topic={g.id}>
                   <p className="text-[13px]">
                     <span className="font-semibold">{g.name}</span> <span className="text-muted">· {g.blurb}</span>
@@ -122,7 +132,7 @@ export default function PaperDesk({ storage }: { storage?: KVStorage }) {
                     ))}
                   </div>
                 </div>
-              ))}
+                ))}
             </div>
             {selected ? (
               <div className="panel p-3 space-y-1 text-[13px] border-sim/50" data-testid="desk-selected" aria-live="polite">
