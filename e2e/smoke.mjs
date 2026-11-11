@@ -230,6 +230,45 @@ const flows = {
     await p.getByTestId("desk-start").click();
     check((await p.getByTestId("desk-kind").innerText()).includes("SIMULATED"), `desk: simulated scenario labelled @${w}`);
   },
+  async "Paper desk scenarios: grouped picker, guided tour on top then Exit, goals and the debrief at the end"(p, w) {
+    await p.goto(base + "/paper/desk", { waitUntil: "networkidle" });
+    if (await p.getByTestId("desk-reset").count()) await p.getByTestId("desk-reset").click();
+    await p.getByTestId("desk-setup").waitFor();
+    check((await p.locator("[data-topic]").count()) >= 11, `desk picker: topic groups @${w}`);
+    check((await p.locator("[data-scenario]").count()) >= 30, `desk picker: 30 scenarios @${w}`);
+    await p.locator('[data-topic-filter="corporate"]').click();
+    check((await p.locator("[data-topic]").count()) === 1 && (await p.locator("[data-scenario]").count()) === 4, `desk picker: topic filter @${w}`);
+    await p.locator('[data-scenario="sim-dividend"]').click();
+    check((await p.getByTestId("desk-selected").innerText()).includes("ex-dividend"), `desk picker: selected lesson @${w}`);
+    check((await overflow(p)) <= 1, `desk picker overflows at ${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/desk-picker-${w}.png`, fullPage: true });
+    await p.getByTestId("desk-start").click();
+    check((await p.getByTestId("desk-lesson").innerText()).includes("Lesson"), `desk: lesson strip @${w}`);
+    await p.getByTestId("desk-tour").click();
+    await p.getByTestId("tour-popover").waitFor();
+    const z = await p.getByTestId("tour-popover").evaluate((el) => Number(getComputedStyle(el).zIndex));
+    check(z >= 1000, `desk tour: popover on top (z ${z}) @${w}`);
+    await p.getByTestId("tour-next").click();
+    check((await p.getByTestId("tour-count").innerText()).includes("2"), `desk tour: steps @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/desk-tour-${w}.png` });
+    await p.getByTestId("tour-exit").click();
+    check((await p.getByTestId("tour-popover").count()) === 0 && (await p.getByTestId("tour-backdrop").count()) === 0, `desk tour: Exit removes it @${w}`);
+    await p.getByTestId("ticket-qty").fill("100");
+    await p.getByTestId("ticket-submit").click();
+    await p.getByTestId("desk-step-1").click();
+    check((await p.getByTestId("desk-chart").getAttribute("data-executions")) === "1", `desk: chart usable after the tour @${w}`);
+    check((await p.locator('[data-testid="desk-goals"] [data-goal-status]').count()) >= 2, `desk: live goals @${w}`);
+    for (let i = 0; i < 12 && !(await p.getByTestId("desk-debrief").count()); i++) await p.getByTestId("desk-step-5").click();
+    await p.getByTestId("desk-debrief").waitFor();
+    check((await p.getByTestId("debrief-signals").innerText()).includes("$2.40"), `desk debrief: signals @${w}`);
+    check((await p.getByTestId("debrief-dividends").count()) === 1, `desk debrief: dividend received @${w}`);
+    await p.getByTestId("debrief-note-0").fill("Held through the ex-date; price fell by the dividend.");
+    await p.reload({ waitUntil: "networkidle" });
+    check((await p.getByTestId("debrief-note-0").inputValue()).includes("ex-date"), `desk debrief: journal saved @${w}`);
+    check((await overflow(p)) <= 1, `desk debrief overflows at ${w}`);
+    if (SHOTS) await p.getByTestId("desk-debrief").screenshot({ path: `${SHOTS}/desk-debrief-${w}.png` });
+    await p.getByTestId("desk-reset").click();
+  },
   async "Quiz pass mark: below 70% stays incomplete, 70%+ completes"(p, w) {
     const qs = getQuestionsForGroup("equity-literacy");
     const runQuiz = async (right) => {
