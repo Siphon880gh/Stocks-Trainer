@@ -42,6 +42,7 @@ export const DEEP_STUDY = [
   { label: "Coach", to: "/coach", icon: "psychology" },
   { label: "Playbooks", to: "/playbooks", icon: "auto_stories" },
   { label: "Paper trading", to: "/paper", icon: "account_balance_wallet" },
+  { label: "Paper desk", to: "/paper/desk", icon: "monitoring" },
   { label: "Challenges", to: "/paper/challenges", icon: "emoji_events" },
 ] as const;
 

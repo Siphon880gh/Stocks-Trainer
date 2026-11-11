@@ -60,6 +60,7 @@ import AcademyTestOut from "./pages/academy/AcademyTestOut";
 import Paper from "./pages/academy/Paper";
 import OptionsLadderPage from "./pages/academy/OptionsLadder";
 import PaperChallenges from "./pages/academy/PaperChallenges";
+import PaperDesk from "./pages/academy/PaperDesk";
 
 export default function App() {
   const baseUrl = import.meta.env.BASE_URL;
@@ -134,6 +135,7 @@ export default function App() {
           <Route path="academy/options" element={<OptionsLadderPage />} />
           <Route path="academy/:unitId" element={<AcademyUnit />} />
           <Route path="paper" element={<Paper />} />
+          <Route path="paper/desk" element={<PaperDesk />} />
           <Route path="paper/challenges" element={<PaperChallenges />} />
           <Route path="paper/challenges/:challengeId" element={<PaperChallenges />} />
         </Route>

@@ -73,6 +73,9 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
           <Link to="/paper/challenges" className="text-[13px] text-primary underline">
             Challenges
           </Link>
+          <Link to="/paper/desk" className="text-[13px] text-primary underline" data-testid="paper-desk-link">
+            Desk: watchlist, news and financials
+          </Link>
         </div>
         <p className="text-[13px] text-muted max-w-3xl">
           Practise every order type with virtual money. Step one daily bar at a time; nothing after the current bar is shown.

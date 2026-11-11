@@ -73,6 +73,7 @@ export const APP_ROUTES: readonly string[] = [
   "/academy/options",
   "/academy/:unitId",
   "/paper",
+  "/paper/desk",
   "/paper/challenges",
   "/paper/challenges/:challengeId",
 ];
@@ -169,6 +170,7 @@ export function resolveRef(ref: ContentRef | RefString | string): ResolvedRef {
 
 const ROUTE_LABELS: Record<string, string> = {
   "/paper": "Paper trading (simulated)",
+  "/paper/desk": "Paper trading desk (watchlist, news, financials)",
   "/paper/challenges": "Paper-trading challenges",
   "/academy": "Beginner Academy",
   "/academy/options": "Options knowledge ladder",

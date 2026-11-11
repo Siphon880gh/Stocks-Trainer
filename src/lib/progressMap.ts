@@ -103,6 +103,7 @@ const PAGES: Array<Omit<MapStage, "kind" | "prereqs" | "related"> & { prereqs?: 
   { id: "page:/macro/play", title: "Macro play", region: "macro", to: "/macro/play", teaser: "Call the market's reaction to SIMULATED releases.", prereqs: ["quiz:macro-reactions"] },
   { id: "page:/academy/options", title: "Options ladder", region: "academy", to: "/academy/options", teaser: "Four knowledge checks before options practice.", prereqs: ["academy:L6"] },
   { id: "page:/paper", title: "Paper account", region: "paper", to: "/paper", teaser: "Place SIMULATED orders with stops and brackets.", prereqs: ["quiz:orders-and-fills"] },
+  { id: "page:/paper/desk", title: "Paper desk", region: "paper", to: "/paper/desk", teaser: "Trade a watchlist through real 2024 earnings, with news and filings that unlock day by day.", prereqs: ["page:/paper"] },
 ];
 
 /** Hubs for routes with a parameter: the stage's progress is the share of items finished. */
