@@ -7,7 +7,7 @@ const period = (s: DeskStatement) => {
   return `${s.form === "10-K" ? "Fiscal year" : "Quarter"} to ${dayLabel(s.periodEnd)}`;
 };
 
-type Row = [string, (s: DeskStatement) => string, string?];
+type Row = [string, (s: DeskStatement) => string, string?, ((s: DeskStatement) => unknown)?];
 
 const ROWS: Row[] = [
   ["Revenue", (s) => bigUsd(s.revenue)],
@@ -25,6 +25,12 @@ const ROWS: Row[] = [
   ["Total assets", (s) => bigUsd(s.totalAssets)],
   ["Total liabilities", (s) => `${bigUsd(s.totalLiabilities)}${s.liabilitiesDerived ? "*" : ""}`],
   ["Stockholders' equity", (s) => bigUsd(s.equity)],
+  ["Debt", (s) => bigUsd(s.debt), "Borrowings", (s) => s.debt],
+  ["Financing cash flow", (s) => bigUsd(s.financingCashFlow), "New debt + shares issued − buybacks − dividends", (s) => s.financingCashFlow],
+  ["Shares issued", (s) => bigUsd(s.stockIssued ?? 0), "Cash raised by selling new shares", (s) => s.stockIssued],
+  ["Buybacks", (s) => bigUsd(s.buybacks ?? 0), "Cash spent buying back shares", (s) => s.buybacks],
+  ["Dividends paid", (s) => bigUsd(s.dividendsPaid ?? 0), undefined, (s) => s.dividendsPaid],
+  ["Diluted shares", (s) => (s.sharesDiluted === undefined ? "—" : `${(s.sharesDiluted / 1_000_000).toFixed(1)}M`), "Share count used for diluted EPS", (s) => s.sharesDiluted],
   ["Liabilities ÷ equity", (s) => { const r = ratios(s).liabilitiesToEquity; return r === null ? "—" : r.toFixed(2); }],
 ];
 
@@ -57,7 +63,7 @@ export default function DeskFinancials({ scenario, bar, active }: { scenario: De
               </tr>
             </thead>
             <tbody>
-              {ROWS.map(([label, f, hint]) => (
+              {ROWS.filter(([, , , has]) => !has || cols.some((c) => has(c) !== undefined)).map(([label, f, hint]) => (
                 <tr key={label} className="border-t border-line">
                   <td className="px-1 py-0.5 text-muted" title={hint}>
                     {label}
@@ -73,6 +79,12 @@ export default function DeskFinancials({ scenario, bar, active }: { scenario: De
           </table>
         </div>
       )}
+      {cols.filter((c) => c.note).map((c, i) => (
+        <p key={i} className="text-[12px] border-l-2 border-sim pl-2" data-testid="desk-filing-note">
+          <span className="font-semibold">{c.periodEnd} note: </span>
+          {c.note}
+        </p>
+      ))}
       {cols.some((c) => c.liabilitiesDerived) ? <p className="text-[11px] text-muted">* Total liabilities = total assets − stockholders' equity (the filing does not tag a total).</p> : null}
       <p className="text-[11px] text-muted">
         Compare like with like: a 10-K covers a full fiscal year, a 10-Q one quarter.
