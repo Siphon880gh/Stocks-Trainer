@@ -324,3 +324,10 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Values read by hand from public finviz.com pages on Nov 12, 2026 before the open (Industry = Gold screen, NEM quote page, screener help, Elite plan page). Insider names replaced with roles.
 - Free vs Elite covers account limits only; charting differences stay in `/practice/charting-apps` (not duplicated).
 - No Playbook: this teaches a tool, not a vouched trading practice.
+
+### TT4 Yahoo Finance
+
+- Lesson `/tools/yahoo-finance`, Learn group `tool-yahoo-finance` (14 YF- questions), 3 macro-news cases (seeds 10401–10403), 5 glossary terms, coach `yahoo-finance-tour` (tagged `tools`).
+- Values read by hand from public finance.yahoo.com pages on Nov 12, 2026 (NEM summary, statistics, historical data, financials; premium plans page). Nothing behind a login.
+- Chart features stay in `/practice/charting-apps` (not duplicated).
+- No Playbook: this teaches a tool, not a vouched trading practice.

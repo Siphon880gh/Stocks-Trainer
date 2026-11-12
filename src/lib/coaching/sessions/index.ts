@@ -88,6 +88,7 @@ import { indexStyleBlocksSession } from "./index-style-blocks";
 import { marketForcesTourSession } from "./market-forces-tour";
 import { stockAnalysisTourSession } from "./stockanalysis-tour";
 import { finvizTourSession } from "./finviz-tour";
+import { yahooFinanceTourSession } from "./yahoo-finance-tour";
 // coach sessions for market themes / tool training end
 import { fourPillarsSession } from "./four-pillars";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
@@ -186,6 +187,7 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   marketForcesTourSession,
   stockAnalysisTourSession,
   finvizTourSession,
+  yahooFinanceTourSession,
   // market themes / tool training sessions end
   fourPillarsSession,
   supplyDemandZoneRetestSession,
