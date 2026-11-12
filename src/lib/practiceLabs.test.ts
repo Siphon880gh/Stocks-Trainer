@@ -68,6 +68,7 @@ describe("misc practice catalog", () => {
       "Energy: oil, natural gas and the companies", // market theme
       "Industrial and transition metals: copper, uranium and clean energy", // market theme
       "Agriculture and inputs: crops, fertilizer and farm equipment", // market theme
+      "Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman", // market theme
       "Automated & algo trading (2026)",
       "Record-setting traders",
     ]);

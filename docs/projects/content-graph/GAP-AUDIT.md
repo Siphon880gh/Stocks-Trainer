@@ -270,3 +270,11 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Sources checked 2026-11-12: USDA WASDE page (2026 dates, 12:00 p.m. ET), USDA NASS Crop Progress, USDA ERS WRS-0702 (33 million Btu per ton; 72–85%; PDF read with pdftotext), USDA ERS farm income, Teucrium CORN page (delivery months, roll dates, K-1), FINRA.
 - Playbook: none.
 - Coach parity after MK4: equity 29, futures 26, forex 23, crypto 22, options 25 (floor 21).
+
+## 2026-11-12 Market themes MK5: materials, chemicals and resins
+- Source: Weng's question about resin stocks. Market Forces has Materials (XLB) but no resin theme; this is a new theme in the trainer only (nothing added to the tickers repo).
+- Ticker check (Nov 11–12, 2026): Dow (DOW), LyondellBasell (LYB), Westlake (WLK; renamed from Westlake Chemical, Feb 18, 2022) and Eastman (EMN) all trade on the NYSE. State Street's XLB holdings file (Nov 11, 2026): Linde 13.1%, Dow 3.5%, LYB 2.4%; WLK and EMN not held. S&P DJI moved Eastman from the S&P 500 to the SmallCap 600 effective Nov 4, 2025.
+- Added `/practice/materials-chemicals` (12 `MAT-`, 3 beginner macro-news cases: new capacity squeezes a resin maker, XLB is not a resin fund, oil spike widens the U.S. ethane edge; 5 terms; coach `materials-resins`).
+- Sources checked 2026-11-12: EIA This Week in Petroleum (Mar 23, 2022) and Today in Energy (Mar 20, 2025), State Street XLB page and daily holdings xlsx, S&P DJI press release (Oct 27, 2025), SEC EDGAR Westlake certificate of amendment (westlake.com returns 403).
+- Playbook: none.
+- Coach parity after MK5: unchanged (equity 29, futures 26, forex 23, crypto 22, options 25; the session has no class tag).

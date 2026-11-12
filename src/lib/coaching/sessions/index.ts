@@ -81,6 +81,7 @@ import { preciousMetalsWrappersSession } from "./precious-metals-wrappers";
 import { energyWrappersSession } from "./energy-wrappers";
 import { industrialMetalsWrappersSession } from "./industrial-metals-wrappers";
 import { agricultureWrappersSession } from "./agriculture-wrappers";
+import { materialsResinsSession } from "./materials-resins";
 // coach sessions for market themes / tool training end
 import { fourPillarsSession } from "./four-pillars";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
@@ -172,6 +173,7 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   energyWrappersSession,
   industrialMetalsWrappersSession,
   agricultureWrappersSession,
+  materialsResinsSession,
   // market themes / tool training sessions end
   fourPillarsSession,
   supplyDemandZoneRetestSession,
