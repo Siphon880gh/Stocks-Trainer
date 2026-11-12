@@ -246,3 +246,11 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Sources checked 2026-11-12: World Gold Council (FY2024 central banks 1,044.6t; AISC guidance), Silver Institute April 2025 newsletter (680.5 Moz industrial, total about 1.16 billion oz; PDF read with pdftotext), FRED DFII10, FINRA, Barrick (ticker B since May 9, 2025; curl 403, browser fetch fine).
 - Playbook: none (no outside expert vouches for a metals strategy; the lesson teaches drivers and wrappers).
 - Coach parity after MK1: equity 29, futures 23, forex 23, crypto 22, options 25 (floor 21).
+
+## 2026-11-12 Market themes MK2: energy
+- Source: Market Forces Oil (USO, BNO, XLE, XOM, CVX) and Natural gas (UNG, FCG, EQT, LNG).
+- Already covered: crude futures cases and the `futures-crude-supply` coach, contango and the April 2020 WTI settlement (MK0). Not covered: refiners vs producers, the crack spread, WTI vs Brent, EIA weekly reports, gas storage and weather, LNG exporters, reverse splits after roll losses.
+- Added `/practice/energy` (14 `EN-`, 3 beginner macro-news cases: refiner falls as crude rises, mild winter breaks a gas-producer thesis, gas futures fund as a long hold; 7 terms; coach `energy-wrappers`).
+- Sources checked 2026-11-12: EIA (crude price drivers, Weekly Petroleum Status Report incl. the Nov 12, 2026 holiday shift, Weekly Natural Gas Storage Report, factors affecting gas prices, 3:2:1 crack spread), USCF UNG (near-month Henry Hub benchmark; 1-for-4 reverse split Jan 23, 2024) and USO pages, FINRA.
+- Playbook: none (no outside expert vouches for an energy strategy).
+- Coach parity after MK2: equity 29, futures 24, forex 23, crypto 22, options 25 (floor 21).

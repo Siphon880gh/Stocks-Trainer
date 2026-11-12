@@ -78,6 +78,7 @@ import { exposureWrappersSession } from "./exposure-wrappers";
 import { bitcoinWrappersSession } from "./bitcoin-wrappers";
 import { currencyFundsDollarSession } from "./currency-funds-dollar";
 import { preciousMetalsWrappersSession } from "./precious-metals-wrappers";
+import { energyWrappersSession } from "./energy-wrappers";
 // coach sessions for market themes / tool training end
 import { fourPillarsSession } from "./four-pillars";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
@@ -166,6 +167,7 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   bitcoinWrappersSession,
   currencyFundsDollarSession,
   preciousMetalsWrappersSession,
+  energyWrappersSession,
   // market themes / tool training sessions end
   fourPillarsSession,
   supplyDemandZoneRetestSession,

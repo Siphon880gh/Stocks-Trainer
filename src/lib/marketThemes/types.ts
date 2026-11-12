@@ -10,13 +10,15 @@ import type { CaseStudy } from "../caseStudies";
 export type MarketThemeQuizGroupId =
   | "exposure-wrappers"
   | "currency-funds"
-  | "precious-metals";
+  | "precious-metals"
+  | "energy";
 
 /** Case thinking modes owned by the market-theme lessons (spread into `CaseThinkingMode`). */
 export type MarketThemeMode =
   | "exposure_wrapper"
   | "currency_wrapper"
-  | "precious_metals";
+  | "precious_metals"
+  | "energy_theme";
 
 export interface ThemeSource {
   label: string;

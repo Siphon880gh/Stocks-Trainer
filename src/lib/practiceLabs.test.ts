@@ -65,6 +65,7 @@ describe("misc practice catalog", () => {
       "Same theme, different wrapper: stocks, funds and futures",
       "Currency funds and the dollar",
       "Precious metals: gold, silver and the miners", // market theme
+      "Energy: oil, natural gas and the companies", // market theme
       "Automated & algo trading (2026)",
       "Record-setting traders",
     ]);
