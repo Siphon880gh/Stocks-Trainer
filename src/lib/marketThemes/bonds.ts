@@ -6,6 +6,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, pct, r2, seededTape, usd } from "./helpers";
 
 /** FINRA rule of thumb: price change ≈ −duration × change in yield (percentage points). */
@@ -136,8 +138,8 @@ export const BONDS_RATES: MarketTheme = {
   ],
   drivers: [
     { title: "Rates and prices move opposite", text: "Investor.gov's example: a 10-year 3% Treasury is worth about $925 a year later if market rates rise to 4%, and about $1,082 if they fall to 2%." },
-    { title: "Duration, not maturity", text: "FINRA: duration measures rate sensitivity; maturity is just the repayment date. Lower coupons and longer maturities mean higher duration." },
-    { title: "The Fed sets the short end", text: "The policy rate anchors bills and short notes. Long yields also price inflation, growth, government borrowing and a term premium, so they can rise when the Fed cuts." },
+    { title: "Duration, not maturity", ...withSims(["FINRA: ", { text: "duration measures rate sensitivity", sim: "mk-br-duration" }, "; maturity is just the repayment date. Lower coupons and longer maturities mean higher duration."]) },
+    { title: "The Fed sets the short end", ...withSims(["The policy rate anchors bills and short notes. Long yields also price inflation, growth, government borrowing and a term premium, so ", { text: "they can rise when the Fed cuts", sim: "mk-br-fed-cut" }, "."]) },
     { title: "Inflation", text: "Fixed coupons lose buying power when inflation rises. TreasuryDirect: TIPS principal rises with CPI, and at maturity you get the greater of adjusted or original principal." },
     { title: "Hold to maturity vs sell early", text: "FINRA: if you hold an individual bond to maturity, price swings matter little. A bond fund never matures, so its duration risk stays." },
   ],
@@ -202,6 +204,7 @@ export const BONDS_RATES: MarketTheme = {
     { label: "Macro desk", to: "/macro" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
+  simulations: THEME_SIMS["bonds-rates"],
   mode: "bond_duration",
   modeLabel: "Bonds: read duration first",
   modeTip:

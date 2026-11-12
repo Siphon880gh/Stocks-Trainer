@@ -26,6 +26,8 @@ import type { LiteracyTerm } from "./literacyTerms";
 import type { CaseStudy } from "./caseStudies";
 import type { PlaybookCredibility } from "./playbooks";
 import { pct, termSlopePct } from "./riskPremiumPortfolio";
+import { simBar } from "./toolTraining/simWalk";
+import type { ToolSimulation, ToolText } from "./toolTraining/types";
 
 export { termSlopePct as curveSlope };
 
@@ -1030,3 +1032,34 @@ export const VIX_PLAYBOOK_EXPLANATION = [
   "6. Judge the record, not the win rate. 19 wins of $100 and one $3,000 loss is 95% winners and −$1,100. After −80% you need +400%. Track maximum drawdown, largest loss and exposure during stress, and test calm, shock, long stress and recovery periods with real product data.",
   "Warning: short volatility can lose many times its carry in days, and the SVIX issuer warns you could lose your whole investment in one day. Adding short volatility to a stock-heavy account increases your dependence on calm markets. Not investment advice.",
 ].join("\n\n");
+
+// ---------------------------------------------------------------- simulation (underlined in "Why shorting continuously can fail")
+
+/** Lead sentence of the shorting panel, with the phrase that opens the SAMPLE short-volatility walk. */
+export const VIX_SHORTING_LEAD: ToolText = [
+  "Volatility often falls back after a spike, but there is no deadline, no fixed baseline, and ",
+  { text: "no guarantee the account survives until it does", sim: "vix-sim-short-vol-spike" },
+  ".",
+];
+
+export const VIX_SIMULATIONS: ToolSimulation[] = [
+  {
+    kind: "bars",
+    id: "vix-sim-short-vol-spike",
+    title: "Calm weeks, one spike, and the climb back",
+    goal: "Walk a SAMPLE inverse-volatility fund week by week to see how small calm-market gains can be erased by one spike, and why the VIX falling back does not mean the fund recovers.",
+    tape: "SAMPLE inverse VIX futures fund · weekly bars · simulated VIX level",
+    start: 3,
+    bars: [
+      simBar("Week 1", [50.0, 51.2, 49.8, 51.0], "Calm markets with the VIX near 13; the fund gains 2%.", "Short-volatility products earn steadily while futures drift down toward a low, quiet VIX. That steadiness is the lure.", { readout: "VIX 13" }),
+      simBar("Week 2", [51.0, 52.1, 50.7, 51.9], "Another quiet week, another small gain.", "Each calm week feels like proof the trade works. The win rate is high; the size of the rare loss is still unknown."),
+      simBar("Week 3", [51.9, 53.0, 51.5, 52.8], "The fund is up about 5.6% in three weeks with the VIX at 12.", "This is the whole reward of the calm stretch. Keep it in mind as the yardstick for the next bars.", { readout: "VIX 12" }),
+      simBar("Week 4", [52.8, 53.4, 51.0, 51.5], "The VIX lifts to 15 and the fund gives back some gains.", "A small rise in volatility is the first warning. Short-volatility losses tend to speed up as the VIX climbs.", { readout: "VIX 15" }),
+      simBar("Week 5", [51.5, 51.6, 27.0, 28.4], "A selloff sends the VIX to 38 and the fund falls about 45% in one week.", "One spike costs many times what the calm weeks earned. It hits at the same time stocks fall, so the whole account suffers.", { mark: "news", readout: "VIX 38" }),
+      simBar("Week 6", [28.4, 31.0, 26.5, 30.2], "The VIX eases to 28 and the fund bounces a little.", "Volatility does tend to fall back after spikes. The question is what the fund needs to get back, not what the VIX does.", { readout: "VIX 28" }),
+      simBar("Week 7", [30.2, 32.6, 29.8, 32.1], "The VIX keeps falling, to 22.", "From 28.40 the fund needs about an 81% gain to get back to 51.50. Recovery math works against the account after a big loss.", { readout: "VIX 22" }),
+      simBar("Week 8", [32.1, 33.5, 31.6, 33.2], "The VIX is back near 19, but the fund is still about 36% below its week 4 close.", "The VIX fell back; the account did not. A position sized for calm weeks would not have survived to see the recovery.", { readout: "VIX 19" }),
+    ],
+    takeaway: "Short volatility wins small and often, then can lose most of an account in one spike that the VIX's later fall does not repay.",
+  },
+];

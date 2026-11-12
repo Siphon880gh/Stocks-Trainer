@@ -7,6 +7,8 @@ import { optionsForAttempt, scoreUnit, type UnitScore } from "../../lib/academy/
 import { estMinutes } from "../../lib/academy/content/estimate";
 import { getLiteracyTerm } from "../../lib/literacyTerms";
 import { cn } from "../../lib/utils";
+import { toolTextPlain, toolTextRefs } from "../../lib/toolTraining/simWalk";
+import { SimHint, SimProvider, ToolTextView } from "../tools/Simulation";
 
 const LETTERS: AnswerLetter[] = ["A", "B", "C", "D", "E"];
 
@@ -20,13 +22,17 @@ interface Props {
   preset?: { answers: Record<string, AnswerLetter>; submitted: boolean };
   onFinish?: (score: UnitScore) => void;
   onRetry?: () => void;
+  /** `?sim=<id>`: open one of the unit's simulations on load (deep link and tests). */
+  initialSim?: string | null;
 }
 
 /** BA2.M2: card stepper → "practise it in the app" chips → unit quiz → mastery result. */
-export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", initialCard = 0, preset, onFinish, onRetry }: Props) {
+export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", initialCard = 0, preset, onFinish, onRetry, initialSim }: Props) {
   const items = useMemo(() => quizForUnit(unit.id), [unit.id]);
   const [phase, setPhase] = useState<"cards" | "quiz">(preset ? "quiz" : initialPhase);
-  const [card, setCard] = useState(Math.min(initialCard, unit.cards.length - 1));
+  // A deep-linked simulation opens on the card that carries its trigger, so closing it returns focus there.
+  const simCard = initialSim ? unit.cards.findIndex((x) => x.leadRich !== undefined && toolTextRefs(x.leadRich).some((r) => r.sim === initialSim)) : -1;
+  const [card, setCard] = useState(simCard >= 0 ? simCard : Math.min(initialCard, unit.cards.length - 1));
   const [answers, setAnswers] = useState<Record<string, AnswerLetter>>(preset?.answers ?? {});
   const [submitted, setSubmitted] = useState(preset?.submitted ?? false);
   const chips = unit.refs.map((r) => resolveRef(r)).filter((r) => r.ok);
@@ -34,7 +40,11 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
   const c = unit.cards[card]!;
   const term = c.glossaryTermId ? getLiteracyTerm(c.glossaryTermId) : undefined;
 
+  const sims = unit.simulations ?? [];
+  const paras = c.body.split(/\n\n+/);
+  const leadOk = c.leadRich !== undefined && toolTextPlain(c.leadRich) === paras[0];
   return (
+    <SimProvider sims={sims} initialOpen={initialSim}>
     <div className="space-y-4" data-testid="unit-player" data-unit={unit.id}>
       <header className="space-y-1">
         <p className="text-[12px] text-muted">
@@ -62,10 +72,11 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
           </div>
           <h2 className="font-semibold">{c.title}</h2>
           <div className="space-y-3 text-[14px] leading-relaxed">
-            {c.body.split(/\n\n+/).map((para) => (
-              <p key={para.slice(0, 48)}>{para}</p>
+            {paras.map((para, i) => (
+              <p key={para.slice(0, 48)}>{i === 0 && leadOk ? <ToolTextView text={c.leadRich!} /> : para}</p>
             ))}
           </div>
+          {leadOk ? <SimHint subject="this card's idea on a SAMPLE chart" /> : null}
           {term ? (
             <Link to={glossaryHref(term.id)} className="inline-flex items-center gap-1 text-[12px] px-2 py-1 rounded-md border border-line hover:border-primary" data-chip="glossary">
               <span className="material-symbols-outlined text-sm" aria-hidden>
@@ -192,5 +203,6 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
         </div>
       </section>
     </div>
+    </SimProvider>
   );
 }

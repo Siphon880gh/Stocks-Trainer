@@ -52,6 +52,7 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
         unit={unit}
         attempt={attempt}
         initialPhase={checkFirst ? "quiz" : "cards"}
+        initialSim={params.get("sim")}
         onFinish={(score) => {
           if (isAcademyPreview(unitStatus(loadAcademy(storage).state, unit.id), readAcademyBrowseAll())) {
             setToast("Preview only. This check was not saved.");

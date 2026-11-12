@@ -8,6 +8,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, pct, r2, seededTape } from "./helpers";
 
 /** Relative strength in percentage points: sector return − market return. */
@@ -137,7 +139,7 @@ export const SECTORS_ROTATION: MarketTheme = {
   ],
   drivers: [
     { title: "The business cycle", text: "Fidelity's research: consumer discretionary has beaten the market in every early cycle since 1962; technology has led mid-cycle; energy and utilities have done well late; staples, utilities and health care have held up best in recessions. It also says no investment has behaved uniformly in every cycle." },
-    { title: "Interest rates", text: "Utilities and REITs borrow heavily and compete with bonds for income buyers; rising yields often weigh on them. Banks can benefit from a steeper curve." },
+    { title: "Interest rates", ...withSims(["Utilities and REITs borrow heavily and compete with bonds for income buyers; ", { text: "rising yields often weigh on them", sim: "mk-sr-rates" }, ". Banks can benefit from a steeper curve."]) },
     { title: "Commodities", text: "Oil sets much of energy's earnings; metals and chemicals drive materials. See Energy and Materials." },
     { title: "Concentration", text: "Market-cap weighting means a few giants can drive a sector fund. Read the holdings file, which State Street updates daily." },
     { title: "Classification changes", text: "GICS is reviewed every year, so a company can change sector and a sector fund's mix can shift without any trade by you." },
@@ -203,6 +205,7 @@ export const SECTORS_ROTATION: MarketTheme = {
     { label: "Practice → Bonds and rates", to: "/practice/bonds-rates" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
+  simulations: THEME_SIMS["sectors-rotation"],
   mode: "sector_cycle",
   modeLabel: "Sectors: holdings and timing first",
   modeTip:

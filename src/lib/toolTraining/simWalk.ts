@@ -113,13 +113,20 @@ export function findSimulation(lesson: ToolLesson, id: string): ToolSimulation |
 
 /** Problems with a lesson's simulations; empty when everything is well-formed. Used by tests. */
 export function simulationProblems(lesson: ToolLesson): string[] {
+  return simSetProblems(lesson.id, lessonSimRefs(lesson), lesson.simulations ?? []);
+}
+
+/**
+ * The same checks for any page that opens simulations (market themes, macro lessons, Academy units…): every trigger
+ * resolves, every simulation has a trigger, 5+ steps, a SAMPLE / simulated tape, enough why-copy, valid OHLC.
+ */
+export function simSetProblems(owner: string, refs: SimRef[], sims: ToolSimulation[]): string[] {
   const out: string[] = [];
-  const sims = lesson.simulations ?? [];
   const ids = sims.map((s) => s.id);
-  if (new Set(ids).size !== ids.length) out.push(`${lesson.id}: duplicate simulation id`);
-  for (const r of lessonSimRefs(lesson)) if (!ids.includes(r.sim)) out.push(`${lesson.id}: trigger "${r.text}" → missing ${r.sim}`);
+  if (new Set(ids).size !== ids.length) out.push(`${owner}: duplicate simulation id`);
+  for (const r of refs) if (!ids.includes(r.sim)) out.push(`${owner}: trigger "${r.text}" → missing ${r.sim}`);
   for (const s of sims) {
-    if (!lessonSimRefs(lesson).some((r) => r.sim === s.id)) out.push(`${s.id}: no underlined trigger`);
+    if (!refs.some((r) => r.sim === s.id)) out.push(`${s.id}: no underlined trigger`);
     if (simStepCount(s) < MIN_SIM_STEPS) out.push(`${s.id}: fewer than ${MIN_SIM_STEPS} steps`);
     if (s.start < 1 || s.start >= simStepCount(s)) out.push(`${s.id}: start must leave at least one Next`);
     if (!/SAMPLE|simulated/i.test(s.tape)) out.push(`${s.id}: tape must say SAMPLE or simulated`);
@@ -142,6 +149,15 @@ export function simulationProblems(lesson: ToolLesson): string[] {
     }
   }
   return out;
+}
+
+/**
+ * Copy that carries simulation triggers outside Tool Training: `text` stays the plain string every other consumer
+ * (search, glossary checks, AI prompts) reads, `rich` is the same words with the underlined runs.
+ * `{ title: "Real yields", ...withSims(["Gold pays nothing… ", { text: "10-year TIPS yield", sim: "pm-sim-real-yields" }, "…"]) }`
+ */
+export function withSims(rich: ToolText): { text: string; rich: ToolText } {
+  return { text: toolTextPlain(rich), rich };
 }
 
 /** Shorthand for SAMPLE bars in lesson data: `simBar("Mar", [43, 44, 38.5, 40], what, why, { mark: "low" })`. */

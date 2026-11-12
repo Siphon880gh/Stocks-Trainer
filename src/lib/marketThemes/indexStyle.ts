@@ -7,6 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, pct, r2, seededTape } from "./helpers";
 
 /** Market-cap weight in %: company cap ÷ total cap. */
@@ -140,7 +142,7 @@ export const INDEX_STYLE: MarketTheme = {
     { name: "Growth, value and dividend styles", examples: `VUG (${FUND_FACTS.VUG.holdings} stocks) · VTV (${FUND_FACTS.VTV.holdings}) · QQQ (Nasdaq-100) · SCHD (dividend)`, owns: "Large caps screened by growth, value or dividend rules", tracks: "Their style index; the Nasdaq-100 excludes financials and is cap-weighted", watch: "Overlap with the S&P 500; each provider's rules differ" },
   ],
   drivers: [
-    { title: "Weighting rules", text: "Cap weighting lets winners grow their weight; equal weighting resets them at each rebalance; price weighting follows share prices. FINRA notes equal-weight and other smart beta indexes can cost more and may not beat the market." },
+    { title: "Weighting rules", ...withSims([{ text: "Cap weighting lets winners grow their weight", sim: "mk-is-weights" }, "; equal weighting resets them at each rebalance; price weighting follows share prices. FINRA notes equal-weight and other smart beta indexes can cost more and may not beat the market."]) },
     { title: "Concentration", text: `With ${SPY_FACTS.lines} lines in SPY, an equal weight would be about ${EQUAL_500}% each; Apple alone was about ${SPY_FACTS.AAPL}% (${SPY_AS_OF}).` },
     { title: "Size and the economy", text: "Small companies lean on domestic sales and borrowing, so they tend to swing more with rates and growth." },
     { title: "Region and currency", text: "Foreign funds earn local returns plus or minus the currency move against the dollar." },
@@ -205,6 +207,7 @@ export const INDEX_STYLE: MarketTheme = {
     { label: "Practice → Sectors and rotation", to: "/practice/sectors-rotation" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
+  simulations: THEME_SIMS["index-style"],
   mode: "index_style",
   modeLabel: "Index funds: read the rules and the weights",
   modeTip:

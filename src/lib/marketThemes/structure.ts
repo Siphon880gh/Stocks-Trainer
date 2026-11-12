@@ -6,6 +6,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, pct, r2, seededTape, usd } from "./helpers";
 
 /** Roll cost of moving from the expiring contract to the next one, as a % of the position. Positive = a cost (contango). */
@@ -156,10 +158,10 @@ export const EXPOSURE_WRAPPERS: MarketTheme = {
   ],
   drivers: [
     { title: "Spot vs futures", text: "Spot is the price for delivery now. A futures price is for a later date and includes storage, financing and expectations. FINRA notes the two usually move together, imperfectly, and converge at expiration." },
-    { title: "The roll", text: "A futures fund must sell expiring contracts and buy later ones. In contango, later months cost more, so each roll loses a little; in backwardation it gains. Fidelity's example: 1% a month is nearly 13% a year." },
+    { title: "The roll", ...withSims(["A futures fund must sell expiring contracts and buy later ones. In contango, later months cost more, so ", { text: "each roll loses a little", sim: "mk-ew-roll" }, "; in backwardation it gains. Fidelity's example: 1% a month is nearly 13% a year."]) },
     { title: "Operating leverage", text: "Producers have large fixed costs. When the commodity rises, profit can rise by a much larger percentage, and the reverse on the way down. That is why miners often swing more than the metal." },
     { title: "Company and market risk", text: "A producer stock also moves with its own costs, debt and management, and with the stock market. In a broad selloff, miners can fall even if the metal holds." },
-    { title: "Hours and gaps", text: "Bitcoin and forex trade almost around the clock; U.S. exchange products trade on exchange days. Moves made while the exchange is shut arrive as an opening gap." },
+    { title: "Hours and gaps", ...withSims(["Bitcoin and forex trade almost around the clock; U.S. exchange products trade on exchange days. Moves made while the exchange is shut ", { text: "arrive as an opening gap", sim: "mk-ew-gap" }, "."]) },
     { title: "When it goes wrong", text: "On April 20, 2020 the expiring WTI crude contract settled at −$37.63 a barrel (CFTC); EIA tied it to scarce storage at the Cushing delivery point. Funds holding near-month contracts had to change how they rolled. Contract mechanics can matter more than the theme." },
   ],
   bridges: [
@@ -232,6 +234,7 @@ export const EXPOSURE_WRAPPERS: MarketTheme = {
     { label: "Practice → Futures vs options & beginner toolkit", to: "/practice/futures-vs-options" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
+  simulations: THEME_SIMS["exposure-wrappers"],
   mode: "exposure_wrapper",
   modeLabel: "Same theme, which wrapper",
   modeTip:

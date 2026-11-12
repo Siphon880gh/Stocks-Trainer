@@ -2,6 +2,7 @@
  * Beginner Academy (BA0.M1): shared types for the course map, lessons, quizzes, placement and rewards.
  * Everything in the Academy is educational and SIMULATED: virtual money, SAMPLE prices, virtual points.
  */
+import type { ToolSimulation, ToolText } from "../toolTraining/types";
 
 /** Level ids in course-map order. L0 Orientation … L7 Other markets. */
 export const LEVEL_IDS = ["L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7"] as const;
@@ -33,6 +34,8 @@ export interface LessonCard {
   body: string;
   /** Optional glossary chip under the card (an Archive literacy term id). */
   glossaryTermId?: string;
+  /** Same words as the first paragraph of `body`, with underlined simulation triggers (`cardWithSims`). */
+  leadRich?: ToolText;
 }
 
 export interface Unit {
@@ -46,6 +49,8 @@ export interface Unit {
   cards: LessonCard[];
   /** ≥ 1 link into existing app content (practice it there). */
   refs: RefString[];
+  /** Bar-by-bar walks opened from underlined phrases in the cards. */
+  simulations?: ToolSimulation[];
 }
 
 export interface Course {

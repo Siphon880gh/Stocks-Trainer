@@ -5,6 +5,7 @@
 import type { QuizQuestion } from "../quizData";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { CaseStudy } from "../caseStudies";
+import type { ToolSimulation, ToolText } from "../toolTraining/types";
 
 /** Learn group ids (also misc-practice ids) owned by the market-theme lessons. */
 export type MarketThemeQuizGroupId =
@@ -52,6 +53,8 @@ export interface ThemeWrapper {
 export interface ThemeCard {
   title: string;
   text: string;
+  /** Same words as `text` with underlined simulation triggers (build both with `withSims`). */
+  rich?: ToolText;
 }
 
 export interface ThemeMathRow {
@@ -107,6 +110,8 @@ export interface MarketTheme {
   caveats: ThemeCard[];
   sources: ThemeSource[];
   links: { label: string; to: string }[];
+  /** Bar-by-bar or column walks opened from underlined phrases in the driver and bridge cards. */
+  simulations?: ToolSimulation[];
   mode: MarketThemeMode;
   modeLabel: string;
   modeTip: string;

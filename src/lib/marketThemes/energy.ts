@@ -7,6 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, r2, seededTape, usd } from "./helpers";
 
 export const GALLONS_PER_BARREL = 42;
@@ -129,9 +131,9 @@ export const ENERGY: MarketTheme = {
   ],
   drivers: [
     { title: "Oil supply decisions", text: "Producer-group output decisions, sanctions and outages change supply quickly. EIA lists supply, demand, inventories and financial markets among the factors behind crude prices." },
-    { title: "Inventories", text: "EIA's Weekly Petroleum Status Report (usually Wednesday, 10:30 a.m. ET) counts crude and fuel stocks; a bigger-than-expected draw or build can move crude within seconds." },
+    { title: "Inventories", ...withSims(["EIA's Weekly Petroleum Status Report (usually Wednesday, 10:30 a.m. ET) counts crude and fuel stocks; ", { text: "a bigger-than-expected draw or build", sim: "mk-en-inventory" }, " can move crude within seconds."]) },
     { title: "Gas: weather and storage", text: "EIA names production, storage, trade, winter and summer weather, growth and other fuels' prices as the major gas drivers. Storage usually builds April–October and draws November–March; the Thursday storage report compares it with the five-year average." },
-    { title: "Refining margins", text: "Refiners earn the spread between crude and fuels. EIA's 3:2:1 crack spread is the common shorthand." },
+    { title: "Refining margins", ...withSims(["Refiners earn the spread between crude and fuels. EIA's ", { text: "3:2:1 crack spread", sim: "mk-en-crack" }, " is the common shorthand."]) },
     { title: "Global demand", text: "Growth, travel and industrial activity set oil demand; a slowdown can outweigh a supply cut." },
   ],
   bridges: [
@@ -195,6 +197,7 @@ export const ENERGY: MarketTheme = {
     { label: "Practice → Same theme, different wrapper", to: "/practice/exposure-wrappers" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
+  simulations: THEME_SIMS["energy"],
   mode: "energy_theme",
   modeLabel: "Energy: which business earns from it",
   modeTip:

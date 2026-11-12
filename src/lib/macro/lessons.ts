@@ -4,6 +4,8 @@
  * (5) Learn quiz group + glossary terms, (6) Training integration (via the quiz group registered in quizData.ts).
  */
 import type { MacroQuizGroupId } from "./quiz/groups";
+import type { ToolSimulation, ToolText } from "../toolTraining/types";
+import { MACRO_SIMS, reactionWithSims } from "./simulations";
 
 export type LessonFamily = "labor" | "inflation" | "growth" | "fed" | "rates" | "housing";
 
@@ -31,6 +33,10 @@ export interface MacroLesson {
   glossaryIds: string[];
   /** Hedged one-paragraph "how markets usually react". */
   reaction: string;
+  /** Same words as `reaction` with underlined simulation triggers (set both with `reactionWithSims`). */
+  reactionRich?: ToolText;
+  /** Bar-by-bar or column walks opened from the reaction paragraph. */
+  simulations?: ToolSimulation[];
 }
 
 export const FAMILY_NAMES: Record<LessonFamily, string> = {
@@ -56,7 +62,8 @@ export const MACRO_LESSONS: MacroLesson[] = [
     roundIds: ["round-payrolls-01", "round-payrolls-03", "round-payrolls-04", "round-payrolls-06", "round-payrolls-07", "round-payrolls-08"],
     quizGroup: "macro-releases",
     glossaryIds: ["nonfarm-payrolls", "unemployment-rate", "average-hourly-earnings", "household-vs-establishment", "data-revision", "participation-rate"],
-    reaction: "A payroll surprise usually moves the 2-year yield first. Whether stocks cheer or worry depends on the regime: when inflation is the fear, strong jobs tend to hurt; when recession is the fear, strong jobs tend to help. Wages and revisions can overrule the headline.",
+    ...reactionWithSims(["A payroll surprise usually ", { text: "moves the 2-year yield first", sim: "mac-payrolls-2y" }, ". Whether stocks cheer or worry depends on the regime: when inflation is the fear, strong jobs tend to hurt; when recession is the fear, strong jobs tend to help. Wages and revisions can overrule the headline."]),
+    simulations: MACRO_SIMS["employment-situation"],
   },
   {
     id: "jobless-claims",
@@ -101,7 +108,8 @@ export const MACRO_LESSONS: MacroLesson[] = [
     roundIds: ["round-cpi-14", "round-cpi-15", "round-cpi-16", "round-cpi-17", "round-cpi-18", "round-cpi-19"],
     quizGroup: "macro-releases",
     glossaryIds: ["cpi", "core-inflation", "shelter-inflation", "inflation-expectations"],
-    reaction: "Hot core CPI usually lifts the 2-year yield and the dollar and weighs on growth stocks and rate-sensitive sectors; cool core does the opposite. During a growth scare, hot CPI can raise stagflation fears.",
+    ...reactionWithSims([{ text: "Hot core CPI", sim: "mac-cpi-hot" }, " usually lifts the 2-year yield and the dollar and weighs on growth stocks and rate-sensitive sectors; cool core does the opposite. During a growth scare, hot CPI can raise stagflation fears."]),
+    simulations: MACRO_SIMS["cpi"],
   },
   {
     id: "ppi",
@@ -174,7 +182,8 @@ export const MACRO_LESSONS: MacroLesson[] = [
     roundIds: ["round-ism-mfg-28", "round-ism-services-31"],
     quizGroup: "macro-releases",
     glossaryIds: ["pmi", "diffusion-index"],
-    reaction: "A PMI crossing 50 gets headlines, but mixed sub-indexes (busy activity with cooling prices, or the reverse) can make the market whipsaw.",
+    ...reactionWithSims(["A PMI crossing 50 gets headlines, but mixed sub-indexes (busy activity with cooling prices, or the reverse) ", { text: "can make the market whipsaw", sim: "mac-ism-whipsaw" }, "."]),
+    simulations: MACRO_SIMS["ism-pmi"],
   },
   {
     id: "consumer-sentiment",
@@ -204,7 +213,8 @@ export const MACRO_LESSONS: MacroLesson[] = [
     roundIds: ["round-fomc-38", "round-fomc-41", "round-fomc-42", "round-fomc-43"],
     quizGroup: "fed-policy",
     glossaryIds: ["fomc", "federal-funds-rate", "target-range", "fed-funds-futures", "hawkish-dovish", "buy-the-rumor", "basis-point"],
-    reaction: "A fully priced decision tends to move little; the surprise is the decision vs pricing. A bigger-than-priced cut during a growth scare can make stocks fall because the Fed looks worried.",
+    ...reactionWithSims(["A fully priced decision tends to move little; ", { text: "the surprise is the decision vs pricing", sim: "mac-fomc-pricing" }, ". A bigger-than-priced cut during a growth scare can make stocks fall because the Fed looks worried."]),
+    simulations: MACRO_SIMS["fomc-decision"],
   },
   {
     id: "dot-plot",
@@ -248,7 +258,8 @@ export const MACRO_LESSONS: MacroLesson[] = [
     roundIds: ["round-cpi-17", "round-payrolls-08"],
     quizGroup: "rates-curve",
     glossaryIds: ["treasury-yield", "two-year-yield", "ten-year-yield", "yield-curve", "curve-inversion", "bull-bear-steepener", "term-premium"],
-    reaction: "Hot data usually lifts the 2-year more than the 10-year (bear flattening); expected cuts usually pull the 2-year down faster (bull steepening).",
+    ...reactionWithSims(["Hot data usually lifts the 2-year more than the 10-year (", { text: "bear flattening", sim: "mac-curve-bear-flat" }, "); expected cuts usually pull the 2-year down faster (bull steepening)."]),
+    simulations: MACRO_SIMS["treasury-curve"],
   },
   {
     id: "real-yields-breakevens",
@@ -291,7 +302,8 @@ export const MACRO_LESSONS: MacroLesson[] = [
     roundIds: ["round-pmms-36", "round-payrolls-02"],
     quizGroup: "housing-mortgage",
     glossaryIds: ["mortgage-rate", "mortgage-spread", "ten-year-yield", "rate-sensitive-sectors"],
-    reaction: "The survey itself rarely moves markets — it reports where rates already went. The market-moving news is whatever moved the 10-year that week.",
+    ...reactionWithSims(["The survey itself rarely moves markets — ", { text: "it reports where rates already went", sim: "mac-mortgage-lag" }, ". The market-moving news is whatever moved the 10-year that week."]),
+    simulations: MACRO_SIMS["mortgage-rates"],
   },
   {
     id: "housing-starts",

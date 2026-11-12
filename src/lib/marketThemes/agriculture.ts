@@ -7,6 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, pct, r2, seededTape, usd } from "./helpers";
 
 /** USDA ERS: about 33 million Btu of natural gas per ton of ammonia. */
@@ -127,7 +129,7 @@ export const AGRICULTURE: MarketTheme = {
   ],
   drivers: [
     { title: "Weather and yields", text: "Drought, floods and heat during key growth stages change yields. USDA NASS's weekly Crop Progress gives condition ratings between monthly reports." },
-    { title: "The WASDE balance sheet", text: "USDA's monthly WASDE (12:00 p.m. ET) projects supply, use and ending stocks. A lower stocks-to-use ratio means less cushion." },
+    { title: "The WASDE balance sheet", ...withSims(["USDA's monthly WASDE (12:00 p.m. ET) projects supply, use and ending stocks. ", { text: "A lower stocks-to-use ratio", sim: "mk-ag-wasde" }, " means less cushion."]) },
     { title: "Trade and policy", text: "Export demand, tariffs and export bans shift where crops go and what they fetch." },
     { title: "Gas for nitrogen", text: "USDA ERS: about 33 million Btu of gas per ton of ammonia; gas is 72–85% of production cost." },
     { title: "Farm income", text: "When crop prices fall and costs stay high, farmers delay equipment and may cut fertilizer use." },
@@ -190,6 +192,7 @@ export const AGRICULTURE: MarketTheme = {
     { label: "Practice → Energy", to: "/practice/energy" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
+  simulations: THEME_SIMS["agriculture"],
   mode: "agriculture_inputs",
   modeLabel: "Farm economy: crop, input or equipment",
   modeTip:

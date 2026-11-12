@@ -70,6 +70,20 @@ export function ToolTextView({ text }: { text: ToolText }) {
   );
 }
 
+/** Copy that may carry triggers: the plain `text` everywhere, the `rich` runs where a page has simulations. */
+export function RichText({ text, rich }: { text: string; rich?: ToolText }) {
+  return rich ? <ToolTextView text={rich} /> : <>{text}</>;
+}
+
+/** The one-line legend that tells readers dotted purple phrases are simulations, not glossary terms. */
+export function SimHint({ subject = "why the idea matters on a chart or a table" }: { subject?: string }) {
+  return (
+    <p className="text-[11px] text-muted" data-testid="sim-hint">
+      <span className="font-medium text-sim underline decoration-dotted decoration-2 underline-offset-[3px]">Dotted purple phrases ▶</span> are not glossary terms. Each opens a short simulation: a SAMPLE tape or a table you step through, showing {subject}.
+    </p>
+  );
+}
+
 /** Holds which simulation is open; renders the popover and returns focus to the trigger on close. */
 export function SimProvider({ sims, initialOpen, children }: { sims: ToolSimulation[]; initialOpen?: string | null; children: ReactNode }) {
   const [openId, setOpenId] = useState<string | null>(initialOpen && sims.some((s) => s.id === initialOpen) ? initialOpen : null);

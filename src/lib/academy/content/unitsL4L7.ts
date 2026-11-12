@@ -4,6 +4,7 @@
  * the options / futures / forex / crypto literacy groups and coach sessions. Educational only.
  */
 import type { Unit } from "../types";
+import { UNIT_SIMS, cardWithSims } from "./simulations";
 
 export const UNITS_L4_L7: Unit[] = [
   // ---------------- L4 Company fundamentals & earnings ----------------
@@ -66,11 +67,12 @@ export const UNITS_L4_L7: Unit[] = [
     title: "How stocks react to earnings",
     objective: "Recognise a gap that holds, a gap that fills and a sell-the-news reaction.",
     cards: [
-      { title: "Gaps", body: "After earnings a stock often opens far from the prior close: a gap. Whether the gap holds over the next days tells you whether buyers or sellers believe the news.", glossaryTermId: "earnings-gap" },
+      { title: "Gaps", ...cardWithSims(["After earnings a stock often opens far from the prior close: a gap. ", { text: "Whether the gap holds over the next days", sim: "ac-earnings-gap" }, " tells you whether buyers or sellers believe the news."]), glossaryTermId: "earnings-gap" },
       { title: "Drift", body: "Big surprises sometimes keep moving in the same direction for days or weeks after the report. This tendency is called post-earnings drift. It is a tendency, not a rule.", glossaryTermId: "post-earnings-drift" },
       { title: "Sell the news", body: "A stock that ran up a lot into the report can fall on good results, because buyers were already in. The reaction depends on positioning as well as the numbers." },
     ],
     refs: ["quiz:earnings-reaction", "practice:/practice/mark-the-band", "glossary:post-earnings-drift", "case:case-earn-beat-miss"],
+    simulations: UNIT_SIMS["l4-earnings-reactions"],
   },
   {
     id: "l4-balance-sheet-risk",

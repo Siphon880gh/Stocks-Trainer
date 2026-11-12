@@ -7,6 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, pct, r2, seededTape } from "./helpers";
 
 /** Revenue change when `contractedPct` of sales is at fixed prices and the rest moves with spot. */
@@ -136,7 +138,7 @@ export const INDUSTRIAL_METALS: MarketTheme = {
     { title: "Grid and construction demand", text: "The IEA says China's rapid grid buildout was the single largest contributor to copper demand growth in 2023–2024. Construction and manufacturing cycles matter too." },
     { title: "Mine supply and disruption", text: "New copper mines take years. The IEA estimated about 7% of 2024 copper supply was at risk from floods or droughts." },
     { title: "Uranium contracts", text: "EIA data: U.S. reactor owners bought 49.8 of 55.9 million pounds under long-term contracts in 2024. Producers reprice slowly; the thin spot market can jump." },
-    { title: "Supply response", text: "High prices bring new supply. The IEA notes lithium rose about eightfold in 2021–22, then fell more than 80% from 2023 as output surged." },
+    { title: "Supply response", ...withSims([{ text: "High prices bring new supply", sim: "mk-im-supply" }, ". The IEA notes lithium rose about eightfold in 2021–22, then fell more than 80% from 2023 as output surged."]) },
     { title: "Policy and financing", text: "Clean-energy projects are mostly up-front capital, so interest rates and subsidies change their economics." },
   ],
   bridges: [
@@ -197,6 +199,7 @@ export const INDUSTRIAL_METALS: MarketTheme = {
     { label: "Practice → Same theme, different wrapper", to: "/practice/exposure-wrappers" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
+  simulations: THEME_SIMS["industrial-metals"],
   mode: "industrial_metals",
   modeLabel: "Metals: which channel reaches the price",
   modeTip:

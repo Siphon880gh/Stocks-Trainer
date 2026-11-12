@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { SimHint, SimProvider, ToolTextView } from "../../components/tools/Simulation";
 import PracticeShell from "../../components/PracticeShell";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
 import {
@@ -32,7 +33,9 @@ import {
   VIX_INSTRUMENTS,
   VIX_KEY_IDEAS,
   VIX_LINKS,
+  VIX_SHORTING_LEAD,
   VIX_SIGMA_LEVELS,
+  VIX_SIMULATIONS,
   VIX_VERDICT,
   VRO_EXAMPLE,
   VX_EXAMPLES,
@@ -76,7 +79,9 @@ export default function PracticeVixTrading() {
   const right = VIX_DRILLS.filter((d) => picks[d.id] === d.answer).length;
   const allDone = VIX_DRILLS.every((d) => picks[d.id] !== undefined);
 
+  const [params] = useSearchParams();
   return (
+    <SimProvider sims={VIX_SIMULATIONS} initialOpen={params.get("sim")}>
     <PracticeShell
       title="VIX trading for beginners"
       blurb={`How traders try to profit from volatility, and the losses that can overwhelm a trade that looked right. ${VIX_DISCLAIMER}`}
@@ -361,7 +366,7 @@ export default function PracticeVixTrading() {
 
       <Panel id="vix-shorting" title="Why shorting continuously can fail">
         <p className="text-[12px]">
-          Volatility often falls back after a spike, but there is no deadline, no fixed baseline, and no guarantee the account survives until it does. 19 trades of +$100 and one of −$3,000: {WIN_RATE_EXAMPLE.winRate}% winners and {usd(WIN_RATE_EXAMPLE.total)} overall ({usd(WIN_RATE_EXAMPLE.expectancy)} a trade).
+          <ToolTextView text={VIX_SHORTING_LEAD} /> 19 trades of +$100 and one of −$3,000: {WIN_RATE_EXAMPLE.winRate}% winners and {usd(WIN_RATE_EXAMPLE.total)} overall ({usd(WIN_RATE_EXAMPLE.expectancy)} a trade).
         </p>
         <table className="text-[12px]" data-testid="vix-recovery">
           <thead>
@@ -376,6 +381,7 @@ export default function PracticeVixTrading() {
         <p className="text-[12px]">
           Look at the whole portfolio: a short-volatility position tends to lose at the same time as stocks in a selloff, so adding it to a stock-heavy account increases your dependence on calm markets. A long-volatility hedge has the opposite role, but its cost and imperfect response can still make it unsuitable.
         </p>
+        <SimHint subject="how a short-volatility position fares through a spike on a SAMPLE tape" />
         <p className="text-[12px] text-muted">Glossary: {term("win-rate-vs-expectancy", "win rate vs expectancy")} · {term("recovery-math", "recovery math")} · {term("drawdown", "drawdown")}</p>
       </Panel>
 
@@ -452,5 +458,6 @@ export default function PracticeVixTrading() {
         </p>
       </section>
     </PracticeShell>
+    </SimProvider>
   );
 }

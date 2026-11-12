@@ -6,6 +6,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, pct, r2, seededTape } from "./helpers";
 
 /** ICE U.S. Dollar Index fixed weights (ICE rulebook 15.01). */
@@ -117,7 +119,7 @@ export const CURRENCY_FUNDS: MarketTheme = {
     { name: "Single-currency trust", examples: "FXE (euro), FXY (yen)", owns: "Deposits in one currency", tracks: "That currency against the dollar, plus deposit interest, minus fees", watch: "One currency only; deposit interest can be below market rates; trading hours" },
   ],
   drivers: [
-    { title: "Rate differentials", text: "Central-bank rates and expectations are a major driver. A currency whose rates are expected to rise relative to another's often strengthens." },
+    { title: "Rate differentials", ...withSims(["Central-bank rates and expectations are a major driver. A currency whose rates are ", { text: "expected to rise relative to another's", sim: "mk-cf-rate-gap" }, " often strengthens."]) },
     { title: "Growth and risk appetite", text: "Risk-off moves often lift the dollar, yen and Swiss franc; risk-on moves often help commodity currencies like the Australian dollar." },
     { title: "Fixed vs broad baskets", text: "The ICE index has fixed weights set when it began and changed only when the euro replaced its legacy currencies. The Federal Reserve's broad dollar index covers many more trading partners." },
     { title: "Official action", text: "Governments sometimes intervene. Intervention can move a pair sharply overnight; it does not guarantee the trend that follows." },
@@ -180,6 +182,7 @@ export const CURRENCY_FUNDS: MarketTheme = {
     { label: "Cases → Forex", to: "/cases?pack=forex" },
     { label: "Macro → The dollar", to: "/macro" },
   ],
+  simulations: THEME_SIMS["currency-funds"],
   mode: "currency_wrapper",
   modeLabel: "Currency: which wrapper, which basket",
   modeTip:

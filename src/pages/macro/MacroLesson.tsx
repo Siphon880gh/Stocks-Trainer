@@ -1,6 +1,7 @@
 import { Fragment, useState, type ReactNode } from "react";
 import CurveExplorer from "../../components/macro/CurveExplorer";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
+import { RichText, SimHint, SimProvider } from "../../components/tools/Simulation";
 import { FAMILY_NAMES, getLesson } from "../../lib/macro/lessons";
 import { getMacroSource } from "../../lib/macro/sources";
 import { getRelease } from "../../lib/macro/releases";
@@ -29,6 +30,7 @@ function Step({ n, title, children }: { n: number; title: string; children: Reac
 /** /macro/:lessonId — real source → simulated look-alike → expectations → reaction rounds → quiz + glossary. */
 export default function MacroLesson({ lessonIdOverride }: { lessonIdOverride?: string }) {
   const params = useParams();
+  const [search] = useSearchParams();
   const lesson = getLesson(lessonIdOverride ?? params.lessonId ?? "");
   const viewerEvent = lesson?.viewer.type === "event" ? lesson.viewer.eventId : undefined;
   const [eventId, setEventId] = useState(viewerEvent && lesson?.eventIds.includes(viewerEvent) ? viewerEvent : lesson?.eventIds[0]);
@@ -61,7 +63,9 @@ export default function MacroLesson({ lessonIdOverride }: { lessonIdOverride?: s
           </div>
     ) : null;
 
+  const sims = lesson.simulations ?? [];
   return (
+    <SimProvider sims={sims} initialOpen={search.get("sim")}>
     <main className="flex-1 px-4 py-6 max-w-5xl mx-auto w-full space-y-6">
       <header className="space-y-1">
         <p className="text-[12px] text-muted">
@@ -124,7 +128,8 @@ export default function MacroLesson({ lessonIdOverride }: { lessonIdOverride?: s
       </Step>
 
       <Step n={4} title="Call the reaction">
-        <p className="text-[13px] text-muted">{lesson.reaction}</p>
+        <p className="text-[13px] text-muted" data-testid="macro-reaction"><RichText text={lesson.reaction} rich={lesson.reactionRich} /></p>
+        {sims.length ? <SimHint subject="how this reaction plays out on a SAMPLE tape or curve" /> : null}
         {round ? (
           <Fragment key={round.id}>
             <MacroDeskRound round={round} onComplete={(c, t) => recordRound(round.id, c, t)} onNext={() => setPlaying(null)} />
@@ -161,5 +166,6 @@ export default function MacroLesson({ lessonIdOverride }: { lessonIdOverride?: s
         </div>
       </Step>
     </main>
+    </SimProvider>
   );
 }

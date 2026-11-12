@@ -4,6 +4,7 @@
  * Educational only; SAMPLE / SIMULATED examples; not trading advice.
  */
 import type { Unit } from "../types";
+import { UNIT_SIMS, cardWithSims } from "./simulations";
 
 export const UNITS_L0_L3: Unit[] = [
   // ---------------- L0 Orientation ----------------
@@ -212,10 +213,11 @@ export const UNITS_L0_L3: Unit[] = [
     objective: "Use volume to judge whether a breakout has real participation.",
     cards: [
       { title: "Volume bars", body: "Under many charts, volume bars show how many shares traded each period. A move on volume well above average had broad participation.", glossaryTermId: "volume" },
-      { title: "Breakouts want volume", body: "A breakout through resistance on heavy volume is more convincing than one on light volume. Light-volume breakouts fail more often." },
+      { title: "Breakouts want volume", ...cardWithSims([{ text: "A breakout through resistance on heavy volume", sim: "ac-volume-breakout" }, " is more convincing than one on light volume. Light-volume breakouts fail more often."]) },
       { title: "Spikes after news", body: "Earnings days and big news show volume spikes. The candle on that day often sets the levels traders watch for weeks: its high, its low and the gap it left behind.", glossaryTermId: "volume-spike" },
     ],
     refs: ["glossary:volume", "glossary:volume-spike", "practice:/practice/replay"],
+    simulations: UNIT_SIMS["l2-volume-confirms"],
   },
   {
     id: "l2-patterns-need-context",
@@ -252,10 +254,11 @@ export const UNITS_L0_L3: Unit[] = [
     objective: "Place a protective sell stop and predict its fill after a gap.",
     cards: [
       { title: "A trigger, then a market order", body: "A stop order waits until price trades at the stop level, then becomes a market order. A sell stop under your entry is a protective exit; a buy stop above the market enters on a breakout.", glossaryTermId: "stop-order" },
-      { title: "Gaps fill worse", body: "If you hold shares with a sell stop at 45 and the stock opens at 41 after bad news, the stop fills near 41, not 45. A stop limits a loss, but it cannot cap it exactly.", glossaryTermId: "gap-risk" },
+      { title: "Gaps fill worse", ...cardWithSims(["If you hold shares with a sell stop at 45 and the stock opens at 41 after bad news, ", { text: "the stop fills near 41, not 45", sim: "ac-stop-gap" }, ". A stop limits a loss, but it cannot cap it exactly."]), glossaryTermId: "gap-risk" },
       { title: "Where the stop goes", body: "Put the stop where your idea is proven wrong, such as below support or the last higher low, not at a round number or a random percentage. Then size the trade so that stop distance equals the loss you accept." },
     ],
     refs: ["glossary:stop-order", "glossary:gap-risk", "practice:/practice/invalidation", "quiz:orders-and-fills"],
+    simulations: UNIT_SIMS["l3-stop-orders"],
   },
   {
     id: "l3-stop-limit",
@@ -278,10 +281,11 @@ export const UNITS_L0_L3: Unit[] = [
     objective: "Predict how a trailing stop's level ratchets up and never down.",
     cards: [
       { title: "A stop that follows price", body: "A trailing sell stop sits a fixed amount or percent below the highest price since you placed it. As the price makes new highs, the stop rises. When the price falls, the stop stays where it is.", glossaryTermId: "trailing-stop" },
-      { title: "An example", body: "Bought at 50 with a $3 trail: the stop starts at 47 if the high is 50. The stock climbs to 58, so the stop rises to 55. It then drops to 54: the stop at 55 triggers and you sell near 55, keeping most of the gain." },
+      { title: "An example", ...cardWithSims([{ text: "Bought at 50 with a $3 trail", sim: "ac-trailing" }, ": the stop starts at 47 if the high is 50. The stock climbs to 58, so the stop rises to 55. It then drops to 54: the stop at 55 triggers and you sell near 55, keeping most of the gain."]) },
       { title: "Choose the distance", body: "Too tight and normal wiggles stop you out. Too loose and you give back a lot. Many traders trail under structure (the last higher low) instead of a fixed distance." },
     ],
     refs: ["glossary:trailing-stop", "coach:trailing-stop-exit", "route:/paper", "quiz:orders-and-fills", "quiz:trade-framework"],
+    simulations: UNIT_SIMS["l3-trailing-stop"],
   },
   {
     id: "l3-time-in-force",

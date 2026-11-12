@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
+import { RichText, SimHint, SimProvider } from "../tools/Simulation";
 import PracticeShell from "../PracticeShell";
 import { markMiscPracticeDone } from "../../lib/miscPractices";
 import { getMarketTheme } from "../../lib/marketThemes";
@@ -9,6 +10,8 @@ import { cn } from "../../lib/utils";
 /** One market-theme lesson (/practice/<theme>): wrappers, drivers, bridges, math, a calculator, drills, caveats, sources. */
 export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) {
   const theme = getMarketTheme(id)!;
+  const [params] = useSearchParams();
+  const sims = theme.simulations ?? [];
   const [picks, setPicks] = useState<Record<string, number>>({});
   const [vals, setVals] = useState<Record<string, number>>(
     () => Object.fromEntries((theme.calculator?.inputs ?? []).map((i) => [i.id, i.value])),
@@ -23,9 +26,11 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
   const done = theme.drills.every((d) => picks[d.id] !== undefined);
 
   return (
+    <SimProvider sims={sims} initialOpen={params.get("sim")}>
     <PracticeShell title={theme.title} blurb={theme.blurb}>
       <section className="panel p-4 space-y-2 text-[13px]" data-testid="theme-intro">
         {theme.intro.map((p) => <p key={p}>{p}</p>)}
+        {sims.length ? <SimHint subject="how a driver below shows up on a fund's tape or in a table" /> : null}
         <p className="text-[11px] text-muted" data-testid="theme-market-forces">Market Forces: {theme.marketForces}</p>
       </section>
 
@@ -63,7 +68,7 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
         {theme.drivers.map((c) => (
           <div key={c.title}>
             <p className="font-medium">{c.title}</p>
-            <p className="text-[12px]">{c.text}</p>
+            <p className="text-[12px]"><RichText text={c.text} rich={c.rich} /></p>
           </div>
         ))}
       </section>
@@ -74,7 +79,7 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
           {theme.bridges.map((c) => (
             <div key={c.title} className="border border-line rounded p-2">
               <p className="font-medium text-[12px]">{c.title}</p>
-              <p className="text-[12px]">{c.text}</p>
+              <p className="text-[12px]"><RichText text={c.text} rich={c.rich} /></p>
             </div>
           ))}
         </div>
@@ -159,7 +164,7 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
         {theme.caveats.map((c) => (
           <div key={c.title}>
             <p className="font-medium">{c.title}</p>
-            <p className="text-[12px]">{c.text}</p>
+            <p className="text-[12px]"><RichText text={c.text} rich={c.rich} /></p>
           </div>
         ))}
       </section>
@@ -186,5 +191,6 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
         </ul>
       </section>
     </PracticeShell>
+    </SimProvider>
   );
 }

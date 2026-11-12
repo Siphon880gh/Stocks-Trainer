@@ -7,6 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, pct, r2, seededTape } from "./helpers";
 
 /** Feedstock cost per pound of product, ignoring co-product credits: feedstock price ÷ yield. */
@@ -129,7 +131,7 @@ export const MATERIALS_CHEMICALS: MarketTheme = {
     { name: "Materials sector fund", examples: "XLB", owns: "S&P 500 materials companies", tracks: "Industrial gases, miners, aggregates, paints, packaging and chemicals", watch: `Resin makers are a small slice (Dow ≈ ${XLB_WEIGHTS.dow}%, LYB ≈ ${XLB_WEIGHTS.lyb}% as of ${XLB_AS_OF}); WLK and EMN are not held` },
   ],
   drivers: [
-    { title: "Feedstock: ethane vs naphtha", text: "EIA: U.S. ethane prices follow natural gas, naphtha follows crude; ethane can yield more than 80% ethylene vs as little as 30% from naphtha. When oil rises faster than gas, U.S. crackers' edge widens." },
+    { title: "Feedstock: ethane vs naphtha", ...withSims(["EIA: U.S. ethane prices follow natural gas, naphtha follows crude; ethane can yield more than 80% ethylene vs as little as 30% from naphtha. ", { text: "When oil rises faster than gas", sim: "mk-mc-feedstock" }, ", U.S. crackers' edge widens."]) },
     { title: "Demand", text: "Packaging, construction, autos and consumer goods drive volumes. Destocking by customers can cut orders even when end demand is fine." },
     { title: "Capacity", text: "Crackers and polymer plants are huge and arrive in steps. When new capacity outruns demand, operating rates and margins fall industry-wide." },
     { title: "Exports and trade", text: "EIA reports record U.S. ethane exports in 2024 (China took 46%), so cheap U.S. feedstock also supplies foreign crackers." },
@@ -197,6 +199,7 @@ export const MATERIALS_CHEMICALS: MarketTheme = {
     { label: "Practice → Same theme, different wrapper", to: "/practice/exposure-wrappers" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
+  simulations: THEME_SIMS["materials-chemicals"],
   mode: "materials_chemicals",
   modeLabel: "Chemicals: the spread, not the headline",
   modeTip:

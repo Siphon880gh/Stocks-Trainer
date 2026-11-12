@@ -7,6 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { MarketTheme } from "./types";
+import { withSims } from "../toolTraining/simWalk";
+import { THEME_SIMS } from "./simulations";
 import { mc, pct, r2, seededTape, usd } from "./helpers";
 
 /** Margin per ounce over all-in sustaining cost. */
@@ -131,7 +133,7 @@ export const PRECIOUS_METALS: MarketTheme = {
     { name: "Streaming / royalty company", examples: "Look up streamers in a sector screen", owns: "Rights to future metal or revenue from other companies' mines", tracks: "Metal price times the streams it owns", watch: "Fewer cost swings than operators; depends on partners' mines and deal terms" },
   ],
   drivers: [
-    { title: "Real yields", text: "Gold pays nothing, so when inflation-adjusted Treasury yields rise, holding gold costs more in forgone interest. Many analysts watch the 10-year TIPS yield (FRED DFII10). The link is strong in some years and weak in others." },
+    { title: "Real yields", ...withSims(["Gold pays nothing, so when inflation-adjusted Treasury yields rise, holding gold costs more in forgone interest. Many analysts watch the ", { text: "10-year TIPS yield", sim: "mk-pm-real-yields" }, " (FRED DFII10). The link is strong in some years and weak in others."]) },
     { title: "The dollar", text: "Gold is priced in dollars, so a stronger dollar often weighs on it for non-U.S. buyers. Often, not always." },
     { title: "Central-bank buying", text: "The World Gold Council estimates central banks bought 1,044.6 tonnes in 2024, the third straight year above 1,000t, versus a 473t average in 2010–2021. Official demand can support prices even when real yields are high." },
     { title: "Risk mood", text: "Gold often draws safe-haven demand in a crisis, but in a rush for cash it can fall with stocks at first." },
@@ -201,6 +203,7 @@ export const PRECIOUS_METALS: MarketTheme = {
     { label: "Coach → Gold as a haven (futures)", to: "/coach/futures-gold-haven" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
+  simulations: THEME_SIMS["precious-metals"],
   mode: "precious_metals",
   modeLabel: "Metals: which driver, which wrapper",
   modeTip:

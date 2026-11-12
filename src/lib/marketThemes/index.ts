@@ -5,6 +5,8 @@
  */
 import type { QuizQuestion } from "../quizData";
 import type { MarketTheme, MarketThemeMode, MarketThemeQuizGroupId } from "./types";
+import type { SimRef } from "../toolTraining/types";
+import { toolTextRefs } from "../toolTraining/simWalk";
 import { EXPOSURE_WRAPPERS } from "./structure";
 import { CURRENCY_FUNDS } from "./currencyFunds";
 import { INDEX_STYLE } from "./indexStyle";
@@ -41,3 +43,8 @@ export const MARKET_THEME_PRACTICE_ITEMS = MARKET_THEMES.map((t) => ({ id: t.id,
 
 export const MARKET_THEME_MODE_LABELS = Object.fromEntries(MARKET_THEMES.map((t) => [t.mode, t.modeLabel])) as Record<MarketThemeMode, string>;
 export const MARKET_THEME_MODE_TIPS = Object.fromEntries(MARKET_THEMES.map((t) => [t.mode, t.modeTip])) as Record<MarketThemeMode, string>;
+
+/** Every underlined simulation trigger in a theme's driver, bridge and caveat cards. */
+export function themeSimRefs(theme: MarketTheme): SimRef[] {
+  return [...theme.drivers, ...theme.bridges, ...theme.caveats].flatMap((c) => (c.rich ? toolTextRefs(c.rich) : []));
+}
