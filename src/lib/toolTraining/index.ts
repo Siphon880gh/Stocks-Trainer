@@ -7,10 +7,11 @@ import type { QuizQuestion } from "../quizData";
 import type { ToolLesson, ToolTrainingMode, ToolTrainingQuizGroupId } from "./types";
 import { MARKET_FORCES_LESSON } from "./marketForces";
 import { STOCKANALYSIS_LESSON } from "./stockAnalysis";
+import { FINVIZ_LESSON } from "./finviz";
 
 export type { MockBlock, MockCallout, ToolLesson, ToolScreen, ToolTrainingMode, ToolTrainingQuizGroupId, ToolWalkthrough } from "./types";
 
-export const TOOL_LESSONS: ToolLesson[] = [MARKET_FORCES_LESSON, STOCKANALYSIS_LESSON];
+export const TOOL_LESSONS: ToolLesson[] = [MARKET_FORCES_LESSON, STOCKANALYSIS_LESSON, FINVIZ_LESSON];
 
 export const TOOL_LESSON_IDS = TOOL_LESSONS.map((t) => t.id);
 

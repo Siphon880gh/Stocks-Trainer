@@ -317,3 +317,10 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Values read by hand from public stockanalysis.com pages on Nov 12, 2026 (NEM overview, income statement, statistics; GDX overview and holdings). Nothing behind a login; Pro limits and pricing from the public Pro page.
 - Risk: every number is dated and will go stale; the lesson says so on screen.
 - No Playbook: this teaches a tool, not a vouched trading practice.
+
+### TT3 Finviz
+
+- Lesson `/tools/finviz`, Learn group `tool-finviz` (14 FV- questions), 3 macro-news cases (seeds 10301–10303), 5 glossary terms, coach `finviz-tour` (tagged `tools`).
+- Values read by hand from public finviz.com pages on Nov 12, 2026 before the open (Industry = Gold screen, NEM quote page, screener help, Elite plan page). Insider names replaced with roles.
+- Free vs Elite covers account limits only; charting differences stay in `/practice/charting-apps` (not duplicated).
+- No Playbook: this teaches a tool, not a vouched trading practice.

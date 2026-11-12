@@ -252,6 +252,7 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | `/tools` | Tool Training hub: lessons, ground rules for every tool, a legend for the simulated screens, link to the charting-apps comparison | <!-- tool route -->
 | `/tools/market-forces` | Tool Training: Market Forces (simulated layouts of Weng's ticker directory) | <!-- tool route -->
 | `/tools/stockanalysis` | Tool Training: StockAnalysis (simulated layouts; values dated Nov 12, 2026) | <!-- tool route -->
+| `/tools/finviz` | Tool Training: Finviz (simulated layouts; values dated Nov 12, 2026) | <!-- tool route -->
 | `/map` | Progress map (`?view=world`, `tree` or `web`): world map, skill tree, discovery web, Next objective |
 | `/practice/statements` | Statements lab · 13-week cash forecast · biotech readout day |
 | `/practice/read-the-print` · `/practice/mark-the-band` | Earnings reaction game · expected-move band |
@@ -331,6 +332,7 @@ Beginner training modelled on how broker apps such as Webull teach new investors
   - TT0 foundations: menu (`TOOL_TRAINING` in `appNav.ts`, AppChrome dropdown, AppSectionNav), ToC group `tool-training`, routes `/tools` and `/tools/:toolId`, map hub, shared mock screens, registry spreads (Learn groups, cases, modes, glossary). No Playbook: tool lessons teach how to read a tool, not a strategy.
   - TT1 Market Forces (`/tools/market-forces`): themes and connection lines, exposure badges, research links for stocks and funds, notes, and index-weight snapshots (ETF-based estimates, Oct 8, 2026); 14-question quiz, 3 cases, 5 terms, coach `market-forces-tour`. No Playbook (a tool, not a practice).
   - TT2 StockAnalysis (`/tools/stockanalysis`): Overview, Financials and Statistics tabs for a stock (Newmont) and Holdings for an ETF (GDX), with values read from public pages on Nov 12, 2026; TTM vs fiscal years, one-time rows, Upgrade (Pro) fields, data providers and as-of dates; 14-question quiz, 3 cases, 5 terms, coach `stockanalysis-tour`. No Playbook (a tool, not a practice).
+  - TT3 Finviz (`/tools/finviz`): screener filter tabs, views and signals, the quote page's snapshot table, analyst and insider rows (Form 144 vs Form 4), delayed quotes, and free vs Elite account limits, read from public pages on Nov 12, 2026; charting features stay in Charting apps compared; 14-question quiz, 3 cases, 5 terms, coach `finviz-tour`. No Playbook (a tool, not a practice).
 - **EMA, SMA and MACD lab** (`/practice/ema-macd`): 3 long SIMULATED charts (120 bars) with 11 questions computed from the chart.
 
 ### Oscillators & volatility stop (`/practice/oscillators`)
