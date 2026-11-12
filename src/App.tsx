@@ -125,6 +125,7 @@ export default function App() {
           <Route path="practice/currency-funds" element={<MarketThemePage id="currency-funds" />} />
           <Route path="practice/precious-metals" element={<MarketThemePage id="precious-metals" />} />
           <Route path="practice/energy" element={<MarketThemePage id="energy" />} />
+          <Route path="practice/industrial-metals" element={<MarketThemePage id="industrial-metals" />} />
           <Route path="map" element={<ProgressMap />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />

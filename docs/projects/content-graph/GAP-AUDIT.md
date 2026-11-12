@@ -254,3 +254,11 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Sources checked 2026-11-12: EIA (crude price drivers, Weekly Petroleum Status Report incl. the Nov 12, 2026 holiday shift, Weekly Natural Gas Storage Report, factors affecting gas prices, 3:2:1 crack spread), USCF UNG (near-month Henry Hub benchmark; 1-for-4 reverse split Jan 23, 2024) and USO pages, FINRA.
 - Playbook: none (no outside expert vouches for an energy strategy).
 - Coach parity after MK2: equity 29, futures 24, forex 23, crypto 22, options 25 (floor 21).
+
+## 2026-11-12 Market themes MK3: industrial and transition metals
+- Source: Market Forces Copper (CPER, COPX, FCX, SCCO), Uranium (URA, URNM, CCJ) and Energy transition (ICLN, TAN, FSLR).
+- Already covered: commodity futures funds and operating leverage (MK0). Not covered: copper's demand channels and supply risk, uranium contracting, physical uranium vehicles, supply response, clean-energy financing.
+- Added `/practice/industrial-metals` (12 `IM-`, 3 beginner macro-news cases: copper mine disruption gap with no plan, spot uranium spike vs a contracted producer, solar maker after a rate jump; 6 terms; coach `industrial-metals-wrappers`).
+- Sources checked 2026-11-12: IEA Global Critical Minerals Outlook 2025 executive summary (curl 403, browser fetch fine), EIA Uranium Marketing Annual Report table S1a, FINRA, Global X COPX and URA, iShares ICLN.
+- Playbook: none.
+- Coach parity after MK3: equity 29, futures 25, forex 23, crypto 22, options 25 (floor 21).

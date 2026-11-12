@@ -59,6 +59,7 @@ export const APP_ROUTES: readonly string[] = [
   "/practice/currency-funds",
   "/practice/precious-metals", // market theme
   "/practice/energy", // market theme
+  "/practice/industrial-metals", // market theme
   "/practice/statements",
   "/practice/read-the-print",
   "/practice/mark-the-band",

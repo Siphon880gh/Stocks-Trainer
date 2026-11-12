@@ -11,14 +11,16 @@ export type MarketThemeQuizGroupId =
   | "exposure-wrappers"
   | "currency-funds"
   | "precious-metals"
-  | "energy";
+  | "energy"
+  | "industrial-metals";
 
 /** Case thinking modes owned by the market-theme lessons (spread into `CaseThinkingMode`). */
 export type MarketThemeMode =
   | "exposure_wrapper"
   | "currency_wrapper"
   | "precious_metals"
-  | "energy_theme";
+  | "energy_theme"
+  | "industrial_metals";
 
 export interface ThemeSource {
   label: string;
