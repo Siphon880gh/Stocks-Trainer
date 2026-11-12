@@ -254,6 +254,7 @@ Detailed click scripts (exact labels for QA): [`QA_User_Flows.md`](./QA_User_Flo
 | `/tools/stockanalysis` | Tool Training: StockAnalysis (simulated layouts; values dated Nov 12, 2026) | <!-- tool route -->
 | `/tools/finviz` | Tool Training: Finviz (simulated layouts; values dated Nov 12, 2026) | <!-- tool route -->
 | `/tools/yahoo-finance` | Tool Training: Yahoo Finance (simulated layouts; values dated Nov 12, 2026) | <!-- tool route -->
+| `/tools/capstone` | Tool Training: Capstone, one ticker across four tools | <!-- tool route -->
 | `/map` | Progress map (`?view=world`, `tree` or `web`): world map, skill tree, discovery web, Next objective |
 | `/practice/statements` | Statements lab · 13-week cash forecast · biotech readout day |
 | `/practice/read-the-print` · `/practice/mark-the-band` | Earnings reaction game · expected-move band |
@@ -335,6 +336,7 @@ Beginner training modelled on how broker apps such as Webull teach new investors
   - TT2 StockAnalysis (`/tools/stockanalysis`): Overview, Financials and Statistics tabs for a stock (Newmont) and Holdings for an ETF (GDX), with values read from public pages on Nov 12, 2026; TTM vs fiscal years, one-time rows, Upgrade (Pro) fields, data providers and as-of dates; 14-question quiz, 3 cases, 5 terms, coach `stockanalysis-tour`. No Playbook (a tool, not a practice).
   - TT3 Finviz (`/tools/finviz`): screener filter tabs, views and signals, the quote page's snapshot table, analyst and insider rows (Form 144 vs Form 4), delayed quotes, and free vs Elite account limits, read from public pages on Nov 12, 2026; charting features stay in Charting apps compared; 14-question quiz, 3 cases, 5 terms, coach `finviz-tour`. No Playbook (a tool, not a practice).
   - TT4 Yahoo Finance (`/tools/yahoo-finance`): Summary time stamps and session labels, Performance Overview vs the S&P 500, the analyst target range, Statistics ttm/mrq labels and provider footnotes, Close vs Adj Close, and the Financials column order, read from public pages on Nov 12, 2026; chart features stay in Charting apps compared; 14-question quiz, 3 cases, 5 terms, coach `yahoo-finance-tour`. No Playbook (a tool, not a practice).
+  - TT5 Capstone (`/tools/capstone`): research Newmont (NEM) across all four tools on one day (Nov 12, 2026), line up where P/E, forward P/E, targets, short interest and employee counts agree or differ, confirm in SEC EDGAR filings, and write a dated research note with a decision rule; 14-question quiz, 3 cases, 4 terms, coach `tool-capstone-research`. No Playbook (a research method, not a vouched trading practice).
 - **EMA, SMA and MACD lab** (`/practice/ema-macd`): 3 long SIMULATED charts (120 bars) with 11 questions computed from the chart.
 
 ### Oscillators & volatility stop (`/practice/oscillators`)

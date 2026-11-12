@@ -331,3 +331,10 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Values read by hand from public finance.yahoo.com pages on Nov 12, 2026 (NEM summary, statistics, historical data, financials; premium plans page). Nothing behind a login.
 - Chart features stay in `/practice/charting-apps` (not duplicated).
 - No Playbook: this teaches a tool, not a vouched trading practice.
+
+### TT5 Capstone
+
+- Lesson `/tools/capstone`, Learn group `tool-capstone` (14 CP- questions), 3 macro-news cases (seeds 10501–10503), 4 glossary terms, coach `tool-capstone-research` (tagged `tools`).
+- Every value is imported from the TT1–TT4 lesson files (one source of truth), so the cross-check table cannot drift from the lessons.
+- No Playbook: a research method, not a vouched trading practice.
+- Tool Training (TT0–TT5) complete: 5 lessons, 70 questions, 15 cases, 24 terms, 5 coach sessions; coach parity unchanged (sessions tagged `tools`).

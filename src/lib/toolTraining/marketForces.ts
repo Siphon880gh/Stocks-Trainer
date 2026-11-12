@@ -16,6 +16,7 @@ export const MF_WEIGHTS_AS_OF = "2026-10-08";
 export const MF_WEIGHTS = {
   CAT: { sp500: 0.55, djia: 9.23, russell1000: 0.51 },
   NVDA: { sp500: 8.34, djia: 2.67, ndx: 8.33, russell1000: 7.53 },
+  NEM: { sp500: 0.18, russell1000: 0.17 },
 } as const;
 
 const TERMS: LiteracyTerm[] = [
