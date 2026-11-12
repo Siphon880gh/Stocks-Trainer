@@ -86,6 +86,7 @@ import { bondsDurationSession } from "./bonds-duration";
 import { sectorsCycleSession } from "./sectors-cycle";
 import { indexStyleBlocksSession } from "./index-style-blocks";
 import { marketForcesTourSession } from "./market-forces-tour";
+import { stockAnalysisTourSession } from "./stockanalysis-tour";
 // coach sessions for market themes / tool training end
 import { fourPillarsSession } from "./four-pillars";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
@@ -182,6 +183,7 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   sectorsCycleSession,
   indexStyleBlocksSession,
   marketForcesTourSession,
+  stockAnalysisTourSession,
   // market themes / tool training sessions end
   fourPillarsSession,
   supplyDemandZoneRetestSession,

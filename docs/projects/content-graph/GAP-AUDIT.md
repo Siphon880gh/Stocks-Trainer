@@ -310,3 +310,10 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Lesson `/tools/market-forces`, Learn group `tool-market-forces` (14 MF- questions), 3 macro-news cases (seeds 10101–10103), 5 glossary terms, coach `market-forces-tour` (tagged `tools`; no asset-class change).
 - Facts read from the tickers repo: `data/catalog.json` (Nov 12, 2026: 87 tickers, 42 themes) and `data/index-weights.json` (ETF-based estimates, Oct 8, 2026).
 - No Playbook: this teaches a tool, not a vouched trading practice.
+
+### TT2 StockAnalysis
+
+- Lesson `/tools/stockanalysis`, Learn group `tool-stockanalysis` (14 SA- questions), 3 macro-news cases (seeds 10201–10203), 5 glossary terms, coach `stockanalysis-tour` (tagged `tools`).
+- Values read by hand from public stockanalysis.com pages on Nov 12, 2026 (NEM overview, income statement, statistics; GDX overview and holdings). Nothing behind a login; Pro limits and pricing from the public Pro page.
+- Risk: every number is dated and will go stale; the lesson says so on screen.
+- No Playbook: this teaches a tool, not a vouched trading practice.
