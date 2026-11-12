@@ -85,6 +85,7 @@ import { materialsResinsSession } from "./materials-resins";
 import { bondsDurationSession } from "./bonds-duration";
 import { sectorsCycleSession } from "./sectors-cycle";
 import { indexStyleBlocksSession } from "./index-style-blocks";
+import { marketForcesTourSession } from "./market-forces-tour";
 // coach sessions for market themes / tool training end
 import { fourPillarsSession } from "./four-pillars";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
@@ -180,6 +181,7 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   bondsDurationSession,
   sectorsCycleSession,
   indexStyleBlocksSession,
+  marketForcesTourSession,
   // market themes / tool training sessions end
   fourPillarsSession,
   supplyDemandZoneRetestSession,

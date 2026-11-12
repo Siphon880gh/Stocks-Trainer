@@ -64,8 +64,11 @@ describe("tool training lessons", () => {
       for (const l of t.links) {
         const path = l.to.split("?")[0]!.split("#")[0]!;
         if (path.startsWith("/coach/")) assert.ok(sessions.has(path.slice(7)), l.to);
+        else if (path.startsWith("/tools/")) assert.ok(getToolLesson(path.slice(7)), l.to);
         else assert.ok(routeExists(path), l.to);
       }
+      assert.ok(t.links.some((l) => l.to.startsWith("/coach/")), `${t.id} coach link`);
+      assert.ok(t.links.some((l) => l.to === `/training?group=${t.id}`), `${t.id} Learn link`);
       assert.ok(t.drills.length >= 3 && t.walkthroughs.length >= 1 && t.caveats.length >= 2, t.id);
       for (const d of t.drills) assert.ok(d.answer >= 0 && d.answer < d.options.length, d.id);
       assert.ok(t.cases.length >= 2, t.id);

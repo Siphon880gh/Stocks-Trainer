@@ -304,3 +304,9 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Source: Weng asked for lessons on Finviz, his Market Forces tickers app, stockanalysis.com and Yahoo Finance under a new TOOL TRAINING menu.
 - Added the Tool Training dropdown (after Practice), ToC group `tool-training`, `/tools` hub and `/tools/:toolId`, map hub `hub:tools`, shared mock-UI and registry spreads. `/practice/charting-apps` is untouched and linked.
 - Lessons use simulated layouts in the app's own style (no logos); each screen has alt text, a caption and markers. Playbook: none (tool skills, not strategies).
+
+### TT1 Market Forces
+
+- Lesson `/tools/market-forces`, Learn group `tool-market-forces` (14 MF- questions), 3 macro-news cases (seeds 10101–10103), 5 glossary terms, coach `market-forces-tour` (tagged `tools`; no asset-class change).
+- Facts read from the tickers repo: `data/catalog.json` (Nov 12, 2026: 87 tickers, 42 themes) and `data/index-weights.json` (ETF-based estimates, Oct 8, 2026).
+- No Playbook: this teaches a tool, not a vouched trading practice.
