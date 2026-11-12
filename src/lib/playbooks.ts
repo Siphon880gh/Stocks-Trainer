@@ -460,6 +460,44 @@ export const PLAYBOOKS: Playbook[] = [
     video: { ...WHEEL_VIDEO },
     credibility: WHEEL_CREDIBILITY,
   },
+  {
+    id: "treasury-bond-ladder",
+    title: "A Treasury ladder for a known need",
+    summary:
+      "Split money for a dated need into equal Treasuries maturing one after another, hold each to maturity, and reinvest or spend each rung on schedule instead of guessing rates.",
+    assetClass: "equity",
+    source: {
+      url: "https://www.fidelity.com/viewpoints/investing-ideas/bond-ladder-strategy",
+      kind: "webpage",
+      label: "Fidelity Viewpoints · How to build a bond ladder",
+      verifiedOn: "2026-11-12",
+    },
+    explanation:
+      "SAMPLE teaching of the bond ladder as Fidelity and Vanguard describe it. A ladder holds bonds of roughly equal amounts with staggered maturities. Vanguard's example: bonds maturing in 2, 4, 6, 8 and 10 years; when the 2-year matures you reinvest in a new 10-year and the ladder keeps its shape. Each rung pays interest along the way and returns face value at maturity, so cash comes back on a calendar you chose.\n\nWhy it helps: you do not have to guess rates. Fidelity notes that if yields fall, part of the ladder is still earning the higher yields you bought; if yields rise, a rung soon frees up money to reinvest higher. FINRA adds that if you hold a bond to maturity, its price swings in between matter little.\n\nFidelity's guidelines: make sure you have enough to diversify (for smaller amounts it points to Treasury or CD ladders, where credit risk is much lower), hold bonds to maturity, use high-quality bonds, do not chase the highest yields, and keep callable bonds out. A worked example for practice: $50,000 split into five $10,000 Treasuries maturing in years 1 to 5, each maturity reinvested in a new 5-year note.\n\nThe Chart look panel is a broad index tape, there only as context: the ladder's schedule does not depend on it. This app has no bond prices or order entry. Not investment advice.",
+    coachSlug: "bonds-duration",
+    caseId: "case-br-ladder-rung-matures",
+    samplePackId: "eq-index-proxy",
+    overlayIds: [],
+    related: [
+      { label: "Practice · Bonds and rates", to: "/practice/bonds-rates" },
+      { label: "Bonds & Rates quiz", to: "/training?group=bonds-rates&start=1" },
+      { label: "Macro desk", to: "/macro" },
+    ],
+    credibility: {
+      title: "A mainstream way to match money to dates, not a way to beat the market",
+      summary: [
+        "Brokerages (Fidelity, Vanguard) teach the ladder as standard practice, and regulators (FINRA, SEC Investor.gov) back the ideas it rests on: prices fall when rates rise, duration measures how much, and holding to maturity removes that price risk for an individual bond.",
+        "The claims are modest and that is the point. Vanguard says plainly that a ladder is conservative and does not maximize returns. It manages timing and reinvestment risk; it does not remove inflation risk (unless the rungs are TIPS), and a Treasury ladder removes most but not all risk only if you actually hold to maturity.",
+        "No study here shows a ladder outperforming a bond fund of similar duration; Fidelity notes that if you cannot hold to maturity, a fund with comparable duration may be the simpler choice.",
+      ],
+      sources: [
+        { supports: "Structure and reinvestment", label: "Vanguard · Strategies for investing in individual bonds", url: "https://investor.vanguard.com/investor-resources-education/online-trading/bond-strategies", note: "Equal amounts with staggered maturities; reinvest a matured rung at the long end; conservative and does not maximize returns.", role: "corroborates", verifiedOn: "2026-11-12" },
+        { supports: "Hold to maturity", label: "FINRA · Brush up on bonds: interest rate changes and duration", url: "https://www.finra.org/investors/insights/bonds-interest-rate-changes-duration", note: "A buy-and-hold-to-maturity investor is little affected by rate changes; duration measures price sensitivity for those who sell early.", role: "corroborates", verifiedOn: "2026-11-12" },
+        { supports: "Rate risk is real, even for Treasuries", label: "SEC Investor.gov · When interest rates go up, prices of fixed-rate bonds fall", url: "https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-86", note: "The government guarantees interest and principal at maturity, not the market price if you sell before maturity.", role: "corroborates", verifiedOn: "2026-11-12" },
+        { supports: "Inflation option", label: "TreasuryDirect · Treasury Inflation-Protected Securities (TIPS)", url: "https://www.treasurydirect.gov/marketable-securities/tips/", note: "TIPS principal adjusts with CPI, so a TIPS ladder addresses the inflation risk a nominal ladder keeps.", role: "corroborates", verifiedOn: "2026-11-12" },
+      ],
+    },
+  },
 ];
 
 export function listPlaybooks(): Playbook[] {

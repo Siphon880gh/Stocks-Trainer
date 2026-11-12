@@ -278,3 +278,10 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Sources checked 2026-11-12: EIA This Week in Petroleum (Mar 23, 2022) and Today in Energy (Mar 20, 2025), State Street XLB page and daily holdings xlsx, S&P DJI press release (Oct 27, 2025), SEC EDGAR Westlake certificate of amendment (westlake.com returns 403).
 - Playbook: none.
 - Coach parity after MK5: unchanged (equity 29, futures 26, forex 23, crypto 22, options 25; the session has no class tag).
+
+## 2026-11-12 Market themes MK6: bonds and rates
+- Source: Market Forces' bonds and rates theme (Treasury funds by maturity, TIPS).
+- Added `/practice/bonds-rates` (14 `BR-`, 3 beginner macro-news cases: a long Treasury fund used as savings, the Fed cuts but long yields rise, a ladder rung matures after rates fell; 6 terms; coach `bonds-duration`).
+- Playbook added: `treasury-bond-ladder` (Fidelity Viewpoints source; credibility panel with Vanguard, FINRA, SEC Investor.gov and TreasuryDirect). It says plainly the ladder is conservative and does not maximize returns; no video.
+- Sources checked 2026-11-12: FINRA duration insight, Investor.gov bulletin on rates and bond prices, TreasuryDirect TIPS, iShares TLT/IEF/SHY/SGOV/TIP pages (durations as of Nov 10, 2026), Fidelity and Vanguard ladder pages.
+- Coach parity after MK6: unchanged (the session has no class tag).
