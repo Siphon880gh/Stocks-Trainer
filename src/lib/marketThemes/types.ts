@@ -12,7 +12,8 @@ export type MarketThemeQuizGroupId =
   | "currency-funds"
   | "precious-metals"
   | "energy"
-  | "industrial-metals";
+  | "industrial-metals"
+  | "agriculture";
 
 /** Case thinking modes owned by the market-theme lessons (spread into `CaseThinkingMode`). */
 export type MarketThemeMode =
@@ -20,7 +21,8 @@ export type MarketThemeMode =
   | "currency_wrapper"
   | "precious_metals"
   | "energy_theme"
-  | "industrial_metals";
+  | "industrial_metals"
+  | "agriculture_inputs";
 
 export interface ThemeSource {
   label: string;

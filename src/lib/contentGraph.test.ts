@@ -124,6 +124,7 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "precious-metals": 14, // market theme floor
   "energy": 14, // market theme floor
   "industrial-metals": 12, // market theme floor
+  "agriculture": 12, // market theme floor
   "supply-demand": 12,
   "buy-or-sell": 60,
   "equity-patterns": 8,

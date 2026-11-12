@@ -262,3 +262,11 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Sources checked 2026-11-12: IEA Global Critical Minerals Outlook 2025 executive summary (curl 403, browser fetch fine), EIA Uranium Marketing Annual Report table S1a, FINRA, Global X COPX and URA, iShares ICLN.
 - Playbook: none.
 - Coach parity after MK3: equity 29, futures 25, forex 23, crypto 22, options 25 (floor 21).
+
+## 2026-11-12 Market themes MK4: agriculture and inputs
+- Source: Market Forces Agriculture (DBA, CORN, WEAT, DE) and Fertilizer (NTR, MOS, CF), folded into one lesson.
+- Already covered: weather and crop futures (`futures-weather-ag` coach, futures cases), commodity pools (MK0). Not covered: WASDE and stocks-to-use, Crop Progress, crop funds across delivery months, nitrogen and natural gas, potash/phosphate, farm income and equipment.
+- Added `/practice/agriculture` (12 `AG-`, 3 beginner macro-news cases: WASDE cut with a planned hedge, gas spike squeezes a nitrogen maker, falling farm income hits an equipment maker; 6 terms; coach `agriculture-wrappers`).
+- Sources checked 2026-11-12: USDA WASDE page (2026 dates, 12:00 p.m. ET), USDA NASS Crop Progress, USDA ERS WRS-0702 (33 million Btu per ton; 72–85%; PDF read with pdftotext), USDA ERS farm income, Teucrium CORN page (delivery months, roll dates, K-1), FINRA.
+- Playbook: none.
+- Coach parity after MK4: equity 29, futures 26, forex 23, crypto 22, options 25 (floor 21).
