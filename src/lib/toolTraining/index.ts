@@ -11,7 +11,8 @@ import { FINVIZ_LESSON } from "./finviz";
 import { YAHOO_FINANCE_LESSON } from "./yahooFinance";
 import { CAPSTONE_LESSON } from "./capstone";
 
-export type { MockBlock, MockCallout, ToolLesson, ToolScreen, ToolTrainingMode, ToolTrainingQuizGroupId, ToolWalkthrough } from "./types";
+export type { BarWalkSim, ColumnStep, ColumnWalkSim, MockBlock, MockCallout, SimBar, SimBarMark, SimRef, ToolLesson, ToolScreen, ToolSimulation, ToolText, ToolTrainingMode, ToolTrainingQuizGroupId, ToolWalkthrough } from "./types";
+export * from "./simWalk";
 
 export const TOOL_LESSONS: ToolLesson[] = [MARKET_FORCES_LESSON, STOCKANALYSIS_LESSON, FINVIZ_LESSON, YAHOO_FINANCE_LESSON, CAPSTONE_LESSON];
 

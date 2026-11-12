@@ -7,7 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
-import type { ToolLesson } from "./types";
+import type { ToolLesson, ToolSimulation } from "./types";
+import { simBar } from "./simWalk";
 
 export const FV_READ_ON = "2026-11-12";
 /** Finviz NEM quote page, read Nov 12, 2026; header stamped 8:25 AM ET, before the 9:30 AM open. */
@@ -97,6 +98,29 @@ const CASES: CaseStudy[] = [
   },
 ];
 
+/** Bar-by-bar walk for the screener-signal habit. SAMPLE tape; Finviz's own signal is described, not reproduced. */
+const FV_SIMULATIONS: ToolSimulation[] = [
+  {
+    kind: "bars",
+    id: "fv-sim-signal",
+    title: "A screener signal fires: research it before reacting",
+    goal: "A signal says what the price did, not why. Step through 8 SAMPLE daily bars: the headline, the fall, the day an Oversold-style signal lists the stock, and what you check before treating it as a reason.",
+    tape: "SAMPLE company · daily bars · simulated",
+    start: 2,
+    bars: [
+      simBar("D1", [42, 42.6, 41.7, 42.3], "Before the fall: the SAMPLE stock trades near 42.", "Signals are computed from price alone. Knowing where the price sat before the move tells you how big the move the signal describes really is."),
+      simBar("D2", [42.3, 42.5, 41.4, 41.6], "A small slip to 41.60.", "Nothing to act on. A screen run today would not list this stock; remember that a list is a snapshot of one moment."),
+      simBar("News", [38.9, 39.4, 37.8, 38.2], "Headline: the company cuts its outlook. The stock gaps from 41.60 to 38.90 and closes at 38.20.", "This is the reason for the fall. The signal will fire days later and won't mention it, which is why you open the quote page's news rows before trusting any signal.", { mark: "news" }),
+      simBar("D4", [38.2, 38.5, 36.6, 36.9], "Selling continues: close 36.90.", "A lower outlook changes what the business is expected to earn. Price can keep adjusting for days; the bars alone don't tell you when that ends."),
+      simBar("D5", [36.9, 37.2, 35.4, 35.7], "Another lower close, 35.70.", "Count the fall from the pre-news close (41.60), not from the bar that looks worst. You are measuring the move the signal will summarize."),
+      simBar("Signal", [35.7, 36, 34.6, 34.9], "An Oversold-style signal (RSI(14) after a sharp fall) lists the stock at 34.90.", "A signal is a reading, not a reason. Finviz's help says oversold stocks may represent a buying opportunity; in this app that is the tool's description, to check against the outlook cut you already saw.", { mark: "signal" }),
+      simBar("D7", [34.9, 35.8, 34.5, 35.5], "A bounce to 35.50.", "One up day after a signal proves nothing. Read the snapshot's time stamp (free quotes are delayed) and check whether analysts' estimates changed after the outlook cut."),
+      simBar("D8", [35.5, 35.6, 33.8, 34.1], "Lower again: 34.10, below the signal day.", "A lower outlook can keep a stock falling after an oversold reading. Your written plan decides, not the signal; if the plan has no rule for signals, this is research, not a trade."),
+    ],
+    takeaway: "Signal → news rows → snapshot time stamp → filings and estimates → your written plan. A screener builds lists; it doesn't give reasons.",
+  },
+];
+
 export const FINVIZ_LESSON: ToolLesson = {
   id: "tool-finviz",
   slug: "finviz",
@@ -151,7 +175,7 @@ export const FINVIZ_LESSON: ToolLesson = {
       callouts: [
         { n: 1, block: 0, text: "8:25 AM ET is before the open and Prev Close is 118.47, so the header price is not yesterday's close. Read the stamp." },
         { n: 2, block: 1, text: "Index shows membership (S&P 500, Russell 1000). P/E and Forward P/E differ from other sites because price time and estimates differ." },
-        { n: 3, block: 2, text: "Ownership and short interest give context, not a signal on their own." },
+        { n: 3, block: 2, text: ["Ownership and short interest give context, ", { text: "not a signal on their own", sim: "fv-sim-signal" }, "."] },
         { n: 4, block: 3, text: "SMA200 is the distance from the 200-day average; Rel Volume before the open is always tiny." },
         { n: 5, block: 4, text: "Recom runs from 1 (strong buy) to 5 (strong sell). It is an average of opinions." },
       ],
@@ -206,11 +230,12 @@ export const FINVIZ_LESSON: ToolLesson = {
         "Time stamp and previous close: is this the close, a delayed quote or pre-market?",
         "Index and market cap: how big and in which indexes.",
         "P/E vs Forward P/E, then EPS (ttm).",
-        "Short Float and Insider Own: context to explain, not signals to act on.",
+        ["Short Float and Insider Own: context to explain, ", { text: "not signals to act on", sim: "fv-sim-signal" }, "."],
         "Perf and SMA200: where the price sits versus its own recent history.",
       ],
     },
   ],
+  simulations: FV_SIMULATIONS,
   drills: [
     { id: "fv-d1", prompt: "Switching the screener from Overview to Valuation view…", options: ["Changes which stocks are listed", "Changes the columns shown for the same list", "Resets the filters", "Buys the stocks"], answer: 1, why: "Views change columns; filters change the list." },
     { id: "fv-d2", prompt: "To drop $10 million companies trading almost nothing from a screen, add…", options: ["Analyst Recom.", "Market Cap. and Average Volume filters", "A Charts view", "The News tab"], answer: 1, why: "Size and liquidity filters remove names you could not trade sensibly." },

@@ -6,7 +6,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
-import type { ToolLesson } from "./types";
+import type { ToolLesson, ToolSimulation } from "./types";
+import { simBar } from "./simWalk";
 
 /** Day the public StockAnalysis pages below were read. */
 export const SA_READ_ON = "2026-11-12";
@@ -106,6 +107,124 @@ const CASES: CaseStudy[] = [
   },
 ];
 
+/** SAMPLE P/E readout for simulated bars: price ÷ EPS to one decimal. */
+const peAt = (price: number, eps: number) => (price / eps).toFixed(1);
+const ONE_TIME_EPS = { before: 4, after: 7.5, forward: 3 } as const;
+const PE_SIM_EPS = { before: 2, after: 2.4 } as const;
+
+/**
+ * Bar-by-bar simulations opened from underlined phrases on /tools/stockanalysis. Every tape is a SAMPLE company;
+ * the only real figures are the NEM values above, quoted with their Nov 12, 2026 read date.
+ */
+const SA_SIMULATIONS: ToolSimulation[] = [
+  {
+    kind: "bars",
+    id: "sa-sim-52-week",
+    title: "52-week range: two extremes, one path",
+    goal: "The Overview's 52-Week Range is just the highest and lowest prices of the past year. Step through 12 SAMPLE monthly bars to see where each extreme came from, and what the two numbers leave out.",
+    tape: "SAMPLE company · monthly bars · simulated",
+    start: 3,
+    bars: [
+      simBar("Dec", [50, 53, 48, 52], "December, the oldest month in the 52-week window: a quiet bar that closes at 52.", "The range only counts the last 52 weeks, so its left edge rolls forward every day. An extreme from 13 months ago silently drops out, and the range can change even when today's price doesn't."),
+      simBar("Jan", [52, 55, 47, 48], "January: a long lower wick to 47 and a close at 48.", "Highs and lows are intraday extremes. The 52-week range is built from these wicks, not from closes, so one fast spike counts as much as a month of trading."),
+      simBar("Feb", [48, 49, 41, 43], "February keeps falling, to a low of 41 and a close of 43.", "Watch the lows step down. You are training yourself to see the path, which the two numbers on the Overview cannot show."),
+      simBar("Mar", [43, 44, 38.5, 40], "March sets the year's low: 38.50, with a close of 40.", "This one wick becomes the left number of the 52-Week Range. You open the chart because the Overview can't tell you whether 38.50 was one bad day or months of trading near that level.", { mark: "low" }),
+      simBar("Apr", [40, 46, 39.5, 45], "April turns: opens at 40 and closes at 45 on a wide up bar.", "A reversal from the low is part of the story the range hides. Note where the turn happened; it is the month whose news and earnings you would read next."),
+      simBar("May", [45, 52, 44, 51], "May makes a higher high and a higher low, closing at 51.", "Higher highs and lows describe the path; they are not a forecast. Writing down what you see keeps you honest when the price later sits mid-range."),
+      simBar("Jun", [51, 58, 50, 57], "June closes at 57, the highest close so far.", "Closes and highs differ. When someone says a stock is \"near its high\", ask whether they mean the intraday high in the range or a closing high."),
+      simBar("Jul", [57, 66, 56, 64], "July is a strong month: up to 66, closing at 64.", "A run into a high is easy to extrapolate. The habit is to note the move, then look up what drove it (an earnings report? a headline?) before calling it a trend."),
+      simBar("Aug", [64, 71.2, 62, 63], "August spikes to 71.20, the year's high, but closes at 63.", "The right number of the range is a wick that lasted hours. Before calling a stock \"far below its high\", check whether that high was a one-day spike like this one.", { mark: "high" }),
+      simBar("Sep", [63, 64, 57, 58], "September falls back to 58.", "The range will keep showing 71.20 as the high for the next 11 months, long after the price has moved on. A stale extreme is still an extreme."),
+      simBar("Oct", [58, 61, 55, 60], "October is a narrow bar that closes at 60.", "Narrow bars after a big swing say little on their own. This is where readers over-read noise; stay with what the bars actually show."),
+      simBar("Nov", [60, 62, 58.5, 61], "November, today's bar: close 61. The Overview would print 52-Week Range 38.50 - 71.20.", `61 sits about two-thirds of the way up that range, yet the path was a fall, a rally from March and a fade from an August spike. Newmont's Overview showed ${SA_NEM.range52} on ${SA_READ_ON}; those two numbers hide its path too, so open the chart before quoting a range.`),
+    ],
+    takeaway: "The 52-Week Range is two wicks. Open the chart (or the History tab) to see the path, when each extreme happened and whether it was a spike.",
+  },
+  {
+    kind: "bars",
+    id: "sa-sim-earnings-week",
+    title: "Earnings week: match the date before calling a move news",
+    goal: "Check the Overview's Earnings Date against the chart before you treat a big bar as news. Step through 8 SAMPLE daily bars around a report: the quiet days, the report bar's gap and the days after.",
+    tape: "SAMPLE company · daily bars around a report · simulated",
+    start: 3,
+    bars: [
+      simBar("D-4", [30, 30.6, 29.7, 30.4], "Four sessions before the report: the SAMPLE stock closes at 30.40.", `First open the Overview and note the Earnings Date (Newmont's read ${SA_NEM.earnings} on ${SA_READ_ON}). With the date in hand you know which bar should carry the news, so you won't mistake a random jump for a reaction.`),
+      simBar("D-3", [30.4, 30.9, 30.1, 30.7], "A small up day to 30.70.", "Bars before a report are often quiet while traders wait. Don't read meaning into small ranges; they are the baseline you will compare the reaction with."),
+      simBar("D-2", [30.7, 31, 30.3, 30.5], "A slight dip to 30.50 on a narrow range.", "Note the pre-report level now. Afterwards it is tempting to measure from whichever bar makes the move look biggest."),
+      simBar("D-1", [30.5, 31.4, 30.4, 31.2], "The day before: a wider range, closing at 31.20.", "Companies report before the open or after the close. A report after this close shows up on the NEXT bar, so check the release time as well as the date before you pin a move to it."),
+      simBar("Report", [33.4, 34.1, 32.6, 32.9], "Report bar: opens at 33.40, a gap of about 7% over 31.20, then fades to close at 32.90.", "This is the bar the Earnings Date predicted, so the gap is a reaction to the report, not a rumor. Now open Financials: the new quarter changes the TTM column, and the TTM column changes the P/E.", { mark: "earnings" }),
+      simBar("D+1", [32.9, 33.2, 31.8, 32.1], "The stock gives back part of the gap, closing at 32.10.", "Reactions get revised as people read the full release. One bar is not a verdict; keep comparing with the 31.20 pre-report close."),
+      simBar("D+2", [32.1, 32.6, 31.7, 32.4], "It steadies at 32.40.", "Look only at today's price and you would not know there was a report at all. That is why a dated note (report date, gap, what changed in Financials) beats memory."),
+      simBar("D+3", [32.4, 33, 32.2, 32.8], "Three days on, 32.80: still above the pre-report close of 31.20.", "Measure from the last pre-report close, not from the report bar's open. Then check the Statistics page's last-updated date: ratios built on the new quarter appear only after the data provider refreshes."),
+    ],
+    takeaway: "Match the move to the Earnings Date (and time) first, then read what changed in Financials, then quote ratios with their updated date.",
+  },
+  {
+    kind: "bars",
+    id: "sa-sim-one-time",
+    title: "A headline jump, then the Financials check",
+    goal: "When a profit headline sends the price up and the trailing P/E down, open Financials and look for a one-time row before trusting the ratio. Step through 8 SAMPLE bars with the P/E shown on each.",
+    tape: "SAMPLE industrial company · daily bars · simulated",
+    start: 3,
+    bars: [
+      simBar("D1", [40, 40.8, 39.6, 40.3], "Before any headline: the SAMPLE stock trades near 40 with a trailing P/E around 10.", "Get a baseline for both price and ratio before news arrives. A ratio only means something next to what it was before and what close peers show.", { readout: `Trailing P/E ${peAt(40.3, ONE_TIME_EPS.before)}` }),
+      simBar("D2", [40.3, 40.9, 40, 40.6], "Another quiet day, closing at 40.60.", "Nothing to research yet. Knowing where you started lets you measure a dramatic-looking number later instead of reacting to it.", { readout: `Trailing P/E ${peAt(40.6, ONE_TIME_EPS.before)}` }),
+      simBar("D3", [40.6, 41, 40.2, 40.5], "The last bar before the report closes at 40.50.", "This is the pre-headline close you will measure from. Write it down next to the Earnings Date from the Overview.", { readout: `Trailing P/E ${peAt(40.5, ONE_TIME_EPS.before)}` }),
+      simBar("News", [44, 45.5, 43.8, 45.2], "Headline: \"Profit nearly doubles\". The stock gaps from 40.50 to 44.00 and closes at 45.20, up about 12%. Trailing P/E drops to about 6.", "The P/E fell because trailing EPS jumped, not because the business got cheaper. A big move on a profit headline is the moment to ask what the profit is made of, before trusting the new ratio.", { mark: "news", readout: `Trailing P/E ${peAt(45.2, ONE_TIME_EPS.after)} · Forward P/E ${peAt(45.2, ONE_TIME_EPS.forward)}` }),
+      simBar("D+1", [45.2, 46, 44.6, 45.5], "Follow-through to 45.50. Posts call it \"half price\" on its P/E of 6, while forward P/E is about 15.", "Trailing P/E is price ÷ the last 12 months of EPS (SEC Investor.gov). When forward P/E sits far above trailing, the trailing earnings probably include something that won't repeat. Open Financials › Income Statement next.", { readout: `Trailing P/E ${peAt(45.5, ONE_TIME_EPS.after)} · Forward P/E ${peAt(45.5, ONE_TIME_EPS.forward)}` }),
+      simBar("D+2", [45.5, 45.7, 43.9, 44.2], "On the income statement you find a large Gain on Sale of Assets row in TTM; operating income barely changed. The price slips to 44.20.", "Comparing operating income with net income separates the business from the one-off. That row is why trailing P/E looks cheap, and why forward estimates, which leave the gain out, look expensive.", { readout: `Trailing P/E ${peAt(44.2, ONE_TIME_EPS.after)} · Forward P/E ${peAt(44.2, ONE_TIME_EPS.forward)}` }),
+      simBar("D+3", [44.2, 44.4, 42.1, 42.5], "More readers find the same row; the stock closes at 42.50.", "You didn't need to predict this drift. Reading the row before acting kept you from paying a \"cheap\" price for earnings that won't come back next year.", { readout: `Trailing P/E ${peAt(42.5, ONE_TIME_EPS.after)}` }),
+      simBar("D+4", [42.5, 42.9, 41.6, 41.9], "Four sessions on, the close is 41.90 and most of the gap is gone.", `The habit works in reverse too. Newmont's real FY 2023 (read ${SA_READ_ON}) showed net income of ${SA_NEM_IS.netIncome[3]}M beside operating income of +${SA_NEM_IS.operatingIncome[3]}M, with a ${SA_NEM_IS.goodwillImpairmentFy2023}M goodwill impairment: a one-time charge that made a year look worse, not better.`, { readout: `Trailing P/E ${peAt(41.9, ONE_TIME_EPS.after)}` }),
+    ],
+    takeaway: "Headline → odd ratio → Financials row by row → the filing's note. Trust a trailing P/E only after you know which rows built it.",
+  },
+  {
+    kind: "bars",
+    id: "sa-sim-pe-moves",
+    title: "Why P/E moves every day, and jumps after earnings",
+    goal: "P/E has two halves: price, which changes every trade, and trailing EPS, which changes only when a quarter is reported. Step through 7 SAMPLE bars with the P/E on each to see which half moved.",
+    tape: "SAMPLE company · daily bars · simulated",
+    start: 2,
+    bars: [
+      simBar("Mon", [29.8, 30.2, 29.6, 30], "Price 30.00 ÷ trailing EPS 2.00 = P/E 15.0.", "The EPS half changes only when a new quarter is reported; the price half changes all day. Knowing which half moved tells you what a new P/E means.", { readout: `P/E ${peAt(30, PE_SIM_EPS.before)} on EPS 2.00` }),
+      simBar("Tue", [30, 30.8, 29.9, 30.6], "Price up to 30.60, EPS unchanged: P/E 15.3.", "The ratio rose only because the price rose. That is why the Statistics page dates its figures: a P/E quoted yesterday is already stale today.", { readout: `P/E ${peAt(30.6, PE_SIM_EPS.before)} on EPS 2.00` }),
+      simBar("Wed", [30.6, 30.7, 29.2, 29.4], "Price down to 29.40: P/E 14.7.", "Same earnings, lower price, a \"cheaper\" stock, yet nothing about the business changed. Ask \"cheaper because of price, or because of earnings?\" every time a ratio moves.", { readout: `P/E ${peAt(29.4, PE_SIM_EPS.before)} on EPS 2.00` }),
+      simBar("Thu", [29.4, 29.9, 29.3, 29.8], "Close 29.80, P/E 14.9. The company reports after the close.", "Check the Overview's Earnings Date and the release time. Tomorrow's P/E will use a new TTM EPS, so comparing Thursday's ratio with Friday's mixes two different denominators.", { readout: `P/E ${peAt(29.8, PE_SIM_EPS.before)} on EPS 2.00` }),
+      simBar("Fri", [30.4, 31.4, 30.2, 31.2], "Report: TTM EPS rises to 2.40. The price gaps up and closes at 31.20, yet the ratio drops: P/E 13.0.", "Price up and P/E down on the same day: the earnings half grew faster. Open Financials to see which line grew (operating income, or a one-time row?) before calling the lower P/E better value.", { mark: "earnings", readout: `P/E ${peAt(31.2, PE_SIM_EPS.after)} on EPS 2.40` }),
+      simBar("Mon", [31.2, 32, 31, 31.8], "Price 31.80, P/E 13.3 on the new EPS.", `From here the ratio drifts with price again until the next report. Providers refresh on their own schedule, which is why you quote the source and date (NEM's Statistics page credited S&P Global Market Intelligence, last updated Nov 12, 2026).`, { readout: `P/E ${peAt(31.8, PE_SIM_EPS.after)} on EPS 2.40` }),
+      simBar("Tue", [31.8, 31.9, 31.2, 31.5], "Price 31.50, P/E 13.1.", "Write the ratio as \"P/E 13.1 at 31.50 on TTM EPS 2.40, as of <date>\". Every part matters: the price, the earnings period and the date.", { readout: `P/E ${peAt(31.5, PE_SIM_EPS.after)} on EPS 2.40` }),
+    ],
+    takeaway: "Price moves a P/E daily; earnings move it in steps after each report. Read the date and the TTM period before comparing two P/Es.",
+  },
+  {
+    kind: "columns",
+    id: "sa-sim-columns",
+    title: "Walk the Financials columns: TTM, then each fiscal year",
+    goal: `Read an income statement one column at a time, period first, so one ratio can't do your thinking. These are Newmont's real figures in millions of USD, read from StockAnalysis on ${SA_READ_ON}; the layout is simulated.`,
+    tape: `Newmont (NEM) income statement, millions USD, read ${SA_READ_ON} · simulated layout`,
+    start: 1,
+    columns: ["Fiscal Year", "TTM", "FY 2025", "FY 2024", "FY 2023"],
+    rows: [
+      ["Period Ending", "Sep 30, 2026", "Dec 31, 2025", "Dec 31, 2024", "Dec 31, 2023"],
+      ["Revenue", ...SA_NEM_IS.revenue],
+      ["Operating Income", ...SA_NEM_IS.operatingIncome],
+      ["Impairment of Goodwill", "-", "-", "-", SA_NEM_IS.goodwillImpairmentFy2023],
+      ["Net Income", ...SA_NEM_IS.netIncome],
+      ["Diluted Shares", ...SA_NEM_IS.dilutedShares],
+      ["EPS (Diluted)", ...SA_NEM_IS.eps],
+    ],
+    steps: [
+      { col: 1, row: 0, what: `TTM column: Period Ending Sep 30, 2026. Revenue ${SA_NEM_IS.revenue[0]}, operating income ${SA_NEM_IS.operatingIncome[0]}, net income ${SA_NEM_IS.netIncome[0]}.`, why: "Read Period Ending before any number. TTM is the last four reported quarters, so it is what the Overview's Revenue (ttm) and the trailing P/E are built from. It is not calendar 2026." },
+      { col: 2, row: 1, what: `FY 2025 ends Dec 31, 2025: revenue ${SA_NEM_IS.revenue[1]}.`, why: "Comparing TTM with the last full year shows the newest trend without waiting for the annual report. The two columns overlap by nine months, so never add them together." },
+      { col: 3, row: 5, what: `FY 2024: diluted shares ${SA_NEM_IS.dilutedShares[2]}M, up from ${SA_NEM_IS.dilutedShares[3]}M in FY 2023 (Shares Change read ${SA_NEM_IS.sharesChangeFy2024}).`, why: "Per-share numbers depend on the share count. When shares jump, EPS can lag net income. Check this row before comparing EPS across years, and let the filing explain why the count changed." },
+      { col: 4, row: 4, what: `FY 2023: net income ${SA_NEM_IS.netIncome[3]} while operating income was +${SA_NEM_IS.operatingIncome[3]}.`, why: "A loss beside positive operating income is the cue to look for an unusual row below the operating line. Without walking to this column you might read FY 2023 as \"the business lost money\"." },
+      { col: 4, row: 3, what: `Same column: Impairment of Goodwill ${SA_NEM_IS.goodwillImpairmentFy2023}, a non-cash write-down.`, why: `This row explains most of the gap between operating income and net income. Note it, then confirm the reason in the 10-K before treating FY 2023's EPS of ${SA_NEM_IS.eps[3]} as the company's earning power.` },
+      { col: 1, row: 6, what: `Back to TTM: EPS ${SA_NEM_IS.eps[0]}, the number under the trailing P/E of ${SA_NEM.pe}.`, why: "Now you know what that ratio rests on: twelve months to Sep 30, 2026, no impairment row in that column, and a share count that has fallen since FY 2024. That is the context a single ratio leaves out." },
+    ],
+    takeaway: "Walk the columns in order: period, revenue, operating income, unusual rows, net income, shares. Then quote any ratio with the period it rests on.",
+  },
+];
+
 export const STOCKANALYSIS_LESSON: ToolLesson = {
   id: "tool-stockanalysis",
   slug: "stockanalysis",
@@ -121,6 +240,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
     "Market Forces' featured link for every ticker opens StockAnalysis. This lesson reads what you find there: a stock's Overview, Financials and Statistics tabs, and an ETF's Holdings tab.",
     `The numbers on these screens are real values read from public StockAnalysis pages on Nov 12, 2026 (Newmont, NEM, and the VanEck Gold Miners ETF, GDX). Prices were at the close of Nov 11. They will have changed by the time you read this; that is the point of reading the dates.`,
     "Everything here is on the free pages. Some fields say Upgrade and some lists are cut short for free users. This lesson does not log in or copy anything behind a paywall.",
+    ["Why read the pages this way? Each check stops a common misread. Step through them bar by bar: ", { text: "what the 52-week range leaves out", sim: "sa-sim-52-week" }, ", ", { text: "a move in earnings week", sim: "sa-sim-earnings-week" }, ", ", { text: "a headline that makes the P/E look cheap", sim: "sa-sim-one-time" }, ", ", { text: "why P/E changes every day", sim: "sa-sim-pe-moves" }, " and ", { text: "walking the Financials columns", sim: "sa-sim-columns" }, "."],
   ],
   screens: [
     {
@@ -138,8 +258,9 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
       callouts: [
         { n: 1, block: 0, text: "Two prices, two times: the regular-session close and a pre-market quote. Read the time stamp before quoting either." },
         { n: 2, block: 1, text: "Tabs are the map. Financials and Statistics are where the checks in this lesson happen." },
-        { n: 3, block: 2, text: "Revenue (ttm) is the last four reported quarters. P/E is price over trailing EPS; Forward PE uses estimates." },
+        { n: 3, block: 2, text: ["Revenue (ttm) is the last four reported quarters. ", { text: "P/E is price over trailing EPS", sim: "sa-sim-pe-moves" }, "; Forward PE uses estimates."] },
         { n: 4, block: 3, text: "Analysts and Price Target are opinions. SEC: never rely solely on an analyst's recommendation." },
+        { n: 5, block: 3, text: ["The ", { text: "52-Week Range", sim: "sa-sim-52-week" }, " is two extremes, not the path between them. The ", { text: "Earnings Date", sim: "sa-sim-earnings-week" }, " tells you which bar should carry the news."] },
       ],
     },
     {
@@ -157,7 +278,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
       callouts: [
         { n: 1, block: 0, text: "Income, balance sheet and cash flow each have their own sub-tab. Ratios and KPIs are derived from them." },
         { n: 2, block: 1, text: "Annual vs Quarterly changes every column. Quarterly numbers are not comparable with annual ones." },
-        { n: 3, block: 2, text: "Read Period Ending first. TTM ends Sep 30, 2026; FY 2025 ends Dec 31, 2025. FY 2023's loss sits beside a goodwill write-down while operating income stayed positive." },
+        { n: 3, block: 2, text: [{ text: "Read Period Ending first", sim: "sa-sim-columns" }, ". TTM ends Sep 30, 2026; FY 2025 ends Dec 31, 2025. FY 2023's loss sits beside a goodwill write-down while operating income stayed positive."] },
         { n: 4, block: 3, text: "Share count matters for per-share numbers. EPS can fall even when profit rises if shares jump." },
       ],
     },
@@ -175,7 +296,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
         { kind: "note", text: "Data Source: S&P Global Market Intelligence · Last updated: Nov 12, 2026" },
       ],
       callouts: [
-        { n: 1, block: 0, text: "Valuation ratios divide price by a statement figure. Compare a company with its own history or close peers, not across industries." },
+        { n: 1, block: 0, text: [{ text: "Valuation ratios divide price by a statement figure", sim: "sa-sim-pe-moves" }, ". Compare a company with its own history or close peers, not across industries."] },
         { n: 2, block: 1, text: "Financial position answers \"can it pay its bills and its debt?\" before you think about upside." },
         { n: 3, block: 2, text: "Short interest is reported on a schedule, so it lags the price." },
         { n: 4, block: 3, text: "Upgrade marks a Pro-only field. Skip it; the free ratios are enough to learn the checks." },
@@ -207,8 +328,8 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
     {
       title: "Check a company in ten minutes",
       steps: [
-        "Overview: note the price and its time stamp, market cap, Revenue (ttm), P/E and Forward PE, and the next earnings date.",
-        "Financials › Income Statement: read Period Ending, then revenue, operating income and net income across columns. Look for unusual rows (impairments, gains on sales).",
+        ["Overview: note the price and its time stamp, market cap, Revenue (ttm), ", { text: "P/E and Forward PE", sim: "sa-sim-pe-moves" }, ", the ", { text: "52-week range", sim: "sa-sim-52-week" }, " and ", { text: "the next earnings date", sim: "sa-sim-earnings-week" }, "."],
+        ["Financials › Income Statement: ", { text: "read Period Ending, then revenue, operating income and net income across columns", sim: "sa-sim-columns" }, ". Look for ", { text: "unusual rows (impairments, gains on sales)", sim: "sa-sim-one-time" }, "."],
         "Financials › Balance Sheet and Cash Flow: check cash vs debt and whether operating cash flow covers capital spending.",
         "Statistics: read valuation ratios against the company's own history, then financial position and short interest.",
         "Write down each number with the page's as-of date and data provider. If something looks off, open the filing from Market Forces' SEC link.",
@@ -223,6 +344,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
       ],
     },
   ],
+  simulations: SA_SIMULATIONS,
   drills: [
     { id: "sa-d1", prompt: "The TTM column ends Sep 30, 2026. It covers…", options: ["Calendar year 2026", "The 12 months to Sep 30, 2026", "Only Q3 2026", "Fiscal year 2025"], answer: 1, why: "Trailing twelve months = the last four reported quarters." },
     { id: "sa-d2", prompt: "Trailing P/E is low but forward P/E is much higher. First check…", options: ["Social media", "The income statement for one-time items", "The 52-week high", "The dividend"], answer: 1, why: "A one-time gain inflates trailing earnings; forward estimates leave it out." },

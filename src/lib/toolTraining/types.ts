@@ -35,11 +35,82 @@ export type MockBlock =
   | { kind: "chips"; title?: string; chips: string[]; active?: number }
   | { kind: "note"; text: string };
 
+/**
+ * An underlined phrase in lesson copy that opens a simulation popover. `sim` is a `ToolSimulation.id` in the same
+ * lesson (the hub legend has none). Structured, not parsed from prose, so tests can check every trigger resolves.
+ */
+export interface SimRef {
+  text: string;
+  sim: string;
+}
+
+/** Lesson copy: plain text, or plain runs mixed with underlined simulation triggers. `toolTextPlain` flattens it. */
+export type ToolText = string | (string | SimRef)[];
+
+/** What a bar is flagged as on a simulated chart. Drawn as a small tag; `high` / `low` also draw a level line. */
+export type SimBarMark = "high" | "low" | "earnings" | "news" | "dividend" | "signal";
+
+/** One SAMPLE bar in a bar-by-bar walk: prices plus what the bar shows and why we are looking at it. */
+export interface SimBar {
+  label: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  mark?: SimBarMark;
+  /** A small figure shown with the bar, e.g. "P/E 15.0" or "Adj Close 49.20". */
+  readout?: string;
+  what: string;
+  /** The research habit this bar trains: the point of the simulation. */
+  why: string;
+}
+
+/** A bar-by-bar walk on a SIMULATED candlestick tape. Bars appear one at a time; the newest is the current bar. */
+export interface BarWalkSim {
+  kind: "bars";
+  id: string;
+  title: string;
+  /** Shown before the first Next: what this walk is for. */
+  goal: string;
+  /** Tape label, must say SAMPLE or simulated, e.g. "SAMPLE company · monthly bars · simulated". */
+  tape: string;
+  /** Bars visible when the walk opens (at least 1). */
+  start: number;
+  bars: SimBar[];
+  /** One-line summary shown on the last bar. */
+  takeaway: string;
+}
+
+/** One step of a column walk: which column (and optionally row) it points at, and why. */
+export interface ColumnStep {
+  col: number;
+  row?: number;
+  what: string;
+  why: string;
+}
+
+/** A column-by-column walk over a table (e.g. Financials TTM → fiscal years). Columns appear as steps reach them. */
+export interface ColumnWalkSim {
+  kind: "columns";
+  id: string;
+  title: string;
+  goal: string;
+  tape: string;
+  start: number;
+  /** Header row; column 0 holds the row labels and is always shown. */
+  columns: string[];
+  rows: string[][];
+  steps: ColumnStep[];
+  takeaway: string;
+}
+
+export type ToolSimulation = BarWalkSim | ColumnWalkSim;
+
 /** A numbered marker that the caption list explains. `block` is the index of the block it sits beside. */
 export interface MockCallout {
   n: number;
   block: number;
-  text: string;
+  text: ToolText;
 }
 
 /** One simulated screen: drawn in the app's own look, no logos, with alt text and a caption. */
@@ -57,7 +128,7 @@ export interface ToolScreen {
 
 export interface ToolWalkthrough {
   title: string;
-  steps: string[];
+  steps: ToolText[];
 }
 
 export interface ToolLesson {
@@ -74,9 +145,11 @@ export interface ToolLesson {
   /** Day the real tool was last checked against these layouts (YYYY-MM-DD). */
   asOf: string;
   quiz: { name: string; description: string; icon: string };
-  intro: string[];
+  intro: ToolText[];
   screens: ToolScreen[];
   walkthroughs: ToolWalkthrough[];
+  /** Bar-by-bar (or column-by-column) walks opened from underlined phrases in the copy above. */
+  simulations?: ToolSimulation[];
   drills: ThemeDrill[];
   caveats: ThemeCard[];
   sources: ThemeSource[];

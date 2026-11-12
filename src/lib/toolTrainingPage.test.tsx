@@ -3,7 +3,11 @@ import { describe, it } from "node:test";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import ToolsHub from "../pages/ToolsHub.tsx";
 import { hrefs, renderHtml, renderText } from "./macro/renderHarness.ts";
-import { TOOL_LESSONS } from "./toolTraining/index.ts";
+import { TOOL_LESSONS, toolTextPlain, type ToolText } from "./toolTraining/index.ts";
+
+/** Underlined triggers render as buttons (plus a ▶ glyph), so compare lesson copy with whitespace and ▶ removed. */
+const squash = (x: string) => x.replace(/[\s▶]/g, "");
+const shows = (text: string, t: ToolText) => squash(text).includes(squash(toolTextPlain(t)));
 
 const at = (path: string) => (
   <MemoryRouter initialEntries={[path]}>
@@ -33,9 +37,10 @@ describe("tool training pages", () => {
       for (const s of t.screens) {
         assert.ok(text.includes(s.alt), `${s.id} alt`);
         assert.ok(text.includes(s.caption), `${s.id} caption`);
-        for (const c of s.callouts) assert.ok(text.includes(c.text), `${s.id} marker ${c.n}`);
+        for (const c of s.callouts) assert.ok(shows(text, c.text), `${s.id} marker ${c.n}`);
       }
-      for (const w of t.walkthroughs) for (const step of w.steps) assert.ok(text.includes(step), step);
+      for (const p of t.intro) assert.ok(shows(text, p), toolTextPlain(p));
+      for (const w of t.walkthroughs) for (const step of w.steps) assert.ok(shows(text, step), toolTextPlain(step));
       for (const d of t.drills) assert.ok(text.includes(d.prompt), d.id);
       for (const c of t.caveats) assert.ok(text.includes(c.title), c.title);
       const links = hrefs(renderHtml(at(t.route)));

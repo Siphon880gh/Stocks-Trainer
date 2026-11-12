@@ -7,7 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
-import type { ToolLesson } from "./types";
+import type { ToolLesson, ToolSimulation } from "./types";
+import { simBar } from "./simWalk";
 
 export const YF_READ_ON = "2026-11-12";
 /** Yahoo Finance NEM Summary, read Nov 12, 2026. */
@@ -111,6 +112,31 @@ const CASES: CaseStudy[] = [
   },
 ];
 
+/** SAMPLE fund for the Adj Close walk: 0.50 dividend, ex-date on bar 5. Adj Close = Close × (1 − dividend ÷ last close before ex). */
+const YF_DIV = { amount: 0.5, lastCloseBefore: 50.4 } as const;
+const yfAdj = (close: number) => (close * (1 - YF_DIV.amount / YF_DIV.lastCloseBefore)).toFixed(2);
+
+const YF_SIMULATIONS: ToolSimulation[] = [
+  {
+    kind: "bars",
+    id: "yf-sim-adj-close",
+    title: "Close vs Adj Close across an ex-dividend day",
+    goal: "Historical Data shows two closing prices. Step through 7 SAMPLE daily bars of a fund that pays a 0.50 dividend to see why the columns differ, and which one to use for which question.",
+    tape: "SAMPLE dividend fund · daily bars · simulated",
+    start: 2,
+    bars: [
+      simBar("D1", [49.8, 50.2, 49.7, 50], "A quiet day: Close 50.00, Adj Close 49.50 as the table shows it today.", "The two columns only differ for dates before a later dividend. A gap like this on an old row is your first clue that a payout happened afterwards.", { readout: `Adj Close ${yfAdj(50)}` }),
+      simBar("D2", [50, 50.5, 49.9, 50.3], "Close 50.30, Adj Close 49.80.", "Adj Close spreads the later dividend back over every earlier day as a percentage. It is a rewritten history built so returns include the cash paid, not the price that printed.", { readout: `Adj Close ${yfAdj(50.3)}` }),
+      simBar("D3", [50.3, 50.4, 49.9, 50.1], "Close 50.10, Adj Close 49.60.", "Quoting what a share traded at that day? Use Close. Measuring a return? Use Adj Close. The question decides the column.", { readout: `Adj Close ${yfAdj(50.1)}` }),
+      simBar("D4", [50.1, 50.6, 50, 50.4], "The last day before the ex-dividend date: Close 50.40.", "Holders at the end of this day get the 0.50 dividend. That is why the next bar is expected to open lower: the cash leaves the fund's price and lands in holders' accounts.", { readout: `Adj Close ${yfAdj(50.4)}` }),
+      simBar("Ex-div", [49.95, 50.1, 49.7, 49.9], "Ex-dividend day: opens at 49.95 and closes at 49.90, down 0.50 from 50.40.", "A price-only chart shows a 1% drop, but holders didn't lose that 0.50; they received it. Yahoo lists the dividend as its own row in Historical Data, so look for that row before reading a drop as bad news.", { mark: "dividend", readout: "Adj Close 49.90 · 0.50 Dividend row" }),
+      simBar("D6", [49.9, 50.3, 49.8, 50.2], "Close 50.20. From D1, Close went 50.00 → 50.20 (+0.4%); Adj Close went 49.50 → 50.20 (+1.4%).", "The extra 1% is the dividend. Performance Overview's total return works the same way, which is why it can beat a price-only chart of the same fund.", { readout: "Adj Close 50.20" }),
+      simBar("D7", [50.2, 50.6, 50.1, 50.45], "Close 50.45, the same in both columns until the next payout.", "For a fund that pays out often, these gaps add up year after year. That is why a dividend fund that looks flat on Close is judged on Adj Close or total return.", { readout: "Adj Close 50.45" }),
+    ],
+    takeaway: "Close is what printed; Adj Close is the return including dividends. Pick the column for the question, and check for a dividend row before reading a drop as news.",
+  },
+];
+
 export const YAHOO_FINANCE_LESSON: ToolLesson = {
   id: "tool-yahoo-finance",
   slug: "yahoo-finance",
@@ -195,7 +221,7 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
       ],
       callouts: [
         { n: 1, block: 0, text: "Recent rows match; older rows differ once a dividend has been paid since. The dividend appears as its own row." },
-        { n: 2, block: 1, text: "Use Adj Close for returns that include dividends; use Close to see the price that actually printed that day." },
+        { n: 2, block: 1, text: [{ text: "Use Adj Close for returns that include dividends", sim: "yf-sim-adj-close" }, "; use Close to see the price that actually printed that day."] },
       ],
     },
     {
@@ -223,11 +249,12 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
         "Performance Overview: compare total return with the benchmark over the same periods; treat it as history.",
         "Analyst Price Targets: read the low and high, not just the average.",
         "Statistics: note ttm, mrq and dated rows, and the footnote source of anything you quote.",
-        "Historical Data: use Adj Close for returns that include dividends.",
+        ["Historical Data: use ", { text: "Adj Close for returns that include dividends", sim: "yf-sim-adj-close" }, "."],
         "Financials: find which side is newest, then read the trend; confirm odd lines in the filing.",
       ],
     },
   ],
+  simulations: YF_SIMULATIONS,
   drills: [
     { id: "yf-d1", prompt: "To compute a 1-year return that includes dividends, use…", options: ["Close", "Adj Close", "Open", "Day's Range"], answer: 1, why: "Adj Close is adjusted for dividends and distributions as well as splits." },
     { id: "yf-d2", prompt: "\"Total Cash (mrq)\" is cash as of…", options: ["Today", "The most recent reported quarter", "The last fiscal year", "Next quarter"], answer: 1, why: "mrq = most recent quarter." },

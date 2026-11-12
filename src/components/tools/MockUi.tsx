@@ -2,6 +2,7 @@ import { Fragment, type ReactNode } from "react";
 import type { MockBlock, ToolScreen } from "../../lib/toolTraining";
 import { seededTape } from "../../lib/marketThemes/helpers";
 import { cn } from "../../lib/utils";
+import { ToolTextView } from "./Simulation";
 
 /** Shared pieces for simulated tool layouts. Drawn in this app's own look: no logos, no copied styling. */
 
@@ -178,7 +179,7 @@ export function MockScreen({ screen }: { screen: ToolScreen }) {
         <span className="block">{screen.caption}</span>
         <ol className="space-y-0.5">
           {screen.callouts.map((c) => (
-            <li key={c.n} className="flex gap-2"><Marker n={c.n} /><span>{c.text}</span></li>
+            <li key={c.n} className="flex gap-2"><Marker n={c.n} /><span><ToolTextView text={c.text} /></span></li>
           ))}
         </ol>
       </figcaption>

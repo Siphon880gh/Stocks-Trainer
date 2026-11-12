@@ -338,3 +338,10 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Every value is imported from the TT1–TT4 lesson files (one source of truth), so the cross-check table cannot drift from the lessons.
 - No Playbook: a research method, not a vouched trading practice.
 - Tool Training (TT0–TT5) complete: 5 lessons, 70 questions, 15 cases, 24 terms, 5 coach sessions; coach parity unchanged (sessions tagged `tools`).
+
+### TT6 Simulations (Weng, 2026-11-12: "more simulation examples inside the Tool Training so it answers why we're doing it")
+
+- Underlined (dotted purple, ▶) phrases in lesson copy open a popover dialog that walks a SAMPLE tape bar by bar (Next / Previous / Replay, ← → keys, Esc or Close returns focus to the phrase). Each bar has "What this bar shows" and "Why we are doing this"; the goal is stated before the first Next and a takeaway shows on the last bar. `?sim=<id>` opens one on load.
+- StockAnalysis (5): `sa-sim-52-week` (12 monthly bars), `sa-sim-earnings-week` (8), `sa-sim-one-time` (8, P/E readout per bar), `sa-sim-pe-moves` (7, P/E readout), `sa-sim-columns` (6-step column walk over NEM's real income statement read Nov 12, 2026). Triggers in the intro, Overview / Financials / Statistics callouts and the ten-minute walkthrough. Every tape is a SAMPLE company; only the existing dated NEM figures are real.
+- Yahoo Finance: `yf-sim-adj-close` (7 bars across an ex-dividend day). Finviz: `fv-sim-signal` (8 bars: headline, fall, Oversold-style signal, follow-up). Market Forces and the capstone have none: the research-link walkthrough (c94d453) already covers Market Forces, and a tape would not add to it.
+- Tests: `toolTrainingSims.test.tsx` (walk bounds, replay, candle layout, column reveal, data checks via `simulationProblems`, popover static render), `toolTrainingPage.test.tsx` compares `ToolText` copy flattened with `toolTextPlain`.

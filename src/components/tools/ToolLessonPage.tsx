@@ -1,15 +1,22 @@
 import { Fragment, useState } from "react";
-import { Link } from "react-router-dom";
-import type { ToolLesson } from "../../lib/toolTraining";
+import { Link, useSearchParams } from "react-router-dom";
+import { simStepCount, toolTextPlain, type ToolLesson } from "../../lib/toolTraining";
 import { cn } from "../../lib/utils";
 import { MockScreen } from "./MockUi";
+import { SimProvider, SimTrigger, ToolTextView } from "./Simulation";
 
-/** One tool-training lesson (/tools/<slug>): credit, simulated screens, walkthroughs, drills, caveats, sources. */
+/**
+ * One tool-training lesson (/tools/<slug>): credit, simulated screens, walkthroughs, simulations, drills, caveats,
+ * sources. Underlined phrases open a simulation popover; `?sim=<id>` opens one on load (deep link and tests).
+ */
 export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
+  const [params] = useSearchParams();
+  const sims = lesson.simulations ?? [];
   const [picks, setPicks] = useState<Record<string, number>>({});
   const right = lesson.drills.filter((d) => picks[d.id] === d.answer).length;
   const done = lesson.drills.every((d) => picks[d.id] !== undefined);
   return (
+    <SimProvider sims={sims} initialOpen={params.get("sim")}>
     <div className="flex-1 flex flex-col">
       <main className="flex-1 px-4 py-6 max-w-4xl mx-auto w-full space-y-4">
         <div>
@@ -23,7 +30,12 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
         </div>
 
         <section className="panel p-4 space-y-2 text-[13px]" data-testid="tool-intro">
-          {lesson.intro.map((p) => <p key={p}>{p}</p>)}
+          {lesson.intro.map((p) => <p key={toolTextPlain(p)}><ToolTextView text={p} /></p>)}
+          {sims.length ? (
+            <p className="text-[11px] text-muted" data-testid="sim-hint">
+              <span className="font-medium text-sim underline decoration-dotted decoration-2 underline-offset-[3px]">Dotted purple phrases ▶</span> are not glossary terms. Each opens a short simulation: a SAMPLE tape or a table you step through, showing why a value from the tool matters for reading the stock.
+            </p>
+          ) : null}
           <p className="text-[11px] text-muted" data-testid="tool-credit">
             {lesson.credit.name} (<a href={lesson.credit.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">{lesson.credit.url.replace(/^https:\/\//, "")}</a>): {lesson.credit.note}
           </p>
@@ -43,11 +55,29 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
             <div key={w.title}>
               <p className="font-medium">{w.title}</p>
               <ol className="list-decimal pl-5 text-[12px] space-y-0.5">
-                {w.steps.map((s) => <li key={s}>{s}</li>)}
+                {w.steps.map((s) => <li key={toolTextPlain(s)}><ToolTextView text={s} /></li>)}
               </ol>
             </div>
           ))}
         </section>
+
+        {sims.length ? (
+          <section className="panel p-4 space-y-2 text-[13px]" data-testid="tool-simulations">
+            <div>
+              <p className="font-semibold text-[14px]">Simulations: why each check matters</p>
+              <p className="text-[11px] text-muted">Step through a SAMPLE tape (or table) one bar at a time. Each step says what it shows and why we are looking. Simulated, not real prices, unless a step names a dated value.</p>
+            </div>
+            <ul className="space-y-2">
+              {sims.map((s) => (
+                <li key={s.id} className="text-[12px]" data-sim-item={s.id}>
+                  <SimTrigger simRef={{ sim: s.id, text: s.title }} />
+                  <span className="text-muted"> · {simStepCount(s)} {s.kind === "bars" ? "bars" : "steps"}</span>
+                  <span className="block text-muted">{s.goal}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
 
         <section className="panel p-4 space-y-3 text-[13px]" data-testid="tool-drills">
           <p className="font-semibold text-[14px]">Your call: {lesson.drills.length} drills</p>
@@ -112,5 +142,6 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
         </section>
       </main>
     </div>
+    </SimProvider>
   );
 }

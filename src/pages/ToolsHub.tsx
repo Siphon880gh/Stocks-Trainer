@@ -46,6 +46,9 @@ export default function ToolsHub() {
         </div>
         <section className="panel p-4 space-y-2 text-[13px]" data-testid="tools-list">
           <p className="font-semibold text-[14px]">Lessons</p>
+          <p className="text-[12px] text-muted" data-testid="tools-sim-note">
+            Inside each lesson, dotted purple phrases marked ▶ open a short simulation: a SAMPLE tape or table you step through, showing how a value from the tool connects back to the stock.
+          </p>
           {TOOL_LESSONS.length ? (
             <ul className="space-y-2">
               {TOOL_LESSONS.map((t) => (
