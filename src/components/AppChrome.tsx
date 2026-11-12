@@ -1,5 +1,5 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { Fragment, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { ACADEMY_MORE, APP_NAV, DASHBOARD_MORE, DEEP_STUDY, OTHER_FACTORS, PATTERN_MORE, PRACTICE_MENU, QUICK_DECISIONS } from "../lib/appNav";
 import { cn } from "../lib/utils";
 
@@ -114,10 +114,10 @@ export default function AppChrome({ children }: { children: ReactNode }) {
             className="flex flex-wrap md:flex-nowrap items-center justify-start w-full md:w-auto gap-x-0.5 gap-y-0.5 md:ml-auto"
           >
             {APP_NAV.map((item) => {
-              if (item.to === "/") return <MenuGroup key={item.to} label={item.label} to={item.to} end items={DASHBOARD_MORE} testId="dashboard-menu" />;
-              if (item.to === "/academy") return <MenuGroup key={item.to} label={item.label} to={item.to} end items={ACADEMY_MORE} testId="academy-menu" />;
-              if (item.to === "/training#patterns") return <MenuGroup key={item.to} label={item.label} to={item.to} items={PATTERN_MORE} testId="pattern-menu" />;
-              if (item.to === "/training#practice") return <MenuGroup key={item.to} label={item.label} to={item.to} items={PRACTICE_MENU} testId="practice-menu" />;
+              if (item.to === "/") return <Fragment key={item.to}><MenuGroup label={item.label} to={item.to} end items={DASHBOARD_MORE} testId="dashboard-menu" /></Fragment>;
+              if (item.to === "/academy") return <Fragment key={item.to}><MenuGroup label={item.label} to={item.to} end items={ACADEMY_MORE} testId="academy-menu" /></Fragment>;
+              if (item.to === "/training#patterns") return <Fragment key={item.to}><MenuGroup label={item.label} to={item.to} items={PATTERN_MORE} testId="pattern-menu" /></Fragment>;
+              if (item.to === "/training#practice") return <Fragment key={item.to}><MenuGroup label={item.label} to={item.to} items={PRACTICE_MENU} testId="practice-menu" /></Fragment>;
               return (
                 <NavLink
                   key={item.to}
