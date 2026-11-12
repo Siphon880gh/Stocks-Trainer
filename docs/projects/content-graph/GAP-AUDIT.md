@@ -292,3 +292,10 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Playbook added: `business-cycle-sector-tilt` (Fidelity Viewpoints source; credibility panel: mixed evidence, citing Fidelity Learn, NBER, FINRA and MSCI GICS (the S&P DJI GICS page returns 403 to automated checks, so it stays on the practice page only); the Stangl/Jacobsen/Visaltanachoti paper is cited on the practice page because ResearchGate blocks automated checks).
 - Sources checked 2026-11-12: S&P DJI GICS, State Street XLK/XLF/XLRE daily holdings (Nov 11, 2026), Vanguard VNQ profile, Investor.gov REITs, FINRA concentration risk, Fidelity business-cycle and sector-rotation pages, NBER business cycle dating, ResearchGate paper (WebFetch).
 - Coach parity after MK7: equity +1 (the session is tagged `equities`).
+
+## 2026-11-12 Market themes MK8: index and style building blocks
+- Source: Market Forces' large-cap, mid-cap, small-cap, total-market, developed, emerging, growth, value and dividend themes.
+- Added `/practice/index-style` (14 `IX-`, 3 beginner macro-news cases: three style funds that are one bet, small caps lag for a year, international jumps as the dollar slides; 6 terms; coach `index-style-blocks` tagged `equities`).
+- Playbook: none. Tilts by size, value or region are disputed; the vouched practice (written mix plus rebalancing) already exists as `rebalance-to-target`.
+- Sources checked 2026-11-12: Investor.gov index funds bulletin, FINRA non-traditional indexes, State Street SPY holdings (Nov 11, 2026), iShares IWM/IJH, Vanguard VTI/VEA/VWO/VTV/VUG profiles, Nasdaq-100 page, S&P DJI S&P 500 page (WebFetch; 403 to curl).
+- Coach parity after MK8: equity +1 (31); floor 22 still met by crypto 22.

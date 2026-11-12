@@ -7,6 +7,7 @@ import type { QuizQuestion } from "../quizData";
 import type { MarketTheme, MarketThemeMode, MarketThemeQuizGroupId } from "./types";
 import { EXPOSURE_WRAPPERS } from "./structure";
 import { CURRENCY_FUNDS } from "./currencyFunds";
+import { INDEX_STYLE } from "./indexStyle";
 import { SECTORS_ROTATION } from "./sectors";
 import { BONDS_RATES } from "./bonds";
 import { MATERIALS_CHEMICALS } from "./materials";
@@ -17,7 +18,7 @@ import { PRECIOUS_METALS } from "./preciousMetals";
 
 export type { MarketTheme, MarketThemeMode, MarketThemeQuizGroupId } from "./types";
 
-export const MARKET_THEMES: MarketTheme[] = [EXPOSURE_WRAPPERS, CURRENCY_FUNDS, PRECIOUS_METALS, ENERGY, INDUSTRIAL_METALS, AGRICULTURE, MATERIALS_CHEMICALS, BONDS_RATES, SECTORS_ROTATION];
+export const MARKET_THEMES: MarketTheme[] = [EXPOSURE_WRAPPERS, CURRENCY_FUNDS, PRECIOUS_METALS, ENERGY, INDUSTRIAL_METALS, AGRICULTURE, MATERIALS_CHEMICALS, BONDS_RATES, SECTORS_ROTATION, INDEX_STYLE];
 
 export const MARKET_THEME_IDS = MARKET_THEMES.map((t) => t.id);
 

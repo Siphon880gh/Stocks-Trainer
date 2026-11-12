@@ -71,6 +71,7 @@ describe("misc practice catalog", () => {
       "Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman", // market theme
       "Bonds and rates: SGOV, SHY, IEF, TLT, TIP and duration", // market theme
       "Sectors and rotation: the 11 sectors, sector funds, REITs and the business cycle", // market theme
+      "Index and style: size, region, style and how index weights work", // market theme
       "Automated & algo trading (2026)",
       "Record-setting traders",
     ]);
