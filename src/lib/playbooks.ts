@@ -498,6 +498,44 @@ export const PLAYBOOKS: Playbook[] = [
       ],
     },
   },
+  {
+    id: "business-cycle-sector-tilt",
+    title: "Business-cycle sector tilt, kept small",
+    summary:
+      "Keep a broad core, and if you tilt toward sectors that have led in a given phase of the cycle, size it small, write the exit, and expect the edge to be modest at best.",
+    assetClass: "equity",
+    source: {
+      url: "https://www.fidelity.com/viewpoints/investing-ideas/sector-investing-business-cycle",
+      kind: "webpage",
+      label: "Fidelity Viewpoints · How to invest using the business cycle",
+      verifiedOn: "2026-11-12",
+    },
+    explanation:
+      "SAMPLE teaching of the business-cycle approach as Fidelity presents it. Fidelity splits the cycle into four phases. Early cycle: a sharp recovery, low rates; consumer discretionary has beaten the market in every early cycle since 1962, and financials and real estate have also done well. Mid-cycle: the longest phase, nearly three years on average; technology has led, but no category has beaten the market more than half the time. Late cycle: about 18 months on average; energy and utilities have done well as inflation rises. Recession: under a year on average; staples, utilities and health care have held up best.\n\nHow to use it here, with the limits in view. Start from a broad core fund. If you tilt, write down the phase you think you are in and why, cap the tilt (for example a tenth of your stocks), name the sector funds, read their holdings for overlap with the core, and set the date or signal that ends the tilt. Fidelity warns the phases vary in length, can be skipped, and that no investment behaved the same in every cycle. Its learning center adds that rotation can raise volatility and underperform the market.\n\nThe Chart look panel is a cyclical tape: practice asking whether the move you see was already priced before the cycle news. There are no live sector charts here. Not investment advice.",
+    coachSlug: "sectors-cycle",
+    caseId: "case-sr-recession-called-late",
+    samplePackId: "eq-cyclical",
+    overlayIds: [],
+    related: [
+      { label: "Practice · Sectors and rotation", to: "/practice/sectors-rotation" },
+      { label: "Sectors & Rotation quiz", to: "/training?group=sectors-rotation&start=1" },
+      { label: "Playbook · Rebalance back to your target mix", to: "/playbooks/rebalance-to-target" },
+    ],
+    credibility: {
+      title: "Mixed evidence: a guide to expectations, not a reliable edge",
+      summary: [
+        "The phase-by-phase sector patterns come from Fidelity's own research. They are widely taught, and Fidelity itself says no investment has behaved uniformly in every cycle.",
+        "Independent evidence is weak. A Massey University working paper by Stangl, Jacobsen and Visaltanachoti found that even an investor who knew the cycle phases perfectly, paying no costs, would have beaten the market by at best about 2.3% a year since 1948, and that the edge quickly dissipates in realistic settings. That paper is listed on the Sectors and rotation practice page; its host blocks automated link checks, so it is not repeated below.",
+        "The practical problem is timing: NBER dates recessions months after they start, so by the time a phase is clear, prices have often moved. That is why this kit keeps the tilt small, written down and inside a rebalancing plan.",
+      ],
+      sources: [
+        { supports: "How rotation is meant to work, and its risks", label: "Fidelity Learn · An introduction to sector rotation strategies", url: "https://www.fidelity.com/learning-center/trading-investing/markets-sectors/intro-sector-rotation-strats", note: "Describes rotating among the 11 GICS sectors by phase, and warns it can raise volatility and underperform the broader market.", role: "presents", verifiedOn: "2026-11-12" },
+        { supports: "Phases are known late", label: "NBER · Business cycle dating", url: "https://www.nber.org/research/business-cycle-dating", note: "The committee identifies peaks and troughs retrospectively, typically a number of months after they occur.", role: "corroborates", verifiedOn: "2026-11-12" },
+        { supports: "Keep the tilt small; check overlap", label: "FINRA · Concentrate on concentration risk", url: "https://www.finra.org/investors/insights/concentration-risk", note: "Deliberate sector bets and overlapping funds (a tech fund plus an index fund) both create concentration risk; rebalance regularly.", role: "corroborates", verifiedOn: "2026-11-12" },
+        { supports: "What the sectors are", label: "MSCI · The Global Industry Classification Standard (GICS)", url: "https://www.msci.com/indexes/index-resources/gics", note: "GICS, built by MSCI and S&P Dow Jones Indices, gives each company one classification by principal business activity (revenue a key factor), is reviewed annually, and lists sector rotation strategies among its uses.", role: "corroborates", verifiedOn: "2026-11-12" },
+      ],
+    },
+  },
 ];
 
 export function listPlaybooks(): Playbook[] {

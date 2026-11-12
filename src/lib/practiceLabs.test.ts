@@ -70,6 +70,7 @@ describe("misc practice catalog", () => {
       "Agriculture and inputs: crops, fertilizer and farm equipment", // market theme
       "Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman", // market theme
       "Bonds and rates: SGOV, SHY, IEF, TLT, TIP and duration", // market theme
+      "Sectors and rotation: the 11 sectors, sector funds, REITs and the business cycle", // market theme
       "Automated & algo trading (2026)",
       "Record-setting traders",
     ]);

@@ -285,3 +285,10 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Playbook added: `treasury-bond-ladder` (Fidelity Viewpoints source; credibility panel with Vanguard, FINRA, SEC Investor.gov and TreasuryDirect). It says plainly the ladder is conservative and does not maximize returns; no video.
 - Sources checked 2026-11-12: FINRA duration insight, Investor.gov bulletin on rates and bond prices, TreasuryDirect TIPS, iShares TLT/IEF/SHY/SGOV/TIP pages (durations as of Nov 10, 2026), Fidelity and Vanguard ladder pages.
 - Coach parity after MK6: unchanged (the session has no class tag).
+
+## 2026-11-12 Market themes MK7: sectors and rotation
+- Source: Market Forces' sector themes (technology, communication, financials, health care, energy, industrials, materials, discretionary, staples, utilities) and its two real estate themes (property, real estate; both VNQ and XLRE), folded into one lesson with one REIT module. Complements the existing desk term `sector-rotation`.
+- Added `/practice/sectors-rotation` (14 `SR-`, 3 beginner macro-news cases: a tech fund on top of an index fund, a recession announced months late, real estate falls as yields jump; 6 terms; coach `sectors-cycle` tagged `equities`).
+- Playbook added: `business-cycle-sector-tilt` (Fidelity Viewpoints source; credibility panel: mixed evidence, citing Fidelity Learn, NBER, FINRA and MSCI GICS (the S&P DJI GICS page returns 403 to automated checks, so it stays on the practice page only); the Stangl/Jacobsen/Visaltanachoti paper is cited on the practice page because ResearchGate blocks automated checks).
+- Sources checked 2026-11-12: S&P DJI GICS, State Street XLK/XLF/XLRE daily holdings (Nov 11, 2026), Vanguard VNQ profile, Investor.gov REITs, FINRA concentration risk, Fidelity business-cycle and sector-rotation pages, NBER business cycle dating, ResearchGate paper (WebFetch).
+- Coach parity after MK7: equity +1 (the session is tagged `equities`).

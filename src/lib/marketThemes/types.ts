@@ -15,7 +15,8 @@ export type MarketThemeQuizGroupId =
   | "industrial-metals"
   | "agriculture"
   | "materials-chemicals"
-  | "bonds-rates";
+  | "bonds-rates"
+  | "sectors-rotation";
 
 /** Case thinking modes owned by the market-theme lessons (spread into `CaseThinkingMode`). */
 export type MarketThemeMode =
@@ -26,7 +27,8 @@ export type MarketThemeMode =
   | "industrial_metals"
   | "agriculture_inputs"
   | "materials_chemicals"
-  | "bond_duration";
+  | "bond_duration"
+  | "sector_cycle";
 
 export interface ThemeSource {
   label: string;
