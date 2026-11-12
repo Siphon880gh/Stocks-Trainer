@@ -64,6 +64,7 @@ describe("misc practice catalog", () => {
       "VIX trading for beginners",
       "Same theme, different wrapper: stocks, funds and futures",
       "Currency funds and the dollar",
+      "Precious metals: gold, silver and the miners", // market theme
       "Automated & algo trading (2026)",
       "Record-setting traders",
     ]);

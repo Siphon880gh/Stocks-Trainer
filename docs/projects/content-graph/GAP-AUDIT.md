@@ -238,3 +238,11 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Sources checked 2026-11-12: FINRA (futures and commodities, ETFs and ETPs, Regulatory Notice 20-14), CFTC (commodity ETP advisory, May 2020 WTI release: −$37.63 settlement), Fidelity (contango and backwardation), EIA (Cushing storage), SEC Chair Gensler's Jan 10, 2024 statement (approval is not an endorsement of bitcoin), Investor.gov (bitcoin futures funds), CME gold contract specs, ICE USDX page and rulebook (weights), FRED DTWEXBGS. Direct curl gets 403 from SEC and CME (bot blocks); both pages read fine in a browser fetch.
 - Playbook: none. These lessons explain structure; no outside expert vouches for a strategy here.
 - Coach parity after MK0: equity 29, futures 22, forex 23, crypto 22, options 25 (floor 21).
+
+## 2026-11-12 Market themes MK1: precious metals
+- Source: Market Forces Gold (GLD, IAU, GDX, NEM, B) and Silver (SLV, SIVR, SIL, PAAS).
+- Already covered: the gold futures contract, `futures-gold-haven` coach and gold futures cases, real yield, US dollar index, expense ratio and operating leverage (MK0). Not covered: what drives gold beyond the contract (central-bank buying, haven limits), silver's industrial demand, AISC, streamers, trust fee drag, the gold/silver ratio.
+- Added `/practice/precious-metals` (14 `PM-`, 3 beginner macro-news cases: miner fund falls harder than gold, silver solar headline gap, two trusts two fees; 6 terms; coach `precious-metals-wrappers`).
+- Sources checked 2026-11-12: World Gold Council (FY2024 central banks 1,044.6t; AISC guidance), Silver Institute April 2025 newsletter (680.5 Moz industrial, total about 1.16 billion oz; PDF read with pdftotext), FRED DFII10, FINRA, Barrick (ticker B since May 9, 2025; curl 403, browser fetch fine).
+- Playbook: none (no outside expert vouches for a metals strategy; the lesson teaches drivers and wrappers).
+- Coach parity after MK1: equity 29, futures 23, forex 23, crypto 22, options 25 (floor 21).

@@ -7,10 +7,11 @@ import type { QuizQuestion } from "../quizData";
 import type { MarketTheme, MarketThemeMode, MarketThemeQuizGroupId } from "./types";
 import { EXPOSURE_WRAPPERS } from "./structure";
 import { CURRENCY_FUNDS } from "./currencyFunds";
+import { PRECIOUS_METALS } from "./preciousMetals";
 
 export type { MarketTheme, MarketThemeMode, MarketThemeQuizGroupId } from "./types";
 
-export const MARKET_THEMES: MarketTheme[] = [EXPOSURE_WRAPPERS, CURRENCY_FUNDS];
+export const MARKET_THEMES: MarketTheme[] = [EXPOSURE_WRAPPERS, CURRENCY_FUNDS, PRECIOUS_METALS];
 
 export const MARKET_THEME_IDS = MARKET_THEMES.map((t) => t.id);
 

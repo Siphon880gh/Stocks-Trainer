@@ -123,6 +123,7 @@ export default function App() {
           <Route path="practice/wheel-strategy" element={<PracticeWheelStrategy />} />
           <Route path="practice/exposure-wrappers" element={<MarketThemePage id="exposure-wrappers" />} />
           <Route path="practice/currency-funds" element={<MarketThemePage id="currency-funds" />} />
+          <Route path="practice/precious-metals" element={<MarketThemePage id="precious-metals" />} />
           <Route path="map" element={<ProgressMap />} />
           <Route path="cases" element={<Cases />} />
           <Route path="cases/:caseId" element={<CasePlayer />} />

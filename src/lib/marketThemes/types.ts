@@ -9,12 +9,14 @@ import type { CaseStudy } from "../caseStudies";
 /** Learn group ids (also misc-practice ids) owned by the market-theme lessons. */
 export type MarketThemeQuizGroupId =
   | "exposure-wrappers"
-  | "currency-funds";
+  | "currency-funds"
+  | "precious-metals";
 
 /** Case thinking modes owned by the market-theme lessons (spread into `CaseThinkingMode`). */
 export type MarketThemeMode =
   | "exposure_wrapper"
-  | "currency_wrapper";
+  | "currency_wrapper"
+  | "precious_metals";
 
 export interface ThemeSource {
   label: string;
