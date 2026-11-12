@@ -1,5 +1,6 @@
 import type { CaseThinkingMode } from "./caseStudies";
 import { MARKET_THEME_MODE_LABELS, MARKET_THEME_MODE_TIPS } from "./marketThemes";
+import { TOOL_MODE_LABELS, TOOL_MODE_TIPS } from "./toolTraining";
 
 export const THINKING_MODE_LABELS: Record<CaseThinkingMode, string> = {
   beat_miss: "Beat or miss",
@@ -23,6 +24,7 @@ export const THINKING_MODE_LABELS: Record<CaseThinkingMode, string> = {
   vix_products: "VIX contract, curve and sizing",
   wheel_cycle: "Wheel: put, assignment, call",
   ...MARKET_THEME_MODE_LABELS,
+  ...TOOL_MODE_LABELS,
 };
 
 export const COACH_TIP_BY_THINKING_MODE: Record<CaseThinkingMode, string> = {
@@ -67,6 +69,7 @@ export const COACH_TIP_BY_THINKING_MODE: Record<CaseThinkingMode, string> = {
   wheel_cycle:
     "Pick a stock you would own through a long fall before you look at the premium. Know the put's breakeven (strike − premium) and the cash it ties up (strike × 100), sell calls only at strikes you would happily sell at, and check the earnings date before you sell. Premium does not fix a broken thesis. Cases → Options context.",
   ...MARKET_THEME_MODE_TIPS,
+  ...TOOL_MODE_TIPS,
 };
 
 export function thinkingModeLabel(mode: CaseThinkingMode): string {

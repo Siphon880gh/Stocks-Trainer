@@ -13,6 +13,7 @@ import { RPP_CASES } from "./riskPremiumPortfolio";
 import { VIX_CASES } from "./vixTrading";
 import { WHEEL_CASES } from "./wheelStrategy";
 import { MARKET_THEME_CASES, type MarketThemeMode } from "./marketThemes";
+import { TOOL_CASES, type ToolTrainingMode } from "./toolTraining";
 
 /** `chart` = price action only (no headline or statement), e.g. the `price-action` pack. */
 export type CaseContextType = "news" | "financials" | "combined" | "chart";
@@ -37,7 +38,8 @@ export type CaseThinkingMode =
   | "vol_risk_premium"
   | "vix_products"
   | "wheel_cycle"
-  | MarketThemeMode;
+  | MarketThemeMode
+  | ToolTrainingMode;
 
 export type CaseAction = "buy" | "sell" | "hold" | "short";
 export type CaseGrade = "correct" | "incorrect" | "partial";
@@ -2196,6 +2198,7 @@ export const CASE_STUDIES: CaseStudy[] = [
   ...VIX_CASES,
   ...WHEEL_CASES,
   ...MARKET_THEME_CASES,
+  ...TOOL_CASES,
   ...FUTURES_CASES,
   ...FOREX_CASES,
   ...CRYPTO_CASES,

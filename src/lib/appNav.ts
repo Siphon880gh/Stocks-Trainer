@@ -1,4 +1,5 @@
 import { MISC_PRACTICE_ITEMS } from "./miscPractices";
+import { CHARTING_APPS_ROUTE, TOOL_LESSONS } from "./toolTraining";
 
 /** Top menu, in the same order as the Learn page after the path. */
 export const APP_NAV = [
@@ -36,6 +37,13 @@ export const PRACTICE_MENU = MISC_PRACTICE_ITEMS.flatMap((item) => {
   if (item.id !== "futures-vs-options") return [row];
   return [row, { id: "options-ladder", label: "Options ladder", to: "/academy/options" }];
 });
+
+/** Tool Training: the hub, one lesson per tool, then the existing charting-apps comparison (kept in Practice too). */
+export const TOOL_TRAINING: readonly { label: string; to: string; icon: string }[] = [
+  { label: "Tool Training overview", to: "/tools", icon: "construction" },
+  ...TOOL_LESSONS.map((t) => ({ label: t.menuLabel, to: t.route, icon: t.icon })),
+  { label: "Charting apps compared", to: CHARTING_APPS_ROUTE, icon: "compare" },
+];
 
 export const DEEP_STUDY = [
   { label: "Cases", to: "/cases", icon: "cases" },

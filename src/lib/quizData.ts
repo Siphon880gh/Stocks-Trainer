@@ -41,6 +41,7 @@ import { RPP_QUESTIONS } from "./riskPremiumPortfolio";
 import { VIX_QUESTIONS } from "./vixTrading";
 import { WHEEL_QUESTIONS } from "./wheelStrategy";
 import { MARKET_THEME_QUIZ_GROUPS, isMarketThemeQuizGroup, marketThemeQuestions, type MarketThemeQuizGroupId } from "./marketThemes";
+import { TOOL_QUIZ_GROUPS, isToolTrainingQuizGroup, toolLessonQuestions, type ToolTrainingQuizGroupId } from "./toolTraining";
 import { DESK_QUESTIONS } from "./deskQuiz";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
@@ -5442,7 +5443,8 @@ export type QuizGroupId =
   | FinancialsQuizGroupId
   | MacroQuizGroupId
   | AcademyQuizGroupId
-  | MarketThemeQuizGroupId;
+  | MarketThemeQuizGroupId
+  | ToolTrainingQuizGroupId;
 
 export interface QuizGroup {
   id: QuizGroupId;
@@ -5679,6 +5681,7 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     icon: "sync",
   },
   ...MARKET_THEME_QUIZ_GROUPS,
+  ...TOOL_QUIZ_GROUPS,
   {
     id: "paper-desk",
     name: "Paper Desk: Trading the News, Filings and Events",
@@ -5830,6 +5833,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
   if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
   if (isMarketThemeQuizGroup(groupId)) return marketThemeQuestions(groupId);
+  if (isToolTrainingQuizGroup(groupId)) return toolLessonQuestions(groupId);
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
   if (groupId === "trading-risk") return [...TRADING_RISK_QUESTIONS, ...PDT_QUESTIONS];
@@ -5883,6 +5887,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
   if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
   if (isMarketThemeQuizGroup(groupId)) return marketThemeQuestions(groupId);
+  if (isToolTrainingQuizGroup(groupId)) return toolLessonQuestions(groupId);
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
   if (groupId === "trading-risk") return [...TRADING_RISK_QUESTIONS, ...PDT_QUESTIONS];

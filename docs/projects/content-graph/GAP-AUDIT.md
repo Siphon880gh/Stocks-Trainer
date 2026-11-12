@@ -299,3 +299,8 @@ Resume pointer for the "check for gaps in the Main Content Graph Prompt and the 
 - Playbook: none. Tilts by size, value or region are disputed; the vouched practice (written mix plus rebalancing) already exists as `rebalance-to-target`.
 - Sources checked 2026-11-12: Investor.gov index funds bulletin, FINRA non-traditional indexes, State Street SPY holdings (Nov 11, 2026), iShares IWM/IJH, Vanguard VTI/VEA/VWO/VTV/VUG profiles, Nasdaq-100 page, S&P DJI S&P 500 page (WebFetch; 403 to curl).
 - Coach parity after MK8: equity +1 (31); floor 22 still met by crypto 22.
+
+## 2026-11-12 Tool Training TT0: foundations
+- Source: Weng asked for lessons on Finviz, his Market Forces tickers app, stockanalysis.com and Yahoo Finance under a new TOOL TRAINING menu.
+- Added the Tool Training dropdown (after Practice), ToC group `tool-training`, `/tools` hub and `/tools/:toolId`, map hub `hub:tools`, shared mock-UI and registry spreads. `/practice/charting-apps` is untouched and linked.
+- Lessons use simulated layouts in the app's own style (no logos); each screen has alt text, a caption and markers. Playbook: none (tool skills, not strategies).

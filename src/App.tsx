@@ -52,6 +52,7 @@ import Coach from "./pages/Coach";
 import CoachSession from "./pages/CoachSession";
 import Playbooks from "./pages/Playbooks";
 import Playbook from "./pages/Playbook";
+import ToolsHub from "./pages/ToolsHub";
 import MacroDesk from "./pages/macro/MacroDesk";
 import MacroLesson from "./pages/macro/MacroLesson";
 import MacroPlay from "./pages/macro/MacroPlay";
@@ -138,6 +139,8 @@ export default function App() {
           <Route path="coach/:slug" element={<CoachSession />} />
           <Route path="playbooks" element={<Playbooks />} />
           <Route path="playbooks/:id" element={<Playbook />} />
+          <Route path="tools" element={<ToolsHub />} />
+          <Route path="tools/:toolId" element={<ToolsHub />} />
           <Route path="macro" element={<MacroDesk />} />
           <Route path="macro/play" element={<MacroPlay />} />
           <Route path="macro/:lessonId" element={<MacroLesson />} />

@@ -74,6 +74,8 @@ export const APP_ROUTES: readonly string[] = [
   "/coach/:slug",
   "/playbooks",
   "/playbooks/:id",
+  "/tools",
+  "/tools/:toolId",
   "/macro",
   "/macro/play",
   "/map",
@@ -192,6 +194,7 @@ const ROUTE_LABELS: Record<string, string> = {
   "/market": "Charts",
   "/archive": "Library",
   "/playbooks": "Playbooks",
+  "/tools": "Tool Training",
 };
 
 function routeLabel(path: string): string {

@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import { MemoryRouter } from "react-router-dom";
 import AppChrome from "../components/AppChrome.tsx";
 import { MISC_PRACTICE_ITEMS } from "./miscPractices.ts";
+import { TOOL_LESSONS } from "./toolTraining/index.ts";
 import { hrefs, renderHtml } from "./macro/renderHarness.ts";
 
 describe("AppChrome header nav", () => {
@@ -48,6 +49,16 @@ describe("AppChrome header nav", () => {
     assert.ok(links.indexOf("/practice/wheel-strategy") < links.indexOf("/practice/crypto-candles"));
     assert.ok(links.indexOf("/practice/crypto-candles") < links.indexOf("/practice/vix-trading"));
     assert.ok(links.indexOf("/practice/vix-trading") < links.indexOf("/practice/algo-trading"));
+  });
+
+  it("puts Tool Training after Practice and before Deep Study, with every lesson and the charting-apps comparison", () => {
+    const menu = nav.slice(nav.indexOf('data-testid="tool-training-menu"'));
+    const toolLinks = hrefs(menu.slice(0, menu.indexOf('data-testid="deep-study-menu"')));
+    assert.equal(toolLinks[0], "/tools");
+    for (const t of TOOL_LESSONS) assert.ok(toolLinks.includes(t.route), t.route);
+    assert.equal(toolLinks[toolLinks.length - 1], "/practice/charting-apps");
+    assert.ok(links.indexOf("/training#practice") < links.indexOf("/tools"));
+    assert.ok(links.indexOf("/tools") < links.indexOf("/cases"));
   });
 
   it("keeps those links under the mounted path", () => {

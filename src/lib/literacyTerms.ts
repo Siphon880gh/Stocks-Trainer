@@ -27,6 +27,7 @@ import { RPP_TERMS } from "./riskPremiumPortfolio";
 import { VIX_TERMS } from "./vixTrading";
 import { WHEEL_TERMS } from "./wheelStrategy";
 import { MARKET_THEME_TERMS } from "./marketThemes";
+import { TOOL_TERMS } from "./toolTraining";
 import { DESK_TERMS } from "./deskTerms";
 import { FP_TERMS } from "./fourPillars";
 
@@ -719,6 +720,7 @@ export const LITERACY_TERMS: LiteracyTerm[] = [
   ...VIX_TERMS,
   ...WHEEL_TERMS,
   ...MARKET_THEME_TERMS,
+  ...TOOL_TERMS,
   ...DESK_TERMS,
 ]
 

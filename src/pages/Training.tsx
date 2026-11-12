@@ -27,6 +27,8 @@ import { isMiscPracticeDone } from "../lib/miscPractices";
 import FinancialsTrainingCard from "../components/financials/FinancialsTrainingCard";
 import { isFinancialsQuizGroup } from "../lib/financials/quizBanks";
 import { isMarketThemeQuizGroup } from "../lib/marketThemes";
+import { isToolTrainingQuizGroup } from "../lib/toolTraining";
+import { TOOL_TRAINING } from "../lib/appNav";
 import MacroTrainingCard from "../components/macro/MacroTrainingCard";
 import { isMacroQuizGroup } from "../lib/macro/quiz/banks";
 import AcademyTrainingCard from "../components/academy/AcademyTrainingCard";
@@ -170,6 +172,7 @@ export default function Training() {
                   g.id === "vix-trading" ||
                   g.id === "wheel-strategy" ||
                   isMarketThemeQuizGroup(g.id) ||
+                  isToolTrainingQuizGroup(g.id) ||
                   g.id === "paper-desk" ||
                   g.id === "supply-demand" ||
                   g.id === "indicators" ||
@@ -347,6 +350,18 @@ export default function Training() {
                 </Link>
                 <YouTubeSearchLink title={item.label} />
               </span>
+            ))}
+          </div>
+        </div>
+
+        </TocGroup>
+        <TocGroup id="tool-training" label="Tool Training" aliases={["tools"]}>
+        <div className="w-full max-w-xl panel p-4 text-sm space-y-2 scroll-mt-32" data-testid="toc-tool-training">
+          <h2 className="font-semibold">Tool Training</h2>
+          <p className="text-muted">How to use outside research tools: where the numbers are, how fresh they are, and what each tool cannot tell you. Credited, not endorsed.</p>
+          <div className="flex flex-wrap gap-3">
+            {TOOL_TRAINING.map((item) => (
+              <Link key={item.to} to={item.to} className="text-primary underline">{item.label}</Link>
             ))}
           </div>
         </div>

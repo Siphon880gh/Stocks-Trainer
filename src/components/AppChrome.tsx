@@ -1,6 +1,6 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Fragment, useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { ACADEMY_MORE, APP_NAV, DASHBOARD_MORE, DEEP_STUDY, OTHER_FACTORS, PATTERN_MORE, PRACTICE_MENU, QUICK_DECISIONS } from "../lib/appNav";
+import { ACADEMY_MORE, APP_NAV, DASHBOARD_MORE, DEEP_STUDY, OTHER_FACTORS, PATTERN_MORE, PRACTICE_MENU, QUICK_DECISIONS, TOOL_TRAINING } from "../lib/appNav";
 import { cn } from "../lib/utils";
 
 function here(to: string, pathname: string, hash: string): boolean {
@@ -136,6 +136,7 @@ export default function AppChrome({ children }: { children: ReactNode }) {
                 </NavLink>
               );
             })}
+            <MenuGroup label="Tool Training" to="/tools" end items={TOOL_TRAINING} testId="tool-training-menu" />
             <MenuGroup label="Deep Study" items={DEEP_STUDY} testId="deep-study-menu" />
             <MenuGroup label="Other factors" items={OTHER_FACTORS} testId="other-factors-menu" />
             <MenuGroup label="Quick Decisions" items={QUICK_DECISIONS} testId="quick-decisions-menu" />
