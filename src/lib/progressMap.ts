@@ -9,6 +9,7 @@
  * ever blocked. Browse all is session-only: it shows locked stages as open and writes no progress.
  */
 import { QUIZ_GROUPS } from "./quizData";
+import { MARKET_THEME_IDS } from "./marketThemes";
 import { MISC_PRACTICE_ITEMS } from "./miscPractices";
 import { LEVELS } from "./academy/content/levels";
 import { LEVEL_IDS } from "./academy/types";
@@ -74,7 +75,7 @@ const QUIZ_REGION: Record<string, RegionId> = Object.fromEntries(
     ["indicators", "indicators oscillators charting-apps algo-trading"],
     ["statements", "financial-literacy earnings-jargon financial-drills statements-reading cash-forecast-13wk earnings-preview earnings-reaction"],
     ["macro", "macro-releases rates-curve fed-policy housing-mortgage macro-reactions"],
-    ["markets", "equity-literacy futures-literacy forex-literacy crypto-literacy options-literacy futures-vs-options options-ladder wheel-strategy"],
+    ["markets", `equity-literacy futures-literacy forex-literacy crypto-literacy options-literacy futures-vs-options options-ladder wheel-strategy ${MARKET_THEME_IDS.join(" ")}`],
     ["risk", "news-literacy trading-risk squeezes news-biases record-traders risk-premium-portfolio vix-trading"],
     ["paper", "orders-and-fills paper-pnl paper-desk"],
   ] as Array<[RegionId, string]>).flatMap(([r, ids]) => ids.split(" ").map((id) => [id, r])),
@@ -86,7 +87,7 @@ const LAB_REGION: Record<string, RegionId> = Object.fromEntries(
     ["library", "hunt lookalike"],
     ["decisions", "draw regime replay plan invalidation levels reversal-charts pattern-themes which-way trade-framework opening-range fair-value-gap fib-decision-map one-minute-charts technique-narratives"],
     ["indicators", "ema-macd oscillators charting-apps algo-trading"],
-    ["markets", "futures-vs-options wheel-strategy"],
+    ["markets", `futures-vs-options wheel-strategy ${MARKET_THEME_IDS.join(" ")}`],
     ["risk", "gamma-squeeze news-biases record-traders risk-premium-portfolio vix-trading"],
   ] as Array<[RegionId, string]>).flatMap(([r, ids]) => ids.split(" ").map((id) => [id, r])),
 );
@@ -167,6 +168,9 @@ const PREREQS: Record<string, string[]> = {
   "quiz:vix-trading": ["lab:vix-trading"],
   "lab:wheel-strategy": ["quiz:options-literacy"],
   "quiz:wheel-strategy": ["lab:wheel-strategy"],
+  ...Object.fromEntries(MARKET_THEME_IDS.map((id) => [`quiz:${id}`, [`lab:${id}`]])),
+  "lab:exposure-wrappers": ["quiz:futures-literacy"],
+  "lab:currency-funds": ["lab:exposure-wrappers"],
   "lab:levels": ["quiz:price-action"],
   "lab:plan": ["lab:levels", "lab:invalidation"],
   "lab:fib-decision-map": ["lab:levels", "lab:invalidation"],

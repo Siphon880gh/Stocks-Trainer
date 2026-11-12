@@ -40,6 +40,7 @@ import { FVG_QUESTIONS } from "./fairValueGap";
 import { RPP_QUESTIONS } from "./riskPremiumPortfolio";
 import { VIX_QUESTIONS } from "./vixTrading";
 import { WHEEL_QUESTIONS } from "./wheelStrategy";
+import { MARKET_THEME_QUIZ_GROUPS, isMarketThemeQuizGroup, marketThemeQuestions, type MarketThemeQuizGroupId } from "./marketThemes";
 import { DESK_QUESTIONS } from "./deskQuiz";
 
 const SQUEEZE_QUESTIONS: QuizQuestion[] = squeezeQuestions();
@@ -5440,7 +5441,8 @@ export type QuizGroupId =
   | "options-literacy"
   | FinancialsQuizGroupId
   | MacroQuizGroupId
-  | AcademyQuizGroupId;
+  | AcademyQuizGroupId
+  | MarketThemeQuizGroupId;
 
 export interface QuizGroup {
   id: QuizGroupId;
@@ -5676,6 +5678,7 @@ export const QUIZ_GROUPS: QuizGroup[] = [
     description: "The four steps (sell a cash-secured put, assignment, covered calls, called away), collateral and breakeven math, premium-adjusted basis, annualized yield and what it assumes, delta and DTE choices, the capped upside and nearly full downside, a crash after assignment, earnings gaps, early assignment, Cboe's PUT and BXM indexes, taxes and approval levels, and whether the wheel is a valid strategy",
     icon: "sync",
   },
+  ...MARKET_THEME_QUIZ_GROUPS,
   {
     id: "paper-desk",
     name: "Paper Desk: Trading the News, Filings and Events",
@@ -5826,6 +5829,7 @@ function questionsArrayForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isFinancialsQuizGroup(groupId)) return FINANCIALS_QUESTION_BANKS[groupId];
   if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
   if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
+  if (isMarketThemeQuizGroup(groupId)) return marketThemeQuestions(groupId);
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
   if (groupId === "trading-risk") return [...TRADING_RISK_QUESTIONS, ...PDT_QUESTIONS];
@@ -5878,6 +5882,7 @@ export function getQuestionsForGroup(groupId: QuizGroupId): QuizQuestion[] {
   if (isFinancialsQuizGroup(groupId)) return FINANCIALS_QUESTION_BANKS[groupId];
   if (isMacroQuizGroup(groupId)) return MACRO_QUESTION_BANKS[groupId];
   if (isAcademyQuizGroup(groupId)) return ACADEMY_QUESTION_BANKS[groupId];
+  if (isMarketThemeQuizGroup(groupId)) return marketThemeQuestions(groupId);
   if (groupId === "indicators") return INDICATOR_QUIZ_QUESTIONS;
   if (groupId === "oscillators") return OSCILLATOR_QUESTIONS;
   if (groupId === "trading-risk") return [...TRADING_RISK_QUESTIONS, ...PDT_QUESTIONS];

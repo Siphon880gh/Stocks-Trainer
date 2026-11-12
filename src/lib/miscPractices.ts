@@ -1,3 +1,4 @@
+import { MARKET_THEME_PRACTICE_ITEMS } from "./marketThemes";
 /** Practice labs, from cash-stock charts toward futures, options, crypto, and narrower markets. */
 
 export interface MiscPracticeItem {
@@ -40,6 +41,7 @@ export const MISC_PRACTICE_ITEMS: MiscPracticeItem[] = [
   { id: "crypto-candles", title: "Candlesticks for crypto", to: "/practice/crypto-candles" },
   { id: "risk-premium-portfolio", title: "Risk-premium portfolio and the VIX overlay", to: "/practice/risk-premium-portfolio" },
   { id: "vix-trading", title: "VIX trading for beginners", to: "/practice/vix-trading" },
+  ...MARKET_THEME_PRACTICE_ITEMS,
   { id: "algo-trading", title: "Automated & algo trading (2026)", to: "/practice/algo-trading" },
   { id: "record-traders", title: "Record-setting traders", to: "/practice/record-traders" },
 ];

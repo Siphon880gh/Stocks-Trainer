@@ -74,6 +74,9 @@ import { breakoutPullbackFvgSession } from "./breakout-pullback-fvg";
 import { readABacktestSession } from "./read-a-backtest";
 import { vixFuturesCurveSession } from "./vix-futures-curve";
 import { wheelStrategySession } from "./wheel-strategy";
+import { exposureWrappersSession } from "./exposure-wrappers";
+import { bitcoinWrappersSession } from "./bitcoin-wrappers";
+import { currencyFundsDollarSession } from "./currency-funds-dollar";
 import { fourPillarsSession } from "./four-pillars";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
 import { candleNeedsContextSession } from "./candle-needs-context";
@@ -157,6 +160,9 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   readABacktestSession,
   vixFuturesCurveSession,
   wheelStrategySession,
+  exposureWrappersSession,
+  bitcoinWrappersSession,
+  currencyFundsDollarSession,
   fourPillarsSession,
   supplyDemandZoneRetestSession,
   candleNeedsContextSession,

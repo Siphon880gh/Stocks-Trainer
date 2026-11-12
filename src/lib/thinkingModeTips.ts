@@ -1,4 +1,5 @@
 import type { CaseThinkingMode } from "./caseStudies";
+import { MARKET_THEME_MODE_LABELS, MARKET_THEME_MODE_TIPS } from "./marketThemes";
 
 export const THINKING_MODE_LABELS: Record<CaseThinkingMode, string> = {
   beat_miss: "Beat or miss",
@@ -21,6 +22,7 @@ export const THINKING_MODE_LABELS: Record<CaseThinkingMode, string> = {
   vol_risk_premium: "Volatility risk premium",
   vix_products: "VIX contract, curve and sizing",
   wheel_cycle: "Wheel: put, assignment, call",
+  ...MARKET_THEME_MODE_LABELS,
 };
 
 export const COACH_TIP_BY_THINKING_MODE: Record<CaseThinkingMode, string> = {
@@ -64,6 +66,7 @@ export const COACH_TIP_BY_THINKING_MODE: Record<CaseThinkingMode, string> = {
     "Judge the contract you hold, not the headline VIX: a short future pays only if that contract falls. Read the curve's level as well as its slope, size in dollars ($1,000 a point on VX; margin is not the limit), model a fund's daily reset, and plan for gaps through stops. Cases → Futures, Market-wide news.",
   wheel_cycle:
     "Pick a stock you would own through a long fall before you look at the premium. Know the put's breakeven (strike − premium) and the cash it ties up (strike × 100), sell calls only at strikes you would happily sell at, and check the earnings date before you sell. Premium does not fix a broken thesis. Cases → Options context.",
+  ...MARKET_THEME_MODE_TIPS,
 };
 
 export function thinkingModeLabel(mode: CaseThinkingMode): string {

@@ -12,6 +12,7 @@ import { FVG_CASES, ORB_CASES, PILLAR_CASES, PRICE_ACTION_CASES } from "./priceA
 import { RPP_CASES } from "./riskPremiumPortfolio";
 import { VIX_CASES } from "./vixTrading";
 import { WHEEL_CASES } from "./wheelStrategy";
+import { MARKET_THEME_CASES, type MarketThemeMode } from "./marketThemes";
 
 /** `chart` = price action only (no headline or statement), e.g. the `price-action` pack. */
 export type CaseContextType = "news" | "financials" | "combined" | "chart";
@@ -35,7 +36,8 @@ export type CaseThinkingMode =
   | "fair_value_gap"
   | "vol_risk_premium"
   | "vix_products"
-  | "wheel_cycle";
+  | "wheel_cycle"
+  | MarketThemeMode;
 
 export type CaseAction = "buy" | "sell" | "hold" | "short";
 export type CaseGrade = "correct" | "incorrect" | "partial";
@@ -2193,6 +2195,7 @@ export const CASE_STUDIES: CaseStudy[] = [
   ...RPP_CASES,
   ...VIX_CASES,
   ...WHEEL_CASES,
+  ...MARKET_THEME_CASES,
   ...FUTURES_CASES,
   ...FOREX_CASES,
   ...CRYPTO_CASES,

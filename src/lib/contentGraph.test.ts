@@ -118,6 +118,9 @@ const DEDICATED_FLOORS: Record<string, number> = {
   "risk-premium-portfolio": 15,
   "vix-trading": 40,
   "wheel-strategy": 20,
+  // market themes (MK0–MK8)
+  "exposure-wrappers": 15,
+  "currency-funds": 12,
   "supply-demand": 12,
   "buy-or-sell": 60,
   "equity-patterns": 8,

@@ -62,6 +62,8 @@ describe("misc practice catalog", () => {
       "Candlesticks for crypto",
       "Risk-premium portfolio and the VIX overlay",
       "VIX trading for beginners",
+      "Same theme, different wrapper: stocks, funds and futures",
+      "Currency funds and the dollar",
       "Automated & algo trading (2026)",
       "Record-setting traders",
     ]);

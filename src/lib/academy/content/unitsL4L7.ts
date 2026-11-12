@@ -216,7 +216,7 @@ export const UNITS_L4_L7: Unit[] = [
       { title: "Check three things", body: "What it holds (read the holdings), what it costs each year (the expense ratio) and how much it trades (volume and spread). Two funds with similar names can hold very different things." },
       { title: "Diversified is not riskless", body: "A broad stock ETF still falls when the whole market falls. Sector ETFs concentrate risk in one industry.", glossaryTermId: "diversification" },
     ],
-    refs: ["glossary:etf", "glossary:diversification", "quiz:equity-literacy"],
+    refs: ["glossary:etf", "glossary:diversification", "quiz:equity-literacy", "practice:/practice/exposure-wrappers"],
   },
   {
     id: "l7-futures",
@@ -242,7 +242,7 @@ export const UNITS_L4_L7: Unit[] = [
       { title: "Pips", body: "For most pairs a pip is 0.0001. EUR/USD moving from 1.0800 to 1.0850 is a 50-pip move.", glossaryTermId: "forex-pip" },
       { title: "Rates drive currencies", body: "Central bank decisions and interest-rate differences between countries are big drivers. A surprise rate move can shift a pair sharply in minutes." },
     ],
-    refs: ["quiz:forex-literacy", "coach:forex-literacy", "glossary:forex-pip"],
+    refs: ["quiz:forex-literacy", "coach:forex-literacy", "glossary:forex-pip", "practice:/practice/currency-funds"],
   },
   {
     id: "l7-crypto",

@@ -26,6 +26,7 @@ import { getMilestoneStatus, loadProgress } from "../lib/progressStore";
 import { isMiscPracticeDone } from "../lib/miscPractices";
 import FinancialsTrainingCard from "../components/financials/FinancialsTrainingCard";
 import { isFinancialsQuizGroup } from "../lib/financials/quizBanks";
+import { isMarketThemeQuizGroup } from "../lib/marketThemes";
 import MacroTrainingCard from "../components/macro/MacroTrainingCard";
 import { isMacroQuizGroup } from "../lib/macro/quiz/banks";
 import AcademyTrainingCard from "../components/academy/AcademyTrainingCard";
@@ -168,6 +169,7 @@ export default function Training() {
                   g.id === "risk-premium-portfolio" ||
                   g.id === "vix-trading" ||
                   g.id === "wheel-strategy" ||
+                  isMarketThemeQuizGroup(g.id) ||
                   g.id === "paper-desk" ||
                   g.id === "supply-demand" ||
                   g.id === "indicators" ||
