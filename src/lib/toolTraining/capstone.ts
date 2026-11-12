@@ -7,7 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
-import type { ToolLesson } from "./types";
+import type { ToolLesson, ToolSimulation } from "./types";
+import { simBar } from "./simWalk";
 import { MF_WEIGHTS } from "./marketForces";
 import { SA_NEM } from "./stockAnalysis";
 import { FV_NEM } from "./finviz";
@@ -100,6 +101,54 @@ const CASES: CaseStudy[] = [
   },
 ];
 
+const CP_SIMULATIONS: ToolSimulation[] = [
+  {
+    kind: "columns",
+    id: "cp-sim-cross-check",
+    title: "Line up the same figure across four tools",
+    goal: `On Nov 12, 2026, Newmont's P/E read ${peValues.join(", ")}, a spread of ${CP_PE_SPREAD}, while EPS agreed within cents and employees did not (17,500 vs 44,100). Walk that comparison table, then go to the 10-K.`,
+    tape: `Newmont (NEM) figures, all read ${CP_READ_ON} · simulated layout`,
+    start: 1,
+    columns: ["Figure", "StockAnalysis", "Finviz", "Yahoo Summary", "Yahoo Stats"],
+    rows: [
+      ["P/E (trailing)", String(CP_COMPARE.pe.sa), String(CP_COMPARE.pe.fv), String(CP_COMPARE.pe.yfSummary), String(CP_COMPARE.pe.yfStats)],
+      ["Forward P/E", String(CP_COMPARE.fwdPe.sa), String(CP_COMPARE.fwdPe.fv), "—", String(CP_COMPARE.fwdPe.yf)],
+      ["EPS (ttm)", String(CP_COMPARE.eps.sa), String(CP_COMPARE.eps.fv), String(CP_COMPARE.eps.yf), "—"],
+      ["Analyst target", String(CP_COMPARE.target.sa), String(CP_COMPARE.target.fv), String(CP_COMPARE.target.yf), "—"],
+      ["Short % of float", String(CP_COMPARE.shortFloat.sa), String(CP_COMPARE.shortFloat.fv), "—", `${CP_COMPARE.shortFloat.yf} (${YF_STATS.shortDate})`],
+      ["Employees", CP_COMPARE.employees.sa, CP_COMPARE.employees.fv, CP_COMPARE.employees.yf, "—"],
+    ],
+    steps: [
+      { col: 1, row: 2, what: `EPS (ttm) agrees closely: ${CP_COMPARE.eps.sa} on StockAnalysis, ${CP_COMPARE.eps.fv} on Finviz, ${CP_COMPARE.eps.yf} on Yahoo.`, why: "Agreement on the same morning builds confidence that you are looking at the same trailing earnings. Small gaps of a few cents are normal; write the figure with its source and date." },
+      { col: 1, row: 0, what: `P/E reads ${CP_COMPARE.pe.sa}, ${CP_COMPARE.pe.fv}, ${CP_COMPARE.pe.yfSummary} and ${CP_COMPARE.pe.yfStats}, a spread of ${CP_PE_SPREAD}.`, why: "EPS agreed, so most of this spread is the price used and the time it was taken (Finviz's header was 8:25 AM ET, before the open). A small P/E gap is usually timing or inputs, not four different companies." },
+      { col: 2, row: 1, what: `Forward P/E: ${CP_COMPARE.fwdPe.fv} on Finviz, ${CP_COMPARE.fwdPe.sa} on StockAnalysis, ${CP_COMPARE.fwdPe.yf} on Yahoo Statistics.`, why: "Forward P/E divides a current price by an estimate, and each site has its own estimate source. Before calling the stock cheaper on one site, compare like with like: the same price time and the same estimate." },
+      { col: 4, row: 4, what: `Short percent of float: ${CP_COMPARE.shortFloat.sa} on StockAnalysis, ${CP_COMPARE.shortFloat.fv} on Finviz, ${CP_COMPARE.shortFloat.yf} on Yahoo Stats as of ${YF_STATS.shortDate}.`, why: "Short interest is dated. A gap here is often a different as-of day or a slightly different float. Quote the figure with its date, and pick one consistent source if you track it over time." },
+      { col: 2, row: 5, what: `Employees: ${CP_COMPARE.employees.sa} on StockAnalysis and Yahoo, ${CP_COMPARE.employees.fv} on Finviz.`, why: "17,500 versus 44,100 is too large to be timing. It is a definition gap (who is counted: employees, contractors, joint ventures). This is the prompt to open the 10-K and read the company's own figure and each site's footnote." },
+      { col: 1, row: 5, what: "The last step is the filing: SEC EDGAR settles what the company reported.", why: "Data sites summarize and calculate. When they disagree, the 10-K or 10-Q is the primary source for what the company said; the site's help page explains how it calculated the rest. Write the finding with the tool, the date, and the filing." },
+    ],
+    takeaway: "Small gaps are usually timing or inputs; large gaps are usually definition. Line them up, then confirm what the company reported in the 10-K or 10-Q.",
+  },
+  {
+    kind: "bars",
+    id: "cp-sim-decision-rule",
+    title: "Walk a written decision rule on a SAMPLE tape",
+    goal: "A written decision rule is a condition you set in advance, tied to a number you can check. Walk a SAMPLE company through earnings week and two weak cash-flow quarters, and let the rule — not the headline — decide.",
+    tape: "SAMPLE company · the rule is an example, not a recommendation · simulated",
+    start: 2,
+    bars: [
+      simBar("T-5", [72, 72.8, 71.4, 72.2], "Five trading days before earnings: the SAMPLE stock closes at 72.20.", "The rule in this walk (an example form, not advice): no new position within three trading days of earnings; exit if operating cash flow falls below capital spending for two quarters, confirmed in the 10-Q. Writing it now is the point."),
+      simBar("T-4", [72.2, 73, 71.8, 72.6], "Four days out, close 72.60.", "Still outside the three-day window. The tools already gave you the earnings date (StockAnalysis and Yahoo both list one). The rule uses that date; it does not change because the tape looks quiet."),
+      simBar("T-2", [72.6, 73.4, 71.2, 71.8], "Two trading days before earnings, close 71.80.", "The rule bars a new position here. Research can continue — add the coming report to the note — but the decision is already written. Headlines in this window do not reopen it.", { readout: "Rule: wait" }),
+      simBar("Earn", [70.4, 74.2, 69.8, 73.5], "Earnings day: the report looks fine at first glance, and the stock closes at 73.50.", "A strong close is not a reason to abandon a rule you wrote to keep headlines from deciding. The cash-flow test is in the 10-Q, which may arrive with the report or shortly after. Read it before changing the note.", { mark: "earnings", readout: "Earnings report" }),
+      simBar("Q1", [73.5, 74, 70.6, 71.2], "The 10-Q: operating cash flow is below capital spending this quarter. Close 71.20.", "One quarter is not the exit. The rule asks for two quarters in a row, confirmed in the filing. Write what the 10-Q shows, with the date, and wait for the next one.", { mark: "news", readout: "Q1 10-Q: OCF < capex" }),
+      simBar("Bounce", [71.2, 74.8, 70.8, 74.1], "A bounce to 74.10. Posts say the worst is over.", "This is the moment a written rule is for. The first 10-Q still shows OCF below capex; one quarter has not met the exit test, and a bounce is not a second filing. Sentiment stays in its own column of the note."),
+      simBar("Q2", [73.6, 74, 68.4, 69], "The next 10-Q: operating cash flow is below capital spending again. The rule says exit.", "Two quarters, both confirmed in the filing. The process is: follow the rule. The price at 69.00 is not 'proof' the rule was right; it is the price on the day the condition was met.", { mark: "news", readout: "Q2 10-Q: exit" }),
+      simBar("After", [69, 73.2, 68.6, 72.4], "After the exit, the SAMPLE stock rallies to 72.40.", "A bounce after an exit does not mean the rule failed, and a further drop would not have meant it 'worked.' The lesson is the habit: a number you can check, written in advance, confirmed in the primary source."),
+    ],
+    takeaway: "Write the rule first, tie it to a number you can check, confirm it in the filing, and follow it. The tape after the fact is not a verdict on the process.",
+  },
+];
+
 export const CAPSTONE_LESSON: ToolLesson = {
   id: "tool-capstone",
   slug: "capstone",
@@ -114,7 +163,7 @@ export const CAPSTONE_LESSON: ToolLesson = {
   intro: [
     "Each tool answers a different question. Market Forces says what you would own and where to look; StockAnalysis lays out statements; Finviz screens and summarizes; Yahoo Finance shows history, total return and labeled statistics.",
     `This capstone follows one ticker, Newmont (NEM), through all four on the same day (Nov 12, 2026). Every value below is a real reading from the earlier lessons. The point is not Newmont; it is the method.`,
-    "When the sites disagree, the filing on SEC EDGAR settles what the company reported. The research note ties it together with a decision rule written in advance.",
+    ["When the sites disagree, ", { text: "the filing on SEC EDGAR settles what the company reported", sim: "cp-sim-cross-check" }, ". The research note ties it together with ", { text: "a decision rule written in advance", sim: "cp-sim-decision-rule" }, "."],
   ],
   screens: [
     {
@@ -143,7 +192,7 @@ export const CAPSTONE_LESSON: ToolLesson = {
         { kind: "note", text: `P/E spread across the four readings: ${CP_PE_SPREAD}. EPS agrees to within a few cents; the price and timing do most of the work.` },
       ],
       callouts: [
-        { n: 1, block: 0, text: "Agreement (EPS near 8.6) builds confidence. Disagreement (employees) is a prompt to read the 10-K's own figure and each site's definition." },
+        { n: 1, block: 0, text: ["Agreement (EPS near 8.6) builds confidence. ", { text: "Disagreement (employees) is a prompt to read the 10-K's own figure", sim: "cp-sim-cross-check" }, " and each site's definition."] },
         { n: 2, block: 1, text: "Pick one consistent source for any ratio you track over time, and note which." },
       ],
     },
@@ -163,7 +212,7 @@ export const CAPSTONE_LESSON: ToolLesson = {
         { n: 1, block: 0, text: "Start with exposure. A miner is a business, not the metal." },
         { n: 2, block: 1, text: "Facts carry a source and the period they cover." },
         { n: 3, block: 2, text: "Opinions are useful context, never the deciding line." },
-        { n: 4, block: 3, text: "Open questions send you to the filing; the rule decides in advance." },
+        { n: 4, block: 3, text: ["Open questions send you to the filing; ", { text: "the rule decides in advance", sim: "cp-sim-decision-rule" }, "."] },
       ],
     },
   ],
@@ -175,12 +224,13 @@ export const CAPSTONE_LESSON: ToolLesson = {
         "StockAnalysis: read Period Ending, then revenue, operating and net income, cash vs debt and cash flow. Note one-time rows.",
         "Finviz: read the snapshot's time stamp, valuation, ownership and short interest; scan insider and analyst rows.",
         "Yahoo Finance: compare total return with the S&P 500, read the target range, and check ttm/mrq labels and footnotes.",
-        "Line up any figure that differs across sites. Explain each gap as timing, input or definition.",
-        "Open the 10-K or 10-Q on SEC EDGAR to confirm what the company reported.",
-        "Write the note: exposure, facts with source and date, opinions apart, open questions, and a decision rule.",
+        [{ text: "Line up any figure that differs across sites", sim: "cp-sim-cross-check" }, ". Explain each gap as timing, input or definition."],
+        [{ text: "Open the 10-K or 10-Q on SEC EDGAR", sim: "cp-sim-cross-check" }, " to confirm what the company reported."],
+        ["Write the note: exposure, facts with source and date, opinions apart, open questions, and ", { text: "a decision rule", sim: "cp-sim-decision-rule" }, "."],
       ],
     },
   ],
+  simulations: CP_SIMULATIONS,
   drills: [
     { id: "cp-d1", prompt: "Four sites show P/E between 13.42 and 13.92 on one morning. Most likely…", options: ["One site is wrong", "Different price times and inputs", "The company restated", "A split"], answer: 1, why: "EPS agreed within cents; the price used differed (pre-market vs close)." },
     { id: "cp-d2", prompt: "Employee counts read 17,500 and 44,100. Next step…", options: ["Average them", "Check the 10-K and each site's definition", "Use the bigger one", "Ignore it"], answer: 1, why: "Large gaps mean different definitions; the filing settles what the company reports." },

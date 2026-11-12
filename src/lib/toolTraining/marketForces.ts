@@ -7,7 +7,8 @@
 import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
-import type { ToolLesson } from "./types";
+import type { ToolLesson, ToolSimulation } from "./types";
+import { simBar } from "./simWalk";
 
 /** Counts from Market Forces' data/catalog.json (updated 2026-11-12). */
 export const MF_FACTS = { tickers: 87, stocks: 36, funds: 51, themes: 42, assets: 10, industries: 12, markets: 12, forces: 8 } as const;
@@ -96,6 +97,63 @@ const CASES: CaseStudy[] = [
   },
 ];
 
+const MF_SIMULATIONS: ToolSimulation[] = [
+  {
+    kind: "bars",
+    id: "mf-sim-exposure",
+    title: "The same headline, two exposures",
+    goal: "The same gold headline can lift a bullion fund and leave a miner flat, or the other way around. Walk a SAMPLE morning where one headline hits both, and the exposure badge tells you why they do not move together.",
+    tape: "SAMPLE gold miner, with a SAMPLE bullion-fund readout · simulated",
+    start: 2,
+    bars: [
+      simBar("M1", [48, 48.6, 47.7, 48.2], "The SAMPLE miner closes at 48.20. A SAMPLE bullion fund sits at 190.", "Two tickers in the same Gold theme. The miner's exposure is a mining business; the fund's is metal in a trust. Until a headline arrives, they can sit quietly together.", { readout: "Fund 190" }),
+      simBar("M2", [48.2, 48.5, 47.9, 48.3], "Another quiet day for the miner, close 48.30. The fund is unchanged.", "Nothing in these bars is a reason to act. You are waiting to see how each exposure responds when the same news arrives."),
+      simBar("Gold", [49.2, 51, 49, 50.4], "Headline: gold jumps. The miner closes at 50.40, up about 4%. The bullion fund rises about 2%.", "The metal moved, and both tickers reacted, but not by the same amount. A miner is a leveraged business: it can move more or less than the metal, depending on costs, hedges and production. The exposure badge is the first thing to read.", { mark: "news", readout: "Fund 193.8 · +2%" }),
+      simBar("M4", [50.4, 51.2, 50, 50.8], "Gold holds; the miner adds a little more, closing at 50.80.", "A follow-through day is still not a forecast. Note what moved (the metal) so you can tell it apart from the next headline, which is about the business."),
+      simBar("Costs", [47.8, 48.2, 45.6, 46.1], "Headline: the SAMPLE miner raises its cost guidance. It gaps down to 46.10. The bullion fund barely moves.", "Same theme, different exposure. A cost problem is a business risk, not a gold-price story. Market Forces' Gold connection says miners also face business and operating risks.", { mark: "news", readout: "Fund 193.5" }),
+      simBar("M6", [46.1, 46.8, 45.4, 45.9], "The miner steadies at 45.90. The fund is still near its post-gold-headline level.", "If you had bought 'gold' without reading the badge, you would own a company whose own news just cut against the metal's move. Exposure is what you would actually own."),
+      simBar("M7", [45.9, 47, 45.5, 46.6], "The miner closes at 46.60. The fund is unchanged from yesterday.", "Two SAMPLE paths, one theme. Read every exposure badge in the list before you decide whether you mean the asset, a basket of businesses, or one business."),
+    ],
+    takeaway: "The exposure badge says what you would own: metal in a trust, a basket of miners, or one mining business. The same headline does not move them the same way.",
+  },
+  {
+    kind: "bars",
+    id: "mf-sim-priced-in",
+    title: "A good story can already be in the price",
+    goal: "A well-known plan can lift a stock for weeks, then leave little reaction when it is formally announced. Walk a SAMPLE company through that path, which is why Market Forces' checklist says to check the market price.",
+    tape: "SAMPLE company · weekly bars · simulated",
+    start: 3,
+    bars: [
+      simBar("W1", [40, 41.2, 39.6, 40.8], "Week 1: the SAMPLE stock closes at 40.80, before the story is widely known.", "This is the quiet starting point. Later bars only make sense if you can see where the price sat before the plan became common knowledge."),
+      simBar("W2", [40.8, 43, 40.5, 42.6], "Week 2: a trade-press leak of an expansion plan. The stock rises to 42.60.", "The story is starting to be known. Each up week from here is the market taking more of that plan into the price, before any official announcement.", { mark: "news" }),
+      simBar("W3", [42.6, 45.2, 42.2, 44.8], "Week 3: more coverage, close 44.80.", "The move is already several dollars. A later headline that 'the company will expand' is describing something a lot of buyers have already acted on."),
+      simBar("W4", [44.8, 48, 44.4, 47.5], "Week 4: the stock reaches 47.50, still on the same plan, still unofficial.", "By now a large part of a reasonable reaction may already be in the price. This is what the checklist means by checking the market price before treating a good story as a reason to buy."),
+      simBar("W5", [47.5, 50.2, 47, 49.6], "Week 5: close 49.60, nearly 25% above week 1, with no official announcement yet.", "Valuation links (multiples, the recent range) are how you see this climb. Market Forces has no live prices; it sends you to those pages, and reminds you that a good story can already be priced in."),
+      simBar("Announce", [50.4, 51.8, 47.6, 48.2], "The official announcement arrives. The stock gaps up, then closes at 48.20, below the prior week's close.", "The news is 'good' and the close is not. That is not a rule that announcements always fade; it is a reminder that the story was already in the price. The checklist's valuation step is there for this moment.", { mark: "news", readout: "Official announcement" }),
+      simBar("W7", [48.2, 48.8, 46.4, 47], "The next week settles at 47.00, near where the stock already was before the announcement.", "If you only read the headline, this looks like a contradiction. If you walked the weeks, it looks like a story that had already been taken up. Write that down, with the date, before the next headline."),
+    ],
+    takeaway: "Check the market price. A good story can already be in the price, so an official announcement may add less than the headline suggests.",
+  },
+  {
+    kind: "bars",
+    id: "mf-sim-sentiment-filing",
+    title: "A post's claim, then the filing",
+    goal: "A confident post can still be wrong about the numbers. Walk a SAMPLE drop, a bullish social claim, and the 10-Q that does not support it, which is why the last research step is to cross-check the conversation.",
+    tape: "SAMPLE company · daily and quarter-end bars · simulated",
+    start: 2,
+    bars: [
+      simBar("D1", [64, 64.6, 63.2, 63.8], "The SAMPLE stock closes at 63.80, a quiet day.", "You will need this starting close to measure the drop. Sentiment feeds have not weighed in yet."),
+      simBar("D2", [63.8, 64, 61.5, 61.9], "A decline to 61.90, still without a headline in this walk.", "Price can move before you know why. The next bars are about what people posting say, and what the filing says."),
+      simBar("Drop", [61.5, 61.8, 56.4, 57.2], "A sharp drop to 57.20. Posts start to appear.", "A fast decline invites commentary. Sentiment shows what people posting think, not what all investors think. SEC Investor.gov warns that social media can give a false impression of consensus.", { mark: "news", readout: "Posts: 'cash is fine'" }),
+      simBar("Posts", [57.2, 59.4, 56.8, 58.6], "A bounce to 58.60 as posts say the company's cash is fine and this is a dip to buy.", "A post is a claim. The Financials & primary sources group is where you check it: SEC filings settle what the company reported. This bar is the prompt to open the 10-Q, not a reason to follow the feed."),
+      simBar("10-Q", [58.6, 59, 55.2, 55.8], "The 10-Q is out: operating cash flow is below capital spending for this quarter. The stock closes at 55.80.", "The filing does not support the post's claim. Write a dated note of what the 10-Q actually shows — Market Forces keeps notes in this browser — and treat the post as opinion, in the same group as Stocktwits, Reddit and X.", { mark: "earnings", readout: "10-Q: OCF < capex" }),
+      simBar("D6", [55.8, 57.2, 54.6, 55.2], "The next day closes at 55.20. Some posts still say 'buy the dip.'", "The filing has not changed. Cross-check once, then let the document — not the next post — stand until a new filing arrives."),
+      simBar("D7", [55.2, 55.6, 53.4, 54], "Another lower close, at 54.00.", "A post can sound certain and still be wrong about the filing. The habit is: news and catalysts first, then sentiment, then a dated note of anything a post claims that the filing does not show."),
+    ],
+    takeaway: "Cross-check any claim in a post against the SEC filing. Sentiment is what people posting think; the 10-Q is what the company reported.",
+  },
+];
+
 export const MARKET_FORCES_LESSON: ToolLesson = {
   id: "tool-market-forces",
   slug: "market-forces",
@@ -129,7 +187,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
         { n: 1, block: 0, text: "Themes sit under Assets, Industries, Markets and Economic forces. The count is how many tickers the theme lists." },
         { n: 2, block: 1, text: "Search matches symbols, names, exposures and theme tags. Show narrows to stocks only or funds only." },
         { n: 3, block: 2, text: "The connection line says what to watch. It suggests a link, not a price direction." },
-        { n: 4, block: 3, text: "Exposure tells you what you would own: metal in a trust, a basket of miners, or one mining business." },
+        { n: 4, block: 3, text: ["Exposure tells you ", { text: "what you would own", sim: "mf-sim-exposure" }, ": metal in a trust, a basket of miners, or one mining business."] },
       ],
     },
     {
@@ -199,7 +257,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
       callouts: [
         { n: 1, block: 0, text: "Valuation & ratios opens the Stock Analysis statistics page: multiples and key metrics, each with the site's own as-of labels." },
         { n: 2, block: 0, text: "Dividend history is past payouts, if any. A company that paid a dividend before may reduce or stop it." },
-        { n: 3, block: 1, text: "Market Forces has no live prices and does not compute whether a stock is cheap or expensive. The checklist's reminder is that a good story can already be in the price." },
+        { n: 3, block: 1, text: ["Market Forces has no live prices and does not compute whether a stock is cheap or expensive. The checklist's reminder is that ", { text: "a good story can already be in the price", sim: "mf-sim-priced-in" }, "."] },
         { n: 4, block: 2, text: "A fund panel does not have this group. Funds show holdings, fees and the prospectus instead." },
       ],
     },
@@ -218,7 +276,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
         { n: 1, block: 0, text: "News & the next catalyst is for headlines and announced events (earnings, reports, policy dates). The checklist says to separate an announced event from speculation. Press releases is a Google search, not a stored feed." },
         { n: 2, block: 1, text: "Sentiment shows what people posting think, not what all investors think. SEC Investor.gov warns that social media can give a false impression of consensus." },
         { n: 3, block: 1, text: "Seeking Alpha is labeled Analysis & comments: it is opinion, in the same group as Stocktwits, Reddit and X. X may ask you to sign in; this app never logs in for you." },
-        { n: 4, block: 2, text: "Write a dated note, and cross-check any claim in a post against the SEC filing. Notes stay on this device; the in-app guide can back them up." },
+        { n: 4, block: 2, text: ["Write a dated note, and ", { text: "cross-check any claim in a post against the SEC filing", sim: "mf-sim-sentiment-filing" }, ". Notes stay on this device; the in-app guide can back them up."] },
       ],
     },
     {
@@ -264,10 +322,10 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
       steps: [
         "Search the headline's subject (for example \"gold\" or \"rates\") and open the matching theme.",
         "Read the connection line and write down the one or two forces it names.",
-        "Read every exposure badge in the list. Decide whether you mean the asset, a basket of businesses or one business.",
+        [{ text: "Read every exposure badge in the list", sim: "mf-sim-exposure" }, ". Decide whether you mean the asset, a basket of businesses or one business."],
         "Select one ticker. For a stock, walk all five groups: overview, financials and SEC filings, valuation and distributions, news (the next catalyst), then sentiment. For a fund, open the issuer, holdings and fees.",
         "On a stock, treat Find investor relations and Earnings & guidance as Google searches when the catalog has no stored official URL; confirm you reached the company's own site. When two sites disagree, open SEC filings.",
-        "Open news for announced events, then valuation (a good story can already be priced in), then sentiment. Note anything a post claims that a filing does not show.",
+        ["Open news for announced events, then valuation (", { text: "a good story can already be priced in", sim: "mf-sim-priced-in" }, "), then sentiment. ", { text: "Note anything a post claims that a filing does not show", sim: "mf-sim-sentiment-filing" }, "."],
         "Add a note with what you found and the date, so the next visit starts where you left off.",
       ],
     },
@@ -280,6 +338,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
       ],
     },
   ],
+  simulations: MF_SIMULATIONS,
   drills: [
     { id: "mf-d1", prompt: "GLD and GDX are both in the Gold theme. The difference is…", options: ["None; both hold gold", "GLD holds bullion; GDX holds mining companies", "GDX holds bullion; GLD holds miners", "GLD is a futures fund"], answer: 1, why: "The exposure badges say Bullion and Mining stocks." },
     { id: "mf-d2", prompt: "Which link group should you open first to check a company's debt?", options: ["Sentiment", "News", "Financials & primary sources", "Index weights"], answer: 2, why: "The balance sheet link sits under Financials & primary sources." },
