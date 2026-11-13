@@ -8,6 +8,7 @@ import type { ToolSimulation, ToolText } from "../../toolTraining/types";
 
 /** `...cardWithSims([...])` sets the card's plain `body` and its `leadRich` runs from one source. */
 export function cardWithSims(rich: ToolText): { body: string; leadRich: ToolText } {
+  // Also used for cards whose lead only marks glossary hover terms ({ text, term }).
   return { body: toolTextPlain(rich), leadRich: rich };
 }
 
@@ -86,8 +87,48 @@ const EARNINGS_GAP: ToolSimulation = {
   takeaway: "Whether an earnings gap holds above the prior close over the next days is the market's vote on the news.",
 };
 
+const WICK_CEILING: ToolSimulation = {
+  kind: "bars",
+  id: "ac-wick-resistance",
+  title: "Upper wicks build a ceiling, then a close breaks it",
+  goal: "Walk a SAMPLE stock as upper wicks keep stopping near 48 to see how wicks mark resistance, why a poke above it is only a test, and what a close through it changes.",
+  tape: "SAMPLE stock · daily bars · simulated volume shown as a multiple of average",
+  start: 2,
+  bars: [
+    simBar("Day 1", [44.0, 45.2, 43.8, 45.0], "A steady green day with short wicks.", "Short wicks mean an orderly move: nobody is fighting the push at the extremes yet."),
+    simBar("Day 2", [45.0, 47.0, 44.8, 46.8], "Another higher close, wicks still short.", "Note where price is heading. Nothing has stopped it so far, so there is no level to draw yet."),
+    simBar("Day 3", [46.8, 48.1, 46.5, 47.0], "The high reaches 48.10, but the close is 47.00: a long upper wick.", "Buyers got to 48 and sellers pushed price back more than a dollar before the close. One wick is a hint, not a level.", { mark: "high" }),
+    simBar("Day 4", [47.0, 47.6, 46.4, 47.4], "A quiet day below the high.", "Price rests under the wick. The useful question is what happens on the next push toward 48."),
+    simBar("Day 5", [47.4, 48.1, 47.0, 47.2], "A second upper wick at 48.10 and a close at 47.20.", "Two rejections near one price start to look like a ceiling. Draw the zone across the wick tips, about 47.90 to 48.10, not through one extreme.", { mark: "high", readout: "Zone 47.90–48.10" }),
+    simBar("Day 6", [47.2, 48.2, 46.9, 47.1], "A third wick pokes to 48.20, then the close falls back to 47.10.", "The poke above the zone did not hold to the close, so it is a test, not a break. Sellers defended the ceiling a third time.", { readout: "Vol 0.9× avg" }),
+    simBar("Day 7", [47.1, 49.3, 47.0, 49.1], "A close at 49.10, clearly above the zone, on 2.1 times average volume.", "This time a close, not a wick, went through a level that rejected price three times, and many traders took part.", { mark: "signal", readout: "Vol 2.1× avg" }),
+    simBar("Day 8", [49.1, 49.4, 48.0, 48.9], "A pullback dips to 48.00 and closes at 48.90.", "The lower wick tags the old ceiling and buyers close it higher: old resistance acting as support. It is still a record of what happened, not a promise."),
+  ],
+  takeaway: "Repeated wicks at one price mark a level; a close through it, better on heavy volume, is what changes it.",
+};
+
+const DOJI_RUN: ToolSimulation = {
+  kind: "bars",
+  id: "ac-doji-after-run",
+  title: "A doji after a run, then the next close decides",
+  goal: "Walk a SAMPLE stock through a three-day run, a doji and the bar after it to see why a doji is a question and the next close past its high or low is the answer.",
+  tape: "SAMPLE stock · daily bars · simulated",
+  start: 2,
+  bars: [
+    simBar("Day 1", [30.0, 31.2, 29.9, 31.0], "A strong green day with small wicks.", "Buyers held control most of the day. A run starts with closes like this one, near the high."),
+    simBar("Day 2", [31.0, 32.4, 30.9, 32.2], "Another close near the high.", "Each close above the last shows buyers still paying up. Short wicks say there is little pushback."),
+    simBar("Day 3", [32.2, 33.6, 32.0, 33.4], "A third strong day: about 11% above the Day 1 open.", "After a run, traders start asking whether the push can continue. The next candle's body is where that shows first."),
+    simBar("Day 4", [33.4, 34.3, 32.6, 33.45], "A doji: open 33.40, close 33.45, with wicks to 34.30 and 32.60.", "Buyers pushed up and sellers pushed down, and the close landed almost on the open. The same effort no longer moved the close: a question, not an answer.", { mark: "signal", readout: "Body 0.05 · range 1.70" }),
+    simBar("Day 5", [33.3, 33.5, 32.1, 32.3], "The next candle closes at 32.30, below the doji's low of 32.60.", "Sellers answered. A close beyond the doji's low is the confirmation many traders wait for before reading the doji as a turn."),
+    simBar("Day 6", [32.3, 32.9, 31.6, 31.8], "Follow-through lower.", "The run has paused or turned for now. Had Day 5 closed above 34.30 instead, buyers would have answered. The doji alone said neither."),
+  ],
+  takeaway: "A doji after a run is a question; the next close beyond its high or low gives the answer.",
+};
+
 /** Simulations per Academy unit id; each unit's card lead carries the underlined trigger. */
 export const UNIT_SIMS: Record<string, ToolSimulation[]> = {
+  "l2-wicks-and-bodies": [DOJI_RUN],
+  "l2-support-resistance": [WICK_CEILING],
   "l2-volume-confirms": [VOLUME],
   "l3-stop-orders": [STOP_GAP],
   "l3-trailing-stop": [TRAILING],

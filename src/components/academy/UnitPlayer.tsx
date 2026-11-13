@@ -76,7 +76,7 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
               <p key={para.slice(0, 48)}>{i === 0 && leadOk ? <ToolTextView text={c.leadRich!} /> : para}</p>
             ))}
           </div>
-          {leadOk ? <SimHint subject="this card's idea on a SAMPLE chart" /> : null}
+          {leadOk && toolTextRefs(c.leadRich!).length ? <SimHint subject="this card's idea on a SAMPLE chart" /> : null}
           {term ? (
             <Link to={glossaryHref(term.id)} className="inline-flex items-center gap-1 text-[12px] px-2 py-1 rounded-md border border-line hover:border-primary" data-chip="glossary">
               <span className="material-symbols-outlined text-sm" aria-hidden>

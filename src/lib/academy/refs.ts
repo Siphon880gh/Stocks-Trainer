@@ -8,6 +8,7 @@ import { listSessions } from "../coaching";
 import { MISC_PRACTICE_ITEMS } from "../miscPractices";
 import { getCaseStudy } from "../caseStudies";
 import { getLesson } from "../macro/lessons";
+import { UNITS } from "./content/levels";
 import { CONTENT_REF_KINDS, type ContentRef, type ContentRefKind, type RefString } from "./types";
 
 /**
@@ -176,6 +177,7 @@ export function resolveRef(ref: ContentRef | RefString | string): ResolvedRef {
       return l ? { ok: true, kind: r.kind, href: `/macro/${l.id}`, label: `Macro Desk: ${l.title}` } : fail(r.kind, `unknown macro lesson ${r.lessonId}`);
     }
     case "route":
+      if (/^\/academy\/l\d-/.test(r.path) && !UNITS.some((u) => u.id === r.path.split(/[?#]/)[0]!.slice("/academy/".length))) return fail(r.kind, `unknown Academy unit ${r.path}`);
       return routeExists(r.path) ? { ok: true, kind: r.kind, href: r.path, label: routeLabel(r.path) } : fail(r.kind, `no app route for ${r.path}`);
   }
 }
@@ -185,6 +187,7 @@ const ROUTE_LABELS: Record<string, string> = {
   "/paper/desk": "Paper trading desk (watchlist, news, financials)",
   "/paper/challenges": "Paper-trading challenges",
   "/academy": "Beginner Academy",
+  "/practice/candle-basics": "Practice: Candlestick Basics",
   "/academy/options": "Options knowledge ladder",
   "/macro": "Macro Desk",
   "/macro/play": "Macro Desk reaction game",
@@ -199,5 +202,8 @@ const ROUTE_LABELS: Record<string, string> = {
 
 function routeLabel(path: string): string {
   const base = path.split(/[?#]/)[0]!;
+  const unit = /^\/academy\/([a-z0-9-]+)$/.exec(base);
+  const u = unit ? UNITS.find((x) => x.id === unit[1]) : undefined;
+  if (u) return `Academy: ${u.title}${/[?&]sim=/.test(path) ? " (simulation)" : ""}`;
   return ROUTE_LABELS[base] ?? `Open ${base}`;
 }

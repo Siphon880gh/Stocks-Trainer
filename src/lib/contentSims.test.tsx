@@ -101,7 +101,8 @@ describe("Academy units open simulations from a card", () => {
   for (const set of CONTENT_SIM_SETS.filter((s) => s.area === "academy")) {
     it(`${set.route}`, () => {
       const u = getUnit(set.owner)!;
-      const idx = u.cards.findIndex((c) => c.leadRich);
+      // The first card whose lead carries a simulation trigger (a lead may also mark only glossary terms).
+      const idx = u.cards.findIndex((c) => c.leadRich && toolTextRefs(c.leadRich).length);
       const card = u.cards[idx]!;
       const ui = (
         <MemoryRouter>

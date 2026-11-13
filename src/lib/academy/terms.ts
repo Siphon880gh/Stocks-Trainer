@@ -265,4 +265,48 @@ export const ACADEMY_TERMS: LiteracyTerm[] = [
     summary: "In the U.S., a gain on an asset held one year or less is generally short-term; held more than a year, it is generally long-term.",
     detail: "Short-term gains are generally taxed at ordinary income rates, and long-term gains at lower rates for most stocks. Some assets, such as collectibles, follow other rules. Check current IRS rules or a tax professional. Educational, not tax advice.",
   },
+  // Candle basics (L2): parts and readings the cards mark as hover terms. Siblings linked, not copied:
+  // `ohlc-anatomy`, `candle-color`, `wick-rejection`, `marubozu-types`, `doji-types`, `shaven-top`, `close-vs-wick`.
+  {
+    id: "upper-wick",
+    name: "Upper wick (upper shadow)",
+    category: "markets",
+    summary: "The thin line above a candle's body. Its tip is the highest price traded in that period.",
+    detail: "Price reached the tip but did not stay there by the close. A long upper wick means buyers pushed price up and sellers pushed it back down before the period ended. A missing upper wick means the high was also the top of the body (a shaven top). A record of the period, not a signal by itself. Educational, not advice.",
+  },
+  {
+    id: "lower-wick",
+    name: "Lower wick (lower shadow)",
+    category: "markets",
+    summary: "The thin line below a candle's body. Its tip is the lowest price traded in that period.",
+    detail: "Price visited the tip and was not kept there by the close. A long lower wick means sellers pushed price down and buyers brought it back up before the period ended. A missing lower wick means the low was also the bottom of the body (a shaven bottom). A record of the period, not a signal by itself. Educational, not advice.",
+  },
+  {
+    id: "shaven-candle",
+    name: "Shaven candle (no wicks)",
+    category: "markets",
+    summary: "A candle with no wick at either end: the open and close were also the period's high and low. Also called a full marubozu.",
+    detail: "A green one opened at its low and closed at its high; a red one opened at its high and closed at its low. One side held control from the first trade to the last in that period. A wick of a cent or two on a real chart reads the same. It records strength in one period; it does not promise the next one. See marubozu types for the one-ended versions. Educational, not advice.",
+  },
+  {
+    id: "doji",
+    name: "Doji",
+    category: "markets",
+    summary: "A candle whose open and close are the same or almost the same, so the body is a thin line.",
+    detail: "Price moved during the period, often both ways, but finished about where it started: neither buyers nor sellers kept the close. In a quiet range that is ordinary. After a long run it can mean the push is tiring. Many traders wait for the next close beyond the doji's high or low to see which side answers. Doji types covers long-legged, dragonfly and gravestone shapes. Educational, not advice.",
+  },
+  {
+    id: "wick-length",
+    name: "Long and short wicks",
+    category: "markets",
+    summary: "Long wicks mean price swung far from its body and was turned away; short wicks mean a steadier period.",
+    detail: "Judge length against the candles around it, not a fixed size. Long wicks show rejection (a level was tested and refused) and a volatile period, often around news. Short wicks show price moving with little fighting at the extremes. Neither tells you the next direction; a long wick matters most at a level traders already watch. Educational, not advice.",
+  },
+  {
+    id: "candle-color-settings",
+    name: "Candle colour conventions",
+    category: "markets",
+    summary: "Green-up, red-down is common but not universal: colours are a chart setting, and some markets use red for up.",
+    detail: "Many charting apps let you choose the up and down colours, or draw hollow (up) and filled (down) bodies instead. Charts in some East Asian markets, such as mainland China, use red for a rising period and green for a falling one. The rule underneath never changes: compare the close with the open. Check the legend or settings before you read a chart from a new source. Educational, not advice.",
+  },
 ];

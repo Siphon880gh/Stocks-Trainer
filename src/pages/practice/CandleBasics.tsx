@@ -184,6 +184,21 @@ export default function CandleBasics() {
           One five-minute candle at a time. The arrows are one possible path inside the period. A real candle does not store that path, only the open, high, low and close. Diagram, not a live chart. Not trading advice.
         </p>
       </div>
+      <section className="panel p-3 text-[12px] space-y-1" data-testid="candle-basics-notes" aria-label="Reading candles right">
+        <p className="font-semibold text-[13px]">Read them right</p>
+        <ul className="list-disc pl-5 space-y-0.5">
+          <li>Red means the close was below the open in that period; green means it was above. Neither is a sale, a bargain or an instruction: a candle is a record of past prices.</li>
+          <li>Green body: open at the bottom, close at the top. Red body: open at the top, close at the bottom. Wick tips are the high and the low.</li>
+          <li>Colours are a chart setting. Some apps let you change them, and charts in some markets use red for up, so check the legend first.</li>
+        </ul>
+        <p className="text-muted">
+          Go deeper:{" "}
+          <Link to="/academy/l2-reading-a-candle" className="text-primary underline">Reading one candle</Link>{" · "}
+          <Link to="/academy/l2-wicks-and-bodies" className="text-primary underline">Wicks and bodies</Link>{" · "}
+          <Link to="/academy/l2-support-resistance" className="text-primary underline">Support and resistance</Link>{" · "}
+          <Link to="/academy/l2-volume-confirms" className="text-primary underline">Volume confirms</Link>
+        </p>
+      </section>
       <div className="flex items-center gap-2" data-testid="candle-basics">
         <button
           type="button"

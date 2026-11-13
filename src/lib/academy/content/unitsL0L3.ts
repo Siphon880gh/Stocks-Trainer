@@ -163,8 +163,28 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Four prices in one shape", body: "Each candle summarises one period with four prices: open, high, low and close. The thick body runs from open to close. The thin wicks reach up to the high and down to the low.", glossaryTermId: "ohlc-anatomy" },
       { title: "Green and red", body: "A green (up) candle closed above where it opened. A red (down) candle closed below its open. The colour tells you the direction within the period, not whether price is higher than yesterday.", glossaryTermId: "candle-color" },
       { title: "Bars and sessions", body: "On a daily chart, one candle is one trading day. In the Academy's paper account each candle is one session: orders you place after a candle closes are tested against the next candle." },
+      {
+        title: "Which end is the open",
+        ...cardWithSims([
+          "On a green candle the bottom of the body is the open and the top is the close. On a red candle it flips: the top of the body is the open and the bottom is the close. Either way, the tip of the ",
+          { text: "upper wick", term: "upper-wick" },
+          " is the high and the tip of the ",
+          { text: "lower wick", term: "lower-wick" },
+          " is the low.",
+        ]),
+        glossaryTermId: "ohlc-anatomy",
+      },
+      {
+        title: "Colour is a record, not an order",
+        ...cardWithSims([
+          "A red candle means price fell during that period: it closed below its open. It is not a sale or a discount. A green candle means price rose: it closed above its open. Neither is an instruction to sell or buy. Each is a record of what already happened, ",
+          { text: "bearish or bullish for that period", term: "candle-color" },
+          " only.",
+        ]),
+        glossaryTermId: "candle-color-settings",
+      },
     ],
-    refs: ["quiz:candle-anatomy", "glossary:ohlc-anatomy", "glossary:candle-color", "practice:/practice/japanese-candles"],
+    refs: ["quiz:candle-anatomy", "glossary:ohlc-anatomy", "glossary:candle-color", "glossary:candle-color-settings", "route:/practice/candle-basics", "practice:/practice/japanese-candles", "route:/academy/l2-wicks-and-bodies"],
   },
   {
     id: "l2-wicks-and-bodies",
@@ -175,9 +195,42 @@ export const UNITS_L0_L3: Unit[] = [
     cards: [
       { title: "Long wicks show rejection", body: "A long lower wick means sellers pushed price down during the period, but buyers pushed it back up before the close. A long upper wick shows the opposite: buyers tried, sellers rejected the higher prices.", glossaryTermId: "wick-rejection" },
       { title: "Full bodies show control", body: "A candle with a big body and tiny wicks opened near one end and closed near the other. One side was in control the whole period.", glossaryTermId: "full-body-candle" },
-      { title: "Small bodies show indecision", body: "A tiny body with wicks on both sides (like a doji) means price went nowhere by the close. On its own it says little; after a long move it can warn the move is tiring.", glossaryTermId: "indecision-candle" },
+      {
+        title: "Small bodies show indecision",
+        ...cardWithSims([
+          "A tiny body with wicks on both sides (like a ",
+          { text: "doji", term: "doji" },
+          ") means price went nowhere by the close. On its own it says little; ",
+          { text: "after a long move it can warn the move is tiring", sim: "ac-doji-after-run" },
+          ".",
+        ]),
+        glossaryTermId: "indecision-candle",
+      },
+      {
+        title: "No wicks: a shaven candle",
+        ...cardWithSims([
+          "Sometimes a candle has no wick at one end, or at both. A missing upper wick means the high was also the top of the body; a missing lower wick means the low was the bottom. A candle with no wicks at all is a ",
+          { text: "shaven candle", term: "shaven-candle" },
+          ", also called a ",
+          { text: "marubozu", term: "marubozu-types" },
+          ".",
+        ]),
+        glossaryTermId: "shaven-candle",
+      },
+      {
+        title: "Long wicks, short wicks",
+        ...cardWithSims([
+          "Wick length is a quick read on how far price swung around its body. ",
+          { text: "Long wicks", term: "wick-length" },
+          " mean price tested a level and turned away: a sign of ",
+          { text: "rejection", term: "wick-rejection" },
+          " and of a volatile period. Short wicks mean price moved steadily, with little fighting at the extremes.",
+        ]),
+        glossaryTermId: "wick-length",
+      },
     ],
-    refs: ["quiz:candle-reading", "glossary:wick-rejection", "practice:/practice/flashcards"],
+    refs: ["quiz:candle-reading", "glossary:wick-rejection", "glossary:doji", "glossary:shaven-candle", "practice:/practice/missing-wicks", "practice:/practice/flashcards", "route:/academy/l2-support-resistance"],
+    simulations: UNIT_SIMS["l2-wicks-and-bodies"],
   },
   {
     id: "l2-trend-vs-range",
@@ -202,8 +255,22 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Floors and ceilings", body: "Support is a price area where buying has stopped declines before. Resistance is where selling has stopped rallies. They are zones, not exact lines.", glossaryTermId: "support-resistance" },
       { title: "Breaks and retests", body: "When price closes clearly through resistance, that level often becomes support on the next pullback. A break that quickly falls back inside is a warning that the breakout failed.", glossaryTermId: "breakout-retest" },
       { title: "Levels place stops", body: "Levels give trades a logical place to be wrong. A long above support can use a stop just below support: if price closes under it, the reason for the trade is gone." },
+      {
+        title: "Wicks mark the edges",
+        ...cardWithSims([
+          "Wicks are often where a floor or ceiling first shows. ",
+          { text: "Upper wicks", term: "upper-wick" },
+          " that keep stopping near one price mark a ceiling where sellers turn price away; ",
+          { text: "lower wicks", term: "lower-wick" },
+          " clustering at one price mark a floor. Watch how ",
+          { text: "repeated wicks at one level build resistance", sim: "ac-wick-resistance" },
+          ", and what a close through it changes.",
+        ]),
+        glossaryTermId: "close-vs-wick",
+      },
     ],
-    refs: ["practice:/practice/opening-range", "practice:/practice/levels", "glossary:support-resistance", "glossary:breakout-retest", "quiz:supply-demand", "coach:supply-demand-zone-retest"],
+    refs: ["practice:/practice/opening-range", "practice:/practice/levels", "glossary:support-resistance", "glossary:breakout-retest", "quiz:supply-demand", "coach:supply-demand-zone-retest", "route:/academy/l2-wicks-and-bodies", "route:/academy/l2-volume-confirms?sim=ac-volume-breakout"],
+    simulations: UNIT_SIMS["l2-support-resistance"],
   },
   {
     id: "l2-volume-confirms",
@@ -215,8 +282,17 @@ export const UNITS_L0_L3: Unit[] = [
       { title: "Volume bars", body: "Under many charts, volume bars show how many shares traded each period. A move on volume well above average had broad participation.", glossaryTermId: "volume" },
       { title: "Breakouts want volume", ...cardWithSims([{ text: "A breakout through resistance on heavy volume", sim: "ac-volume-breakout" }, " is more convincing than one on light volume. Light-volume breakouts fail more often."]) },
       { title: "Spikes after news", body: "Earnings days and big news show volume spikes. The candle on that day often sets the levels traders watch for weeks: its high, its low and the gap it left behind.", glossaryTermId: "volume-spike" },
+      {
+        title: "Volume behind a candle",
+        ...cardWithSims([
+          "A candle's colour shows direction; volume shows how many shares stood behind it. A big green candle on heavy volume had broad support; the same candle on light volume had few backers. ",
+          { text: "A long wick at a level", term: "wick-rejection" },
+          " on heavy volume is a strong rejection, because many traders took part in turning price away.",
+        ]),
+        glossaryTermId: "relative-volume",
+      },
     ],
-    refs: ["glossary:volume", "glossary:volume-spike", "practice:/practice/replay"],
+    refs: ["glossary:volume", "glossary:volume-spike", "glossary:relative-volume", "glossary:breakout-volume", "practice:/practice/replay", "route:/academy/l2-support-resistance?sim=ac-wick-resistance", "route:/academy/l2-reading-a-candle"],
     simulations: UNIT_SIMS["l2-volume-confirms"],
   },
   {
