@@ -1,6 +1,7 @@
 /** BA2.M1.S2: unit quizzes for L4–L7 (3 original items per unit). */
 import type { UnitQuizItem } from "../types";
 import { buildUnitItems, type RawItem } from "./quizBuilder";
+import { BEFORE_YOU_TRADE_QUIZ_RAW } from "./beforeYouTrade";
 
 const RAW: Record<string, RawItem[]> = {
   "l4-three-statements": [
@@ -98,6 +99,8 @@ const RAW: Record<string, RawItem[]> = {
     { p: "Crypto moves 5–10% a day. What does that mean for position size?", r: "Size must be smaller for the same risk", w: [["Size can be larger", "Bigger swings need smaller size."], ["Size does not matter", "It matters more."], ["Stops are not needed", "They are needed even more."]], e: "Daily moves are large, so position size has to be smaller for the same risk.", c: ["smaller"] },
     { p: "A listing rumour spreads and a coin jumps 30%. What is the stock-style rule?", r: "Check the source and ask what was already expected", w: [["Buy immediately", "Rumours often reverse."], ["Short it", "No shorting in the Academy; and not a rule."], ["Ignore all news forever", "Not the lesson."]], e: "The same rule applies as for stocks: check the source and ask what was already expected.", c: ["check the source"] },
   ],
+  // L7 · Before you trade (beforeYouTrade.ts), after l7-crypto so earlier letters do not shift.
+  ...BEFORE_YOU_TRADE_QUIZ_RAW,
 };
 
 const counters: Record<string, { n: number }> = {};

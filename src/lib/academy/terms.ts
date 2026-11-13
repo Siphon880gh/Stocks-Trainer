@@ -237,4 +237,32 @@ export const ACADEMY_TERMS: LiteracyTerm[] = [
     summary: "A fund that holds a basket (an index, a sector, bonds, commodities) and trades on an exchange like a stock.",
     detail: "One share gives exposure to the whole basket, which spreads single-company risk. Check what it holds, its yearly fee (expense ratio) and its trading volume before using it.",
   },
+  {
+    id: "collectibles-tax",
+    name: "Collectibles tax (bullion)",
+    category: "ownership",
+    summary: "U.S. tax rules can treat gains on physical metal, including many bullion trusts, as collectibles rather than ordinary stock gains.",
+    detail: "Long-term gains on collectibles can face a higher maximum federal rate than most long-term stock gains. Rules change and depend on your situation, so check current IRS guidance or a tax professional before relying on any rate. Educational, not tax advice.",
+  },
+  {
+    id: "schedule-k1",
+    name: "Schedule K-1",
+    category: "ownership",
+    summary: "A tax form some funds organized as partnerships, such as certain futures funds, send instead of a 1099.",
+    detail: "A K-1 reports your share of the partnership's income, which can be taxable even in a year you sold nothing. It can arrive later than other forms. Read the fund's tax page and ask a tax professional if one applies to you. Educational, not tax advice.",
+  },
+  {
+    id: "fund-prospectus",
+    name: "Fund prospectus",
+    category: "ownership",
+    summary: "The fund's own legal document describing what it may hold, the index it follows, its fees and its main risks.",
+    detail: "The issuer publishes it, often with a shorter summary prospectus. When a fund's name, a website summary and the prospectus disagree, the prospectus and the dated holdings file are the source. Educational, not advice.",
+  },
+  {
+    id: "capital-gains-holding-period",
+    name: "Short- and long-term capital gains",
+    category: "ownership",
+    summary: "In the U.S., a gain on an asset held one year or less is generally short-term; held more than a year, it is generally long-term.",
+    detail: "Short-term gains are generally taxed at ordinary income rates, and long-term gains at lower rates for most stocks. Some assets, such as collectibles, follow other rules. Check current IRS rules or a tax professional. Educational, not tax advice.",
+  },
 ];

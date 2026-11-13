@@ -3,6 +3,7 @@
  * still match. Together they stay within MAX_CARD_WORDS. Original teaching, not a copied article.
  */
 import type { Unit } from "../types";
+import { BEFORE_YOU_TRADE_MORE } from "./beforeYouTrade";
 
 export const CARD_MORE: Record<string, string> = {
   "l0-what-is-a-market::Buyers meet sellers":
@@ -305,6 +306,7 @@ export const CARD_MORE: Record<string, string> = {
     "Daily moves of several percent are ordinary in the largest coins, and much larger moves are ordinary in small ones. The same dollar risk you would take in a stock therefore requires a smaller position, because the distance to a sensible exit is wider. A position sized as if the coin moved like a large stock will hit a full loss on a routine day. Volatility is a sizing input, not a reason the asset is more attractive.",
   "l7-crypto::Headlines and hype":
     "Listing rumours, exchange outages, hacks, and worries about a stablecoin losing its peg can move prices before any official note exists. The stock rule still applies: separate chatter from a filing, an issuer statement, or an exchange notice, and ask what was already expected. A rally on a rumour that is then denied is a classic give-back. This app's crypto tapes are samples for that drill. They are not a live exchange and not a reason to treat chat as confirmation.",
+  ...BEFORE_YOU_TRADE_MORE,
 };
 
 export function deepenUnits(units: Unit[]): Unit[] {

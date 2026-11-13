@@ -70,9 +70,12 @@ export const LEVELS: Level[] = [
   {
     id: "L7",
     title: "Other markets",
-    summary: "ETFs, futures, currencies and crypto: what is different and what is the same.",
+    summary: "ETFs, futures, currencies and crypto, what each wrapper holds, and a research checklist before any trade.",
     prerequisites: ["L1"],
-    courses: [{ id: "other-markets", levelId: "L7", title: "Beyond single stocks", summary: "ETFs, futures, forex and crypto basics.", unitIds: ids("L7", "other-markets") }],
+    courses: [
+      { id: "other-markets", levelId: "L7", title: "Beyond single stocks", summary: "ETFs, futures, forex and crypto basics.", unitIds: ids("L7", "other-markets") },
+      { id: "before-you-trade", levelId: "L7", title: "Before you trade", summary: "What each wrapper holds, then a six-step research checklist.", unitIds: ids("L7", "before-you-trade") },
+    ],
   },
 ];
 

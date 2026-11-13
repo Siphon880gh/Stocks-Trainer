@@ -5,6 +5,7 @@
  */
 import type { Unit } from "../types";
 import { UNIT_SIMS, cardWithSims } from "./simulations";
+import { BEFORE_YOU_TRADE_UNITS } from "./beforeYouTrade";
 
 export const UNITS_L4_L7: Unit[] = [
   // ---------------- L4 Company fundamentals & earnings ----------------
@@ -259,4 +260,6 @@ export const UNITS_L4_L7: Unit[] = [
     ],
     refs: ["quiz:crypto-literacy", "coach:crypto-literacy", "glossary:crypto-weekend"],
   },
+  // ---------------- L7 Before you trade (beforeYouTrade.ts) ----------------
+  ...BEFORE_YOU_TRADE_UNITS,
 ];
