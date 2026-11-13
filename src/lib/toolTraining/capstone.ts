@@ -248,6 +248,11 @@ export const CAPSTONE_LESSON: ToolLesson = {
     { id: "cp-d4", prompt: "A good decision rule is…", options: ["\"Sell if it feels bad\"", "Written in advance and tied to a checkable number", "Whatever the latest post says", "Set after the trade"], answer: 1, why: "A rule you can check keeps headlines from deciding." },
     { id: "cp-d5", prompt: "The first stop in the research path is…", options: ["Sentiment", "Analyst targets", "What you would own (exposure)", "The chart"], answer: 2, why: "Market Forces' badge says whether it is a business, a basket, metal or futures." },
   ],
+  scenarios: [
+    { id: "cp-s1", prompt: "Two sites show different market caps for the same stock at the same minute. In your note you…", options: ["Pick the larger", "Write both with sources and times, then check shares outstanding on the latest 10-Q cover", "Average them silently", "Drop market cap"], answer: 1, why: "Share counts update on different schedules. The filing cover gives the primary figure." },
+    { id: "cp-s2", prompt: "Halfway through a note you catch yourself writing \"undervalued\" in the Facts column. What do you do?", options: ["Keep it; it feels true", "Move it to Opinions and write the fact it rests on (for example P/E versus the 5-year median)", "Delete the whole note", "Ask a forum"], answer: 1, why: "Facts are checkable values with sources. Judgements belong in Opinions, next to the facts that support them." },
+    { id: "cp-s3", prompt: "Your research note is done, but one figure in the Facts column has no source link or date. Before saving, you…", options: ["Save it as is", "Find the source and add it with a date, or mark the figure unverified", "Round the figure", "Remove the date"], answer: 1, why: "A figure you cannot trace is hard to recheck later. A source and date make the note reusable." },
+  ],
   caveats: [
     { title: "One day's readings", text: "All values were read on Nov 12, 2026 and will change. The method, not the numbers, is the lesson." },
     { title: "Example ticker", text: "Newmont is used because it appears in Market Forces' Gold theme and on all four sites. It is an example, not a recommendation." },

@@ -20,6 +20,7 @@ export * from "./liveLinks";
 export * from "./fieldTerms";
 export * from "./tasks";
 export * from "./workflow";
+export * from "./progress";
 import { TOOL_FIELD_TERMS } from "./fieldTerms";
 
 export const TOOL_LESSONS: ToolLesson[] = [MARKET_FORCES_LESSON, STOCKANALYSIS_LESSON, FINVIZ_LESSON, YAHOO_FINANCE_LESSON, EDGAR_LESSON, EARNINGS_INSIDERS_LESSON, CAPSTONE_LESSON, CAPSTONE_BANK_LESSON];

@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import ToolLessonPage from "../components/tools/ToolLessonPage";
 import { MockScreen } from "../components/tools/MockUi";
-import { CHARTING_APPS_ROUTE, TOOL_LESSONS, getToolLesson, type ToolScreen } from "../lib/toolTraining";
+import { CHARTING_APPS_ROUTE, TOOL_LESSONS, getToolLesson, lessonCompletion, loadToolProgress, type ToolLesson, type ToolProgressStore, type ToolScreen } from "../lib/toolTraining";
 
 /** How every simulated screen in Tool Training is drawn, shown once on the hub. */
 const LEGEND: ToolScreen = {
@@ -22,6 +22,13 @@ const LEGEND: ToolScreen = {
   ],
 };
 
+/** Saved progress for a hub card. Opening a lesson adds nothing; doing its items does. */
+function progressLine(t: ToolLesson, store: ToolProgressStore): string {
+  const c = lessonCompletion(t, store.lessons[t.id]);
+  if (!c.done) return `Not started · ${c.total} items to do`;
+  return c.done === c.total ? `Done · all ${c.total} items` : `${c.done} of ${c.total} items done (${Math.round(c.fraction * 100)}%)`;
+}
+
 export default function ToolsHub() {
   const { toolId } = useParams();
   if (toolId) {
@@ -34,6 +41,7 @@ export default function ToolsHub() {
       </main>
     );
   }
+  const store = loadToolProgress();
   return (
     <div className="flex-1 flex flex-col">
       <main className="flex-1 px-4 py-6 max-w-4xl mx-auto w-full space-y-4" data-testid="tools-hub">
@@ -57,6 +65,7 @@ export default function ToolsHub() {
                   <span>
                     <Link to={t.route} className="text-primary underline font-medium">{t.title}</Link>
                     <span className="block text-[12px] text-muted">{t.blurb}</span>
+                    <span className="block text-[11px] text-muted" data-lesson-progress={t.id}>{progressLine(t, store)}</span>
                   </span>
                 </li>
               ))}

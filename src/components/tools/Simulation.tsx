@@ -87,7 +87,8 @@ export function SimHint({ subject = "why the idea matters on a chart or a table"
 }
 
 /** Holds which simulation is open; renders the popover and returns focus to the trigger on close. */
-export function SimProvider({ sims, initialOpen, children }: { sims: ToolSimulation[]; initialOpen?: string | null; children: ReactNode }) {
+/** `onWalkEnd` fires once per opening when a walk reaches its last step (Tool Training saves it). */
+export function SimProvider({ sims, initialOpen, onWalkEnd, children }: { sims: ToolSimulation[]; initialOpen?: string | null; onWalkEnd?: (simId: string) => void; children: ReactNode }) {
   const [openId, setOpenId] = useState<string | null>(initialOpen && sims.some((s) => s.id === initialOpen) ? initialOpen : null);
   const trigger = useRef<HTMLElement | null>(null);
   const open = useCallback((id: string, el: HTMLElement | null) => {
@@ -105,7 +106,7 @@ export function SimProvider({ sims, initialOpen, children }: { sims: ToolSimulat
     <SimContext.Provider value={{ openId, open }}>
       <span id={SIM_HINT_ID} className="sr-only">Opens a short simulation</span>
       {children}
-      {sim ? <Fragment key={sim.id}><SimDialog sim={sim} onClose={close} /></Fragment> : null}
+      {sim ? <Fragment key={sim.id}><SimDialog sim={sim} onClose={close} onWalkEnd={onWalkEnd} /></Fragment> : null}
     </SimContext.Provider>
   );
 }
@@ -113,8 +114,12 @@ export function SimProvider({ sims, initialOpen, children }: { sims: ToolSimulat
 const FOCUSABLE = 'button:not([disabled]), [href], [tabindex]:not([tabindex="-1"])';
 
 /** The popover: a dialog over the lesson with Next / Previous / Replay, Esc and ← → keys. */
-export function SimDialog({ sim, onClose, initial }: { sim: ToolSimulation; onClose: () => void; initial?: WalkState }) {
+export function SimDialog({ sim, onClose, initial, onWalkEnd }: { sim: ToolSimulation; onClose: () => void; initial?: WalkState; onWalkEnd?: (simId: string) => void }) {
   const [walk, setWalk] = useState<WalkState>(() => initial ?? startWalk(sim));
+  const ended = atEnd(walk);
+  useEffect(() => {
+    if (ended) onWalkEnd?.(sim.id);
+  }, [ended, onWalkEnd, sim.id]);
   const panel = useRef<HTMLDivElement>(null);
   useEffect(() => {
     panel.current?.querySelector<HTMLElement>("[data-sim-next]")?.focus();

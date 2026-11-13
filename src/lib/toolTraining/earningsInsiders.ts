@@ -285,6 +285,11 @@ export const EARNINGS_INSIDERS_LESSON: ToolLesson = {
     { id: "ei-d4", prompt: "In a tracker cluster, which rows count as insiders buying with their own money?", options: ["A - Award", "M - Option exercise", "P - Purchase", "F - Tax"], answer: 2, why: "Only P is an open-market purchase." },
     { id: "ei-d5", prompt: "One officer sells the same 2,500 shares about a month apart, 10b5-1 box checked both times. That is…", options: ["A signal to sell", "A pre-set plan", "Insider trading", "A buyback"], answer: 1, why: "A plan adopted in advance, with a cooling-off period before it can trade." },
   ],
+  scenarios: [
+    { id: "ei-s1", prompt: "A calendar lists a company's earnings date, but the company's own IR page has not announced one. In your note you write…", options: ["The date as confirmed", "The date as estimated, with the source, and check IR again later", "Nothing at all", "The prior year's date"], answer: 1, why: "Calendars often project dates from history. Only the company's announcement confirms it." },
+    { id: "ei-s2", prompt: "Six insiders filed proposed sales the week after earnings. Before reading it as a warning, you check…", options: ["Nothing; it is a warning", "Whether the trading window just opened, whether sales are 10b5-1 plan trades, and how much each still holds", "The stock's color on the chart", "Only the CEO's name"], answer: 1, why: "Insiders often sell when the post-earnings window opens. Plan status and remaining holdings give the context." },
+    { id: "ei-s3", prompt: "An insider tracker shows one director buying $40,000 of stock. Another site says three insiders bought in the same month. Next step…", options: ["Ignore buys", "Open the Form 4s to confirm the dates, prices and codes (P is an open-market purchase)", "Buy the same amount", "Assume both sites are wrong"], answer: 1, why: "Code P marks an open-market buy. The filings confirm whether it is a real cluster or one trade counted twice." },
+  ],
   caveats: [
     { title: "Fields can be stale", text: "On Nov 13, 2026, two sites' earnings fields still showed JPMorgan's October report. Read whether a date is the last or the next." },
     { title: "Insiders can be wrong", text: "Even a cluster of open-market buys is a research lead, not a forecast. Insiders buy and sell for many reasons, and a tracker cannot tell you which." },

@@ -276,6 +276,11 @@ export const EDGAR_LESSON: ToolLesson = {
     { id: "ed-d4", prompt: "On a Form 4, which code is an open-market purchase?", options: ["A", "M", "P", "F"], answer: 2, why: "A is an award, M an option exercise, F shares withheld for tax." },
     { id: "ed-d5", prompt: "Filtering JPMorgan's filing list by type 4 shows 424B2 forms because…", options: ["The SEC mislabeled them", "The type box matches the start of the form name", "JPMorgan files Form 4 as 424B2", "Insiders use prospectuses"], answer: 1, why: "It is a prefix match. Use the insider transactions page for Forms 3, 4 and 5." },
   ],
+  scenarios: [
+    { id: "ed-s1", prompt: "On EDGAR you filter a company's filings by type 4 and the list fills with 424B2 prospectuses. What happened?", options: ["The company has no insiders", "The type box is a prefix match; use the insider transactions page for Form 4s", "EDGAR is down", "424B2 is a kind of Form 4"], answer: 1, why: "The filter matches types that start with what you type. The issuer's insider page lists Form 4s cleanly." },
+    { id: "ed-s2", prompt: "A data site's TTM revenue and your sum from EDGAR differ by about one quarter's revenue. Most likely…", options: ["The site is lying", "One of you used a different set of four quarters; check the quarter end dates and the latest 10-Q filing date", "EDGAR is wrong", "Revenue cannot be summed"], answer: 1, why: "TTM depends on which quarters are included. A new 10-Q shifts the window, so match the period ends." },
+    { id: "ed-s3", prompt: "Full-text search finds your phrase in 42 filings, including other companies' exhibits. To keep only the company you care about you…", options: ["Read all 42", "Add the company name or CIK filter and a form type", "Give up on full-text search", "Search a news site instead"], answer: 1, why: "Full-text search covers all filers. The entity and form filters narrow it to the documents you need." },
+  ],
   caveats: [
     { title: "Filings are the source, not the answer", text: "A filing tells you what the company reported. It does not tell you what the stock will do. Read it to settle facts and definitions, then keep your own rule." },
     { title: "Relevance is not recency", text: "Full-text search results can lead with older filings. Sort by filing date or set a date range before you treat the top result as the latest." },

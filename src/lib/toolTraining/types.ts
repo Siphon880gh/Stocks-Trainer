@@ -223,6 +223,8 @@ export interface ToolLesson {
   /** Optional guided workflow with a note template (the capstones). */
   workflow?: ToolWorkflow;
   drills: ThemeDrill[];
+  /** Scenario drills (TT14): a short situation on the tool, then the next step to take. 2–3 per lesson. */
+  scenarios: ThemeDrill[];
   caveats: ThemeCard[];
   sources: ThemeSource[];
   links: { label: string; to: string }[];

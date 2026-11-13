@@ -10,7 +10,7 @@
  */
 import { QUIZ_GROUPS } from "./quizData";
 import { MARKET_THEME_IDS } from "./marketThemes";
-import { TOOL_LESSONS, TOOL_LESSON_IDS } from "./toolTraining";
+import { TOOL_LESSONS, TOOL_LESSON_IDS, loadToolProgress, toolTrainingShare } from "./toolTraining";
 import { MISC_PRACTICE_ITEMS } from "./miscPractices";
 import { LEVELS } from "./academy/content/levels";
 import { LEVEL_IDS } from "./academy/types";
@@ -114,7 +114,7 @@ const HUBS: MapStage[] = [
   { id: "hub:cases", kind: "hub", title: "Cases", region: "cases", to: "/cases", prereqs: ["quiz:equity-literacy"], related: ["quiz:news-literacy"], teaser: "Decide on real-style news and earnings cases." },
   { id: "hub:coach", kind: "hub", title: "Coach sessions", region: "cases", to: "/coach", prereqs: [], related: ["hub:cases"], teaser: "Step-by-step coached decisions." },
   { id: "hub:playbooks", kind: "hub", title: "Playbooks", region: "cases", to: "/playbooks", prereqs: ["quiz:price-action"], related: ["hub:coach"], teaser: "Setups written as plans: entry, stop, target." },
-  { id: "hub:tools", kind: "hub", title: "Tool Training", region: "indicators", to: "/tools", prereqs: [], related: ["lab:charting-apps"], teaser: "Learn to use outside research tools with simulated layouts; progress is the share of tool lessons opened." },
+  { id: "hub:tools", kind: "hub", title: "Tool Training", region: "indicators", to: "/tools", prereqs: [], related: ["lab:charting-apps"], teaser: "Learn to use outside research tools with simulated layouts; progress is the average share of each lesson's drills, scenarios, tasks and walks done (opening a lesson counts for nothing)." },
   { id: "hub:macro", kind: "hub", title: "Macro lessons", region: "macro", to: "/macro", prereqs: [], related: ["quiz:macro-releases"], teaser: "Lessons on jobs, inflation, growth, the Fed and rates." },
   { id: "hub:desk", kind: "hub", title: "Paper desk", region: "paper", to: "/paper/desk", prereqs: ["page:/paper"], related: ["quiz:paper-desk", "hub:challenges"], teaser: "Replay real 2024 earnings and SIMULATED scenarios on many topics; progress is the share of scenarios finished." },
   { id: "hub:challenges", kind: "hub", title: "Paper challenges", region: "paper", to: "/paper/challenges", prereqs: ["page:/paper"], related: ["quiz:paper-pnl"], teaser: "Scored challenges: discipline first, result second." },
@@ -462,7 +462,7 @@ export function readSnapshot(storage: KV | undefined = typeof window !== "undefi
     "hub:cases": share(Object.keys(progress?.caseResults ?? {}).filter((id) => CASE_STUDIES.some((c) => c.id === id)).length, CASE_STUDIES.length),
     "hub:coach": share(Object.entries(progress?.coachingCompleted ?? {}).filter(([, v]) => v).length, listSessions().length),
     "hub:playbooks": share(PLAYBOOKS.filter((p) => visited.includes(`/playbooks/${p.id}`)).length, PLAYBOOKS.length),
-    "hub:tools": share(TOOL_LESSONS.filter((t) => visited.includes(t.route)).length, TOOL_LESSONS.length),
+    "hub:tools": toolTrainingShare(TOOL_LESSONS, loadToolProgress(storage)),
     "hub:macro": share(MACRO_LESSONS.filter((l) => visited.includes(`/macro/${l.id}`)).length, MACRO_LESSONS.length),
     "hub:desk": share(DESK_SCENARIOS.filter((x) => (desk?.completed?.[x.id] ?? 0) > 0).length, DESK_SCENARIOS.length),
     "hub:challenges": share(CHALLENGES.filter((c) => (paper?.challengeAttempts?.[c.id] ?? []).some((a) => a.passed)).length, CHALLENGES.length),
