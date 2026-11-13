@@ -374,6 +374,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
   links: [
     { label: "Learn → Tool: Market Forces", to: "/training?group=tool-market-forces" },
     { label: "Coach → Tour Market Forces", to: "/coach/market-forces-tour" },
+    { label: "Academy → Before you trade: the checklist, step by step", to: "/academy/l7-before-you-trade" },
     { label: "Practice → Exposure wrappers", to: "/practice/exposure-wrappers" },
     { label: "Practice → Index and style", to: "/practice/index-style" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },

@@ -228,6 +228,7 @@ export const EXPOSURE_WRAPPERS: MarketTheme = {
   ],
   links: [
     { label: "Learn → Same Theme, Different Wrapper", to: "/training?group=exposure-wrappers" },
+    { label: "Academy → What you would own, by type", to: "/academy/l7-what-you-own" },
     { label: "Coach → Same theme, three wrappers", to: "/coach/exposure-wrappers" },
     { label: "Coach → Bitcoin: coin, ETP, futures or miners", to: "/coach/bitcoin-wrappers" },
     { label: "Practice → Currency funds and the dollar", to: "/practice/currency-funds" },

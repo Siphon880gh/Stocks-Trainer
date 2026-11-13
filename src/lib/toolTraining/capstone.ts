@@ -258,6 +258,7 @@ export const CAPSTONE_LESSON: ToolLesson = {
   links: [
     { label: "Learn → Tool: Capstone", to: "/training?group=tool-capstone" },
     { label: "Coach → One ticker, four tools", to: "/coach/tool-capstone-research" },
+    { label: "Academy → Before you trade: a research checklist", to: "/academy/l7-before-you-trade" },
     { label: "Tool Training → Market Forces", to: "/tools/market-forces" },
     { label: "Tool Training → StockAnalysis", to: "/tools/stockanalysis" },
     { label: "Tool Training → Finviz", to: "/tools/finviz" },
