@@ -38,6 +38,7 @@ function declared(lessonIndex: number): { where: string; link: LiveLink }[] {
   const out: { where: string; link: LiveLink }[] = [];
   for (const s of t.screens) for (const link of s.live ?? []) out.push({ where: `${t.slug}/${s.id}`, link });
   for (const s of t.simulations ?? []) if (s.kind === "columns") for (const link of s.live ?? []) out.push({ where: `${t.slug}/${s.id}`, link });
+  for (const k of t.tasks) out.push({ where: `${t.slug}/${k.id}`, link: k.live });
   return out;
 }
 

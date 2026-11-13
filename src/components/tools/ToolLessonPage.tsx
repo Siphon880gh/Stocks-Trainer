@@ -1,18 +1,21 @@
 import { Fragment, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { simStepCount, toolTextPlain, type ToolLesson } from "../../lib/toolTraining";
+import { simStepCount, toolTextPlain, type FindTaskRecord, type ToolLesson } from "../../lib/toolTraining";
 import { cn } from "../../lib/utils";
 import { MockScreen } from "./MockUi";
 import { SimProvider, SimTrigger, ToolTextView } from "./Simulation";
+import { FindItTasks } from "./FindItTasks";
 
 /**
- * One tool-training lesson (/tools/<slug>): credit, simulated screens, walkthroughs, simulations, drills, caveats,
+ * One tool-training lesson (/tools/<slug>): credit, simulated screens, walkthroughs, simulations, find-it-yourself
+ * tasks on the live tools, drills, caveats,
  * sources. Underlined phrases open a simulation popover; `?sim=<id>` opens one on load (deep link and tests).
  */
 export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
   const [params] = useSearchParams();
   const sims = lesson.simulations ?? [];
   const [picks, setPicks] = useState<Record<string, number>>({});
+  const [tasks, setTasks] = useState<Record<string, FindTaskRecord>>({});
   const right = lesson.drills.filter((d) => picks[d.id] === d.answer).length;
   const done = lesson.drills.every((d) => picks[d.id] !== undefined);
   return (
@@ -81,6 +84,8 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
             </ul>
           </section>
         ) : null}
+
+        <FindItTasks tasks={lesson.tasks} records={tasks} onRecord={(id, r) => setTasks((m) => ({ ...m, [id]: r }))} />
 
         <section className="panel p-4 space-y-3 text-[13px]" data-testid="tool-drills">
           <p className="font-semibold text-[14px]">Your call: {lesson.drills.length} drills</p>

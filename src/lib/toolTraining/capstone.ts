@@ -235,6 +235,12 @@ export const CAPSTONE_LESSON: ToolLesson = {
     },
   ],
   simulations: CP_SIMULATIONS,
+  tasks: [
+    { id: "cp-t1", find: "Newmont's trailing P/E on StockAnalysis", live: stockAnalysisStock("NEM", "statistics", "NEM statistics"), where: "Statistics › Valuation Ratios: PE Ratio", answer: { format: "number", min: 2, max: 100, example: "13.79" }, why: "The first of three reads of one ratio. Write the source and time beside it before you look at the next site." },
+    { id: "cp-t2", find: "Newmont's trailing P/E on Finviz", live: finvizQuote("NEM", "NEM snapshot"), where: "Quote page snapshot table: P/E", answer: { format: "number", min: 2, max: 100, example: "13.42" }, why: "A second read: different price times and earnings definitions give a slightly different number. That gap is normal." },
+    { id: "cp-t3", find: "Newmont's trailing P/E on Yahoo Finance", live: yahooQuote("NEM", "key-statistics", "NEM statistics"), where: "Statistics › Valuation Measures: Trailing P/E, Current column", answer: { format: "number", min: 2, max: 100, example: "13.5" }, why: "Three reads that roughly agree are a range, not a precise figure. A big gap means one site uses different earnings." },
+    { id: "cp-t4", find: "Newmont's exposure label in Market Forces", live: marketForcesView({ theme: "gold", ticker: "NEM" }, "NEM research links"), where: "The Gold table's Exposure column, or NEM's research panel", answer: { format: "text", example: "Gold miner", oneOf: ["miner", "mining"] }, why: "Close the loop with what you would own: a miner carries business and operating risk on top of the gold price." },
+  ],
   drills: [
     { id: "cp-d1", prompt: "Four sites show P/E between 13.42 and 13.92 on one morning. Most likely…", options: ["One site is wrong", "Different price times and inputs", "The company restated", "A split"], answer: 1, why: "EPS agreed within cents; the price used differed (pre-market vs close)." },
     { id: "cp-d2", prompt: "Employee counts read 17,500 and 44,100. Next step…", options: ["Average them", "Check the 10-K and each site's definition", "Use the bigger one", "Ignore it"], answer: 1, why: "Large gaps mean different definitions; the filing settles what the company reports." },

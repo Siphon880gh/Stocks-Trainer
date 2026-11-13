@@ -329,6 +329,12 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
     },
   ],
   simulations: YF_SIMULATIONS,
+  tasks: [
+    { id: "yf-t1", find: "Newmont's previous close", live: yahooQuote("NEM", "", "NEM summary"), where: "Summary: Previous Close, first row of the quote table", answer: { format: "money", min: 20, max: 500, example: "118.47" }, why: "Previous close is the anchor for today's change. Before the open, the header price may be pre-market and differ from it." },
+    { id: "yf-t2", find: "Newmont's 1y target estimate", live: yahooQuote("NEM", "", "NEM summary"), where: "Summary: 1y Target Est, last row of the quote table", answer: { format: "money", min: 20, max: 600, example: "136.20" }, why: "An average target is many opinions blended. Record it with the date and compare it with the range on the Analysis tab." },
+    { id: "yf-t3", find: "Newmont's Beta (5Y Monthly)", live: yahooQuote("NEM", "key-statistics", "NEM statistics"), where: "Statistics › Trading Information: Beta (5Y Monthly)", answer: { format: "number", min: -1, max: 4, example: "0.48" }, why: "Beta compares past moves with the market's over a stated window. It describes history, not a forecast." },
+    { id: "yf-t4", find: "The latest Adj Close in Newmont's historical data", live: yahooQuote("NEM", "history", "NEM historical data"), where: "Historical Data: top row, Adj Close column; the row's date is the time stamp", answer: { format: "money", min: 20, max: 500, example: "118.47" }, why: "Adjusted close folds in dividends and splits. Use it, not Close, when you compare returns across years." },
+  ],
   drills: [
     { id: "yf-d1", prompt: "To compute a 1-year return that includes dividends, use…", options: ["Close", "Adj Close", "Open", "Day's Range"], answer: 1, why: "Adj Close is adjusted for dividends and distributions as well as splits." },
     { id: "yf-d2", prompt: "\"Total Cash (mrq)\" is cash as of…", options: ["Today", "The most recent reported quarter", "The last fiscal year", "Next quarter"], answer: 1, why: "mrq = most recent quarter." },

@@ -351,6 +351,12 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
     },
   ],
   simulations: SA_SIMULATIONS,
+  tasks: [
+    { id: "sa-t1", find: "Newmont's market cap", live: stockAnalysisStock("NEM", "", "NEM overview"), where: "Overview: the key data list beside the chart", answer: { format: "money", min: 20e9, max: 600e9, example: "$125.3B" }, why: "Market cap sets the scale: how big the company is versus its peers and how much of an index it might be." },
+    { id: "sa-t2", find: "Newmont's revenue in the TTM column", live: stockAnalysisStock("NEM", "financials", "NEM income statement"), where: "Financials › Income: the Revenue row, first column (TTM)", answer: { format: "money", min: 5e9, max: 120e9, example: "21.5B" }, why: "TTM revenue is the latest four quarters added up. Check the column header before comparing it with a fiscal year." },
+    { id: "sa-t3", find: "Newmont's forward P/E", live: stockAnalysisStock("NEM", "statistics", "NEM statistics"), where: "Statistics › Valuation Ratios: Forward PE", answer: { format: "number", min: 2, max: 80, example: "11.9" }, why: "Forward P/E uses estimates, not reported profit. Write down the date: estimates change after every earnings report." },
+    { id: "sa-t4", find: "The weight of GDX's largest holding", live: stockAnalysisEtf("GDX", "holdings", "GDX holdings"), where: "Holdings: the % Weight column, top row", answer: { format: "percent", min: 1, max: 30, example: "13.2%" }, why: "A fund's top holding tells you how concentrated it is. Holdings files are dated; record the as-of date the page shows." },
+  ],
   drills: [
     { id: "sa-d1", prompt: "The TTM column ends Sep 30, 2026. It covers…", options: ["Calendar year 2026", "The 12 months to Sep 30, 2026", "Only Q3 2026", "Fiscal year 2025"], answer: 1, why: "Trailing twelve months = the last four reported quarters." },
     { id: "sa-d2", prompt: "Trailing P/E is low but forward P/E is much higher. First check…", options: ["Social media", "The income statement for one-time items", "The 52-week high", "The dividend"], answer: 1, why: "A one-time gain inflates trailing earnings; forward estimates leave it out." },

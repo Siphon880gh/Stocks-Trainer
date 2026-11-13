@@ -348,6 +348,12 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     },
   ],
   simulations: MF_SIMULATIONS,
+  tasks: [
+    { id: "mf-t1", find: "How many tickers the Silver theme lists", live: marketForcesView({ theme: "silver" }, "Silver theme"), where: "Theme list: the count beside Silver, or the \"Common tickers\" heading", answer: { format: "number", min: 1, max: 40, example: "4" }, why: "A theme with a handful of tickers is a starting list. Knowing its size tells you how much research one theme is." },
+    { id: "mf-t2", find: "The exposure label on Newmont (NEM)", live: marketForcesView({ theme: "gold", ticker: "NEM" }, "NEM in the Gold theme"), where: "The Exposure column of the Gold table, or the badge in NEM's research panel", answer: { format: "text", example: "Gold miner", oneOf: ["miner", "mining"] }, why: "The exposure label says what you would own: one mining business, not the metal. A stock and a bullion trust react to different things." },
+    { id: "mf-t3", find: "The exposure label on GLD", live: marketForcesView({ theme: "gold", ticker: "GLD" }, "GLD in the Gold theme"), where: "The Exposure column of the Gold table, or GLD's research panel", answer: { format: "text", example: "Bullion", oneOf: ["bullion", "gold"] }, why: "A physically backed trust owns the metal. Comparing its label with NEM's shows why one theme holds very different wrappers." },
+    { id: "mf-t4", find: "Nvidia's S&P 500 weight in Index weights, with the snapshot date as the time stamp", live: marketForcesView({ weights: ["NVDA"] }, "Index weights, NVDA"), where: "Index weights mode: the S&P 500 row under NVDA; the date sits in the Quality · snapshot column", answer: { format: "percent", min: 0.5, max: 20, example: "8.34%" }, why: "Index weight says how much of an index fund one stock is. Record the snapshot date with it: weights drift as prices move." },
+  ],
   drills: [
     { id: "mf-d1", prompt: "GLD and GDX are both in the Gold theme. The difference is…", options: ["None; both hold gold", "GLD holds bullion; GDX holds mining companies", "GDX holds bullion; GLD holds miners", "GLD is a futures fund"], answer: 1, why: "The exposure badges say Bullion and Mining stocks." },
     { id: "mf-d2", prompt: "Which link group should you open first to check a company's debt?", options: ["Sentiment", "News", "Financials & primary sources", "Index weights"], answer: 2, why: "The balance sheet link sits under Financials & primary sources." },

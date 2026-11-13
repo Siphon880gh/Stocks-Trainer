@@ -142,6 +142,28 @@ export interface ToolWalkthrough {
   steps: ToolText[];
 }
 
+/**
+ * What a "find it yourself" answer should look like. Live values move, so the check is format and plausibility
+ * (a range, a list of labels), never an exact number. `example` must pass its own check.
+ */
+export type FindTaskAnswer =
+  | { format: "percent" | "number" | "money"; min: number; max: number; example: string }
+  | { format: "date"; example: string; minYear: number; maxYear: number }
+  | { format: "text"; example: string; oneOf?: string[] };
+
+/** A task on the real tool: open the live link, find one field, record its value and the page's time stamp. */
+export interface ToolTask {
+  id: string;
+  /** What to find, e.g. "Newmont's Short Float". */
+  find: ToolText;
+  live: LiveLink;
+  /** Where on the page the field sits. */
+  where: string;
+  answer: FindTaskAnswer;
+  /** Why the value matters for research (shown after a check). */
+  why: string;
+}
+
 export interface ToolLesson {
   id: ToolTrainingQuizGroupId;
   /** URL segment: /tools/<slug>. */
@@ -161,6 +183,8 @@ export interface ToolLesson {
   walkthroughs: ToolWalkthrough[];
   /** Bar-by-bar (or column-by-column) walks opened from underlined phrases in the copy above. */
   simulations?: ToolSimulation[];
+  /** "Find it yourself" tasks on the live tools (3–4 per lesson). */
+  tasks: ToolTask[];
   drills: ThemeDrill[];
   caveats: ThemeCard[];
   sources: ThemeSource[];

@@ -303,6 +303,12 @@ export const FINVIZ_LESSON: ToolLesson = {
     },
   ],
   simulations: FV_SIMULATIONS,
+  tasks: [
+    { id: "fv-t1", find: "How many stocks Industry = Gold returns", live: finvizScreener(["ind_gold"], "screener, Industry = Gold"), where: "Screener: the \"#1 / N Total\" count above the results", answer: { format: "number", min: 10, max: 200, example: "56" }, why: "The size of the list before you add size and volume filters shows how many tiny names a sort would surface first." },
+    { id: "fv-t2", find: "Newmont's Short Float", live: finvizQuote("NEM", "NEM snapshot"), where: "Quote page snapshot table: Short Float", answer: { format: "percent", min: 0, max: 40, example: "1.66%" }, why: "Short interest is context to explain, not a signal. Its source updates twice a month, so the date matters." },
+    { id: "fv-t3", find: "Newmont's analyst Recom on Finviz's 1–5 scale", live: finvizQuote("NEM", "NEM snapshot"), where: "Quote page snapshot table: Recom", answer: { format: "number", min: 1, max: 5, example: "1.72" }, why: "Recom averages opinions on a 1 (strong buy) to 5 (strong sell) scale. It is not a target or a reason by itself." },
+    { id: "fv-t4", find: "Newmont's header price and the time stamp beside it", live: finvizQuote("NEM", "NEM quote page"), where: "Quote header, beside the price (e.g. \"Nov 12 • 8:25 AM ET\"); type the price as the value", answer: { format: "money", min: 20, max: 500, example: "115.56" }, why: "A header price can be pre-market, delayed or after hours. Reading the stamp first tells you which one you are looking at." },
+  ],
   drills: [
     { id: "fv-d1", prompt: "Switching the screener from Overview to Valuation view…", options: ["Changes which stocks are listed", "Changes the columns shown for the same list", "Resets the filters", "Buys the stocks"], answer: 1, why: "Views change columns; filters change the list." },
     { id: "fv-d2", prompt: "To drop $10 million companies trading almost nothing from a screen, add…", options: ["Analyst Recom.", "Market Cap. and Average Volume filters", "A Charts view", "The News tab"], answer: 1, why: "Size and liquidity filters remove names you could not trade sensibly." },
