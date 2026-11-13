@@ -15,13 +15,14 @@ import {
   type ToolTrainingQuizGroupId,
 } from "./toolTraining/index.ts";
 
-/** Which tools a lesson's live links may open: one per tool lesson; the capstone spans all four. */
+/** Which tools a lesson's live links may open: one per tool lesson; the capstones span several. */
 const LESSON_TOOLS: Record<ToolTrainingQuizGroupId, LiveTool[]> = {
   "tool-market-forces": ["Market Forces"],
   "tool-stockanalysis": ["StockAnalysis"],
   "tool-finviz": ["Finviz"],
   "tool-yahoo-finance": ["Yahoo Finance"],
   "tool-capstone": ["Market Forces", "StockAnalysis", "Finviz", "Yahoo Finance"],
+  "tool-capstone-bank": ["Market Forces", "StockAnalysis", "Finviz", "Yahoo Finance", "SEC EDGAR"],
 };
 
 const at = (path: string) => (
@@ -39,6 +40,7 @@ function declared(lessonIndex: number): { where: string; link: LiveLink }[] {
   for (const s of t.screens) for (const link of s.live ?? []) out.push({ where: `${t.slug}/${s.id}`, link });
   for (const s of t.simulations ?? []) if (s.kind === "columns") for (const link of s.live ?? []) out.push({ where: `${t.slug}/${s.id}`, link });
   for (const k of t.tasks) out.push({ where: `${t.slug}/${k.id}`, link: k.live });
+  for (const st of t.workflow?.steps ?? []) for (const link of st.live) out.push({ where: `${t.slug}/${st.id}`, link });
   return out;
 }
 

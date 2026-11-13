@@ -4,7 +4,7 @@
  * checked on Nov 12, 2026. Market Forces has no public host yet, so it points at the local copy Weng serves.
  */
 
-export type LiveTool = "StockAnalysis" | "Finviz" | "Yahoo Finance" | "Market Forces";
+export type LiveTool = "StockAnalysis" | "Finviz" | "Yahoo Finance" | "Market Forces" | "SEC EDGAR";
 
 export interface LiveLink {
   tool: LiveTool;
@@ -22,6 +22,7 @@ export const LIVE_TOOL_ORIGINS: Record<LiveTool, string> = {
   Finviz: "https://finviz.com/",
   "Yahoo Finance": "https://finance.yahoo.com/",
   "Market Forces": MARKET_FORCES_URL,
+  "SEC EDGAR": "https://www.sec.gov/",
 };
 
 const lower = (symbol: string) => encodeURIComponent(symbol.trim().toLowerCase());
@@ -73,6 +74,37 @@ export function marketForcesView(view: { theme?: string; ticker?: string; weight
   if (view.ticker) params.push(`ticker=${upper(view.ticker)}`);
   if (view.weights) params.push(`weights=${view.weights.map(upper).join(",")}`);
   return { tool: "Market Forces", label, url: `${MARKET_FORCES_URL}${params.length ? `#${params.join("&")}` : ""}` };
+}
+
+/** A CIK padded to the 10 digits EDGAR's own links use, e.g. 19617 → "0000019617". */
+export function padCik(cik: string | number): string {
+  return String(cik).replace(/\D/g, "").padStart(10, "0");
+}
+
+/**
+ * EDGAR's company filing list, filtered by form type (e.g. "10-Q"). The type filter is a prefix match: "4" also
+ * lists 424B2 prospectuses, so insider trades use `edgarInsiders` instead.
+ */
+export function edgarFilings(cik: string | number, type: string, label: string): LiveLink {
+  return { tool: "SEC EDGAR", label, url: `https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${padCik(cik)}&type=${encodeURIComponent(type)}&dateb=&owner=include&count=40` };
+}
+
+/** EDGAR full-text search (2001 onward) with a phrase, optionally one company and form types, in its hash. */
+export function edgarFullText(query: string, label: string, opts: { cik?: string | number; forms?: string[] } = {}): LiveLink {
+  const parts = [`q=${encodeURIComponent(query)}`];
+  if (opts.cik !== undefined) parts.push(`ciks=${padCik(opts.cik)}`);
+  if (opts.forms?.length) parts.push(`forms=${opts.forms.map(encodeURIComponent).join(",")}`);
+  return { tool: "SEC EDGAR", label, url: `https://www.sec.gov/edgar/search/#/${parts.join("&")}` };
+}
+
+/** EDGAR's insider transactions for an issuer (Forms 3, 4 and 5), newest first. */
+export function edgarInsiders(cik: string | number, label: string): LiveLink {
+  return { tool: "SEC EDGAR", label, url: `https://www.sec.gov/cgi-bin/own-disp?action=getissuer&CIK=${padCik(cik)}` };
+}
+
+/** One filing on EDGAR by path under /Archives/edgar/data/ (an index folder or a rendered document). */
+export function edgarDocument(path: string, label: string): LiveLink {
+  return { tool: "SEC EDGAR", label, url: `https://www.sec.gov/Archives/edgar/data/${path.replace(/^\/+/, "")}` };
 }
 
 /** True when `link.url` is well formed and sits on its tool's origin (https, or the local Market Forces app). */

@@ -5,6 +5,7 @@ import { cn } from "../../lib/utils";
 import { MockScreen } from "./MockUi";
 import { SimProvider, SimTrigger, ToolTextView } from "./Simulation";
 import { FindItTasks } from "./FindItTasks";
+import { WorkflowPanel } from "./WorkflowPanel";
 
 /**
  * One tool-training lesson (/tools/<slug>): credit, simulated screens, walkthroughs, simulations, find-it-yourself
@@ -16,6 +17,7 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
   const sims = lesson.simulations ?? [];
   const [picks, setPicks] = useState<Record<string, number>>({});
   const [tasks, setTasks] = useState<Record<string, FindTaskRecord>>({});
+  const [notes, setNotes] = useState<Record<string, string>>({});
   const right = lesson.drills.filter((d) => picks[d.id] === d.answer).length;
   const done = lesson.drills.every((d) => picks[d.id] !== undefined);
   return (
@@ -84,6 +86,8 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
             </ul>
           </section>
         ) : null}
+
+        {lesson.workflow ? <WorkflowPanel workflow={lesson.workflow} values={notes} onChange={(k, v) => setNotes((m) => ({ ...m, [k]: v }))} /> : null}
 
         <FindItTasks tasks={lesson.tasks} records={tasks} onRecord={(id, r) => setTasks((m) => ({ ...m, [id]: r }))} />
 

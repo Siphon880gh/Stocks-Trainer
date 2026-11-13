@@ -15,7 +15,8 @@ export type ToolTrainingQuizGroupId =
   | "tool-stockanalysis"
   | "tool-finviz"
   | "tool-yahoo-finance"
-  | "tool-capstone";
+  | "tool-capstone"
+  | "tool-capstone-bank";
 
 /** Case thinking modes owned by tool lessons (spread into `CaseThinkingMode`). */
 export type ToolTrainingMode =
@@ -23,7 +24,8 @@ export type ToolTrainingMode =
   | "tool_stockanalysis"
   | "tool_finviz"
   | "tool_yahoo_finance"
-  | "tool_capstone";
+  | "tool_capstone"
+  | "tool_capstone_bank";
 
 /** One block of a simulated screen. Numbers in blocks are illustrative unless the lesson says otherwise. */
 export type MockBlock =
@@ -164,6 +166,35 @@ export interface ToolTask {
   why: string;
 }
 
+/** One input in a guided workflow; `key` fills `{key}` in the workflow's note template. */
+export interface WorkflowField {
+  key: string;
+  label: string;
+  placeholder: string;
+}
+
+/** One step of a guided multi-tool workflow: open the live page(s), do the read, type what you found. */
+export interface WorkflowStep {
+  id: string;
+  title: string;
+  live: LiveLink[];
+  do: ToolText[];
+  fields: WorkflowField[];
+}
+
+/**
+ * A step-by-step research workflow across tools with a note template that fills as you type. Unfilled keys show
+ * as blanks, so the note reads as a checklist until it is done.
+ */
+export interface ToolWorkflow {
+  title: string;
+  intro: string;
+  noteTitle: string;
+  steps: WorkflowStep[];
+  /** Note lines; `{key}` is replaced by that field's value. */
+  note: string[];
+}
+
 export interface ToolLesson {
   id: ToolTrainingQuizGroupId;
   /** URL segment: /tools/<slug>. */
@@ -185,6 +216,8 @@ export interface ToolLesson {
   simulations?: ToolSimulation[];
   /** "Find it yourself" tasks on the live tools (3–4 per lesson). */
   tasks: ToolTask[];
+  /** Optional guided workflow with a note template (the capstones). */
+  workflow?: ToolWorkflow;
   drills: ThemeDrill[];
   caveats: ThemeCard[];
   sources: ThemeSource[];
