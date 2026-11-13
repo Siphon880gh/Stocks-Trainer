@@ -21,6 +21,7 @@ import {
 } from "../../lib/toolTraining";
 import { cn } from "../../lib/utils";
 import { LiveLinks } from "./LiveLinks";
+import { ToolTerm } from "./ToolTerm";
 
 /**
  * Tool Training simulations: underlined phrases in lesson copy (`ToolTextView` / `SimTrigger`) open a popover
@@ -66,7 +67,7 @@ export function ToolTextView({ text }: { text: ToolText }) {
   if (typeof text === "string") return <>{text}</>;
   return (
     <>
-      {text.map((p, i) => (typeof p === "string" ? <span key={i}>{p}</span> : <Fragment key={i}><SimTrigger simRef={p} /></Fragment>))}
+      {text.map((p, i) => (typeof p === "string" ? <span key={i}>{p}</span> : "sim" in p ? <Fragment key={i}><SimTrigger simRef={p} /></Fragment> : <Fragment key={i}><ToolTerm text={p.text} term={p.term} /></Fragment>))}
     </>
   );
 }

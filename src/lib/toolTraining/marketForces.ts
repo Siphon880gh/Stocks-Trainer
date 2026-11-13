@@ -262,7 +262,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
       ],
       callouts: [
         { n: 1, block: 0, text: "Valuation & ratios opens the Stock Analysis statistics page: multiples and key metrics, each with the site's own as-of labels." },
-        { n: 2, block: 0, text: "Dividend history is past payouts, if any. A company that paid a dividend before may reduce or stop it." },
+        { n: 2, block: 0, text: [{ text: "Dividend history", term: "dividend" }, " is past payouts, if any. A company that paid a dividend before may reduce or stop it."] },
         { n: 3, block: 1, text: ["Market Forces has no live prices and does not compute whether a stock is cheap or expensive. The checklist's reminder is that ", { text: "a good story can already be in the price", sim: "mf-sim-priced-in" }, "."] },
         { n: 4, block: 2, text: "A fund panel does not have this group. Funds show holdings, fees and the prospectus instead." },
       ],
@@ -299,7 +299,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
         { kind: "chips", title: "Also in these themes", chips: ["Gold", "Commodity market", "Inflation", "U.S. dollar"] },
       ],
       callouts: [
-        { n: 1, block: 0, text: "Issuer and exposure come first. A bullion trust holds metal, not companies." },
+        { n: 1, block: 0, text: ["Issuer and ", { text: "exposure", term: "exposure-label" }, " come first. A bullion trust holds metal, not companies."] },
         { n: 2, block: 1, text: "For bullion, currency-trust and futures funds, Holdings links to the issuer, because a stock list would not describe them." },
         { n: 3, block: 2, text: "One ticker can sit in several themes. GLD appears under Gold, Commodity market, Inflation and U.S. dollar." },
       ],
@@ -319,7 +319,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
       ],
       callouts: [
         { n: 1, block: 0, text: "Index weights swaps the research panel for a weights panel. Check one or more tickers." },
-        { n: 2, block: 1, text: "Same company, very different weights. The Dow is price-weighted; the S&P 500 is market-cap weighted." },
+        { n: 2, block: 1, text: ["Same company, very different weights. The Dow is ", { text: "price-weighted", term: "price-weighted-index" }, "; the S&P 500 is ", { text: "market-cap weighted", term: "market-cap-weighting" }, "."] },
         { n: 3, block: 2, text: "Read the quality label and the snapshot date before comparing with any other source." },
         { n: 4, block: 3, text: "The limits list says what the app could not get, and why." },
       ],

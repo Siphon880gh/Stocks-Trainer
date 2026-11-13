@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useRef, useState, type ReactElement, type ReactNode } from "react";
+import { Fragment, useEffect, useId, useRef, useState, type ReactElement, type ReactNode } from "react";
 import { splitEarningsJargon, type EarningsJargonTerm } from "../lib/earningsJargon";
 
 interface JargonTextProps {
@@ -103,9 +103,10 @@ function useGlossaryPopover<T extends HTMLElement>() {
   return { ref, open, setOpen: (v: boolean) => (v ? show() : close()), box, show, scheduleClose, blur, toggle };
 }
 
-function Tip({ term, box, onEnter, onLeave }: { term: EarningsJargonTerm; box: { left: number; top: number; width: number }; onEnter: () => void; onLeave: () => void }) {
+function Tip({ term, box, onEnter, onLeave, id }: { term: Pick<EarningsJargonTerm, "name" | "summary">; box: { left: number; top: number; width: number }; onEnter: () => void; onLeave: () => void; id?: string }) {
   return (
     <span
+      id={id}
       role="tooltip"
       className="fixed z-[260] p-3 rounded-lg border-2 border-line bg-background-dark shadow-lg text-left normal-case not-italic font-normal tracking-normal"
       style={{ left: box.left, top: box.top, width: box.width }}
@@ -218,5 +219,51 @@ export function WithGlossary({ texts, children, className }: { texts: (string | 
       <div className="flex-1 min-w-0 h-full">{children}</div>
       <GlossaryButtons texts={texts} />
     </div>
+  );
+}
+
+/**
+ * A word that is itself the glossary trigger: hover, keyboard focus or a tap shows the definition (`role="tooltip"`,
+ * linked by `aria-describedby`); Escape or a second tap closes it. The tip is `position: fixed`, so nothing shifts.
+ * Thin dashed underline, unlike the thick dotted purple ▶ of simulation triggers. Pass `focusable={false}` inside
+ * an `aria-hidden` figure and offer a focusable copy outside it (Tool Training's "Terms on this screen").
+ */
+export function GlossaryTermMark({ term, children, focusable = true }: { term: { id: string; name: string; summary: string }; children?: ReactNode; focusable?: boolean }): ReactElement {
+  const p = useGlossaryPopover<HTMLSpanElement>();
+  const tipId = useId();
+  return (
+    <>
+      <span
+        ref={p.ref}
+        tabIndex={focusable ? 0 : undefined}
+        role={focusable ? "button" : undefined}
+        aria-expanded={focusable ? p.open : undefined}
+        aria-describedby={focusable && p.open ? tipId : undefined}
+        data-glossary-term={term.id}
+        className="cursor-help underline decoration-dashed decoration-1 decoration-muted underline-offset-[3px] rounded-sm hover:decoration-primary hover:text-primary outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+        onMouseEnter={p.show}
+        onMouseLeave={p.scheduleClose}
+        onFocus={p.show}
+        onBlur={p.blur}
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          p.toggle();
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Escape") {
+            e.stopPropagation();
+            p.setOpen(false);
+          } else if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            p.toggle();
+          }
+        }}
+      >
+        {children ?? term.name}
+      </span>
+      {p.open ? <Tip id={tipId} term={term} box={p.box} onEnter={p.show} onLeave={p.scheduleClose} /> : null}
+    </>
   );
 }

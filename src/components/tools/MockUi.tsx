@@ -4,6 +4,8 @@ import { seededTape } from "../../lib/marketThemes/helpers";
 import { cn } from "../../lib/utils";
 import { ToolTextView } from "./Simulation";
 import { LiveLinks } from "./LiveLinks";
+import { FieldLabel, ScreenTerms } from "./ToolTerm";
+import { screenFieldTermIds } from "../../lib/toolTraining";
 
 /** Shared pieces for simulated tool layouts. Drawn in this app's own look: no logos, no copied styling. */
 
@@ -61,7 +63,7 @@ export function MockStats({ title, rows }: { title?: string; rows: { label: stri
       <dl className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-1 text-[12px]">
         {rows.map((r) => (
           <div key={r.label} className="flex justify-between gap-2 border-b border-line py-0.5">
-            <dt className="text-muted">{r.label}</dt>
+            <dt className="text-muted"><FieldLabel label={r.label} /></dt>
             <dd className="font-medium tabular-nums">{r.value}</dd>
           </div>
         ))}
@@ -77,13 +79,13 @@ export function MockTable({ title, columns, rows }: { title?: string; columns: s
       <table className="w-full text-[12px] border-collapse">
         <thead>
           <tr className="text-left text-muted border-b border-line">
-            {columns.map((c) => <th key={c} className="py-1 pr-2 font-medium">{c}</th>)}
+            {columns.map((c) => <th key={c} className="py-1 pr-2 font-medium"><FieldLabel label={c} /></th>)}
           </tr>
         </thead>
         <tbody>
           {rows.map((r, i) => (
             <tr key={i} className="border-b border-line">
-              {r.map((cell, j) => <td key={j} className="py-1 pr-2 tabular-nums">{cell}</td>)}
+              {r.map((cell, j) => <td key={j} className="py-1 pr-2 tabular-nums">{j === 0 ? <FieldLabel label={cell} /> : cell}</td>)}
             </tr>
           ))}
         </tbody>
@@ -99,7 +101,7 @@ export function MockFilters({ title, filters }: { title?: string; filters: { lab
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
         {filters.map((f) => (
           <div key={f.label} className="rounded border border-line px-2 py-1">
-            <p className="text-muted">{f.label}</p>
+            <p className="text-muted"><FieldLabel label={f.label} /></p>
             <p className="font-medium">{f.value}</p>
           </div>
         ))}
@@ -177,6 +179,7 @@ export function MockScreen({ screen, asOf }: { screen: ToolScreen; asOf?: string
         </MockFrame>
       </div>
       <LiveLinks links={screen.live} asOf={asOf} />
+      <ScreenTerms ids={screenFieldTermIds(screen)} />
       <figcaption id={captionId} className="text-[12px] space-y-1">
         <span className="block">{screen.caption}</span>
         <ol className="space-y-0.5">

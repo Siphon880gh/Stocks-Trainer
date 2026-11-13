@@ -241,7 +241,7 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
         { n: 1, block: 0, text: [{ text: "Close and pre-market are separate lines", sim: "yf-sim-sessions" }, " with separate times. The close is the regular-session price."] },
         { n: 2, block: 1, text: "Twelve tabs. Statistics, Historical Data and Financials hold the checks in this lesson." },
         { n: 3, block: 2, text: [{ text: "Previous Close (119.96) is the close before the Nov 11 session", sim: "yf-sim-sessions" }, ", not the 118.47 shown above. Labels are relative to the last session."] },
-        { n: 4, block: 3, text: "PE Ratio (TTM) uses the last 12 months. The 1y Target Est is an average of analyst opinions." },
+        { n: 4, block: 3, text: [{ text: "PE Ratio (TTM)", term: "pe-ratio" }, " uses the last 12 months. The ", { text: "1y Target Est", term: "price-target" }, " is an average of analyst opinions."] },
         { n: 5, block: 4, text: "Summaries are secondhand. Use them to find questions, not answers." },
       ],
     },
@@ -258,7 +258,7 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
         { kind: "chart", label: "Illustrative price line (not NEM data)", seed: 10411, drift: 0.001 },
       ],
       callouts: [
-        { n: 1, block: 0, text: "Total return includes dividends, and the benchmark row gives context. It shows what happened, not what will." },
+        { n: 1, block: 0, text: [{ text: "Total return", term: "total-return-vs-benchmark" }, " includes dividends, and the benchmark row gives context. It shows what happened, not what will."] },
         { n: 2, block: 1, text: ["The average target sits between ", { text: "a low of 70 and a high of 165", sim: "yf-sim-target-range" }, ". That spread is the real information."] },
         { n: 3, block: 2, text: "For charts and indicators, see Charting apps compared. This line is illustrative only." },
       ],
@@ -277,8 +277,8 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
       ],
       callouts: [
         { n: 1, block: 0, text: "Valuation by quarter-end shows how the multiple moved. Compare a company with its own history first." },
-        { n: 2, block: 1, text: "ttm, mrq and dated labels each point to a different date. Short interest is reported on a schedule, so it lags." },
-        { n: 3, block: 2, text: "Each row's footnote names its source. Debt/Equity here is a percent (15.58%); StockAnalysis showed 0.16, the same idea as a ratio." },
+        { n: 2, block: 1, text: [{ text: "ttm", term: "trailing-twelve-months" }, ", ", { text: "mrq", term: "most-recent-quarter" }, " and dated labels each point to a different date. ", { text: "Short interest", term: "short-interest" }, " is reported on a schedule, so it lags."] },
+        { n: 3, block: 2, text: ["Each row's footnote names its source. ", { text: "Debt/Equity", term: "debt-to-equity" }, " here is a percent (15.58%); StockAnalysis showed 0.16, the same idea as a ratio."] },
       ],
     },
     {

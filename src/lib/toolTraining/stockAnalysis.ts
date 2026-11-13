@@ -261,8 +261,8 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
       callouts: [
         { n: 1, block: 0, text: "Two prices, two times: the regular-session close and a pre-market quote. Read the time stamp before quoting either." },
         { n: 2, block: 1, text: "Tabs are the map. Financials and Statistics are where the checks in this lesson happen." },
-        { n: 3, block: 2, text: ["Revenue (ttm) is the last four reported quarters. ", { text: "P/E is price over trailing EPS", sim: "sa-sim-pe-moves" }, "; Forward PE uses estimates."] },
-        { n: 4, block: 3, text: "Analysts and Price Target are opinions. SEC: never rely solely on an analyst's recommendation." },
+        { n: 3, block: 2, text: [{ text: "Revenue (ttm)", term: "revenue" }, " is the last four reported quarters. ", { text: "P/E is price over trailing EPS", sim: "sa-sim-pe-moves" }, "; ", { text: "Forward PE", term: "forward-pe" }, " uses estimates."] },
+        { n: 4, block: 3, text: [{ text: "Analysts", term: "analyst-consensus" }, " and ", { text: "Price Target", term: "price-target" }, " are opinions. SEC: never rely solely on an analyst's recommendation."] },
         { n: 5, block: 3, text: ["The ", { text: "52-Week Range", sim: "sa-sim-52-week" }, " is two extremes, not the path between them. The ", { text: "Earnings Date", sim: "sa-sim-earnings-week" }, " tells you which bar should carry the news."] },
       ],
     },
@@ -283,7 +283,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
         { n: 1, block: 0, text: "Income, balance sheet and cash flow each have their own sub-tab. Ratios and KPIs are derived from them." },
         { n: 2, block: 1, text: "Annual vs Quarterly changes every column. Quarterly numbers are not comparable with annual ones." },
         { n: 3, block: 2, text: [{ text: "Read Period Ending first", sim: "sa-sim-columns" }, ". TTM ends Sep 30, 2026; FY 2025 ends Dec 31, 2025. FY 2023's loss sits beside a goodwill write-down while operating income stayed positive."] },
-        { n: 4, block: 3, text: "Share count matters for per-share numbers. EPS can fall even when profit rises if shares jump." },
+        { n: 4, block: 3, text: [{ text: "Share count", term: "diluted-shares" }, " matters for per-share numbers. ", { text: "EPS", term: "eps" }, " can fall even when profit rises if shares jump."] },
       ],
     },
     {
@@ -303,7 +303,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
       callouts: [
         { n: 1, block: 0, text: [{ text: "Valuation ratios divide price by a statement figure", sim: "sa-sim-pe-moves" }, ". Compare a company with its own history or close peers, not across industries."] },
         { n: 2, block: 1, text: "Financial position answers \"can it pay its bills and its debt?\" before you think about upside." },
-        { n: 3, block: 2, text: "Short interest is reported on a schedule, so it lags the price." },
+        { n: 3, block: 2, text: [{ text: "Short interest", term: "short-interest" }, " is reported on a schedule, so it lags the price."] },
         { n: 4, block: 3, text: "Upgrade marks a Pro-only field. Skip it; the free ratios are enough to learn the checks." },
         { n: 5, block: 4, text: "The footer names the data provider and the update date. Quote both with any number you use." },
       ],
@@ -324,7 +324,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
       ],
       callouts: [
         { n: 1, block: 1, text: "ETF pages have fewer tabs: Overview, Holdings, Dividends, History." },
-        { n: 2, block: 2, text: "Expense ratio, holdings count and the index tracked are the first fund facts to read." },
+        { n: 2, block: 2, text: [{ text: "Expense ratio", term: "expense-ratio" }, ", ", { text: "holdings", term: "etf-holdings" }, " count and the index tracked are the first fund facts to read."] },
         { n: 3, block: 3, text: "Symbols can differ by site and listing. Barrick shows as ABX here and B in Market Forces." },
         { n: 4, block: 4, text: "Free users see part of the list. For the full, dated file, open the issuer's page." },
       ],

@@ -3,7 +3,7 @@
  * `ToolText` triggers that open them. The popover in `components/tools/Simulation.tsx` only calls these, so the
  * stepping rules are unit-tested without a browser. Educational, not advice.
  */
-import type { SimBar, SimRef, ToolLesson, ToolSimulation, ToolText } from "./types";
+import type { SimBar, SimRef, TermRef, ToolLesson, ToolSimulation, ToolText } from "./types";
 
 /** Minimum steps in a simulation ("5+ bars"). */
 export const MIN_SIM_STEPS = 5;
@@ -95,10 +95,15 @@ export function toolTextPlain(t: ToolText): string {
   return typeof t === "string" ? t : t.map((p) => (typeof p === "string" ? p : p.text)).join("");
 }
 export function toolTextRefs(t: ToolText): SimRef[] {
-  return typeof t === "string" ? [] : t.filter((p): p is SimRef => typeof p !== "string");
+  return typeof t === "string" ? [] : t.filter((p): p is SimRef => typeof p !== "string" && "sim" in p);
 }
 
 /** Every underlined trigger in a lesson's intro, screen callouts and walkthrough steps. */
+/** Glossary terms marked in a piece of copy (`{ text, term }`). */
+export function toolTextTerms(t: ToolText): TermRef[] {
+  return typeof t === "string" ? [] : t.filter((p): p is TermRef => typeof p !== "string" && "term" in p);
+}
+
 export function lessonSimRefs(lesson: ToolLesson): SimRef[] {
   return [
     ...lesson.intro.flatMap(toolTextRefs),

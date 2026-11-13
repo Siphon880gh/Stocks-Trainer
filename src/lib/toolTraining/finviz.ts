@@ -217,7 +217,7 @@ export const FINVIZ_LESSON: ToolLesson = {
       ],
       callouts: [
         { n: 1, block: 0, text: "Filter tabs group criteria: Descriptive (what and how big), Fundamental (valuation, growth), Technical (price behavior)." },
-        { n: 2, block: 1, text: "Add filters until the list is one you could research. Market Cap. and Average Volume remove tiny, thinly traded names." },
+        { n: 2, block: 1, text: ["Add filters until the list is one you could research. ", { text: "Market Cap.", term: "market-cap" }, " and ", { text: "Average Volume", term: "average-volume" }, " remove tiny, thinly traded names."] },
         { n: 3, block: 2, text: "Views change the columns, not the list. Valuation and Ownership are quick second looks." },
         { n: 4, block: 3, text: ["Finviz files gold miners under Basic Materials, its own sector scheme, not GICS Materials. ", { text: "A $10 million company with no P/E", sim: "fv-sim-illiquid" }, " sits beside $90 billion ones."] },
         { n: 5, block: 4, text: "Free data is delayed. Read the time before quoting a price." },
@@ -239,10 +239,10 @@ export const FINVIZ_LESSON: ToolLesson = {
       ],
       callouts: [
         { n: 1, block: 0, text: [{ text: "8:25 AM ET is before the open", sim: "fv-sim-premarket" }, " and Prev Close is 118.47, so the header price is not yesterday's close. Read the stamp."] },
-        { n: 2, block: 1, text: "Index shows membership (S&P 500, Russell 1000). P/E and Forward P/E differ from other sites because price time and estimates differ." },
+        { n: 2, block: 1, text: ["Index shows membership (S&P 500, Russell 1000). ", { text: "P/E", term: "pe-ratio" }, " and ", { text: "Forward P/E", term: "forward-pe" }, " differ from other sites because price time and estimates differ."] },
         { n: 3, block: 2, text: ["Ownership and short interest give context, ", { text: "not a signal on their own", sim: "fv-sim-signal" }, "."] },
-        { n: 4, block: 3, text: "SMA200 is the distance from the 200-day average; Rel Volume before the open is always tiny." },
-        { n: 5, block: 4, text: "Recom runs from 1 (strong buy) to 5 (strong sell). It is an average of opinions." },
+        { n: 4, block: 3, text: [{ text: "SMA200", term: "sma-distance" }, " is the distance from the 200-day average; ", { text: "Rel Volume", term: "relative-volume" }, " before the open is always tiny."] },
+        { n: 5, block: 4, text: [{ text: "Recom", term: "analyst-consensus" }, " runs from 1 (strong buy) to 5 (strong sell). It is an average of opinions."] },
       ],
     },
     {

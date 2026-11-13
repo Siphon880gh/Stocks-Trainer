@@ -196,7 +196,7 @@ export const CAPSTONE_LESSON: ToolLesson = {
         { kind: "note", text: `P/E spread across the four readings: ${CP_PE_SPREAD}. EPS agrees to within a few cents; the price and timing do most of the work.` },
       ],
       callouts: [
-        { n: 1, block: 0, text: ["Agreement (EPS near 8.6) builds confidence. ", { text: "Disagreement (employees) is a prompt to read the 10-K's own figure", sim: "cp-sim-cross-check" }, " and each site's definition."] },
+        { n: 1, block: 0, text: ["Agreement (", { text: "EPS", term: "eps" }, " near 8.6) builds confidence. ", { text: "Disagreement (employees) is a prompt to read the 10-K's own figure", sim: "cp-sim-cross-check" }, " and each site's definition."] },
         { n: 2, block: 1, text: "Pick one consistent source for any ratio you track over time, and note which." },
       ],
     },
@@ -213,7 +213,7 @@ export const CAPSTONE_LESSON: ToolLesson = {
         { kind: "note", text: "Open questions: why do employee counts differ (17,500 vs 44,100)? What does the 10-Q say about 2027 spending? Decision rule (example form): no position within three trading days of earnings; exit if operating cash flow falls below capital spending for two quarters, confirmed in the 10-Q." },
       ],
       callouts: [
-        { n: 1, block: 0, text: "Start with exposure. A miner is a business, not the metal." },
+        { n: 1, block: 0, text: ["Start with ", { text: "exposure", term: "exposure-label" }, ". A miner is a business, not the metal."] },
         { n: 2, block: 1, text: "Facts carry a source and the period they cover." },
         { n: 3, block: 2, text: "Opinions are useful context, never the deciding line." },
         { n: 4, block: 3, text: ["Open questions send you to the filing; ", { text: "the rule decides in advance", sim: "cp-sim-decision-rule" }, "."] },

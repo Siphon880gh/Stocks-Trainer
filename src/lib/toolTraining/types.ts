@@ -45,8 +45,14 @@ export interface SimRef {
   sim: string;
 }
 
-/** Lesson copy: plain text, or plain runs mixed with underlined simulation triggers. `toolTextPlain` flattens it. */
-export type ToolText = string | (string | SimRef)[];
+/** A glossary term in lesson copy: hover, focus or tap shows its Archive definition. `term` is a `LiteracyTerm` id. */
+export interface TermRef {
+  text: string;
+  term: string;
+}
+
+/** Lesson copy: plain text, or plain runs mixed with simulation triggers and glossary terms. `toolTextPlain` flattens it. */
+export type ToolText = string | (string | SimRef | TermRef)[];
 
 /** What a bar is flagged as on a simulated chart. Drawn as a small tag; `high` / `low` also draw a level line. */
 export type SimBarMark = "high" | "low" | "earnings" | "news" | "dividend" | "signal";

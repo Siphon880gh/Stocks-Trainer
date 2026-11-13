@@ -36,6 +36,9 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
               <span className="font-medium text-sim underline decoration-dotted decoration-2 underline-offset-[3px]">Dotted purple phrases ▶</span> are not glossary terms. Each opens a short simulation: a SAMPLE tape or a table you step through, showing why a value from the tool matters for reading the stock.
             </p>
           ) : null}
+          <p className="text-[11px] text-muted" data-testid="term-hint">
+            <span className="underline decoration-dashed decoration-1 decoration-muted underline-offset-[3px]">Words with a thin dashed underline</span> are glossary terms: hover, focus or tap one for a short definition. On a simulated screen, the terms are also listed under it.
+          </p>
           <p className="text-[11px] text-muted" data-testid="tool-credit">
             {lesson.credit.name} (<a href={lesson.credit.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">{lesson.credit.url.replace(/^https:\/\//, "")}</a>): {lesson.credit.note}
           </p>

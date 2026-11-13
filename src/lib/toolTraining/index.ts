@@ -11,9 +11,11 @@ import { FINVIZ_LESSON } from "./finviz";
 import { YAHOO_FINANCE_LESSON } from "./yahooFinance";
 import { CAPSTONE_LESSON } from "./capstone";
 
-export type { BarWalkSim, ColumnStep, ColumnWalkSim, MockBlock, MockCallout, SimBar, SimBarMark, SimRef, ToolLesson, ToolScreen, ToolSimulation, ToolText, ToolTrainingMode, ToolTrainingQuizGroupId, ToolWalkthrough } from "./types";
+export type { BarWalkSim, ColumnStep, ColumnWalkSim, MockBlock, MockCallout, SimBar, SimBarMark, SimRef, TermRef, ToolLesson, ToolScreen, ToolSimulation, ToolText, ToolTrainingMode, ToolTrainingQuizGroupId, ToolWalkthrough } from "./types";
 export * from "./simWalk";
 export * from "./liveLinks";
+export * from "./fieldTerms";
+import { TOOL_FIELD_TERMS } from "./fieldTerms";
 
 export const TOOL_LESSONS: ToolLesson[] = [MARKET_FORCES_LESSON, STOCKANALYSIS_LESSON, FINVIZ_LESSON, YAHOO_FINANCE_LESSON, CAPSTONE_LESSON];
 
@@ -33,7 +35,8 @@ export function toolLessonQuestions(id: string): QuizQuestion[] {
 
 export const TOOL_QUIZ_GROUPS = TOOL_LESSONS.map((t) => ({ id: t.id, name: t.quiz.name, description: t.quiz.description, icon: t.quiz.icon }));
 export const TOOL_CASES = TOOL_LESSONS.flatMap((t) => t.cases);
-export const TOOL_TERMS = TOOL_LESSONS.flatMap((t) => t.terms);
+/** Lesson terms, then the field-label definitions behind the screens' hover terms (`fieldTerms.ts`). */
+export const TOOL_TERMS = [...TOOL_LESSONS.flatMap((t) => t.terms), ...TOOL_FIELD_TERMS];
 export const TOOL_MODE_LABELS = Object.fromEntries(TOOL_LESSONS.map((t) => [t.mode, t.modeLabel])) as Record<ToolTrainingMode, string>;
 export const TOOL_MODE_TIPS = Object.fromEntries(TOOL_LESSONS.map((t) => [t.mode, t.modeTip])) as Record<ToolTrainingMode, string>;
 
