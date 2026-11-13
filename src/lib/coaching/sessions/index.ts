@@ -91,6 +91,7 @@ import { finvizTourSession } from "./finviz-tour";
 import { yahooFinanceTourSession } from "./yahoo-finance-tour";
 import { toolCapstoneResearchSession } from "./tool-capstone-research";
 import { toolCapstoneBankSession } from "./tool-capstone-bank";
+import { secEdgarTourSession } from "./sec-edgar-tour";
 // coach sessions for market themes / tool training end
 import { fourPillarsSession } from "./four-pillars";
 import { supplyDemandZoneRetestSession } from "./supply-demand-zone-retest";
@@ -192,6 +193,7 @@ export const COACHING_SESSION_MODULES: CoachingSession[] = [
   yahooFinanceTourSession,
   toolCapstoneResearchSession,
   toolCapstoneBankSession,
+  secEdgarTourSession,
   // market themes / tool training sessions end
   fourPillarsSession,
   supplyDemandZoneRetestSession,

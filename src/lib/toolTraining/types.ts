@@ -16,7 +16,8 @@ export type ToolTrainingQuizGroupId =
   | "tool-finviz"
   | "tool-yahoo-finance"
   | "tool-capstone"
-  | "tool-capstone-bank";
+  | "tool-capstone-bank"
+  | "tool-edgar";
 
 /** Case thinking modes owned by tool lessons (spread into `CaseThinkingMode`). */
 export type ToolTrainingMode =
@@ -25,7 +26,8 @@ export type ToolTrainingMode =
   | "tool_finviz"
   | "tool_yahoo_finance"
   | "tool_capstone"
-  | "tool_capstone_bank";
+  | "tool_capstone_bank"
+  | "tool_edgar";
 
 /** One block of a simulated screen. Numbers in blocks are illustrative unless the lesson says otherwise. */
 export type MockBlock =
