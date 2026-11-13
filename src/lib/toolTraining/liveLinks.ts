@@ -4,7 +4,7 @@
  * checked on Nov 12, 2026. Market Forces has no public host yet, so it points at the local copy Weng serves.
  */
 
-export type LiveTool = "StockAnalysis" | "Finviz" | "Yahoo Finance" | "Market Forces" | "SEC EDGAR";
+export type LiveTool = "StockAnalysis" | "Finviz" | "Yahoo Finance" | "Market Forces" | "SEC EDGAR" | "JPMorganChase IR";
 
 export interface LiveLink {
   tool: LiveTool;
@@ -23,6 +23,7 @@ export const LIVE_TOOL_ORIGINS: Record<LiveTool, string> = {
   "Yahoo Finance": "https://finance.yahoo.com/",
   "Market Forces": MARKET_FORCES_URL,
   "SEC EDGAR": "https://www.sec.gov/",
+  "JPMorganChase IR": "https://www.jpmorganchase.com/",
 };
 
 const lower = (symbol: string) => encodeURIComponent(symbol.trim().toLowerCase());
@@ -65,6 +66,32 @@ export type YahooTab = "" | "key-statistics" | "history" | "financials" | "analy
 /** finance.yahoo.com/quote/<SYM>/<tab>/ (Statistics lives at key-statistics). */
 export function yahooQuote(symbol: string, tab: YahooTab, label: string): LiveLink {
   return { tool: "Yahoo Finance", label, url: `https://finance.yahoo.com/quote/${upper(symbol)}/${tab ? `${tab}/` : ""}` };
+}
+
+/** finance.yahoo.com/calendar/earnings?symbol=<SYM>: past and upcoming report dates with EPS estimates. */
+export function yahooEarningsCalendar(symbol: string, label: string): LiveLink {
+  return { tool: "Yahoo Finance", label, url: `https://finance.yahoo.com/calendar/earnings?symbol=${upper(symbol)}` };
+}
+
+/** finviz.com/insidertrading: the latest insider trades across the market; tc=1 purchases, tc=2 sales. */
+export function finvizInsiderTrading(kind: "all" | "buys" | "sales", label: string): LiveLink {
+  const tc = kind === "buys" ? "?tc=1" : kind === "sales" ? "?tc=2" : "";
+  return { tool: "Finviz", label, url: `https://finviz.com/insidertrading${tc}` };
+}
+
+/** finviz.com/calendar/earnings: the week's earnings calendar. */
+export function finvizEarningsCalendar(label: string): LiveLink {
+  return { tool: "Finviz", label, url: "https://finviz.com/calendar/earnings" };
+}
+
+/** stockanalysis.com/stocks/earnings-calendar/: reports by day with Before Open / After Close. */
+export function stockAnalysisEarningsCalendar(label: string): LiveLink {
+  return { tool: "StockAnalysis", label, url: "https://stockanalysis.com/stocks/earnings-calendar/" };
+}
+
+/** JPMorganChase investor relations: /ir (events and quarterly earnings) or a news release under /ir/news/. */
+export function jpmorganIr(path: string, label: string): LiveLink {
+  return { tool: "JPMorganChase IR", label, url: `https://www.jpmorganchase.com/ir${path ? `/${path.replace(/^\/+/, "")}` : ""}` };
 }
 
 /** The local Market Forces app with a view in its hash: a theme, a selected ticker, or Index weights picks. */

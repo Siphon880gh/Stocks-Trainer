@@ -23,6 +23,7 @@ const LESSON_TOOLS: Record<ToolTrainingQuizGroupId, LiveTool[]> = {
   "tool-yahoo-finance": ["Yahoo Finance"],
   "tool-capstone": ["Market Forces", "StockAnalysis", "Finviz", "Yahoo Finance"],
   "tool-edgar": ["SEC EDGAR", "StockAnalysis", "Finviz"],
+  "tool-earnings-insiders": ["JPMorganChase IR", "Yahoo Finance", "StockAnalysis", "Finviz", "SEC EDGAR"],
   "tool-capstone-bank": ["Market Forces", "StockAnalysis", "Finviz", "Yahoo Finance", "SEC EDGAR"],
 };
 

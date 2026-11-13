@@ -296,6 +296,7 @@ export const EDGAR_LESSON: ToolLesson = {
     { label: "Coach → Check it on EDGAR", to: "/coach/sec-edgar-tour" },
     { label: "Tool Training → Capstone 2 (a bank)", to: "/tools/capstone-bank" },
     { label: "Tool Training → Finviz", to: "/tools/finviz" },
+    { label: "Tool Training → Earnings dates and insiders", to: "/tools/earnings-insiders" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
   mode: "tool_edgar",

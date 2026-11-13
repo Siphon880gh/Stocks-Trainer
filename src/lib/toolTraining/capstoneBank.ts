@@ -246,7 +246,7 @@ const WORKFLOW: ToolWorkflow = {
       id: "cb-w6",
       title: "The next report date",
       live: [yahooQuote("JPM", "", "JPM summary"), stockAnalysisStock("JPM", "", "JPM overview")],
-      do: ["Read the earnings date the data site shows.", "Then check it against the company's own investor relations page: a data site may show an estimate or the call time rather than the release time."],
+      do: ["Read the earnings date the data site shows.", ["Then check it against the company's own investor relations page: a data site may show an estimate or the call time rather than the release time (Tool Training → Earnings dates and insiders)."]],
       fields: [{ key: "next_report", label: "Next report date and its source", placeholder: "Jan 14, 2027 · company IR" }],
     },
     {
@@ -378,6 +378,8 @@ export const CAPSTONE_BANK_LESSON: ToolLesson = {
     { label: "Learn → Tool: Capstone 2 (a bank)", to: "/training?group=tool-capstone-bank" },
     { label: "Coach → A bank, five tools", to: "/coach/tool-capstone-bank" },
     { label: "Tool Training → Capstone part 1 (a miner)", to: "/tools/capstone" },
+    { label: "Tool Training → Earnings dates and insiders", to: "/tools/earnings-insiders" },
+    { label: "Tool Training → SEC EDGAR", to: "/tools/sec-edgar" },
     { label: "Cases → Market-wide news", to: "/cases?pack=macro-news" },
   ],
   mode: "tool_capstone_bank",
