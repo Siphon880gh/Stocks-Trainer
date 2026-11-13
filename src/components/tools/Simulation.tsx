@@ -20,6 +20,7 @@ import {
   type WalkState,
 } from "../../lib/toolTraining";
 import { cn } from "../../lib/utils";
+import { LiveLinks } from "./LiveLinks";
 
 /**
  * Tool Training simulations: underlined phrases in lesson copy (`ToolTextView` / `SimTrigger`) open a popover
@@ -196,6 +197,7 @@ export function SimPanel({ sim, walk, onNext, onPrev, onReplay, onClose }: { sim
           <span className="font-semibold">Goal: </span>{sim.goal}
         </p>
         {sim.kind === "bars" ? <CandleWalkChart sim={sim} walk={walk} /> : <ColumnWalkTable sim={sim} walk={walk} />}
+        {sim.kind === "columns" ? <LiveLinks links={sim.live} /> : null}
         <div aria-live="polite" className="space-y-2" data-testid="sim-step">
           <p className="text-[11px] text-muted">
             <span className="font-medium text-ink">{walkProgress(sim, walk)}</span>

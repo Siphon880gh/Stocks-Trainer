@@ -7,6 +7,7 @@ import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
 import type { ToolLesson, ToolSimulation } from "./types";
+import { stockAnalysisStock, stockAnalysisEtf } from "./liveLinks";
 import { simBar } from "./simWalk";
 
 /** Day the public StockAnalysis pages below were read. */
@@ -199,6 +200,7 @@ const SA_SIMULATIONS: ToolSimulation[] = [
   {
     kind: "columns",
     id: "sa-sim-columns",
+    live: [stockAnalysisStock("NEM", "financials", "NEM income statement")],
     title: "Walk the Financials columns: TTM, then each fiscal year",
     goal: `Read an income statement one column at a time, period first, so one ratio can't do your thinking. These are Newmont's real figures in millions of USD, read from StockAnalysis on ${SA_READ_ON}; the layout is simulated.`,
     tape: `Newmont (NEM) income statement, millions USD, read ${SA_READ_ON} · simulated layout`,
@@ -245,6 +247,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
   screens: [
     {
       id: "sa-overview",
+      live: [stockAnalysisStock("NEM", "", "NEM overview")],
       title: "Overview: the quote and the key facts",
       where: "Stock page · Overview tab (NEM)",
       alt: `Simulated StockAnalysis overview for Newmont. The quote reads ${SA_NEM.close}, down ${Math.abs(SA_NEM.change)} or ${Math.abs(SA_NEM.changePct)} percent, at close on ${SA_NEM.closeAt}, with a separate pre-market price. Tabs run Overview, Financials, Forecast, Statistics, Dividends, History and Profile. Two fact tables list market cap, revenue, P/E, dividend, 52-week range, analyst rating and earnings date.`,
@@ -265,6 +268,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
     },
     {
       id: "sa-income",
+      live: [stockAnalysisStock("NEM", "financials", "NEM income statement")],
       title: "Financials: columns, periods and unusual rows",
       where: "Stock page · Financials › Income Statement (NEM, annual)",
       alt: "Simulated StockAnalysis income statement for Newmont in millions of US dollars. Sub-tabs run Overview, Income Statement, Balance Sheet, Cash Flow, Ratios and KPIs, with an Annual and Quarterly switch. Columns are TTM ending Sep 30 2026, then fiscal years 2025, 2024 and 2023. FY 2023 shows a net loss of 2,494 million with a goodwill impairment of 1,760 million.",
@@ -284,6 +288,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
     },
     {
       id: "sa-statistics",
+      live: [stockAnalysisStock("NEM", "statistics", "NEM statistics")],
       title: "Statistics: ratios with a source and a date",
       where: "Stock page · Statistics tab (NEM)",
       alt: "Simulated StockAnalysis statistics page for Newmont. Valuation ratios include P/E 13.79, forward P/E 12.95, P/S 4.62, P/B 3.46 and P/FCF 12.19. Financial position shows a current ratio of 2.45, debt to equity of 0.16 and interest coverage of 107.12. Short selling shows 1.73 percent of float and 3.03 days to cover. Fair value fields say Upgrade. A footer credits S&P Global Market Intelligence, last updated Nov 12, 2026.",
@@ -305,6 +310,7 @@ export const STOCKANALYSIS_LESSON: ToolLesson = {
     },
     {
       id: "sa-etf-holdings",
+      live: [stockAnalysisEtf("GDX", "holdings", "GDX holdings")],
       title: "ETF Holdings: what the fund owns, as of when",
       where: "ETF page · Holdings tab (GDX)",
       alt: "Simulated StockAnalysis holdings page for the VanEck Gold Miners ETF. The fund shows assets of 28.24 billion dollars, a 0.51 percent expense ratio and 63 holdings. The top five holdings are Agnico Eagle 11.64 percent, Newmont 11.62 percent, Barrick 7.96 percent, Wheaton Precious Metals 5.76 percent and Franco-Nevada 5.44 percent. A note says 25 of 63 holdings are shown to free users, from Finnhub, last updated Nov 10, 2026.",

@@ -8,6 +8,7 @@ import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
 import type { ToolLesson, ToolSimulation } from "./types";
+import { marketForcesView } from "./liveLinks";
 import { simBar } from "./simWalk";
 
 /** Counts from Market Forces' data/catalog.json (updated 2026-11-12). */
@@ -173,6 +174,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
   screens: [
     {
       id: "mf-theme",
+      live: [marketForcesView({ theme: "gold" }, "Gold theme")],
       title: "Pick a theme and read the connection",
       where: "Directory · Assets › Gold",
       alt: "Simulated Market Forces directory. A theme list with Gold selected, a search bar with a Show filter set to stocks and funds, a Gold panel with its description and connection line, and a table of five tickers with kind and exposure columns.",
@@ -192,6 +194,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     },
     {
       id: "mf-stock-links",
+      live: [marketForcesView({ theme: "gold", ticker: "NEM" }, "NEM research links")],
       title: "Research links for a stock",
       where: "Research panel · NEM selected",
       alt: "Simulated Market Forces research panel for Newmont, a stock. A summary of ticker, kind and exposure, then the five link groups a stock receives, in the order they appear: overview and analysis, financials and primary sources, valuation and distributions, news and the next catalyst, and sentiment and investor discussions.",
@@ -209,6 +212,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     },
     {
       id: "mf-stock-overview",
+      live: [marketForcesView({ theme: "gold", ticker: "NEM" }, "NEM research links")],
       title: "Overview & analysis",
       where: "Research panel · NEM · Overview & analysis",
       alt: "Simulated Market Forces overview and analysis group for Newmont. Four links: Stock Analysis for overview and key facts, drawn as the visually emphasized starting overview, Finviz for a chart, stats and headlines, Yahoo chart for price history and volume, and Analyst views for estimates and opinion.",
@@ -227,6 +231,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     },
     {
       id: "mf-stock-financials",
+      live: [marketForcesView({ theme: "gold", ticker: "NEM" }, "NEM research links")],
       title: "Financials & primary sources",
       where: "Research panel · NEM · Financials & primary sources",
       alt: "Simulated Market Forces financials and primary sources group for Newmont. Seven links: financials overview, income statement, balance sheet, cash flow, SEC filings, Find investor relations as a Google search, and Earnings and guidance as a Google search.",
@@ -245,6 +250,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     },
     {
       id: "mf-stock-valuation",
+      live: [marketForcesView({ theme: "gold", ticker: "NEM" }, "NEM research links")],
       title: "Valuation & distributions",
       where: "Research panel · NEM · Valuation & distributions",
       alt: "Simulated Market Forces valuation and distributions group for Newmont, a stock-only group. Two links: Valuation and ratios for multiples and key metrics, and Dividend history for past payouts, if any.",
@@ -263,6 +269,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     },
     {
       id: "mf-stock-news-sentiment",
+      live: [marketForcesView({ theme: "gold", ticker: "NEM" }, "NEM research links")],
       title: "News, catalysts and sentiment",
       where: "Research panel · NEM · News and Sentiment",
       alt: "Simulated Market Forces news and sentiment groups for Newmont. News and the next catalyst lists Google News and press releases. Sentiment and investor discussions lists Stocktwits, a Reddit search, an X cashtag search that may need a sign-in, and Seeking Alpha for analysis and comments. A notes box sits under the links.",
@@ -281,6 +288,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     },
     {
       id: "mf-fund-links",
+      live: [marketForcesView({ theme: "gold", ticker: "GLD" }, "GLD research links")],
       title: "Research links for a fund",
       where: "Research panel · GLD selected",
       alt: "Simulated Market Forces research panel for SPDR Gold Shares, a fund with a Bullion exposure badge. A fund holdings and documents group lists the issuer, holdings, fees and prospectus links.",
@@ -298,6 +306,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     },
     {
       id: "mf-index-weights",
+      live: [marketForcesView({ weights: ["CAT", "NVDA"] }, "Index weights, CAT and NVDA")],
       title: "Index weights: where the weight sits",
       where: "Index weights mode · CAT and NVDA picked",
       alt: "Simulated Market Forces index weights view. Caterpillar is about 9.23 percent of the Dow but 0.55 percent of the S&P 500. Nvidia is about 8.34 percent of the S&P 500 and 2.67 percent of the Dow. Each line is an ETF-based estimate with an October 8, 2026 snapshot date.",

@@ -8,6 +8,7 @@ import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
 import type { ToolLesson, ToolSimulation } from "./types";
+import { marketForcesView, stockAnalysisStock, finvizQuote, yahooQuote } from "./liveLinks";
 import { simBar } from "./simWalk";
 import { MF_WEIGHTS } from "./marketForces";
 import { SA_NEM } from "./stockAnalysis";
@@ -105,6 +106,7 @@ const CP_SIMULATIONS: ToolSimulation[] = [
   {
     kind: "columns",
     id: "cp-sim-cross-check",
+    live: [stockAnalysisStock("NEM", "statistics", "NEM statistics"), finvizQuote("NEM", "NEM snapshot"), yahooQuote("NEM", "key-statistics", "NEM statistics")],
     title: "Line up the same figure across four tools",
     goal: `On Nov 12, 2026, Newmont's P/E read ${peValues.join(", ")}, a spread of ${CP_PE_SPREAD}, while EPS agreed within cents and employees did not (17,500 vs 44,100). Walk that comparison table, then go to the 10-K.`,
     tape: `Newmont (NEM) figures, all read ${CP_READ_ON} · simulated layout`,
@@ -168,6 +170,7 @@ export const CAPSTONE_LESSON: ToolLesson = {
   screens: [
     {
       id: "cp-path",
+      live: [marketForcesView({ theme: "gold", ticker: "NEM" }, "NEM research links"), stockAnalysisStock("NEM", "", "NEM overview"), finvizQuote("NEM", "NEM quote page"), yahooQuote("NEM", "", "NEM summary")],
       title: "The research path",
       where: "Four tools, one ticker (NEM)",
       alt: "Simulated research path for Newmont across four tools. Market Forces shows the Gold theme, a Gold miner exposure badge and index weights. StockAnalysis shows the income statement and statistics with dates. Finviz shows the snapshot and insider rows. Yahoo Finance shows total return against the S&P 500, the analyst target range and Adj Close. The last step is the 10-K or 10-Q on SEC EDGAR.",
@@ -183,6 +186,7 @@ export const CAPSTONE_LESSON: ToolLesson = {
     },
     {
       id: "cp-crosscheck",
+      live: [stockAnalysisStock("NEM", "statistics", "NEM statistics"), finvizQuote("NEM", "NEM snapshot"), yahooQuote("NEM", "key-statistics", "NEM statistics")],
       title: "Cross-check: same company, same day, different numbers",
       where: "Side-by-side readings (NEM, Nov 12, 2026)",
       alt: `Simulated cross-check table for Newmont. P/E reads ${CP_COMPARE.pe.sa} on StockAnalysis, ${CP_COMPARE.pe.fv} on Finviz, and ${CP_COMPARE.pe.yfSummary} or ${CP_COMPARE.pe.yfStats} on two Yahoo pages. Forward P/E reads ${CP_COMPARE.fwdPe.sa}, ${CP_COMPARE.fwdPe.fv} and ${CP_COMPARE.fwdPe.yf}. EPS is about 8.6 everywhere. Average targets read ${CP_COMPARE.target.sa}, ${CP_COMPARE.target.fv} and ${CP_COMPARE.target.yf}. Short percent of float reads ${CP_COMPARE.shortFloat.sa}, ${CP_COMPARE.shortFloat.fv} and ${CP_COMPARE.shortFloat.yf}. Employees read 17,500 on two sites and 44,100 on Finviz.`,

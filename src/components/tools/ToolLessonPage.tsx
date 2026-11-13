@@ -46,7 +46,7 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
             <p className="font-semibold text-[14px]">What you will see</p>
             <p className="text-[11px] text-muted">Simulated layouts drawn in this app's style, checked against the real tool on {lesson.asOf}. Numbers in them are illustrative unless a caption says otherwise. Real sites change their layouts.</p>
           </div>
-          {lesson.screens.map((s) => <Fragment key={s.id}><MockScreen screen={s} /></Fragment>)}
+          {lesson.screens.map((s) => <Fragment key={s.id}><MockScreen screen={s} asOf={lesson.asOf} /></Fragment>)}
         </section>
 
         <section className="panel p-4 space-y-3 text-[13px]" data-testid="tool-walkthroughs">

@@ -7,6 +7,7 @@ import type { QuizQuestion } from "../quizData";
 import type { LiteracyTerm } from "../literacyTerms";
 import type { CaseStudy } from "../caseStudies";
 import type { ThemeCard, ThemeDrill, ThemeSource } from "../marketThemes/types";
+import type { LiveLink } from "./liveLinks";
 
 /** Learn group ids owned by tool lessons. */
 export type ToolTrainingQuizGroupId =
@@ -102,6 +103,8 @@ export interface ColumnWalkSim {
   rows: string[][];
   steps: ColumnStep[];
   takeaway: string;
+  /** The real page(s) this table mirrors, built in `liveLinks.ts`. Live numbers differ from the dated walk. */
+  live?: LiveLink[];
 }
 
 export type ToolSimulation = BarWalkSim | ColumnWalkSim;
@@ -124,6 +127,8 @@ export interface ToolScreen {
   caption: string;
   blocks: MockBlock[];
   callouts: MockCallout[];
+  /** The real page(s) this layout mirrors, built in `liveLinks.ts`. Omit when there is no live counterpart. */
+  live?: LiveLink[];
 }
 
 export interface ToolWalkthrough {

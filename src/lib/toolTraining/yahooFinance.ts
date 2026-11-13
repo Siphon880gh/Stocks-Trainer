@@ -8,6 +8,7 @@ import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
 import type { ToolLesson, ToolSimulation } from "./types";
+import { yahooQuote } from "./liveLinks";
 import { simBar } from "./simWalk";
 
 export const YF_READ_ON = "2026-11-12";
@@ -156,6 +157,7 @@ const YF_SIMULATIONS: ToolSimulation[] = [
   {
     kind: "columns",
     id: "yf-sim-target-range",
+    live: [yahooQuote("NEM", "analysis", "NEM analyst price targets")],
     title: "The average target sits inside a wide range",
     goal: `An average target of ${YF_NEM.target} sits between a low of ${YF_NEM.targetLow} and a high of ${YF_NEM.targetHigh}. Walk those three Newmont figures, read Nov 12, 2026, so the average cannot hide the spread.`,
     tape: `Newmont (NEM) analyst price targets, read ${YF_READ_ON} · simulated layout`,
@@ -179,6 +181,7 @@ const YF_SIMULATIONS: ToolSimulation[] = [
   {
     kind: "columns",
     id: "yf-sim-financials-order",
+    live: [yahooQuote("NEM", "financials", "NEM income statement")],
     title: "Yahoo Financials: oldest on the left",
     goal: "Yahoo's income statement puts the oldest year on the left and TTM on the far right, the opposite of StockAnalysis. Walk Newmont's real annual columns, read Nov 12, 2026, in that order, and notice where a one-time line sits.",
     tape: `Newmont (NEM) annual income statement, read ${YF_READ_ON} · simulated layout`,
@@ -222,6 +225,7 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
   screens: [
     {
       id: "yf-summary",
+      live: [yahooQuote("NEM", "", "NEM summary")],
       title: "Summary: two prices and a dense facts grid",
       where: "Quote page · Summary tab (NEM)",
       alt: `Simulated Yahoo Finance summary for Newmont. The quote shows ${YF_NEM.close} at close on ${YF_NEM.closeAt} and a pre-market price of ${YF_NEM.pre}. Tabs run Summary, News, Chart, Community, Statistics, Historical Data, Profile, Financials, Analysis, Seasonality, Options and Holders. A facts grid lists previous close, open, day's range, 52-week range, volume, market cap, beta, P/E, EPS, earnings date, dividend and the 1-year target estimate. Morningstar Rating is available only with a paid plan.`,
@@ -243,6 +247,7 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
     },
     {
       id: "yf-performance",
+      live: [yahooQuote("NEM", "", "NEM Performance Overview"), yahooQuote("NEM", "analysis", "NEM analyst price targets")],
       title: "Performance Overview and the target range",
       where: "Quote page · Summary · Performance Overview and Analyst Price Targets (NEM)",
       alt: `Simulated Yahoo Finance performance overview for Newmont against the S&P 500: year to date ${YF_PERF[0][1]} versus ${YF_PERF[0][2]}, one year ${YF_PERF[1][1]} versus ${YF_PERF[1][2]}, three years ${YF_PERF[2][1]} versus ${YF_PERF[2][2]}, five years ${YF_PERF[3][1]} versus ${YF_PERF[3][2]}. Analyst price targets run from a low of ${YF_NEM.targetLow} to a high of ${YF_NEM.targetHigh}, with an average of ${YF_NEM.target} and the current price at ${YF_NEM.close}.`,
@@ -260,6 +265,7 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
     },
     {
       id: "yf-statistics",
+      live: [yahooQuote("NEM", "key-statistics", "NEM statistics")],
       title: "Statistics: ttm, mrq, dates and footnotes",
       where: "Quote page · Statistics tab (NEM)",
       alt: `Simulated Yahoo Finance statistics page for Newmont. A valuation table shows trailing P/E by period: current ${YF_STATS.pe[0]}, then ${YF_STATS.pe.slice(1).join(", ")} at the last four quarter ends, with forward P/E alongside. Labels show the most recent quarter as ${YF_STATS.mrq} and short interest dated ${YF_STATS.shortDate}. Footnotes credit Refinitiv, EDGAR Online, Morningstar, S&P Global Market Intelligence and Yahoo's own calculations. Longer history says Upgrade.`,
@@ -277,6 +283,7 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
     },
     {
       id: "yf-history",
+      live: [yahooQuote("NEM", "history", "NEM historical data")],
       title: "Historical Data: Close vs Adj Close",
       where: "Quote page · Historical Data tab (NEM, daily)",
       alt: "Simulated Yahoo Finance historical data table for Newmont. Recent rows show identical Close and Adj Close. A row from November 28, 2025 shows Close 90.73 and Adj Close 90.15, and a November 26, 2025 row records a 0.25 dividend. Column notes say Close is adjusted for splits and Adj Close for splits and dividends or capital gain distributions.",
@@ -292,6 +299,7 @@ export const YAHOO_FINANCE_LESSON: ToolLesson = {
     },
     {
       id: "yf-financials",
+      live: [yahooQuote("NEM", "financials", "NEM income statement")],
       title: "Financials: oldest on the left",
       where: "Quote page · Financials › Income Statement (NEM, annual)",
       alt: "Simulated Yahoo Finance income statement for Newmont. Columns run oldest to newest, left to right: 12/31/2022, 12/31/2023, 12/31/2024, 12/31/2025 and TTM. Rows show total revenue, gross profit, total operating profit, irregular income and expenses, net income available to common stockholders and diluted EPS. The 2023 column shows a 2.49 billion dollar loss with 2.59 billion dollars of irregular expenses.",

@@ -3,6 +3,7 @@ import type { MockBlock, ToolScreen } from "../../lib/toolTraining";
 import { seededTape } from "../../lib/marketThemes/helpers";
 import { cn } from "../../lib/utils";
 import { ToolTextView } from "./Simulation";
+import { LiveLinks } from "./LiveLinks";
 
 /** Shared pieces for simulated tool layouts. Drawn in this app's own look: no logos, no copied styling. */
 
@@ -154,7 +155,7 @@ export function MockBlockView({ block }: { block: MockBlock }) {
 }
 
 /** One simulated screen with numbered markers, alt text for screen readers and a caption. */
-export function MockScreen({ screen }: { screen: ToolScreen }) {
+export function MockScreen({ screen, asOf }: { screen: ToolScreen; asOf?: string }) {
   const captionId = `mock-${screen.id}-caption`;
   return (
     <figure className="space-y-2" data-testid="mock-screen" data-screen={screen.id} aria-labelledby={captionId}>
@@ -175,6 +176,7 @@ export function MockScreen({ screen }: { screen: ToolScreen }) {
           })}
         </MockFrame>
       </div>
+      <LiveLinks links={screen.live} asOf={asOf} />
       <figcaption id={captionId} className="text-[12px] space-y-1">
         <span className="block">{screen.caption}</span>
         <ol className="space-y-0.5">

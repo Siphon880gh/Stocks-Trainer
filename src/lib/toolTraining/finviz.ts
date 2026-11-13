@@ -8,6 +8,7 @@ import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
 import type { ToolLesson, ToolSimulation } from "./types";
+import { finvizQuote, finvizScreener, finvizPlans } from "./liveLinks";
 import { simBar } from "./simWalk";
 
 export const FV_READ_ON = "2026-11-12";
@@ -158,6 +159,7 @@ const FV_SIMULATIONS: ToolSimulation[] = [
   {
     kind: "columns",
     id: "fv-sim-form144",
+    live: [finvizQuote("NEM", "NEM insider trading table")],
     title: "Form 144 and Form 4: one trade, two rows",
     goal: "Finviz lists a proposed sale (Form 144) and a completed sale (Form 4) as separate rows. Walk Newmont's real insider rows, read Nov 12, 2026, to see how one trade can appear twice, then a later sale that appears only once.",
     tape: `Newmont (NEM) insider rows, roles only, read ${FV_READ_ON} · simulated layout`,
@@ -201,6 +203,7 @@ export const FINVIZ_LESSON: ToolLesson = {
   screens: [
     {
       id: "fv-screener",
+      live: [finvizScreener(["ind_gold"], "screener, Industry = Gold, Overview view")],
       title: "Screener: filters, views and a result list",
       where: "Screener · Descriptive filters · Industry = Gold · Overview view",
       alt: `Simulated Finviz screener. Filter tabs run Descriptive, Fundamental, Technical, News, ETF and All. Filters show Industry set to Gold and other fields at Any, with Trades marked Elite only. View tabs run Overview, Valuation, Financial, Ownership, Performance, Technical and Charts. The result list shows ${FV_GOLD_SCREEN.total} total on ${FV_GOLD_SCREEN.pages} pages, including large miners and a company worth about 10 million dollars with zero volume. A footer says stock quotes are delayed by 1 minute.`,
@@ -222,6 +225,7 @@ export const FINVIZ_LESSON: ToolLesson = {
     },
     {
       id: "fv-snapshot",
+      live: [finvizQuote("NEM", "NEM quote page")],
       title: "Quote page: the snapshot table",
       where: "Quote page · snapshot table (NEM)",
       alt: `Simulated Finviz quote page for Newmont. The header price is ${FV_NEM.price}, down ${Math.abs(FV_NEM.changePct)} percent, stamped ${FV_NEM.stamp} with a previous close of ${FV_NEM.prevClose}. A snapshot grid lists index membership, market cap, P/E ${FV_NEM.pe}, forward P/E ${FV_NEM.fwdPe}, EPS, short float, insider and institutional ownership, performance, analyst recommendation, target price, relative volume and distance from the 200-day average.`,
@@ -243,6 +247,7 @@ export const FINVIZ_LESSON: ToolLesson = {
     },
     {
       id: "fv-insider",
+      live: [finvizQuote("NEM", "NEM analyst and insider tables")],
       title: "Insider and analyst rows",
       where: "Quote page · analyst ratings and insider trading tables (NEM)",
       alt: "Simulated Finviz tables for Newmont. Analyst rows show a July 2026 upgrade from hold to buy with a 127 dollar target and a December 2025 downgrade to neutral with a 97 dollar target. Insider rows show an officer's sale of 8,060 shares at 120.78 dollars on March 3, 2026 listed twice, once as Proposed Sale and once as Sale, and a director's sale of 2,080 shares in December 2025.",
@@ -260,6 +265,7 @@ export const FINVIZ_LESSON: ToolLesson = {
     },
     {
       id: "fv-free-elite",
+      live: [finvizPlans("Elite plans and FAQ")],
       title: "Free vs Elite: account limits",
       where: "Pricing page · plan comparison (summarized)",
       alt: `Simulated summary of Finviz's free and Elite plans. Free gets delayed market and quote data, 3 years of financial statements, basic screener filters, 20 rows per page, a 3-minute auto-refresh, one watchlist of 10 tickers and no export. Elite gets real-time data, 8 years of statements, advanced filters, 100 rows per page, a 10-second refresh, 20 watchlists of 100 tickers and export to Excel or CSV. Elite listed at ${FV_ELITE.monthly} a month or ${FV_ELITE.annual} a year.`,
