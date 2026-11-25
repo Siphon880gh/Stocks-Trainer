@@ -571,7 +571,7 @@ const flows = {
 
   async "Charting apps: 11-app table, spot the trap, Webull example screenshots + lightbox, broker learning"(p, w) {
     await p.goto(base + "/practice/charting-apps", { waitUntil: "networkidle" });
-    check((await p.locator("[data-app]").count()) === 11, `charts: app table rows wrong @${w}`);
+    check((await p.getByTestId("ca-table").locator("tr[data-app]").count()) === 11, `charts: app table rows wrong @${w}`);
     for (const spot of await p.locator("[data-spot]").all()) await spot.locator("button").first().click();
     check(/\/ 3 correct/.test(await p.getByTestId("ca-spot-score").innerText()), `charts: spot-the-trap not graded @${w}`);
     const shots = p.locator("[data-shot] img");
