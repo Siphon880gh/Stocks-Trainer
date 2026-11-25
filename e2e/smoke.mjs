@@ -918,7 +918,9 @@ const flows = {
   },
   async "Progress map: world / tree / web views, next objective, progress fills in"(p, w) {
     await p.goto(base + "/", { waitUntil: "networkidle" });
-    await p.getByTestId("nav-map").click();
+    // Map sits in the Dashboard menu.
+    await p.getByTestId("dashboard-menu").click();
+    await p.getByRole("menuitem", { name: "Map" }).click();
     await p.waitForURL(/\/map$/);
     check((await p.getByTestId("map-next").getAttribute("data-stage")) === "quiz:candle-anatomy", `map: first objective @${w}`);
     check((await p.getByTestId("map-region").count()) === 12, `map: 12 regions @${w}`);
