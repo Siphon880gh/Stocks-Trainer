@@ -275,7 +275,7 @@ const flows = {
     const qs = getQuestionsForGroup("equity-literacy");
     const runQuiz = async (right) => {
       await p.goto(base + "/training?group=equity-literacy&start=1", { waitUntil: "networkidle" });
-      const dlg = p.locator("[role=dialog]");
+      const dlg = p.getByRole("dialog");
       await dlg.waitFor({ timeout: 5000 });
       for (const q of qs) {
         const pick = right ? q.correctAnswer : q.options.find((o) => o.id !== q.correctAnswer).id;
@@ -641,7 +641,7 @@ const flows = {
     if (SHOTS) await p.screenshot({ path: `${SHOTS}/reversal-charts-${w}.png`, fullPage: true });
     await p.goto(base + "/archive?tab=patterns&open=double-bottom", { waitUntil: "networkidle" });
     await p.getByTestId("pattern-tab-trade").click();
-    check(/neckline/i.test(await p.locator("[role=dialog]").innerText()), `rev: Archive tabs not deepened @${w}`);
+    check(/neckline/i.test(await p.getByRole("dialog").innerText()), `rev: Archive tabs not deepened @${w}`);
     await p.goto(base + "/training?group=reversal-charts", { waitUntil: "networkidle" });
     check(/Reversal Chart Patterns/.test(await p.locator("main").innerText()), `rev: Learn group missing @${w}`);
   },
