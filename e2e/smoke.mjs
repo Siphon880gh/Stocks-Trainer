@@ -131,9 +131,11 @@ const flows = {
     check((await overflow(p)) <= 1, `ORB no horizontal overflow at ${w}`);
   },
   async "route change starts at the top"(p) {
-    await p.goto(base + "/training", { waitUntil: "networkidle" });
+    // The Table of Contents shows one group at a time; Deep Study is tall and holds the Cases link.
+    await p.goto(base + "/training#deep-study", { waitUntil: "networkidle" });
     await p.evaluate(() => scrollTo(0, 3000));
-    await p.locator('a[href="/cases"]').first().click({ force: true });
+    check((await p.evaluate(() => scrollY)) > 0, "/training#deep-study did not scroll before the route change");
+    await p.locator('[data-toc-group="deep-study"] a[href="/cases"]').first().click();
     await p.waitForURL(/\/cases$/);
     await p.waitForTimeout(200);
     check((await p.evaluate(() => scrollY)) === 0, "/training → /cases kept the scroll offset");
