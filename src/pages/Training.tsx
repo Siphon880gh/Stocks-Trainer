@@ -115,7 +115,8 @@ export default function Training() {
             refreshKey={pathMapTick}
           />
         </div>
-        <PanelCarousel>
+        {/* A ?group= link opens the quiz panel so the linked group is on screen. */}
+        <PanelCarousel fallback={groupParam && QUIZ_GROUPS.some((g) => g.id === groupParam) ? "quiz" : undefined}>
         <TocGroup id="academy" label="Academy">
         <div className="w-full max-w-xl scroll-mt-32">
           <AcademyTrainingCard onSelectGroup={setSelectedGroup} />

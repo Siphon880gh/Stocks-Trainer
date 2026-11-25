@@ -25,13 +25,16 @@ function slideProps(node: ReactNode): TocGroupProps | null {
   return node.props;
 }
 
-/** Dots and chevrons that reveal one group of panels at a time. The address hash selects the group. */
-export default function PanelCarousel({ children }: { children: ReactNode }) {
+/**
+ * Dots and chevrons that reveal one group of panels at a time. The address hash selects the group;
+ * without a hash, `fallback` (when given) picks the group, otherwise the first one shows.
+ */
+export default function PanelCarousel({ children, fallback }: { children: ReactNode; fallback?: string }) {
   const slides = Children.toArray(children).filter((node) => slideProps(node));
   const { hash } = useLocation();
   const navigate = useNavigate();
   const indexFor = (value: string) => {
-    const id = value.replace(/^#/, "");
+    const id = value.replace(/^#/, "") || fallback || "";
     if (!id) return 0;
     const found = slides.findIndex((node) => {
       const props = slideProps(node);
@@ -42,7 +45,7 @@ export default function PanelCarousel({ children }: { children: ReactNode }) {
   const [index, setIndex] = useState(() => indexFor(hash));
   useEffect(() => {
     setIndex(indexFor(hash));
-  }, [hash, slides.length]);
+  }, [hash, slides.length, fallback]);
   const go = (next: number) => {
     const count = slides.length;
     if (!count) return;
