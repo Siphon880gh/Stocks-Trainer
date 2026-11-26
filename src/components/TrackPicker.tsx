@@ -43,7 +43,7 @@ export default function TrackPicker({
       <div>
         <h2 id={headingId} className="text-lg font-semibold tracking-tight">What do you want to learn?</h2>
         <p className="text-sm text-muted">
-          Pick a path and Home shows only your next few steps. Change it anytime; your progress stays. Everything else is one click away in Browse everything.
+          Pick a path and Home shows only your next few steps. Change it anytime; your progress stays. Everything else is one click away in Browse everything. Not sure? Start with New to stocks.
         </p>
       </div>
       <ul className="grid gap-2 sm:grid-cols-2">
