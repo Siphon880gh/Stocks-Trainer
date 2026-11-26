@@ -137,7 +137,7 @@ export default function NavTabsMenu({
   };
 
   const buttonClass = cn(
-    "inline-flex items-center gap-0.5 py-1.5 text-[12px] min-[360px]:text-[13px]",
+    "inline-flex items-center justify-center gap-0.5 min-h-11 md:min-h-0 py-1.5 text-[13px]",
     groupOn || open ? "text-primary font-semibold bg-primary/10" : "text-muted hover:text-ink hover:bg-canvas",
   );
 
@@ -214,7 +214,7 @@ export default function NavTabsMenu({
   return (
     <div ref={root} className="relative inline-flex items-center">
       {to ? (
-        <NavLink to={to} end={end} className={cn(buttonClass, "rounded-l-md px-1 sm:px-2.5")}>
+        <NavLink to={to} end={end} className={cn(buttonClass, "rounded-l-md px-2 sm:px-2.5")}>
           {label}
         </NavLink>
       ) : null}
@@ -226,7 +226,7 @@ export default function NavTabsMenu({
         aria-label={`${label} menu`}
         data-testid={`${menu}-menu`}
         onClick={toggleMenu}
-        className={cn(buttonClass, to ? "rounded-r-md pr-1" : "rounded-md px-1 sm:px-2.5")}
+        className={cn(buttonClass, to ? "rounded-r-md min-w-11 md:min-w-0 pr-1" : "rounded-md px-2 sm:px-2.5")}
       >
         {to ? null : label}
         <span className="material-symbols-outlined text-[18px]" aria-hidden>expand_more</span>
