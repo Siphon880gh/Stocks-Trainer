@@ -80,3 +80,9 @@ select,
 textarea {
   text-transform: none;
 }
+
+/* The corner AI helper (public/harness-ai.js) uses a very high z-index; hide it while an app dialog is open. */
+body.overlay-open .hai-float,
+body.overlay-open .hai-panel {
+  visibility: hidden;
+}

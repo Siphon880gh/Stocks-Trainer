@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { EVERYTHING_TRACK_ID, TRACKS, getTrack, loadTrackId, saveTrackId } from "../lib/tracks";
 import { confirmPathSelection, isPathConfirmed } from "../lib/progressStore";
 import { cn } from "../lib/utils";
+import { Z } from "../lib/zLayers";
 
 /** The saved track id, kept in step with picks made anywhere on the page. */
 export function useTrackId(): string | null {
@@ -87,11 +88,16 @@ export function TrackPickerDialog({ open, onClose }: { open: boolean; onClose: (
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
+    // Hide the corner AI helper while the dialog is open so it never sits on top of the backdrop (see index.css).
+    document.body.classList.add("overlay-open");
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.classList.remove("overlay-open");
+    };
   }, [open, onClose]);
   if (!open || typeof document === "undefined") return null;
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-start justify-center p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="track-dialog-title" data-testid="track-dialog">
+    <div style={{ zIndex: Z.modal }} className="fixed inset-0 flex items-start justify-center p-4 overflow-y-auto" role="dialog" aria-modal="true" aria-labelledby="track-dialog-title" data-testid="track-dialog">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} aria-hidden="true" />
       <div className="relative w-full max-w-2xl mt-10 bg-surface rounded-xl shadow-lg">
         <button type="button" onClick={onClose} aria-label="Close" className="absolute right-2 top-2 p-2 rounded hover:bg-primary/10 text-muted">
