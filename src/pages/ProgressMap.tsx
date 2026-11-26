@@ -38,7 +38,7 @@ function NextObjective({ model }: { model: MapModel }) {
       <div className="flex-1 min-w-[200px]">
         <p className="text-xs font-mono uppercase tracking-wide text-primary">Next objective</p>
         <p className="text-[15px] font-semibold">{n.stage.title}</p>
-        <p className="text-[12px] text-muted">
+        <p className="text-[12px] text-slate-300">
           {sentence(n.stage.teaser)}
           {unlocks.length ? ` Unlocks: ${unlocks.slice(0, 3).join(", ")}${unlocks.length > 3 ? "…" : ""}.` : ""}
         </p>
