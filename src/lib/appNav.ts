@@ -109,7 +109,7 @@ export const PRACTICE_FAMILY_IDS: readonly { title: string; ids: readonly string
   { title: "Automation and records", ids: ["algo-trading", "record-traders"] },
 ];
 
-const FINANCIAL_GAMES: readonly { id: string; label: string; to: string }[] = [
+export const FINANCIAL_GAMES: readonly { id: string; label: string; to: string }[] = [
   { id: "statements", label: "Statements lab", to: "/practice/statements" },
   { id: "read-the-print", label: "Read the Print", to: "/practice/read-the-print" },
   { id: "mark-the-band", label: "Mark the band", to: "/practice/mark-the-band" },
