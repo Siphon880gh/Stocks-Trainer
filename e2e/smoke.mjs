@@ -123,6 +123,36 @@ const contrastFailures = (p) =>
     }
     return [...out.values()];
   });
+/** True when the element's centre point hits the element itself (nothing is drawn over it). */
+const onTop = (loc) =>
+  loc.evaluate((el) => {
+    const r = el.getBoundingClientRect();
+    const hit = document.elementFromPoint(r.left + r.width / 2, r.top + Math.min(r.height / 2, 40));
+    return !!hit && (el === hit || el.contains(hit));
+  });
+/** A context with the theme saved (or left unset for "system") and a picked track, plus the device colour scheme. */
+async function themedPage(w, theme, scheme = "light") {
+  const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, isMobile: w < 600, hasTouch: w < 600, colorScheme: scheme });
+  await ctx.addInitScript((t) => {
+    if (t && !sessionStorage.getItem("theme-seeded")) {
+      localStorage.setItem("analysis_core_theme_v1", t);
+      sessionStorage.setItem("theme-seeded", "1");
+    }
+    localStorage.setItem("analysis_core_track_v1", JSON.stringify({ id: "charts-patterns", at: "2026-11-25T00:00:00.000Z" }));
+    // Record the <html> theme the moment <body> is parsed, before React or any paint.
+    new MutationObserver((_, obs) => {
+      if (document.body && !window.__themeAtBody) {
+        window.__themeAtBody = document.documentElement.className + "|" + document.documentElement.dataset.theme;
+        obs.disconnect();
+      }
+    }).observe(document, { childList: true, subtree: true });
+  }, theme ?? null);
+  const p = await ctx.newPage();
+  const errors = [];
+  p.on("pageerror", (e) => errors.push(String(e)));
+  return { ctx, p, errors };
+}
+const isDark = (p) => p.evaluate(() => document.documentElement.classList.contains("dark"));
 const CONTRAST_PAGES = ["/", "/browse", "/training", "/academy", "/practice/levels", "/paper/desk", "/archive", "/map", "/cases", "/coach", "/macro", "/playbooks"];
 
 const flows = {
@@ -1346,6 +1376,129 @@ const flows = {
       } finally {
         await ctx.close();
       }
+    }
+  },
+  async "Theme: the header menu switches Light, Dark and System, persists after reload and never flashes"(_p, w) {
+    const { ctx, p, errors } = await themedPage(w, null, "light");
+    try {
+      await p.goto(base + "/", { waitUntil: "networkidle" });
+      const btn = p.getByTestId("theme-button");
+      check(!(await isDark(p)), `theme @${w}: System on a light device starts light`);
+      check((await btn.getAttribute("aria-label")) === "Theme: System (light)", `theme @${w}: button names the current choice (${await btn.getAttribute("aria-label")})`);
+      const box = await btn.boundingBox();
+      if (w < 600) check(box.width >= 44 && box.height >= 44, `theme @${w}: 44 px target (${box.width}x${box.height})`);
+      const header = await p.locator("header").first().boundingBox();
+      check(box.y + box.height <= header.y + header.height + 1 && box.x + box.width <= (w < 600 ? 391 : 1281), `theme @${w}: button sits in the header`);
+      if (w < 600) {
+        const logo = await p.getByRole("link", { name: "Learn Stocks home" }).boundingBox();
+        check(Math.abs(logo.y + logo.height / 2 - (box.y + box.height / 2)) < 6, `theme @${w}: on phones it shares the logo row`);
+      }
+      check((await overflow(p)) <= 1, `theme @${w}: header still fits without overflow`);
+      for (const [choice, dark] of [["dark", true], ["light", false], ["system", false], ["dark", true]]) {
+        await btn.click();
+        const menu = p.getByTestId("theme-menu");
+        await menu.waitFor();
+        check((await menu.getByRole("menuitemradio").count()) === 3, `theme @${w}: three choices`);
+        check(await onTop(menu), `theme @${w}: menu is on top`);
+        await menu.locator(`[data-theme-option="${choice}"]`).click();
+        check((await isDark(p)) === dark, `theme @${w}: ${choice} sets html.dark=${dark}`);
+        check((await p.evaluate(() => document.documentElement.dataset.theme)) === (dark ? "dark" : "light"), `theme @${w}: ${choice} sets data-theme`);
+        check((await p.evaluate(() => localStorage.getItem("analysis_core_theme_v1"))) === choice, `theme @${w}: ${choice} saved`);
+        check((await p.evaluate(() => document.activeElement?.getAttribute("data-testid"))) === "theme-button", `theme @${w}: focus returns to the button`);
+      }
+      await btn.click();
+      check((await p.getByTestId("theme-menu").locator('[aria-checked="true"]').getAttribute("data-theme-option")) === "dark", `theme @${w}: the saved choice is checked`);
+      check((await p.evaluate(() => document.activeElement?.getAttribute("data-theme-option"))) === "dark", `theme @${w}: focus starts on the checked choice`);
+      await p.keyboard.press("ArrowDown");
+      check((await p.evaluate(() => document.activeElement?.getAttribute("data-theme-option"))) === "system", `theme @${w}: arrow keys move through the choices`);
+      await p.keyboard.press("Escape");
+      check((await p.getByTestId("theme-menu").count()) === 0, `theme @${w}: Escape closes`);
+      check(await isDark(p), `theme @${w}: Escape keeps the choice`);
+      await p.reload({ waitUntil: "networkidle" });
+      check(await isDark(p), `theme @${w}: dark persists after reload`);
+      check((await p.evaluate(() => window.__themeAtBody)) === "dark|dark", `theme @${w}: dark is set before the body is parsed (no flash): ${await p.evaluate(() => window.__themeAtBody)}`);
+      check((await p.evaluate(() => getComputedStyle(document.body).backgroundColor)) === "rgb(19, 23, 34)", `theme @${w}: dark canvas`);
+      await p.goto(base + "/academy", { waitUntil: "networkidle" });
+      check(await isDark(p), `theme @${w}: dark carries to other pages`);
+    } finally {
+      check(errors.length === 0, `theme @${w}: page errors ${errors[0]}`);
+      await ctx.close();
+    }
+  },
+  async "Theme: System follows the device live and an explicit Light overrides a dark device"(_p, w) {
+    const { ctx, p } = await themedPage(w, null, "dark");
+    try {
+      await p.goto(base + "/", { waitUntil: "networkidle" });
+      check(await isDark(p), `system @${w}: dark device starts dark`);
+      check((await p.evaluate(() => window.__themeAtBody)) === "dark|dark", `system @${w}: no flash on a dark device`);
+      await p.emulateMedia({ colorScheme: "light" });
+      await p.waitForFunction(() => !document.documentElement.classList.contains("dark"));
+      check(!(await isDark(p)), `system @${w}: switches to light live`);
+      await p.emulateMedia({ colorScheme: "dark" });
+      await p.waitForFunction(() => document.documentElement.classList.contains("dark"));
+      check((await p.getByTestId("theme-button").getAttribute("aria-label")) === "Theme: System (dark)", `system @${w}: label follows the device`);
+      await p.getByTestId("theme-button").click();
+      await p.getByTestId("theme-menu").locator('[data-theme-option="light"]').click();
+      check(!(await isDark(p)), `system @${w}: Light overrides the dark device`);
+      await p.reload({ waitUntil: "networkidle" });
+      check(!(await isDark(p)) && (await p.evaluate(() => window.__themeAtBody)) === "|light", `system @${w}: Light holds after reload on a dark device`);
+    } finally {
+      await ctx.close();
+    }
+  },
+  async "Dark mode: menus, dialogs, the Browse popup and the walkthrough stay on top and meet AA contrast"(_p, w) {
+    const { ctx, p, errors } = await themedPage(w, "dark");
+    const aa = async (what) => {
+      const bad = await contrastFailures(p);
+      check(bad.length === 0, `dark ${what} @${w}: ${bad.length} under AA: ${bad.slice(0, 3).join(" | ")}`);
+    };
+    try {
+      await p.goto(base + "/", { waitUntil: "networkidle" });
+      check(await isDark(p), `dark layers @${w}: dark on`);
+      await p.getByTestId("learn-menu").click();
+      const panel = p.getByTestId("learn-menu-panel");
+      await panel.waitFor();
+      check(await onTop(panel), `dark layers @${w}: Learn dropdown on top`);
+      await aa("Learn dropdown");
+      await p.keyboard.press("Escape");
+      await p.getByTestId("track-chip").click();
+      const picker = p.getByRole("dialog").first();
+      await picker.waitFor();
+      check(await onTop(picker), `dark layers @${w}: path picker on top`);
+      await aa("path picker");
+      await p.keyboard.press("Escape");
+      await picker.waitFor({ state: "detached", timeout: 5000 }).catch(() => {});
+
+      await p.goto(base + "/browse", { waitUntil: "networkidle" });
+      await p.locator("[data-testid='browse-section-learn'] a[href$='/practice/candle-basics']").first().click();
+      const dlg = p.getByTestId("browse-modal");
+      await dlg.waitFor({ state: "visible" });
+      await dlg.locator("h1", { hasText: "Candlestick Basics" }).first().waitFor({ timeout: 10000 });
+      check(await onTop(dlg), `dark layers @${w}: Browse popup on top`);
+      const z = await p.getByTestId("browse-modal-backdrop").evaluate((el) => getComputedStyle(el).zIndex);
+      check(z === "100", `dark layers @${w}: Browse popup keeps the modal layer (${z})`);
+      await aa("Browse popup");
+      await p.getByTestId("browse-modal-close").click();
+
+      await p.goto(base + "/archive?open=hammer", { waitUntil: "networkidle" });
+      const pattern = p.getByRole("dialog").first();
+      await pattern.waitFor();
+      check(await onTop(pattern), `dark layers @${w}: pattern dialog on top`);
+      await aa("pattern dialog");
+
+      await p.goto(base + "/paper/desk", { waitUntil: "networkidle" });
+      const banner = p.getByText(/^SIMULATED — virtual money/).first();
+      check(await banner.isVisible(), `dark layers @${w}: SIMULATED banner visible`);
+      await p.locator('[data-scenario="sim-dividend"]').click();
+      await p.getByTestId("desk-start").click();
+      await p.getByTestId("desk-tour").click();
+      const tour = p.getByTestId("tour-popover");
+      await tour.waitFor();
+      check(await onTop(tour), `dark layers @${w}: walkthrough popover on top`);
+      await aa("desk with walkthrough");
+    } finally {
+      check(errors.length === 0, `dark layers @${w}: page errors ${errors[0]}`);
+      await ctx.close();
     }
   },
 };
