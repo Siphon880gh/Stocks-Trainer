@@ -222,7 +222,7 @@ export default function CasePlayer() {
                   grade === "correct"
                     ? "text-primary"
                     : grade === "partial"
-                      ? "text-yellow-400"
+                      ? "text-amber-700"
                       : "text-accent-red"
                 }
               >
@@ -260,7 +260,7 @@ export default function CasePlayer() {
               <JargonText text={withoutSampleWord(study.debrief.evidence)} />
             </p>
             {grade === "partial" && study.partialOnHorizonMismatch ? (
-              <p className="text-yellow-400/90 text-xs">
+              <p className="text-amber-700 text-xs">
                 Partial credit: your direction can make sense, but the time
                 frame did not match the teaching answer.
               </p>

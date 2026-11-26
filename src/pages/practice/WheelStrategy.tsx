@@ -110,8 +110,8 @@ export default function PracticeWheelStrategy() {
               {WHEEL_SCENARIOS.map((s) => (
                 <tr key={s.id} data-scenario={s.id}>
                   <td className="pr-3">{s.title}</td>
-                  <td className={cn("pr-3", s.wheel < 0 && "text-rose-500")}>{usd(s.wheel)}</td>
-                  <td className={cn("pr-3", s.stock < 0 && "text-rose-500")}>{usd(s.stock)}</td>
+                  <td className={cn("pr-3", s.wheel < 0 && "text-rose-700")}>{usd(s.wheel)}</td>
+                  <td className={cn("pr-3", s.stock < 0 && "text-rose-700")}>{usd(s.stock)}</td>
                   <td>{s.note}</td>
                 </tr>
               ))}
