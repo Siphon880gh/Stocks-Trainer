@@ -1,6 +1,6 @@
 # Directional navigation: analysis and proposal
 
-Status: approved by Weng on 2026-11-25 ("Just do it") and being built. Recommended answers to the open decisions below are the ones implemented. Companion to [`docs/NAVIGATION-INVENTORY.md`](../../NAVIGATION-INVENTORY.md), which lists every route, topic and deep link that must stay reachable.
+Status: approved by Weng on 2026-11-25 ("Just do it") and built the same day (header, path picker, Next up, Browse everything at `/browse`). Recommended answers to the open decisions below are the ones implemented. Companion to [`docs/NAVIGATION-INVENTORY.md`](../../NAVIGATION-INVENTORY.md), which lists every route, topic and deep link that must stay reachable.
 
 ## 1. How a learner reaches content today (before this change, commit `536eeb5`)
 
