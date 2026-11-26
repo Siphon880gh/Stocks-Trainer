@@ -1145,6 +1145,91 @@ const flows = {
     await p.waitForURL(/\/browse$/);
     check((await dlg.count()) === 0, `popup: back from full page shows Browse with no dialog @${w}`);
   },
+  async "Topic access: one sample per area and one deep link per kind still open after the redesign"(p, w) {
+    const base0 = JSON.parse((await import("node:fs")).readFileSync(new URL("../docs/projects/navigation/topic-baseline-536eeb5.json", import.meta.url), "utf8"));
+    const { CONTENT_SIM_SETS } = await load("/src/lib/contentSims.ts");
+    const { TOOL_LESSONS } = await load("/src/lib/toolTraining/index.ts");
+    const { CASE_STUDIES } = await load("/src/lib/caseStudies.ts");
+    const { LITERACY_TERMS } = await load("/src/lib/literacyTerms.ts");
+    const { listSessions } = await load("/src/lib/coaching/index.ts");
+    const { QUIZ_GROUPS } = await load("/src/lib/quizData.ts");
+    const simFor = (route) => {
+      const set = CONTENT_SIM_SETS.find((s) => s.route === route && s.sims.length);
+      if (set) return { url: route, sim: set.sims[0].id };
+      const tool = TOOL_LESSONS.find((t) => t.simulations?.length);
+      return { url: tool.route, sim: tool.simulations[0].id };
+    };
+    const sample = {
+      "/academy/:unitId?check": "/academy/l1-what-is-a-share?check=1",
+      "/archive?crypto": "/archive?crypto=all",
+      "/archive?open": "/archive?tab=patterns&open=doji",
+      "/archive?tab": "/archive?tab=indicators",
+      "/archive?theme": "/archive?theme=continuation",
+      "/cases?market": "/cases?market=crypto",
+      "/cases?pack": "/cases?pack=forex",
+      "/coach?class": "/coach?class=forex",
+      "/macro/play?round": "/macro/play?round=round-cpi-14",
+      "/market?class": "/market?class=crypto",
+      "/market?nav": "/market?nav=1",
+      "/practice/opening-range#context": "/practice/opening-range#context",
+      "/practice/pattern-themes?theme": "/practice/pattern-themes?theme=gap",
+      "/practice/read-the-print?round": "/practice/read-the-print?round=2",
+      "/practice/statements#forecast": "/practice/statements#forecast",
+      "/training?group": "/training?group=fed-policy",
+      "/training?start": "/training?group=opening-range&start=1",
+    };
+    const urls = [];
+    for (const d of base0.deepLinks) {
+      const kind = `${d.route}${d.param}`;
+      if (d.param === "?sim") {
+        const route = d.route === "/academy/:unitId" ? CONTENT_SIM_SETS.find((s) => s.route.startsWith("/academy/")).route : d.route === "/tools/:toolId" ? null : d.route;
+        const s = route ? simFor(route) : simFor("/tools/none");
+        urls.push({ kind, url: `${s.url}?sim=${s.sim}`, sim: s.sim });
+      } else if (d.route === "/training" && d.param.startsWith("#")) urls.push({ kind, url: `/training${d.param}` });
+      else urls.push({ kind, url: sample[kind] });
+    }
+    check(urls.every((u) => u.url), `topics: a sample URL for every deep-link kind (${urls.filter((u) => !u.url).map((u) => u.kind)}) @${w}`);
+    // One sample per area.
+    const sess = listSessions();
+    const areas = [
+      "/academy/l3-stop-orders", "/academy/test-out/L2", "/academy/options", "/paper", "/paper/desk", "/paper/challenges/ride-the-trend",
+      `/cases/${CASE_STUDIES[CASE_STUDIES.length - 1].id}`, `/coach/${sess[sess.length - 1].slug}`, "/playbooks/gap-and-go", "/macro/cpi",
+      `/archive?tab=literacy&open=${LITERACY_TERMS[LITERACY_TERMS.length - 1].id}`, "/practice/technique-narratives", "/practice/energy",
+      "/tools/finviz", "/map", "/practice/levels", "/practice/japanese-candles", "/practice-draw",
+    ];
+    const visit = async (url, label) => {
+      await p.goto(base + url, { waitUntil: "domcontentloaded" });
+      const heading = () => p.locator("h1, h2, [role='dialog']").first().waitFor({ timeout: 10000 }).then(() => true, () => false);
+      let ok = await heading();
+      // Non-equity cases sit behind the chart gate, unchanged by the redesign; its session peek opens them.
+      const peek = p.getByRole("button", { name: /Open this case this session|Browse this session/ });
+      if (!ok && (await peek.count())) {
+        await peek.first().click();
+        ok = await heading();
+      }
+      const path = new URL(p.url()).pathname;
+      check(ok && path === url.split(/[?#]/)[0], `topics: ${label} opens ${url} (now ${path}) @${w}`);
+    };
+    for (const u of urls) {
+      await visit(u.url, u.kind);
+      if (u.sim) check(await p.locator(`[data-sim='${u.sim}']`).first().waitFor({ timeout: 10000 }).then(() => true, () => false), `topics: ${u.kind} opens its simulation @${w}`);
+    }
+    for (const a of areas) await visit(a, "area sample");
+    // Click paths: search Browse everything for one item of each indexed kind.
+    await p.goto(base + "/browse", { waitUntil: "networkidle" });
+    const searches = [
+      [QUIZ_GROUPS.find((g) => g.id === "fed-policy").name, "/training?group=fed-policy"],
+      [sess[0].title, `/coach/${sess[0].slug}`],
+      [CASE_STUDIES[0].title, `/cases/${CASE_STUDIES[0].id}`],
+      ["doji", "/archive?tab=patterns&open=doji"],
+      [LITERACY_TERMS[0].name, `/archive?tab=literacy&open=${LITERACY_TERMS[0].id}`],
+    ];
+    for (const [q, href] of searches) {
+      await p.getByTestId("browse-search").fill(q);
+      const n = await p.locator(`[data-testid='browse-results'] a[href$='${href}']`).count();
+      check(n >= 1, `topics: Browse search "${q}" finds ${href} @${w}`);
+    }
+  },
 };
 
 
