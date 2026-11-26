@@ -212,11 +212,11 @@ export function SimPanel({ sim, walk, onNext, onPrev, onReplay, onClose }: { sim
             {bar?.readout ? ` · ${bar.readout}` : ""}
           </p>
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-muted">What this {unit} shows</p>
+            <p className="text-[12px] font-semibold text-muted">What this {unit} shows</p>
             <p>{copy.what}</p>
           </div>
-          <div className="rounded border-l-4 border-sim bg-canvas px-3 py-2">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-sim">Why we are doing this</p>
+          <div className="rounded border border-sim/30 bg-sim/5 px-3 py-2">
+            <p className="text-[12px] font-semibold text-sim">Why we are doing this</p>
             <p>{copy.why}</p>
           </div>
           {atEnd(walk) ? (
