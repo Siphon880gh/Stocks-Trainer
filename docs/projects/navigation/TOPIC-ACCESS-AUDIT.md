@@ -99,3 +99,17 @@ All four were fixed in the test before it was committed.
 | — | New route `/browse` (Browse everything) | Added, not removed: 73 baseline routes → 74 now. |
 
 `docs/NAVIGATION-INVENTORY.md` was not regenerated in this pass, because the TS-4 fixes changed no nav data. Its own test (`navInventory`) still passes.
+
+## Re-check after the Impeccable score fixes (round 3)
+
+- **When:** 2026-11-25, at commit `4497f91`, against the same baseline (`topic-baseline-536eeb5.json`).
+- **What changed that could hide content:** every page except Home now loads in its own chunk, a page error boundary wraps the page area, and touch targets, contrast and heading levels changed. No nav data, menu, route or Browse list changed.
+- **`src/lib/topicAccess.test.tsx`:** 35 of 35 pass. With `TOPIC_AUDIT_OUT`, all 34 areas report 0 missing and 0 unreachable. The test now loads every page chunk first (`preloadPages()`), so the server renders it walks are the real pages, not loading placeholders.
+  - Routes 73/73 (74 now), quiz groups 107/107, practice labs 46/46, practice items 45/45, tool training pages 10/10, tool lessons 8/8.
+  - Academy levels 8/8, units 45/45, test-outs 8/8, option strategies 13/13, option ladder levels 4/4, challenges 10/10, desk scenarios 30/30, desk topics 11/11.
+  - Case packs 17/17, cases 517/517, coach sessions 99/99, coach sessions under a non-equity class 96/96, playbooks 20/20.
+  - Macro lessons 18/18, macro rounds 29/29, macro terms 50/50, patterns 158/158, indicators 5/5, glossary terms 613/613.
+  - Market themes 10/10, narratives 6/6, pattern themes 17/17, simulation set pages 25/25, learning paths 3/3, map regions 12/12, map stages 179/179 (180 now), TOC groups and aliases 20/20, deep-link kinds 31/31.
+- **Browser flow** "Topic access: one sample per area and one deep link per kind still open after the redesign": 128 checks, 0 failed, at 390 and 1280 px.
+- **Losses found:** none, so nothing needed restoring.
+- **`docs/NAVIGATION-INVENTORY.md`:** not regenerated, because no nav data changed. `navInventory` passes 6 of 6.
