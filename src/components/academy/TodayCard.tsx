@@ -10,6 +10,7 @@ import { awardDaily, dailyFlash } from "../../lib/academy/rewards/award";
 import { computeStreak } from "../../lib/academy/rewards/streak";
 import { loadRewards } from "../../lib/academy/storage";
 import { cn } from "../../lib/utils";
+import { logReviewAnswer } from "../../lib/academy/retention";
 
 /** BA9.M2: Today card (Home + Academy hub): next unit, one spaced review question, a term, the challenge of the week. */
 /** `onAward` lets a host refresh panels that read the same rewards store (the hub's points and Day streak). */
@@ -25,7 +26,8 @@ export default function TodayCard({ storage, now = () => new Date(), variant = "
   const answer = (id: AnswerLetter) => {
     if (!q || answered) return;
     const correct = id === q.correctAnswer;
-    const next = recordDaily(loadAcademy(storage).state, picks.dateKey, q.id, correct, now());
+    // Retention: the daily question counts toward the review-questions pace; a miss joins the 1/3/7-day review.
+    const next = logReviewAnswer(recordDaily(loadAcademy(storage).state, picks.dateKey, q.id, correct, now()), q.id, correct, "daily", now());
     saveAcademy(next, storage);
     setState(next);
     const r = awardDaily(picks.dateKey, storage, now(), correct);

@@ -6,6 +6,7 @@ import { loadAcademy, saveAcademy, type KVStorage } from "../../lib/academy/stor
 import { isAcademyPreview, readAcademyBrowseAll } from "../../lib/academy/browse";
 import { recordUnitAttempt, unitStatus } from "../../lib/academy/progress";
 import { awardUnitMastery } from "../../lib/academy/rewards/award";
+import { logUnitCheck } from "../../lib/academy/retention";
 
 /** /academy/:unitId — one unit: cards, quiz, mastery; progress saved on the academy key. */
 export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
@@ -58,7 +59,8 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
             setToast("Preview only. This check was not saved.");
             return;
           }
-          const s = recordUnitAttempt(loadAcademy(storage).state, unit.id, score.correct, score.total);
+          // Retention: a pass logs the unit as completed (scrolling the cards never does); misses go to the 1/3/7-day review.
+          const s = logUnitCheck(recordUnitAttempt(loadAcademy(storage).state, unit.id, score.correct, score.total), unit.id, score);
           saveAcademy(s, storage);
           const r = awardUnitMastery(unit.id, score, storage);
           if (r.added || r.newBadges.length) setToast(`${r.added ? `+${r.added} practice points` : ""}${r.added && r.newBadges.length ? " · " : ""}${r.newBadges.length ? `new badge${r.newBadges.length > 1 ? "s" : ""} earned` : ""}. Points are virtual.`);
