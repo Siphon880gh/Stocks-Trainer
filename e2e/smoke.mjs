@@ -1238,6 +1238,26 @@ const flows = {
     else check(header <= 60, `header: desktop row stays compact (${Math.round(header)} px) @${w}`);
     check((await overflow(p)) <= 1, `header: no sideways scroll @${w}`);
   },
+  async "Page load failure: a page whose chunk fails shows a reload message, and the header stays"(_p, w) {
+    // Own context: the failed import is meant to log errors, which the shared error check would count.
+    const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, isMobile: w < 600, hasTouch: w < 600 });
+    const p = await ctx.newPage();
+    try {
+      await p.route("**/src/pages/Archive.tsx*", (r) => r.abort());
+      await p.goto(base + "/archive", { waitUntil: "networkidle" });
+      const err = p.getByTestId("page-error");
+      await err.waitFor({ timeout: 10000 });
+      check((await err.getAttribute("role")) === "alert", `page error @${w}: role=alert`);
+      check(await p.getByRole("button", { name: "Reload the page" }).isVisible(), `page error @${w}: reload button`);
+      check(await p.locator("header").first().isVisible(), `page error @${w}: header still shown`);
+      await p.unroute("**/src/pages/Archive.tsx*");
+      await p.getByRole("button", { name: "Reload the page" }).click();
+      await p.getByRole("heading", { level: 1, name: "Library" }).waitFor({ timeout: 10000 });
+      check(true, `page error @${w}: reload recovers`);
+    } finally {
+      await ctx.close();
+    }
+  },
 };
 
 
