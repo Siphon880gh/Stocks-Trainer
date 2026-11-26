@@ -3,6 +3,7 @@ import Layout from "./components/Layout";
 import ScrollToTop from "./components/ScrollToTop";
 import Dashboard from "./pages/Dashboard";
 import Market from "./pages/Market";
+import BrowseEverything from "./pages/BrowseEverything";
 import Training from "./pages/Training";
 import Archive from "./pages/Archive";
 import PracticeDraw from "./pages/PracticeDraw";
@@ -80,6 +81,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
+          <Route path="browse" element={<BrowseEverything />} />
           <Route path="market" element={<Market />} />
           <Route path="training" element={<Training />} />
           <Route path="archive" element={<Archive />} />

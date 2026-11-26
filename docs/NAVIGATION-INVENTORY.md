@@ -277,6 +277,15 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 - **Map:** Progress map: 1 stage(s) — `page:/map`
 - **In-content (1 files):** `src/components/ProgressMapCard.tsx`
 
+#### `/browse`
+
+- **Page:** `src/pages/BrowseEverything.tsx`
+- **Teaches:** Browse everything: the full catalog from `src/lib/browseCatalog.ts`, grouped, with search across quizzes, labs, lessons, coach sessions, cases, glossary terms and patterns.
+- **Menu:** none yet (the header link lands with the header change)
+- **ToC:** none
+- **Map:** Progress map: 1 stage(s) — `page:/browse`
+- **In-content:** none
+
 ### Academy and paper trading
 
 #### `/academy`

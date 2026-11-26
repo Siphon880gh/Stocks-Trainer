@@ -98,6 +98,7 @@ const PAGES: Array<Omit<MapStage, "kind" | "prereqs" | "related"> & { prereqs?: 
   { id: "page:/", title: "Dashboard", region: "start", to: "/", teaser: "Your dashboard: path, Today card and next steps." },
   { id: "page:/training", title: "Table of Contents", region: "start", to: "/training", teaser: "Every quiz group and practice, one group at a time." },
   { id: "page:/map", title: "Progress map", region: "start", to: "/map", teaser: "See what you've done and what's next." },
+  { id: "page:/browse", title: "Browse everything", region: "start", to: "/browse", teaser: "Every lesson, lab, quiz and tool in one list, with search." },
   { id: "page:/market", title: "Charts", region: "start", to: "/market", teaser: "SIMULATED and sample charts with indicators and drawing." },
   { id: "page:/practice/candle-basics", title: "Candlestick Basics", region: "candles", to: "/practice/candle-basics", teaser: "One candle at a time, with the path of buyers and sellers drawn on it, then a match check." },
   { id: "page:/archive", title: "Library", region: "library", to: "/archive", teaser: "Look up any pattern: shape, themes, direction and a drill." },
