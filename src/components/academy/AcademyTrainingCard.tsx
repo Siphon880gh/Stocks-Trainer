@@ -19,7 +19,7 @@ export default function AcademyTrainingCard({ onSelectGroup, storage }: Props) {
         <span className="text-xs text-muted">Simulated money · not trading advice</span>
       </div>
       <p className="text-[12px] text-muted">Short units from orientation through other markets, each with a 3-question check.</p>
-      <div className="flex flex-wrap gap-x-4 gap-y-2">
+      <div className="flex flex-wrap gap-x-4 gap-y-2 [&>a]:inline-flex [&>a]:min-h-6 [&>a]:items-center">
         <Link to="/academy" className="text-primary underline font-medium" data-testid="academy-link">
           Academy ({s.unitsDone}/{s.units} units)
         </Link>
