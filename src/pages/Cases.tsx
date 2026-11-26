@@ -106,12 +106,12 @@ export default function Cases() {
               : null}
           </p>
           {focusPack ? (
-            <p className="text-xs text-primary/70 mt-2">
+            <p className="text-xs text-muted mt-2">
               Showing: {CASE_PACKS.find((p) => p.id === focusPack)?.name ?? focusPack}
             </p>
           ) : null}
           {marketClass ? (
-            <p className="text-xs text-primary/70 mt-2">
+            <p className="text-xs text-muted mt-2">
               Showing: {NAVIGATOR_CLASS_LABELS[marketClass]}
               {marketClass === "forex"
                 ? ". Practice only, not a live FX desk."
@@ -181,7 +181,7 @@ export default function Cases() {
           </div>
         ) : null}
 
-        <p className="text-xs text-primary/60">
+        <p className="text-xs text-muted">
           Tip:{" "}
           <Link to="/coach/chase-vs-fade" className="underline text-primary">
             walk through chase vs fade
@@ -208,14 +208,14 @@ export default function Cases() {
                 isFocus ? "rounded-xl border border-line p-4 bg-primary/5" : ""
               }`}
             >
-              <h2 className="text-sm font-bold text-primary/80 uppercase tracking-widest">
+              <h2 className="text-sm font-bold text-primary uppercase tracking-widest">
                 {meta.name} ({pack.length})
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-muted">
                 <JargonText text={meta.description} />
               </p>
               {!unlocked ? (
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-muted">
                   Locked. Finish the earlier beginner-path steps first.
                 </p>
               ) : null}
@@ -228,7 +228,7 @@ export default function Cases() {
                           <span className="text-primary">
                             <JargonText text={withoutSampleWord(c.title)} plain />
                           </span>
-                          <span className="text-slate-500 text-xs ml-2">
+                          <span className="text-muted text-xs ml-2">
                             {thinkingModeLabel(c.thinkingMode)} ·{" "}
                             {c.difficulty === "beginner" ? "Beginner" : "Intermediate"}
                           </span>

@@ -39,7 +39,7 @@ export default function CoachingPathTrail({
           </span>
           {steps.length === 1 ? "Path · 1 step" : `Path · ${steps.length} steps`}
         </button>
-        <label className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 cursor-pointer">
+        <label className="inline-flex items-center gap-1.5 font-mono text-xs text-muted cursor-pointer">
           <input
             type="checkbox"
             checked={showNodeIds}
@@ -74,7 +74,7 @@ export default function CoachingPathTrail({
                 ) : null}
               </p>
               {!step.isCurrent && step.choiceLabel ? (
-                <p className="pl-4 normal-case text-slate-500 break-words">
+                <p className="pl-4 normal-case text-muted break-words">
                   You chose: <JargonText text={step.choiceLabel} />
                 </p>
               ) : null}

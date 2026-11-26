@@ -15,11 +15,11 @@ export default function IndicatorGlossary({ onClose, compact = false }: Indicato
     return (
       <div className="space-y-2">
         <div className="flex items-center justify-between">
-          <h4 className="text-xs font-bold text-primary/80 uppercase tracking-wider">How Indicators Help</h4>
+          <h4 className="text-xs font-bold text-primary uppercase tracking-wider">How Indicators Help</h4>
           <div className="flex items-center gap-2">
-            <Link to="/archive?tab=indicators" className="text-xs text-primary/70 hover:text-primary">View in Library</Link>
+            <Link to="/archive?tab=indicators" className="text-xs text-muted hover:text-primary">View in Library</Link>
             {onClose && (
-              <button onClick={onClose} className="text-xs text-primary/70 hover:text-primary">Collapse</button>
+              <button onClick={onClose} className="text-xs text-muted hover:text-primary">Collapse</button>
             )}
           </div>
         </div>
@@ -31,7 +31,7 @@ export default function IndicatorGlossary({ onClose, compact = false }: Indicato
                 {ind.name} — {ind.fullName}
               </summary>
               <p className="mt-1 text-xs text-slate-300 pl-6">{ind.description}</p>
-              <p className="mt-0.5 text-xs text-primary/60 pl-6 italic">Use: {ind.useCase}</p>
+              <p className="mt-0.5 text-xs text-muted pl-6 italic">Use: {ind.useCase}</p>
             </details>
             <YouTubeSearchLink title={ind.name} />
           </div>
@@ -44,7 +44,7 @@ export default function IndicatorGlossary({ onClose, compact = false }: Indicato
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-sm font-bold text-primary uppercase tracking-widest">How Indicators Help</h3>
-        <Link to="/archive?tab=indicators" className="text-xs text-primary/70 hover:text-primary font-bold">View in Library</Link>
+        <Link to="/archive?tab=indicators" className="text-xs text-muted hover:text-primary font-bold">View in Library</Link>
       </div>
       <p className="text-slate-400 text-xs">
         Technical indicators smooth price data and highlight momentum, trend, and overbought/oversold conditions.
@@ -60,8 +60,8 @@ export default function IndicatorGlossary({ onClose, compact = false }: Indicato
               className="min-w-0 flex-1 px-4 py-3 flex items-center justify-between text-left hover:bg-primary/5 transition-colors"
             >
               <span className="font-bold text-primary">{ind.name}</span>
-              <span className="text-xs text-primary/60">{ind.fullName}</span>
-              <span className="material-symbols-outlined text-primary/60">
+              <span className="text-xs text-muted">{ind.fullName}</span>
+              <span className="material-symbols-outlined text-muted">
                 {expanded === ind.id ? "expand_less" : "expand_more"}
               </span>
             </button>
@@ -70,7 +70,7 @@ export default function IndicatorGlossary({ onClose, compact = false }: Indicato
           {expanded === ind.id && (
             <div className="px-4 pb-4 pt-0 space-y-2">
               <p className="text-slate-300 text-sm">{ind.description}</p>
-              <p className="text-primary/70 text-xs font-mono">Use: {ind.useCase}</p>
+              <p className="text-muted text-xs font-mono">Use: {ind.useCase}</p>
             </div>
           )}
         </div>

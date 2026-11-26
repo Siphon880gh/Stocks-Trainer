@@ -189,7 +189,7 @@ export default function PathMapPanel({
               </Link>
             ) : null}
             {active.isGradedCasePack && isGradedCasePackLocked(active.id) ? (
-              <p className="text-accent-red/90">LOCKED · finish Indicators first</p>
+              <p className="text-accent-red">LOCKED · finish Indicators first</p>
             ) : null}
           </>
         ) : (

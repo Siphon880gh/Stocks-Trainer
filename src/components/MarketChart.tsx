@@ -73,7 +73,7 @@ const OSC_PANEL_H = 120;
 const EMPTY_HIGHLIGHTS: ChartHighlightMark[] = [];
 
 const scaleBtn =
-  "rounded border border-[#d1d4dc] bg-white px-2 py-0.5 text-[#131722] hover:bg-[#f0f3fa] disabled:opacity-40";
+  "rounded border border-line bg-white px-2 py-0.5 text-ink hover:bg-[#f0f3fa] disabled:opacity-40";
 
 const axisTick = { fill: CHART.textMuted, fontSize: 10, fontFamily: CHART.font };
 
@@ -299,7 +299,7 @@ function highlightLabelStyle(box: HighlightBandBox): CSSProperties {
 }
 
 const chevronBtn =
-  "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded border border-[#d1d4dc] bg-white text-[#131722] hover:bg-[#f0f3fa] disabled:border-[#ececef] disabled:bg-[#f8f9fd] disabled:text-[#c5c7ce] disabled:hover:bg-[#f8f9fd]";
+  "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded border border-line bg-white text-ink hover:bg-[#f0f3fa] disabled:border-[#ececef] disabled:bg-[#f8f9fd] disabled:text-[#c5c7ce] disabled:hover:bg-[#f8f9fd]";
 
 function ExplanationPopover({
   note,
@@ -373,7 +373,7 @@ function ExplanationPopover({
       ref={ref}
       role="dialog"
       aria-label={`Bar ${note.step} of ${note.of} explanation`}
-      className="fixed z-[200] w-[300px] rounded border border-[#d1d4dc] bg-white shadow-md px-2.5 py-2 pr-9 text-[12px] leading-relaxed"
+      className="fixed z-[200] w-[300px] rounded border border-line bg-white shadow-md px-2.5 py-2 pr-9 text-[12px] leading-relaxed"
       style={{
         left: pos.left,
         top: pos.top,
@@ -393,7 +393,7 @@ function ExplanationPopover({
             chevron_left
           </span>
         </button>
-        <p className="flex-1 min-w-0 text-center text-xs uppercase tracking-wide text-[#787b86]">
+        <p className="flex-1 min-w-0 text-center text-xs uppercase tracking-wide text-muted">
           Step {note.step} of {note.of}
           {ANCHOR_LABEL[note.anchor] ? ` · ${ANCHOR_LABEL[note.anchor]}` : ""}
           {" · "}
@@ -414,7 +414,7 @@ function ExplanationPopover({
       <p className="font-semibold mb-0.5 px-0.5">
         <JargonText text={withoutSampleWord(note.headline)} />
       </p>
-      <p className="text-[#787b86] px-0.5">
+      <p className="text-muted px-0.5">
         <JargonText text={withoutSampleWord(note.detail)} />
       </p>
       <SampleDataNote />
@@ -438,22 +438,22 @@ function PriceTooltip({
   const up = d.close >= d.open;
   return (
     <div
-      className="text-[12px] space-y-0.5 bg-white border border-[#d1d4dc] rounded shadow-md px-3 py-2 min-w-[128px]"
+      className="text-[12px] space-y-0.5 bg-white border border-line rounded shadow-md px-3 py-2 min-w-[128px]"
       style={{ fontFamily: CHART.font, color: CHART.text }}
     >
       <p className="font-semibold border-b border-[#e0e3eb] pb-1 mb-1.5">{d.name}</p>
       <div className="tabular-nums space-y-0.5">
         <p>
-          <span className="text-[#787b86] w-4 inline-block">O</span> {fmt(d.open)}
+          <span className="text-muted w-4 inline-block">O</span> {fmt(d.open)}
         </p>
         <p>
-          <span className="text-[#787b86] w-4 inline-block">H</span> {fmt(d.high)}
+          <span className="text-muted w-4 inline-block">H</span> {fmt(d.high)}
         </p>
         <p>
-          <span className="text-[#787b86] w-4 inline-block">L</span> {fmt(d.low)}
+          <span className="text-muted w-4 inline-block">L</span> {fmt(d.low)}
         </p>
         <p>
-          <span className="text-[#787b86] w-4 inline-block">C</span>{" "}
+          <span className="text-muted w-4 inline-block">C</span>{" "}
           <span style={{ color: up ? CHART.up : CHART.down }}>{fmt(d.close)}</span>
         </p>
       </div>
@@ -941,7 +941,7 @@ export default function MarketChart({
                     className={cn(
                       scaleBtn,
                       active &&
-                        "border-[#2962ff] bg-[#e8f0ff] font-semibold text-[#2962ff] hover:bg-[#d6e4ff]",
+                        "border-primary bg-[#e8f0ff] font-semibold text-primary hover:bg-[#d6e4ff]",
                     )}
                     onClick={() => onFrequencyMinutes?.(f.minutes)}
                   >
@@ -986,10 +986,10 @@ export default function MarketChart({
           <span>{zoom.toFixed(2)}×</span>
           <div className="ml-auto flex max-w-full shrink-0 flex-wrap items-center gap-y-2" data-testid="chart-toolbar-right">
             <div ref={explainHelpRef} className="relative">
-            <div className="inline-flex h-7 items-stretch overflow-hidden rounded-md border border-[#2962ff]">
+            <div className="inline-flex h-7 items-stretch overflow-hidden rounded-md border border-primary">
               <button
                 type="button"
-                className={`px-3 text-[12px] text-[#2962ff] ${
+                className={`px-3 text-[12px] text-primary ${
                   explanationsOn
                     ? "bg-[#e8f0ff] font-semibold hover:bg-[#d6e4ff]"
                     : "bg-white font-medium hover:bg-[#e8f0ff]"
@@ -1013,7 +1013,7 @@ export default function MarketChart({
                 aria-label="What are chart explanations?"
                 aria-expanded={explainHelpOn}
                 title="What are chart explanations?"
-                className={`min-w-7 border-l border-[#2962ff] px-1.5 text-[#2962ff] ${
+                className={`min-w-7 border-l border-primary px-1.5 text-primary ${
                   explanationsOn
                     ? "bg-[#e8f0ff] hover:bg-[#d6e4ff]"
                     : "bg-white hover:bg-[#e8f0ff]"
@@ -1031,7 +1031,7 @@ export default function MarketChart({
             {explainHelpOn ? (
               <div
                 role="tooltip"
-                className="absolute right-0 top-full z-30 mt-1.5 w-[280px] rounded border border-[#d1d4dc] bg-white px-3 py-2 text-[12px] leading-relaxed text-[#131722] shadow-md"
+                className="absolute right-0 top-full z-30 mt-1.5 w-[280px] rounded border border-line bg-white px-3 py-2 text-[12px] leading-relaxed text-ink shadow-md"
               >
                 Numbered dots appear on the candles and on any overlays you have
                 on, such as SMA (only if it's applicable to have explanations). 
@@ -1043,8 +1043,8 @@ export default function MarketChart({
             </div>
             {statusLabel ? (
               <>
-                <span aria-hidden className="mx-3 h-4 w-px bg-[#d1d4dc]" />
-                <span className="inline-flex h-7 items-center gap-1.5 px-2.5 text-xs rounded-md border border-[#d1d4dc] bg-white text-[#131722] normal-case">
+                <span aria-hidden className="mx-3 h-4 w-px bg-line" />
+                <span className="inline-flex h-7 items-center gap-1.5 px-2.5 text-xs rounded-md border border-line bg-white text-ink normal-case">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#089981]" />
                   {statusLabel}
                 </span>
@@ -1052,7 +1052,7 @@ export default function MarketChart({
             ) : null}
             {youtubeTitle ? (
               <>
-                <span aria-hidden className="mx-3 h-4 w-px bg-[#d1d4dc]" />
+                <span aria-hidden className="mx-3 h-4 w-px bg-line" />
                 <YouTubeSearchLink title={youtubeTitle} label="Videos" />
               </>
             ) : null}
@@ -1454,7 +1454,7 @@ export default function MarketChart({
               />
               <div
                 data-pattern-highlight-label={h.id}
-                className="absolute flex items-center gap-1 rounded border border-[#2962ff] bg-white px-1.5 py-0.5 shadow-sm"
+                className="absolute flex items-center gap-1 rounded border border-primary bg-white px-1.5 py-0.5 shadow-sm"
                 style={{
                   ...highlightLabelStyle(box),
                   zIndex: front ? 32 : 20,

@@ -71,13 +71,13 @@ export default function IndicatorDetailModal({ overlay, onClose, hidePracticeLin
             />
           </div>
           <div className="space-y-2">
-            <p className="text-xs font-mono text-primary/60 uppercase tracking-wider">
+            <p className="text-xs font-mono text-muted uppercase tracking-wider">
               {overlay.fullName} • {overlay.category}
             </p>
             <p className="text-slate-200 text-sm leading-relaxed normal-case">
               {overlay.detail ?? overlay.description}
             </p>
-            <p className="text-xs text-primary/60 italic">Use: {overlay.useCase}</p>
+            <p className="text-xs text-muted italic">Use: {overlay.useCase}</p>
           </div>
           <div className="flex gap-3">
             {hidePracticeLink ? null : (

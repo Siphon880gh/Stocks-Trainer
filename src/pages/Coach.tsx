@@ -108,7 +108,7 @@ export default function Coach() {
               ))}
             </select>
           </label>
-          <span className="font-mono text-xs text-slate-500">
+          <span className="font-mono text-xs text-muted">
             {filtered.length}/{sessions.length} sessions
           </span>
         </div>

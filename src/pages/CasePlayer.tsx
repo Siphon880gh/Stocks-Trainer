@@ -97,7 +97,7 @@ export default function CasePlayer() {
         </div>
         <button
           type="button"
-          className="block text-sm text-primary/60 font-mono"
+          className="block text-sm text-muted font-mono"
           onClick={() => navigate(-1)}
         >
           Go back
@@ -154,7 +154,7 @@ export default function CasePlayer() {
             Tip: <JargonText text={withoutSampleWord(coachTipForThinkingMode(study.thinkingMode))} />
           </p>
           {study.newsHeadline ? (
-            <p className="text-sm text-primary/90">
+            <p className="text-sm text-primary">
               Headline: <JargonText text={withoutSampleWord(study.newsHeadline)} />
             </p>
           ) : null}
@@ -247,15 +247,15 @@ export default function CasePlayer() {
               ) : null}
             </div>
             <p className="text-slate-300">
-              <span className="text-primary/50">How to think about it: </span>
+              <span className="text-muted">How to think about it: </span>
               <JargonText text={withoutSampleWord(study.debrief.process)} />
             </p>
             <p className="text-slate-300">
-              <span className="text-primary/50">Why the price moved: </span>
+              <span className="text-muted">Why the price moved: </span>
               <JargonText text={withoutSampleWord(study.debrief.whyMarketMoved)} />
             </p>
             <p className="text-slate-300">
-              <span className="text-primary/50">What the numbers showed: </span>
+              <span className="text-muted">What the numbers showed: </span>
               <JargonText text={withoutSampleWord(study.debrief.evidence)} />
             </p>
             {grade === "partial" && study.partialOnHorizonMismatch ? (
@@ -264,7 +264,7 @@ export default function CasePlayer() {
                 frame did not match the teaching answer.
               </p>
             ) : null}
-            <p className="text-xs text-primary/40">
+            <p className="text-xs text-muted">
               This decision is locked so you cannot peek and change it. Refresh
               or reopen the case to try again.
             </p>

@@ -238,12 +238,12 @@ export default function QuizModal({
             <div className="relative">
               <SampleDataNote />
               {question.overlayId && quizSamplePackName(question) ? (
-                <p className="text-xs text-[#787b86] normal-case px-1 pb-1">
+                <p className="text-xs text-muted normal-case px-1 pb-1">
                   {withoutSampleWord(quizSamplePackName(question) ?? "")}
                   {question.revealAnnotations && !submitted ? " · levels and plan appear after you answer" : ""}
                 </p>
               ) : question.revealAnnotations && !submitted ? (
-                <p className="text-xs text-[#787b86] normal-case px-1 pb-1">
+                <p className="text-xs text-muted normal-case px-1 pb-1">
                   Levels and plan appear after you answer
                 </p>
               ) : null}
@@ -297,7 +297,7 @@ export default function QuizModal({
                 )}
               </p>
               {question.glossaryTermId && getLiteracyTerm(question.glossaryTermId) ? (
-                <p className="text-primary/70 text-xs font-mono">
+                <p className="text-muted text-xs font-mono">
                   Related term: {withoutSampleWord(getLiteracyTerm(question.glossaryTermId)!.name)}
                 </p>
               ) : null}
@@ -359,7 +359,7 @@ export default function QuizModal({
               {selectedOption !== question.correctAnswer && pickedOption?.feedback ? (
                 <div className="flex gap-2">
                   <span className="text-primary opacity-50">&gt;</span>
-                  <p className="text-accent-red/90">
+                  <p className="text-accent-red">
                     Why not {optionLabel(pickedOption)}: <JargonText text={withoutSampleWord(pickedOption.feedback)} />
                   </p>
                 </div>
@@ -519,7 +519,7 @@ function QuizOptionButton({
           <span
             className={cn(
               "mt-1 text-lg font-bold font-mono",
-              selected || showCorrect ? "text-primary" : "text-primary/70"
+              selected || showCorrect ? "text-primary" : "text-muted"
             )}
           >
             {withoutSampleWord(option.label)}
@@ -540,7 +540,7 @@ function QuizOptionButton({
           <span
             className={cn(
               "text-xs font-mono mb-2",
-              selected ? "text-primary" : "text-primary/40"
+              selected ? "text-primary" : "text-muted"
             )}
           >
             Option {option.id} {selected && "(selected)"}
@@ -551,7 +551,7 @@ function QuizOptionButton({
           <p
             className={cn(
               "text-sm mt-1 transition-opacity",
-              selected ? "text-primary/60" : "text-slate-400 opacity-0 group-hover:opacity-100"
+              selected ? "text-muted" : "text-slate-400 opacity-0 group-hover:opacity-100"
             )}
           >
             <JargonText text={withoutSampleWord(option.description)} plain />

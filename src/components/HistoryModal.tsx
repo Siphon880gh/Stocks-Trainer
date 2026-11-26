@@ -44,18 +44,18 @@ export default function HistoryModal({ data, onClose, onSelectBar }: HistoryModa
           </button>
         </div>
         <div className="p-4 overflow-y-auto max-h-[calc(85vh-60px)]">
-          <p className="text-primary/60 text-xs mb-4">
+          <p className="text-muted text-xs mb-4">
             Historical price data for the current chart. O=Open, H=High, L=Low, C=Close.
           </p>
           <div className="overflow-x-auto">
             <table className="w-full font-mono text-sm">
               <thead>
                 <tr className="border-b border-line">
-                  <th className="text-left py-2 px-3 text-primary/80">Time</th>
-                  <th className="text-right py-2 px-3 text-primary/80">O</th>
-                  <th className="text-right py-2 px-3 text-primary/80">H</th>
-                  <th className="text-right py-2 px-3 text-primary/80">L</th>
-                  <th className="text-right py-2 px-3 text-primary/80">C</th>
+                  <th className="text-left py-2 px-3 text-primary">Time</th>
+                  <th className="text-right py-2 px-3 text-primary">O</th>
+                  <th className="text-right py-2 px-3 text-primary">H</th>
+                  <th className="text-right py-2 px-3 text-primary">L</th>
+                  <th className="text-right py-2 px-3 text-primary">C</th>
                 </tr>
               </thead>
               <tbody>

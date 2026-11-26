@@ -408,7 +408,7 @@ export default function Market() {
                 <h3 className="text-[12px] font-semibold text-muted">Overlays</h3>
                 <button
                   onClick={() => setShowGlossary(!showGlossary)}
-                  className="p-1 rounded hover:bg-primary/10 text-primary/70 hover:text-primary transition-colors"
+                  className="p-1 rounded hover:bg-primary/10 text-muted hover:text-primary transition-colors"
                   title="How indicators help"
                 >
                   <span className="material-symbols-outlined text-sm">info</span>

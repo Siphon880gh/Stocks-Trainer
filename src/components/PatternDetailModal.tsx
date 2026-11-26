@@ -70,7 +70,7 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
         <div className="p-4 sm:p-6 space-y-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-xs font-mono text-primary/60 uppercase tracking-wider">
+              <span className="text-xs font-mono text-muted uppercase tracking-wider">
                 {pattern.type} • {pattern.confirmation.replace("_", " ")} confirmation
               </span>
               {pattern.rare ? (

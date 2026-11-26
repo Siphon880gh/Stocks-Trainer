@@ -101,14 +101,14 @@ export default function Archive() {
         <div className="px-4 pb-4">
           <label className="flex flex-col w-full">
             <div className="flex w-full items-stretch rounded-lg bg-surface border border-line h-11">
-              <div className="text-primary/60 flex items-center justify-center px-3">
+              <div className="text-muted flex items-center justify-center px-3">
                 <span className="material-symbols-outlined text-xl">search</span>
               </div>
               <input
                 className="form-input flex-1 bg-transparent border-none focus:ring-0 text-slate-100 placeholder:text-primary/40 text-sm font-display outline-none"
                 placeholder="Search technical patterns..."
               />
-              <div className="text-primary/60 flex items-center justify-center px-3">
+              <div className="text-muted flex items-center justify-center px-3">
                 <span className="material-symbols-outlined text-xl">filter_list</span>
               </div>
             </div>
@@ -426,7 +426,7 @@ export default function Archive() {
                       alt={`${pattern.name} pattern`}
                     />
                   ) : (
-                    <span className="material-symbols-outlined text-5xl text-primary/60">
+                    <span className="material-symbols-outlined text-5xl text-muted">
                       {pattern.id === "doji" ? "trending_flat" : pattern.id === "hammer" ? "vertical_align_bottom" : "compare_arrows"}
                     </span>
                   )}
@@ -436,7 +436,7 @@ export default function Archive() {
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
                       <span
                         className={`material-symbols-outlined text-sm ${
-                          pattern.sentiment === "bearish" ? "text-accent-red" : pattern.type === "reversal" ? "text-primary" : pattern.type === "continuation" ? "text-primary/70" : "text-primary/60"
+                          pattern.sentiment === "bearish" ? "text-accent-red" : pattern.type === "reversal" ? "text-primary" : pattern.type === "continuation" ? "text-muted" : "text-muted"
                         }`}
                       >
                         {pattern.type === "reversal"
@@ -503,7 +503,7 @@ export default function Archive() {
             >
               <div className="flex gap-4">
                 <div className="h-24 w-24 shrink-0 rounded bg-background-dark overflow-hidden border border-line flex items-center justify-center">
-                  <span className="material-symbols-outlined text-5xl text-primary/60">
+                  <span className="material-symbols-outlined text-5xl text-muted">
                     {overlay.id === "sma" || overlay.id === "ema" ? "trending_up" : overlay.id === "rsi" || overlay.id === "macd" ? "show_chart" : "bar_chart"}
                   </span>
                 </div>

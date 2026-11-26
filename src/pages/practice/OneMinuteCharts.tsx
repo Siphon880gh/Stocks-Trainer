@@ -68,7 +68,7 @@ export default function PracticeOneMinuteCharts() {
           <CandlestickChart data={SIM_1M} height={180} showScaleControls={false} compact />
           <div className="flex flex-wrap gap-1 px-2 pb-2">
             {[...ends].map((i) => (
-              <span key={i} className="text-xs font-mono text-primary/70">5m@{i + 1}</span>
+              <span key={i} className="text-xs font-mono text-muted">5m@{i + 1}</span>
             ))}
           </div>
         </div>

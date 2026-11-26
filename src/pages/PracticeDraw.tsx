@@ -285,14 +285,14 @@ export default function PracticeDraw() {
                 className={`px-3 py-2 text-xs font-mono rounded border transition-colors ${
                   templateId === t.id
                     ? "border-primary bg-primary/20 text-primary"
-                    : "border-line text-primary/70 hover:bg-primary/10"
+                    : "border-line text-muted hover:bg-primary/10"
                 }`}
               >
                 {t.name}
               </button>
             ))}
           </div>
-          <p className="mt-2 text-xs font-mono text-primary/50">
+          <p className="mt-2 text-xs font-mono text-muted">
             Guide silhouette shown as dashed lines · {template.name}
             {template.hint ? ` · ${template.hint}` : ""}
           </p>
@@ -300,7 +300,7 @@ export default function PracticeDraw() {
 
         <section className="panel p-3 bg-surface rounded-xl space-y-3">
           <div className="flex items-center justify-between gap-2 flex-wrap">
-            <h2 className="text-xs font-bold tracking-widest text-primary/70 font-mono">
+            <h2 className="text-xs font-bold tracking-widest text-muted font-mono">
               CANVAS
             </h2>
             <div className="flex flex-wrap items-center gap-2">

@@ -267,7 +267,7 @@ export default function CoachSession() {
               </button>
             ) : null}
             {showNodeIds ? (
-              <span className="font-mono text-xs text-slate-500">
+              <span className="font-mono text-xs text-muted">
                 NODE · {state.currentNodeId}
               </span>
             ) : null}
@@ -282,7 +282,7 @@ export default function CoachSession() {
 
         {showChoices ? (
           <div className="space-y-2" role="group" aria-label="Coaching choices">
-            <p className="text-xs font-bold text-primary/60 uppercase tracking-[0.2em]">
+            <p className="text-xs font-bold text-muted uppercase tracking-[0.2em]">
               Choose
             </p>
             <ul className="space-y-2">

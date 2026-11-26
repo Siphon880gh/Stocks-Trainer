@@ -53,10 +53,10 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
           </button>
         </div>
         <div className="p-4 overflow-y-auto max-h-[calc(85vh-60px)] space-y-4">
-          <p className="text-primary/60 text-xs mb-1">
+          <p className="text-muted text-xs mb-1">
             Reference only. Do not use during the quiz.
           </p>
-          <p className="text-primary/50 text-xs mb-4">
+          <p className="text-muted text-xs mb-4">
             Click any question to open the quiz and practice that one for repetition.
           </p>
           {groupId === "all"
@@ -66,7 +66,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                   const groupQuestions = getQuestionsForGroup(group.id as Exclude<QuizGroupId, "all">);
                   return (
                     <div key={group.id} className="space-y-3">
-                      <h3 className="text-sm font-bold text-primary/80 uppercase tracking-wider flex items-center gap-2">
+                      <h3 className="text-sm font-bold text-primary uppercase tracking-wider flex items-center gap-2">
                         {group.icon && <span className="material-symbols-outlined text-base">{group.icon}</span>}
                         {group.name}
                       </h3>
@@ -83,11 +83,11 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                             className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer group"
                           >
                             <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
-                              <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>
+                              <span className="text-xs font-mono text-muted">Q{i + 1} · {q.id}</span>
                               <span className="font-bold text-primary flex items-center gap-2">
                                 {q.correctAnswer}: <JargonText text={label} plain />
                                 {onPracticeQuestion && (
-                                  <span className="text-xs font-normal text-primary/60">— Click to practice</span>
+                                  <span className="text-xs font-normal text-muted">— Click to practice</span>
                                 )}
                               </span>
                             </div>
@@ -158,11 +158,11 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                     className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer group"
                   >
                     <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
-                      <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>
+                      <span className="text-xs font-mono text-muted">Q{i + 1} · {q.id}</span>
                       <span className="font-bold text-primary flex items-center gap-2">
                         {q.correctAnswer}: <JargonText text={label} plain />
                         {onPracticeQuestion && (
-                          <span className="text-xs font-normal text-primary/60">— Click to practice</span>
+                          <span className="text-xs font-normal text-muted">— Click to practice</span>
                         )}
                       </span>
                     </div>

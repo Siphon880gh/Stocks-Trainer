@@ -56,7 +56,7 @@ export default function ScanPatternsModal({
             </p>
           ) : (
             <>
-              <p className="text-primary/60 text-xs">
+              <p className="text-muted text-xs">
                 Detected {patterns.length} pattern(s) in the chart. Use these signals with confirmation.
               </p>
               <div className="space-y-3">
@@ -70,7 +70,7 @@ export default function ScanPatternsModal({
                   >
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-bold text-primary">{p.name}</span>
-                      <span className="text-xs font-mono text-primary/70">Candle {p.index + 1} • {p.confidence}%</span>
+                      <span className="text-xs font-mono text-muted">Candle {p.index + 1} • {p.confidence}%</span>
                     </div>
                     <p className="text-slate-300 text-sm">
                       <JargonText text={withoutSampleWord(p.description)} plain />

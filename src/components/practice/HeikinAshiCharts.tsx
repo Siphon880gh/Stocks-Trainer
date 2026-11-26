@@ -23,7 +23,7 @@ export default function HeikinAshiCharts({ view, mark, height = 220 }: { view: H
 export function HeikinAshiQuizExhibit({ exhibit, revealed }: { exhibit: { mark?: number }; revealed: boolean }) {
   return (
     <div className="overflow-hidden" data-testid="ha-exhibit">
-      <p className="text-xs text-[#787b86] normal-case px-1 pb-1">
+      <p className="text-xs text-muted normal-case px-1 pb-1">
         {HA_LABEL} chart · regular vs Heikin-Ashi · educational{exhibit.mark != null && !revealed ? " · the answer bar is marked after you answer" : ""}
       </p>
       <HeikinAshiCharts view="both" mark={revealed ? exhibit.mark : undefined} height={180} />

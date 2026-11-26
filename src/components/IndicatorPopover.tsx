@@ -55,9 +55,9 @@ export default function IndicatorPopover({ overlayId, x, y, onClose, onLearnMore
       style={{ left: position.left, top: position.top }}
     >
       <h4 className="text-sm font-bold text-primary uppercase tracking-wider mb-1">{overlay.name}</h4>
-      <p className="text-xs text-primary/80 mb-2">{overlay.fullName}</p>
+      <p className="text-xs text-primary mb-2">{overlay.fullName}</p>
       <p className="text-slate-300 text-sm mb-2">{overlay.description}</p>
-      <p className="text-xs text-primary/60 italic mb-3">Use: {overlay.useCase}</p>
+      <p className="text-xs text-muted italic mb-3">Use: {overlay.useCase}</p>
       {onLearnMore && (
         <button
           onClick={() => {
