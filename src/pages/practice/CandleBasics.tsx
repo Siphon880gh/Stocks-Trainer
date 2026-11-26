@@ -149,13 +149,13 @@ function MatchQuiz() {
               )}
             >
               <DrawnCandle lesson={lesson} labeled={false} />
-              {matched ? <p className="text-[12px] text-emerald-600 px-1 pb-1">{lesson.match}</p> : null}
+              {matched ? <p className="text-[12px] text-emerald-700 px-1 pb-1">{lesson.match}</p> : null}
             </button>
           );
         })}
       </div>
       {done ? (
-        <p className="text-sm font-semibold text-emerald-600" data-testid="candle-match-done">
+        <p className="text-sm font-semibold text-emerald-700" data-testid="candle-match-done">
           You matched every variation. The shapes are ways of reading one period, not a signal to buy or sell.
         </p>
       ) : (

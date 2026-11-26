@@ -217,7 +217,7 @@ export default function Archive() {
                 }}
                 className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded px-4 cursor-pointer transition-colors ${
                   cryptoFilter === f
-                    ? "bg-emerald-600 text-white"
+                    ? "bg-emerald-700 text-white"
                     : "bg-emerald-500/10 border border-line text-emerald-700 hover:bg-emerald-500/20"
                 }`}
                 title={f === "all" ? "Show all patterns" : CRYPTO_FIT_HINT[f]}
@@ -463,10 +463,10 @@ export default function Archive() {
                           <span
                             className={`text-xs rounded border px-1 py-0.5 ${
                               fit === "works"
-                                ? "border-emerald-500/60 text-emerald-600"
+                                ? "border-emerald-500/60 text-emerald-700"
                                 : fit === "adapted"
-                                  ? "border-amber-500/60 text-amber-600"
-                                  : "border-rose-500/60 text-rose-600"
+                                  ? "border-amber-500/60 text-amber-700"
+                                  : "border-rose-500/60 text-rose-700"
                             }`}
                             title={CRYPTO_FIT_HINT[fit]}
                             data-crypto-fit={fit}

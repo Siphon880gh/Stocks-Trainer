@@ -122,7 +122,7 @@ export default function PracticeTechniqueNarratives() {
 
       <section className="panel p-4 space-y-2 text-[13px]" data-tour="nar-trades" data-testid="nar-trades">
         <p className="font-semibold text-[14px]">Trades on the {side} chart</p>
-        <p data-testid="nar-result" className={cn("font-medium", chart.result.total >= 0 ? "text-emerald-600" : "text-rose-600")}>{resultLine(chart.result)}</p>
+        <p data-testid="nar-result" className={cn("font-medium", chart.result.total >= 0 ? "text-emerald-700" : "text-rose-700")}>{resultLine(chart.result)}</p>
         <div className="overflow-x-auto">
           <table className="w-full text-[12px]">
             <thead><tr className="text-left text-muted"><th className="py-1 pr-2">Entry bar</th><th className="pr-2">Entry</th><th className="pr-2">Exit bar</th><th className="pr-2">Exit</th><th>P&L</th></tr></thead>
@@ -130,7 +130,7 @@ export default function PracticeTechniqueNarratives() {
               {chart.result.trades.map((t) => (
                 <tr key={`${t.entryIndex}-${t.exitIndex}`} className="border-t border-line/60 font-mono">
                   <td className="py-1 pr-2">{t.entryIndex + 1}</td><td className="pr-2">{t.entry}</td><td className="pr-2">{t.exitIndex + 1}</td><td className="pr-2">{t.exit}</td>
-                  <td className={t.pnl >= 0 ? "text-emerald-600" : "text-rose-600"}>{t.pnl >= 0 ? "+" : ""}{t.pnl.toFixed(2)}</td>
+                  <td className={t.pnl >= 0 ? "text-emerald-700" : "text-rose-700"}>{t.pnl >= 0 ? "+" : ""}{t.pnl.toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
@@ -152,7 +152,7 @@ export default function PracticeTechniqueNarratives() {
             <li key={c}><label className="flex gap-2 items-start"><input type="checkbox" checked={!!checks[c]} onChange={(e) => setChecks({ ...checks, [c]: e.target.checked })} />{c}</label></li>
           ))}
         </ul>
-        {n.checklist.every((c) => checks[c]) && <p className="text-[12px] text-emerald-600">The chart fits. Still define your stop and size first.</p>}
+        {n.checklist.every((c) => checks[c]) && <p className="text-[12px] text-emerald-700">The chart fits. Still define your stop and size first.</p>}
       </section>
 
       <section className="panel p-4 space-y-3 text-[13px]" data-testid="nar-quiz">
@@ -168,7 +168,7 @@ export default function PracticeTechniqueNarratives() {
                     className={cn("panel px-2 py-1 text-left text-[12px]", pick === o.id && (o.id === q.correctAnswer ? "ring-2 ring-emerald-500" : "ring-2 ring-rose-500"))}>{o.label}</button>
                 ))}
               </div>
-              {pick && <p className={cn("text-[12px]", pick === q.correctAnswer ? "text-emerald-600" : "text-rose-600")}>{pick === q.correctAnswer ? "Correct. " : "Not quite. "}{q.explanation}</p>}
+              {pick && <p className={cn("text-[12px]", pick === q.correctAnswer ? "text-emerald-700" : "text-rose-700")}>{pick === q.correctAnswer ? "Correct. " : "Not quite. "}{q.explanation}</p>}
             </div>
           );
         })}

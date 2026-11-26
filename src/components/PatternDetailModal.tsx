@@ -74,7 +74,7 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
                 {pattern.type} • {pattern.confirmation.replace("_", " ")} confirmation
               </span>
               {pattern.rare ? (
-                <span className="text-xs font-mono uppercase tracking-wide rounded border border-amber-500/60 text-amber-600 px-1.5 py-0.5">
+                <span className="text-xs font-mono uppercase tracking-wide rounded border border-amber-500/60 text-amber-700 px-1.5 py-0.5">
                   Advanced / rare
                 </span>
               ) : null}
@@ -85,10 +85,10 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
                   <span
                     className={`text-xs font-mono uppercase tracking-wide rounded border px-1.5 py-0.5 ${
                       fit === "works"
-                        ? "border-emerald-500/60 text-emerald-600"
+                        ? "border-emerald-500/60 text-emerald-700"
                         : fit === "adapted"
-                          ? "border-amber-500/60 text-amber-600"
-                          : "border-rose-500/60 text-rose-600"
+                          ? "border-amber-500/60 text-amber-700"
+                          : "border-rose-500/60 text-rose-700"
                     }`}
                     title={CRYPTO_FIT_HINT[fit]}
                     data-testid="pattern-crypto-fit"

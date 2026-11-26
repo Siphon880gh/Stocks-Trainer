@@ -63,7 +63,7 @@ export default function PracticeReversalCharts() {
         <div className="panel p-3 space-y-2" data-testid="rev-detail" data-active={active.id}>
           <div className="flex flex-wrap items-center gap-2">
             <p className="font-semibold text-[14px]">{active.name}</p>
-            <span className={cn("text-xs font-mono uppercase tracking-wide rounded border px-1.5 py-0.5", active.side === "bullish" ? "border-emerald-500/60 text-emerald-600" : "border-rose-500/60 text-rose-600")}>
+            <span className={cn("text-xs font-mono uppercase tracking-wide rounded border px-1.5 py-0.5", active.side === "bullish" ? "border-emerald-500/60 text-emerald-700" : "border-rose-500/60 text-rose-700")}>
               {active.side}
             </span>
             <Link to={`/archive?tab=patterns&open=${active.id}`} className="text-[12px] text-primary underline">Archive</Link>

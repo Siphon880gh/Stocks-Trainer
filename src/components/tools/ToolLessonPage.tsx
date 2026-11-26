@@ -118,7 +118,7 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
                 <li key={s.id} className="text-[12px]" data-sim-item={s.id}>
                   <SimTrigger simRef={{ sim: s.id, text: s.title }} />
                   <span className="text-muted"> · {simStepCount(s)} {s.kind === "bars" ? "bars" : "steps"}</span>
-                  {progress.walks[s.id] ? <span className="text-emerald-600" data-walk-done={s.id}> · walked ✓</span> : null}
+                  {progress.walks[s.id] ? <span className="text-emerald-700" data-walk-done={s.id}> · walked ✓</span> : null}
                   <span className="block text-muted">{s.goal}</span>
                 </li>
               ))}

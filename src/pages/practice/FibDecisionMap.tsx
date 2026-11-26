@@ -120,7 +120,7 @@ export default function PracticeFibDecisionMap() {
           ))}
         </div>
         {correct && (
-          <p data-testid="fib-drill-feedback" className={cn("text-[12px]", correct.correct ? "text-emerald-600" : "text-rose-600")}>
+          <p data-testid="fib-drill-feedback" className={cn("text-[12px]", correct.correct ? "text-emerald-700" : "text-rose-700")}>
             {correct.correct ? "Coherent plan. " : "Not the map. "}{correct.why}
           </p>
         )}

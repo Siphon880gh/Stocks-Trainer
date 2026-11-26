@@ -117,8 +117,8 @@ export default function PracticeMissingWicks() {
       <section className="panel p-4 space-y-2 text-[13px]" data-tour="mw-when" data-testid="mw-when">
         <p className="font-semibold text-[14px]">When to drill down</p>
         <div className="grid gap-3 sm:grid-cols-2">
-          <div><p className="font-medium text-emerald-600">Useful</p><ul className="list-disc pl-5 space-y-1">{WHEN_TO_DRILL.yes.map((x) => <li key={x}>{x}</li>)}</ul></div>
-          <div><p className="font-medium text-rose-600">Not useful</p><ul className="list-disc pl-5 space-y-1">{WHEN_TO_DRILL.no.map((x) => <li key={x}>{x}</li>)}</ul></div>
+          <div><p className="font-medium text-emerald-700">Useful</p><ul className="list-disc pl-5 space-y-1">{WHEN_TO_DRILL.yes.map((x) => <li key={x}>{x}</li>)}</ul></div>
+          <div><p className="font-medium text-rose-700">Not useful</p><ul className="list-disc pl-5 space-y-1">{WHEN_TO_DRILL.no.map((x) => <li key={x}>{x}</li>)}</ul></div>
         </div>
         <p className="text-[12px]">Grouping rules: <Link className="underline text-primary" to="/practice/one-minute-charts">Reading 1-minute charts</Link></p>
       </section>
@@ -136,7 +136,7 @@ export default function PracticeMissingWicks() {
                     className={cn("panel px-2 py-1 text-left text-[12px]", pick === o.id && (o.id === q.correctAnswer ? "ring-2 ring-emerald-500" : "ring-2 ring-rose-500"))}>{o.label}</button>
                 ))}
               </div>
-              {pick && <p className={cn("text-[12px]", pick === q.correctAnswer ? "text-emerald-600" : "text-rose-600")}>{pick === q.correctAnswer ? "Correct. " : "Not quite. "}{q.explanation}</p>}
+              {pick && <p className={cn("text-[12px]", pick === q.correctAnswer ? "text-emerald-700" : "text-rose-700")}>{pick === q.correctAnswer ? "Correct. " : "Not quite. "}{q.explanation}</p>}
             </div>
           );
         })}

@@ -104,7 +104,7 @@ export default function PracticeEssentialCandles() {
                     </button>
                   ))}
                 </div>
-                {p && <p className={cn("text-[12px]", ok ? "text-emerald-600" : "text-rose-600")} aria-live="polite">{ok ? "Right. " : "Not quite. "}{chk.reason}</p>}
+                {p && <p className={cn("text-[12px]", ok ? "text-emerald-700" : "text-rose-700")} aria-live="polite">{ok ? "Right. " : "Not quite. "}{chk.reason}</p>}
               </div>
             );
           })}
@@ -155,7 +155,7 @@ export default function PracticeEssentialCandles() {
                     className={cn("panel px-2 py-1 text-left text-[12px]", a === o.id && (o.id === q.correctAnswer ? "ring-2 ring-emerald-500" : "ring-2 ring-rose-500"))}>{o.label}</button>
                 ))}
               </div>
-              {a && <p className={cn("text-[12px]", a === q.correctAnswer ? "text-emerald-600" : "text-rose-600")}>{a === q.correctAnswer ? "Correct. " : "Not quite. "}{q.explanation}</p>}
+              {a && <p className={cn("text-[12px]", a === q.correctAnswer ? "text-emerald-700" : "text-rose-700")}>{a === q.correctAnswer ? "Correct. " : "Not quite. "}{q.explanation}</p>}
             </div>
           );
         })}

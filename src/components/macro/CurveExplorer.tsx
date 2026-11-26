@@ -25,7 +25,7 @@ export default function CurveExplorer({ initial }: Props) {
   const [ms, setMs] = useState(d.mortgageSpread);
   const r = explore(y2, y10, ms, d.loan);
   const shape = SHAPE_TEXT[r.shape];
-  const tone = r.shape === "inverted" ? "text-red-600" : r.shape === "flat" ? "text-amber-600" : "text-emerald-700";
+  const tone = r.shape === "inverted" ? "text-red-600" : r.shape === "flat" ? "text-amber-700" : "text-emerald-700";
   const h = (v: number) => 100 - (v / 7) * 90;
   return (
     <section className="panel p-4 space-y-3" aria-label="Yield-curve explorer" data-testid="curve-explorer">

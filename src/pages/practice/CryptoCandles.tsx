@@ -91,9 +91,9 @@ export default function PracticeCryptoCandles() {
               <span
                 className={cn(
                   "shrink-0 text-xs font-mono uppercase tracking-wide rounded border px-1.5 py-0.5",
-                  p.cryptoFit === "works" && "border-emerald-500/60 text-emerald-600",
-                  p.cryptoFit === "adapted" && "border-amber-500/60 text-amber-600",
-                  p.cryptoFit === "rare" && "border-rose-500/60 text-rose-600",
+                  p.cryptoFit === "works" && "border-emerald-500/60 text-emerald-700",
+                  p.cryptoFit === "adapted" && "border-amber-500/60 text-amber-700",
+                  p.cryptoFit === "rare" && "border-rose-500/60 text-rose-700",
                 )}
                 title={CRYPTO_FIT_HINT[p.cryptoFit]}
               >

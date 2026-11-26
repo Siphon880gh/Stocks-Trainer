@@ -16,8 +16,8 @@ const isView = (v: string | null): v is View => v === "world" || v === "tree" ||
 
 const STATUS_ICON: Record<StageStatus, string> = { done: "check_circle", "in-progress": "timelapse", available: "radio_button_unchecked", locked: "lock" };
 const STATUS_TONE: Record<StageStatus, string> = {
-  done: "border-emerald-500 bg-emerald-500/15 text-emerald-600 dark:text-emerald-400",
-  "in-progress": "border-amber-500 bg-amber-500/10 text-amber-600 dark:text-amber-400",
+  done: "border-emerald-500 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
+  "in-progress": "border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-400",
   available: "border-primary/60 bg-surface text-primary",
   locked: "border-line bg-canvas text-muted",
 };

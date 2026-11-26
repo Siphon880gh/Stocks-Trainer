@@ -43,7 +43,7 @@ export default function PracticeTradeFramework() {
         <div className="grid md:grid-cols-2 gap-3">
           {[chop, signal].map((c) => (
             <div key={c.chartKey} className="space-y-1" data-panel={c.label}>
-              <p className={cn("text-[12px] font-semibold", c === chop ? "text-muted" : "text-emerald-600")}>{c.label}</p>
+              <p className={cn("text-[12px] font-semibold", c === chop ? "text-muted" : "text-emerald-700")}>{c.label}</p>
               <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
                 <CandlestickChart data={SCENARIOS[c.chartKey]!.bars} annotations={c.annotations} height={170} showScaleControls={false} compact />
               </div>
