@@ -113,7 +113,7 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
                   step={i.step}
                   value={vals[i.id] ?? 0}
                   onChange={(e) => setVals({ ...vals, [i.id]: Number(e.target.value) })}
-                  className="border border-line rounded px-2 py-1 bg-white"
+                  className="border border-line rounded px-2 py-1 bg-surface"
                 />
               </label>
             ))}

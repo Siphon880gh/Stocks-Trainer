@@ -59,7 +59,7 @@ export function specFromFields(f: TicketFields, symbol: string, last = 0): Order
   return spec;
 }
 
-const input = "w-full px-2 py-1.5 rounded-md border border-line bg-white text-[13px] tabular-nums";
+const input = "w-full px-2 py-1.5 rounded-md border border-line bg-surface text-[13px] tabular-nums";
 
 /** BA5.M1: order ticket with live validation and a generated plain-language preview. SIMULATED. */
 export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES, disabled, onSubmit, initial, allowBracket }: Props) {

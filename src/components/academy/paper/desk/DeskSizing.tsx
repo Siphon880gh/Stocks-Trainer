@@ -6,7 +6,7 @@ import { cn } from "../../../../lib/utils";
 type Mode = "risk" | "percent" | "amount";
 
 const toCents = (s: string) => Math.round(Number(s) * 100);
-const input = "w-full px-2 py-1 rounded-md border border-line bg-white text-[12px] tabular-nums";
+const input = "w-full px-2 py-1 rounded-md border border-line bg-surface text-[12px] tabular-nums";
 
 /** Position-size calculator (risk from a stop, % of equity, or a cash amount) that hands a share count to the ticket. */
 export default function DeskSizing({ last, equity, onUse }: { last: number; equity: number; onUse: (qty: number, stop?: number, target?: number) => void }) {

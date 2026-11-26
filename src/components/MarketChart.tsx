@@ -73,7 +73,7 @@ const OSC_PANEL_H = 120;
 const EMPTY_HIGHLIGHTS: ChartHighlightMark[] = [];
 
 const scaleBtn =
-  "rounded border border-line bg-white px-2 py-0.5 text-ink hover:bg-[#f0f3fa] disabled:opacity-40";
+  "rounded border border-line bg-surface px-2 py-0.5 text-ink hover:bg-hover disabled:opacity-40";
 
 const axisTick = { fill: CHART.textMuted, fontSize: 10, fontFamily: CHART.font };
 
@@ -299,7 +299,7 @@ function highlightLabelStyle(box: HighlightBandBox): CSSProperties {
 }
 
 const chevronBtn =
-  "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded border border-line bg-white text-ink hover:bg-[#f0f3fa] disabled:border-[#ececef] disabled:bg-[#f8f9fd] disabled:text-[#c5c7ce] disabled:hover:bg-[#f8f9fd]";
+  "inline-flex h-7 w-7 shrink-0 items-center justify-center rounded border border-line bg-surface text-ink hover:bg-hover disabled:border-disabled-line disabled:bg-pane disabled:text-disabled-ink disabled:hover:bg-pane";
 
 function ExplanationPopover({
   note,
@@ -373,7 +373,7 @@ function ExplanationPopover({
       ref={ref}
       role="dialog"
       aria-label={`Bar ${note.step} of ${note.of} explanation`}
-      className="fixed z-[200] w-[300px] rounded border border-line bg-white shadow-md px-2.5 py-2 pr-9 text-[12px] leading-relaxed"
+      className="fixed z-[200] w-[300px] rounded border border-line bg-surface shadow-md px-2.5 py-2 pr-9 text-[12px] leading-relaxed"
       style={{
         left: pos.left,
         top: pos.top,
@@ -438,10 +438,10 @@ function PriceTooltip({
   const up = d.close >= d.open;
   return (
     <div
-      className="text-[12px] space-y-0.5 bg-white border border-line rounded shadow-md px-3 py-2 min-w-[128px]"
+      className="text-[12px] space-y-0.5 bg-surface border border-line rounded shadow-md px-3 py-2 min-w-[128px]"
       style={{ fontFamily: CHART.font, color: CHART.text }}
     >
-      <p className="font-semibold border-b border-[#e0e3eb] pb-1 mb-1.5">{d.name}</p>
+      <p className="font-semibold border-b border-grid pb-1 mb-1.5">{d.name}</p>
       <div className="tabular-nums space-y-0.5">
         <p>
           <span className="text-muted w-4 inline-block">O</span> {fmt(d.open)}
@@ -912,7 +912,7 @@ export default function MarketChart({
     <div className={cn(chartPaneClass, "space-y-0")} style={{ fontFamily: CHART.font }}>
       {showScaleControls ? (
         <div
-          className="flex flex-wrap items-center gap-x-2 gap-y-2 px-2 py-2 text-xs border-b border-[#e0e3eb] bg-[#f8f9fd]"
+          className="flex flex-wrap items-center gap-x-2 gap-y-2 px-2 py-2 text-xs border-b border-grid bg-pane"
           style={{ color: CHART.textMuted }}
         >
           {frequencies && frequencies.length > 0 ? (
@@ -941,7 +941,7 @@ export default function MarketChart({
                     className={cn(
                       scaleBtn,
                       active &&
-                        "border-primary bg-[#e8f0ff] font-semibold text-primary hover:bg-[#d6e4ff]",
+                        "border-primary bg-tint font-semibold text-primary hover:bg-tint-strong",
                     )}
                     onClick={() => onFrequencyMinutes?.(f.minutes)}
                   >
@@ -991,8 +991,8 @@ export default function MarketChart({
                 type="button"
                 className={`px-3 text-[12px] text-primary ${
                   explanationsOn
-                    ? "bg-[#e8f0ff] font-semibold hover:bg-[#d6e4ff]"
-                    : "bg-white font-medium hover:bg-[#e8f0ff]"
+                    ? "bg-tint font-semibold hover:bg-tint-strong"
+                    : "bg-surface font-medium hover:bg-tint"
                 }`}
                 aria-pressed={explanationsOn}
                 onClick={() => {
@@ -1015,8 +1015,8 @@ export default function MarketChart({
                 title="What are chart explanations?"
                 className={`min-w-7 border-l border-primary px-1.5 text-primary ${
                   explanationsOn
-                    ? "bg-[#e8f0ff] hover:bg-[#d6e4ff]"
-                    : "bg-white hover:bg-[#e8f0ff]"
+                    ? "bg-tint hover:bg-tint-strong"
+                    : "bg-surface hover:bg-tint"
                 }`}
                 onClick={() => setExplainHelpOn((open) => !open)}
               >
@@ -1031,7 +1031,7 @@ export default function MarketChart({
             {explainHelpOn ? (
               <div
                 role="tooltip"
-                className="absolute right-0 top-full z-30 mt-1.5 w-[280px] rounded border border-line bg-white px-3 py-2 text-[12px] leading-relaxed text-ink shadow-md"
+                className="absolute right-0 top-full z-30 mt-1.5 w-[280px] rounded border border-line bg-surface px-3 py-2 text-[12px] leading-relaxed text-ink shadow-md"
               >
                 Numbered dots appear on the candles and on any overlays you have
                 on, such as SMA (only if it's applicable to have explanations). 
@@ -1044,7 +1044,7 @@ export default function MarketChart({
             {statusLabel ? (
               <>
                 <span aria-hidden className="mx-3 h-4 w-px bg-line" />
-                <span className="inline-flex h-7 items-center gap-1.5 px-2.5 text-xs rounded-md border border-line bg-white text-ink normal-case">
+                <span className="inline-flex h-7 items-center gap-1.5 px-2.5 text-xs rounded-md border border-line bg-surface text-ink normal-case">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#089981]" />
                   {statusLabel}
                 </span>
@@ -1266,7 +1266,7 @@ export default function MarketChart({
         </ResponsiveContainer>
 
       {showRSI ? (
-        <div className="border-t border-[#e0e3eb]">
+        <div className="border-t border-grid">
           <PaneLegend items={[{ color: CHART.rsi, label: "RSI(5)" }]} />
           <ResponsiveContainer width="100%" height={OSC_PANEL_H}>
             <ComposedChart
@@ -1342,7 +1342,7 @@ export default function MarketChart({
       ) : null}
 
       {showMACD ? (
-        <div className="border-t border-[#e0e3eb]">
+        <div className="border-t border-grid">
           <PaneLegend
             items={[
               { color: CHART.macd, label: "MACD" },
@@ -1454,7 +1454,7 @@ export default function MarketChart({
               />
               <div
                 data-pattern-highlight-label={h.id}
-                className="absolute flex items-center gap-1 rounded border border-primary bg-white px-1.5 py-0.5 shadow-sm"
+                className="absolute flex items-center gap-1 rounded border border-primary bg-surface px-1.5 py-0.5 shadow-sm"
                 style={{
                   ...highlightLabelStyle(box),
                   zIndex: front ? 32 : 20,
@@ -1471,7 +1471,7 @@ export default function MarketChart({
                     type="button"
                     aria-label={`About ${h.label}`}
                     title={`About ${h.label}`}
-                    className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-xs font-semibold leading-none hover:bg-[#e8f0ff]"
+                    className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-xs font-semibold leading-none hover:bg-tint"
                     onClick={() => {
                       raiseHighlight(h.id);
                       onExplainHighlight?.(h.id);
@@ -1484,7 +1484,7 @@ export default function MarketChart({
                   type="button"
                   aria-label={`Clear ${h.label} highlight`}
                   title="Clear highlight"
-                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-xs font-semibold leading-none hover:bg-[#e8f0ff]"
+                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-xs font-semibold leading-none hover:bg-tint"
                   onClick={() => onClearHighlight?.(h.id)}
                 >
                   ×
