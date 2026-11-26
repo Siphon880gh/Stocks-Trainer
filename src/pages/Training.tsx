@@ -400,6 +400,7 @@ export default function Training() {
           <section id="coach" className="panel p-4 text-sm space-y-2">
             <h3 className="font-semibold">Coach</h3>
             <p className="text-muted">Step-by-step coached decisions.</p>
+            <Link to="/coach" className="text-primary underline">Open the Coach catalog</Link>
             <ul className="flex flex-wrap gap-x-4 gap-y-2">
               {listSessions().map((session) => (
                 <li key={session.slug}>
@@ -411,6 +412,7 @@ export default function Training() {
           <section id="playbooks" className="panel p-4 text-sm space-y-2">
             <h3 className="font-semibold">Playbooks</h3>
             <p className="text-muted">Setups written as plans: entry, stop, target.</p>
+            <Link to="/playbooks" className="text-primary underline">Open all playbooks</Link>
             <ul className="flex flex-wrap gap-x-4 gap-y-2">
               {listPlaybooks().map((playbook) => (
                 <li key={playbook.id}>
@@ -422,7 +424,10 @@ export default function Training() {
           <section id="paper" className="panel p-4 text-sm space-y-2">
             <h3 className="font-semibold">Paper trading</h3>
             <p className="text-muted">SIMULATED orders with stops and brackets.</p>
-            <Link to="/paper" className="text-primary underline">Open paper trading</Link>
+            <div className="flex flex-wrap gap-3">
+              <Link to="/paper" className="text-primary underline">Open paper trading</Link>
+              <Link to="/paper/desk" className="text-primary underline">Open the paper desk</Link>
+            </div>
           </section>
           <section id="challenges" className="panel p-4 text-sm space-y-2">
             <h3 className="font-semibold">Challenges</h3>
