@@ -1081,6 +1081,40 @@ const flows = {
     await p.keyboard.press("Escape");
     check(await p.evaluate(() => [...document.querySelectorAll(".hai-float")].every((el) => getComputedStyle(el).visibility !== "hidden")), `tabs: AI helper back after the dialog @${w}`);
   },
+  async "Browse new tab: switch off by default, remembered after reload, links open a new tab"(p, w) {
+    await p.goto(base + "/browse", { waitUntil: "networkidle" });
+    const sw = p.getByRole("switch", { name: "Open links in a new tab" });
+    check((await sw.getAttribute("aria-checked")) === "false", `newtab: off by default @${w}`);
+    check((await p.locator("[data-testid='browse-everything'] a[target='_blank']").count()) === 0, `newtab: no new-tab links when off @${w}`);
+    await sw.click();
+    check((await sw.getAttribute("aria-checked")) === "true", `newtab: switch turns on @${w}`);
+    await p.reload({ waitUntil: "networkidle" });
+    check((await sw.getAttribute("aria-checked")) === "true", `newtab: on after reload @${w}`);
+    const all = p.locator("[data-testid='browse-everything'] a");
+    const n = await all.count();
+    check(n > 50 && (await p.locator("[data-testid='browse-everything'] a[target='_blank'][rel='noopener noreferrer']").count()) === n, `newtab: every link opens a new tab @${w}`);
+    check((await overflow(p)) <= 1, `newtab: no overflow @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/browse-newtab-${w}.png` });
+    await p.getByTestId("browse-search").fill("doji");
+    const hit = p.locator("[data-testid='browse-results'] a[href$='/archive?tab=patterns&open=doji']");
+    check((await hit.getAttribute("target")) === "_blank", `newtab: search result opens a new tab @${w}`);
+    const [tab] = await Promise.all([p.context().waitForEvent("page"), hit.click()]);
+    await tab.waitForLoadState("domcontentloaded");
+    check(tab.url() === base + "/archive?tab=patterns&open=doji", `newtab: new tab keeps path and query (${tab.url()}) @${w}`);
+    check(p.url().endsWith("/browse"), `newtab: Browse stays open @${w}`);
+    await tab.close();
+    await p.getByTestId("browse-toc").click();
+    await p.waitForTimeout(300);
+    await sw.click();
+    check((await sw.getAttribute("aria-checked")) === "false", `newtab: switch turns off @${w}`);
+    await p.reload({ waitUntil: "networkidle" });
+    check((await sw.getAttribute("aria-checked")) === "false", `newtab: off after reload @${w}`);
+    check((await p.locator("[data-testid='browse-everything'] a[target='_blank']").count()) === 0, `newtab: links back to in-app when off @${w}`);
+    for (const extra of p.context().pages()) if (extra !== p) await extra.close();
+    await p.getByTestId("browse-toc").click();
+    await p.waitForURL(/\/training$/);
+    check(p.context().pages().length === 1, `newtab: off navigates in the same tab @${w}`);
+  },
 };
 
 
