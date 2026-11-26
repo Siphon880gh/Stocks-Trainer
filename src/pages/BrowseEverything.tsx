@@ -26,9 +26,9 @@ export default function BrowseEverything() {
           Every lesson, lab, quiz and tool in one place. Your path on Home stays as it is; anything here opens in a popup, with Open full page if you want to stay there.
         </p>
         <div className="flex flex-wrap gap-3 text-sm">
-          <Link to="/training" {...popup("/training", "Full Table of Contents")} className="text-primary underline" data-testid="browse-toc">Full Table of Contents</Link>
-          <Link to="/archive" {...popup("/archive", "Library and glossary")} className="text-primary underline">Library and glossary</Link>
-          <Link to="/map" {...popup("/map", "Progress map")} className="text-primary underline">Progress map</Link>
+          <Link to="/training" {...popup("/training", "Full Table of Contents")} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary" data-testid="browse-toc">Full Table of Contents</Link>
+          <Link to="/archive" {...popup("/archive", "Library and glossary")} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Library and glossary</Link>
+          <Link to="/map" {...popup("/map", "Progress map")} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Progress map</Link>
         </div>
       </header>
 
@@ -54,7 +54,7 @@ export default function BrowseEverything() {
             <ul className="space-y-1.5">
               {hits.map((h) => (
                 <li key={h.to} className="flex flex-wrap items-baseline gap-x-2">
-                  <Link to={h.to} {...popup(h.to, h.label)} className="text-primary underline">{h.label}</Link>
+                  <Link to={h.to} {...popup(h.to, h.label)} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">{h.label}</Link>
                   <span className="text-xs text-muted">{h.kind}</span>
                 </li>
               ))}
@@ -71,7 +71,7 @@ export default function BrowseEverything() {
             <ul className="flex flex-wrap gap-x-4 gap-y-1.5">
               {s.links.map((l) => (
                 <li key={`${s.id}-${l.to}`}>
-                  <Link to={l.to} {...popup(l.to, l.label)} className="text-primary underline">{l.label}</Link>
+                  <Link to={l.to} {...popup(l.to, l.label)} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">{l.label}</Link>
                 </li>
               ))}
             </ul>
