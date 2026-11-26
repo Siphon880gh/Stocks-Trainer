@@ -6,16 +6,21 @@ import { fileURLToPath } from "node:url";
 import { APP_ROUTES } from "./academy/refs";
 import {
   ACADEMY_MORE,
-  APP_NAV,
   DASHBOARD_MORE,
   DEEP_STUDY,
+  HEADER_NAV,
+  LEARN_MENU,
   OTHER_FACTORS,
   PATTERN_MORE,
+  PRACTICE_FAMILIES,
   PRACTICE_MENU,
   QUICK_DECISIONS,
   TOOL_TRAINING,
+  TRADE_MENU,
 } from "./appNav";
+import { BROWSE_SECTIONS } from "./browseCatalog";
 import { STAGES } from "./progressMap";
+import { TRACKS } from "./tracks";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const root = join(here, "..", "..");
@@ -39,13 +44,15 @@ function tocLinks(): string[] {
   return [...found, ...PRACTICE_MENU.map((i) => i.to), ...TOOL_TRAINING.map((i) => i.to)];
 }
 
-const menuGroups: readonly (readonly { to: string }[])[] = [
-  APP_NAV, DASHBOARD_MORE, ACADEMY_MORE, PATTERN_MORE, PRACTICE_MENU, TOOL_TRAINING, DEEP_STUDY, OTHER_FACTORS, QUICK_DECISIONS,
+/** The directional header: top-level links plus the Learn, Practice (by family) and Trade menus. */
+const headerGroups: readonly (readonly { to: string }[])[] = [
+  HEADER_NAV.flatMap((i) => (i.to ? [{ to: i.to }] : [])), LEARN_MENU, ...PRACTICE_FAMILIES.map((f) => f.items), TRADE_MENU,
 ];
-const menuLinks = menuGroups.flatMap((group) => group.map((i) => i.to));
+const headerLinks = headerGroups.flatMap((group) => group.map((i) => i.to));
+const browseLinks = BROWSE_SECTIONS.flatMap((s) => s.links.map((l) => l.to));
 
-/** Every static route a learner can reach from the header, the Table of Contents or the progress map. */
-const entryPoints = new Set([...menuLinks, ...tocLinks(), ...STAGES.map((s) => s.to)].map(pathOf));
+/** Every static route a learner can reach from the header, Browse everything, the Table of Contents or the progress map. */
+const entryPoints = new Set([...headerLinks, ...browseLinks, ...tocLinks(), ...STAGES.map((s) => s.to)].map(pathOf));
 
 const staticRoutes = APP_ROUTES.filter((r) => !r.includes(":"));
 const paramRoutes = APP_ROUTES.filter((r) => r.includes(":"));
@@ -71,4 +78,20 @@ test("every param route's hub is a static route with an entry point", () => {
     const candidates = [hub, hub.split("/").slice(0, -1).join("/")].filter(Boolean);
     assert.ok(candidates.some((h) => staticRoutes.includes(h) && entryPoints.has(h)), `${r} has no reachable hub`);
   }
+});
+
+test("every item from the old header menus is still in the header or Browse everything", () => {
+  const old: readonly (readonly { label: string; to: string }[])[] = [DASHBOARD_MORE, ACADEMY_MORE, PATTERN_MORE, PRACTICE_MENU, TOOL_TRAINING, DEEP_STUDY, OTHER_FACTORS, QUICK_DECISIONS];
+  const reach = new Set([...headerLinks, ...browseLinks]);
+  for (const item of old.flat()) assert.ok(reach.has(item.to), `${item.label} (${item.to}) lost its menu entry`);
+  for (const to of ["/", "/training", "/academy", "/training#patterns", "/training#practice"]) assert.ok(reach.has(to), `old top-level ${to}`);
+});
+
+test("every learner-track step opens a route, or a hub's detail page, that also has a header, Browse or map entry point", () => {
+  const reachable = (path: string) => {
+    const segs = path.split("/");
+    for (let n = segs.length; n > 1; n--) if (entryPoints.has(segs.slice(0, n).join("/"))) return true;
+    return entryPoints.has(path);
+  };
+  for (const t of TRACKS) for (const s of t.steps) assert.ok(reachable(pathOf(s.to)), `${t.id}: ${s.to}`);
 });
