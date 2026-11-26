@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ANSWER_STREAK_LABEL, ANSWER_STREAK_TIP } from "../lib/streakLabels";
 import MacroHomeTip from "../components/macro/MacroHomeTip";
 import PlacementCard from "../components/academy/PlacementCard";
@@ -53,8 +53,10 @@ import {
   getProgressSyncAdapter,
   importProgressJson,
 } from "../lib/progressSync";
-import AppSectionNav from "../components/AppSectionNav";
-import ProgressMap from "./ProgressMap";
+import TrackPicker, { useTrackId } from "../components/TrackPicker";
+import NextUpCard from "../components/NextUpCard";
+import { getTrack } from "../lib/tracks";
+import { BROWSE_ROUTE } from "../lib/appNav";
 
 export default function Dashboard() {
   const [{ state: progress, recoveryMessage }, setLoad] = useState(() => {
@@ -86,6 +88,7 @@ export default function Dashboard() {
   const coachTip = coachTipForActive();
   const drawTip = practiceDrawTipLine();
   const drawDone = hasGradedPracticeDraw();
+  const track = getTrack(useTrackId());
 
   const completedCount = useMemo(
     () =>
@@ -120,6 +123,14 @@ export default function Dashboard() {
     });
   };
 
+  // A first track pick confirms the milestone path, so re-read progress when the track changes.
+  const lastTrack = useRef(track?.id);
+  useEffect(() => {
+    if (lastTrack.current === track?.id) return;
+    lastTrack.current = track?.id;
+    refreshProgress();
+  });
+
   const pathCompleteLabel =
     progress.pathId === DECISION_MAKER_PATH_ID
       ? "Decision Maker path complete"
@@ -139,15 +150,21 @@ export default function Dashboard() {
   return (
     <main className="flex-1 p-4 md:p-8 max-w-3xl mx-auto w-full space-y-8">
       <p className="text-[14px] text-ink" data-testid="value-promise">{VALUE_PROMISE}</p>
-      {goalPending ? <GoalPicker onConfirmed={refreshProgress} /> : null}
-      {/* Beginner Academy (BA3.M3): optional, dismissible, only after the goal picker is confirmed. */}
-      {!goalPending ? <PlacementCard variant="home" /> : null}
+      {/* Directional Home: pick a track first, then only its next 1–3 steps. Everything else is in Browse everything. */}
+      {track ? <NextUpCard track={track} /> : <TrackPicker currentId={null} />}
+      {track && goalPending ? <GoalPicker onConfirmed={refreshProgress} /> : null}
+      {/* Beginner Academy (BA3.M3): optional, dismissible; shown to the New to stocks track. */}
+      {track?.id === "new-to-stocks" && !goalPending ? <PlacementCard variant="home" /> : null}
       {/* Beginner Academy (BA9.M2): Today card, after the goal picker is confirmed. */}
-      {!goalPending ? <TodayCard variant="home" /> : null}
-      {/* Progress Map (#23): share done and the next objective. */}
-      {!goalPending ? <ProgressMapCard /> : null}
-      {!goalPending ? <ProgressMap embedded /> : null}
+      {track && !goalPending ? <TodayCard variant="home" /> : null}
+      {/* Progress Map (#23): share done and the next objective; the full map is one click away. */}
+      {track && !goalPending ? <ProgressMapCard /> : null}
 
+      <details className="border-t border-line pt-4" data-testid="home-milestones">
+        <summary className="cursor-pointer text-sm text-muted hover:text-ink">
+          Milestone path · {pathTemplate?.title ?? "Learning path"} · {pathStepLabel}
+        </summary>
+      <div className="mt-4 space-y-8">
       <section className="flex flex-wrap items-end justify-between gap-4">
         <div className="relative min-w-0 pr-9">
           <SampleDataNote />
@@ -279,18 +296,18 @@ export default function Dashboard() {
           </p>
         ) : null}
       </section>
+      </div>
+      </details>
 
       <section className="border-t border-line pt-6 space-y-3">
-        <AppSectionNav />
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+          <Link to={BROWSE_ROUTE} className="text-primary font-semibold hover:underline" data-testid="home-browse">Browse everything</Link>
+          <Link to="/training" className="text-primary hover:underline">Table of Contents</Link>
           <Link to="/market?nav=1" className="text-primary hover:underline">Market navigator</Link>
           <Link to="/archive" className="text-primary hover:underline">Library</Link>
           <Link to="/practice-draw" className="text-primary hover:underline">
             Draw{drawDone ? " · done" : ""}
           </Link>
-          <Link to="/practice/lookalike" className="text-primary hover:underline">Lookalikes</Link>
-          <Link to="/practice/hunt" className="text-primary hover:underline">Pattern hunt</Link>
-          <Link to="/practice/levels" className="text-primary hover:underline">Support and resistance</Link>
         </div>
         <p className="text-[12px] text-muted tabular-nums">
           {progress.scores.totalPoints} pts ·{" "}
