@@ -6,7 +6,6 @@ import TodayCard from "../components/academy/TodayCard";
 import ProgressMapCard from "../components/ProgressMapCard";
 import AcademyHomeTip from "../components/academy/AcademyHomeTip";
 import { Link } from "react-router-dom";
-import GoalPicker from "../components/GoalPicker";
 import JargonText from "../components/JargonText";
 import SampleDataNote from "../components/SampleDataNote";
 import { withoutSampleWord } from "../lib/learnerCopy";
@@ -53,9 +52,9 @@ import {
   getProgressSyncAdapter,
   importProgressJson,
 } from "../lib/progressSync";
-import TrackPicker, { useTrackId } from "../components/TrackPicker";
+import TrackPicker, { pickTrack, useTrackId } from "../components/TrackPicker";
 import NextUpCard from "../components/NextUpCard";
-import { getTrack } from "../lib/tracks";
+import { clearTrackId, getTrack } from "../lib/tracks";
 import { BROWSE_ROUTE } from "../lib/appNav";
 
 export default function Dashboard() {
@@ -126,6 +125,12 @@ export default function Dashboard() {
   // A first track pick confirms the milestone path, so re-read progress when the track changes.
   const lastTrack = useRef(track?.id);
   useEffect(() => {
+    // A saved track with no confirmed path (for example an older save): confirm the track's path once.
+    if (track && goalPending) {
+      pickTrack(track.id);
+      refreshProgress();
+      return;
+    }
     if (lastTrack.current === track?.id) return;
     lastTrack.current = track?.id;
     refreshProgress();
@@ -152,7 +157,6 @@ export default function Dashboard() {
       <p className="text-[14px] text-ink" data-testid="value-promise">{VALUE_PROMISE}</p>
       {/* Directional Home: pick a track first, then only its next 1–3 steps. Everything else is in Browse everything. */}
       {track ? <NextUpCard track={track} /> : <TrackPicker currentId={null} />}
-      {track && goalPending ? <GoalPicker onConfirmed={refreshProgress} /> : null}
       {/* Beginner Academy (BA3.M3): optional, dismissible; shown to the New to stocks track. */}
       {track?.id === "new-to-stocks" && !goalPending ? <PlacementCard variant="home" /> : null}
       {/* Beginner Academy (BA9.M2): Today card, after the goal picker is confirmed. */}
@@ -409,6 +413,7 @@ export default function Dashboard() {
                 )
               ) {
                 resetProgress();
+                clearTrackId();
                 setChartGateTemporaryBypass(false);
                 refreshProgress();
               }

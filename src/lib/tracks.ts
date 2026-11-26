@@ -235,6 +235,16 @@ export function saveTrackId(id: string, storage: KV | undefined = browser()): vo
   }
 }
 
+/** Forget the track, so Home shows the path picker again (used by Reset path). */
+export function clearTrackId(storage: KV | undefined = browser()): void {
+  try {
+    storage?.setItem(TRACK_KEY, "");
+    if (typeof window !== "undefined") window.dispatchEvent(new Event("track-change"));
+  } catch {
+    /* storage blocked */
+  }
+}
+
 export interface TrackProgress {
   /** Stage id → map status ("done", "in-progress", "available", "locked"). */
   stageStatus: (stage: string) => string | undefined;

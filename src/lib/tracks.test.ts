@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { EVERYTHING_TRACK_ID, TRACKS, TRACK_KEY, doneCount, getTrack, isStepDone, loadTrackId, nextSteps, saveTrackId, type TrackProgress } from "./tracks";
+import { EVERYTHING_TRACK_ID, TRACKS, TRACK_KEY, clearTrackId, doneCount, getTrack, isStepDone, loadTrackId, nextSteps, saveTrackId, type TrackProgress } from "./tracks";
 import { routeExists } from "./academy/refs";
 import { STAGE_BY_ID } from "./progressMap";
 import { CASE_PACKS } from "./caseStudies";
@@ -59,4 +59,12 @@ test("track storage: null before a pick, saved id after, unknown ids ignored", (
   assert.equal(loadTrackId(s), "options-vol");
   s.setItem(TRACK_KEY, "{bad json");
   assert.equal(loadTrackId(s), null);
+});
+
+test("tracks: clearing the track brings the picker back", () => {
+  const kv = memoryStorage();
+  saveTrackId("macro-news", kv);
+  assert.equal(loadTrackId(kv), "macro-news");
+  clearTrackId(kv);
+  assert.equal(loadTrackId(kv), null);
 });
