@@ -1,0 +1,15 @@
+# Apache serves dist/ as a plain folder, so a deep link or a refresh on a route such as
+# practice/candle-basics has no file behind it and returned 404. Send every route to
+# index.html, and point nested asset requests back here, because index.html loads its
+# scripts and styles with relative ./assets/ URLs that a deep route would otherwise nest.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^.+?/(assets/.+|patterns/.+|screenshots/.+|harness-ai\.js)$ $1 [L]
+
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_URI} !\.(?:js|css|map|png|jpe?g|gif|svg|webp|ico|json|woff2?)$
+  RewriteRule ^ index.html [L]
+</IfModule>
