@@ -1280,7 +1280,7 @@ export default function MarketChart({
                 domain={[0, 100]}
                 ticks={[30, 50, 70]}
                 stroke={CHART.grid}
-                tick={{ ...axisTick, fontSize: 9 }}
+                tick={axisTick}
                 width={56}
                 axisLine={{ stroke: CHART.border }}
               />
@@ -1361,7 +1361,7 @@ export default function MarketChart({
                 orientation="right"
                 domain={["auto", "auto"]}
                 stroke={CHART.grid}
-                tick={{ ...axisTick, fontSize: 9 }}
+                tick={axisTick}
                 width={56}
                 tickFormatter={(v) => Number(v).toFixed(0)}
                 axisLine={{ stroke: CHART.border }}
