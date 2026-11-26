@@ -100,12 +100,12 @@ function MenuGroup({
         className={cn(
           // Below sm the menu spans the header width (the blurred header is the containing block), so it never runs off a phone screen.
           "absolute left-0 top-full z-50 mt-1 max-h-[70vh] overflow-y-auto rounded-lg border border-line bg-surface py-1 shadow-lg max-sm:fixed max-sm:inset-x-2 max-sm:mt-0",
-          sections ? "sm:w-[34rem] sm:columns-2 sm:gap-0" : "sm:min-w-56",
+          sections ? "sm:w-[34rem] sm:grid sm:grid-cols-2" : "sm:min-w-56",
         )}
       >
         {items.map(row)}
         {(sections ?? []).map((s) => (
-          <div key={s.title} role="group" aria-label={s.title} className="break-inside-avoid pb-1">
+          <div key={s.title} role="group" aria-label={s.title} className="pb-1">
             <p className="px-3 pt-2 pb-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted">{s.title}</p>
             {s.items.map(row)}
           </div>
@@ -113,7 +113,7 @@ function MenuGroup({
         <Link
           to={BROWSE_ROUTE}
           role="menuitem"
-          className="flex items-center gap-2 px-3 py-1.5 mt-1 border-t border-line text-[13px] text-primary hover:bg-canvas break-inside-avoid"
+          className="flex items-center gap-2 px-3 py-1.5 mt-1 border-t border-line text-[13px] text-primary hover:bg-canvas sm:col-span-2"
           onClick={() => setOpen(false)}
         >
           <span className="material-symbols-outlined text-[18px]" aria-hidden>apps</span>

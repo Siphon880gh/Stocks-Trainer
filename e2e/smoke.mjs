@@ -991,6 +991,11 @@ const flows = {
     check((await menu.getByRole("group").count()) === 7, `nav: 7 practice families @${w}`);
     const box = await menu.boundingBox();
     check(box && box.x >= 0 && box.x + box.width <= w + 1, `nav: practice menu fits @${w}`);
+    // Every family is reachable inside the menu's own scroll (no hidden overflow columns).
+    const last = menu.getByRole("group").last().getByRole("menuitem").last();
+    await last.scrollIntoViewIfNeeded();
+    const lb = await last.boundingBox();
+    check(lb && lb.x >= 0 && lb.x + lb.width <= w + 1, `nav: last practice family on screen @${w}`);
     if (SHOTS) await p.screenshot({ path: `${SHOTS}/nav-practice-menu-${w}.png`, fullPage: false });
     await menu.getByRole("menuitem", { name: "Browse everything" }).click();
     await p.waitForURL(/\/browse$/);
