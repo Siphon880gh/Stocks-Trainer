@@ -25,11 +25,6 @@ export default function BrowseEverything() {
         <p className="text-sm text-muted max-w-2xl">
           Every lesson, lab, quiz and tool in one place. Your path on Home stays as it is; anything here opens in a popup, with Open full page if you want to stay there.
         </p>
-        <div className="flex flex-wrap gap-3 text-sm">
-          <Link to="/training" {...popup("/training", "Full Table of Contents")} className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary" data-testid="browse-toc">Full Table of Contents</Link>
-          <Link to="/archive" {...popup("/archive", "Library and glossary")} className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Library and glossary</Link>
-          <Link to="/map" {...popup("/map", "Progress map")} className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Progress map</Link>
-        </div>
       </header>
 
       <div className="max-w-xl">
@@ -71,7 +66,14 @@ export default function BrowseEverything() {
             <ul className="flex flex-wrap gap-x-4">
               {s.links.map((l) => (
                 <li key={`${s.id}-${l.to}`}>
-                  <Link to={l.to} {...popup(l.to, l.label)} className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">{l.label}</Link>
+                  <Link
+                    to={l.to}
+                    {...popup(l.to, l.label)}
+                    className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary"
+                    data-testid={s.id === "start" && l.to === "/training" ? "browse-toc" : undefined}
+                  >
+                    {l.label}
+                  </Link>
                 </li>
               ))}
             </ul>
