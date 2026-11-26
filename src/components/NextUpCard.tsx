@@ -33,12 +33,14 @@ export default function NextUpCard({ track }: { track: Track }) {
       <div className="flex flex-wrap items-start gap-3">
         <span className="material-symbols-outlined text-primary text-[26px]" aria-hidden>{track.icon}</span>
         <div className="flex-1 min-w-[180px]">
-          <p className="text-[12px] text-muted">Your path</p>
-          <h2 id="next-up-title" className="text-lg font-semibold tracking-tight">{track.title}</h2>
+          <h2 id="next-up-title" className="text-lg font-semibold tracking-tight">
+            <span className="sr-only">Your path: </span>
+            {track.title}
+          </h2>
           {everything ? (
             <p className="text-[12px] text-muted">Every section is open. Start from the full catalog, the Table of Contents or the map.</p>
           ) : (
-            <p className="text-[12px] text-muted" data-testid="next-up-count">{done} of {track.steps.length} steps done</p>
+            <p className="text-[12px] text-muted" data-testid="next-up-count">Your path · {done} of {track.steps.length} steps done</p>
           )}
         </div>
         <button
