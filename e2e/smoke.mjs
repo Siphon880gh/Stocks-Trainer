@@ -1230,6 +1230,14 @@ const flows = {
       check(n >= 1, `topics: Browse search "${q}" finds ${href} @${w}`);
     }
   },
+  async "Header tap targets: every control is at least 44 px on a phone, compact on desktop"(p, w) {
+    await p.goto(base + "/", { waitUntil: "networkidle" });
+    const boxes = await p.evaluate(() => [...document.querySelectorAll("header a, header button")].filter((e) => e.offsetParent).map((e) => { const b = e.getBoundingClientRect(); return { t: (e.textContent || e.getAttribute("aria-label") || "").trim().slice(0, 20), w: b.width, h: b.height }; }));
+    const header = await p.evaluate(() => document.querySelector("header").getBoundingClientRect().height);
+    if (w < 768) for (const b of boxes) check(b.w >= 44 && b.h >= 44, `header: "${b.t}" is ${Math.round(b.w)}x${Math.round(b.h)} @${w}`);
+    else check(header <= 60, `header: desktop row stays compact (${Math.round(header)} px) @${w}`);
+    check((await overflow(p)) <= 1, `header: no sideways scroll @${w}`);
+  },
 };
 
 
