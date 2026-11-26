@@ -9,6 +9,7 @@ import { TEST_OUT_LEVELS } from "../../lib/academy/testOut";
 import PlacementCard from "../../components/academy/PlacementCard";
 import TodayCard from "../../components/academy/TodayCard";
 import RewardsPanel from "../../components/academy/RewardsPanel";
+import PacePanel from "../../components/academy/PacePanel";
 import { VALUE_PROMISE } from "../../lib/academy/copy";
 import { cn } from "../../lib/utils";
 import AppSectionNav from "../../components/AppSectionNav";
@@ -97,6 +98,10 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
       {!state.placement ? <PlacementCard variant="hub" storage={storage} /> : null}
 
       <TodayCard storage={storage} onAward={() => setRewardsTick((t) => t + 1)} />
+
+      <Fragment key={`pace-${rewardsTick}`}>
+        <PacePanel storage={storage} />
+      </Fragment>
 
       <Fragment key={rewardsTick}>
         <RewardsPanel storage={storage} preview={browseAll} />
