@@ -1,0 +1,1 @@
+const o="analysis_core_tour_progress_v1";function l(t){try{const e=JSON.parse(localStorage.getItem(o)??"{}");return typeof e[t]=="number"?e[t]:null}catch{return null}}function a(t,e){try{const r=JSON.parse(localStorage.getItem(o)??"{}");e==null?delete r[t]:r[t]=e,localStorage.setItem(o,JSON.stringify(r))}catch{}}export{l,a as s};
