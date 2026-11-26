@@ -60,7 +60,7 @@ export default function CasePlayer() {
 
   if (!study) {
     return (
-      <div className="p-6 font-mono text-sm space-y-3">
+      <div className="max-w-xl mx-auto p-6 text-sm space-y-3">
         <p className="text-sm text-accent-red">Case not found: {caseId}</p>
         <Link to="/cases" className="text-primary underline">
           Back to cases
@@ -72,6 +72,7 @@ export default function CasePlayer() {
   if (!gateOk || !classOk) {
     return (
       <div className="max-w-xl mx-auto p-6 space-y-4">
+        <h1 className="text-lg font-semibold tracking-tight text-ink">{withoutSampleWord(study.title)}</h1>
         <p className="text-sm text-slate-200 leading-relaxed">
           {!classOk
             ? "This case is Futures, Forex, Crypto, or Options context. Those classes stay locked until you peek this session."
@@ -86,7 +87,7 @@ export default function CasePlayer() {
           </Link>
           <button
             type="button"
-            className="inline-flex rounded-lg border border-line px-3 py-2 text-sm font-mono text-primary hover:bg-primary/10"
+            className="inline-flex rounded-lg border border-line px-3 py-2 text-sm font-semibold text-primary hover:bg-primary/10"
             onClick={() => {
               setChartGateTemporaryBypass(true);
               setTempBypass(true);
@@ -97,7 +98,7 @@ export default function CasePlayer() {
         </div>
         <button
           type="button"
-          className="block text-sm text-muted font-mono"
+          className="block min-h-6 text-sm text-muted hover:text-ink hover:underline"
           onClick={() => navigate(-1)}
         >
           Go back
