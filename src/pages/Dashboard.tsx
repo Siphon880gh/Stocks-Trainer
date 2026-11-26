@@ -154,7 +154,10 @@ export default function Dashboard() {
 
   return (
     <main className="flex-1 p-4 md:p-8 max-w-3xl mx-auto w-full space-y-8">
-      <p className="text-[14px] text-ink" data-testid="value-promise">{VALUE_PROMISE}</p>
+      <header className="space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight">Learn to read stocks and charts</h1>
+        <p className="text-[14px] text-muted" data-testid="value-promise">{VALUE_PROMISE}</p>
+      </header>
       {/* Directional Home: pick a track first, then only its next 1–3 steps. Everything else is in Browse everything. */}
       {track ? <NextUpCard track={track} /> : <TrackPicker currentId={null} />}
       {/* Beginner Academy (BA3.M3): optional, dismissible; shown to the New to stocks track. */}
@@ -175,13 +178,13 @@ export default function Dashboard() {
           <p className="text-[13px] text-muted">
             {pathTemplate?.title ?? "Learning path"} · {pathStepLabel}
           </p>
-          <h1 className="text-2xl font-semibold tracking-tight mt-1">
+          <h2 className="text-2xl font-semibold tracking-tight mt-1">
             {pathDone
               ? pathCompleteLabel
               : activeDef
                 ? withoutSampleWord(activeDef.title)
                 : pathTemplate?.title ?? "Your path"}
-          </h1>
+          </h2>
           {pathDone ? (
             <p className="text-sm text-muted mt-2">
               {progress.pathId === DECISION_MAKER_PATH_ID
