@@ -300,6 +300,13 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 - **ToC:** ToC › academy card (AcademyTrainingCard.tsx): `/academy/review`
 - **In-content (1 file):** `src/components/academy/PacePanel.tsx` (shown when questions are due)
 
+#### `/academy/diary`
+
+- **Page:** `src/pages/academy/AcademyDiary.tsx`
+- **Teaches:** Learning retention: every completed unit by day, with days ago, its level and course, and each level's last-done recency.
+- **ToC:** ToC › academy card (AcademyTrainingCard.tsx): `/academy/diary`
+- **In-content (1 file):** `src/components/academy/PacePanel.tsx`
+
 #### `/paper`
 
 - **Page:** `src/pages/academy/Paper.tsx`

@@ -133,7 +133,7 @@ export const PARAM_ROUTE_STAGE: Record<string, string> = {
   "paper/challenges/:challengeId": "hub:challenges",
 };
 /** Static routes served by a stage whose `to` differs ("/academy" is the level stages' hub). */
-const ROUTE_ALIAS: Record<string, string> = { "/academy": "academy:L0", "/academy/review": "academy:L0", "/coach": "hub:coach", "/cases": "hub:cases", "/playbooks": "hub:playbooks", "/macro": "hub:macro", "/paper/challenges": "hub:challenges", "/paper/desk": "hub:desk" };
+const ROUTE_ALIAS: Record<string, string> = { "/academy": "academy:L0", "/academy/review": "academy:L0", "/academy/diary": "academy:L0", "/coach": "hub:coach", "/cases": "hub:cases", "/playbooks": "hub:playbooks", "/macro": "hub:macro", "/paper/challenges": "hub:challenges", "/paper/desk": "hub:desk" };
 
 /** Skill tree: suggested prerequisites (candles → patterns → confirmation → levels → fib / decision map, plus side branches). */
 const PREREQS: Record<string, string[]> = {

@@ -26,6 +26,9 @@ export default function AcademyTrainingCard({ onSelectGroup, storage }: Props) {
         <Link to="/academy/review" className="text-primary underline" data-testid="academy-review-link">
           Review missed questions
         </Link>
+        <Link to="/academy/diary" className="text-primary underline" data-testid="academy-diary-link">
+          Diary
+        </Link>
         <Link to="/coach/first-paper-trade" className="text-primary underline">
           Coach: first paper trade
         </Link>

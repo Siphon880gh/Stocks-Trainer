@@ -68,6 +68,7 @@ const AcademyHub = lazyPage(() => import("./pages/academy/AcademyHub"));
 const AcademyUnit = lazyPage(() => import("./pages/academy/AcademyUnit"));
 const AcademyTestOut = lazyPage(() => import("./pages/academy/AcademyTestOut"));
 const AcademyReview = lazyPage(() => import("./pages/academy/AcademyReview"));
+const AcademyDiary = lazyPage(() => import("./pages/academy/AcademyDiary"));
 const Paper = lazyPage(() => import("./pages/academy/Paper"));
 const OptionsLadderPage = lazyPage(() => import("./pages/academy/OptionsLadder"));
 const PaperChallenges = lazyPage(() => import("./pages/academy/PaperChallenges"));
@@ -146,6 +147,7 @@ const pageRoutes = (
     <Route path="academy/test-out/:levelId" element={<AcademyTestOut />} />
     <Route path="academy/options" element={<OptionsLadderPage />} />
     <Route path="academy/review" element={<AcademyReview />} />
+    <Route path="academy/diary" element={<AcademyDiary />} />
     <Route path="academy/:unitId" element={<AcademyUnit />} />
     <Route path="paper" element={<Paper />} />
     <Route path="paper/desk" element={<PaperDesk />} />

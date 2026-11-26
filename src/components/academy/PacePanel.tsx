@@ -162,6 +162,11 @@ export default function PacePanel({ storage, now = () => new Date() }: { storage
         <p className="text-muted" data-testid="pace-weekly">
           This week: {plural(w.units, "unit", "units")} · {plural(w.quizzes, "review question", "review questions")} · {plural(w.activeDays, "active day", "active days")}.
         </p>
+        <p>
+          <Link to="/academy/diary" className="text-primary underline" data-testid="pace-diary-link">
+            Diary: everything you've completed
+          </Link>
+        </p>
       </div>
       <details id="rt-pace-settings" className="text-[13px]">
         <summary className="cursor-pointer font-semibold">Pace and reminders</summary>

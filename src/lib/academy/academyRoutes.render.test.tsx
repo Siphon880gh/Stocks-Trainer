@@ -30,7 +30,7 @@ function check(href: string, where: string) {
   assert.ok(routeExists(href), `${where}: ${href} is not a route`);
   const [path, query = ""] = href.split("?");
   const seg = path!.split("/").filter(Boolean);
-  if (seg[0] === "academy" && seg.length === 2 && seg[1] !== "options") assert.ok(getUnit(seg[1]!), `${where}: unknown unit ${seg[1]}`);
+  if (seg[0] === "academy" && seg.length === 2 && !["options", "review", "diary"].includes(seg[1]!)) assert.ok(getUnit(seg[1]!), `${where}: unknown unit ${seg[1]}`);
   if (seg[0] === "academy" && seg[1] === "test-out") assert.ok(getLevel(seg[2]!), `${where}: unknown level ${seg[2]}`);
   if (seg[0] === "paper" && seg[1] === "challenges" && seg[2]) assert.ok(getChallenge(seg[2]), `${where}: unknown challenge ${seg[2]}`);
   const open = new URLSearchParams(query).get("open");
