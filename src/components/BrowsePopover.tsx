@@ -321,7 +321,7 @@ export default function BrowsePopover({
             </button>
           </div>
           <div className="px-2 pt-2">
-            <div className="flex items-center gap-1 rounded-md border border-line bg-canvas px-2 focus-within:border-primary/50">
+            <div className="flex items-center gap-1 rounded-md border border-line bg-canvas px-2 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30">
               <span
                 className="material-symbols-outlined text-[16px] text-muted leading-none"
                 aria-hidden

@@ -161,7 +161,7 @@ export default function NavTabsMenu({
         hidden={tab !== id}
         tabIndex={0}
         data-testid={`navpanel-${menu}-${id}`}
-        className="px-3 py-2 focus:outline-none"
+        className="px-3 py-2 focus:outline-none focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
       >
         <p className="text-[12px] text-muted pb-1">
           {id === "path" ? `Your path: ${track?.title ?? ""}. Only the steps for this menu, in order.` : level?.blurb}

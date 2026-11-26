@@ -90,3 +90,23 @@ body.overlay-open .hai-float,
 body.overlay-open .hai-panel {
   visibility: hidden;
 }
+
+@layer base {
+  /* One visible keyboard focus ring everywhere; components with their own focus style still win (zero specificity). */
+  :where(a[href], button, input, select, textarea, summary, [tabindex]:not([tabindex="-1"]), [role="tab"]):focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+/* Reduced motion: keep colour and opacity feedback so state changes still read, but drop movement and smooth scrolling. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-property: color, background-color, border-color, outline-color, text-decoration-color, opacity !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
