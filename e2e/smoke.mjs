@@ -985,19 +985,9 @@ const flows = {
     await dialog.getByTestId("track-option-fundamentals").click();
     await p.waitForSelector("[data-testid='next-up'][data-track='fundamentals']");
     check((await p.getByTestId("track-dialog").count()) === 0, `nav: dialog closes on pick @${w}`);
-    // Practice menu: grouped families, inside the viewport.
+    // Every dropdown keeps Browse everything as its footer.
     await p.getByTestId("practice-menu").click();
-    const menu = p.locator("[role='menu']:visible");
-    check((await menu.getByRole("group").count()) === 7, `nav: 7 practice families @${w}`);
-    const box = await menu.boundingBox();
-    check(box && box.x >= 0 && box.x + box.width <= w + 1, `nav: practice menu fits @${w}`);
-    // Every family is reachable inside the menu's own scroll (no hidden overflow columns).
-    const last = menu.getByRole("group").last().getByRole("menuitem").last();
-    await last.scrollIntoViewIfNeeded();
-    const lb = await last.boundingBox();
-    check(lb && lb.x >= 0 && lb.x + lb.width <= w + 1, `nav: last practice family on screen @${w}`);
-    if (SHOTS) await p.screenshot({ path: `${SHOTS}/nav-practice-menu-${w}.png`, fullPage: false });
-    await menu.getByRole("menuitem", { name: "Browse everything" }).click();
+    await p.getByTestId("practice-menu-browse").click();
     await p.waitForURL(/\/browse$/);
     await p.getByTestId("browse-everything").waitFor();
     check((await p.locator("[data-testid^='browse-section-']").count()) >= 15, `browse: sections @${w}`);
@@ -1018,6 +1008,78 @@ const flows = {
     await p.getByTestId("track-dialog").getByTestId("track-option-everything").click();
     await p.waitForSelector("[data-testid='next-up'][data-track='everything']");
     check((await p.getByTestId("next-up-step").first().getAttribute("href")).endsWith("/browse"), `nav: everything starts at Browse @${w}`);
+  },
+  async "Nav tabs: level tabs in Learn, Practice and Trade, keyboard, remembered tab and For your path"(p, w) {
+    await p.goto(base + "/", { waitUntil: "networkidle" });
+    const vh = p.viewportSize().height;
+    for (const m of ["learn", "practice", "trade"]) {
+      await p.getByTestId(`${m}-menu`).click();
+      const panel = p.getByTestId(`${m}-menu-panel`);
+      await panel.waitFor();
+      check((await panel.getByRole("tab").count()) === 3, `tabs: 3 level tabs without a track (${m}) @${w}`);
+      check((await p.getByTestId(`navtab-${m}-beginner`).getAttribute("aria-selected")) === "true", `tabs: Beginner by default (${m}) @${w}`);
+      await p.waitForFunction((id) => document.activeElement?.getAttribute("data-testid") === id, `navtab-${m}-beginner`);
+      const shown = await p.getByTestId(`navpanel-${m}-beginner`).getByTestId("navtab-item").count();
+      check(shown >= 2 && shown <= 12, `tabs: ${shown} beginner items (${m}) @${w}`);
+      const groups = await p.getByTestId(`navpanel-${m}-beginner`).getByRole("group").count();
+      check(groups >= 1 && groups <= 4, `tabs: ${groups} groups (${m}) @${w}`);
+      const box = await panel.boundingBox();
+      check(box && box.x >= 0 && box.x + box.width <= w + 1 && box.y + box.height <= vh + 1, `tabs: panel fits the viewport (${m}) @${w}`);
+      check(await p.getByTestId(`${m}-menu-browse`).isVisible(), `tabs: Browse everything footer (${m}) @${w}`);
+      check(await panel.getByRole("tabpanel").first().isVisible(), `tabs: a tabpanel shows (${m}) @${w}`);
+      if (SHOTS) await p.screenshot({ path: `${SHOTS}/navtabs-${m}-${w}.png`, fullPage: false });
+      // Arrow keys move between tabs and select them; Home and End jump.
+      await p.keyboard.press("ArrowRight");
+      check((await p.getByTestId(`navtab-${m}-intermediate`).getAttribute("aria-selected")) === "true", `tabs: ArrowRight selects Intermediate (${m}) @${w}`);
+      check(await p.getByTestId(`navpanel-${m}-intermediate`).isVisible(), `tabs: Intermediate panel shows (${m}) @${w}`);
+      check(!(await p.getByTestId(`navpanel-${m}-beginner`).isVisible()), `tabs: Beginner panel hides (${m}) @${w}`);
+      await p.keyboard.press("End");
+      check((await p.getByTestId(`navtab-${m}-advanced`).getAttribute("aria-selected")) === "true", `tabs: End selects Advanced (${m}) @${w}`);
+      await p.keyboard.press("ArrowRight");
+      check((await p.getByTestId(`navtab-${m}-beginner`).getAttribute("aria-selected")) === "true", `tabs: ArrowRight wraps (${m}) @${w}`);
+      await p.keyboard.press("ArrowLeft");
+      await p.keyboard.press("Home");
+      check((await p.getByTestId(`navtab-${m}-beginner`).getAttribute("aria-selected")) === "true", `tabs: Home selects Beginner (${m}) @${w}`);
+      await p.keyboard.press("ArrowDown");
+      check(await p.evaluate((m) => !!document.activeElement?.closest(`[data-testid='navpanel-${m}-beginner']`), m), `tabs: ArrowDown enters the panel (${m}) @${w}`);
+      await p.keyboard.press("Escape");
+      check(!(await panel.isVisible()), `tabs: Escape closes (${m}) @${w}`);
+      check(await p.evaluate((m) => document.activeElement?.getAttribute("data-testid") === `${m}-menu`, m), `tabs: focus returns to the toggle (${m}) @${w}`);
+    }
+    // Long tabs cap at 12 with Show all; the last tab used is remembered per menu.
+    await p.getByTestId("practice-menu").click();
+    await p.getByTestId("navtab-practice-intermediate").click();
+    const inter = p.getByTestId("navpanel-practice-intermediate");
+    check((await inter.getByTestId("navtab-item").count()) === 12, `tabs: 12 intermediate labs first @${w}`);
+    await p.getByTestId("navtab-more-practice-intermediate").click();
+    check((await inter.getByTestId("navtab-item").count()) === 20, `tabs: Show all lists 20 @${w}`);
+    await p.keyboard.press("Escape");
+    await p.getByTestId("practice-menu").click();
+    check((await p.getByTestId("navtab-practice-intermediate").getAttribute("aria-selected")) === "true", `tabs: remembers the last tab @${w}`);
+    await inter.getByTestId("navtab-item").first().click();
+    await p.waitForURL((u) => u.pathname.startsWith("/practice/"));
+    check(!(await p.getByTestId("practice-menu-panel").isVisible()), `tabs: following an item closes the menu @${w}`);
+    // With a track: For your path is first and selected, and lists that track's steps for the menu.
+    await p.goto(base + "/", { waitUntil: "networkidle" });
+    await p.getByTestId("track-option-charts-patterns").click();
+    await p.waitForSelector("[data-testid='next-up']");
+    for (const m of ["practice", "learn"]) {
+      await p.getByTestId(`${m}-menu`).click();
+      const panel = p.getByTestId(`${m}-menu-panel`);
+      check((await panel.getByRole("tab").count()) === 4, `tabs: 4 tabs with a track (${m}) @${w}`);
+      check((await p.getByTestId(`navtab-${m}-path`).getAttribute("aria-selected")) === "true", `tabs: For your path by default (${m}) @${w}`);
+      const items = await p.getByTestId(`navpanel-${m}-path`).getByTestId("navtab-item").count();
+      check(items >= 1 && items <= 12, `tabs: ${items} path items (${m}) @${w}`);
+      check(/Step \d+ of 15/.test(await p.getByTestId(`navpanel-${m}-path`).innerText()), `tabs: path items show their step (${m}) @${w}`);
+      if (SHOTS && m === "practice") await p.screenshot({ path: `${SHOTS}/navtabs-path-${w}.png`, fullPage: false });
+      await p.keyboard.press("Escape");
+    }
+    // The path dialog hides the corner AI helper so nothing draws over its backdrop.
+    await p.getByTestId("track-chip").click();
+    await p.getByTestId("track-dialog").waitFor();
+    check(await p.evaluate(() => [...document.querySelectorAll(".hai-float")].every((el) => getComputedStyle(el).visibility === "hidden")), `tabs: AI helper hidden under the dialog @${w}`);
+    await p.keyboard.press("Escape");
+    check(await p.evaluate(() => [...document.querySelectorAll(".hai-float")].every((el) => getComputedStyle(el).visibility !== "hidden")), `tabs: AI helper back after the dialog @${w}`);
   },
 };
 
