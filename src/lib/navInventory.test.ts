@@ -9,15 +9,13 @@ import {
   DASHBOARD_MORE,
   DEEP_STUDY,
   HEADER_NAV,
-  LEARN_MENU,
   OTHER_FACTORS,
   PATTERN_MORE,
-  PRACTICE_FAMILIES,
   PRACTICE_MENU,
   QUICK_DECISIONS,
   TOOL_TRAINING,
-  TRADE_MENU,
 } from "./appNav";
+import { LEVEL_MENUS, MENU_IDS } from "./navLevels";
 import { BROWSE_SECTIONS } from "./browseCatalog";
 import { STAGES } from "./progressMap";
 import { TRACKS } from "./tracks";
@@ -44,9 +42,9 @@ function tocLinks(): string[] {
   return [...found, ...PRACTICE_MENU.map((i) => i.to), ...TOOL_TRAINING.map((i) => i.to)];
 }
 
-/** The directional header: top-level links plus the Learn, Practice (by family) and Trade menus. */
+/** The directional header: top-level links plus the level tabs of the Learn, Practice and Trade dropdowns. */
 const headerGroups: readonly (readonly { to: string }[])[] = [
-  HEADER_NAV.flatMap((i) => (i.to ? [{ to: i.to }] : [])), LEARN_MENU, ...PRACTICE_FAMILIES.map((f) => f.items), TRADE_MENU,
+  HEADER_NAV.flatMap((i) => (i.to ? [{ to: i.to }] : [])), ...MENU_IDS.map((m) => LEVEL_MENUS[m]),
 ];
 const headerLinks = headerGroups.flatMap((group) => group.map((i) => i.to));
 const browseLinks = BROWSE_SECTIONS.flatMap((s) => s.links.map((l) => l.to));
