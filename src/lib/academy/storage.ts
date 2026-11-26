@@ -64,6 +64,8 @@ export interface AcademyState {
   options: OptionsLadderRecord;
   /** Local date key (YYYY-MM-DD) → the Today card's review question answer. */
   daily: Record<string, { questionId: string; correct: boolean }>;
+  /** Learning retention (pace, completion log, review queue, reminder). Kept as stored; retention.ts sanitises it on read. */
+  retention?: Record<string, unknown>;
   updatedAt: string;
 }
 
@@ -147,6 +149,7 @@ export function migrateAcademy(raw: unknown): AcademyState {
     ...(typeof raw.placementDismissed === "boolean" ? { placementDismissed: raw.placementDismissed } : {}),
     options: { passed: obj(o.passed, {}), attempts: obj(o.attempts, {}), acknowledged: obj(o.acknowledged, {}) },
     daily: obj(raw.daily, e.daily),
+    ...(isObj(raw.retention) ? { retention: raw.retention } : {}),
     updatedAt: typeof raw.updatedAt === "string" ? raw.updatedAt : e.updatedAt,
   };
 }
