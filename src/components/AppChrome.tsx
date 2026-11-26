@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import { Fragment, useState, type ReactNode } from "react";
 import { HEADER_NAV } from "../lib/appNav";
 import NavTabsMenu from "./NavTabsMenu";
+import ThemeMenu from "./ThemeMenu";
 import { getTrack } from "../lib/tracks";
 import { TrackPickerDialog, useTrackId } from "./TrackPicker";
 import { cn } from "../lib/utils";
@@ -47,6 +48,8 @@ export default function AppChrome({ children }: { children: ReactNode }) {
               <span className="text-[12px] font-normal text-muted tracking-normal">by WengIndustries</span>
             </span>
           </Link>
+          {/* Phones: top right beside the logo. From md up: last in the row, after the path chip. */}
+          <ThemeMenu className="ml-auto md:ml-0 md:order-last shrink-0" />
           <nav
             data-testid="app-nav"
             className="flex flex-wrap md:flex-nowrap items-center justify-start w-full md:w-auto gap-x-0.5 gap-y-0.5 md:ml-auto"
