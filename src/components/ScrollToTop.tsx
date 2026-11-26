@@ -1,13 +1,15 @@
 import { useLayoutEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
+import { pageLocation } from "../lib/browseModal";
 import { shouldResetOnRouteChange, type RouteLocation } from "../lib/scrollReset";
 
 /**
  * Start each new route at the top. A layout effect runs before the pages' own
  * effects, so pages that scroll to a focus target on mount (Cases, Market) still win.
+ * A Browse everything popup keeps the page behind it, so it does not count as a route change.
  */
 export default function ScrollToTop() {
-  const { pathname, hash } = useLocation();
+  const { pathname, hash } = pageLocation(useLocation());
   const prev = useRef<RouteLocation | null>(null);
   useLayoutEffect(() => {
     const next = { pathname, hash };
