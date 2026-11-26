@@ -38,8 +38,11 @@ Before merging any navigation change, walk this checklist. "Reachable" means a l
 | · param routes | 8 |  |
 | Header top-level destinations | 6 | `HEADER_NAV` in `src/lib/appNav.ts` |
 | · header menus (Learn, Practice, Trade) | 3 | `src/components/AppChrome.tsx` |
-| · header menu items | 70 | `LEARN_MENU`, `PRACTICE_FAMILIES`, `TRADE_MENU` |
-| · Practice families | 7 | `PRACTICE_FAMILY_IDS` in `src/lib/appNav.ts` |
+| · header dropdown items (each with one level) | 88 | `LEVEL_MENUS` in `src/lib/navLevels.ts` |
+| · learn dropdown: Beginner 7 / Intermediate 5 / Advanced 10 | 22 | `src/lib/navLevels.ts` |
+| · practice dropdown: Beginner 11 / Intermediate 20 / Advanced 18 | 49 | `src/lib/navLevels.ts` |
+| · trade dropdown: Beginner 5 / Intermediate 6 / Advanced 6 | 17 | `src/lib/navLevels.ts` |
+| Practice families (Browse everything) | 7 | `PRACTICE_FAMILY_IDS` in `src/lib/appNav.ts` |
 | Old menu catalog items (kept as data for the ToC and Browse everything) | 82 | `src/lib/appNav.ts` |
 | Browse everything sections / links | 19 / 171 | `BROWSE_SECTIONS` in `src/lib/browseCatalog.ts` |
 | Learner tracks (incl. Show me everything) / steps | 8 / 95 | `TRACKS` in `src/lib/tracks.ts` |
@@ -79,57 +82,56 @@ Before merging any navigation change, walk this checklist. "Reachable" means a l
 
 ### Header (`src/components/AppChrome.tsx`, items in `src/lib/appNav.ts`)
 
-The header has a logo link to `/`, six top-level destinations and a path chip (`track-chip`) that names the learner track and opens the path picker as a dialog (portal to `document.body`, `z-[100]`, above the sticky header). Menus open on the chevron; a label with a link navigates. Every menu ends with a Browse everything link. Below `sm` an open menu spans the header width so it never runs off a phone screen.
+The header has a logo link to `/`, six top-level destinations and a path chip (`track-chip`) that names the learner track and opens the path picker as a dialog (portal to `document.body`, `Z.modal`, above the sticky header; it hides the corner AI helper while open). Learn, Practice and Trade open on the chevron; their labels navigate.
 
-| Destination | Label link | Menu (`data-testid`) |
+| Destination | Label link | Dropdown (`data-testid`) |
 |---|---|---|
 | Home | `/` | — (`nav-home`) |
-| Learn | `/academy` | 12 items from `LEARN_MENU` (`learn-menu`) |
-| Practice | `/training#practice` | 49 items from `PRACTICE_FAMILIES` (`practice-menu`) in 7 families |
-| Trade | (no label link) | 9 items from `TRADE_MENU` (`trade-menu`) |
+| Learn | `/academy` | 22 items in level tabs (`learn-menu`, panel `learn-menu-panel`) |
+| Practice | `/training#practice` | 49 items in level tabs (`practice-menu`, panel `practice-menu-panel`) |
+| Trade | (no label link) | 17 items in level tabs (`trade-menu`, panel `trade-menu-panel`) |
 | Map | `/map` | — (`nav-map`) |
 | Browse everything | `/browse` | — (`nav-browse`) |
 
-<details><summary>Learn menu: 12 items</summary>
+### Dropdown level tabs (`src/components/NavTabsMenu.tsx`, data in `src/lib/navLevels.ts`)
 
-- Table of Contents → `/training`
-- Academy lessons → `/academy`
-- Candlestick Basics → `/practice/candle-basics`
-- Quiz (Patterns) → `/training#patterns`
-- Quiz (Concepts) → `/training#concepts`
-- Library and glossary → `/archive`
-- Financials → `/training#financials`
-- Statements lab → `/practice/statements`
-- Macro → `/training#macro`
-- Macro desk → `/macro`
-- Options ladder → `/academy/options`
-- Tool Training → `/tools`
+Each dropdown is a tab row (`role="tablist"`) over tab panels: **For your path** (only with a track; selected by default then), **Beginner**, **Intermediate**, **Advanced**. Without a track Beginner opens. The last tab used is remembered per menu in `localStorage` under `analysis_core_nav_tab_v1` (for the same track; a new track opens on For your path). A tab shows at most 12 items in up to 4 labelled groups, each with a one-line description; longer tabs end with “Show all”. For your path lists the track's unfinished steps that belong to that menu (from `src/lib/tracks.ts`), with “Step n of N”. Browse everything is the footer of every dropdown. Keys: arrow Left and Right (wrapping), Home and End move between tabs and select them, arrow Down enters the panel, Escape closes and returns focus to the toggle. The panel uses `Z.popover`, is pinned under the header (full width on a phone, right edge from `sm` up) and the tab row scrolls sideways when it does not fit.
 
-</details>
+Levels follow the app's own order: the Academy (L0–L3 basics, L4–L5 fundamentals and macro, L6–L7 options and other markets), the Beginner Equities path first, and the case packs (equity earnings and company news first; options context, futures, forex and crypto last). Labs: first candles and chart reading are Beginner; price action, patterns, indicators and the broad market themes are Intermediate; options, precision day trading, portfolios, automation and commodity themes are Advanced.
 
-<details><summary>Practice menu: 7 families</summary>
+| Dropdown | Tab | Items | Groups (items) |
+|---|---|---:|---|
+| Learn | Beginner | 7 | Start here (3); Look it up (3); Company numbers (1) |
+| Learn | Intermediate | 5 | Concepts and numbers (3); Economy (2) |
+| Learn | Advanced | 10 | Options (1); Research tools (9) |
+| Practice | Beginner | 11 | First candles (6); Reading a chart (4); Company numbers (1) |
+| Practice | Intermediate | 20 | Price action (5); Patterns (4); Indicators (4); Earnings and markets (7) |
+| Practice | Advanced | 18 | Options and volatility (6); Precision day trading (3); Portfolio and automation (3); Commodities and records (6) |
+| Trade | Beginner | 5 | First decisions (2); Practice money (1); First cases (2) |
+| Trade | Intermediate | 6 | Guided decisions (4); Scored practice (2) |
+| Trade | Advanced | 6 | Full desk (2); Other markets (4) |
 
-- **Candles and patterns:** Japanese candlesticks (`/practice/japanese-candles`), Essential candlestick patterns (`/practice/essential-candles`), Missing wicks and zooming in (`/practice/missing-wicks`), Which Way? (Up, Down or Either) (`/practice/which-way`), Pattern themes (`/practice/pattern-themes`), Reversal chart patterns (`/practice/reversal-charts`), Flashcards (`/practice/flashcards`), Label (`/practice/label`), Lookalikes (`/practice/lookalike`), Pattern hunt (`/practice/hunt`), Drawing (`/practice-draw`)
-- **Price action and day trading:** Trend vs range (`/practice/regime`), Support and resistance (`/practice/levels`), Bar replay (`/practice/replay`), Mark the plan (`/practice/plan`), Invalidation (`/practice/invalidation`), Price action trading framework (`/practice/trade-framework`), Opening range: retests, failed breaks & risk (`/practice/opening-range`), Breakout, pullback and fair value gap (`/practice/fair-value-gap`), Fibonacci as a decision map (`/practice/fib-decision-map`), Reading 1-minute charts (`/practice/one-minute-charts`)
-- **Indicators and charting apps:** Heikin-Ashi candles (`/practice/heikin-ashi`), EMA, SMA and MACD (long charts) (`/practice/ema-macd`), Oscillators & volatility stop (`/practice/oscillators`), Technique narratives (`/practice/technique-narratives`), Indicator & charting apps (`/practice/charting-apps`)
-- **Statements and earnings:** Statements lab (`/practice/statements`), Read the Print (`/practice/read-the-print`), Mark the band (`/practice/mark-the-band`)
-- **Options and volatility:** News, biases & short-term options (`/practice/news-biases`), Futures vs options & beginner toolkit (`/practice/futures-vs-options`), Options ladder (`/academy/options`), The wheel strategy (cash-secured puts to covered calls) (`/practice/wheel-strategy`), Gamma squeeze case (`/practice/gamma-squeeze`), Risk-premium portfolio and the VIX overlay (`/practice/risk-premium-portfolio`), VIX trading for beginners (`/practice/vix-trading`)
-- **Other markets:** Candlesticks for crypto (`/practice/crypto-candles`), Same theme, different wrapper: stocks, funds and futures (`/practice/exposure-wrappers`), Currency funds and the dollar (`/practice/currency-funds`), Precious metals: gold, silver and the miners (`/practice/precious-metals`), Energy: oil, natural gas and the companies (`/practice/energy`), Industrial and transition metals: copper, uranium and clean energy (`/practice/industrial-metals`), Agriculture and inputs: crops, fertilizer and farm equipment (`/practice/agriculture`), Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman (`/practice/materials-chemicals`), Bonds and rates: SGOV, SHY, IEF, TLT, TIP and duration (`/practice/bonds-rates`), Sectors and rotation: the 11 sectors, sector funds, REITs and the business cycle (`/practice/sectors-rotation`), Index and style: size, region, style and how index weights work (`/practice/index-style`)
-- **Automation and records:** Automated & algo trading (2026) (`/practice/algo-trading`), Record-setting traders (`/practice/record-traders`)
+<details><summary>Learn dropdown: 22 items by level</summary>
+
+- **Beginner:** Academy lessons (`/academy`, Start here), Candlestick Basics (`/practice/candle-basics`, Start here), Table of Contents (`/training`, Start here), Library and glossary (`/archive`, Look it up), Glossary terms (`/archive?tab=literacy`, Look it up), Quiz (Patterns) (`/training#patterns`, Look it up), Statements lab (`/practice/statements`, Company numbers)
+- **Intermediate:** Quiz (Concepts) (`/training#concepts`, Concepts and numbers), Financials (`/training#financials`, Concepts and numbers), Indicator cards (`/archive?tab=indicators`, Concepts and numbers), Macro (`/training#macro`, Economy), Macro desk (`/macro`, Economy)
+- **Advanced:** Options ladder (`/academy/options`, Options), Tool Training (`/tools`, Research tools), Market Forces (`/tools/market-forces`, Research tools), StockAnalysis (`/tools/stockanalysis`, Research tools), Finviz (`/tools/finviz`, Research tools), Yahoo Finance (`/tools/yahoo-finance`, Research tools), SEC EDGAR (`/tools/sec-edgar`, Research tools), Earnings dates and insiders (`/tools/earnings-insiders`, Research tools), Capstone: one ticker, four tools (`/tools/capstone`, Research tools), Capstone 2: a bank, step by step (`/tools/capstone-bank`, Research tools)
 
 </details>
 
-<details><summary>Trade menu: 9 items</summary>
+<details><summary>Practice dropdown: 49 items by level</summary>
 
-- Paper trading → `/paper`
-- Paper desk → `/paper/desk`
-- Challenges → `/paper/challenges`
-- Cases → `/cases`
-- Coach → `/coach`
-- Playbooks → `/playbooks`
-- Charts → `/market`
-- Buy or Sell → `/training#buy-or-sell`
-- Macro play → `/macro/play`
+- **Beginner:** Japanese candlesticks (`/practice/japanese-candles`, First candles), Essential candlestick patterns (`/practice/essential-candles`, First candles), Missing wicks and zooming in (`/practice/missing-wicks`, First candles), Which Way? (Up, Down or Either) (`/practice/which-way`, First candles), Flashcards (`/practice/flashcards`, First candles), Label (`/practice/label`, First candles), Trend vs range (`/practice/regime`, Reading a chart), Support and resistance (`/practice/levels`, Reading a chart), Pattern themes (`/practice/pattern-themes`, Reading a chart), Heikin-Ashi candles (`/practice/heikin-ashi`, Reading a chart), Statements lab (`/practice/statements`, Company numbers)
+- **Intermediate:** Bar replay (`/practice/replay`, Price action), Mark the plan (`/practice/plan`, Price action), Invalidation (`/practice/invalidation`, Price action), Price action trading framework (`/practice/trade-framework`, Price action), Opening range: retests, failed breaks & risk (`/practice/opening-range`, Price action), Reversal chart patterns (`/practice/reversal-charts`, Patterns), Pattern hunt (`/practice/hunt`, Patterns), Lookalikes (`/practice/lookalike`, Patterns), EMA, SMA and MACD (long charts) (`/practice/ema-macd`, Indicators), Oscillators & volatility stop (`/practice/oscillators`, Indicators), Read the Print (`/practice/read-the-print`, Earnings and markets), Candlesticks for crypto (`/practice/crypto-candles`, Earnings and markets), Drawing (`/practice-draw`, Patterns), Technique narratives (`/practice/technique-narratives`, Indicators), Indicator & charting apps (`/practice/charting-apps`, Indicators), Same theme, different wrapper: stocks, funds and futures (`/practice/exposure-wrappers`, Earnings and markets), Sectors and rotation: the 11 sectors, sector funds, REITs and the business cycle (`/practice/sectors-rotation`, Earnings and markets), Index and style: size, region, style and how index weights work (`/practice/index-style`, Earnings and markets), Bonds and rates: SGOV, SHY, IEF, TLT, TIP and duration (`/practice/bonds-rates`, Earnings and markets), Currency funds and the dollar (`/practice/currency-funds`, Earnings and markets)
+- **Advanced:** News, biases & short-term options (`/practice/news-biases`, Options and volatility), Futures vs options & beginner toolkit (`/practice/futures-vs-options`, Options and volatility), Options ladder (`/academy/options`, Options and volatility), The wheel strategy (cash-secured puts to covered calls) (`/practice/wheel-strategy`, Options and volatility), Gamma squeeze case (`/practice/gamma-squeeze`, Options and volatility), VIX trading for beginners (`/practice/vix-trading`, Options and volatility), Breakout, pullback and fair value gap (`/practice/fair-value-gap`, Precision day trading), Fibonacci as a decision map (`/practice/fib-decision-map`, Precision day trading), Reading 1-minute charts (`/practice/one-minute-charts`, Precision day trading), Mark the band (`/practice/mark-the-band`, Portfolio and automation), Risk-premium portfolio and the VIX overlay (`/practice/risk-premium-portfolio`, Portfolio and automation), Automated & algo trading (2026) (`/practice/algo-trading`, Portfolio and automation), Record-setting traders (`/practice/record-traders`, Commodities and records), Precious metals: gold, silver and the miners (`/practice/precious-metals`, Commodities and records), Energy: oil, natural gas and the companies (`/practice/energy`, Commodities and records), Industrial and transition metals: copper, uranium and clean energy (`/practice/industrial-metals`, Commodities and records), Agriculture and inputs: crops, fertilizer and farm equipment (`/practice/agriculture`, Commodities and records), Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman (`/practice/materials-chemicals`, Commodities and records)
+
+</details>
+
+<details><summary>Trade dropdown: 17 items by level</summary>
+
+- **Beginner:** Buy or Sell (`/training#buy-or-sell`, First decisions), Charts (`/market`, First decisions), Paper trading (`/paper`, Practice money), Earnings cases (`/cases?pack=earnings`, First cases), Company news cases (`/cases?pack=company-news`, First cases)
+- **Intermediate:** Coach (`/coach`, Guided decisions), Cases (`/cases`, Guided decisions), Market-wide news cases (`/cases?pack=macro-news`, Guided decisions), Price action cases (`/cases?pack=price-action`, Guided decisions), Challenges (`/paper/challenges`, Scored practice), Macro play (`/macro/play`, Scored practice)
+- **Advanced:** Paper desk (`/paper/desk`, Full desk), Playbooks (`/playbooks`, Full desk), Options context cases (`/cases?pack=options-context`, Other markets), Futures cases (`/cases?pack=futures`, Other markets), Forex cases (`/cases?pack=forex`, Other markets), Crypto cases (`/cases?pack=crypto`, Other markets)
 
 </details>
 
@@ -217,7 +219,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/BrowseEverything.tsx`
 - **Teaches:** Browse everything: every lesson, lab, quiz and tool grouped in one page, with search across quizzes, Academy lessons, coach sessions, cases, glossary terms and patterns.
-- **Menu:** Header: “Browse everything” (`/browse`); Header › Learn, Practice and Trade menus: last item “Browse everything”
+- **Menu:** Header: “Browse everything” (`/browse`); Header › Learn, Practice and Trade dropdowns: footer “Browse everything” (`<menu>-menu-browse`)
 - **Browse:** none
 - **Track:** Track “Show me everything” step 1: “Browse everything: search and every page”
 - **ToC:** none
@@ -228,18 +230,18 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/Training.tsx`
 - **Teaches:** Table of Contents (Learn): path map plus a carousel of 7 groups (Academy, Quiz, Practice, Tool Training, Deep Study, Other factors, Quick Decisions); runs every quiz group.
-- **Menu:** Header › Learn menu: “Financials” (`/training#financials`); Header › Learn menu: “Macro” (`/training#macro`); Header › Learn menu: “Quiz (Concepts)” (`/training#concepts`); Header › Learn menu: “Quiz (Patterns)” (`/training#patterns`); Header › Learn menu: “Table of Contents” (`/training`); Header › Trade menu: “Buy or Sell” (`/training#buy-or-sell`); Header: “Practice” (`/training#practice`)
+- **Menu:** Header › Learn › Beginner › Look it up: “Quiz (Patterns)” (`/training#patterns`); Header › Learn › Beginner › Start here: “Table of Contents” (`/training`); Header › Learn › Intermediate › Concepts and numbers: “Financials” (`/training#financials`); Header › Learn › Intermediate › Concepts and numbers: “Quiz (Concepts)” (`/training#concepts`); Header › Learn › Intermediate › Economy: “Macro” (`/training#macro`); Header › Trade › Beginner › First decisions: “Buy or Sell” (`/training#buy-or-sell`); Header: “Practice” (`/training#practice`)
 - **Browse:** Browse everything › Financials and macro: “Financials” (`/training#financials`); Browse everything › Financials and macro: “Macro” (`/training#macro`); Browse everything › Learn: “Financials” (`/training#financials`); Browse everything › Learn: “Macro” (`/training#macro`); Browse everything › Learn: “Quiz (Concepts)” (`/training#concepts`); Browse everything › Learn: “Quiz (Patterns)” (`/training#patterns`); Browse everything › Learn: “Table of Contents” (`/training`); Browse everything › Quick Decisions: “Buy or Sell” (`/training#buy-or-sell`); … 2 more
 - **Track:** Track “Active and day trading” step 15: “Trading risk quiz”; Track “Active and day trading” step 2: “Four pillars quiz”; Track “Charts and patterns” step 10: “Chart patterns quiz”; Track “Charts and patterns” step 2: “Candle anatomy, then candle reading quizzes”; Track “Charts and patterns” step 7: “Candle pattern book quiz”; Track “Company fundamentals and earnings” step 2: “Statements literacy quiz”; Track “Company fundamentals and earnings” step 4: “Reading the statements quiz”; Track “Company fundamentals and earnings” step 5: “13-week cash forecast quiz”; … 14 more
 - **ToC:** ToC › academy card (AcademyTrainingCard.tsx): `/training?group=${g.id}&start=1`; ToC › other-factors (#financials) card (FinancialsTrainingCard.tsx): `/training?group=${g.id}&start=1`; ToC › other-factors (#macro) card (MacroTrainingCard.tsx): `/training?group=${g.id}&start=1`
 - **Map:** Progress map: 108 stage(s) — `page:/training`, `quiz:equity-literacy`, `quiz:financial-literacy`, `quiz:news-literacy`, `quiz:earnings-jargon`, `quiz:financial-drills` …
-- **In-content (72 files):** `src/components/AppChrome.tsx`, `src/components/IndicatorDetailModal.tsx`, `src/components/MarketNavigator.tsx`, `src/components/OrbContextLab.tsx`, `src/components/PatternDetailModal.tsx`, `src/components/PracticeShell.tsx`, `src/components/ScanPatternsModal.tsx`, `src/components/tools/ToolLessonPage.tsx`, `src/lib/academy/content/beforeYouTrade.ts (Academy ref)`, `src/lib/academy/content/unitsL0L3.ts (Academy ref)`, `src/lib/academy/content/unitsL4L7.ts (Academy ref)`, `src/lib/academy/options/ladder.ts (Academy ref)`, `src/lib/beginnerPath.ts`, `src/lib/fairValueGap.ts`, `src/lib/fourPillars.ts`, `src/lib/macro/homeTip.ts`, `src/lib/marketNavigator.ts`, `src/lib/marketThemes/agriculture.ts`, `src/lib/marketThemes/bonds.ts`, `src/lib/marketThemes/currencyFunds.ts`, `src/lib/marketThemes/energy.ts`, `src/lib/marketThemes/indexStyle.ts`, `src/lib/marketThemes/industrialMetals.ts`, `src/lib/marketThemes/materials.ts`, `src/lib/marketThemes/preciousMetals.ts`, `src/lib/marketThemes/sectors.ts`, `src/lib/marketThemes/structure.ts`, `src/lib/openingRange.ts`, `src/lib/playbooks.ts`, `src/lib/riskPremiumPortfolio.ts`, `src/lib/toolTraining/capstone.ts`, `src/lib/toolTraining/capstoneBank.ts`, `src/lib/toolTraining/earningsInsiders.ts`, `src/lib/toolTraining/edgar.ts`, `src/lib/toolTraining/finviz.ts`, `src/lib/toolTraining/marketForces.ts`, `src/lib/toolTraining/stockAnalysis.ts`, `src/lib/toolTraining/yahooFinance.ts`, `src/lib/tradeFramework.ts`, `src/lib/vixTrading.ts`, `src/lib/wheelStrategy.ts`, `src/pages/Archive.tsx`, `src/pages/BrowseEverything.tsx`, `src/pages/CasePlayer.tsx`, `src/pages/Cases.tsx`, `src/pages/Dashboard.tsx`, `src/pages/Market.tsx`, `src/pages/Playbook.tsx`, `src/pages/PracticeDraw.tsx`, `src/pages/ToolsHub.tsx`, `src/pages/academy/AcademyHub.tsx`, `src/pages/academy/OptionsLadder.tsx`, `src/pages/macro/MacroDesk.tsx`, `src/pages/macro/MacroLesson.tsx`, `src/pages/macro/MacroPlay.tsx`, `src/pages/practice/AlgoTrading.tsx`, `src/pages/practice/CandleBasics.tsx`, `src/pages/practice/ChartingApps.tsx`, `src/pages/practice/CryptoCandles.tsx`, `src/pages/practice/EssentialCandles.tsx`, `src/pages/practice/FuturesVsOptions.tsx`, `src/pages/practice/GammaSqueeze.tsx`, `src/pages/practice/HeikinAshi.tsx`, `src/pages/practice/JapaneseCandles.tsx`, `src/pages/practice/MissingWicks.tsx`, `src/pages/practice/NewsBiases.tsx`, `src/pages/practice/OneMinuteCharts.tsx`, `src/pages/practice/Oscillators.tsx`, `src/pages/practice/PatternThemes.tsx`, `src/pages/practice/RecordTraders.tsx`, `src/pages/practice/ReversalCharts.tsx`, `src/pages/practice/TechniqueNarratives.tsx`
+- **In-content (72 files):** `src/components/IndicatorDetailModal.tsx`, `src/components/MarketNavigator.tsx`, `src/components/NavTabsMenu.tsx`, `src/components/OrbContextLab.tsx`, `src/components/PatternDetailModal.tsx`, `src/components/PracticeShell.tsx`, `src/components/ScanPatternsModal.tsx`, `src/components/tools/ToolLessonPage.tsx`, `src/lib/academy/content/beforeYouTrade.ts (Academy ref)`, `src/lib/academy/content/unitsL0L3.ts (Academy ref)`, `src/lib/academy/content/unitsL4L7.ts (Academy ref)`, `src/lib/academy/options/ladder.ts (Academy ref)`, `src/lib/beginnerPath.ts`, `src/lib/fairValueGap.ts`, `src/lib/fourPillars.ts`, `src/lib/macro/homeTip.ts`, `src/lib/marketNavigator.ts`, `src/lib/marketThemes/agriculture.ts`, `src/lib/marketThemes/bonds.ts`, `src/lib/marketThemes/currencyFunds.ts`, `src/lib/marketThemes/energy.ts`, `src/lib/marketThemes/indexStyle.ts`, `src/lib/marketThemes/industrialMetals.ts`, `src/lib/marketThemes/materials.ts`, `src/lib/marketThemes/preciousMetals.ts`, `src/lib/marketThemes/sectors.ts`, `src/lib/marketThemes/structure.ts`, `src/lib/openingRange.ts`, `src/lib/playbooks.ts`, `src/lib/riskPremiumPortfolio.ts`, `src/lib/toolTraining/capstone.ts`, `src/lib/toolTraining/capstoneBank.ts`, `src/lib/toolTraining/earningsInsiders.ts`, `src/lib/toolTraining/edgar.ts`, `src/lib/toolTraining/finviz.ts`, `src/lib/toolTraining/marketForces.ts`, `src/lib/toolTraining/stockAnalysis.ts`, `src/lib/toolTraining/yahooFinance.ts`, `src/lib/tradeFramework.ts`, `src/lib/vixTrading.ts`, `src/lib/wheelStrategy.ts`, `src/pages/Archive.tsx`, `src/pages/BrowseEverything.tsx`, `src/pages/CasePlayer.tsx`, `src/pages/Cases.tsx`, `src/pages/Dashboard.tsx`, `src/pages/Market.tsx`, `src/pages/Playbook.tsx`, `src/pages/PracticeDraw.tsx`, `src/pages/ToolsHub.tsx`, `src/pages/academy/AcademyHub.tsx`, `src/pages/academy/OptionsLadder.tsx`, `src/pages/macro/MacroDesk.tsx`, `src/pages/macro/MacroLesson.tsx`, `src/pages/macro/MacroPlay.tsx`, `src/pages/practice/AlgoTrading.tsx`, `src/pages/practice/CandleBasics.tsx`, `src/pages/practice/ChartingApps.tsx`, `src/pages/practice/CryptoCandles.tsx`, `src/pages/practice/EssentialCandles.tsx`, `src/pages/practice/FuturesVsOptions.tsx`, `src/pages/practice/GammaSqueeze.tsx`, `src/pages/practice/HeikinAshi.tsx`, `src/pages/practice/JapaneseCandles.tsx`, `src/pages/practice/MissingWicks.tsx`, `src/pages/practice/NewsBiases.tsx`, `src/pages/practice/OneMinuteCharts.tsx`, `src/pages/practice/Oscillators.tsx`, `src/pages/practice/PatternThemes.tsx`, `src/pages/practice/RecordTraders.tsx`, `src/pages/practice/ReversalCharts.tsx`, `src/pages/practice/TechniqueNarratives.tsx`
 
 #### `/market`
 
 - **Page:** `src/pages/Market.tsx`
 - **Teaches:** Charts: SAMPLE/DELAYED candles with overlays (SMA, EMA, RSI, MACD, Bollinger), pattern scan, market navigator (`?nav=1`, `?class=`).
-- **Menu:** Header › Trade menu: “Charts” (`/market`)
+- **Menu:** Header › Trade › Beginner › First decisions: “Charts” (`/market`)
 - **Browse:** Browse everything › Quick Decisions: “Charts” (`/market`); Browse everything › Trade and decide: “Charts” (`/market`)
 - **ToC:** ToC › quick-decisions: `/market?nav=1`; ToC › quick-decisions: `/market`
 - **Map:** Progress map: 1 stage(s) — `page:/market`
@@ -249,7 +251,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/Archive.tsx`
 - **Teaches:** Library: candlestick and chart pattern cards, indicator cards, and the literacy glossary (`?tab=patterns|indicators|literacy`, `?open=<id>`).
-- **Menu:** Header › Learn menu: “Library and glossary” (`/archive`)
+- **Menu:** Header › Learn › Beginner › Look it up: “Glossary terms” (`/archive?tab=literacy`); Header › Learn › Beginner › Look it up: “Library and glossary” (`/archive`); Header › Learn › Intermediate › Concepts and numbers: “Indicator cards” (`/archive?tab=indicators`)
 - **Browse:** Browse everything › Learn: “Library and glossary” (`/archive`); Browse everything › Start points: “Library and glossary” (`/archive`)
 - **Track:** Track “Charts and patterns” step 15: “Library: patterns tab”
 - **ToC:** ToC › (footer): `/archive`
@@ -273,7 +275,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/academy/AcademyHub.tsx`
 - **Teaches:** Academy course map: levels L0–L7, courses, units, placement, test-outs, rewards.
-- **Menu:** Header › Learn menu: “Academy lessons” (`/academy`); Header: “Learn” (`/academy`)
+- **Menu:** Header › Learn › Beginner › Start here: “Academy lessons” (`/academy`); Header: “Learn” (`/academy`)
 - **Browse:** Browse everything › Learn: “Academy lessons” (`/academy`)
 - **Track:** Track “Company fundamentals and earnings” step 1: “Academy L4 Company fundamentals & earnings”; Track “Macro and news” step 1: “Academy L5 Macro & rates”; Track “New to stocks” step 1: “Placement check or “I'm brand new””; Track “New to stocks” step 2: “Academy L0 Orientation (5 units)”; Track “New to stocks” step 3: “Academy L1 Stock basics”; Track “New to stocks” step 7: “Academy L2 Charts & candles”; Track “New to stocks” step 9: “Academy L3 Orders, sizing & risk”; Track “Options and volatility” step 1: “Academy L6 Options education (test-out first if ready)”; … 1 more
 - **ToC:** ToC › academy card (AcademyTrainingCard.tsx): `/academy`
@@ -284,7 +286,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/academy/OptionsLadder.tsx`
 - **Teaches:** Options ladder: strategies unlocked level by level (time decay, payoff diagrams, checks).
-- **Menu:** Header › Learn menu: “Options ladder” (`/academy/options`); Header › Practice menu › Options and volatility: “Options ladder” (`/academy/options`)
+- **Menu:** Header › Learn › Advanced › Options: “Options ladder” (`/academy/options`); Header › Practice › Advanced › Options and volatility: “Options ladder” (`/academy/options`)
 - **Browse:** Browse everything › Learn: “Options ladder” (`/academy/options`); Browse everything › Practice: Options and volatility: “Options ladder” (`/academy/options`)
 - **Track:** Track “Options and volatility” step 3: “Options ladder”
 - **ToC:** ToC › Practice: “Options ladder”
@@ -295,7 +297,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/academy/Paper.tsx`
 - **Teaches:** Paper trading account: SIMULATED orders, stops and brackets.
-- **Menu:** Header › Trade menu: “Paper trading” (`/paper`)
+- **Menu:** Header › Trade › Beginner › Practice money: “Paper trading” (`/paper`)
 - **Browse:** Browse everything › Trade and decide: “Paper trading” (`/paper`)
 - **Track:** Track “New to stocks” step 11: “Paper account”
 - **ToC:** ToC › deep-study: `/paper`
@@ -306,7 +308,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/academy/PaperDesk.tsx`
 - **Teaches:** Paper desk: competitor-style paper trading with bundled news and financial statements; 1 HISTORICAL 2024 scenario plus SIMULATED scenarios by topic.
-- **Menu:** Header › Trade menu: “Paper desk” (`/paper/desk`)
+- **Menu:** Header › Trade › Advanced › Full desk: “Paper desk” (`/paper/desk`)
 - **Browse:** Browse everything › Trade and decide: “Paper desk” (`/paper/desk`)
 - **Track:** Track “Active and day trading” step 13: “Paper desk: Breakouts & gaps, Execution & risk topics”; Track “Company fundamentals and earnings” step 12: “Paper desk: Earnings & guidance, Balance-sheet risk, Insiders & analysts”; Track “Macro and news” step 11: “Paper desk: Macro & sectors topic”; Track “Options and volatility” step 12: “Paper desk: time decay scenario”
 - **ToC:** ToC › deep-study: `/paper/desk`
@@ -317,7 +319,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/academy/PaperChallenges.tsx`
 - **Teaches:** Paper challenges list (discipline score plus result score) and challenge of the week.
-- **Menu:** Header › Trade menu: “Challenges” (`/paper/challenges`)
+- **Menu:** Header › Trade › Intermediate › Scored practice: “Challenges” (`/paper/challenges`)
 - **Browse:** Browse everything › Trade and decide: “Challenges” (`/paper/challenges`)
 - **ToC:** ToC › deep-study: `/paper/challenges`
 - **Map:** Progress map: 1 stage(s) — `hub:challenges`
@@ -329,7 +331,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/Cases.tsx`
 - **Teaches:** Cases library: decide-then-reveal case packs (stocks, futures, forex, crypto, options context, price action).
-- **Menu:** Header › Trade menu: “Cases” (`/cases`)
+- **Menu:** Header › Trade › Advanced › Other markets: “Crypto cases” (`/cases?pack=crypto`); Header › Trade › Advanced › Other markets: “Forex cases” (`/cases?pack=forex`); Header › Trade › Advanced › Other markets: “Futures cases” (`/cases?pack=futures`); Header › Trade › Advanced › Other markets: “Options context cases” (`/cases?pack=options-context`); Header › Trade › Beginner › First cases: “Company news cases” (`/cases?pack=company-news`); Header › Trade › Beginner › First cases: “Earnings cases” (`/cases?pack=earnings`); Header › Trade › Intermediate › Guided decisions: “Cases” (`/cases`); Header › Trade › Intermediate › Guided decisions: “Market-wide news cases” (`/cases?pack=macro-news`); … 1 more
 - **Browse:** Browse everything › Case packs: “Company news” (`/cases?pack=company-news`); Browse everything › Case packs: “Crypto macro” (`/cases?pack=crypto-macro`); Browse everything › Case packs: “Crypto tape” (`/cases?pack=crypto-tape`); Browse everything › Case packs: “Crypto” (`/cases?pack=crypto`); Browse everything › Case packs: “Earnings” (`/cases?pack=earnings`); Browse everything › Case packs: “Forex macro” (`/cases?pack=forex-macro`); Browse everything › Case packs: “Forex tape” (`/cases?pack=forex-tape`); Browse everything › Case packs: “Forex” (`/cases?pack=forex`); … 10 more
 - **Track:** Track “Active and day trading” step 12: “Price action cases”; Track “Company fundamentals and earnings” step 11: “Earnings, company news, then news plus financials cases”; Track “Macro and news” step 9: “Market-wide news cases”; Track “New to stocks” step 14: “Earnings cases (beginner)”; Track “New to stocks” step 15: “Company news cases”; Track “Options and volatility” step 11: “Options context cases”; Track “Other markets” step 5: “Futures cases”; Track “Other markets” step 7: “Forex cases”; … 1 more
 - **ToC:** ToC › #path panel card (PathMapPanel.tsx): `/cases?pack=${active.casesPack}`; ToC › deep-study: `/cases?pack=combined`; ToC › deep-study: `/cases?pack=company-news`; ToC › deep-study: `/cases?pack=earnings`; ToC › deep-study: `/cases?pack=macro-news`; ToC › deep-study: `/cases`
@@ -340,7 +342,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/Coach.tsx`
 - **Teaches:** Coach catalog: step-by-step coached decision sessions, filtered by topic and market class.
-- **Menu:** Header › Trade menu: “Coach” (`/coach`)
+- **Menu:** Header › Trade › Intermediate › Guided decisions: “Coach” (`/coach`)
 - **Browse:** Browse everything › Coach by market: “Coach: Crypto” (`/coach?class=crypto`); Browse everything › Coach by market: “Coach: Equities” (`/coach?class=equity`); Browse everything › Coach by market: “Coach: Forex” (`/coach?class=forex`); Browse everything › Coach by market: “Coach: Futures” (`/coach?class=future`); Browse everything › Coach by market: “Coach: Options context” (`/coach?class=option_context`); Browse everything › Trade and decide: “Coach” (`/coach`)
 - **ToC:** ToC › deep-study: `/coach`
 - **Map:** Progress map: 1 stage(s) — `hub:coach`
@@ -350,7 +352,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/Playbooks.tsx`
 - **Teaches:** Playbooks list: outside-source strategy kits written as plans (entry, stop, target).
-- **Menu:** Header › Trade menu: “Playbooks” (`/playbooks`)
+- **Menu:** Header › Trade › Advanced › Full desk: “Playbooks” (`/playbooks`)
 - **Browse:** Browse everything › Trade and decide: “Playbooks” (`/playbooks`)
 - **ToC:** ToC › deep-study: `/playbooks`
 - **Map:** Progress map: 1 stage(s) — `hub:playbooks`
@@ -360,7 +362,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/ToolsHub.tsx`
 - **Teaches:** Tool Training hub: how to use outside research tools, plus the charting-apps comparison.
-- **Menu:** Header › Learn menu: “Tool Training” (`/tools`)
+- **Menu:** Header › Learn › Advanced › Research tools: “Tool Training” (`/tools`)
 - **Browse:** Browse everything › Learn: “Tool Training” (`/tools`); Browse everything › Tool Training: “Tool Training overview” (`/tools`)
 - **ToC:** ToC › Tool Training: “Tool Training overview”
 - **Map:** Progress map: 1 stage(s) — `hub:tools`
@@ -370,7 +372,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/macro/MacroDesk.tsx`
 - **Teaches:** Macro Desk: SIMULATED economic releases grouped by family, plus macro quizzes.
-- **Menu:** Header › Learn menu: “Macro desk” (`/macro`)
+- **Menu:** Header › Learn › Intermediate › Economy: “Macro desk” (`/macro`)
 - **Browse:** Browse everything › Financials and macro: “Macro desk” (`/macro`); Browse everything › Learn: “Macro desk” (`/macro`)
 - **Track:** Track “Macro and news” step 3: “Macro Desk lessons (jobs, CPI, FOMC, curve…)”
 - **ToC:** ToC › other-factors (#macro) card (MacroTrainingCard.tsx): `/macro`
@@ -381,7 +383,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/macro/MacroPlay.tsx`
 - **Teaches:** Macro reaction game: consensus vs actual, then the market reaction (`?round=<id>`).
-- **Menu:** Header › Trade menu: “Macro play” (`/macro/play`)
+- **Menu:** Header › Trade › Intermediate › Scored practice: “Macro play” (`/macro/play`)
 - **Browse:** Browse everything › Financials and macro: “Macro play” (`/macro/play`); Browse everything › Trade and decide: “Macro play” (`/macro/play`)
 - **Track:** Track “Macro and news” step 5: “Macro play (29 rounds)”
 - **ToC:** ToC › other-factors (#macro) card (MacroTrainingCard.tsx): `/macro/play`
@@ -394,7 +396,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/StatementsLab.tsx`
 - **Teaches:** Statements lab: income statement, balance sheet, cash flow reader and the 13-week cash forecast (`#forecast`).
-- **Menu:** Header › Learn menu: “Statements lab” (`/practice/statements`); Header › Practice menu › Statements and earnings: “Statements lab” (`/practice/statements`)
+- **Menu:** Header › Learn › Beginner › Company numbers: “Statements lab” (`/practice/statements`); Header › Practice › Beginner › Company numbers: “Statements lab” (`/practice/statements`)
 - **Browse:** Browse everything › Financials and macro: “Statements lab” (`/practice/statements`); Browse everything › Learn: “Statements lab” (`/practice/statements`); Browse everything › Practice: Statements and earnings: “Statements lab” (`/practice/statements`)
 - **Track:** Track “Company fundamentals and earnings” step 3: “Statements lab”
 - **ToC:** ToC › other-factors (#financials) card (FinancialsTrainingCard.tsx): `/practice/statements#forecast`; ToC › other-factors (#financials) card (FinancialsTrainingCard.tsx): `/practice/statements`
@@ -405,7 +407,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/ReadThePrint.tsx`
 - **Teaches:** Read the Print: earnings-print game, expectations vs actual and the follow-through.
-- **Menu:** Header › Practice menu › Statements and earnings: “Read the Print” (`/practice/read-the-print`)
+- **Menu:** Header › Practice › Intermediate › Earnings and markets: “Read the Print” (`/practice/read-the-print`)
 - **Browse:** Browse everything › Financials and macro: “Read the Print” (`/practice/read-the-print`); Browse everything › Practice: Statements and earnings: “Read the Print” (`/practice/read-the-print`)
 - **Track:** Track “Company fundamentals and earnings” step 7: “Read the Print”
 - **ToC:** ToC › other-factors (#financials) card (FinancialsTrainingCard.tsx): `/practice/read-the-print`
@@ -416,7 +418,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/MarkTheBand.tsx`
 - **Teaches:** Mark the band: mark the expected range around an earnings release.
-- **Menu:** Header › Practice menu › Statements and earnings: “Mark the band” (`/practice/mark-the-band`)
+- **Menu:** Header › Practice › Advanced › Portfolio and automation: “Mark the band” (`/practice/mark-the-band`)
 - **Browse:** Browse everything › Financials and macro: “Mark the band” (`/practice/mark-the-band`); Browse everything › Practice: Statements and earnings: “Mark the band” (`/practice/mark-the-band`)
 - **Track:** Track “Company fundamentals and earnings” step 8: “Mark the band”
 - **ToC:** ToC › other-factors (#financials) card (FinancialsTrainingCard.tsx): `/practice/mark-the-band`
@@ -429,7 +431,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/PracticeDraw.tsx`
 - **Teaches:** Drawing lab: draw a pattern on a canvas and get it graded.
-- **Menu:** Header › Practice menu › Candles and patterns: “Drawing” (`/practice-draw`)
+- **Menu:** Header › Practice › Intermediate › Patterns: “Drawing” (`/practice-draw`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Drawing” (`/practice-draw`)
 - **ToC:** ToC › Practice: “Drawing”
 - **Map:** Progress map: 1 stage(s) — `lab:draw`
@@ -439,7 +441,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Flashcards.tsx`
 - **Teaches:** Practice lab: Flashcards.
-- **Menu:** Header › Practice menu › Candles and patterns: “Flashcards” (`/practice/flashcards`)
+- **Menu:** Header › Practice › Beginner › First candles: “Flashcards” (`/practice/flashcards`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Flashcards” (`/practice/flashcards`)
 - **ToC:** ToC › Practice: “Flashcards”
 - **Map:** Progress map: 1 stage(s) — `lab:flashcards`
@@ -449,7 +451,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Label.tsx`
 - **Teaches:** Practice lab: Label.
-- **Menu:** Header › Practice menu › Candles and patterns: “Label” (`/practice/label`)
+- **Menu:** Header › Practice › Beginner › First candles: “Label” (`/practice/label`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Label” (`/practice/label`)
 - **ToC:** ToC › Practice: “Label”
 - **Map:** Progress map: 1 stage(s) — `lab:label`
@@ -459,7 +461,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Regime.tsx`
 - **Teaches:** Practice lab: Trend vs range.
-- **Menu:** Header › Practice menu › Price action and day trading: “Trend vs range” (`/practice/regime`)
+- **Menu:** Header › Practice › Beginner › Reading a chart: “Trend vs range” (`/practice/regime`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Trend vs range” (`/practice/regime`)
 - **ToC:** ToC › Practice: “Trend vs range”
 - **Map:** Progress map: 1 stage(s) — `lab:regime`
@@ -469,7 +471,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Replay.tsx`
 - **Teaches:** Practice lab: Bar replay.
-- **Menu:** Header › Practice menu › Price action and day trading: “Bar replay” (`/practice/replay`)
+- **Menu:** Header › Practice › Intermediate › Price action: “Bar replay” (`/practice/replay`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Bar replay” (`/practice/replay`)
 - **ToC:** ToC › Practice: “Bar replay”
 - **Map:** Progress map: 1 stage(s) — `lab:replay`
@@ -479,7 +481,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Plan.tsx`
 - **Teaches:** Practice lab: Mark the plan.
-- **Menu:** Header › Practice menu › Price action and day trading: “Mark the plan” (`/practice/plan`)
+- **Menu:** Header › Practice › Intermediate › Price action: “Mark the plan” (`/practice/plan`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Mark the plan” (`/practice/plan`)
 - **ToC:** ToC › Practice: “Mark the plan”
 - **Map:** Progress map: 1 stage(s) — `lab:plan`
@@ -489,7 +491,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Hunt.tsx`
 - **Teaches:** Practice lab: Pattern hunt.
-- **Menu:** Header › Practice menu › Candles and patterns: “Pattern hunt” (`/practice/hunt`)
+- **Menu:** Header › Practice › Intermediate › Patterns: “Pattern hunt” (`/practice/hunt`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Pattern hunt” (`/practice/hunt`)
 - **Track:** Track “Charts and patterns” step 11: “Flashcards, Label, Lookalikes, Pattern hunt, Drawing”
 - **ToC:** ToC › Practice: “Pattern hunt”
@@ -500,7 +502,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Lookalike.tsx`
 - **Teaches:** Practice lab: Lookalikes.
-- **Menu:** Header › Practice menu › Candles and patterns: “Lookalikes” (`/practice/lookalike`)
+- **Menu:** Header › Practice › Intermediate › Patterns: “Lookalikes” (`/practice/lookalike`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Lookalikes” (`/practice/lookalike`)
 - **ToC:** ToC › Practice: “Lookalikes”
 - **Map:** Progress map: 1 stage(s) — `lab:lookalike`
@@ -510,7 +512,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Invalidation.tsx`
 - **Teaches:** Practice lab: Invalidation.
-- **Menu:** Header › Practice menu › Price action and day trading: “Invalidation” (`/practice/invalidation`)
+- **Menu:** Header › Practice › Intermediate › Price action: “Invalidation” (`/practice/invalidation`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Invalidation” (`/practice/invalidation`)
 - **Track:** Track “Active and day trading” step 10: “Bar replay, Mark the plan, Invalidation”
 - **ToC:** ToC › Practice: “Invalidation”
@@ -521,7 +523,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Levels.tsx`
 - **Teaches:** Practice lab: Support and resistance.
-- **Menu:** Header › Practice menu › Price action and day trading: “Support and resistance” (`/practice/levels`)
+- **Menu:** Header › Practice › Beginner › Reading a chart: “Support and resistance” (`/practice/levels`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Support and resistance” (`/practice/levels`)
 - **Track:** Track “Active and day trading” step 3: “Support and resistance”; Track “Charts and patterns” step 12: “Trend vs range; Support and resistance”
 - **ToC:** ToC › Practice: “Support and resistance”
@@ -532,7 +534,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/EmaMacd.tsx`
 - **Teaches:** Practice lab: EMA, SMA and MACD (long charts).
-- **Menu:** Header › Practice menu › Indicators and charting apps: “EMA, SMA and MACD (long charts)” (`/practice/ema-macd`)
+- **Menu:** Header › Practice › Intermediate › Indicators: “EMA, SMA and MACD (long charts)” (`/practice/ema-macd`)
 - **Browse:** Browse everything › Practice: Indicators and charting apps: “EMA, SMA and MACD (long charts)” (`/practice/ema-macd`)
 - **Track:** Track “Charts and patterns” step 13: “Indicators quiz; EMA/SMA/MACD; Oscillators”
 - **ToC:** ToC › Practice: “EMA, SMA and MACD (long charts)”
@@ -543,7 +545,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/Oscillators.tsx`
 - **Teaches:** Practice lab: Oscillators & volatility stop.
-- **Menu:** Header › Practice menu › Indicators and charting apps: “Oscillators & volatility stop” (`/practice/oscillators`)
+- **Menu:** Header › Practice › Intermediate › Indicators: “Oscillators & volatility stop” (`/practice/oscillators`)
 - **Browse:** Browse everything › Practice: Indicators and charting apps: “Oscillators & volatility stop” (`/practice/oscillators`)
 - **ToC:** ToC › Practice: “Oscillators & volatility stop”
 - **Map:** Progress map: 1 stage(s) — `lab:oscillators`
@@ -553,7 +555,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/JapaneseCandles.tsx`
 - **Teaches:** Practice lab: Japanese candlesticks.
-- **Menu:** Header › Practice menu › Candles and patterns: “Japanese candlesticks” (`/practice/japanese-candles`)
+- **Menu:** Header › Practice › Beginner › First candles: “Japanese candlesticks” (`/practice/japanese-candles`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Japanese candlesticks” (`/practice/japanese-candles`)
 - **Track:** Track “Charts and patterns” step 3: “Japanese candlesticks”
 - **ToC:** ToC › Practice: “Japanese candlesticks”
@@ -564,7 +566,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/CandleBasics.tsx`
 - **Teaches:** Candlestick Basics: parts of one candle (body, wicks, open/close) before the pattern quizzes.
-- **Menu:** Header › Learn menu: “Candlestick Basics” (`/practice/candle-basics`)
+- **Menu:** Header › Learn › Beginner › Start here: “Candlestick Basics” (`/practice/candle-basics`)
 - **Browse:** Browse everything › Learn: “Candlestick Basics” (`/practice/candle-basics`)
 - **Track:** Track “Charts and patterns” step 1: “Candlestick Basics”; Track “New to stocks” step 5: “Candlestick Basics”
 - **ToC:** ToC › quiz: `/practice/candle-basics`
@@ -575,7 +577,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/HeikinAshi.tsx`
 - **Teaches:** Practice lab: Heikin-Ashi candles.
-- **Menu:** Header › Practice menu › Indicators and charting apps: “Heikin-Ashi candles” (`/practice/heikin-ashi`)
+- **Menu:** Header › Practice › Beginner › Reading a chart: “Heikin-Ashi candles” (`/practice/heikin-ashi`)
 - **Browse:** Browse everything › Practice: Indicators and charting apps: “Heikin-Ashi candles” (`/practice/heikin-ashi`)
 - **Track:** Track “Charts and patterns” step 14: “Heikin-Ashi candles”
 - **ToC:** ToC › Practice: “Heikin-Ashi candles”
@@ -586,7 +588,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/GammaSqueeze.tsx`
 - **Teaches:** Practice lab: Gamma squeeze case.
-- **Menu:** Header › Practice menu › Options and volatility: “Gamma squeeze case” (`/practice/gamma-squeeze`)
+- **Menu:** Header › Practice › Advanced › Options and volatility: “Gamma squeeze case” (`/practice/gamma-squeeze`)
 - **Browse:** Browse everything › Practice: Options and volatility: “Gamma squeeze case” (`/practice/gamma-squeeze`)
 - **Track:** Track “Options and volatility” step 8: “Gamma squeeze case; Squeezes quiz”
 - **ToC:** ToC › Practice: “Gamma squeeze case”
@@ -597,7 +599,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/NewsBiases.tsx`
 - **Teaches:** Practice lab: News, biases & short-term options.
-- **Menu:** Header › Practice menu › Options and volatility: “News, biases & short-term options” (`/practice/news-biases`)
+- **Menu:** Header › Practice › Advanced › Options and volatility: “News, biases & short-term options” (`/practice/news-biases`)
 - **Browse:** Browse everything › Practice: Options and volatility: “News, biases & short-term options” (`/practice/news-biases`)
 - **Track:** Track “Macro and news” step 8: “News, biases & short-term options”
 - **ToC:** ToC › Practice: “News, biases & short-term options”
@@ -608,7 +610,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/AlgoTrading.tsx`
 - **Teaches:** Practice lab: Automated & algo trading (2026).
-- **Menu:** Header › Practice menu › Automation and records: “Automated & algo trading (2026)” (`/practice/algo-trading`)
+- **Menu:** Header › Practice › Advanced › Portfolio and automation: “Automated & algo trading (2026)” (`/practice/algo-trading`)
 - **Browse:** Browse everything › Practice: Automation and records: “Automated & algo trading (2026)” (`/practice/algo-trading`)
 - **ToC:** ToC › Practice: “Automated & algo trading (2026)”
 - **Map:** Progress map: 1 stage(s) — `lab:algo-trading`
@@ -618,7 +620,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/ChartingApps.tsx`
 - **Teaches:** Practice lab: Indicator & charting apps.
-- **Menu:** Header › Practice menu › Indicators and charting apps: “Indicator & charting apps” (`/practice/charting-apps`)
+- **Menu:** Header › Practice › Intermediate › Indicators: “Indicator & charting apps” (`/practice/charting-apps`)
 - **Browse:** Browse everything › Practice: Indicators and charting apps: “Indicator & charting apps” (`/practice/charting-apps`); Browse everything › Tool Training: “Charting apps compared” (`/practice/charting-apps`)
 - **ToC:** ToC › Practice: “Indicator & charting apps”; ToC › Tool Training: “Charting apps compared”
 - **Map:** Progress map: 1 stage(s) — `lab:charting-apps`
@@ -628,7 +630,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/CryptoCandles.tsx`
 - **Teaches:** Practice lab: Candlesticks for crypto.
-- **Menu:** Header › Practice menu › Other markets: “Candlesticks for crypto” (`/practice/crypto-candles`)
+- **Menu:** Header › Practice › Intermediate › Earnings and markets: “Candlesticks for crypto” (`/practice/crypto-candles`)
 - **Browse:** Browse everything › Practice: Other markets: “Candlesticks for crypto” (`/practice/crypto-candles`)
 - **Track:** Track “Other markets” step 8: “Candlesticks for crypto”
 - **ToC:** ToC › Practice: “Candlesticks for crypto”
@@ -639,7 +641,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/ReversalCharts.tsx`
 - **Teaches:** Practice lab: Reversal chart patterns.
-- **Menu:** Header › Practice menu › Candles and patterns: “Reversal chart patterns” (`/practice/reversal-charts`)
+- **Menu:** Header › Practice › Intermediate › Patterns: “Reversal chart patterns” (`/practice/reversal-charts`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Reversal chart patterns” (`/practice/reversal-charts`)
 - **Track:** Track “Charts and patterns” step 9: “Reversal chart patterns”
 - **ToC:** ToC › Practice: “Reversal chart patterns”
@@ -650,7 +652,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/OneMinuteCharts.tsx`
 - **Teaches:** Practice lab: Reading 1-minute charts.
-- **Menu:** Header › Practice menu › Price action and day trading: “Reading 1-minute charts” (`/practice/one-minute-charts`)
+- **Menu:** Header › Practice › Advanced › Precision day trading: “Reading 1-minute charts” (`/practice/one-minute-charts`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Reading 1-minute charts” (`/practice/one-minute-charts`)
 - **Track:** Track “Active and day trading” step 8: “Reading 1-minute charts”
 - **ToC:** ToC › Practice: “Reading 1-minute charts”
@@ -661,7 +663,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/FibDecisionMap.tsx`
 - **Teaches:** Practice lab: Fibonacci as a decision map.
-- **Menu:** Header › Practice menu › Price action and day trading: “Fibonacci as a decision map” (`/practice/fib-decision-map`)
+- **Menu:** Header › Practice › Advanced › Precision day trading: “Fibonacci as a decision map” (`/practice/fib-decision-map`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Fibonacci as a decision map” (`/practice/fib-decision-map`)
 - **Track:** Track “Active and day trading” step 9: “Fibonacci as a decision map”
 - **ToC:** ToC › Practice: “Fibonacci as a decision map”
@@ -672,7 +674,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/FuturesVsOptions.tsx`
 - **Teaches:** Practice lab: Futures vs options & beginner toolkit.
-- **Menu:** Header › Practice menu › Options and volatility: “Futures vs options & beginner toolkit” (`/practice/futures-vs-options`)
+- **Menu:** Header › Practice › Advanced › Options and volatility: “Futures vs options & beginner toolkit” (`/practice/futures-vs-options`)
 - **Browse:** Browse everything › Practice: Options and volatility: “Futures vs options & beginner toolkit” (`/practice/futures-vs-options`)
 - **Track:** Track “Options and volatility” step 5: “Futures vs options & beginner toolkit”
 - **ToC:** ToC › Practice: “Futures vs options & beginner toolkit”
@@ -683,7 +685,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/TechniqueNarratives.tsx`
 - **Teaches:** Practice lab: Technique narratives.
-- **Menu:** Header › Practice menu › Indicators and charting apps: “Technique narratives” (`/practice/technique-narratives`)
+- **Menu:** Header › Practice › Intermediate › Indicators: “Technique narratives” (`/practice/technique-narratives`)
 - **Browse:** Browse everything › Practice: Indicators and charting apps: “Technique narratives” (`/practice/technique-narratives`)
 - **ToC:** ToC › Practice: “Technique narratives”
 - **Map:** Progress map: 1 stage(s) — `lab:technique-narratives`
@@ -693,7 +695,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/MissingWicks.tsx`
 - **Teaches:** Practice lab: Missing wicks and zooming in.
-- **Menu:** Header › Practice menu › Candles and patterns: “Missing wicks and zooming in” (`/practice/missing-wicks`)
+- **Menu:** Header › Practice › Beginner › First candles: “Missing wicks and zooming in” (`/practice/missing-wicks`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Missing wicks and zooming in” (`/practice/missing-wicks`)
 - **Track:** Track “Charts and patterns” step 5: “Missing wicks and zooming in”
 - **ToC:** ToC › Practice: “Missing wicks and zooming in”
@@ -704,7 +706,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/RecordTraders.tsx`
 - **Teaches:** Practice lab: Record-setting traders.
-- **Menu:** Header › Practice menu › Automation and records: “Record-setting traders” (`/practice/record-traders`)
+- **Menu:** Header › Practice › Advanced › Commodities and records: “Record-setting traders” (`/practice/record-traders`)
 - **Browse:** Browse everything › Practice: Automation and records: “Record-setting traders” (`/practice/record-traders`)
 - **ToC:** ToC › Practice: “Record-setting traders”
 - **Map:** Progress map: 1 stage(s) — `lab:record-traders`
@@ -714,7 +716,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/PatternThemes.tsx`
 - **Teaches:** Practice lab: Pattern themes.
-- **Menu:** Header › Practice menu › Candles and patterns: “Pattern themes” (`/practice/pattern-themes`)
+- **Menu:** Header › Practice › Beginner › Reading a chart: “Pattern themes” (`/practice/pattern-themes`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Pattern themes” (`/practice/pattern-themes`)
 - **Track:** Track “Charts and patterns” step 8: “Pattern themes”
 - **ToC:** ToC › Practice: “Pattern themes”
@@ -725,7 +727,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/EssentialCandles.tsx`
 - **Teaches:** Practice lab: Essential candlestick patterns.
-- **Menu:** Header › Practice menu › Candles and patterns: “Essential candlestick patterns” (`/practice/essential-candles`)
+- **Menu:** Header › Practice › Beginner › First candles: “Essential candlestick patterns” (`/practice/essential-candles`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Essential candlestick patterns” (`/practice/essential-candles`)
 - **Track:** Track “Charts and patterns” step 4: “Essential candlestick patterns”
 - **ToC:** ToC › Practice: “Essential candlestick patterns”
@@ -736,7 +738,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/WhichWay.tsx`
 - **Teaches:** Practice lab: Which Way? (Up, Down or Either).
-- **Menu:** Header › Practice menu › Candles and patterns: “Which Way? (Up, Down or Either)” (`/practice/which-way`)
+- **Menu:** Header › Practice › Beginner › First candles: “Which Way? (Up, Down or Either)” (`/practice/which-way`)
 - **Browse:** Browse everything › Practice: Candles and patterns: “Which Way? (Up, Down or Either)” (`/practice/which-way`)
 - **Track:** Track “Charts and patterns” step 6: “Which Way?”
 - **ToC:** ToC › Practice: “Which Way? (Up, Down or Either)”
@@ -747,7 +749,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/TradeFramework.tsx`
 - **Teaches:** Practice lab: Price action trading framework.
-- **Menu:** Header › Practice menu › Price action and day trading: “Price action trading framework” (`/practice/trade-framework`)
+- **Menu:** Header › Practice › Intermediate › Price action: “Price action trading framework” (`/practice/trade-framework`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Price action trading framework” (`/practice/trade-framework`)
 - **Track:** Track “Active and day trading” step 1: “Price action trading framework”
 - **ToC:** ToC › Practice: “Price action trading framework”
@@ -758,7 +760,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/OpeningRange.tsx`
 - **Teaches:** Practice lab: Opening range: retests, failed breaks & risk.
-- **Menu:** Header › Practice menu › Price action and day trading: “Opening range: retests, failed breaks & risk” (`/practice/opening-range`)
+- **Menu:** Header › Practice › Intermediate › Price action: “Opening range: retests, failed breaks & risk” (`/practice/opening-range`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Opening range: retests, failed breaks & risk” (`/practice/opening-range`)
 - **Track:** Track “Active and day trading” step 4: “Opening range lab”
 - **ToC:** ToC › Practice: “Opening range: retests, failed breaks & risk”
@@ -769,7 +771,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/FairValueGap.tsx`
 - **Teaches:** Practice lab: Breakout, pullback and fair value gap.
-- **Menu:** Header › Practice menu › Price action and day trading: “Breakout, pullback and fair value gap” (`/practice/fair-value-gap`)
+- **Menu:** Header › Practice › Advanced › Precision day trading: “Breakout, pullback and fair value gap” (`/practice/fair-value-gap`)
 - **Browse:** Browse everything › Practice: Price action and day trading: “Breakout, pullback and fair value gap” (`/practice/fair-value-gap`)
 - **Track:** Track “Active and day trading” step 7: “Breakout, pullback and fair value gap”
 - **ToC:** ToC › Practice: “Breakout, pullback and fair value gap”
@@ -780,7 +782,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/RiskPremiumPortfolio.tsx`
 - **Teaches:** Practice lab: Risk-premium portfolio and the VIX overlay.
-- **Menu:** Header › Practice menu › Options and volatility: “Risk-premium portfolio and the VIX overlay” (`/practice/risk-premium-portfolio`)
+- **Menu:** Header › Practice › Advanced › Portfolio and automation: “Risk-premium portfolio and the VIX overlay” (`/practice/risk-premium-portfolio`)
 - **Browse:** Browse everything › Practice: Options and volatility: “Risk-premium portfolio and the VIX overlay” (`/practice/risk-premium-portfolio`)
 - **Track:** Track “Options and volatility” step 10: “Risk-premium portfolio and the VIX overlay”
 - **ToC:** ToC › Practice: “Risk-premium portfolio and the VIX overlay”
@@ -791,7 +793,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/VixTrading.tsx`
 - **Teaches:** Practice lab: VIX trading for beginners.
-- **Menu:** Header › Practice menu › Options and volatility: “VIX trading for beginners” (`/practice/vix-trading`)
+- **Menu:** Header › Practice › Advanced › Options and volatility: “VIX trading for beginners” (`/practice/vix-trading`)
 - **Browse:** Browse everything › Practice: Options and volatility: “VIX trading for beginners” (`/practice/vix-trading`)
 - **Track:** Track “Options and volatility” step 9: “VIX trading for beginners”
 - **ToC:** ToC › Practice: “VIX trading for beginners”
@@ -802,7 +804,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/practice/WheelStrategy.tsx`
 - **Teaches:** Practice lab: The wheel strategy (cash-secured puts to covered calls).
-- **Menu:** Header › Practice menu › Options and volatility: “The wheel strategy (cash-secured puts to covered calls)” (`/practice/wheel-strategy`)
+- **Menu:** Header › Practice › Advanced › Options and volatility: “The wheel strategy (cash-secured puts to covered calls)” (`/practice/wheel-strategy`)
 - **Browse:** Browse everything › Practice: Options and volatility: “The wheel strategy (cash-secured puts to covered calls)” (`/practice/wheel-strategy`)
 - **Track:** Track “Options and volatility” step 7: “The wheel strategy”
 - **ToC:** ToC › Practice: “The wheel strategy (cash-secured puts to covered calls)”
@@ -813,7 +815,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="exposure-wrappers")
 - **Teaches:** Market theme: Same theme, different wrapper: stocks, funds and futures (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Same theme, different wrapper: stocks, funds and futures” (`/practice/exposure-wrappers`)
+- **Menu:** Header › Practice › Intermediate › Earnings and markets: “Same theme, different wrapper: stocks, funds and futures” (`/practice/exposure-wrappers`)
 - **Browse:** Browse everything › Practice: Other markets: “Same theme, different wrapper: stocks, funds and futures” (`/practice/exposure-wrappers`)
 - **Track:** Track “Other markets” step 4: “Same theme, different wrapper”
 - **ToC:** ToC › Practice: “Same theme, different wrapper: stocks, funds and futures”
@@ -824,7 +826,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="currency-funds")
 - **Teaches:** Market theme: Currency funds and the dollar (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Currency funds and the dollar” (`/practice/currency-funds`)
+- **Menu:** Header › Practice › Intermediate › Earnings and markets: “Currency funds and the dollar” (`/practice/currency-funds`)
 - **Browse:** Browse everything › Practice: Other markets: “Currency funds and the dollar” (`/practice/currency-funds`)
 - **ToC:** ToC › Practice: “Currency funds and the dollar”
 - **Map:** Progress map: 1 stage(s) — `lab:currency-funds`
@@ -834,7 +836,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="precious-metals")
 - **Teaches:** Market theme: Precious metals: gold, silver and the miners (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Precious metals: gold, silver and the miners” (`/practice/precious-metals`)
+- **Menu:** Header › Practice › Advanced › Commodities and records: “Precious metals: gold, silver and the miners” (`/practice/precious-metals`)
 - **Browse:** Browse everything › Practice: Other markets: “Precious metals: gold, silver and the miners” (`/practice/precious-metals`)
 - **ToC:** ToC › Practice: “Precious metals: gold, silver and the miners”
 - **Map:** Progress map: 1 stage(s) — `lab:precious-metals`
@@ -844,7 +846,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="energy")
 - **Teaches:** Market theme: Energy: oil, natural gas and the companies (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Energy: oil, natural gas and the companies” (`/practice/energy`)
+- **Menu:** Header › Practice › Advanced › Commodities and records: “Energy: oil, natural gas and the companies” (`/practice/energy`)
 - **Browse:** Browse everything › Practice: Other markets: “Energy: oil, natural gas and the companies” (`/practice/energy`)
 - **Track:** Track “Other markets” step 10: “Market themes: precious metals, energy, agriculture, industrial metals…”
 - **ToC:** ToC › Practice: “Energy: oil, natural gas and the companies”
@@ -855,7 +857,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="industrial-metals")
 - **Teaches:** Market theme: Industrial and transition metals: copper, uranium and clean energy (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Industrial and transition metals: copper, uranium and clean energy” (`/practice/industrial-metals`)
+- **Menu:** Header › Practice › Advanced › Commodities and records: “Industrial and transition metals: copper, uranium and clean energy” (`/practice/industrial-metals`)
 - **Browse:** Browse everything › Practice: Other markets: “Industrial and transition metals: copper, uranium and clean energy” (`/practice/industrial-metals`)
 - **ToC:** ToC › Practice: “Industrial and transition metals: copper, uranium and clean energy”
 - **Map:** Progress map: 1 stage(s) — `lab:industrial-metals`
@@ -865,7 +867,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="agriculture")
 - **Teaches:** Market theme: Agriculture and inputs: crops, fertilizer and farm equipment (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Agriculture and inputs: crops, fertilizer and farm equipment” (`/practice/agriculture`)
+- **Menu:** Header › Practice › Advanced › Commodities and records: “Agriculture and inputs: crops, fertilizer and farm equipment” (`/practice/agriculture`)
 - **Browse:** Browse everything › Practice: Other markets: “Agriculture and inputs: crops, fertilizer and farm equipment” (`/practice/agriculture`)
 - **ToC:** ToC › Practice: “Agriculture and inputs: crops, fertilizer and farm equipment”
 - **Map:** Progress map: 1 stage(s) — `lab:agriculture`
@@ -875,7 +877,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="materials-chemicals")
 - **Teaches:** Market theme: Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman” (`/practice/materials-chemicals`)
+- **Menu:** Header › Practice › Advanced › Commodities and records: “Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman” (`/practice/materials-chemicals`)
 - **Browse:** Browse everything › Practice: Other markets: “Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman” (`/practice/materials-chemicals`)
 - **ToC:** ToC › Practice: “Materials, chemicals and resins: Dow, LyondellBasell, Westlake, Eastman”
 - **Map:** Progress map: 1 stage(s) — `lab:materials-chemicals`
@@ -885,7 +887,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="bonds-rates")
 - **Teaches:** Market theme: Bonds and rates: SGOV, SHY, IEF, TLT, TIP and duration (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Bonds and rates: SGOV, SHY, IEF, TLT, TIP and duration” (`/practice/bonds-rates`)
+- **Menu:** Header › Practice › Intermediate › Earnings and markets: “Bonds and rates: SGOV, SHY, IEF, TLT, TIP and duration” (`/practice/bonds-rates`)
 - **Browse:** Browse everything › Practice: Other markets: “Bonds and rates: SGOV, SHY, IEF, TLT, TIP and duration” (`/practice/bonds-rates`)
 - **ToC:** ToC › Practice: “Bonds and rates: SGOV, SHY, IEF, TLT, TIP and duration”
 - **Map:** Progress map: 1 stage(s) — `lab:bonds-rates`
@@ -895,7 +897,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="sectors-rotation")
 - **Teaches:** Market theme: Sectors and rotation: the 11 sectors, sector funds, REITs and the business cycle (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Sectors and rotation: the 11 sectors, sector funds, REITs and the business cycle” (`/practice/sectors-rotation`)
+- **Menu:** Header › Practice › Intermediate › Earnings and markets: “Sectors and rotation: the 11 sectors, sector funds, REITs and the business cycle” (`/practice/sectors-rotation`)
 - **Browse:** Browse everything › Practice: Other markets: “Sectors and rotation: the 11 sectors, sector funds, REITs and the business cycle” (`/practice/sectors-rotation`)
 - **Track:** Track “Macro and news” step 10: “Bonds and rates; Sectors and rotation themes”
 - **ToC:** ToC › Practice: “Sectors and rotation: the 11 sectors, sector funds, REITs and the business cycle”
@@ -906,7 +908,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/components/practice/MarketThemePage.tsx` (id="index-style")
 - **Teaches:** Market theme: Index and style: size, region, style and how index weights work (MarketThemePage, `?sim=`).
-- **Menu:** Header › Practice menu › Other markets: “Index and style: size, region, style and how index weights work” (`/practice/index-style`)
+- **Menu:** Header › Practice › Intermediate › Earnings and markets: “Index and style: size, region, style and how index weights work” (`/practice/index-style`)
 - **Browse:** Browse everything › Practice: Other markets: “Index and style: size, region, style and how index weights work” (`/practice/index-style`)
 - **ToC:** ToC › Practice: “Index and style: size, region, style and how index weights work”
 - **Map:** Progress map: 1 stage(s) — `lab:index-style`
@@ -950,7 +952,7 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 
 - **Page:** `src/pages/ToolsHub.tsx`
 - **Teaches:** One Tool Training lesson (walkthrough, find-it tasks, simulations, quiz).
-- **Menu:** none
+- **Menu:** Header › Learn › Advanced › Research tools: “Capstone 2: a bank, step by step” (`/tools/capstone-bank`); Header › Learn › Advanced › Research tools: “Capstone: one ticker, four tools” (`/tools/capstone`); Header › Learn › Advanced › Research tools: “Earnings dates and insiders” (`/tools/earnings-insiders`); Header › Learn › Advanced › Research tools: “Finviz” (`/tools/finviz`); Header › Learn › Advanced › Research tools: “Market Forces” (`/tools/market-forces`); Header › Learn › Advanced › Research tools: “SEC EDGAR” (`/tools/sec-edgar`); Header › Learn › Advanced › Research tools: “StockAnalysis” (`/tools/stockanalysis`); Header › Learn › Advanced › Research tools: “Yahoo Finance” (`/tools/yahoo-finance`)
 - **Browse:** Browse everything › Tool Training: “Capstone 2: a bank, step by step” (`/tools/capstone-bank`); Browse everything › Tool Training: “Capstone: one ticker, four tools” (`/tools/capstone`); Browse everything › Tool Training: “Earnings dates and insiders” (`/tools/earnings-insiders`); Browse everything › Tool Training: “Finviz” (`/tools/finviz`); Browse everything › Tool Training: “Market Forces” (`/tools/market-forces`); Browse everything › Tool Training: “SEC EDGAR” (`/tools/sec-edgar`); Browse everything › Tool Training: “StockAnalysis” (`/tools/stockanalysis`); Browse everything › Tool Training: “Yahoo Finance” (`/tools/yahoo-finance`)
 - **Track:** Track “Company fundamentals and earnings” step 10: “Tool Training: StockAnalysis, SEC EDGAR, Earnings & insiders”; Track “Macro and news” step 7: “Tool Training: Market Forces”
 - **ToC:** ToC › Tool Training: “Capstone 2: a bank, step by step”; ToC › Tool Training: “Capstone: one ticker, four tools”; ToC › Tool Training: “Earnings dates and insiders”; ToC › Tool Training: “Finviz”; ToC › Tool Training: “Market Forces”; ToC › Tool Training: “SEC EDGAR”; ToC › Tool Training: “StockAnalysis”; ToC › Tool Training: “Yahoo Finance”
@@ -2226,10 +2228,10 @@ Read by `PanelCarousel` (group id or alias) and `Training.tsx` (`#concepts` swit
 | `/academy/:unitId` | `?sim` | `SimProvider` / `UnitPlayer` `initialOpen`: opens that simulation on load | 2 | `src/lib/academy/content/unitsL0L3.ts (Academy ref)` |
 | `/archive` | `?crypto` | `src/pages/Archive.tsx`: crypto-fit filter | 1 | `src/pages/practice/CryptoCandles.tsx` |
 | `/archive` | `?open` | `src/pages/Archive.tsx`: opens one pattern, indicator or term | 131 | `src/components/OrbContextLab.tsx`, `src/components/QuizModal.tsx`, `src/lib/academy/content/beforeYouTrade.ts (Academy ref)`, `src/lib/academy/content/unitsL0L3.ts (Academy ref)`, `src/lib/academy/content/unitsL4L7.ts (Academy ref)`, `src/lib/academy/options/ladder.ts (Academy ref)`, `src/lib/academy/refs.ts`, `src/lib/browseCatalog.ts`, `src/lib/fairValueGap.ts`, `src/lib/financials/format.ts`, `src/lib/marketNavigator.ts`, `src/lib/openingRange.ts`, `src/lib/playbooks.ts`, `src/lib/riskPremiumPortfolio.ts`, `src/lib/vixTrading.ts`, `src/pages/Market.tsx`, `src/pages/academy/OptionsLadder.tsx`, `src/pages/macro/MacroLesson.tsx`, `src/pages/practice/AlgoTrading.tsx`, `src/pages/practice/ChartingApps.tsx`, `src/pages/practice/CryptoCandles.tsx`, `src/pages/practice/EssentialCandles.tsx`, `src/pages/practice/FairValueGap.tsx`, `src/pages/practice/FibDecisionMap.tsx`, `src/pages/practice/Flashcards.tsx`, `src/pages/practice/FuturesVsOptions.tsx`, `src/pages/practice/GammaSqueeze.tsx`, `src/pages/practice/JapaneseCandles.tsx`, `src/pages/practice/MissingWicks.tsx`, `src/pages/practice/NewsBiases.tsx`, `src/pages/practice/OneMinuteCharts.tsx`, `src/pages/practice/OpeningRange.tsx`, `src/pages/practice/Oscillators.tsx`, `src/pages/practice/PatternThemes.tsx`, `src/pages/practice/RecordTraders.tsx`, `src/pages/practice/ReversalCharts.tsx`, `src/pages/practice/RiskPremiumPortfolio.tsx`, `src/pages/practice/TradeFramework.tsx`, `src/pages/practice/VixTrading.tsx`, `src/pages/practice/WheelStrategy.tsx`, `src/pages/practice/WhichWay.tsx` |
-| `/archive` | `?tab` | `src/pages/Archive.tsx`: patterns, indicators or literacy tab | 129 | `src/components/IndicatorGlossary.tsx`, `src/components/OrbContextLab.tsx`, `src/components/QuizModal.tsx`, `src/lib/academy/content/beforeYouTrade.ts (Academy ref)`, `src/lib/academy/content/unitsL0L3.ts (Academy ref)`, `src/lib/academy/content/unitsL4L7.ts (Academy ref)`, `src/lib/academy/options/ladder.ts (Academy ref)`, `src/lib/academy/refs.ts`, `src/lib/browseCatalog.ts`, `src/lib/fairValueGap.ts`, `src/lib/financials/format.ts`, `src/lib/marketNavigator.ts`, `src/lib/openingRange.ts`, `src/lib/playbooks.ts`, `src/lib/riskPremiumPortfolio.ts`, `src/lib/vixTrading.ts`, `src/pages/Market.tsx`, `src/pages/academy/OptionsLadder.tsx`, `src/pages/macro/MacroLesson.tsx`, `src/pages/practice/AlgoTrading.tsx`, `src/pages/practice/ChartingApps.tsx`, `src/pages/practice/CryptoCandles.tsx`, `src/pages/practice/FairValueGap.tsx`, `src/pages/practice/FibDecisionMap.tsx`, `src/pages/practice/Flashcards.tsx`, `src/pages/practice/FuturesVsOptions.tsx`, `src/pages/practice/GammaSqueeze.tsx`, `src/pages/practice/JapaneseCandles.tsx`, `src/pages/practice/MissingWicks.tsx`, `src/pages/practice/NewsBiases.tsx`, `src/pages/practice/OneMinuteCharts.tsx`, `src/pages/practice/OpeningRange.tsx`, `src/pages/practice/Oscillators.tsx`, `src/pages/practice/RecordTraders.tsx`, `src/pages/practice/ReversalCharts.tsx`, `src/pages/practice/RiskPremiumPortfolio.tsx`, `src/pages/practice/TradeFramework.tsx`, `src/pages/practice/VixTrading.tsx`, `src/pages/practice/WheelStrategy.tsx` |
+| `/archive` | `?tab` | `src/pages/Archive.tsx`: patterns, indicators or literacy tab | 131 | `src/components/IndicatorGlossary.tsx`, `src/components/OrbContextLab.tsx`, `src/components/QuizModal.tsx`, `src/lib/academy/content/beforeYouTrade.ts (Academy ref)`, `src/lib/academy/content/unitsL0L3.ts (Academy ref)`, `src/lib/academy/content/unitsL4L7.ts (Academy ref)`, `src/lib/academy/options/ladder.ts (Academy ref)`, `src/lib/academy/refs.ts`, `src/lib/browseCatalog.ts`, `src/lib/fairValueGap.ts`, `src/lib/financials/format.ts`, `src/lib/marketNavigator.ts`, `src/lib/navLevels.ts`, `src/lib/openingRange.ts`, `src/lib/playbooks.ts`, `src/lib/riskPremiumPortfolio.ts`, `src/lib/vixTrading.ts`, `src/pages/Market.tsx`, `src/pages/academy/OptionsLadder.tsx`, `src/pages/macro/MacroLesson.tsx`, `src/pages/practice/AlgoTrading.tsx`, `src/pages/practice/ChartingApps.tsx`, `src/pages/practice/CryptoCandles.tsx`, `src/pages/practice/FairValueGap.tsx`, `src/pages/practice/FibDecisionMap.tsx`, `src/pages/practice/Flashcards.tsx`, `src/pages/practice/FuturesVsOptions.tsx`, `src/pages/practice/GammaSqueeze.tsx`, `src/pages/practice/JapaneseCandles.tsx`, `src/pages/practice/MissingWicks.tsx`, `src/pages/practice/NewsBiases.tsx`, `src/pages/practice/OneMinuteCharts.tsx`, `src/pages/practice/OpeningRange.tsx`, `src/pages/practice/Oscillators.tsx`, `src/pages/practice/RecordTraders.tsx`, `src/pages/practice/ReversalCharts.tsx`, `src/pages/practice/RiskPremiumPortfolio.tsx`, `src/pages/practice/TradeFramework.tsx`, `src/pages/practice/VixTrading.tsx`, `src/pages/practice/WheelStrategy.tsx` |
 | `/archive` | `?theme` | `src/pages/Archive.tsx`: pattern theme filter | 1 | `src/pages/practice/PatternThemes.tsx` |
 | `/cases` | `?market` | `src/pages/Cases.tsx`: limits packs to one market class (`?class=` also works) | 1 | `src/lib/marketNavigator.ts` |
-| `/cases` | `?pack` | `src/pages/Cases.tsx`: focuses a pack first | 48 | `src/components/PathMapPanel.tsx`, `src/lib/browseCatalog.ts`, `src/lib/fairValueGap.ts`, `src/lib/fourPillars.ts`, `src/lib/marketThemes/agriculture.ts`, `src/lib/marketThemes/bonds.ts`, `src/lib/marketThemes/currencyFunds.ts`, `src/lib/marketThemes/energy.ts`, `src/lib/marketThemes/indexStyle.ts`, `src/lib/marketThemes/industrialMetals.ts`, `src/lib/marketThemes/materials.ts`, `src/lib/marketThemes/preciousMetals.ts`, `src/lib/marketThemes/sectors.ts`, `src/lib/marketThemes/structure.ts`, `src/lib/openingRange.ts`, `src/lib/riskPremiumPortfolio.ts`, `src/lib/toolTraining/capstone.ts`, `src/lib/toolTraining/capstoneBank.ts`, `src/lib/toolTraining/earningsInsiders.ts`, `src/lib/toolTraining/edgar.ts`, `src/lib/toolTraining/finviz.ts`, `src/lib/toolTraining/marketForces.ts`, `src/lib/toolTraining/stockAnalysis.ts`, `src/lib/toolTraining/yahooFinance.ts`, `src/lib/tracks.ts`, `src/lib/tradeFramework.ts`, `src/lib/vixTrading.ts`, `src/lib/wheelStrategy.ts`, `src/pages/Dashboard.tsx`, `src/pages/Training.tsx` |
+| `/cases` | `?pack` | `src/pages/Cases.tsx`: focuses a pack first | 56 | `src/components/PathMapPanel.tsx`, `src/lib/browseCatalog.ts`, `src/lib/fairValueGap.ts`, `src/lib/fourPillars.ts`, `src/lib/marketThemes/agriculture.ts`, `src/lib/marketThemes/bonds.ts`, `src/lib/marketThemes/currencyFunds.ts`, `src/lib/marketThemes/energy.ts`, `src/lib/marketThemes/indexStyle.ts`, `src/lib/marketThemes/industrialMetals.ts`, `src/lib/marketThemes/materials.ts`, `src/lib/marketThemes/preciousMetals.ts`, `src/lib/marketThemes/sectors.ts`, `src/lib/marketThemes/structure.ts`, `src/lib/navLevels.ts`, `src/lib/openingRange.ts`, `src/lib/riskPremiumPortfolio.ts`, `src/lib/toolTraining/capstone.ts`, `src/lib/toolTraining/capstoneBank.ts`, `src/lib/toolTraining/earningsInsiders.ts`, `src/lib/toolTraining/edgar.ts`, `src/lib/toolTraining/finviz.ts`, `src/lib/toolTraining/marketForces.ts`, `src/lib/toolTraining/stockAnalysis.ts`, `src/lib/toolTraining/yahooFinance.ts`, `src/lib/tracks.ts`, `src/lib/tradeFramework.ts`, `src/lib/vixTrading.ts`, `src/lib/wheelStrategy.ts`, `src/pages/Dashboard.tsx`, `src/pages/Training.tsx` |
 | `/coach` | `?class` | `src/pages/Coach.tsx`: market class filter (default equity; `?market=` also works) | 3 | `src/lib/browseCatalog.ts`, `src/lib/marketNavigator.ts` |
 | `/macro/play` | `?round` | `src/pages/macro/MacroPlay.tsx`: starts at a round | 1 | `src/lib/macro/homeTip.ts` |
 | `/market` | `?class` | `src/pages/Market.tsx`: market class | 1 | `src/lib/marketNavigator.ts` |
@@ -2245,11 +2247,11 @@ Read by `PanelCarousel` (group id or alias) and `Training.tsx` (`#concepts` swit
 | `/practice/sectors-rotation` | `?sim` | `SimProvider` / `UnitPlayer` `initialOpen`: opens that simulation on load | 1 | `src/lib/academy/content/beforeYouTrade.ts (Academy ref)` |
 | `/practice/statements` | `#forecast` | `src/pages/practice/StatementsLab.tsx`: anchor `id="forecast"` | 1 | `src/components/financials/FinancialsTrainingCard.tsx` |
 | `/tools/:toolId` | `?sim` | `SimProvider` / `UnitPlayer` `initialOpen`: opens that simulation on load | 2 | `src/lib/academy/content/beforeYouTrade.ts (Academy ref)` |
-| `/training` | `#buy-or-sell` | `PanelCarousel` group id or alias | 2 | `src/lib/appNav.ts` |
-| `/training` | `#concepts` | `PanelCarousel` group id or alias; `Training.tsx` switches to concept groups | 2 | `src/lib/appNav.ts` |
-| `/training` | `#financials` | `PanelCarousel` group id or alias | 2 | `src/lib/appNav.ts` |
-| `/training` | `#macro` | `PanelCarousel` group id or alias | 2 | `src/lib/appNav.ts` |
-| `/training` | `#patterns` | `PanelCarousel` group id or alias | 3 | `src/lib/appNav.ts` |
+| `/training` | `#buy-or-sell` | `PanelCarousel` group id or alias | 3 | `src/lib/appNav.ts`, `src/lib/navLevels.ts` |
+| `/training` | `#concepts` | `PanelCarousel` group id or alias; `Training.tsx` switches to concept groups | 3 | `src/lib/appNav.ts`, `src/lib/navLevels.ts` |
+| `/training` | `#financials` | `PanelCarousel` group id or alias | 3 | `src/lib/appNav.ts`, `src/lib/navLevels.ts` |
+| `/training` | `#macro` | `PanelCarousel` group id or alias | 3 | `src/lib/appNav.ts`, `src/lib/navLevels.ts` |
+| `/training` | `#patterns` | `PanelCarousel` group id or alias | 4 | `src/lib/appNav.ts`, `src/lib/navLevels.ts` |
 | `/training` | `#practice` | `PanelCarousel` group id or alias | 2 | `src/lib/appNav.ts` |
 | `/training` | `?group` | `src/pages/Training.tsx`: selects the quiz group and opens the Quiz panel | 139 | `src/components/IndicatorDetailModal.tsx`, `src/components/MarketNavigator.tsx`, `src/components/OrbContextLab.tsx`, `src/components/PathMapPanel.tsx`, `src/components/academy/AcademyTrainingCard.tsx`, `src/components/financials/FinancialsTrainingCard.tsx`, `src/components/macro/MacroTrainingCard.tsx`, `src/lib/academy/content/beforeYouTrade.ts (Academy ref)`, `src/lib/academy/content/unitsL0L3.ts (Academy ref)`, `src/lib/academy/content/unitsL4L7.ts (Academy ref)`, `src/lib/academy/options/ladder.ts (Academy ref)`, `src/lib/academy/refs.ts`, `src/lib/beginnerPath.ts`, `src/lib/browseCatalog.ts`, `src/lib/fairValueGap.ts`, `src/lib/fourPillars.ts`, `src/lib/macro/homeTip.ts`, `src/lib/marketNavigator.ts`, `src/lib/marketThemes/agriculture.ts`, `src/lib/marketThemes/bonds.ts`, `src/lib/marketThemes/currencyFunds.ts`, `src/lib/marketThemes/energy.ts`, `src/lib/marketThemes/indexStyle.ts`, `src/lib/marketThemes/industrialMetals.ts`, `src/lib/marketThemes/materials.ts`, `src/lib/marketThemes/preciousMetals.ts`, `src/lib/marketThemes/sectors.ts`, `src/lib/marketThemes/structure.ts`, `src/lib/openingRange.ts`, `src/lib/playbooks.ts`, `src/lib/progressMap.ts`, `src/lib/riskPremiumPortfolio.ts`, `src/lib/toolTraining/capstone.ts`, `src/lib/toolTraining/capstoneBank.ts`, `src/lib/toolTraining/earningsInsiders.ts`, `src/lib/toolTraining/edgar.ts`, `src/lib/toolTraining/finviz.ts`, `src/lib/toolTraining/marketForces.ts`, `src/lib/toolTraining/stockAnalysis.ts`, `src/lib/toolTraining/yahooFinance.ts`, `src/lib/tracks.ts`, `src/lib/tradeFramework.ts`, `src/lib/vixTrading.ts`, `src/lib/wheelStrategy.ts`, `src/pages/Archive.tsx`, `src/pages/CasePlayer.tsx`, `src/pages/Cases.tsx`, `src/pages/Dashboard.tsx`, `src/pages/Market.tsx`, `src/pages/Playbook.tsx`, `src/pages/academy/OptionsLadder.tsx`, `src/pages/macro/MacroDesk.tsx`, `src/pages/macro/MacroLesson.tsx`, `src/pages/practice/AlgoTrading.tsx`, `src/pages/practice/ChartingApps.tsx`, `src/pages/practice/CryptoCandles.tsx`, `src/pages/practice/EssentialCandles.tsx`, `src/pages/practice/FuturesVsOptions.tsx`, `src/pages/practice/GammaSqueeze.tsx`, `src/pages/practice/HeikinAshi.tsx`, `src/pages/practice/JapaneseCandles.tsx`, `src/pages/practice/MissingWicks.tsx`, `src/pages/practice/NewsBiases.tsx`, `src/pages/practice/OneMinuteCharts.tsx`, `src/pages/practice/Oscillators.tsx`, `src/pages/practice/PatternThemes.tsx`, `src/pages/practice/RecordTraders.tsx`, `src/pages/practice/ReversalCharts.tsx`, `src/pages/practice/TechniqueNarratives.tsx` |
 | `/training` | `?start` | `src/pages/Training.tsx`: `start=1` opens the quiz modal | 83 | `src/components/IndicatorDetailModal.tsx`, `src/components/MarketNavigator.tsx`, `src/components/OrbContextLab.tsx`, `src/components/academy/AcademyTrainingCard.tsx`, `src/components/financials/FinancialsTrainingCard.tsx`, `src/components/macro/MacroTrainingCard.tsx`, `src/lib/academy/content/beforeYouTrade.ts (Academy ref)`, `src/lib/academy/content/unitsL0L3.ts (Academy ref)`, `src/lib/academy/content/unitsL4L7.ts (Academy ref)`, `src/lib/academy/options/ladder.ts (Academy ref)`, `src/lib/academy/refs.ts`, `src/lib/beginnerPath.ts`, `src/lib/fairValueGap.ts`, `src/lib/fourPillars.ts`, `src/lib/macro/homeTip.ts`, `src/lib/openingRange.ts`, `src/lib/playbooks.ts`, `src/lib/riskPremiumPortfolio.ts`, `src/lib/tradeFramework.ts`, `src/lib/vixTrading.ts`, `src/lib/wheelStrategy.ts`, `src/pages/Archive.tsx`, `src/pages/CasePlayer.tsx`, `src/pages/Cases.tsx`, `src/pages/Dashboard.tsx`, `src/pages/Market.tsx`, `src/pages/academy/OptionsLadder.tsx`, `src/pages/macro/MacroDesk.tsx`, `src/pages/macro/MacroLesson.tsx`, `src/pages/practice/AlgoTrading.tsx`, `src/pages/practice/ChartingApps.tsx`, `src/pages/practice/CryptoCandles.tsx`, `src/pages/practice/GammaSqueeze.tsx`, `src/pages/practice/HeikinAshi.tsx`, `src/pages/practice/JapaneseCandles.tsx`, `src/pages/practice/NewsBiases.tsx`, `src/pages/practice/OneMinuteCharts.tsx`, `src/pages/practice/Oscillators.tsx`, `src/pages/practice/ReversalCharts.tsx` |
@@ -2309,9 +2311,9 @@ Nothing is orphaned: every route in `src/App.tsx` has at least one in-app link, 
 `src/lib/navInventory.test.ts` runs with `npm run test:lib` (part of `npm run verify`). It fails when:
 
 1. A route in `APP_ROUTES` (`src/lib/academy/refs.ts`, which `refs.test.ts` keeps equal to `src/App.tsx`) is not written in backticks in this file.
-2. A static route has no entry point in the header (`HEADER_NAV`, `LEARN_MENU`, `PRACTICE_FAMILIES`, `TRADE_MENU` in `src/lib/appNav.ts`), Browse everything (`BROWSE_SECTIONS` in `src/lib/browseCatalog.ts`), the Table of Contents links (`src/pages/Training.tsx`) or the progress map stages (`src/lib/progressMap.ts`).
+2. A static route has no entry point in the header (`HEADER_NAV` in `src/lib/appNav.ts` and the dropdown level tabs, `LEVEL_MENUS` in `src/lib/navLevels.ts`), Browse everything (`BROWSE_SECTIONS` in `src/lib/browseCatalog.ts`), the Table of Contents links (`src/pages/Training.tsx`) or the progress map stages (`src/lib/progressMap.ts`).
 3. A param route's hub (for example `/coach` for `/coach/:slug`) is not a static route with such an entry point.
 4. An item from the old header menus has neither a header nor a Browse everything entry.
 5. A learner-track step opens a route (or a hub detail page) with no such entry point.
 
-`src/lib/browseCatalog.test.ts` also checks that every Browse link and search hit opens a real route, that the Practice families hold every Practice lab exactly once, and that the test-outs, macro lessons, case packs, challenges and coach classes all have a link. When menus move again, update the entry-point sources in the tests, then this file.
+`src/lib/browseCatalog.test.ts` also checks that every Browse link and search hit opens a real route, that the Practice families hold every Practice lab exactly once, and that the test-outs, macro lessons, case packs, challenges and coach classes all have a link. `src/lib/navLevels.test.ts` checks that every dropdown item has exactly one level, a group, a one-line description and a real route, that the dropdowns keep every Learn, Trade and Practice item, that each tab has at most 4 groups, and that For your path items are the track's own steps from `src/lib/tracks.ts`. When menus move again, update the entry-point sources in the tests, then this file.
