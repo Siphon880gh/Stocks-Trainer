@@ -36,9 +36,9 @@ This pass followed `templates/AUDIT.md`, the original 20 UX laws and the design 
 | P3 | The dropdown level tabs had a rounded top with a thick underline and no focus ring. | Law of common region; keyboard floor | Square underline, larger padding, `focus-visible` ring. | Before/after `menu-*`. | Fixed `74ca01e` |
 | P3 | The simulation's why panel used a thick side stripe and uppercase labels. | Law of similarity | Light tinted box, sentence-case labels. | Detector shows 0 findings. | Fixed `8ccdd18` |
 | P2 | Links inside the Browse popup navigate the whole popup rather than nesting. | Doherty threshold, peak-end rule | Keep the current behaviour; "Open full page" is explicit. | n/a | Deferred: it is the agreed popup behaviour (t83u). Changing it needs Weng's call. |
-| P2 | Header controls are 29–36 px tall on phones. | Fitts's law | Make them 44 px tall in a taller phone header. | Measured; they pass 2.5.8 at 24 px. | Deferred: layout trade-off |
-| P2 | 10–11 px text is widespread. | Cognitive load | Do a type-scale pass. | n/a | Deferred: app-wide and needs page-by-page review |
-| P3 | Home with a picked track stacks four or more cards. | Hick's law, Miller's law | Merge Today and points into the Next up card. | n/a | Deferred: structural Home change |
+| P2 | Header controls are 29–36 px tall on phones. | Fitts's law, Jakob's law (logo goes home) | Make them 44×44 px below md, with the logo standing in for Home on phones. | Measured every control at 44×44 or larger at 390 px; the desktop header is 57 px; there's no overflow. An e2e flow checks this. | Fixed `b7b7f32`, `4ae2227` |
+| P2 | 10–11 px text is widespread. | Cognitive load, aesthetic-usability | Set a 12 px meta floor (the `text-xs` token in `index.css`), with 13 px secondary and 14 px and up for body. | No `text-[9–11px]` is left in `src`. The full e2e overflow checks pass at 390 px. | Fixed `ebd209f`, `b30c2cc` |
+| P3 | Home with a picked track stacks four or more cards. | Hick's law, von Restorff | Make Next up the one filled action, fold the placement check, Today and map into a closed "More for today" section, and outline the milestone Continue button. | A render test asserts one filled action outside the fold. Before/after `deferred-after-home-track-*`. | Fixed `35d3859` |
 | P3 | The first-visit picker uses same-size cards. | Law of similarity | None. | n/a | Kept: equal weight suits a choice between paths |
 | P3 | The paper desk SIMULATED banner is purple. | Von Restorff | None. | n/a | Kept: purple is the reserved "simulated" signal |
 
@@ -52,7 +52,7 @@ This pass followed `templates/AUDIT.md`, the original 20 UX laws and the design 
   - The tab focus ring is added and contrast meets AA.
   - Browse targets are 28 px.
   - There's no horizontal overflow at 390 px.
-  - The header targets are deferred (see above).
+  - Header targets are 44 px on phones, and there's no text under 12 px.
 - [x] Responsive and localization checks. Screens were checked at 390 and 1280 px; the filter rows wrap. Localization was not tested (English only).
 - [x] Motion and 3D. None added, so no reduced-motion fallback is needed.
 - [x] Performance, reliability and privacy. There are no new dependencies or assets, no data or storage changes, and functionality is unchanged.
@@ -75,6 +75,5 @@ This pass followed `templates/AUDIT.md`, the original 20 UX laws and the design 
 
 ## Next actions
 
-1. Decide on 44 px header targets on phones.
-2. Do a type-scale pass for the 10–11 px meta text.
-3. Merge the Home cards under Next up when a track is picked.
+1. Watch whether people open "More for today". If the daily review is missed, show a one-line Today summary in its label.
+2. Consider moving the 13 px secondary copy on reading-heavy pages up to 14 px.

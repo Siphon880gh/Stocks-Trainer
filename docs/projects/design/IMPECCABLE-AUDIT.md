@@ -19,12 +19,12 @@ Questions skipped: there was no channel to ask Weng mid-run; the design context 
 
 | Dimension | Before | After | Notes |
 |---|---|---|---|
-| Accessibility | 2/4 | 3/4 | Muted text failed AA (4.22:1 on white, 3.87:1 on canvas); it now passes (5.31 / 4.87). Home had no visible h1. Tab focus ring was missing. Header targets are still 29–36 px (they pass 2.5.8 at 24 px but are under 44 px). |
+| Accessibility | 2/4 | 4/4 | Muted text failed AA (4.22:1 on white, 3.87:1 on canvas); it now passes (5.31 / 4.87). Home had no visible h1. Tab focus ring was missing. Header targets are now 44 px on phones, and there's no text under 12 px. |
 | Performance | 3/4 | 3/4 | No change was needed. There was no layout shift in the shots and no new assets. |
 | Theming / tokens | 3/4 | 4/4 | The Library's terminal costume (font-mono, uppercase, `/ root`, SNAKE_CASE) went against the design context. The simulation side stripe was replaced. The detector went from 2 findings to 0. |
 | Responsive | 2/4 | 3/4 | The Library tab and filter rows clipped behind a hidden scrollbar at 390 px; they now wrap. Browse links are 28 px tall targets. |
 | Anti-patterns / craft floor | 2/4 | 3/4 | Fixed: the eyebrow over the Next up heading, the 90-chip wall on Academy, the duplicate link row on Browse, and a rounded tab with a thick bottom border. |
-| **Total** | **12/20** | **16/20** | |
+| **Total** | **12/20** | **17/20** | |
 
 ## Critique (Nielsen heuristics, 0–4)
 
@@ -54,15 +54,15 @@ Questions skipped: there was no channel to ask Weng mid-run; the design context 
 | 7 | P3 | Craft floor: a "Your path" eyebrow sat above the Next up heading. | `NextUpCard` | **Fixed** `e3f0109`. It is carried in the progress line, and screen readers still hear "Your path:". |
 | 8 | P3 | Detector `border-accent-on-rounded`: tabs were rounded-top with a thick bottom border, and had no visible focus ring. | `NavTabsMenu` | **Fixed** `74ca01e`. Square underline, larger tap area, focus ring. |
 | 9 | P3 | Detector `side-tab`: the simulation's "Why we are doing this" panel used a 4 px side stripe and uppercase labels. | `Simulation.tsx` | **Fixed** `8ccdd18`. A light tinted box with sentence-case labels. |
-| 10 | P2 | Header controls are 29–36 px tall at 390 px. They pass WCAG 2.5.8 (24 px) but are under the 44 px comfort target. | `AppChrome` | **Deferred.** Raising them makes the two-row phone header taller, which is a layout decision for Weng. |
-| 11 | P2 | 10–11 px meta text is widespread (badges, captions, chart labels). | many | **Deferred.** It is an app-wide type-scale change and needs its own pass so the screens can be checked one by one. |
-| 12 | P3 | With a track picked, Home stacks four or more cards (Next up, Today, points, map card, milestones). | `Dashboard` | **Deferred.** This is structural; it belongs with the next Home iteration. |
+| 10 | P2 | Header controls are 29–36 px tall at 390 px. They pass WCAG 2.5.8 (24 px) but are under the 44 px comfort target. | `AppChrome`, `NavTabsMenu` | **Fixed (follow-up)** `b7b7f32`. Every header control is at least 44×44 px below md. The logo (labelled "Learn Stocks home") stands in for Home on phones so the row still fits 390 px. The desktop row stays 57 px. An e2e check guards it (`4ae2227`). |
+| 11 | P2 | 10–11 px meta text is widespread (badges, captions, chart labels). | many | **Fixed (follow-up)** `ebd209f`, `b30c2cc`. All 236 uses of 9–11 px interface text across 86 files now use `text-xs`, which `index.css` sets as a 12 px meta token with 1.4 line height. 13 px is the secondary step and 14 px (`text-sm`) and up is body. Chart SVG labels keep their plot-sized units, and the market chart's indicator ticks now match its 10 px axis. |
+| 12 | P3 | With a track picked, Home stacks four or more cards (Next up, Today, points, map card, milestones). | `Dashboard` | **Fixed (follow-up)** `35d3859`. Next up is the only filled action. The placement check, Today in the Academy and the map card sit in one closed "More for today" fold, and the milestone Continue button is now an outline button. A render test asserts one filled action outside the fold. |
 | 13 | P3 | The paper desk SIMULATED banner uses the sim purple. | `/paper/desk` | **Kept on purpose.** Purple is the app's reserved "simulated" signal. |
 
 ## Detector
 
 - Before: 2 findings, `border-accent-on-rounded` (NavTabsMenu) and `side-tab` (Simulation.tsx).
-- After: **0 findings**.
+- After: **0 findings**. It was re-run after the follow-up fixes and still reports 0 findings.
 
 ## Checks
 
