@@ -376,7 +376,7 @@ export default function Archive() {
               >
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm text-primary">menu_book</span>
-                <h4 className="text-slate-100 font-bold text-base font-display">{withoutSampleWord(term.name)}</h4>
+                <h3 className="text-slate-100 font-bold text-base font-display">{withoutSampleWord(term.name)}</h3>
                 <span className="text-xs text-muted">{term.category}</span>
                 {locked ? (
                   <span className="text-xs text-muted">Locked</span>
@@ -447,7 +447,7 @@ export default function Archive() {
                             ? "trending_flat"
                             : "remove"}
                       </span>
-                      <h4 className="text-slate-100 font-bold text-base font-display">{pattern.name}</h4>
+                      <h3 className="text-slate-100 font-bold text-base font-display">{pattern.name}</h3>
                       {pattern.rare ? (
                         <span
                           className="text-xs rounded border border-amber-500/60 text-amber-700 px-1 py-0.5"
@@ -513,7 +513,7 @@ export default function Archive() {
                       <span className="material-symbols-outlined text-sm text-primary">
                         {overlay.category === "trend" ? "trending_up" : overlay.category === "oscillator" ? "show_chart" : "bar_chart"}
                       </span>
-                      <h4 className="text-slate-100 font-bold text-base font-display">{overlay.name}</h4>
+                      <h3 className="text-slate-100 font-bold text-base font-display">{overlay.name}</h3>
                     </div>
                     <p className="text-ink/80 text-[13px] mt-2 leading-relaxed">
                       <span className="block text-[12px] text-muted">
