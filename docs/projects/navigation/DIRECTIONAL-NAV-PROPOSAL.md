@@ -1,6 +1,6 @@
 # Directional navigation: analysis and proposal
 
-Status: approved by Weng on 2026-11-25 ("Just do it") and built the same day (header, path picker, Next up, Browse everything at `/browse`). Recommended answers to the open decisions below are the ones implemented. Companion to [`docs/NAVIGATION-INVENTORY.md`](../../NAVIGATION-INVENTORY.md), which lists every route, topic and deep link that must stay reachable.
+Status: approved by Weng on 2026-11-25 ("Just do it") and built the same day (header, path picker, Next up, Browse everything at `/browse`), then revised with level tabs inside the dropdowns (section 6). Recommended answers to the open decisions below are the ones implemented. Companion to [`docs/NAVIGATION-INVENTORY.md`](../../NAVIGATION-INVENTORY.md), which lists every route, topic and deep link that must stay reachable.
 
 ## 1. How a learner reaches content today (before this change, commit `536eeb5`)
 
@@ -184,7 +184,7 @@ Futures, forex, crypto and commodities (extends today's Market Explorer path).
 flowchart TD
   H[Header] --> Home[Home: Your path / Next up]
   H --> Learn[Learn menu: Academy, quizzes, Library, Tool Training, Macro, Statements, Options ladder]
-  H --> Practice[Practice menu: 46 labs in 7 families]
+  H --> Practice[Practice menu: 49 labs in level tabs]
   H --> Trade[Trade menu: Paper, Desk, Challenges, Cases, Coach, Playbooks, Charts, Buy or Sell]
   H --> Map[Map]
   H --> Browse[Browse everything: search, full ToC, Library, every destination]
@@ -207,7 +207,7 @@ flowchart TD
 | ToC label | Browse everything → Full Table of Contents (`/training` unchanged) |
 | Academy menu (Lessons, Quiz Concepts) | Learn menu |
 | Pattern recognition menu (Candlestick Basics, Quiz Patterns, Library) | Learn menu |
-| Practice menu (46, flat) | Practice menu (46, grouped in 7 families, plus Statements lab, Read the Print, Mark the band) |
+| Practice menu (46, flat) | Practice dropdown: 46 labs plus Statements lab, Read the Print and Mark the band, in Beginner / Intermediate / Advanced tabs (section 6); the 7 families stay in Browse everything |
 | Tool Training menu (10) | Learn → Tool Training; every lesson on Browse everything |
 | Deep Study menu (Cases, Coach, Playbooks, Paper, Paper desk, Challenges) | Trade menu |
 | Other factors menu (Financials, Statements lab, Read the Print, Mark the band, Macro, Macro desk, Macro play) | Learn (Macro desk, Statements lab), Practice (Read the Print, Mark the band), Trade (Macro play); all on Browse everything |
@@ -243,3 +243,20 @@ No route, hash or param changes. `/training` and its hashes, `?group=`/`&start=1
 3. **Ask once on first visit, never force it**: the picker is an inline Home panel, not a blocking modal, and Show me everything is one of the choices.
 4. **Changing track never resets progress**: the track is stored apart from the milestone path.
 5. **Gates stay as they are**: Browse everything shows every link, while the chart gate and Academy locks keep their existing session peeks (phase 3 may merge them).
+
+## 6. Revision: level tabs in the dropdowns
+
+Weng's feedback on the first build: still hard to navigate; maybe carousels or tabs in the dropdowns for different users or levels. Decision: **tabs, not carousels**. A carousel hides items behind swipes, is slow to scan and is hard to use with a keyboard or screen reader; tabs show one short list at a time and name every other list.
+
+- Learn, Practice and Trade each open a tab row: **For your path** (only once a track is picked, and selected by default then), **Beginner**, **Intermediate**, **Advanced**. With no track, Beginner opens. The last tab used is remembered per menu (`analysis_core_nav_tab_v1`).
+- Every dropdown item has exactly one level and one short group, in data (`src/lib/navLevels.ts`, tested in `navLevels.test.ts`). A tab shows at most 12 items in up to 4 labelled groups, each with a one-line description; the two long Practice tabs (20 and 18 labs) end with "Show all".
+- For your path lists the track's unfinished steps that belong to that menu, straight from `src/lib/tracks.ts`, with "Step n of N".
+- Browse everything stays the footer of every dropdown.
+- ARIA tablist, tab and tabpanel; arrow keys, Home and End switch tabs; arrow Down enters the panel; Escape closes and returns focus. On a phone the panel spans the screen and the tab row scrolls sideways. The panel uses `Z.popover`; the path dialog uses `Z.modal` and hides the corner AI helper while open.
+
+| Dropdown | Beginner | Intermediate | Advanced |
+|---|---:|---:|---:|
+| Learn (22) | 7 | 5 | 10 |
+| Practice (49) | 11 | 20 | 18 |
+| Trade (17) | 5 | 6 | 6 |
+
