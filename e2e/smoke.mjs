@@ -918,9 +918,8 @@ const flows = {
   },
   async "Progress map: world / tree / web views, next objective, progress fills in"(p, w) {
     await p.goto(base + "/", { waitUntil: "networkidle" });
-    // Map sits in the Dashboard menu.
-    await p.getByTestId("dashboard-menu").click();
-    await p.getByRole("menuitem", { name: "Map" }).click();
+    // Map is a top-level header link.
+    await p.getByTestId("nav-map").click();
     await p.waitForURL(/\/map$/);
     check((await p.getByTestId("map-next").getAttribute("data-stage")) === "quiz:candle-anatomy", `map: first objective @${w}`);
     check((await p.getByTestId("map-region").count()) === 12, `map: 12 regions @${w}`);
@@ -953,6 +952,67 @@ const flows = {
     check(Number(await p.locator("[data-testid='map-region'][data-region='candles']").getAttribute("data-pct")) > 0, `map: candles fills in @${w}`);
     check((await p.locator("[data-stage='quiz:candle-anatomy'][data-status='done']").count()) === 1, `map: done check @${w}`);
     if (SHOTS) await p.screenshot({ path: `${SHOTS}/map-progress-${w}.png`, fullPage: false });
+  },
+  async "Directional nav: path picker, Next up, path chip, Browse everything and grouped menus"(p, w) {
+    await p.goto(base + "/", { waitUntil: "networkidle" });
+    check(await p.getByTestId("track-picker").isVisible(), `nav: picker on first visit @${w}`);
+    check((await p.locator("[data-testid^='track-option-']").count()) === 8, `nav: 7 tracks + everything @${w}`);
+    check((await p.getByTestId("next-up").count()) === 0, `nav: no Next up before a pick @${w}`);
+    check(/Pick a path/.test(await p.getByTestId("track-chip").innerText()), `nav: chip prompts @${w}`);
+    check((await overflow(p)) <= 1, `nav picker overflow @${w}`);
+    await p.getByTestId("track-option-charts-patterns").click();
+    await p.waitForSelector("[data-testid='next-up'][data-track='charts-patterns']");
+    const steps = await p.getByTestId("next-up-step").count();
+    check(steps >= 1 && steps <= 3, `nav: 1-3 next steps (${steps}) @${w}`);
+    check(/Charts/.test(await p.getByTestId("track-chip").innerText()), `nav: chip names the track @${w}`);
+    check((await p.getByTestId("track-picker").count()) === 0, `nav: picker folds away @${w}`);
+    check((await overflow(p)) <= 1, `nav next-up overflow @${w}`);
+    const first = await p.getByTestId("next-up-step").first().getAttribute("href");
+    await p.getByTestId("next-up-step").first().click();
+    await p.waitForURL((u) => u.href !== base + "/");
+    check(first && p.url().includes(first.split("#")[0]), `nav: first step opens ${first} @${w}`);
+    await p.goto(base + "/", { waitUntil: "networkidle" });
+    check((await p.getByTestId("next-up").getAttribute("data-track")) === "charts-patterns", `nav: track persists @${w}`);
+    // Change the path from the header chip: the dialog sits above the sticky header.
+    await p.getByTestId("track-chip").click();
+    const dialog = p.getByTestId("track-dialog");
+    await dialog.waitFor();
+    const onTop = await p.evaluate(() => {
+      const el = document.elementFromPoint(innerWidth / 2, 30);
+      return !!el?.closest("[data-testid='track-dialog']");
+    });
+    check(onTop, `nav: dialog above the header @${w}`);
+    await dialog.getByTestId("track-option-fundamentals").click();
+    await p.waitForSelector("[data-testid='next-up'][data-track='fundamentals']");
+    check((await p.getByTestId("track-dialog").count()) === 0, `nav: dialog closes on pick @${w}`);
+    // Practice menu: grouped families, inside the viewport.
+    await p.getByTestId("practice-menu").click();
+    const menu = p.locator("[role='menu']:visible");
+    check((await menu.getByRole("group").count()) === 7, `nav: 7 practice families @${w}`);
+    const box = await menu.boundingBox();
+    check(box && box.x >= 0 && box.x + box.width <= w + 1, `nav: practice menu fits @${w}`);
+    if (SHOTS) await p.screenshot({ path: `${SHOTS}/nav-practice-menu-${w}.png`, fullPage: false });
+    await menu.getByRole("menuitem", { name: "Browse everything" }).click();
+    await p.waitForURL(/\/browse$/);
+    await p.getByTestId("browse-everything").waitFor();
+    check((await p.locator("[data-testid^='browse-section-']").count()) >= 15, `browse: sections @${w}`);
+    check((await p.locator("[data-testid='browse-section-test-outs'] a").count()) === 8, `browse: 8 test-outs @${w}`);
+    check((await p.locator("[data-testid='browse-section-macro-lessons'] a").count()) === 18, `browse: 18 macro lessons @${w}`);
+    check((await overflow(p)) <= 1, `browse overflow @${w}`);
+    await p.getByTestId("browse-search").fill("doji");
+    const hit = p.locator("[data-testid='browse-results'] a[href$='/archive?tab=patterns&open=doji']");
+    check((await hit.count()) === 1, `browse: search finds Doji @${w}`);
+    await hit.click();
+    await p.waitForURL(/archive\?tab=patterns&open=doji/);
+    await p.goto(base + "/browse", { waitUntil: "networkidle" });
+    await p.getByTestId("browse-toc").click();
+    await p.waitForURL(/\/training$/);
+    // Show me everything: the entry points instead of a narrow path.
+    await p.goto(base + "/", { waitUntil: "networkidle" });
+    await p.getByTestId("next-up-change").click();
+    await p.getByTestId("track-dialog").getByTestId("track-option-everything").click();
+    await p.waitForSelector("[data-testid='next-up'][data-track='everything']");
+    check((await p.getByTestId("next-up-step").first().getAttribute("href")).endsWith("/browse"), `nav: everything starts at Browse @${w}`);
   },
 };
 
