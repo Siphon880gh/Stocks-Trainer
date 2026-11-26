@@ -24,6 +24,11 @@ type FilterType = "all" | "bullish" | "bearish" | "neutral";
 type CryptoFilter = "all" | CryptoFit;
 type ArchiveTab = "patterns" | "indicators" | "literacy";
 
+/** Sentence-case label for a pattern's type, e.g. "Reversal pattern". */
+function patternTypeLabel(type: string): string {
+  return `${type.charAt(0).toUpperCase()}${type.slice(1)} pattern`;
+}
+
 export default function Archive() {
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get("tab") as ArchiveTab | null;
@@ -168,8 +173,8 @@ export default function Archive() {
                   : "bg-primary/10 border border-line text-primary hover:bg-primary/20"
               }`}
             >
-              <p className="text-xs font-bold uppercase tracking-wider">
-                {f === "all" ? "All Patterns" : f.charAt(0).toUpperCase() + f.slice(1)}
+              <p className="text-xs font-semibold">
+                {f === "all" ? "All patterns" : f.charAt(0).toUpperCase() + f.slice(1)}
               </p>
             </button>
           ))
@@ -185,13 +190,13 @@ export default function Archive() {
                   : "bg-primary/10 border border-line text-primary hover:bg-primary/20"
               }`}
             >
-              <p className="text-xs font-bold uppercase tracking-wider">
-                {f === "all" ? "All Indicators" : f.charAt(0).toUpperCase() + f.slice(1)}
+              <p className="text-xs font-semibold">
+                {f === "all" ? "All indicators" : f.charAt(0).toUpperCase() + f.slice(1)}
               </p>
             </button>
           ))
             : (
-              <p className="text-xs text-primary/50 font-mono uppercase tracking-wider py-1">
+              <p className="text-xs text-muted py-1">
                 Beginner equities glossary
               </p>
             )}
@@ -217,7 +222,7 @@ export default function Archive() {
                 }`}
                 title={f === "all" ? "Show all patterns" : CRYPTO_FIT_HINT[f]}
               >
-                <p className="text-xs font-bold uppercase tracking-wider">
+                <p className="text-xs font-semibold">
                   {f === "all" ? "Crypto: all" : CRYPTO_FIT_LABEL[f]}
                 </p>
               </button>
@@ -257,13 +262,13 @@ export default function Archive() {
 
       <main className="flex-1 px-4 py-6 space-y-6 max-w-7xl mx-auto w-full">
         <div className="flex items-center justify-between gap-3">
-          <h3 className="text-primary text-sm font-bold uppercase tracking-[0.2em] font-mono">
+          <h2 className="text-ink text-base font-semibold">
             {tab === "patterns"
-              ? "Pattern Library / root"
+              ? "Pattern library"
               : tab === "indicators"
-                ? "Indicator Library / root"
-                : "Literacy Glossary / root"}
-          </h3>
+                ? "Indicator library"
+                : "Literacy glossary"}
+          </h2>
           <div className="flex items-center gap-3">
             <BrowsePopover
               title={
@@ -321,7 +326,7 @@ export default function Archive() {
                 setSearchParams({ tab: "literacy", open: term.id }, { replace: true });
               }}
             />
-            <span className="text-primary/40 text-xs font-mono">
+            <span className="text-muted text-xs">
               Total:{" "}
               {tab === "patterns"
                 ? filteredPatterns.length
@@ -372,12 +377,12 @@ export default function Archive() {
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm text-primary">menu_book</span>
                 <h4 className="text-slate-100 font-bold text-base font-display">{withoutSampleWord(term.name)}</h4>
-                <span className="text-[10px] font-mono text-primary/50 uppercase">{term.category}</span>
+                <span className="text-[11px] text-muted">{term.category}</span>
                 {locked ? (
-                  <span className="text-[10px] font-mono text-muted uppercase">locked</span>
+                  <span className="text-[11px] text-muted">Locked</span>
                 ) : null}
               </div>
-              <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
+              <p className="text-ink/80 text-[13px] mt-2 leading-relaxed">
                 <JargonText text={withoutSampleWord(term.summary)} plain />
               </p>
               </button>
@@ -387,7 +392,7 @@ export default function Archive() {
               {locked ? (
                 <button
                   type="button"
-                  className="text-primary underline text-xs mt-2 font-mono text-left"
+                  className="text-primary underline text-xs mt-2 text-left"
                   onClick={() => {
                     setChartGateTemporaryBypass(true);
                     setTempBypass(true);
@@ -410,7 +415,7 @@ export default function Archive() {
               type="button"
               onClick={() => setSelectedPattern(pattern)}
               className="group w-full text-left flex flex-col cursor-pointer"
-              title={`${pattern.type.toUpperCase()}_PATTERN | CONFIRMATION: ${pattern.confirmation.toUpperCase()} — ${pattern.description}`}
+              title={`${patternTypeLabel(pattern.type)} · Confirmation: ${pattern.confirmation.replace(/_/g, " ")} — ${pattern.description}`}
             >
               <div className="flex gap-4">
                 <div className="h-24 w-24 shrink-0 rounded bg-background-dark overflow-hidden border border-line flex items-center justify-center">
@@ -445,7 +450,7 @@ export default function Archive() {
                       <h4 className="text-slate-100 font-bold text-base font-display">{pattern.name}</h4>
                       {pattern.rare ? (
                         <span
-                          className="text-[9px] font-mono uppercase tracking-wide rounded border border-amber-500/60 text-amber-600 px-1 py-0.5"
+                          className="text-[11px] rounded border border-amber-500/60 text-amber-700 px-1 py-0.5"
                           title="Advanced / rare: infrequent and less reliable than the core patterns. Confirm before acting."
                         >
                           Advanced / rare
@@ -456,7 +461,7 @@ export default function Archive() {
                         if (!fit) return null;
                         return (
                           <span
-                            className={`text-[9px] font-mono uppercase tracking-wide rounded border px-1 py-0.5 ${
+                            className={`text-[11px] rounded border px-1 py-0.5 ${
                               fit === "works"
                                 ? "border-emerald-500/60 text-emerald-600"
                                 : fit === "adapted"
@@ -471,9 +476,10 @@ export default function Archive() {
                         );
                       })()}
                     </div>
-                    <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
-                      &gt; {pattern.type.toUpperCase()}_PATTERN<br />
-                      &gt; CONFIRMATION: {pattern.confirmation.toUpperCase().replace("_", " ")}<br />
+                    <p className="text-ink/80 text-[13px] mt-2 leading-relaxed">
+                      <span className="block text-[12px] text-muted">
+                        {patternTypeLabel(pattern.type)} · Confirmation: {pattern.confirmation.replace(/_/g, " ")}
+                      </span>
                       <JargonText text={withoutSampleWord(pattern.description)} plain />
                     </p>
                   </div>
@@ -493,7 +499,7 @@ export default function Archive() {
               type="button"
               onClick={() => setSelectedOverlay(overlay)}
               className="group w-full text-left flex flex-col cursor-pointer"
-              title={`${overlay.category.toUpperCase()} — ${overlay.description}`}
+              title={`${overlay.category} — ${overlay.description}`}
             >
               <div className="flex gap-4">
                 <div className="h-24 w-24 shrink-0 rounded bg-background-dark overflow-hidden border border-line flex items-center justify-center">
@@ -509,9 +515,10 @@ export default function Archive() {
                       </span>
                       <h4 className="text-slate-100 font-bold text-base font-display">{overlay.name}</h4>
                     </div>
-                    <p className="text-primary/70 text-xs mt-2 font-mono leading-relaxed">
-                      &gt; {overlay.category.toUpperCase()}<br />
-                      &gt; {overlay.fullName}<br />
+                    <p className="text-ink/80 text-[13px] mt-2 leading-relaxed">
+                      <span className="block text-[12px] text-muted">
+                        {overlay.fullName} · {overlay.category}
+                      </span>
                       {overlay.description}
                     </p>
                   </div>
@@ -561,7 +568,7 @@ export default function Archive() {
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-[10px] font-mono text-primary/50 uppercase tracking-widest">
+                <p className="text-[12px] text-muted">
                   Literacy · {selectedTerm.category}
                 </p>
                 <h3 className="text-xl font-bold text-primary inline-flex items-center gap-2">
