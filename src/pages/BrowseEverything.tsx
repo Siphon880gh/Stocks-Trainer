@@ -26,9 +26,9 @@ export default function BrowseEverything() {
           Every lesson, lab, quiz and tool in one place. Your path on Home stays as it is; anything here opens in a popup, with Open full page if you want to stay there.
         </p>
         <div className="flex flex-wrap gap-3 text-sm">
-          <Link to="/training" {...popup("/training", "Full Table of Contents")} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary" data-testid="browse-toc">Full Table of Contents</Link>
-          <Link to="/archive" {...popup("/archive", "Library and glossary")} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Library and glossary</Link>
-          <Link to="/map" {...popup("/map", "Progress map")} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Progress map</Link>
+          <Link to="/training" {...popup("/training", "Full Table of Contents")} className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary" data-testid="browse-toc">Full Table of Contents</Link>
+          <Link to="/archive" {...popup("/archive", "Library and glossary")} className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Library and glossary</Link>
+          <Link to="/map" {...popup("/map", "Progress map")} className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">Progress map</Link>
         </div>
       </header>
 
@@ -51,10 +51,10 @@ export default function BrowseEverything() {
           {hits.length === 0 ? (
             <p className="text-muted">No match. Try a shorter word, or open the full Table of Contents.</p>
           ) : (
-            <ul className="space-y-1.5">
+            <ul className="space-y-0.5">
               {hits.map((h) => (
                 <li key={h.to} className="flex flex-wrap items-baseline gap-x-2">
-                  <Link to={h.to} {...popup(h.to, h.label)} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">{h.label}</Link>
+                  <Link to={h.to} {...popup(h.to, h.label)} className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">{h.label}</Link>
                   <span className="text-xs text-muted">{h.kind}</span>
                 </li>
               ))}
@@ -68,10 +68,10 @@ export default function BrowseEverything() {
           <section key={s.id} id={`browse-${s.id}`} className="panel p-4 text-sm space-y-2 scroll-mt-32" data-testid={`browse-section-${s.id}`}>
             <h2 className="font-semibold">{s.title}</h2>
             {s.blurb ? <p className="text-muted">{s.blurb}</p> : null}
-            <ul className="flex flex-wrap gap-x-4 gap-y-1.5">
+            <ul className="flex flex-wrap gap-x-4">
               {s.links.map((l) => (
                 <li key={`${s.id}-${l.to}`}>
-                  <Link to={l.to} {...popup(l.to, l.label)} className="text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">{l.label}</Link>
+                  <Link to={l.to} {...popup(l.to, l.label)} className="inline-block py-1 text-primary underline decoration-primary/30 underline-offset-2 hover:decoration-primary">{l.label}</Link>
                 </li>
               ))}
             </ul>
