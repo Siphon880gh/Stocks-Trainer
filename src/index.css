@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Dark mode follows the `dark` class on <html> (set by index.html and src/lib/theme.ts), not only the OS setting. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   /* Interface blue, green and red are a step darker than the chart colours so text and white-on-colour labels meet AA (charts keep #2962ff, #089981, #f23645). */
   --color-primary: #1e53e5;
@@ -15,6 +18,19 @@
   --color-line: #d1d4dc;
   --color-up: #067a67;
   --color-accent-red: #d1202f;
+  /* Solid fills that carry white labels. Same as the text colours in light; dark mode keeps these deep while text colours lighten. */
+  --color-primary-fill: #1e53e5;
+  --color-up-fill: #067a67;
+  --color-accent-red-fill: #d1202f;
+  --color-sim-fill: #7c3aed;
+  /* Quiet surfaces: selected tint, pane, hover row, hairline grid and disabled text. */
+  --color-tint: #e8f0ff;
+  --color-tint-strong: #d6e4ff;
+  --color-pane: #f8f9fd;
+  --color-hover: #f0f3fa;
+  --color-grid: #e0e3eb;
+  --color-disabled-line: #ececef;
+  --color-disabled-ink: #c5c7ce;
   /* Beginner Academy: accent for SIMULATED order buttons (our own token, not a broker colour). */
   --color-sim: #7c3aed;
   --color-sim-dim: #6d28d9;
@@ -29,6 +45,91 @@
   --font-sans: "Instrument Sans", "Segoe UI", sans-serif;
   --font-display: "Instrument Sans", "Segoe UI", sans-serif;
   --font-mono: "Instrument Sans", "Segoe UI", sans-serif;
+}
+
+/*
+ * Dark theme: the same tokens with dark values, so every bg-surface, text-ink, border-line and so on follows.
+ * Status hues (amber, emerald, red, rose, yellow) swap light and dark shades (50 <-> 950, 300 <-> 700 ...), so
+ * "text-emerald-700 on bg-emerald-50" stays readable without a dark: class on each use. 500 stays as it is.
+ * Every pair meets WCAG AA on the dark canvas (#131722) and surface (#1e222d); the e2e contrast check covers it.
+ */
+.dark {
+  color-scheme: dark;
+  --color-canvas: #131722;
+  --color-background-light: #131722;
+  --color-background-dark: #131722;
+  --color-surface: #1e222d;
+  --color-neutral-dark: #1e222d;
+  --color-ink: #e6e8ee;
+  --color-muted: #a3a6af;
+  --color-line: #363a45;
+  --color-primary: #7aa2ff;
+  --color-primary-dim: #2f62f0;
+  --color-up: #2ebd9f;
+  --color-accent-red: #ff7a85;
+  --color-sim: #b69cfb;
+  --color-slate-100: #e6e8ee;
+  --color-slate-200: #d1d4dc;
+  --color-slate-300: #b2b5be;
+  --color-slate-400: #a3a6af;
+  --color-slate-500: #858892;
+  --color-tint: #1f2b4d;
+  --color-tint-strong: #283a66;
+  --color-pane: #181c27;
+  --color-hover: #2a2e39;
+  --color-grid: #2a2e39;
+  --color-disabled-line: #2a2e39;
+  --color-disabled-ink: #5d606b;
+  --color-amber-50: oklch(27.9% 0.077 45.635);
+  --color-amber-100: oklch(41.4% 0.112 45.904);
+  --color-amber-200: oklch(47.3% 0.137 46.201);
+  --color-amber-300: oklch(55.5% 0.163 48.998);
+  --color-amber-400: oklch(66.6% 0.179 58.318);
+  --color-amber-600: oklch(82.8% 0.189 84.429);
+  --color-amber-700: oklch(87.9% 0.169 91.605);
+  --color-amber-800: oklch(92.4% 0.12 95.746);
+  --color-amber-900: oklch(96.2% 0.059 95.617);
+  --color-amber-950: oklch(98.7% 0.022 95.277);
+  --color-emerald-50: oklch(26.2% 0.051 172.552);
+  --color-emerald-100: oklch(37.8% 0.077 168.94);
+  --color-emerald-200: oklch(43.2% 0.095 166.913);
+  --color-emerald-300: oklch(50.8% 0.118 165.612);
+  --color-emerald-400: oklch(59.6% 0.145 163.225);
+  --color-emerald-600: oklch(76.5% 0.177 163.223);
+  --color-emerald-700: oklch(84.5% 0.143 164.978);
+  --color-emerald-800: oklch(90.5% 0.093 164.15);
+  --color-emerald-900: oklch(95% 0.052 163.051);
+  --color-emerald-950: oklch(97.9% 0.021 166.113);
+  --color-red-50: oklch(25.8% 0.092 26.042);
+  --color-red-100: oklch(39.6% 0.141 25.723);
+  --color-red-200: oklch(44.4% 0.177 26.899);
+  --color-red-300: oklch(50.5% 0.213 27.518);
+  --color-red-400: oklch(57.7% 0.245 27.325);
+  --color-red-600: oklch(70.4% 0.191 22.216);
+  --color-red-700: oklch(80.8% 0.114 19.571);
+  --color-red-800: oklch(88.5% 0.062 18.334);
+  --color-red-900: oklch(93.6% 0.032 17.717);
+  --color-red-950: oklch(97.1% 0.013 17.38);
+  --color-rose-50: oklch(27.1% 0.105 12.094);
+  --color-rose-100: oklch(41% 0.159 10.272);
+  --color-rose-200: oklch(45.5% 0.188 13.697);
+  --color-rose-300: oklch(51.4% 0.222 16.935);
+  --color-rose-400: oklch(58.6% 0.253 17.585);
+  --color-rose-600: oklch(71.2% 0.194 13.428);
+  --color-rose-700: oklch(81% 0.117 11.638);
+  --color-rose-800: oklch(89.2% 0.058 10.001);
+  --color-rose-900: oklch(94.1% 0.03 12.58);
+  --color-rose-950: oklch(96.9% 0.015 12.422);
+  --color-yellow-50: oklch(28.6% 0.066 53.813);
+  --color-yellow-100: oklch(42.1% 0.095 57.708);
+  --color-yellow-200: oklch(47.6% 0.114 61.907);
+  --color-yellow-300: oklch(55.4% 0.135 66.442);
+  --color-yellow-400: oklch(68.1% 0.162 75.834);
+  --color-yellow-600: oklch(85.2% 0.199 91.936);
+  --color-yellow-700: oklch(90.5% 0.182 98.111);
+  --color-yellow-800: oklch(94.5% 0.129 101.54);
+  --color-yellow-900: oklch(97.3% 0.071 103.193);
+  --color-yellow-950: oklch(98.7% 0.026 102.212);
 }
 
 @layer utilities {
