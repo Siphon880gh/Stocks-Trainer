@@ -9,7 +9,8 @@
   --color-surface: #ffffff;
   --color-neutral-dark: #ffffff;
   --color-ink: #131722;
-  --color-muted: #787b86;
+  /* Secondary text: #787b86 (the chart grey) fell under 4.5:1 on white and canvas; this keeps the tone and meets WCAG AA. Charts keep #787b86. */
+  --color-muted: #686b76;
   --color-line: #d1d4dc;
   --color-up: #089981;
   --color-accent-red: #f23645;
@@ -19,7 +20,7 @@
   --color-slate-100: #131722;
   --color-slate-200: #2a2e39;
   --color-slate-300: #434651;
-  --color-slate-400: #787b86;
+  --color-slate-400: #686b76;
   --color-slate-500: #9598a1;
   --font-sans: "Instrument Sans", "Segoe UI", sans-serif;
   --font-display: "Instrument Sans", "Segoe UI", sans-serif;
