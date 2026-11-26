@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import AppChrome from "./AppChrome";
 import { recordVisit } from "../lib/mapProgress";
+import { PageLoading } from "../lib/lazyPage";
 
 export default function Layout() {
   const { pathname } = useLocation();
@@ -9,7 +10,9 @@ export default function Layout() {
   useEffect(() => recordVisit(pathname), [pathname]);
   return (
     <AppChrome>
-      <Outlet />
+      <Suspense fallback={<PageLoading />}>
+        <Outlet />
+      </Suspense>
     </AppChrome>
   );
 }

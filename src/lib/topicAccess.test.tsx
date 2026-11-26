@@ -10,7 +10,7 @@ import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { MemoryRouter, matchPath } from "react-router-dom";
-import { AppRoutes } from "../App.tsx";
+import { AppRoutes, preloadPages } from "../App.tsx";
 import { HEADER_NAV } from "./appNav.ts";
 import { LEVEL_MENUS, MENU_IDS } from "./navLevels.ts";
 import { BROWSE_SECTIONS, browseIndex, searchBrowse } from "./browseCatalog.ts";
@@ -39,6 +39,9 @@ import { CONTENT_SIM_SETS } from "./contentSims.ts";
 import { PATH_TEMPLATES } from "./learningPaths.ts";
 import { setChartGateTemporaryBypass } from "./beginnerPath.ts";
 import { hrefs, renderHtml } from "./macro/renderHarness.ts";
+
+// Pages are lazy chunks in the app; load them all so the static renders below are complete.
+await preloadPages();
 
 type Baseline = Record<string, any>;
 const BASE: Baseline = JSON.parse(readFileSync(new URL("../../docs/projects/navigation/topic-baseline-536eeb5.json", import.meta.url), "utf8"));

@@ -1,6 +1,7 @@
-import { useEffect, useRef, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
+import { Suspense, useEffect, useRef, type KeyboardEvent as ReactKeyboardEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
+import { PageLoading } from "../lib/lazyPage";
 import { browseModalOf, takeBrowseTrigger } from "../lib/browseModal";
 import { recordVisit } from "../lib/mapProgress";
 import { Z } from "../lib/zLayers";
@@ -102,7 +103,9 @@ export default function BrowseModal() {
           </button>
         </div>
         <div className="flex-1 overflow-y-auto overscroll-contain" data-testid="browse-modal-body">
-          <Outlet />
+          <Suspense fallback={<PageLoading />}>
+            <Outlet />
+          </Suspense>
         </div>
       </div>
     </div>

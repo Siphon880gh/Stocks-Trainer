@@ -2,9 +2,12 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { describe, it } from "node:test";
 import { MemoryRouter } from "react-router-dom";
-import { AppRoutes } from "../App.tsx";
+import { AppRoutes, preloadPages } from "../App.tsx";
 import { browseModalOf, browseModalState, pageLocation, rememberBrowseTrigger, takeBrowseTrigger } from "./browseModal.ts";
 import { renderHtml } from "./macro/renderHarness.ts";
+
+// Pages are lazy chunks in the app; load them all so the static renders below are complete.
+await preloadPages();
 
 const browse = { pathname: "/browse", search: "", hash: "", key: "k1" };
 
