@@ -24,6 +24,14 @@ const STATUS: Record<UnitStatus | "preview", { label: string; icon: string; cls:
   tested_out: { label: "Tested out", icon: "fast_forward", cls: "text-up" },
 };
 
+/** Hover text for a days-ago badge: relative age plus the full local date and time, e.g.
+ *  "Last completed 3 days ago (Monday, November 23, 2026 at 9:14 AM)". */
+function agoTitle(at: string, days: number) {
+  const rel = days === 0 ? "today" : days === 1 ? "1 day ago" : `${days} days ago`;
+  const full = new Date(at).toLocaleString(undefined, { dateStyle: "full", timeStyle: "short" });
+  return `Last completed ${rel} (${full})`;
+}
+
 /** /academy — Beginner Academy hub: placement, continue, the level map with courses and units. */
 export default function AcademyHub({ storage, extra }: { storage?: KVStorage; extra?: ReactNode }) {
   const state = loadAcademy(storage).state;
@@ -169,7 +177,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                             </span>
                             <span className="flex-1">{u.title}</span>
                             {ago ? (
-                              <span className="rounded border border-line px-1 text-[11px] text-muted" data-rt-days-ago={ago.days} title={`Last completed ${ago.label === "today" ? "today" : `${ago.days} days ago`}`}>
+                              <span className="rounded border border-line px-1 text-[11px] text-muted" data-rt-days-ago={ago.days} title={agoTitle(at!, ago.days)} aria-label={agoTitle(at!, ago.days)}>
                                 {ago.label}
                               </span>
                             ) : null}
