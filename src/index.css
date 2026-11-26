@@ -226,3 +226,61 @@ body.overlay-open .hai-panel {
     min-height: 44px;
   }
 }
+
+/*
+ * Charts in dark mode. The chart components keep their light colours in markup (the candlestick render is a
+ * byte-identical baseline), so dark mode re-maps those exact colours here: SVG fill/stroke attributes, inline
+ * styles and the few chart-only hex classes. Candle green #089981 and red #f23645 stay as they are; both read
+ * clearly on the dark pane, as on dark trading terminals.
+ */
+.dark {
+  --chart-bg: #1e222d;
+  --chart-pane: #181c27;
+  --chart-grid: #2a2e39;
+  --chart-border: #434651;
+  --chart-text: #d1d4dc;
+  --chart-muted: #a3a6af;
+}
+.dark .chart-pane {
+  color-scheme: dark;
+  background-color: var(--chart-bg);
+  border-color: var(--chart-border);
+  color: var(--chart-text);
+}
+.dark .bg-white { background-color: var(--chart-bg); }
+.dark .bg-\[\#f8f9fd\] { background-color: var(--chart-pane); }
+.dark .hover\:bg-\[\#f0f3fa\]:hover { background-color: var(--color-hover); }
+.dark .border-\[\#d1d4dc\] { border-color: var(--chart-border); }
+.dark .border-\[\#e0e3eb\] { border-color: var(--chart-grid); }
+.dark .text-\[\#131722\] { color: var(--chart-text); }
+.dark .text-\[\#787b86\] { color: var(--chart-muted); }
+
+.dark svg [fill="#ffffff"] { fill: var(--chart-bg); }
+.dark svg [stroke="#ffffff"] { stroke: var(--chart-bg); }
+.dark svg [fill="#f8f9fd"] { fill: var(--chart-pane); }
+.dark svg :is([stroke="#e0e3eb"], [stroke="#eef0f4"]) { stroke: var(--chart-grid); }
+.dark svg [fill="#e0e3eb"] { fill: var(--chart-grid); }
+.dark svg [stroke="#d1d4dc"] { stroke: var(--chart-border); }
+.dark svg [fill="#d1d4dc"] { fill: var(--chart-border); }
+.dark svg [fill="#131722"] { fill: var(--chart-text); }
+.dark svg [stroke="#131722"] { stroke: var(--chart-text); }
+.dark svg [fill="#787b86"] { fill: var(--chart-muted); }
+.dark svg :is([stroke="#787b86"], [stroke="#64748b"]) { stroke: #868993; }
+.dark svg [fill="#64748b"] { fill: #868993; }
+/* Series colours that are too dark on the dark pane get their lighter sibling. */
+.dark svg [fill="#b45309"] { fill: #f59e0b; }
+.dark svg [stroke="#0f766e"] { stroke: #2dd4bf; }
+.dark svg [stroke="#a21caf"] { stroke: #e879f9; }
+.dark svg [stroke="#7b1fa2"] { stroke: #ce93d8; }
+.dark svg [fill="#7b1fa2"] { fill: #ce93d8; }
+.dark svg [fill="#7c3aed"] { fill: #b69cfb; }
+.dark svg [stroke="#7c3aed"] { stroke: #b69cfb; }
+.dark svg [stroke="#2563eb"] { stroke: #60a5fa; }
+.dark .bg-\[\#0f766e\] { background-color: #2dd4bf; }
+.dark .bg-\[\#a21caf\] { background-color: #e879f9; }
+/* Inline chart styles (React writes colours as rgb()). */
+.dark :is([style*="background: rgb(255, 255, 255)"], [style*="background-color: rgb(255, 255, 255)"]) { background-color: var(--chart-bg) !important; }
+.dark [style*="border: 1px solid rgb(209, 212, 220)"] { border-color: var(--chart-border) !important; }
+.dark [style*="color: rgb(19, 23, 34)"]:not([style*="background-color: rgb(19, 23, 34)"]) { color: var(--chart-text) !important; }
+.dark [style*="color: rgb(120, 123, 134)"] { color: var(--chart-muted) !important; }
+.dark .recharts-default-tooltip { background-color: var(--chart-bg) !important; border-color: var(--chart-border) !important; color: var(--chart-text) !important; }
