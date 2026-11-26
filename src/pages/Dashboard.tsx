@@ -160,12 +160,27 @@ export default function Dashboard() {
       </header>
       {/* Directional Home: pick a track first, then only its next 1–3 steps. Everything else is in Browse everything. */}
       {track ? <NextUpCard track={track} /> : <TrackPicker currentId={null} />}
-      {/* Beginner Academy (BA3.M3): optional, dismissible; shown to the New to stocks track. */}
-      {track?.id === "new-to-stocks" && !goalPending ? <PlacementCard variant="home" /> : null}
-      {/* Beginner Academy (BA9.M2): Today card, after the goal picker is confirmed. */}
-      {track && !goalPending ? <TodayCard variant="home" /> : null}
-      {/* Progress Map (#23): share done and the next objective; the full map is one click away. */}
-      {track && !goalPending ? <ProgressMapCard /> : null}
+      {/* One primary action: Next up. The placement check, Today in the Academy and the map card sit in one closed
+          "More for today" fold beneath it, so nothing competes with the path's next step. */}
+      {track && !goalPending ? (
+        <details className="group rounded-lg border border-line bg-surface" data-testid="home-more">
+          <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 px-4 py-2 text-sm text-ink hover:bg-canvas [&::-webkit-details-marker]:hidden">
+            <span>
+              <span className="font-semibold">More for today</span>
+              <span className="text-muted"> · daily review, term of the day{track.id === "new-to-stocks" ? ", placement check" : ""} and your map</span>
+            </span>
+            <span className="material-symbols-outlined text-[20px] text-muted transition-transform group-open:rotate-180" aria-hidden>expand_more</span>
+          </summary>
+          <div className="space-y-4 border-t border-line p-4">
+            {/* Beginner Academy (BA3.M3): optional, dismissible; shown to the New to stocks track. */}
+            {track.id === "new-to-stocks" ? <PlacementCard variant="home" /> : null}
+            {/* Beginner Academy (BA9.M2): Today card, after the goal picker is confirmed. */}
+            <TodayCard variant="home" />
+            {/* Progress Map (#23): share done and the next objective; the full map is one click away. */}
+            <ProgressMapCard />
+          </div>
+        </details>
+      ) : null}
 
       <details className="border-t border-line pt-4" data-testid="home-milestones">
         <summary className="cursor-pointer text-sm text-muted hover:text-ink">
@@ -207,7 +222,7 @@ export default function Dashboard() {
         </div>
         <Link
           to={nextHref}
-          className="bg-primary text-white font-semibold px-5 py-2.5 rounded-md hover:bg-primary-dim text-sm"
+          className="border border-primary text-primary font-semibold px-5 py-2.5 rounded-md hover:bg-primary/10 text-sm"
         >
           {nextLabel}
         </Link>
