@@ -6,6 +6,7 @@
 import type { Unit } from "../types";
 import { UNIT_SIMS, cardWithSims } from "./simulations";
 import { BEFORE_YOU_TRADE_UNITS } from "./beforeYouTrade";
+import { DASHBOARD_NUMBERS_L4 } from "./dashboardNumbers";
 
 export const UNITS_L4_L7: Unit[] = [
   // ---------------- L4 Company fundamentals & earnings ----------------
@@ -262,4 +263,6 @@ export const UNITS_L4_L7: Unit[] = [
   },
   // ---------------- L7 Before you trade (beforeYouTrade.ts) ----------------
   ...BEFORE_YOU_TRADE_UNITS,
+  // ---------------- L4 Positioning signals (dashboardNumbers.ts) ----------------
+  ...DASHBOARD_NUMBERS_L4,
 ];

@@ -1,6 +1,7 @@
 /** BA2.M1.S1: unit quizzes for L0–L3 (3 original items per unit). */
 import type { UnitQuizItem } from "../types";
 import { buildUnitItems, type RawItem } from "./quizBuilder";
+import { DASHBOARD_NUMBERS_QUIZ_RAW_L0L3 } from "./dashboardNumbers";
 
 const RAW: Record<string, RawItem[]> = {
   "l0-what-is-a-market": [
@@ -131,6 +132,8 @@ const RAW: Record<string, RawItem[]> = {
     { p: "Entry 50, stop 48, target 56. What is the reward-to-risk?", r: "3 to 1", w: [["1 to 3", "Reversed."], ["2 to 1", "Reward is 6, risk is 2."], ["6 to 1", "Risk is 2, not 1."]], e: "Risking 2 to make 6 is 3 to 1.", c: ["3 to 1"], g: "risk-reward" },
     { p: "You planned to risk $100 and the trade made $250. What is the result in R?", r: "+2.5R", w: [["+250R", "R is the planned risk, $100."], ["+1R", "That would be $100."], ["−2.5R", "It was a winner."]], e: "R is the risk you planned: $250 ÷ $100 = +2.5R.", c: ["R is the risk you planned"], g: "r-multiple" },
   ],
+  // L2 · Gap days and L3 · Review your results (dashboardNumbers.ts), last so earlier letters do not shift.
+  ...DASHBOARD_NUMBERS_QUIZ_RAW_L0L3,
 };
 
 const counters: Record<string, { n: number }> = {};

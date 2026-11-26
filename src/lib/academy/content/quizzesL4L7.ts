@@ -2,6 +2,7 @@
 import type { UnitQuizItem } from "../types";
 import { buildUnitItems, type RawItem } from "./quizBuilder";
 import { BEFORE_YOU_TRADE_QUIZ_RAW } from "./beforeYouTrade";
+import { DASHBOARD_NUMBERS_QUIZ_RAW_L4L7 } from "./dashboardNumbers";
 
 const RAW: Record<string, RawItem[]> = {
   "l4-three-statements": [
@@ -101,6 +102,8 @@ const RAW: Record<string, RawItem[]> = {
   ],
   // L7 · Before you trade (beforeYouTrade.ts), after l7-crypto so earlier letters do not shift.
   ...BEFORE_YOU_TRADE_QUIZ_RAW,
+  // L4 · Positioning signals (dashboardNumbers.ts), last so earlier letters do not shift.
+  ...DASHBOARD_NUMBERS_QUIZ_RAW_L4L7,
 };
 
 const counters: Record<string, { n: number }> = {};

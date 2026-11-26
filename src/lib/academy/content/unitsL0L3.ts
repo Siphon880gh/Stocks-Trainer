@@ -5,6 +5,7 @@
  */
 import type { Unit } from "../types";
 import { UNIT_SIMS, cardWithSims } from "./simulations";
+import { DASHBOARD_NUMBERS_L2, DASHBOARD_NUMBERS_L3 } from "./dashboardNumbers";
 
 export const UNITS_L0_L3: Unit[] = [
   // ---------------- L0 Orientation ----------------
@@ -402,4 +403,7 @@ export const UNITS_L0_L3: Unit[] = [
     ],
     refs: ["coach:trade-plan-before-entry", "practice:/practice/plan", "glossary:taking-profit", "practice:/practice/trade-framework"],
   },
+  // ---------------- L2 Gap days and L3 Review your results (dashboardNumbers.ts) ----------------
+  ...DASHBOARD_NUMBERS_L2,
+  ...DASHBOARD_NUMBERS_L3,
 ];

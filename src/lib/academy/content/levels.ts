@@ -31,7 +31,10 @@ export const LEVELS: Level[] = [
     title: "Charts & candles",
     summary: "Read candles, trends, levels and volume, and why patterns need context.",
     prerequisites: ["L1"],
-    courses: [{ id: "charts-and-candles", levelId: "L2", title: "Reading charts", summary: "Candles, structure, levels and volume.", unitIds: ids("L2", "charts-and-candles") }],
+    courses: [
+      { id: "charts-and-candles", levelId: "L2", title: "Reading charts", summary: "Candles, structure, levels and volume.", unitIds: ids("L2", "charts-and-candles") },
+      { id: "gap-days", levelId: "L2", title: "Gap days by the numbers", summary: "Data stamps, the pre-market, relative volume, spike, fade and close vs open.", unitIds: ids("L2", "gap-days") },
+    ],
   },
   {
     id: "L3",
@@ -41,6 +44,7 @@ export const LEVELS: Level[] = [
     courses: [
       { id: "order-types", levelId: "L3", title: "Order types", summary: "Market, limit, stop, stop-limit, trailing stop and time in force.", unitIds: ids("L3", "order-types") },
       { id: "sizing-and-planning", levelId: "L3", title: "Sizing and planning", summary: "Position size from risk, and the four-number trade plan.", unitIds: ids("L3", "sizing-and-planning") },
+      { id: "review-results", levelId: "L3", title: "Review your results", summary: "Win rate, expectancy, profit factor, drawdown and the equity curve.", unitIds: ids("L3", "review-results") },
     ],
   },
   {
@@ -51,6 +55,7 @@ export const LEVELS: Level[] = [
     courses: [
       { id: "reading-statements", levelId: "L4", title: "Reading statements", summary: "Income statement, balance sheet, cash flow, margins and P/E.", unitIds: ids("L4", "reading-statements") },
       { id: "earnings", levelId: "L4", title: "Earnings season", summary: "Expectations, reactions and balance-sheet risk.", unitIds: ids("L4", "earnings") },
+      { id: "positioning", levelId: "L4", title: "Positioning signals", summary: "Short interest vs short volume, put/call, options flow and insider trades.", unitIds: ids("L4", "positioning") },
     ],
   },
   {

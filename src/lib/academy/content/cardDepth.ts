@@ -4,6 +4,7 @@
  */
 import type { Unit } from "../types";
 import { BEFORE_YOU_TRADE_MORE } from "./beforeYouTrade";
+import { DASHBOARD_NUMBERS_MORE } from "./dashboardNumbers";
 
 export const CARD_MORE: Record<string, string> = {
   "l0-what-is-a-market::Buyers meet sellers":
@@ -319,6 +320,7 @@ export const CARD_MORE: Record<string, string> = {
   "l7-crypto::Headlines and hype":
     "Listing rumours, exchange outages, hacks, and worries about a stablecoin losing its peg can move prices before any official note exists. The stock rule still applies: separate chatter from a filing, an issuer statement, or an exchange notice, and ask what was already expected. A rally on a rumour that is then denied is a classic give-back. This app's crypto tapes are samples for that drill. They are not a live exchange and not a reason to treat chat as confirmation.",
   ...BEFORE_YOU_TRADE_MORE,
+  ...DASHBOARD_NUMBERS_MORE,
 };
 
 export function deepenUnits(units: Unit[]): Unit[] {
