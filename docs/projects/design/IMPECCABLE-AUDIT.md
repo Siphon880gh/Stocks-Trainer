@@ -24,7 +24,39 @@ Questions skipped: there was no channel to ask Weng mid-run; the design context 
 | Theming / tokens | 3/4 | 4/4 | The Library's terminal costume (font-mono, uppercase, `/ root`, SNAKE_CASE) went against the design context. The simulation side stripe was replaced. The detector went from 2 findings to 0. |
 | Responsive | 2/4 | 3/4 | The Library tab and filter rows clipped behind a hidden scrollbar at 390 px; they now wrap. Browse links are 28 px tall targets. |
 | Anti-patterns / craft floor | 2/4 | 3/4 | Fixed: the eyebrow over the Next up heading, the 90-chip wall on Academy, the duplicate link row on Browse, and a rounded tab with a thick bottom border. |
-| **Total** | **12/20** | **17/20** | |
+| **Total** | **12/20** | **17/20** | Round 3 re-scored this honestly as 14/20; see below. |
+
+## Re-audit and score fixes (round 3)
+
+- **When:** 2026-11-25, from commit `f145281`, re-scored against the audit reference's own rubric at 1280 and 390 px on the same surfaces plus Map, Cases, Coach, Macro and Playbooks.
+- **Baseline correction:** the table above over-scored two rows. Theming 4/4 needs a working dark mode, and the fifth dimension is "Implementation integrity", not a craft floor. Re-measured honestly, the starting point for this round was **14/20**.
+- **Measured with** a throwaway Chrome script (not committed): overflow, targets under 44 px and under 24 px, text contrast against the real composited background, unnamed controls, h1 count, heading-level skips and text under 12 px, on 12 pages at both widths. The detector ran again too.
+
+| Dimension | Start of round | After | Where the points were lost, and what fixed them |
+|---|---|---|---|
+| Accessibility | 3/4 | 4/4 | Lost: secondary text in faded blue (`text-primary/50–70`), slate and hard-coded grey fell under 4.5:1; the interface blue, green and red and the 600-shade status colours sat at 3.2–4.4:1; focus rings were suppressed on many controls; no reduced-motion mode; the Library skipped from h2 to h4. Fixed: `938e6e9`, `ec39220`, `6455a59` (contrast, now 0 failures on all 24 page × width runs), `492d564` (one focus ring app-wide, reduced motion that keeps colour feedback and drops movement), `db77c57` (outline). |
+| Performance | 2/4 | 3/4 | Lost: one 5.09 MB script (1.42 MB gzip) for every route, and `transition-all` on cards, buttons and toggles. Fixed: `dcaf453` (every page but Home in its own chunk; first download 3.9 MB, 1.09 MB gzip, with a quiet loading state), `8300157` (animate only the properties that change). |
+| Theming / tokens | 3/4 | 3/4 | Hard-coded hex text and line colours became tokens (`ec39220`). The remaining hex values are the chart palette and the YouTube red, which is intentional. The missing point is dark mode (see "Left for Weng"). |
+| Responsive | 3/4 | 4/4 | Lost: on phones, buttons, selects and tabs were 30–38 px; map stage dots and video icons were 28 px; some inline links were 16–20 px tall. Fixed: `3f0c6b9` (44 px minimum for buttons, selects, tabs, disclosure rows, text inputs and button-style links on touch screens; 44 px hit areas for map dots and video icons), `148ebdc`, `390d9d9` (24 px minimum for stand-alone text links). No horizontal overflow at 390 px. |
+| Implementation integrity | 3/4 | 4/4 | Lost: a page that failed to load left a blank screen; the locked case screen had no title and kept the monospace costume. Fixed: `d9ce377` (a reload message with `role="alert"`, the header stays, and a failed chunk retries; e2e check `4497f91`), `e9c005b`. The detector still reports 0 findings. |
+| **Total** | **14/20** | **18/20** | Band: Excellent (18–20). |
+
+### What the measurements show now
+
+- Contrast: 0 text elements under AA on 12 pages at 1280 and 390 px.
+- Phone targets: every button, select, tab and text input is at least 44 px. What remains under 44 px is text links in dense lists (Browse, Map, Cases, Coach, Playbooks), which are 28 px tall with spacing and pass WCAG 2.5.8. Links inside a sentence are exempt. Making each list link 44 px would make those pages much longer, so they stay as they are.
+- One h1 per page, no heading skips, no unnamed controls, no text under 12 px, and no horizontal overflow.
+
+### My calls
+
+- The reduced-motion mode keeps colour and opacity transitions, because they carry feedback such as a correct or wrong answer. It drops movement, animation loops and smooth scrolling.
+- The interface colours went one step darker. The charts keep the original TradingView blue, green and red because they are read against chart grids, not as text.
+- I kept 44 px targets to touch screens. Desktop controls keep their current density.
+
+### Left for Weng (the last 2 points)
+
+- **Theming, 1 point: dark mode.** `.impeccable.md` defines a light brokerage-tape look, and a dark theme is a brand decision. The tokens are now in place, so it would mostly be a second set of values for `--color-*`.
+- **Performance, 1 point: the first download is still about 1.09 MB gzip.** Most of it is the content data: the header's level tabs and Home's Next up and map cards score progress through `progressMap`, which imports every quiz, case, coach session and lesson list. Getting under about 500 KB means moving progress scoring onto small per-area summaries or loading it after first paint. That changes how every progress number is computed, so it should be its own project with a go-ahead.
 
 ## Critique (Nielsen heuristics, 0–4)
 
@@ -62,7 +94,7 @@ Questions skipped: there was no channel to ask Weng mid-run; the design context 
 ## Detector
 
 - Before: 2 findings, `border-accent-on-rounded` (NavTabsMenu) and `side-tab` (Simulation.tsx).
-- After: **0 findings**. It was re-run after the follow-up fixes and still reports 0 findings.
+- After: **0 findings**. It was re-run after the follow-up fixes and again after the round 3 fixes, and still reports 0 findings.
 
 ## Checks
 
