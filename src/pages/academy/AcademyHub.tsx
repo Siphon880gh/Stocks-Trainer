@@ -10,6 +10,7 @@ import PlacementCard from "../../components/academy/PlacementCard";
 import TodayCard from "../../components/academy/TodayCard";
 import RewardsPanel from "../../components/academy/RewardsPanel";
 import PacePanel from "../../components/academy/PacePanel";
+import { categoryRecency, daysAgo, lastCompletedAt } from "../../lib/academy/retention";
 import { VALUE_PROMISE } from "../../lib/academy/copy";
 import { cn } from "../../lib/utils";
 import AppSectionNav from "../../components/AppSectionNav";
@@ -37,6 +38,12 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
   const sum = academySummary(state);
   const next = nextUnit(state);
   const nextU = next ? getUnit(next) : undefined;
+  const recency = categoryRecency(state);
+  /** Quiet "last done" text for a level or course: "3d ago", "today", or nothing if never. */
+  const recLabel = (key: string) => {
+    const r = recency[key];
+    return r?.label ? (r.label === "today" ? "last done today" : `last done ${r.label} ago`) : null;
+  };
   return (
     <main className="flex-1 px-4 py-6 max-w-5xl mx-auto w-full space-y-6" data-testid="academy-hub">
       <header className="space-y-2">
@@ -119,6 +126,11 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
               <h2 className="text-[15px] font-semibold">
                 {lv.id} · {lv.title}
               </h2>
+              {recLabel(`${lv.id} · ${lv.title}`) ? (
+                <span className="text-[12px] text-muted" data-rt-recency={lv.id}>
+                  {recLabel(`${lv.id} · ${lv.title}`)}
+                </span>
+              ) : null}
               <span className="text-[12px] text-muted">
                 {complete ? "Complete" : unlocked ? `${Math.round(levelPct(state, lv.id) * 100)}% done` : browseAll ? "Preview for this tab" : `Locked: finish ${lv.prerequisites.join(", ")} first (or test out)`}
               </span>
@@ -134,7 +146,9 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                 <div key={c.id} className="panel p-3 space-y-2" data-course={c.id}>
                   <div className="flex items-baseline justify-between gap-2">
                     <p className="font-semibold text-[14px]">{c.title}</p>
-                    <span className="text-xs text-muted">{Math.round(coursePct(state, c.id) * 100)}%</span>
+                    <span className="text-xs text-muted" data-rt-recency={c.id}>
+                      {Math.round(coursePct(state, c.id) * 100)}%{recLabel(`${lv.id} · ${lv.title} > ${c.title}`) ? ` · ${recLabel(`${lv.id} · ${lv.title} > ${c.title}`)}` : ""}
+                    </span>
                   </div>
                   <div className="h-1.5 rounded-full bg-line overflow-hidden" aria-hidden>
                     <div className="h-full bg-up-fill" style={{ width: `${Math.round(coursePct(state, c.id) * 100)}%` }} />
@@ -145,6 +159,8 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                       const st = unitStatus(state, id);
                       const shown = browseAll && st === "locked" ? "preview" : st;
                       const s = STATUS[shown];
+                      const at = lastCompletedAt(state, id);
+                      const ago = at ? daysAgo(at) : null;
                       return (
                         <li key={id} className="flex items-center gap-2">
                           <Link to={`/academy/${id}`} className="flex flex-1 min-w-0 items-center gap-2 text-[13px] hover:text-primary" data-unit={id} data-status={shown}>
@@ -152,6 +168,11 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                               {s.icon}
                             </span>
                             <span className="flex-1">{u.title}</span>
+                            {ago ? (
+                              <span className="rounded border border-line px-1 text-[11px] text-muted" data-rt-days-ago={ago.days} title={`Last completed ${ago.label === "today" ? "today" : `${ago.days} days ago`}`}>
+                                {ago.label}
+                              </span>
+                            ) : null}
                             <span className="text-xs text-muted">
                               {s.label} · {estMinutes(u)} min
                             </span>
