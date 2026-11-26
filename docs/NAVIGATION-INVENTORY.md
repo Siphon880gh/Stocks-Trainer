@@ -293,6 +293,13 @@ Above the carousel sits the path map panel (`id="path"`, `src/components/PathMap
 - **Map:** Progress map: 1 stage(s) — `page:/academy/options`
 - **In-content (3 files):** `src/lib/academy/content/unitsL4L7.ts (Academy ref)`, `src/lib/wheelStrategy.ts`, `src/pages/practice/GammaSqueeze.tsx`
 
+#### `/academy/review`
+
+- **Page:** `src/pages/academy/AcademyReview.tsx`
+- **Teaches:** Learning retention: missed unit-check and Today questions come back 1, 3, then 7 days later.
+- **ToC:** ToC › academy card (AcademyTrainingCard.tsx): `/academy/review`
+- **In-content (1 file):** `src/components/academy/PacePanel.tsx` (shown when questions are due)
+
 #### `/paper`
 
 - **Page:** `src/pages/academy/Paper.tsx`

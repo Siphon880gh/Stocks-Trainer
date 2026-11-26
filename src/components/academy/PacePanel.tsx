@@ -6,6 +6,7 @@ import { computeStreak, dayKey } from "../../lib/academy/rewards/streak";
 import { loadAcademy, loadRewards, saveAcademy, type KVStorage } from "../../lib/academy/storage";
 import {
   actualPace, behind, categoryRecency, forecast, getRetention, goalMet, markDoneForToday, remainingUnits, setPace, staleCategories, todayCounts, weekly, UNIT_PATH,
+  dueReviews,
 } from "../../lib/academy/retention";
 
 const fmtDate = (k: string) => new Date(`${k}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
@@ -40,6 +41,7 @@ export default function PacePanel({ storage, now = () => new Date() }: { storage
   const stale = staleCategories(categoryRecency(state, t)).slice(0, 2);
   const w = weekly(state, t);
   const doneToday = r.doneForToday === dayKey(t);
+  const due = dueReviews(state, t);
   const [units, setUnits] = useState(String(r.pace.unitsPerDay));
   const [quizzes, setQuizzes] = useState(String(r.pace.quizzesPerDay));
   const [saved, setSaved] = useState<string | null>(null);
@@ -92,6 +94,14 @@ export default function PacePanel({ storage, now = () => new Date() }: { storage
         {levelFc && levelLeft > 0 && nextId ? (
           <p>
             {UNIT_PATH[nextId]?.[0]}: done by {fmtDate(levelFc.date)} ({plural(levelLeft, "unit", "units")} left).
+          </p>
+        ) : null}
+        {due.length ? (
+          <p data-testid="pace-reviews">
+            <Link to="/academy/review" className="text-primary underline">
+              Review {plural(due.length, "missed question", "missed questions")}
+            </Link>{" "}
+            due today.
           </p>
         ) : null}
         {stale.map((x) => (
