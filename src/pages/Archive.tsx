@@ -114,7 +114,7 @@ export default function Archive() {
             </div>
           </label>
         </div>
-        <div className="flex gap-2 px-4 pb-2 overflow-x-auto no-scrollbar">
+        <div className="flex flex-wrap gap-2 px-4 pb-2">
           <button
             type="button"
             onClick={() => {
@@ -160,7 +160,7 @@ export default function Archive() {
             Literacy
           </button>
         </div>
-        <div className="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar">
+        <div className="flex flex-wrap gap-2 px-4 pb-4">
           {tab === "patterns"
             ? (["all", "bullish", "bearish", "neutral"] as const).map((f) => (
             <button
@@ -202,7 +202,7 @@ export default function Archive() {
             )}
         </div>
         {tab === "patterns" ? (
-          <div className="flex gap-2 px-4 pb-4 overflow-x-auto no-scrollbar" data-testid="archive-crypto-filters">
+          <div className="flex flex-wrap gap-2 px-4 pb-4" data-testid="archive-crypto-filters">
             {(["all", "works", "adapted", "rare"] as const).map((f) => (
               <button
                 key={`crypto-${f}`}
