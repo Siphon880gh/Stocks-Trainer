@@ -1,8 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #2962ff;
-  --color-primary-dim: #1e53e5;
+  /* Interface blue, green and red are a step darker than the chart colours so text and white-on-colour labels meet AA (charts keep #2962ff, #089981, #f23645). */
+  --color-primary: #1e53e5;
+  --color-primary-dim: #1a46c2;
   --color-background-light: #f4f5f8;
   --color-background-dark: #f4f5f8;
   --color-canvas: #f4f5f8;
@@ -12,8 +13,8 @@
   /* Secondary text: #787b86 (the chart grey) fell under 4.5:1 on white and canvas; this keeps the tone and meets WCAG AA. Charts keep #787b86. */
   --color-muted: #686b76;
   --color-line: #d1d4dc;
-  --color-up: #089981;
-  --color-accent-red: #f23645;
+  --color-up: #067a67;
+  --color-accent-red: #d1202f;
   /* Beginner Academy: accent for SIMULATED order buttons (our own token, not a broker colour). */
   --color-sim: #7c3aed;
   --color-sim-dim: #6d28d9;
