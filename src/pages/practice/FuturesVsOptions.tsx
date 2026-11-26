@@ -135,7 +135,7 @@ export default function PracticeFuturesVsOptions() {
           <span className="font-mono">{smaN}</span>
         </label>
         <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
-          <p className="text-[10px] text-muted px-2 pt-1">SIMULATED daily closes · SMA({smaN}) line</p>
+          <p className="text-xs text-muted px-2 pt-1">SIMULATED daily closes · SMA({smaN}) line</p>
           <CandlestickChart data={SIM_DAILY} height={180} showScaleControls={false} compact annotations={ann} />
         </div>
         <p data-testid="fo-sma-out" className="text-[12px]">Latest SMA({smaN}) = {smaLast?.toFixed(2)}</p>

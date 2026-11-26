@@ -58,7 +58,7 @@ export default function PracticeFairValueGap() {
           ))}
         </ol>
         <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
-          <p className="text-[10px] text-muted px-2 pt-1">SAMPLE stock, 5-minute candles (ET)</p>
+          <p className="text-xs text-muted px-2 pt-1">SAMPLE stock, 5-minute candles (ET)</p>
           <CandlestickChart
             data={example.bars}
             annotations={mergeAnnotations(exampleAnn.before, exampleAnn.reveal)}
@@ -74,7 +74,7 @@ export default function PracticeFairValueGap() {
         <p className="text-[12px]">
           Glossary: {term("fair-value-gap", "fair value gap")} · {term("imbalance", "imbalance")} · {term("breakout-signal-vs-entry", "breakout signal vs entry")} · {term("breakout-retest", "breakout and retest")}
         </p>
-        <p className="text-[11px] text-muted" data-testid="fvg-source">
+        <p className="text-xs text-muted" data-testid="fvg-source">
           Idea from{" "}
           <a href={FVG_SOURCE.url} target="_blank" rel="noreferrer" className="text-primary underline">a short Facebook trading reel</a>{" "}
           (may ask you to log in). {FVG_SOURCE.note}

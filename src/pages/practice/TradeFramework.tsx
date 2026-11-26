@@ -82,7 +82,7 @@ export default function PracticeTradeFramework() {
           </p>
           <p className="font-medium">{step.rule}</p>
           <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
-            <p className="text-[10px] text-muted px-2 pt-1">SAMPLE chart</p>
+            <p className="text-xs text-muted px-2 pt-1">SAMPLE chart</p>
             <CandlestickChart
               data={step.bars}
               annotations={step.annotations}

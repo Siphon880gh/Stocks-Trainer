@@ -48,7 +48,7 @@ export default function DeskFinancials({ scenario, bar, active }: { scenario: De
         <p className="text-[12px] text-muted">No filing yet.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-[11px]">
+          <table className="w-full text-xs">
             <thead>
               <tr>
                 <th className="text-left font-medium text-muted px-1 py-1" />
@@ -85,8 +85,8 @@ export default function DeskFinancials({ scenario, bar, active }: { scenario: De
           {c.note}
         </p>
       ))}
-      {cols.some((c) => c.liabilitiesDerived) ? <p className="text-[11px] text-muted">* Total liabilities = total assets − stockholders' equity (the filing does not tag a total).</p> : null}
-      <p className="text-[11px] text-muted">
+      {cols.some((c) => c.liabilitiesDerived) ? <p className="text-xs text-muted">* Total liabilities = total assets − stockholders' equity (the filing does not tag a total).</p> : null}
+      <p className="text-xs text-muted">
         Compare like with like: a 10-K covers a full fiscal year, a 10-Q one quarter.
         {cols.map((c, i) =>
           c.url ? (

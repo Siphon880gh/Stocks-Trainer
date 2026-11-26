@@ -13,7 +13,7 @@ export default function FedPricingCard({ month }: { month: number }) {
     <section className="panel p-4 space-y-2" aria-label="Simulated rate probabilities">
       <div className="flex items-baseline gap-2">
         <h3 className="font-semibold">Market pricing for the {m.label} meeting</h3>
-        <span className="text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-300 rounded px-1">SIMULATED</span>
+        <span className="text-xs font-bold text-amber-800 bg-amber-50 border border-amber-300 rounded px-1">SIMULATED</span>
       </div>
       <p className="text-[12px] text-muted">Current range before the meeting: {m.lowerBefore.toFixed(2)}–{(m.lowerBefore + 0.25).toFixed(2)}%</p>
       <div className="space-y-1.5">

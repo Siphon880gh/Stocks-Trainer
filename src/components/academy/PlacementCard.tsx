@@ -39,7 +39,7 @@ export default function PlacementCard({ variant = "hub", storage, initialPhase =
     <section className="panel p-4 space-y-3 text-sm" data-testid="placement-card" data-variant={variant}>
       <div className="flex items-baseline justify-between gap-2">
         <p className="font-semibold">{variant === "home" ? "New: Beginner Academy — where should you start?" : "Placement check"}</p>
-        <span className="text-[11px] text-muted">optional · {PLACEMENT_ITEMS.length} questions · about 3 min</span>
+        <span className="text-xs text-muted">optional · {PLACEMENT_ITEMS.length} questions · about 3 min</span>
       </div>
 
       {phase === "intro" ? (

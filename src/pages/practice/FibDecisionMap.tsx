@@ -57,7 +57,7 @@ export default function PracticeFibDecisionMap() {
           Anchor: high of the push to low of the selloff. Bounce stalls near 50% / VWAP ({SWING.vwap}). Levels through 100% shown; {term("fib-extension", "extensions")} 127.2% / 161.8% are in the table for targets.
         </p>
         <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
-          <p className="text-[10px] text-muted px-2 pt-1">SIMULATED · fib from swing high to swing low</p>
+          <p className="text-xs text-muted px-2 pt-1">SIMULATED · fib from swing high to swing low</p>
           <CandlestickChart data={SIM_5M} height={220} showScaleControls={false} compact annotations={ann} padRightBars={2} />
         </div>
         <div className="overflow-x-auto">

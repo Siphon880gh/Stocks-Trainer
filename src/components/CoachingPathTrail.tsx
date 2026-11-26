@@ -29,7 +29,7 @@ export default function CoachingPathTrail({
       <div className="flex flex-wrap items-center gap-2 px-3 py-2 border-b border-line">
         <button
           type="button"
-          className="flex-1 min-w-[10rem] text-left font-mono text-[10px] tracking-widest text-primary flex items-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+          className="flex-1 min-w-[10rem] text-left font-mono text-xs tracking-widest text-primary flex items-center gap-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
           aria-expanded={expanded}
           aria-controls={panelId}
           onClick={() => onExpandedChange(!expanded)}
@@ -39,7 +39,7 @@ export default function CoachingPathTrail({
           </span>
           {steps.length === 1 ? "Path · 1 step" : `Path · ${steps.length} steps`}
         </button>
-        <label className="inline-flex items-center gap-1.5 font-mono text-[10px] text-slate-500 cursor-pointer">
+        <label className="inline-flex items-center gap-1.5 font-mono text-xs text-slate-500 cursor-pointer">
           <input
             type="checkbox"
             checked={showNodeIds}

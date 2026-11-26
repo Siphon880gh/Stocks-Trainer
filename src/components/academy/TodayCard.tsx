@@ -51,29 +51,29 @@ export default function TodayCard({ storage, now = () => new Date(), variant = "
       <div className="grid sm:grid-cols-3 gap-2 text-[13px]">
         {unit ? (
           <Link to={`/academy/${unit.id}`} className="border border-line rounded-lg p-2.5 hover:border-primary" data-testid="today-next-unit">
-            <p className="text-[11px] text-muted">Next unit</p>
+            <p className="text-xs text-muted">Next unit</p>
             <p className="font-medium">{unit.title}</p>
           </Link>
         ) : (
           <Link to="/academy" className="border border-line rounded-lg p-2.5 hover:border-primary">
-            <p className="text-[11px] text-muted">Next unit</p>
+            <p className="text-xs text-muted">Next unit</p>
             <p className="font-medium">All units done</p>
           </Link>
         )}
         <Link to={glossaryHref(picks.term.id)} className="border border-line rounded-lg p-2.5 hover:border-primary" data-testid="today-term">
-          <p className="text-[11px] text-muted">Term of the day</p>
+          <p className="text-xs text-muted">Term of the day</p>
           <p className="font-medium">{picks.term.name}</p>
           <p className="text-[12px] text-muted line-clamp-2">{picks.term.summary}</p>
         </Link>
         <Link to={`/paper/challenges/${picks.challenge.id}`} className="border border-line rounded-lg p-2.5 hover:border-sim" data-testid="today-challenge">
-          <p className="text-[11px] text-muted">Challenge of the week</p>
+          <p className="text-xs text-muted">Challenge of the week</p>
           <p className="font-medium">{picks.challenge.title}</p>
         </Link>
       </div>
 
       {q ? (
         <div className="space-y-1.5 border-t border-line pt-3" data-testid="today-review" data-question={q.id}>
-          <p className="text-[11px] text-muted">Review question{getUnit(q.unitId) ? ` · from "${getUnit(q.unitId)!.title}"` : ""}</p>
+          <p className="text-xs text-muted">Review question{getUnit(q.unitId) ? ` · from "${getUnit(q.unitId)!.title}"` : ""}</p>
           <p className="text-[13px] font-medium">{q.prompt}</p>
           <div className="grid sm:grid-cols-2 gap-1">
             {q.options.map((o) => {

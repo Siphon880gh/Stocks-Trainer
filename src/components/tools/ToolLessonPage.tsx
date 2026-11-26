@@ -68,21 +68,21 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
           </span>
           <span className="text-muted">Saved in this browser.</span>
           {c.done || Object.keys(progress.notes).length ? (
-            <button type="button" onClick={reset} className="ml-auto px-2 py-0.5 rounded border text-[11px]" data-testid="tool-progress-reset">Reset this lesson</button>
+            <button type="button" onClick={reset} className="ml-auto px-2 py-0.5 rounded border text-xs" data-testid="tool-progress-reset">Reset this lesson</button>
           ) : null}
         </section>
 
         <section className="panel p-4 space-y-2 text-[13px]" data-testid="tool-intro">
           {lesson.intro.map((p) => <p key={toolTextPlain(p)}><ToolTextView text={p} /></p>)}
           {sims.length ? (
-            <p className="text-[11px] text-muted" data-testid="sim-hint">
+            <p className="text-xs text-muted" data-testid="sim-hint">
               <span className="font-medium text-sim underline decoration-dotted decoration-2 underline-offset-[3px]">Dotted purple phrases ▶</span> are not glossary terms. Each opens a short simulation: a SAMPLE tape or a table you step through, showing why a value from the tool matters for reading the stock.
             </p>
           ) : null}
-          <p className="text-[11px] text-muted" data-testid="term-hint">
+          <p className="text-xs text-muted" data-testid="term-hint">
             <span className="underline decoration-dashed decoration-1 decoration-muted underline-offset-[3px]">Words with a thin dashed underline</span> are glossary terms: hover, focus or tap one for a short definition. On a simulated screen, the terms are also listed under it.
           </p>
-          <p className="text-[11px] text-muted" data-testid="tool-credit">
+          <p className="text-xs text-muted" data-testid="tool-credit">
             {lesson.credit.name} (<a href={lesson.credit.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">{lesson.credit.url.replace(/^https:\/\//, "")}</a>): {lesson.credit.note}
           </p>
         </section>
@@ -90,7 +90,7 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
         <section className="panel p-4 space-y-4 text-[13px]" data-testid="tool-screens">
           <div>
             <p className="font-semibold text-[14px]">What you will see</p>
-            <p className="text-[11px] text-muted">Simulated layouts drawn in this app's style, checked against the real tool on {lesson.asOf}. Numbers in them are illustrative unless a caption says otherwise. Real sites change their layouts.</p>
+            <p className="text-xs text-muted">Simulated layouts drawn in this app's style, checked against the real tool on {lesson.asOf}. Numbers in them are illustrative unless a caption says otherwise. Real sites change their layouts.</p>
           </div>
           {lesson.screens.map((s) => <Fragment key={s.id}><MockScreen screen={s} asOf={lesson.asOf} /></Fragment>)}
         </section>
@@ -111,7 +111,7 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
           <section className="panel p-4 space-y-2 text-[13px]" data-testid="tool-simulations">
             <div>
               <p className="font-semibold text-[14px]">Simulations: why each check matters</p>
-              <p className="text-[11px] text-muted">Step through a SAMPLE tape (or table) one bar at a time. Each step says what it shows and why we are looking. Simulated, not real prices, unless a step names a dated value. A walk counts as done when you reach its last step.</p>
+              <p className="text-xs text-muted">Step through a SAMPLE tape (or table) one bar at a time. Each step says what it shows and why we are looking. Simulated, not real prices, unless a step names a dated value. A walk counts as done when you reach its last step.</p>
             </div>
             <ul className="space-y-2">
               {sims.map((s) => (
@@ -163,7 +163,7 @@ export default function ToolLessonPage({ lesson }: { lesson: ToolLesson }) {
               </li>
             ))}
           </ul>
-          <p className="text-[11px] text-muted">Tools are credited for what they show, not endorsed. Educational, not advice.</p>
+          <p className="text-xs text-muted">Tools are credited for what they show, not endorsed. Educational, not advice.</p>
         </section>
 
         <section className="panel p-4 space-y-2 text-[13px]" data-testid="tool-links">
@@ -185,7 +185,7 @@ function DrillSet({ testId, title, note, drills, picks, onPick }: { testId: stri
     <section className="panel p-4 space-y-3 text-[13px]" data-testid={testId}>
       <div>
         <p className="font-semibold text-[14px]">{title}</p>
-        {note ? <p className="text-[11px] text-muted">{note}</p> : null}
+        {note ? <p className="text-xs text-muted">{note}</p> : null}
       </div>
       {drills.map((d) => {
         const picked = picks[d.id];

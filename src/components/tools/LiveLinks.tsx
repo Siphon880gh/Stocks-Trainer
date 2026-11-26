@@ -19,7 +19,7 @@ export function LiveLinks({ links, asOf }: { links?: LiveLink[]; asOf?: string }
           </li>
         ))}
       </ul>
-      <p className="text-[11px] text-muted">
+      <p className="text-xs text-muted">
         {asOf
           ? `Live numbers will differ from this snapshot of ${formatSnapshotDate(asOf)}.`
           : "Live numbers will differ from the dated values in this walk."}

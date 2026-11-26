@@ -31,7 +31,7 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
       <section className="panel p-4 space-y-2 text-[13px]" data-testid="theme-intro">
         {theme.intro.map((p) => <p key={p}>{p}</p>)}
         {sims.length ? <SimHint subject="how a driver below shows up on a fund's tape or in a table" /> : null}
-        <p className="text-[11px] text-muted" data-testid="theme-market-forces">Market Forces: {theme.marketForces}</p>
+        <p className="text-xs text-muted" data-testid="theme-market-forces">Market Forces: {theme.marketForces}</p>
       </section>
 
       <section className="panel p-4 space-y-2 text-[13px]" data-testid="theme-wrappers">
@@ -60,7 +60,7 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
             </tbody>
           </table>
         </div>
-        <p className="text-[11px] text-muted">Tickers are examples to research, not recommendations. Check current holdings and documents with the issuer.</p>
+        <p className="text-xs text-muted">Tickers are examples to research, not recommendations. Check current holdings and documents with the issuer.</p>
       </section>
 
       <section className="panel p-4 space-y-3 text-[13px]" data-testid="theme-drivers">
@@ -98,7 +98,7 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
             ))}
           </tbody>
         </table>
-        <p className="text-[11px] text-muted">{theme.math.note}</p>
+        <p className="text-xs text-muted">{theme.math.note}</p>
       </section>
 
       {theme.calculator ? (
@@ -123,7 +123,7 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
               <li key={o.label}><span className="text-muted">{o.label}:</span> <span className="font-medium">{o.value}</span></li>
             ))}
           </ul>
-          <p className="text-[11px] text-muted">{theme.calculator.note}</p>
+          <p className="text-xs text-muted">{theme.calculator.note}</p>
         </section>
       ) : null}
 
@@ -179,7 +179,7 @@ export default function MarketThemePage({ id }: { id: MarketThemeQuizGroupId }) 
             </li>
           ))}
         </ul>
-        <p className="text-[11px] text-muted">Credited for what they explain, not as endorsements. Educational, not advice.</p>
+        <p className="text-xs text-muted">Credited for what they explain, not as endorsements. Educational, not advice.</p>
       </section>
 
       <section className="panel p-4 space-y-2 text-[13px]" data-testid="theme-links">

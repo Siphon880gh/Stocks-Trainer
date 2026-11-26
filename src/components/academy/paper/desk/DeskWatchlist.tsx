@@ -33,7 +33,7 @@ export default function DeskWatchlist({ scenario, bar, active, state, onPick }: 
                     {(q.changePct * 100).toFixed(2)}%
                   </span>
                 </span>
-                {held ? <span className="block text-[11px] text-sim">{held > 0 ? `Holding ${held}` : `Short ${-held}`}</span> : null}
+                {held ? <span className="block text-xs text-sim">{held > 0 ? `Holding ${held}` : `Short ${-held}`}</span> : null}
               </button>
             </li>
           );

@@ -69,7 +69,7 @@ function PriorQuarters({ round }: { round: PrintRound }) {
   return (
     <div className="space-y-2" data-testid="prior-quarters">
       <IncomeStatementTable company={r.company} start={start} count={k - start} />
-      <div className="flex flex-wrap gap-2 text-[11px]">
+      <div className="flex flex-wrap gap-2 text-xs">
         <span className="text-muted self-center">Last reported quarter:</span>
         {chips.map(([label, value, term]) => (
           <Link key={label} to={glossaryHref(term)} className="px-2 py-1 rounded border border-line bg-surface hover:border-primary">
@@ -188,7 +188,7 @@ export default function ReadThePrintGame({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
         <EarningsPreviewCard event={event} revealActuals={reveal} compact />
         <div className="space-y-1">
-          <p className="text-[10px] uppercase tracking-wider text-muted">
+          <p className="text-xs uppercase tracking-wider text-muted">
             {reveal ? "Price around the report (with volume)" : "Price into the report (last 30 sessions)"}
           </p>
           <div data-testid="rtp-chart" data-bars={reveal ? rc.bars.length : preBars.length}>

@@ -292,7 +292,7 @@ export default function PracticeDraw() {
               </button>
             ))}
           </div>
-          <p className="mt-2 text-[10px] font-mono text-primary/50">
+          <p className="mt-2 text-xs font-mono text-primary/50">
             Guide silhouette shown as dashed lines · {template.name}
             {template.hint ? ` · ${template.hint}` : ""}
           </p>
@@ -300,7 +300,7 @@ export default function PracticeDraw() {
 
         <section className="panel p-3 bg-surface rounded-xl space-y-3">
           <div className="flex items-center justify-between gap-2 flex-wrap">
-            <h2 className="text-[10px] font-bold tracking-widest text-primary/70 font-mono">
+            <h2 className="text-xs font-bold tracking-widest text-primary/70 font-mono">
               CANVAS
             </h2>
             <div className="flex flex-wrap items-center gap-2">

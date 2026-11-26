@@ -152,7 +152,7 @@ export default function CandlestickChart({
     <div ref={containerRef} className={cn(chartPaneClass, "relative")}>
       {!compact && showScaleControls ? (
         <div
-          className="flex flex-wrap items-center gap-2 px-2 py-1.5 text-[11px] border-b border-[#e0e3eb] bg-[#f8f9fd]"
+          className="flex flex-wrap items-center gap-2 px-2 py-1.5 text-xs border-b border-[#e0e3eb] bg-[#f8f9fd]"
           style={{ fontFamily: CHART.font, color: CHART.textMuted }}
         >
           <span>Scale</span>

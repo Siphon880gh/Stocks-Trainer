@@ -63,14 +63,14 @@ export default function PracticeReversalCharts() {
         <div className="panel p-3 space-y-2" data-testid="rev-detail" data-active={active.id}>
           <div className="flex flex-wrap items-center gap-2">
             <p className="font-semibold text-[14px]">{active.name}</p>
-            <span className={cn("text-[10px] font-mono uppercase tracking-wide rounded border px-1.5 py-0.5", active.side === "bullish" ? "border-emerald-500/60 text-emerald-600" : "border-rose-500/60 text-rose-600")}>
+            <span className={cn("text-xs font-mono uppercase tracking-wide rounded border px-1.5 py-0.5", active.side === "bullish" ? "border-emerald-500/60 text-emerald-600" : "border-rose-500/60 text-rose-600")}>
               {active.side}
             </span>
             <Link to={`/archive?tab=patterns&open=${active.id}`} className="text-[12px] text-primary underline">Archive</Link>
           </div>
           {bars.length ? (
             <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
-              <p className="text-[10px] text-muted px-2 pt-1">SIMULATED illustration</p>
+              <p className="text-xs text-muted px-2 pt-1">SIMULATED illustration</p>
               <CandlestickChart data={bars} height={160} showScaleControls={false} compact />
             </div>
           ) : null}
@@ -84,7 +84,7 @@ export default function PracticeReversalCharts() {
             <p><span className="font-medium">Retest: </span>{active.retest}</p>
             <p className="sm:col-span-2"><span className="font-medium">Invalidation: </span>{active.failure}</p>
           </div>
-          <a href={active.source.url} target="_blank" rel="noopener noreferrer" className="text-[11px] text-primary underline">{active.source.label}</a>
+          <a href={active.source.url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary underline">{active.source.label}</a>
         </div>
       </section>
 
@@ -134,7 +134,7 @@ export default function PracticeReversalCharts() {
           {" · "}
           <Link to="/archive?tab=patterns" className="text-primary underline">Archive</Link>
         </p>
-        <p className="text-[11px] text-muted space-x-1">
+        <p className="text-xs text-muted space-x-1">
           Sources: {Object.values(SRC).map((x) => (
             <a key={x.url} href={x.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">{x.label}</a>
           ))}

@@ -22,10 +22,10 @@ export function FindItTasks({
     <section className="panel p-4 space-y-3 text-[13px]" data-testid="tool-tasks">
       <div>
         <p className="font-semibold text-[14px]">Find it yourself: {tasks.length} tasks on the live tools</p>
-        <p className="text-[11px] text-muted">
+        <p className="text-xs text-muted">
           Open each link in a new tab, find the field, then type what you saw and the time stamp on the page (or when you looked). Live values move, so the check is the format and a plausible range, not an exact number.
         </p>
-        <p className="text-[11px] text-muted" data-testid="tool-tasks-count">{done} of {tasks.length} recorded</p>
+        <p className="text-xs text-muted" data-testid="tool-tasks-count">{done} of {tasks.length} recorded</p>
       </div>
       {tasks.map((t) => <Fragment key={t.id}><TaskRow task={t} record={records[t.id]} onRecord={(r) => onRecord(t.id, r)} /></Fragment>)}
     </section>
@@ -54,7 +54,7 @@ function TaskRow({ task, record, onRecord }: { task: ToolTask; record?: FindTask
         <span className="text-muted"> · {task.where}</span>
       </p>
       <div className="flex flex-wrap gap-2 items-end">
-        <label className="text-[11px] text-muted flex flex-col gap-0.5">
+        <label className="text-xs text-muted flex flex-col gap-0.5">
           Value you found
           <input
             value={value}
@@ -64,7 +64,7 @@ function TaskRow({ task, record, onRecord }: { task: ToolTask; record?: FindTask
             className="px-2 py-1 rounded border bg-transparent text-[12px] text-ink w-40"
           />
         </label>
-        <label className="text-[11px] text-muted flex flex-col gap-0.5">
+        <label className="text-xs text-muted flex flex-col gap-0.5">
           Time stamp on the page
           <input
             value={stamp}
@@ -74,10 +74,10 @@ function TaskRow({ task, record, onRecord }: { task: ToolTask; record?: FindTask
             className="px-2 py-1 rounded border bg-transparent text-[12px] text-ink w-48"
           />
         </label>
-        <button type="button" onClick={() => setStamp(nowStamp())} className="px-2 py-1 rounded border text-[11px]">Use the time now</button>
+        <button type="button" onClick={() => setStamp(nowStamp())} className="px-2 py-1 rounded border text-xs">Use the time now</button>
         <button type="button" onClick={check} className="px-2 py-1 rounded border border-primary text-primary text-[12px]">Check</button>
       </div>
-      <p className="text-[11px] text-muted">{taskFormatHint(task.answer)}</p>
+      <p className="text-xs text-muted">{taskFormatHint(task.answer)}</p>
       {problems && problems.length ? (
         <ul className="text-[12px] list-disc pl-5" role="status" data-task-problems>
           {problems.map((p) => <li key={p}>{p}</li>)}

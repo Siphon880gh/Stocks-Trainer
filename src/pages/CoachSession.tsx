@@ -247,7 +247,7 @@ export default function CoachSession() {
           <SampleDataNote />
           <div className="flex flex-wrap items-center gap-2">
             <span
-              className={`inline-flex items-center gap-1 font-mono text-[10px] tracking-widest border px-2 py-0.5 ${outcomeUi.badge}`}
+              className={`inline-flex items-center gap-1 font-mono text-xs tracking-widest border px-2 py-0.5 ${outcomeUi.badge}`}
             >
               <span className="material-symbols-outlined text-sm" aria-hidden>
                 {outcomeUi.icon}
@@ -258,7 +258,7 @@ export default function CoachSession() {
               <button
                 type="button"
                 onClick={() => setExplainOpen(true)}
-                className="inline-flex items-center gap-1 font-mono text-[10px] tracking-widest border border-line px-2 py-0.5 text-primary hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                className="inline-flex items-center gap-1 font-mono text-xs tracking-widest border border-line px-2 py-0.5 text-primary hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
               >
                 <span className="material-symbols-outlined text-sm" aria-hidden>
                   auto_fix_high
@@ -267,7 +267,7 @@ export default function CoachSession() {
               </button>
             ) : null}
             {showNodeIds ? (
-              <span className="font-mono text-[10px] text-slate-500">
+              <span className="font-mono text-xs text-slate-500">
                 NODE · {state.currentNodeId}
               </span>
             ) : null}
@@ -282,7 +282,7 @@ export default function CoachSession() {
 
         {showChoices ? (
           <div className="space-y-2" role="group" aria-label="Coaching choices">
-            <p className="text-[10px] font-bold text-primary/60 uppercase tracking-[0.2em]">
+            <p className="text-xs font-bold text-primary/60 uppercase tracking-[0.2em]">
               Choose
             </p>
             <ul className="space-y-2">

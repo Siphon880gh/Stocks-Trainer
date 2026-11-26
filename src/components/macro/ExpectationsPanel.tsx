@@ -19,7 +19,7 @@ function Row({ m, revealed }: { m: Metric; revealed: boolean }) {
             {formatMetricValue(m, m.actual)}
           </td>
           <td className={`py-1.5 px-2 text-right tabular-nums ${labelTone(m.label)}`} data-field="surprise">
-            {formatSurprise(m, m.surprise)} <span className="text-[11px]">({metricZ(m) > 0 ? "+" : ""}{metricZ(m).toFixed(1)}σ)</span>
+            {formatSurprise(m, m.surprise)} <span className="text-xs">({metricZ(m) > 0 ? "+" : ""}{metricZ(m).toFixed(1)}σ)</span>
           </td>
         </>
       ) : (
@@ -70,7 +70,7 @@ export default function ExpectationsPanel({ event, revealed, hideRead = false }:
           {event.twist === "mixed" && <span>The pieces disagreed, so the release nets out close to in line.</span>}
         </p>
       )}
-      <p className="text-[11px] text-muted">σ = surprise divided by the usual forecast miss for this release. Consensus and range are simulated.</p>
+      <p className="text-xs text-muted">σ = surprise divided by the usual forecast miss for this release. Consensus and range are simulated.</p>
     </section>
   );
 }

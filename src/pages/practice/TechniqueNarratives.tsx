@@ -102,7 +102,7 @@ export default function PracticeTechniqueNarratives() {
         </div>
         <p className="font-medium">{chart.title}</p>
         <div className="rounded-lg bg-background-dark border border-line overflow-hidden" data-testid="nar-canvas">
-          <p className="text-[10px] text-muted px-2 pt-1">SIMULATED · click a candle to read it</p>
+          <p className="text-xs text-muted px-2 pt-1">SIMULATED · click a candle to read it</p>
           <CandlestickChart data={chart.bars} height={240} showScaleControls={false} annotations={ann} highlightIndex={bar ?? focus}
             showVolume={chart.showVolume} onSelectBar={(i) => setBar(i)} markerDecimals={2} />
         </div>

@@ -36,7 +36,7 @@ function NextObjective({ model }: { model: MapModel }) {
     <section className="rounded-xl border-2 border-primary bg-primary/10 p-4 flex flex-wrap items-center gap-3" data-testid="map-next" data-stage={n.stage.id} aria-label="Next objective">
       <span className="material-symbols-outlined text-primary text-[28px]" aria-hidden>flag</span>
       <div className="flex-1 min-w-[200px]">
-        <p className="text-[11px] font-mono uppercase tracking-wide text-primary">Next objective</p>
+        <p className="text-xs font-mono uppercase tracking-wide text-primary">Next objective</p>
         <p className="text-[15px] font-semibold">{n.stage.title}</p>
         <p className="text-[12px] text-muted">
           {sentence(n.stage.teaser)}
@@ -86,10 +86,10 @@ function WorldMap({ model }: { model: MapModel }) {
             <div className="flex items-center gap-2">
               <span className="material-symbols-outlined text-primary" aria-hidden>{r.region.icon}</span>
               <h2 id={`region-${r.region.id}`} className="text-[14px] font-semibold flex-1">{r.region.name}</h2>
-              {r.finished ? <span className="text-[11px] rounded-full bg-emerald-500 text-white px-2 py-0.5">Finished</span> : null}
+              {r.finished ? <span className="text-xs rounded-full bg-emerald-500 text-white px-2 py-0.5">Finished</span> : null}
             </div>
             <p className="text-[12px] text-muted">{r.region.blurb}</p>
-            <div className="flex items-center gap-2 text-[11px] tabular-nums">
+            <div className="flex items-center gap-2 text-xs tabular-nums">
               <div className="flex-1 h-2 rounded-full bg-canvas border border-line overflow-hidden" role="progressbar" aria-label={`${r.region.name} complete`} aria-valuemin={0} aria-valuemax={100} aria-valuenow={r.pct}>
                 <div className="h-full bg-emerald-500" style={{ width: `${r.pct}%` }} />
               </div>
@@ -125,7 +125,7 @@ function SkillTree({ model }: { model: MapModel }) {
     <div className="flex flex-col sm:flex-row gap-3 sm:overflow-x-auto pb-2" data-testid="map-tree">
       {tiers.map((ids, d) => (
         <section key={d} className="sm:min-w-[200px] sm:w-[200px] space-y-2" aria-label={`Tier ${d + 1}`}>
-          <h2 className="text-[11px] font-mono uppercase tracking-wide text-muted">Tier {d + 1}</h2>
+          <h2 className="text-xs font-mono uppercase tracking-wide text-muted">Tier {d + 1}</h2>
           <ul className="grid grid-cols-1 min-[480px]:grid-cols-2 sm:grid-cols-1 gap-2">
             {ids.map((id) => {
               const s = model.states[id];
@@ -144,9 +144,9 @@ function SkillTree({ model }: { model: MapModel }) {
                       <span className="material-symbols-outlined text-[15px]" aria-hidden>{STATUS_ICON[s.status]}</span>
                       {s.stage.title}
                     </span>
-                    <span className="block text-[11px]">{STATUS_LABEL[s.status]}{s.stage.kind === "quiz" ? " · quiz" : s.stage.kind === "lab" ? " · practice" : ""}</span>
-                    {s.status === "locked" && needs.length ? <span className="block text-[11px] text-muted">After: {needs.join(", ")}</span> : null}
-                    {unlocks.length ? <span className="block text-[11px] text-muted">Unlocks → {unlocks.join(", ")}</span> : null}
+                    <span className="block text-xs">{STATUS_LABEL[s.status]}{s.stage.kind === "quiz" ? " · quiz" : s.stage.kind === "lab" ? " · practice" : ""}</span>
+                    {s.status === "locked" && needs.length ? <span className="block text-xs text-muted">After: {needs.join(", ")}</span> : null}
+                    {unlocks.length ? <span className="block text-xs text-muted">Unlocks → {unlocks.join(", ")}</span> : null}
                   </Link>
                 </li>
               );
@@ -277,7 +277,7 @@ export default function ProgressMap({ embedded = false }: { embedded?: boolean }
       <div id="map-panel" role="tabpanel" aria-label={VIEWS.find((v) => v.id === view)!.label}>
         {view === "world" ? <WorldMap model={model} /> : view === "tree" ? <SkillTree model={model} /> : <DiscoveryWeb model={model} />}
       </div>
-      <p className="text-[11px] text-muted flex flex-wrap gap-3" aria-label="Legend">
+      <p className="text-xs text-muted flex flex-wrap gap-3" aria-label="Legend">
         {(Object.keys(STATUS_LABEL) as StageStatus[]).map((s) => (
           <span key={s} className="inline-flex items-center gap-1">
             <span className="material-symbols-outlined text-[14px]" aria-hidden>{STATUS_ICON[s]}</span>

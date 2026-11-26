@@ -35,7 +35,7 @@ export default function RewardsPanel({ storage, now = new Date(), preview = read
       <div className="h-2 rounded-full bg-line overflow-hidden" aria-label={`Progress to the next rank ${Math.round(rank.progress * 100)}%`}>
         <div className="h-full bg-sim" style={{ width: `${Math.round(rank.progress * 100)}%` }} />
       </div>
-      <p className="text-[11px] text-muted">
+      <p className="text-xs text-muted">
         {rank.next === null ? "Top rank reached." : `${rank.next - pts} points to the next rank.`} Units {by["unit-mastered"]} · test-outs {by["test-out"]} · challenges {by["challenge-passed"]} · daily {by["daily-goal"]} · options {by["options-level"]} · other {by["first-order"] + by["retro-credit"]}
       </p>
       <ul className="grid grid-cols-3 sm:grid-cols-6 lg:grid-cols-8 gap-2" aria-label="Badges">
@@ -47,13 +47,13 @@ export default function RewardsPanel({ storage, now = new Date(), preview = read
               <span className={cn("material-symbols-outlined", got ? "text-sim" : open ? "text-primary" : "text-muted")} aria-hidden>
                 {open ? b.icon : "lock"}
               </span>
-              <p className="text-[11px] font-semibold leading-tight">{b.name}</p>
-              {!got ? <p className="text-[10px] text-muted leading-tight">{preview ? "Preview" : b.hint}</p> : null}
+              <p className="text-xs font-semibold leading-tight">{b.name}</p>
+              {!got ? <p className="text-xs text-muted leading-tight">{preview ? "Preview" : b.hint}</p> : null}
             </li>
           );
         })}
       </ul>
-      <p className="text-[11px] text-muted" data-testid="points-disclaimer">
+      <p className="text-xs text-muted" data-testid="points-disclaimer">
         {POINTS_DISCLAIMER}
       </p>
     </section>

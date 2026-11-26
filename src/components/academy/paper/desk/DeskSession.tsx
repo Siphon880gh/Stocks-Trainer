@@ -112,7 +112,7 @@ export default function DeskSession({ log, onLog, toolbar }: Props) {
     <div className="space-y-3" data-testid="desk-session" data-bar={log.bar} data-scenario={scenario.id} data-active={active}>
       <SimulatedBanner />
       <div className="flex flex-wrap items-center gap-2">
-        <span className={cn("text-[11px] font-semibold px-1.5 py-0.5 rounded border", scenario.kind === "historical" ? "border-ink/40" : "border-sim text-sim")} data-testid="desk-kind">
+        <span className={cn("text-xs font-semibold px-1.5 py-0.5 rounded border", scenario.kind === "historical" ? "border-ink/40" : "border-sim text-sim")} data-testid="desk-kind">
           {scenario.kind === "historical" ? "HISTORICAL replay" : "SIMULATED"}
         </span>
         <p className="font-semibold text-[14px]">{scenario.title}</p>
@@ -174,7 +174,7 @@ export default function DeskSession({ log, onLog, toolbar }: Props) {
                 {sym.name} <span className="text-muted font-normal">({active})</span>
               </p>
               <div className="flex-1" />
-              <div className="flex gap-1 text-[11px]" role="group" aria-label="Chart range">
+              <div className="flex gap-1 text-xs" role="group" aria-label="Chart range">
                 {RANGES.map(([l, n]) => (
                   <button key={l} type="button" onClick={() => setRange(n)} aria-pressed={range === n} className={cn("px-1.5 py-0.5 rounded border", range === n ? "border-sim bg-sim/10" : "border-line")}>
                     {l}
@@ -185,7 +185,7 @@ export default function DeskSession({ log, onLog, toolbar }: Props) {
             <div data-testid="desk-chart" data-tour="desk-chart" data-executions={annotations.points?.length ?? 0} data-events={annotations.events?.length ?? 0}>
               <CandlestickChart data={data} height={320} markers={markers} markerDecimals={2} padRightBars={4} showScaleControls={false} annotations={annotations} showVolume={!!sym.volumes} />
             </div>
-            <p className="text-[11px] text-muted px-1">B / S circles are your fills; dashed lines are working orders; vertical lines mark news days.</p>
+            <p className="text-xs text-muted px-1">B / S circles are your fills; dashed lines are working orders; vertical lines mark news days.</p>
           </div>
           <AccountSummary state={state} />
           <div data-tour="desk-account">

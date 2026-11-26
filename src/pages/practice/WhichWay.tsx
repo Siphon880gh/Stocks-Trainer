@@ -118,7 +118,7 @@ export default function PracticeWhichWay() {
         <div className="flex flex-wrap items-baseline justify-between gap-2">
           <h2 className="text-[15px] font-semibold">
             {round.name}
-            <span className="ml-2 text-[11px] font-normal text-muted" data-testid="ww-position">
+            <span className="ml-2 text-xs font-normal text-muted" data-testid="ww-position">
               {idx + 1} / {rounds.length}
             </span>
           </h2>
@@ -127,7 +127,7 @@ export default function PracticeWhichWay() {
           </span>
         </div>
         <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
-          <p className="text-[10px] text-muted px-2 pt-1">
+          <p className="text-xs text-muted px-2 pt-1">
             SIMULATED · first {round.lead} candles = prior trend · highlighted = the bar that completes the pattern
           </p>
           <CandlestickChart data={round.bars} height={220} showScaleControls={false} compact highlightIndex={round.end} />
@@ -152,7 +152,7 @@ export default function PracticeWhichWay() {
               )}
             >
               <span aria-hidden>{DIRECTION_ARROW[d]}</span> {DIRECTION_LABEL[d]}
-              <span className="block text-[10px] font-normal text-muted">{KEYS[d]}</span>
+              <span className="block text-xs font-normal text-muted">{KEYS[d]}</span>
             </button>
           ))}
         </div>

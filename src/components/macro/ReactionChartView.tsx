@@ -32,7 +32,7 @@ export default function ReactionChartView({
       <figcaption className="flex flex-wrap items-baseline gap-x-2 text-[13px]">
         <span className="font-semibold">{INSTRUMENT_NAMES[instrument]}</span>
         <span className="text-muted">5-minute bars{isYield ? " · yield in %" : ""} · {e.period} release</span>
-        <span className="ml-auto text-[11px] font-bold text-amber-800 bg-amber-50 border border-amber-300 rounded px-1">SIMULATED</span>
+        <span className="ml-auto text-xs font-bold text-amber-800 bg-amber-50 border border-amber-300 rounded px-1">SIMULATED</span>
       </figcaption>
       <CandlestickChart
         data={bars}

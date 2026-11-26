@@ -95,12 +95,12 @@ export default function PracticeGammaSqueeze({ initialAnswers = {} as Partial<Re
           A trader sees chatter about {SQZ_TICKER} and a wave of call buying in Friday's strikes. The story you may have heard: {usd(t.cost)} of weekly out-of-the-money calls turned into about {usd(t.exitValue)} and was sold the same afternoon. Play it forward one decision at a time.
         </p>
         <CandlestickChart data={SQZ_BARS.slice(0, shownTo + 1)} height={260} markers={markers} showVolume highlightIndex={shownTo} markerDecimals={0} />
-        <p className="text-[11px] text-muted">Call contracts traded per bar (all strikes), {SQZ_LABEL}</p>
+        <p className="text-xs text-muted">Call contracts traded per bar (all strikes), {SQZ_LABEL}</p>
         <CallVolumeStrip bars={SQZ_BARS.slice(0, shownTo + 1)} mark={shownTo} />
 
         {current ? (
           <div className="panel p-3 space-y-2" data-testid={`sqz-step-${current.id}`}>
-            <p className="text-[11px] text-muted tabular-nums">Decision {step + 1} of {SQZ_DECISIONS.length}</p>
+            <p className="text-xs text-muted tabular-nums">Decision {step + 1} of {SQZ_DECISIONS.length}</p>
             <p className="text-[13px] font-medium">{current.prompt}</p>
             {current.id === "enter" ? (
               <p className="text-[12px] text-muted tabular-nums">
@@ -150,7 +150,7 @@ export default function PracticeGammaSqueeze({ initialAnswers = {} as Partial<Re
               </li>
               <li>After the peak the call buying faded, the stock gave back part of the move, and the calls lost value fast.</li>
             </ul>
-            <p className="text-[11px] text-muted">Value of the {t.contracts} calls through the day ({SQZ_LABEL}). Dashed line: what was paid. Blue line: the exit.</p>
+            <p className="text-xs text-muted">Value of the {t.contracts} calls through the day ({SQZ_LABEL}). Dashed line: what was paid. Blue line: the exit.</p>
             <ValueLines upTo={77} />
             <p className="text-[12px] text-muted">Option values are Black-Scholes mids on made-up volatility. Real weekly options have wide bid-ask spreads, so fills are worse than mids, especially in a fast market.</p>
           </section>
@@ -161,7 +161,7 @@ export default function PracticeGammaSqueeze({ initialAnswers = {} as Partial<Re
               Same entry, same calls. The call buying dries up before noon, the stock drifts back to {STALL_BARS[77]!.close.toFixed(2)} by Thursday's close and {STALL_EXPIRY_PRICE.toFixed(2)} at Friday's close. At 1:00 PM ET the calls are worth ${t.stallExitPremium.toFixed(2)} each; at Thursday's close about {usd(t.stallThursdayValue)} in total; at expiry, below the {CALL_STRIKE} strike, {usd(t.stallExpiryValue)}. The whole {usd(t.cost)} is gone.
             </p>
             <CandlestickChart data={STALL_BARS} height={200} markers={markers} highlightIndex={ENTRY_BAR} markerDecimals={0} />
-            <p className="text-[11px] text-muted">Green: the squeeze path. Red: the stall path. Same calls, same entry.</p>
+            <p className="text-xs text-muted">Green: the squeeze path. Red: the stall path. Same calls, same entry.</p>
             <ValueLines upTo={77} stall />
           </section>
 
@@ -199,7 +199,7 @@ export default function PracticeGammaSqueeze({ initialAnswers = {} as Partial<Re
               <Link to="/training?group=trading-risk&start=1" className="text-primary underline">Learn · Trading risk</Link> ·{" "}
               <Link to="/academy/options" className="text-primary underline">Academy · Options ladder</Link>
             </p>
-            <p className="text-[11px] text-muted">
+            <p className="text-xs text-muted">
               Sources:{" "}
               <a className="underline" target="_blank" rel="noopener noreferrer" href="https://www.sec.gov/files/staff-report-equity-options-market-struction-conditions-early-2021.pdf">SEC staff report on early-2021 market conditions (Oct 2021)</a> ·{" "}
               <a className="underline" target="_blank" rel="noopener noreferrer" href="https://www.optionseducation.org/advancedconcepts/gamma">OIC: Gamma</a> ·{" "}

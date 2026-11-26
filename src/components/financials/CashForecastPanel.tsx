@@ -67,7 +67,7 @@ export default function CashForecastPanel({ forecasts = CASH_FORECASTS, initialI
       </div>
 
       <fieldset className="flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-ink" data-testid="what-if">
-        <legend className="text-[10px] uppercase tracking-wider text-muted mb-1">What if…</legend>
+        <legend className="text-xs uppercase tracking-wider text-muted mb-1">What if…</legend>
         <label className="flex items-center gap-1">
           <input type="checkbox" checked={!!whatIf.delayCollections} onChange={() => toggle("delayCollections", false)} />
           customers pay one week later

@@ -74,7 +74,7 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
                 {pattern.type} • {pattern.confirmation.replace("_", " ")} confirmation
               </span>
               {pattern.rare ? (
-                <span className="text-[10px] font-mono uppercase tracking-wide rounded border border-amber-500/60 text-amber-600 px-1.5 py-0.5">
+                <span className="text-xs font-mono uppercase tracking-wide rounded border border-amber-500/60 text-amber-600 px-1.5 py-0.5">
                   Advanced / rare
                 </span>
               ) : null}
@@ -83,7 +83,7 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
                 if (!fit) return null;
                 return (
                   <span
-                    className={`text-[10px] font-mono uppercase tracking-wide rounded border px-1.5 py-0.5 ${
+                    className={`text-xs font-mono uppercase tracking-wide rounded border px-1.5 py-0.5 ${
                       fit === "works"
                         ? "border-emerald-500/60 text-emerald-600"
                         : fit === "adapted"
@@ -100,13 +100,13 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
             </div>
             {pattern.themes ? (
               <div className="flex flex-wrap items-center gap-1.5" data-testid="pattern-themes">
-                <span className="text-[10px] font-mono uppercase tracking-wide text-muted">Themes</span>
+                <span className="text-xs font-mono uppercase tracking-wide text-muted">Themes</span>
                 {[pattern.themes.primary, ...pattern.themes.secondary].map((id, i) => (
                   <Link
                     key={id}
                     to={`/practice/pattern-themes?theme=${id}`}
                     data-testid={i === 0 ? "pattern-theme-primary" : "pattern-theme-secondary"}
-                    className={`text-[11px] rounded-full border px-2 py-0.5 ${i === 0 ? "border-primary bg-primary/10 text-primary font-semibold" : "border-line text-muted"}`}
+                    className={`text-xs rounded-full border px-2 py-0.5 ${i === 0 ? "border-primary bg-primary/10 text-primary font-semibold" : "border-line text-muted"}`}
                     title={getTheme(id)?.question}
                   >
                     {i === 0 ? "Primary: " : ""}{getTheme(id)?.short ?? id}
@@ -115,14 +115,14 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
               </div>
             ) : null}
             {aliasesFor(pattern.id).length ? (
-              <p className="text-[11px] text-muted" data-testid="pattern-aliases">
-                <span className="font-mono uppercase tracking-wide text-[10px]">Also called</span>{" "}
+              <p className="text-xs text-muted" data-testid="pattern-aliases">
+                <span className="font-mono uppercase tracking-wide text-xs">Also called</span>{" "}
                 <span className="text-ink">{aliasesFor(pattern.id).join(" · ")}</span>
               </p>
             ) : null}
             {pattern.potentialDirection ? (
-              <p className="text-[11px] text-muted" data-testid="pattern-direction" data-direction={pattern.potentialDirection}>
-                <span className="font-mono uppercase tracking-wide text-[10px]">Potential direction</span>{" "}
+              <p className="text-xs text-muted" data-testid="pattern-direction" data-direction={pattern.potentialDirection}>
+                <span className="font-mono uppercase tracking-wide text-xs">Potential direction</span>{" "}
                 <Link to="/practice/which-way" className="font-semibold text-ink hover:text-primary">
                   {DIRECTION_ARROW[pattern.potentialDirection]} {DIRECTION_LABEL[pattern.potentialDirection]}
                 </Link>
@@ -136,7 +136,7 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
             ) : null}
             {ill.bars.length ? (
               <div className="rounded-lg bg-background-dark border border-line overflow-hidden" data-testid="pattern-illustration">
-                <p className="text-[10px] text-muted px-2 pt-1">
+                <p className="text-xs text-muted px-2 pt-1">
                   SIMULATED illustration{ill.confirmIndex != null ? " · last candle = confirmation" : ""}
                 </p>
                 {ill.bars.some((b) => b.volume) ? (
@@ -168,7 +168,7 @@ export default function PatternDetailModal({ pattern, onClose, initialTab = "rec
           </div>
           <div role="tabpanel" data-testid="pattern-tabpanel" data-tab={tab} className="text-ink text-sm leading-relaxed space-y-2">
             {tabs.general ? (
-              <p className="text-[11px] text-muted">General guide for this pattern family; check the description for this pattern's own rules.</p>
+              <p className="text-xs text-muted">General guide for this pattern family; check the description for this pattern's own rules.</p>
             ) : null}
             {tab === "recognise" ? (
               <ul className="list-disc pl-5 space-y-1">

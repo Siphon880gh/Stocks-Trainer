@@ -37,7 +37,7 @@ export default function ReactionRulesTable() {
               <tr key={r.regime} className="border-b border-line/60 align-top">
                 <td className="py-1.5 px-2 w-48">
                   <p className="font-semibold">{REGIME_NAMES[r.regime]}</p>
-                  <p className="text-[11px] text-muted">{REGIME_BLURB[r.regime]}</p>
+                  <p className="text-xs text-muted">{REGIME_BLURB[r.regime]}</p>
                 </td>
                 {r.cells.map((c) => (
                   <td key={`${c.cls}-${c.label}`} className="py-1.5 px-2">

@@ -58,12 +58,12 @@ export default function CashForecastTable({ result, showCallout = true, hideBrea
       <div className="px-3 py-2 border-b border-line flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="text-[13px] font-semibold text-ink">
           {input.title}
-          {input.ticker ? <span className="ml-1 font-mono text-[10px] text-muted">{input.ticker}</span> : null}
+          {input.ticker ? <span className="ml-1 font-mono text-xs text-muted">{input.ticker}</span> : null}
         </h3>
-        <span className="text-[10px] text-muted font-mono">$ thousands · 13 weeks</span>
+        <span className="text-xs text-muted font-mono">$ thousands · 13 weeks</span>
       </div>
       <div className="overflow-x-auto [contain:inline-size]">
-        <table className="w-full text-[11px] font-mono tabular-nums border-collapse">
+        <table className="w-full text-xs font-mono tabular-nums border-collapse">
           <thead>
             <tr className="text-muted">
               <th className="sticky left-0 bg-surface text-left font-normal px-2 py-1.5 min-w-[132px]">Week</th>
@@ -83,7 +83,7 @@ export default function CashForecastTable({ result, showCallout = true, hideBrea
               if (row.kind === "section")
                 return (
                   <tr key={`s-${ri}`} className="bg-canvas">
-                    <td colSpan={weeks.length + 1} className="sticky left-0 px-3 py-1 text-[10px] uppercase tracking-wider text-muted">
+                    <td colSpan={weeks.length + 1} className="sticky left-0 px-3 py-1 text-xs uppercase tracking-wider text-muted">
                       {row.label}
                     </td>
                   </tr>
@@ -129,7 +129,7 @@ export default function CashForecastTable({ result, showCallout = true, hideBrea
         </p>
       ) : null}
       {input.notes?.length ? (
-        <ul className="px-3 py-2 text-[11px] text-muted border-t border-line list-disc pl-6">
+        <ul className="px-3 py-2 text-xs text-muted border-t border-line list-disc pl-6">
           {input.notes.map((n) => (
             <li key={n}>{n}</li>
           ))}

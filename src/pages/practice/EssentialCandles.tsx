@@ -41,7 +41,7 @@ function StarDiagram({ bars, labels, title, testId }: { bars: OHLC[]; labels: st
         <text x={xs[0] - 16} y={y(bars[0].open) + 3} fontSize="8" textAnchor="end" fill="currentColor">Open</text>
         <text x={xs[0] - 16} y={y(bars[0].close) + 3} fontSize="8" textAnchor="end" fill="currentColor">Close</text>
       </svg>
-      <figcaption className="text-[11px] text-muted">SIMULATED · {title}</figcaption>
+      <figcaption className="text-xs text-muted">SIMULATED · {title}</figcaption>
     </figure>
   );
 }
@@ -121,7 +121,7 @@ export default function PracticeEssentialCandles() {
               <article key={e.id} className="panel p-3 space-y-1 text-[13px]" data-testid="ec-card" data-id={e.id}>
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
                   <h3 className="font-semibold">{e.name}</h3>
-                  <span className={cn("text-[11px] rounded-full px-2 py-0.5", e.bias === "bullish" ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" : e.bias === "bearish" ? "bg-rose-500/15 text-rose-700 dark:text-rose-300" : "bg-slate-500/15")}>{e.bias === "neutral" ? "indecision / either way" : e.bias}</span>
+                  <span className={cn("text-xs rounded-full px-2 py-0.5", e.bias === "bullish" ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" : e.bias === "bearish" ? "bg-rose-500/15 text-rose-700 dark:text-rose-300" : "bg-slate-500/15")}>{e.bias === "neutral" ? "indecision / either way" : e.bias}</span>
                 </div>
                 <p><strong>Shape:</strong> {e.rule}</p>
                 <p><strong>Means:</strong> {e.meaning}</p>

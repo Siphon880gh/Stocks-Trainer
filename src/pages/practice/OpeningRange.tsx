@@ -61,7 +61,7 @@ export default function PracticeOpeningRange() {
           ))}
         </ol>
         <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
-          <p className="text-[10px] text-muted px-2 pt-1">SIMULATED SPY.S, 15-minute candles (ET)</p>
+          <p className="text-xs text-muted px-2 pt-1">SIMULATED SPY.S, 15-minute candles (ET)</p>
           <CandlestickChart
             data={example.bars}
             annotations={mergeAnnotations(exampleAnn.before, exampleAnn.reveal)}
@@ -77,7 +77,7 @@ export default function PracticeOpeningRange() {
         <p className="text-[12px]">
           Glossary: {term("opening-range", "opening range")} · {term("opening-range-breakout", "opening range breakout")} · {term("strike-price", "strike price")}
         </p>
-        <p className="text-[11px] text-muted" data-testid="orb-source">
+        <p className="text-xs text-muted" data-testid="orb-source">
           Idea from a{" "}
           <a href={ORB_SOURCE.url} target="_blank" rel="noreferrer" className="text-primary underline">public Facebook reel</a>{" "}
           (may ask you to log in). {ORB_SOURCE.note}
@@ -118,13 +118,13 @@ export default function PracticeOpeningRange() {
             </tbody>
           </table>
         </div>
-        <p className="text-[11px] text-muted">
+        <p className="text-xs text-muted">
           Black-Scholes with an assumed {ORB_OPTION_EXAMPLE.vol * 100}% volatility and no rates; real quotes add a bid-ask spread. Read more: {term("underlying-vs-premium-rr", "underlying vs premium")} · {term("gamma", "delta and gamma")} · {term("short-dated-option", "short-dated options")} · {term("pattern-day-trader", "the PDT rule (FINRA-sourced)")}
         </p>
       </section>
 
       <section className="panel p-4 space-y-3 text-[13px]" data-testid="orb-drills">
-        <p className="text-[11px] text-muted">SIMULATED SPY.S · legacy model · 15-minute candles, Eastern start times. These drills test the stated close-only rules, not the confirmation variant above.</p>
+        <p className="text-xs text-muted">SIMULATED SPY.S · legacy model · 15-minute candles, Eastern start times. These drills test the stated close-only rules, not the confirmation variant above.</p>
         <p className="font-semibold text-[14px]">Your call at the highlighted candle</p>
         {ORB_SESSIONS.map((s) => {
           const picked = picks[s.id];

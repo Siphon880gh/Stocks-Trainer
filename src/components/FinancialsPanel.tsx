@@ -28,25 +28,25 @@ export default function FinancialsPanel({ data }: FinancialsPanelProps) {
         <div className="p-3 rounded border border-line bg-canvas">
           <p className="text-[12px] text-muted">E/P</p>
           <p className="text-lg font-semibold tabular-nums">{ep.toFixed(2)}%</p>
-          <p className="text-[10px] text-slate-500">Earnings ÷ Price</p>
+          <p className="text-xs text-slate-500">Earnings ÷ Price</p>
         </div>
         <div className="p-3 rounded border border-line bg-canvas">
           <p className="text-[12px] text-muted">P/E</p>
           <p className="text-lg font-semibold tabular-nums">{pe.toFixed(1)}</p>
-          <p className="text-[10px] text-slate-500">Price ÷ Earnings</p>
+          <p className="text-xs text-slate-500">Price ÷ Earnings</p>
         </div>
         <div className="p-3 rounded border border-line bg-canvas">
           <p className="text-[12px] text-muted">Sharpe</p>
           <p className="text-lg font-semibold tabular-nums">{sharpe.toFixed(2)}</p>
-          <p className="text-[10px] text-slate-500">Risk-adjusted return</p>
+          <p className="text-xs text-slate-500">Risk-adjusted return</p>
         </div>
         <div className="p-3 rounded border border-line bg-canvas">
           <p className="text-[12px] text-muted">Vol (ann.)</p>
           <p className="text-lg font-semibold tabular-nums">{vol.toFixed(1)}%</p>
-          <p className="text-[10px] text-slate-500">Annualized volatility</p>
+          <p className="text-xs text-slate-500">Annualized volatility</p>
         </div>
       </div>
-      <p className="text-[10px] text-slate-500 mt-2">
+      <p className="text-xs text-slate-500 mt-2">
         E/P: higher = cheaper. Sharpe: &gt;1 = good risk-adjusted. Vol: lower = less risk.
       </p>
     </div>

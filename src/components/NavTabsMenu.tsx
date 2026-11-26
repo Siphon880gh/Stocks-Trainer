@@ -174,7 +174,7 @@ export default function NavTabsMenu({
         <div className="grid gap-x-4 sm:grid-cols-2">
           {groupItems(list).map((g) => (
             <div key={g.title} role="group" aria-label={g.title} className="pb-1">
-              <p className="pt-1.5 pb-0.5 text-[11px] font-semibold uppercase tracking-wide text-muted">{g.title}</p>
+              <p className="pt-1.5 pb-0.5 text-xs font-semibold uppercase tracking-wide text-muted">{g.title}</p>
               <ul>
                 {g.items.map((item) => (
                   <li key={item.to + item.label}>
@@ -188,7 +188,7 @@ export default function NavTabsMenu({
                       )}
                     >
                       <span className="block text-[13px] font-medium leading-snug">{item.label}</span>
-                      <span className="block text-[11px] text-muted leading-snug truncate">{item.desc}</span>
+                      <span className="block text-xs text-muted leading-snug truncate">{item.desc}</span>
                     </Link>
                   </li>
                 ))}

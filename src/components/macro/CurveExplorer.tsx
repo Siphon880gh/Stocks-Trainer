@@ -31,7 +31,7 @@ export default function CurveExplorer({ initial }: Props) {
     <section className="panel p-4 space-y-3" aria-label="Yield-curve explorer" data-testid="curve-explorer">
       <div className="flex items-baseline justify-between gap-2">
         <h2 className="text-[15px] font-semibold">Yield-curve explorer</h2>
-        <span className="text-[11px] text-muted">What-if tool · not a forecast</span>
+        <span className="text-xs text-muted">What-if tool · not a forecast</span>
       </div>
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-3">
@@ -50,17 +50,17 @@ export default function CurveExplorer({ initial }: Props) {
       </div>
       <div className="grid sm:grid-cols-3 gap-3 text-[13px]">
         <div className="border border-line rounded-lg p-2">
-          <p className="text-muted text-[11px]">2s10s spread</p>
+          <p className="text-muted text-xs">2s10s spread</p>
           <p className={`font-mono font-semibold ${tone}`} data-testid="ce-spread">{r.spreadBp > 0 ? "+" : r.spreadBp < 0 ? "−" : ""}{Math.abs(r.spreadBp)} bp</p>
         </div>
         <div className="border border-line rounded-lg p-2">
-          <p className="text-muted text-[11px]">Curve shape</p>
+          <p className="text-muted text-xs">Curve shape</p>
           <p className={`font-semibold ${tone}`} data-testid="ce-shape">{shape.label}</p>
         </div>
         <div className="border border-line rounded-lg p-2">
-          <p className="text-muted text-[11px]">30-year mortgage estimate</p>
+          <p className="text-muted text-xs">30-year mortgage estimate</p>
           <p className="font-mono font-semibold" data-testid="ce-mortgage">{r.mortgage30.toFixed(2)}%</p>
-          <p className="text-[11px] text-muted">≈ ${r.payment.toLocaleString("en-US")}/mo on ${(d.loan / 1000).toFixed(0)}k</p>
+          <p className="text-xs text-muted">≈ ${r.payment.toLocaleString("en-US")}/mo on ${(d.loan / 1000).toFixed(0)}k</p>
         </div>
       </div>
       <p className="text-[12px] text-muted">

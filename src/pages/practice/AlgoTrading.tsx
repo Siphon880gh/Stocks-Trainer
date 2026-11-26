@@ -73,7 +73,7 @@ export default function PracticeAlgoTrading() {
               <p className="font-semibold">{t.name}</p>
               <p>{t.what}</p>
               <p className="text-[12px]"><span className="font-medium">Fix:</span> {t.fix}</p>
-              <p className="text-[11px]">{ext(t.source)}</p>
+              <p className="text-xs">{ext(t.source)}</p>
             </div>
           ))}
         </div>
@@ -88,7 +88,7 @@ export default function PracticeAlgoTrading() {
         <div className="grid sm:grid-cols-2 gap-2">
           {LEGAL_RULES.map((l) => (
             <div key={l.name} className="panel p-3 space-y-1">
-              <p className="font-semibold">{l.name}</p><p>{l.text}</p><p className="text-[11px]">{ext(l.source)}</p>
+              <p className="font-semibold">{l.name}</p><p>{l.text}</p><p className="text-xs">{ext(l.source)}</p>
             </div>
           ))}
         </div>

@@ -72,7 +72,7 @@ export default function PracticeNewsBiases() {
               <p className="text-[12px]"><span className="font-medium">News example:</span> {b.newsExample}</p>
               <p className="text-[12px]"><span className="font-medium">Countermeasure:</span> {b.countermeasure}</p>
               {b.source ? (
-                <a href={b.source.url} target="_blank" rel="noopener noreferrer" className="text-[11px] text-muted underline">{b.source.label}</a>
+                <a href={b.source.url} target="_blank" rel="noopener noreferrer" className="text-xs text-muted underline">{b.source.label}</a>
               ) : null}
             </div>
           ))}
@@ -167,7 +167,7 @@ export default function PracticeNewsBiases() {
           <Link to="/training?group=news-biases&start=1" className="text-primary underline">Learn · News, Biases & Short-Term Options</Link> ·{" "}
           <Link to="/coach/news-day-decision" className="text-primary underline">Coach · A news-day decision</Link>
         </p>
-        <p className="text-[11px] text-muted">
+        <p className="text-xs text-muted">
           Sources:{" "}
           {NEWS_BIAS_SOURCES.map((s, i) => (
             <span key={s.url}>

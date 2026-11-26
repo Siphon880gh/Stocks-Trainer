@@ -55,7 +55,7 @@ export default function StatementReader({
             aria-pressed={c.id === company.id}
             className={`px-3 py-1.5 rounded-lg border text-[12px] ${c.id === company.id ? "border-primary bg-primary/10 text-ink font-semibold" : "border-line bg-surface text-muted hover:text-ink"}`}
           >
-            {c.name} <span className="font-mono text-[10px]">{c.ticker}</span>
+            {c.name} <span className="font-mono text-xs">{c.ticker}</span>
           </button>
         ))}
       </div>
@@ -80,7 +80,7 @@ export default function StatementReader({
             {t.label}
           </button>
         ))}
-        <label className="ml-auto flex items-center gap-1 text-[11px] text-muted pb-1">
+        <label className="ml-auto flex items-center gap-1 text-xs text-muted pb-1">
           <input type="checkbox" checked={!latestFour} onChange={(e) => setLatestFour(!e.target.checked)} />
           All {total} quarters
         </label>

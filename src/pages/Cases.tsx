@@ -106,12 +106,12 @@ export default function Cases() {
               : null}
           </p>
           {focusPack ? (
-            <p className="text-[11px] text-primary/70 mt-2">
+            <p className="text-xs text-primary/70 mt-2">
               Showing: {CASE_PACKS.find((p) => p.id === focusPack)?.name ?? focusPack}
             </p>
           ) : null}
           {marketClass ? (
-            <p className="text-[11px] text-primary/70 mt-2">
+            <p className="text-xs text-primary/70 mt-2">
               Showing: {NAVIGATOR_CLASS_LABELS[marketClass]}
               {marketClass === "forex"
                 ? ". Practice only, not a live FX desk."
@@ -181,7 +181,7 @@ export default function Cases() {
           </div>
         ) : null}
 
-        <p className="text-[11px] text-primary/60">
+        <p className="text-xs text-primary/60">
           Tip:{" "}
           <Link to="/coach/chase-vs-fade" className="underline text-primary">
             walk through chase vs fade

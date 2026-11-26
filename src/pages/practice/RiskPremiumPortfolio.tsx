@@ -74,7 +74,7 @@ export default function PracticeRiskPremiumPortfolio() {
         <p className="text-[12px] text-muted">
           Weights set by each asset's economic role, not by what backtested best. Glossary: {term("risk-premium", "risk premium")} · {term("risk-parity", "risk parity / All Weather")} · {term("diversification", "diversification")} · {term("etf", "ETF")}
         </p>
-        <p className="text-[11px] text-muted" data-testid="rpp-source">
+        <p className="text-xs text-muted" data-testid="rpp-source">
           From{" "}
           <a href={RPP_VIDEO.watchUrl} target="_blank" rel="noreferrer" className="text-primary underline">{RPP_VIDEO.title}</a>{" "}
           by{" "}
@@ -101,7 +101,7 @@ export default function PracticeRiskPremiumPortfolio() {
         <p className="text-[12px]">
           The video moves a weak slice to cash but does not give its lookbacks. A common textbook version: at each month-end, hold the asset if its price is above its {RPP_TREND_LOOKBACK}-month simple moving average, otherwise hold cash.
         </p>
-        <div className="flex flex-wrap gap-1 text-[11px]" data-testid="rpp-trend-months">
+        <div className="flex flex-wrap gap-1 text-xs" data-testid="rpp-trend-months">
           {RPP_TREND_SAMPLE.map((c, i) => (
             <span
               key={i}

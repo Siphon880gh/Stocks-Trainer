@@ -21,7 +21,7 @@ const OUTCOME_STYLE: Record<Outcome | "raise" | "maintain" | "cut", string> = {
 };
 
 function Chip({ kind }: { kind: keyof typeof OUTCOME_STYLE }) {
-  return <span className={`px-1.5 py-0.5 rounded border text-[10px] uppercase tracking-wider font-semibold ${OUTCOME_STYLE[kind]}`}>{kind}</span>;
+  return <span className={`px-1.5 py-0.5 rounded border text-xs uppercase tracking-wider font-semibold ${OUTCOME_STYLE[kind]}`}>{kind}</span>;
 }
 
 function Term({ id, children }: { id: string; children: string }) {
@@ -47,7 +47,7 @@ function RangeBar({ range, ticks }: { range: GuidanceRange; ticks: { value: numb
       {ticks.map((t) => (
         <div key={t.label} className="absolute top-1 flex flex-col items-center -translate-x-1/2" style={{ left: pos(t.value) }}>
           <div className={`w-0.5 h-4 ${toneClass[t.tone]}`} />
-          <span className="text-[9px] text-muted whitespace-nowrap">{t.label}</span>
+          <span className="text-xs text-muted whitespace-nowrap">{t.label}</span>
         </div>
       ))}
     </div>
@@ -65,10 +65,10 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
       <div className="px-3 py-2 border-b border-line flex flex-wrap items-baseline justify-between gap-2">
         <h3 className="text-[13px] font-semibold text-ink">
           {revealActuals ? "Results vs expectations" : "Earnings preview"} · {r.company.name}{" "}
-          <span className="font-mono text-[10px] text-muted">{r.company.ticker}</span> · {r.quarter.label}
+          <span className="font-mono text-xs text-muted">{r.company.ticker}</span> · {r.quarter.label}
         </h3>
         <span className="flex items-center gap-2">
-          <span className="text-[10px] text-muted font-mono">EPS in $ · revenue in $ thousands</span>
+          <span className="text-xs text-muted font-mono">EPS in $ · revenue in $ thousands</span>
           <SampleDataNote placement="inline" text={FIN_DISCLAIMER} />
         </span>
       </div>
@@ -81,7 +81,7 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
 
       <div className={`grid gap-3 p-3 ${compact ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"}`}>
         <div className="space-y-1 text-[12px]">
-          <p className="text-[10px] uppercase tracking-wider text-muted">
+          <p className="text-xs uppercase tracking-wider text-muted">
             <Term id="consensus-estimate">Consensus</Term>
           </p>
           <table className="w-full font-mono tabular-nums">
@@ -102,7 +102,7 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
                   <td className="text-slate-300 py-0.5">Whisper EPS</td>
                   <td className="text-right text-ink">{fmtEps(x.whisperEps)}</td>
                   {revealActuals ? (
-                    <td className="text-right pl-3 text-[11px] text-muted">{r.actualEps >= x.whisperEps ? "met whisper" : "missed whisper"}</td>
+                    <td className="text-right pl-3 text-xs text-muted">{r.actualEps >= x.whisperEps ? "met whisper" : "missed whisper"}</td>
                   ) : null}
                 </tr>
               ) : null}
@@ -118,14 +118,14 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
             </tbody>
           </table>
           {revealActuals && r.epsSurprise !== null ? (
-            <p className="text-[11px] text-muted">
+            <p className="text-xs text-muted">
               <Term id="earnings-surprise">Surprise</Term>: EPS {fmtPct(r.epsSurprise)} · revenue {fmtPct(r.revenueSurprise)}
             </p>
           ) : null}
         </div>
 
         <div className="space-y-1 text-[12px]">
-          <p className="text-[10px] uppercase tracking-wider text-muted">
+          <p className="text-xs uppercase tracking-wider text-muted">
             <Term id="guidance">Company guidance</Term> for {r.quarter.label} {revenueLabelOf(r.company)}
           </p>
           <p className="font-mono tabular-nums text-ink">
@@ -140,7 +140,7 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
           />
           {revealActuals ? (
             <div className="pt-1" data-testid="new-guidance">
-              <p className="text-[11px] text-slate-300">
+              <p className="text-xs text-slate-300">
                 Next quarter: {fmtK(event.newGuidance.low)} – {fmtK(event.newGuidance.high)} (mid {fmtK(midpoint(event.newGuidance))}) vs street{" "}
                 {fmtK(event.nextQuarterConsensusRevenue)} <Chip kind={r.guidance} />
               </p>
@@ -149,7 +149,7 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
         </div>
 
         <div className="space-y-1 text-[12px]">
-          <p className="text-[10px] uppercase tracking-wider text-muted">
+          <p className="text-xs uppercase tracking-wider text-muted">
             <Term id="kpi">KPI watch</Term>
           </p>
           <ul className="space-y-1">
@@ -163,14 +163,14 @@ export default function EarningsPreviewCard({ event, revealActuals = false, comp
                     <Chip kind={k.actual >= k.expected ? "beat" : "miss"} />
                   </span>
                 ) : null}
-                <span className="block text-[11px] text-muted">{k.why}</span>
+                <span className="block text-xs text-muted">{k.why}</span>
               </li>
             ))}
           </ul>
         </div>
 
         <div className="space-y-1 text-[12px]">
-          <p className="text-[10px] uppercase tracking-wider text-muted">Setup</p>
+          <p className="text-xs uppercase tracking-wider text-muted">Setup</p>
           <p className="text-slate-300">
             <Term id="implied-move">Implied move</Term>: <span className="font-mono text-ink">±{x.impliedMovePct}%</span>
           </p>

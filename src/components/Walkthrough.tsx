@@ -119,7 +119,7 @@ export default function Walkthrough({
         className="rounded-lg border-2 border-line bg-surface shadow-xl p-4 text-[13px] space-y-2 outline-none"
         style={{ ...style, zIndex: Z.tourPopover }}
       >
-        <p className="text-[11px] text-muted" aria-live="polite" data-testid="tour-count">
+        <p className="text-xs text-muted" aria-live="polite" data-testid="tour-count">
           Step {index + 1} of {steps.length} · {label}
         </p>
         <p className="font-semibold text-[14px]">{step.title}</p>
@@ -134,7 +134,7 @@ export default function Walkthrough({
           )}
           <button type="button" data-testid="tour-exit" onClick={onExit} className="ml-auto text-[12px] underline">Exit to explore</button>
         </div>
-        <p className="text-[10px] text-muted">← → to step · Esc to exit</p>
+        <p className="text-xs text-muted">← → to step · Esc to exit</p>
       </div>
     </>,
     document.body,

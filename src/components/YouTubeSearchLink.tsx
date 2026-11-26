@@ -26,7 +26,7 @@ export default function YouTubeSearchLink({
       className={cn(
         "inline-flex items-center justify-center shrink-0 text-muted hover:text-[#ff0000] focus-visible:text-[#ff0000] transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
         label
-          ? "h-7 gap-1.5 rounded-md border border-[#d1d4dc] bg-white px-2.5 text-[11px] font-medium hover:border-current"
+          ? "h-7 gap-1.5 rounded-md border border-[#d1d4dc] bg-white px-2.5 text-xs font-medium hover:border-current"
           : "min-h-7 min-w-7 rounded-sm p-1.5",
         className,
       )}

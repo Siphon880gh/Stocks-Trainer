@@ -91,7 +91,7 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
     >
       <div className="flex items-baseline justify-between">
         <p className="font-semibold text-[14px]">Order ticket · {symbol}</p>
-        <span className="text-[11px] text-sim font-semibold">SIMULATED</span>
+        <span className="text-xs text-sim font-semibold">SIMULATED</span>
       </div>
       <div className="grid grid-cols-2 gap-1.5" role="group" aria-label="Side">
         {(["buy", "sell"] as const).map((s) => (

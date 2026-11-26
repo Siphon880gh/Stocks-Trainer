@@ -55,7 +55,7 @@ export default function PracticeWheelStrategy() {
         <ul className="list-disc pl-5 text-[12px] space-y-1">
           {WHEEL_VERDICT.points.map((p) => <li key={p}>{p}</li>)}
         </ul>
-        <p className="text-[11px] text-muted" data-testid="wheel-source">
+        <p className="text-xs text-muted" data-testid="wheel-source">
           Started from Weng's notes on the wheel (general market opinions plus screenshots of the commercial wheelstrategyoptions.com screeners and Trade Tracker, which use sample data and sell paid tiers). The verdict, numbers and caveats here come from OIC, Schwab, Fidelity, FINRA, the IRS and Cboe; see the Playbook's "How well-tested is this?" panel. Glossary: {term("wheel-strategy", "wheel strategy")} · {term("cash-secured-put", "cash-secured put")} · {term("covered-call", "covered call")}
         </p>
       </section>
@@ -68,7 +68,7 @@ export default function PracticeWheelStrategy() {
               <div role="listitem" className="panel p-3 flex-1 space-y-1" data-step={s.id}>
                 <p className="font-medium text-[12px]">{s.title}</p>
                 <p className="text-[12px]">{s.text}</p>
-                <p className="text-[11px] text-muted">{s.ifNot}</p>
+                <p className="text-xs text-muted">{s.ifNot}</p>
               </div>
               {i < WHEEL_CYCLE.length - 1 ? <span aria-hidden className="self-center text-muted">→</span> : null}
             </Fragment>
@@ -156,7 +156,7 @@ export default function PracticeWheelStrategy() {
         <ul className="list-disc pl-5 text-[12px] space-y-1">
           {WHEEL_BENCHMARK_NOTES.map((n) => <li key={n}>{n}</li>)}
         </ul>
-        <p className="text-[11px] text-muted">
+        <p className="text-xs text-muted">
           Source: Wilshire Analytics, "Options-Based Benchmark Indexes: Performance, Risk and Premium Capture (June 1986–Dec. 2018)", prepared for Cboe. Past index results are not predictive. Glossary: {term("put-write-index", "PUT")} · {term("buy-write-index", "BXM")} · {term("volatility-risk-premium", "volatility risk premium")} · {term("drawdown", "drawdown")}
         </p>
       </section>
@@ -169,7 +169,7 @@ export default function PracticeWheelStrategy() {
             <p className="text-[12px]">{l.lesson}</p>
           </div>
         ))}
-        <p className="text-[11px] text-muted">Screens from wheelstrategyoptions.com (a commercial screener and tracker), shown with demo portfolios. Mentioned to explain the columns, not as a recommendation.</p>
+        <p className="text-xs text-muted">Screens from wheelstrategyoptions.com (a commercial screener and tracker), shown with demo portfolios. Mentioned to explain the columns, not as a recommendation.</p>
       </section>
 
       <section className="panel p-4 space-y-3 text-[13px]" data-testid="wheel-drills">

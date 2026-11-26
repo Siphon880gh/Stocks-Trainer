@@ -66,7 +66,7 @@ export default function OptionsLadder({ storage, now = () => new Date(), initial
                       <div key={s.id} className="border border-line rounded-lg p-3 space-y-1.5" data-strategy={s.id}>
                         <p className="font-semibold text-[14px]">
                           {s.name}
-                          {s.conceptOnly ? <span className="ml-2 text-[11px] text-accent-red font-semibold">HIGHEST RISK · concept only</span> : null}
+                          {s.conceptOnly ? <span className="ml-2 text-xs text-accent-red font-semibold">HIGHEST RISK · concept only</span> : null}
                         </p>
                         <p className="text-[12px]">{s.use}</p>
                         <p className="text-[12px] text-muted">Example ($50 stock): {s.legs.map((g) => (g.kind === "stock" ? `own shares at $${g.price}` : `${g.position} ${g.qty > 1 ? `${g.qty}× ` : ""}$${g.strike} ${g.kind} for $${g.premium.toFixed(2)}`)).join(", ")}</p>

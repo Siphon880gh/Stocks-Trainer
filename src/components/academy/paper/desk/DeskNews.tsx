@@ -23,7 +23,7 @@ export default function DeskNews({ scenario, bar, active }: { scenario: DeskScen
       <ul className="space-y-2 max-h-[420px] overflow-y-auto pr-1">
         {items.map((n) => (
           <li key={n.id} className="border-b border-line pb-2 text-[12px]" data-news-id={n.id}>
-            <p className="flex flex-wrap items-center gap-1.5 text-[11px] text-muted">
+            <p className="flex flex-wrap items-center gap-1.5 text-xs text-muted">
               <span className="tabular-nums">{n.at < 0 ? dayLabel(n.date ?? "") : dayLabel(scenario.labels[n.at]!)}</span>
               {n.symbol ? <span className="font-semibold text-ink">{n.symbol}</span> : null}
               <span className="px-1 rounded border border-line">{KIND[n.kind]}</span>
@@ -32,7 +32,7 @@ export default function DeskNews({ scenario, bar, active }: { scenario: DeskScen
             </p>
             <p className="font-semibold leading-snug mt-0.5">{n.headline}</p>
             <p className="text-muted leading-snug">{n.summary}</p>
-            <p className="text-[11px] text-muted">
+            <p className="text-xs text-muted">
               {n.url ? (
                 <a href={n.url} target="_blank" rel="noopener noreferrer" className="underline hover:text-ink">
                   {n.source}

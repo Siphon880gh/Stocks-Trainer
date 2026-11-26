@@ -377,9 +377,9 @@ export default function Archive() {
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-sm text-primary">menu_book</span>
                 <h4 className="text-slate-100 font-bold text-base font-display">{withoutSampleWord(term.name)}</h4>
-                <span className="text-[11px] text-muted">{term.category}</span>
+                <span className="text-xs text-muted">{term.category}</span>
                 {locked ? (
-                  <span className="text-[11px] text-muted">Locked</span>
+                  <span className="text-xs text-muted">Locked</span>
                 ) : null}
               </div>
               <p className="text-ink/80 text-[13px] mt-2 leading-relaxed">
@@ -450,7 +450,7 @@ export default function Archive() {
                       <h4 className="text-slate-100 font-bold text-base font-display">{pattern.name}</h4>
                       {pattern.rare ? (
                         <span
-                          className="text-[11px] rounded border border-amber-500/60 text-amber-700 px-1 py-0.5"
+                          className="text-xs rounded border border-amber-500/60 text-amber-700 px-1 py-0.5"
                           title="Advanced / rare: infrequent and less reliable than the core patterns. Confirm before acting."
                         >
                           Advanced / rare
@@ -461,7 +461,7 @@ export default function Archive() {
                         if (!fit) return null;
                         return (
                           <span
-                            className={`text-[11px] rounded border px-1 py-0.5 ${
+                            className={`text-xs rounded border px-1 py-0.5 ${
                               fit === "works"
                                 ? "border-emerald-500/60 text-emerald-600"
                                 : fit === "adapted"

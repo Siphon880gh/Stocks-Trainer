@@ -25,7 +25,7 @@ export function AccountSummary({ state }: { state: AccountState }) {
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2" data-testid="account-summary">
       {cells.map(([k, v, cls, id]) => (
         <div key={k} className="panel px-3 py-2">
-          <p className="text-[11px] text-muted">{k}</p>
+          <p className="text-xs text-muted">{k}</p>
           <p className={cn("font-semibold tabular-nums text-[14px]", cls)} data-stat={id}>
             {v}
           </p>

@@ -87,7 +87,7 @@ export default function DeskDebrief({ scenario, log, state, goals, dividends, on
             </label>
           );
         })}
-        <p className="text-[11px] text-muted">Notes are saved with this session on this device.</p>
+        <p className="text-xs text-muted">Notes are saved with this session on this device.</p>
       </div>
     </section>
   );

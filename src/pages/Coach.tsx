@@ -108,7 +108,7 @@ export default function Coach() {
               ))}
             </select>
           </label>
-          <span className="font-mono text-[10px] text-slate-500">
+          <span className="font-mono text-xs text-slate-500">
             {filtered.length}/{sessions.length} sessions
           </span>
         </div>
@@ -147,7 +147,7 @@ export default function Coach() {
                       {meta.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="text-[11px] border border-line px-2 py-0.5 rounded text-muted"
+                          className="text-xs border border-line px-2 py-0.5 rounded text-muted"
                         >
                           {tag}
                         </span>

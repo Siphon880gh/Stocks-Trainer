@@ -393,7 +393,7 @@ function ExplanationPopover({
             chevron_left
           </span>
         </button>
-        <p className="flex-1 min-w-0 text-center text-[10px] uppercase tracking-wide text-[#787b86]">
+        <p className="flex-1 min-w-0 text-center text-xs uppercase tracking-wide text-[#787b86]">
           Step {note.step} of {note.of}
           {ANCHOR_LABEL[note.anchor] ? ` · ${ANCHOR_LABEL[note.anchor]}` : ""}
           {" · "}
@@ -468,7 +468,7 @@ function PaneLegend({
 }) {
   return (
     <div
-      className="flex flex-wrap items-center gap-x-3 gap-y-1 px-2 py-1 text-[11px]"
+      className="flex flex-wrap items-center gap-x-3 gap-y-1 px-2 py-1 text-xs"
       style={{ fontFamily: CHART.font, color: CHART.textMuted }}
     >
       {items.map((item) => (
@@ -912,7 +912,7 @@ export default function MarketChart({
     <div className={cn(chartPaneClass, "space-y-0")} style={{ fontFamily: CHART.font }}>
       {showScaleControls ? (
         <div
-          className="flex flex-wrap items-center gap-x-2 gap-y-2 px-2 py-2 text-[11px] border-b border-[#e0e3eb] bg-[#f8f9fd]"
+          className="flex flex-wrap items-center gap-x-2 gap-y-2 px-2 py-2 text-xs border-b border-[#e0e3eb] bg-[#f8f9fd]"
           style={{ color: CHART.textMuted }}
         >
           {frequencies && frequencies.length > 0 ? (
@@ -1022,7 +1022,7 @@ export default function MarketChart({
               >
                 <span
                   aria-hidden
-                  className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-current text-[10px] font-semibold leading-none"
+                  className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-current text-xs font-semibold leading-none"
                 >
                   i
                 </span>
@@ -1044,7 +1044,7 @@ export default function MarketChart({
             {statusLabel ? (
               <>
                 <span aria-hidden className="mx-3 h-4 w-px bg-[#d1d4dc]" />
-                <span className="inline-flex h-7 items-center gap-1.5 px-2.5 text-[11px] rounded-md border border-[#d1d4dc] bg-white text-[#131722] normal-case">
+                <span className="inline-flex h-7 items-center gap-1.5 px-2.5 text-xs rounded-md border border-[#d1d4dc] bg-white text-[#131722] normal-case">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#089981]" />
                   {statusLabel}
                 </span>
@@ -1463,7 +1463,7 @@ export default function MarketChart({
                 }}
                 onMouseEnter={() => raiseHighlight(h.id)}
               >
-                <span className="max-w-[200px] truncate text-[11px] font-semibold leading-none">
+                <span className="max-w-[200px] truncate text-xs font-semibold leading-none">
                   {h.label}
                 </span>
                 {h.canExplain ? (
@@ -1471,7 +1471,7 @@ export default function MarketChart({
                     type="button"
                     aria-label={`About ${h.label}`}
                     title={`About ${h.label}`}
-                    className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-[10px] font-semibold leading-none hover:bg-[#e8f0ff]"
+                    className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-xs font-semibold leading-none hover:bg-[#e8f0ff]"
                     onClick={() => {
                       raiseHighlight(h.id);
                       onExplainHighlight?.(h.id);
@@ -1484,7 +1484,7 @@ export default function MarketChart({
                   type="button"
                   aria-label={`Clear ${h.label} highlight`}
                   title="Clear highlight"
-                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-[10px] font-semibold leading-none hover:bg-[#e8f0ff]"
+                  className="inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-current text-xs font-semibold leading-none hover:bg-[#e8f0ff]"
                   onClick={() => onClearHighlight?.(h.id)}
                 >
                   ×

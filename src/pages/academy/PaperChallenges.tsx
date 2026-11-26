@@ -254,7 +254,7 @@ export default function PaperChallenges({ storage, now = new Date() }: { storage
           const passed = (store.challengeAttempts[ch.id] ?? []).some((a) => a.passed);
           return (
             <Link key={ch.id} to={`/paper/challenges/${ch.id}`} className="panel p-3 block hover:border-sim space-y-1" data-challenge={ch.id}>
-              <p className="text-[11px] text-muted uppercase">{THEME_LABELS[ch.theme]}</p>
+              <p className="text-xs text-muted uppercase">{THEME_LABELS[ch.theme]}</p>
               <p className="font-semibold text-[14px]">
                 {ch.title} {passed ? <span className="material-symbols-outlined text-up text-base align-middle" aria-label="passed">check_circle</span> : null}
               </p>

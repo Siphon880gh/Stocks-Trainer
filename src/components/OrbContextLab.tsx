@@ -50,7 +50,7 @@ export default function OrbContextLab({ onComplete }: { onComplete: () => void }
     </div>
     <div data-tour="orb-context-chart" className="space-y-2">
       <p className="font-medium">{s.title}</p>
-      <p className="text-[11px] text-muted">SIMULATED stock · 5-minute candles · Pacific · {frame} completed candles · no future tape until answer</p>
+      <p className="text-xs text-muted">SIMULATED stock · 5-minute candles · Pacific · {frame} completed candles · no future tape until answer</p>
       <CandlestickChart data={visible} annotations={ann} height={320} padRightBars={3} showScaleControls markerDecimals={2} />
       <p data-testid="orb-range-status" aria-live="polite">{range ? `${minutes}-minute range frozen: ${range.low.toFixed(2)}–${range.high.toFixed(2)} · midpoint ${range.midpoint.toFixed(2)}` : `${minutes}-minute range incomplete: wait for ${minutes / 5} completed candles.`}</p>
       <div className="flex flex-wrap items-center gap-3">

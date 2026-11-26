@@ -103,15 +103,15 @@ export default function PathMapPanel({
               >
                 {STATUS_MARK[shownStatus]}
               </span>
-              <span className="text-[10px] text-muted">{i + 1}</span>
+              <span className="text-xs text-muted">{i + 1}</span>
               <span
-                className={`text-[11px] font-semibold leading-tight ${
+                className={`text-xs font-semibold leading-tight ${
                   isActive ? "text-ink" : shownStatus === "locked" ? "text-muted" : "text-ink"
                 }`}
               >
                 {withoutSampleWord(m.title)}
               </span>
-              <span className="text-[10px] text-muted">
+              <span className="text-xs text-muted">
                 {shownStatus}
               </span>
             </>

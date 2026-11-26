@@ -452,7 +452,7 @@ export default function PracticeVixTrading() {
             <li key={l.to}><Link to={l.to} className="text-primary underline">{l.label}</Link></li>
           ))}
         </ul>
-        <p className="text-[11px] text-muted" data-testid="vix-source">
+        <p className="text-xs text-muted" data-testid="vix-source">
           Based on the article “{VIX_ARTICLE.title}” (no author named; product descriptions checked {VIX_ARTICLE.checkedOn}) and the Cboe, SEC, FINRA, NFA, New York Fed and fund-issuer pages it cites, listed on the{" "}
           <Link to="/playbooks/vix-curve-carry-paper" className="text-primary underline">VIX futures curve and carry Playbook</Link>. Trades and curves are hypothetical and exclude costs.
         </p>

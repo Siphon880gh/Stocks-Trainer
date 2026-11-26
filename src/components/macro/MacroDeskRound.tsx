@@ -139,7 +139,7 @@ export default function MacroDeskRound({ round, onComplete, onNext, initialPhase
             );
           })}
         </ul>
-        <p className="text-[11px] text-muted">Simulated tendencies for learning, not a forecast or trading advice. Real reactions vary with positioning and other news.</p>
+        <p className="text-xs text-muted">Simulated tendencies for learning, not a forecast or trading advice. Real reactions vary with positioning and other news.</p>
       </section>
       <div className="grid lg:grid-cols-2 gap-4">
         {round.instruments.map((i) => (

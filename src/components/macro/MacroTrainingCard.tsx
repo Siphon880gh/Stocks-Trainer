@@ -19,7 +19,7 @@ export default function MacroTrainingCard({ onSelectGroup, progress }: Props) {
     <div className="w-full max-w-xl panel p-4 text-sm space-y-3" data-testid="macro-training-card">
       <div className="flex items-baseline justify-between gap-2">
         <p className="font-semibold">Macro Desk</p>
-        <span className="text-[11px] text-muted">SIMULATED numbers · not trading advice</span>
+        <span className="text-xs text-muted">SIMULATED numbers · not trading advice</span>
       </div>
       <p className="text-[12px] text-muted">
         Visit the real release (BLS, BEA, FRED, the Fed, Freddie Mac…), read a look-alike with simulated numbers, then predict how yields, the dollar, stocks and sectors react.
@@ -46,7 +46,7 @@ export default function MacroTrainingCard({ onSelectGroup, progress }: Props) {
           >
             <span className="material-symbols-outlined text-base">{g.icon}</span>
             {g.name}
-            <span className="text-[10px] opacity-80">({MACRO_QUESTION_BANKS[g.id].length})</span>
+            <span className="text-xs opacity-80">({MACRO_QUESTION_BANKS[g.id].length})</span>
           </Link>
         ))}
       </div>

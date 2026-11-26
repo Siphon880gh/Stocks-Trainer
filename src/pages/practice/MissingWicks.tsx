@@ -77,7 +77,7 @@ export default function PracticeMissingWicks() {
       <section className="panel p-4 space-y-2 text-[13px]" data-tour="mw-chart" data-testid="mw-chart">
         <p className="font-medium">{SCN_LABEL[scn]} · {tf === "1h" ? "1-hour candles (focus: 7:30–8:30 AM PT)" : tf === "15m" ? "4 × 15-minute candles, 7:30–8:30 AM PT" : "60 × 1-minute candles, 7:30–8:30 AM PT"}</p>
         <div className="rounded-lg bg-background-dark border border-line overflow-hidden" data-testid="mw-canvas">
-          <p className="text-[10px] text-muted px-2 pt-1">SIMULATED · click a candle to read it</p>
+          <p className="text-xs text-muted px-2 pt-1">SIMULATED · click a candle to read it</p>
           <CandlestickChart data={bars} height={240} showScaleControls={false} highlightIndex={bar ?? (tf === "1h" ? FOCUS_INDEX_1H : undefined)}
             onSelectBar={(i) => setBar(i)} markerDecimals={2} padRightBars={tf === "1h" ? 1 : 0}
             annotations={{ levels: [{ price: scn === "mirror" ? 100 : 100, label: scn === "mirror" ? "Open = low 100.00" : "Open = high 100.00", tone: "entry" }] }} />

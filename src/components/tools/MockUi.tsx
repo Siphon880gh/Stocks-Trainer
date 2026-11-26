@@ -12,7 +12,7 @@ import { screenFieldTermIds } from "../../lib/toolTraining";
 export function MockFrame({ where, children }: { where: string; children: ReactNode }) {
   return (
     <div className="rounded-lg border border-line bg-surface overflow-hidden" data-testid="mock-frame">
-      <div className="flex items-center gap-2 border-b border-line bg-canvas px-3 py-1.5 text-[11px] text-muted">
+      <div className="flex items-center gap-2 border-b border-line bg-canvas px-3 py-1.5 text-xs text-muted">
         <span className="inline-flex gap-1" aria-hidden>
           <span className="h-2 w-2 rounded-full bg-line" />
           <span className="h-2 w-2 rounded-full bg-line" />
@@ -27,7 +27,7 @@ export function MockFrame({ where, children }: { where: string; children: ReactN
 
 export function Marker({ n }: { n: number }) {
   return (
-    <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-white text-[11px] font-semibold" aria-hidden>
+    <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-white text-xs font-semibold" aria-hidden>
       {n}
     </span>
   );
@@ -41,7 +41,7 @@ export function MockQuote({ symbol, name, price, change, up, meta }: Extract<Moc
         <span className="text-xl font-semibold tabular-nums">{price}</span>
         <span className={cn("text-[13px] font-medium tabular-nums", up ? "text-up" : "text-down")}>{change}</span>
       </p>
-      <p className="text-[11px] text-muted">{meta}</p>
+      <p className="text-xs text-muted">{meta}</p>
     </div>
   );
 }
@@ -98,7 +98,7 @@ export function MockFilters({ title, filters }: { title?: string; filters: { lab
   return (
     <div>
       {title ? <p className="text-[12px] font-semibold mb-1">{title}</p> : null}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
         {filters.map((f) => (
           <div key={f.label} className="rounded border border-line px-2 py-1">
             <p className="text-muted"><FieldLabel label={f.label} /></p>
@@ -116,7 +116,7 @@ export function MockChips({ title, chips, active }: { title?: string; chips: str
       {title ? <p className="text-[12px] font-semibold mb-1">{title}</p> : null}
       <div className="flex flex-wrap gap-1.5">
         {chips.map((c, i) => (
-          <span key={c} className={cn("px-2 py-0.5 rounded-full border text-[11px]", i === active ? "border-primary bg-primary text-white" : "border-line text-muted")}>{c}</span>
+          <span key={c} className={cn("px-2 py-0.5 rounded-full border text-xs", i === active ? "border-primary bg-primary text-white" : "border-line text-muted")}>{c}</span>
         ))}
       </div>
     </div>
@@ -138,7 +138,7 @@ export function MockChart({ label, seed, drift, points = 40 }: { label: string; 
       <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-20" aria-hidden>
         <polyline points={path} fill="none" strokeWidth="1.5" className={up ? "stroke-up" : "stroke-down"} />
       </svg>
-      <p className="text-[11px] text-muted">{label}</p>
+      <p className="text-xs text-muted">{label}</p>
     </div>
   );
 }
@@ -152,7 +152,7 @@ export function MockBlockView({ block }: { block: MockBlock }) {
     case "filters": return <MockFilters title={block.title} filters={block.filters} />;
     case "chips": return <MockChips title={block.title} chips={block.chips} active={block.active} />;
     case "chart": return <MockChart label={block.label} seed={block.seed} drift={block.drift} points={block.points} />;
-    case "note": return <p className="text-[11px] text-muted">{block.text}</p>;
+    case "note": return <p className="text-xs text-muted">{block.text}</p>;
   }
 }
 

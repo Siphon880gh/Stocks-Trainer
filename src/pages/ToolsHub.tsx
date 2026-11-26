@@ -65,7 +65,7 @@ export default function ToolsHub() {
                   <span>
                     <Link to={t.route} className="text-primary underline font-medium">{t.title}</Link>
                     <span className="block text-[12px] text-muted">{t.blurb}</span>
-                    <span className="block text-[11px] text-muted" data-lesson-progress={t.id}>{progressLine(t, store)}</span>
+                    <span className="block text-xs text-muted" data-lesson-progress={t.id}>{progressLine(t, store)}</span>
                   </span>
                 </li>
               ))}

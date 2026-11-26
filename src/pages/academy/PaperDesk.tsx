@@ -127,7 +127,7 @@ export default function PaperDesk({ storage }: { storage?: KVStorage }) {
                             ))}
                           </ul>
                         ) : null}
-                        {store.completed[s.id] ? <p className="text-[11px] text-up">Finished {store.completed[s.id]}×</p> : null}
+                        {store.completed[s.id] ? <p className="text-xs text-up">Finished {store.completed[s.id]}×</p> : null}
                       </button>
                     ))}
                   </div>
@@ -146,7 +146,7 @@ export default function PaperDesk({ storage }: { storage?: KVStorage }) {
                   </ul>
                 ) : null}
                 {selected.options ? <p className="text-[12px] text-muted">Suggested rules are pre-set below for this scenario.</p> : null}
-                <p className="text-[11px] text-muted">{selected.sourceNote}</p>
+                <p className="text-xs text-muted">{selected.sourceNote}</p>
               </div>
             ) : null}
             <p className="font-semibold">2. Starting virtual cash</p>

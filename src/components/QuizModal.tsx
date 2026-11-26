@@ -238,12 +238,12 @@ export default function QuizModal({
             <div className="relative">
               <SampleDataNote />
               {question.overlayId && quizSamplePackName(question) ? (
-                <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">
+                <p className="text-xs text-[#787b86] normal-case px-1 pb-1">
                   {withoutSampleWord(quizSamplePackName(question) ?? "")}
                   {question.revealAnnotations && !submitted ? " · levels and plan appear after you answer" : ""}
                 </p>
               ) : question.revealAnnotations && !submitted ? (
-                <p className="text-[10px] text-[#787b86] normal-case px-1 pb-1">
+                <p className="text-xs text-[#787b86] normal-case px-1 pb-1">
                   Levels and plan appear after you answer
                 </p>
               ) : null}

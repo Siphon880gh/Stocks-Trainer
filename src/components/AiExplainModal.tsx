@@ -26,7 +26,7 @@ export function WhyNotAutomatic() {
       <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 font-medium [&::-webkit-details-marker]:hidden">
         <span
           aria-hidden="true"
-          className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-current text-[11px] font-semibold italic leading-none"
+          className="inline-flex h-4 w-4 items-center justify-center rounded-full border border-current text-xs font-semibold italic leading-none"
         >
           i
         </span>

@@ -33,7 +33,7 @@ function Question({ q, picked, onPick, testId }: { q: ReadoutQuestion; picked?: 
           return (
             <button key={c.id} type="button" disabled={!!picked} onClick={() => onPick(c.id)} className={`text-left px-3 py-2 rounded-lg border text-[12px] ${tone}`}>
               <b className="font-mono mr-1">{c.id}</b> {c.label}
-              {picked && chosen && c.feedback ? <span className="block text-[11px] text-muted mt-0.5">{c.feedback}</span> : null}
+              {picked && chosen && c.feedback ? <span className="block text-xs text-muted mt-0.5">{c.feedback}</span> : null}
             </button>
           );
         })}
@@ -105,7 +105,7 @@ export default function TrialReadoutPanel({ initialId, initialPhase = "setup" }:
             aria-pressed={r.id === id}
             className={`px-3 py-1.5 rounded-lg border text-[12px] ${r.id === id ? "border-primary bg-primary/10 text-ink font-semibold" : "border-line bg-surface text-muted hover:text-ink"}`}
           >
-            {r.trial} <span className="font-mono text-[10px]">{rr.company.quarters[r.quarterIndex]!.label}</span>
+            {r.trial} <span className="font-mono text-xs">{rr.company.quarters[r.quarterIndex]!.label}</span>
           </button>
         ))}
       </div>
@@ -113,7 +113,7 @@ export default function TrialReadoutPanel({ initialId, initialPhase = "setup" }:
       <div className="grid gap-3 md:grid-cols-2">
         <div className="border border-line rounded-lg bg-surface p-3 space-y-2 text-[12px]">
           <p className="text-[13px] font-semibold text-ink">
-            Going in · {rr.company.name} <span className="font-mono text-[10px] text-muted">{rr.company.ticker}</span>
+            Going in · {rr.company.name} <span className="font-mono text-xs text-muted">{rr.company.ticker}</span>
           </p>
           <ul className="list-disc pl-5 space-y-1 text-slate-300">
             {readout.setup.map((s) => (

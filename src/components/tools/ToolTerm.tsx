@@ -23,7 +23,7 @@ export function ScreenTerms({ ids }: { ids: string[] }) {
   const terms = ids.map((id) => getLiteracyTerm(id)).filter((t) => t !== undefined);
   if (!terms.length) return null;
   return (
-    <p className="text-[11px] text-muted" data-testid="screen-terms">
+    <p className="text-xs text-muted" data-testid="screen-terms">
       <span>Terms on this screen (hover, focus or tap): </span>
       {terms.map((t, i) => (
         <span key={t.id}>

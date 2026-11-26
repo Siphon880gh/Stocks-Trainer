@@ -64,11 +64,11 @@ export default function PracticeOneMinuteCharts() {
           A {term("price-leg", "leg")} is a clean directional push. {term("consolidation", "Sideways")} is the pause where traders decide whether another leg is coming. Say &quot;three legs up, then sideways&quot; instead of &quot;the chart is confusing&quot;.
         </p>
         <div className="rounded-lg bg-background-dark border border-line overflow-hidden">
-          <p className="text-[10px] text-muted px-2 pt-1">SIMULATED 1m: three legs up, sideways, two more legs up · dashed markers = end of each 5m group</p>
+          <p className="text-xs text-muted px-2 pt-1">SIMULATED 1m: three legs up, sideways, two more legs up · dashed markers = end of each 5m group</p>
           <CandlestickChart data={SIM_1M} height={180} showScaleControls={false} compact />
           <div className="flex flex-wrap gap-1 px-2 pb-2">
             {[...ends].map((i) => (
-              <span key={i} className="text-[10px] font-mono text-primary/70">5m@{i + 1}</span>
+              <span key={i} className="text-xs font-mono text-primary/70">5m@{i + 1}</span>
             ))}
           </div>
         </div>
@@ -97,7 +97,7 @@ export default function PracticeOneMinuteCharts() {
           Gross ${(ticks * MES.tickValue * contracts).toFixed(2)} − cost ${(rt * contracts).toFixed(2)} → net ${net.toFixed(2)}
           {net <= 0 ? " (costs ate the scalp)" : ""}
         </p>
-        <p className="text-[11px] space-x-1">{[SRC.mesFaq, SRC.mesRule].map((x) => <a key={x.url} href={x.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">{x.label}</a>)}</p>
+        <p className="text-xs space-x-1">{[SRC.mesFaq, SRC.mesRule].map((x) => <a key={x.url} href={x.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">{x.label}</a>)}</p>
       </section>
 
       <section className="panel p-4 space-y-2 text-[13px]" data-testid="om-fib">
@@ -109,7 +109,7 @@ export default function PracticeOneMinuteCharts() {
           ))}
         </ul>
         <p>{FIB_TEACH.timeLens}</p>
-        <p className="text-[11px]"><a href={FIB_TEACH.source.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">{FIB_TEACH.source.label}</a></p>
+        <p className="text-xs"><a href={FIB_TEACH.source.url} target="_blank" rel="noopener noreferrer" className="text-primary underline">{FIB_TEACH.source.label}</a></p>
       </section>
 
       <section className="panel p-4 space-y-2 text-[13px]" data-testid="om-barcount">

@@ -15,7 +15,7 @@ export default function CasePrintLink({ caseId }: { caseId: string }) {
           <Link to={l.href} className="text-primary underline">
             round {l.round} ({l.label})
           </Link>{" "}
-          <span className="text-[11px]">— {l.why}</span>
+          <span className="text-xs">— {l.why}</span>
         </span>
       ))}
     </p>

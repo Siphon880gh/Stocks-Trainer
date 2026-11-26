@@ -46,7 +46,7 @@ export default function StatementTable({
     <div className="border border-line rounded-lg bg-surface overflow-hidden" data-testid="statement-table">
       <div className="px-3 py-2 border-b border-line flex items-baseline justify-between gap-2">
         <h3 className="text-[13px] font-semibold text-ink">{title}</h3>
-        {unitLabel ? <span className="text-[10px] text-muted font-mono">{unitLabel}</span> : null}
+        {unitLabel ? <span className="text-xs text-muted font-mono">{unitLabel}</span> : null}
       </div>
       {/* contain:inline-size stops the table's min-content width from stretching the page on phones. */}
       <div className="overflow-x-auto [contain:inline-size]">
@@ -70,7 +70,7 @@ export default function StatementTable({
               if (kind === "section") {
                 return (
                   <tr key={`${row.label}-${ri}`} className="bg-canvas">
-                    <td colSpan={columns.length + 1} className="sticky left-0 px-3 py-1 text-[10px] uppercase tracking-wider text-muted">
+                    <td colSpan={columns.length + 1} className="sticky left-0 px-3 py-1 text-xs uppercase tracking-wider text-muted">
                       {row.label}
                     </td>
                   </tr>
@@ -110,7 +110,7 @@ export default function StatementTable({
           </tbody>
         </table>
       </div>
-      {caption ? <p className="px-3 py-2 text-[11px] text-muted border-t border-line">{caption}</p> : null}
+      {caption ? <p className="px-3 py-2 text-xs text-muted border-t border-line">{caption}</p> : null}
     </div>
   );
 }

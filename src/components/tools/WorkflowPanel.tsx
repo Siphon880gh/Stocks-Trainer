@@ -26,8 +26,8 @@ export function WorkflowPanel({
     <section className="panel p-4 space-y-3 text-[13px]" data-testid="tool-workflow">
       <div>
         <p className="font-semibold text-[14px]">{workflow.title}</p>
-        <p className="text-[11px] text-muted">{workflow.intro}</p>
-        <p className="text-[11px] text-muted" data-testid="workflow-progress">{filled} of {total} fields filled</p>
+        <p className="text-xs text-muted">{workflow.intro}</p>
+        <p className="text-xs text-muted" data-testid="workflow-progress">{filled} of {total} fields filled</p>
       </div>
       <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <ol className="space-y-3 list-decimal pl-5">
@@ -49,7 +49,7 @@ export function WorkflowPanel({
               </p>
               <div className="flex flex-col gap-1">
                 {st.fields.map((f) => (
-                  <label key={f.key} className="text-[11px] text-muted flex flex-col gap-0.5">
+                  <label key={f.key} className="text-xs text-muted flex flex-col gap-0.5">
                     {f.label}
                     <input
                       value={values[f.key] ?? ""}
@@ -70,10 +70,10 @@ export function WorkflowPanel({
           <ul className="text-[12px] space-y-1" data-testid="workflow-note" aria-live="polite">
             {lines.map((l, i) => <li key={i}>{l}</li>)}
           </ul>
-          <button type="button" onClick={copy} className="px-2 py-1 rounded border text-[11px]">
+          <button type="button" onClick={copy} className="px-2 py-1 rounded border text-xs">
             {copied ? "Copied" : "Copy note"}
           </button>
-          <p className="text-[11px] text-muted">Placeholders show the dated example reads; blanks (____) are still to fill. Examples, not recommendations.</p>
+          <p className="text-xs text-muted">Placeholders show the dated example reads; blanks (____) are still to fill. Examples, not recommendations.</p>
         </div>
       </div>
     </section>

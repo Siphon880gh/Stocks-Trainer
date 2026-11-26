@@ -217,7 +217,7 @@ export default function Training() {
                     >
                       {g.icon && <span className="material-symbols-outlined text-lg">{g.icon}</span>}
                       {g.name}
-                      <span className="text-[10px] font-normal opacity-80">
+                      <span className="text-xs font-normal opacity-80">
                         ({getQuestionsForGroup(g.id).length})
                       </span>
                     </button>

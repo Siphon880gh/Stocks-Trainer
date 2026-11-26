@@ -18,7 +18,7 @@ export default function FinancialsTrainingCard({ onSelectGroup, progress }: Prop
     <div className="w-full max-w-xl panel p-4 text-sm space-y-3" data-testid="financials-training-card">
       <div className="flex items-baseline justify-between gap-2">
         <p className="font-semibold">Financials &amp; earnings</p>
-        <span className="text-[11px] text-muted">Fictional companies · not trading advice</span>
+        <span className="text-xs text-muted">Fictional companies · not trading advice</span>
       </div>
       <div className="flex flex-wrap gap-x-4 gap-y-2">
         <Link to="/practice/read-the-print" className="text-primary underline font-medium" data-testid="read-the-print-link">
@@ -48,7 +48,7 @@ export default function FinancialsTrainingCard({ onSelectGroup, progress }: Prop
           >
             <span className="material-symbols-outlined text-base">{g.icon}</span>
             {g.name}
-            <span className="text-[10px] opacity-80">({FINANCIALS_QUESTION_BANKS[g.id].length})</span>
+            <span className="text-xs opacity-80">({FINANCIALS_QUESTION_BANKS[g.id].length})</span>
           </Link>
         ))}
       </div>

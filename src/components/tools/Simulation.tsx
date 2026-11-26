@@ -55,7 +55,7 @@ export function SimTrigger({ simRef, children }: { simRef: SimRef; children?: Re
       aria-describedby={SIM_HINT_ID}
       title="Opens a short simulation"
       onClick={(e) => ctx.open(simRef.sim, e.currentTarget)}
-      className="inline text-left font-medium text-sim underline decoration-dotted decoration-2 decoration-sim/70 underline-offset-[3px] rounded-sm hover:bg-sim/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sim cursor-pointer after:inline-block after:ml-0.5 after:align-super after:text-[9px] after:no-underline after:content-['▶']"
+      className="inline text-left font-medium text-sim underline decoration-dotted decoration-2 decoration-sim/70 underline-offset-[3px] rounded-sm hover:bg-sim/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-sim cursor-pointer after:inline-block after:ml-0.5 after:align-super after:text-xs after:no-underline after:content-['▶']"
     >
       {children ?? simRef.text}
     </button>
@@ -80,7 +80,7 @@ export function RichText({ text, rich }: { text: string; rich?: ToolText }) {
 /** The one-line legend that tells readers dotted purple phrases are simulations, not glossary terms. */
 export function SimHint({ subject = "why the idea matters on a chart or a table" }: { subject?: string }) {
   return (
-    <p className="text-[11px] text-muted" data-testid="sim-hint">
+    <p className="text-xs text-muted" data-testid="sim-hint">
       <span className="font-medium text-sim underline decoration-dotted decoration-2 underline-offset-[3px]">Dotted purple phrases ▶</span> are not glossary terms. Each opens a short simulation: a SAMPLE tape or a table you step through, showing {subject}.
     </p>
   );
@@ -191,7 +191,7 @@ export function SimPanel({ sim, walk, onNext, onPrev, onReplay, onClose }: { sim
     <div className="text-[13px]">
       <div className="sticky top-0 z-10 flex items-start justify-between gap-2 px-4 py-3 border-b border-line bg-surface">
         <div className="min-w-0">
-          <p className="text-[10px] font-mono uppercase tracking-wider text-sim">Simulation · {sim.tape}</p>
+          <p className="text-xs font-mono uppercase tracking-wider text-sim">Simulation · {sim.tape}</p>
           <h2 id={`sim-${sim.id}-title`} className="text-[15px] font-semibold leading-snug">{sim.title}</h2>
         </div>
         <button type="button" onClick={onClose} aria-label="Close simulation" className="shrink-0 px-2 py-1 rounded border border-line text-[12px] hover:bg-canvas">
@@ -205,7 +205,7 @@ export function SimPanel({ sim, walk, onNext, onPrev, onReplay, onClose }: { sim
         {sim.kind === "bars" ? <CandleWalkChart sim={sim} walk={walk} /> : <ColumnWalkTable sim={sim} walk={walk} />}
         {sim.kind === "columns" ? <LiveLinks links={sim.live} /> : null}
         <div aria-live="polite" className="space-y-2" data-testid="sim-step">
-          <p className="text-[11px] text-muted">
+          <p className="text-xs text-muted">
             <span className="font-medium text-ink">{walkProgress(sim, walk)}</span>
             {copy.label ? ` · ${copy.label}` : ""}
             {bar ? ` · O ${bar.open.toFixed(2)} H ${bar.high.toFixed(2)} L ${bar.low.toFixed(2)} C ${bar.close.toFixed(2)}` : ""}
@@ -236,7 +236,7 @@ export function SimPanel({ sim, walk, onNext, onPrev, onReplay, onClose }: { sim
             ↺ Replay
           </button>
         </div>
-        <p className="text-[10px] text-muted">SAMPLE figures, simulated, unless a step names a dated real value. Educational, not advice. Keys: ← → step, Esc closes.</p>
+        <p className="text-xs text-muted">SAMPLE figures, simulated, unless a step names a dated real value. Educational, not advice. Keys: ← → step, Esc closes.</p>
       </div>
     </div>
   );
@@ -298,7 +298,7 @@ export function CandleWalkChart({ sim, walk }: { sim: BarWalkSim; walk: WalkStat
         })}
         {b.readout ? <Readout text={b.readout} x={boxes[cur]!.x} yHigh={boxes[cur]!.yHigh} yLow={boxes[cur]!.yLow} w={W} h={H} /> : null}
       </svg>
-      <figcaption className="text-[10px] text-muted">
+      <figcaption className="text-xs text-muted">
         {sim.tape}. Green = closed above its open, red = below. Tags: E earnings, N headline, D ex-dividend, S signal; dashed lines mark the high and low.
       </figcaption>
     </figure>

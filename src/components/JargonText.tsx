@@ -113,7 +113,7 @@ function Tip({ term, box, onEnter, onLeave, id }: { term: Pick<EarningsJargonTer
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
     >
-      <span className="block text-[11px] font-bold text-primary uppercase tracking-wider mb-1">{term.name}</span>
+      <span className="block text-xs font-bold text-primary uppercase tracking-wider mb-1">{term.name}</span>
       <span className="block text-[13px] text-slate-300 leading-snug">{term.summary}</span>
     </span>
   );
@@ -168,7 +168,7 @@ function GlossaryButton({ term, showName }: { term: EarningsJargonTerm; showName
         aria-expanded={p.open}
         title={`About ${term.name}`}
         data-glossary-term={term.id}
-        className="inline-flex shrink-0 items-center justify-center gap-0.5 min-h-11 min-w-11 sm:min-h-7 sm:min-w-7 px-1 rounded-md text-primary text-[11px] hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+        className="inline-flex shrink-0 items-center justify-center gap-0.5 min-h-11 min-w-11 sm:min-h-7 sm:min-w-7 px-1 rounded-md text-primary text-xs hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
         onMouseEnter={p.show}
         onMouseLeave={p.scheduleClose}
         onFocus={p.show}

@@ -237,7 +237,7 @@ export default function CasePlayer() {
                 <button
                   type="button"
                   onClick={() => setExplainOpen(true)}
-                  className="inline-flex items-center gap-1 font-mono text-[10px] tracking-widest border border-line px-2 py-0.5 text-primary hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+                  className="inline-flex items-center gap-1 font-mono text-xs tracking-widest border border-line px-2 py-0.5 text-primary hover:bg-primary/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
                 >
                   <span className="material-symbols-outlined text-sm" aria-hidden>
                     auto_fix_high
@@ -264,7 +264,7 @@ export default function CasePlayer() {
                 frame did not match the teaching answer.
               </p>
             ) : null}
-            <p className="text-[10px] text-primary/40">
+            <p className="text-xs text-primary/40">
               This decision is locked so you cannot peek and change it. Refresh
               or reopen the case to try again.
             </p>

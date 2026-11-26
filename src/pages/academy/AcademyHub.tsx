@@ -129,7 +129,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                 <div key={c.id} className="panel p-3 space-y-2" data-course={c.id}>
                   <div className="flex items-baseline justify-between gap-2">
                     <p className="font-semibold text-[14px]">{c.title}</p>
-                    <span className="text-[11px] text-muted">{Math.round(coursePct(state, c.id) * 100)}%</span>
+                    <span className="text-xs text-muted">{Math.round(coursePct(state, c.id) * 100)}%</span>
                   </div>
                   <div className="h-1.5 rounded-full bg-line overflow-hidden" aria-hidden>
                     <div className="h-full bg-up" style={{ width: `${Math.round(coursePct(state, c.id) * 100)}%` }} />
@@ -147,12 +147,12 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                               {s.icon}
                             </span>
                             <span className="flex-1">{u.title}</span>
-                            <span className="text-[11px] text-muted">
+                            <span className="text-xs text-muted">
                               {s.label} · {estMinutes(u)} min
                             </span>
                           </Link>
                           {st !== "mastered" && st !== "tested_out" ? (
-                            <Link to={`/academy/${id}?check=1`} className="text-[11px] text-primary hover:underline shrink-0" data-test-out-unit={id} aria-label={`Test out of ${u.title}`}>
+                            <Link to={`/academy/${id}?check=1`} className="text-xs text-primary hover:underline shrink-0" data-test-out-unit={id} aria-label={`Test out of ${u.title}`}>
                               Test out
                             </Link>
                           ) : null}

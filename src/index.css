@@ -22,6 +22,9 @@
   --color-slate-300: #434651;
   --color-slate-400: #686b76;
   --color-slate-500: #9598a1;
+  /* Type floor: meta text (badges, captions, eyebrows) is 12 px (text-xs), secondary copy 13 px, body 14 px (text-sm) and up. Nothing in the UI goes below 12 px; chart SVG labels keep their own sizes. */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.4;
   --font-sans: "Instrument Sans", "Segoe UI", sans-serif;
   --font-display: "Instrument Sans", "Segoe UI", sans-serif;
   --font-mono: "Instrument Sans", "Segoe UI", sans-serif;

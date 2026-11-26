@@ -37,7 +37,7 @@ export default function SimulatedFrame({ sourceId, title, period, releaseTimeET,
         {releaseTimeET && <span className="text-[12px] text-muted ml-auto">Released {releaseTimeET} ET (simulated schedule)</span>}
       </div>
       <div className="p-4 space-y-4 text-sm text-ink">{children}</div>
-      {footnote && <div className="px-4 pb-3 text-[11px] text-muted">{footnote}</div>}
+      {footnote && <div className="px-4 pb-3 text-xs text-muted">{footnote}</div>}
     </section>
   );
 }
