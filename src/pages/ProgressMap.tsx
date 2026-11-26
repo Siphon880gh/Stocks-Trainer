@@ -16,8 +16,8 @@ const isView = (v: string | null): v is View => v === "world" || v === "tree" ||
 
 const STATUS_ICON: Record<StageStatus, string> = { done: "check_circle", "in-progress": "timelapse", available: "radio_button_unchecked", locked: "lock" };
 const STATUS_TONE: Record<StageStatus, string> = {
-  done: "border-emerald-500 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400",
-  "in-progress": "border-amber-500 bg-amber-500/10 text-amber-700 dark:text-amber-400",
+  done: "border-emerald-500 bg-emerald-500/15 text-emerald-700",
+  "in-progress": "border-amber-500 bg-amber-500/10 text-amber-700",
   available: "border-primary/60 bg-surface text-primary",
   locked: "border-line bg-canvas text-muted",
 };
@@ -244,7 +244,7 @@ export default function ProgressMap({ embedded = false }: { embedded?: boolean }
           onClick={toggleBrowse}
           className={cn(
             "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[13px] font-semibold",
-            browseAll ? "border-amber-500 bg-amber-500/15 text-amber-700 dark:text-amber-300" : "border-line bg-surface hover:bg-primary/10",
+            browseAll ? "border-amber-500 bg-amber-500/15 text-amber-700" : "border-line bg-surface hover:bg-primary/10",
           )}
         >
           <span className="material-symbols-outlined text-[16px]" aria-hidden>{browseAll ? "lock_open" : "lock"}</span>

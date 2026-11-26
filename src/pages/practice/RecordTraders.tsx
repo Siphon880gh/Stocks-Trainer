@@ -57,7 +57,7 @@ export default function PracticeRecordTraders() {
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h3 className="text-[15px] font-semibold">{c.name}</h3>
               <span
-                className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase ${c.strength === "strong" ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300" : "bg-amber-500/15 text-amber-700 dark:text-amber-300"}`}
+                className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase ${c.strength === "strong" ? "bg-emerald-500/15 text-emerald-700" : "bg-amber-500/15 text-amber-700"}`}
               >
                 {c.strength} verification
               </span>
@@ -124,13 +124,13 @@ export default function PracticeRecordTraders() {
         <h3 className="text-[15px] font-semibold">Does it still work today?</h3>
         <div className="grid gap-3 sm:grid-cols-2">
           <div>
-            <h4 className="font-semibold text-emerald-700 dark:text-emerald-300">What still shows up</h4>
+            <h4 className="font-semibold text-emerald-700">What still shows up</h4>
             <ul className="list-disc pl-5 space-y-2">
               {STILL_SHOWS_UP.map((e) => <li key={e.text}>{e.text}<SrcLinks list={e.sources} /></li>)}
             </ul>
           </div>
           <div>
-            <h4 className="font-semibold text-amber-700 dark:text-amber-300">What has weakened or changed</h4>
+            <h4 className="font-semibold text-amber-700">What has weakened or changed</h4>
             <ul className="list-disc pl-5 space-y-2">
               {HAS_WEAKENED.map((e) => <li key={e.text}>{e.text}<SrcLinks list={e.sources} /></li>)}
             </ul>
@@ -187,7 +187,7 @@ export default function PracticeRecordTraders() {
                 ))}
               </div>
               {a && (
-                <p role="status" className={a === c.answer ? "text-emerald-700 dark:text-emerald-300" : "text-rose-700 dark:text-rose-300"}>
+                <p role="status" className={a === c.answer ? "text-emerald-700" : "text-rose-700"}>
                   {a === c.answer ? "Right." : `Not quite: it's ${c.answer}.`} {c.why}
                 </p>
               )}

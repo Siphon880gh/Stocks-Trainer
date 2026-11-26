@@ -63,7 +63,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
             onClick={toggleBrowse}
             className={cn(
               "inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[13px] font-semibold",
-              browseAll ? "border-amber-500 bg-amber-500/15 text-amber-700 dark:text-amber-300" : "border-line bg-surface hover:bg-primary/10",
+              browseAll ? "border-amber-500 bg-amber-500/15 text-amber-700" : "border-line bg-surface hover:bg-primary/10",
             )}
           >
             <span className="material-symbols-outlined text-[16px]" aria-hidden>{browseAll ? "lock_open" : "lock"}</span>
