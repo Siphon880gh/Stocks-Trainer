@@ -58,6 +58,35 @@ Questions skipped: there was no channel to ask Weng mid-run; the design context 
 - **Theming, 1 point: dark mode.** `.impeccable.md` defines a light brokerage-tape look, and a dark theme is a brand decision. The tokens are now in place, so it would mostly be a second set of values for `--color-*`.
 - **Performance, 1 point: the first download is still about 1.09 MB gzip.** Most of it is the content data: the header's level tabs and Home's Next up and map cards score progress through `progressMap`, which imports every quiz, case, coach session and lesson list. Getting under about 500 KB means moving progress scoring onto small per-area summaries or loading it after first paint. That changes how every progress number is computed, so it should be its own project with a go-ahead.
 
+## Dark mode (round 4)
+
+- **When:** 2026-11-25, from commit `496203a`. Weng approved dark mode with a light/dark toggle. The smaller first download is left for later.
+- **How it works:**
+  - `src/lib/theme.ts` stores Light, Dark or System under `analysis_core_theme_v1`. System is the default and follows `prefers-color-scheme`, live.
+  - An inline script in `index.html` sets `class="dark"`, `data-theme` and `color-scheme` on `<html>` before the body is parsed, so there is no flash of the wrong theme. `harness-ai.js` is untouched.
+  - `index.css` gives every colour token a dark value under `.dark`, and Tailwind's `dark:` variant follows that class.
+  - The amber, emerald, red, rose and yellow status shades swap light and dark steps (50 ↔ 950, 300 ↔ 700 and so on), so existing status text and tints read without a `dark:` class on each use.
+  - Solid buttons use new fill tokens (`bg-primary-fill` and others) that stay deep, while blue, green, red and purple text lighten.
+- **Toggle:** a Light / Dark / System menu (`role="menu"` with `menuitemradio` items) in the header. On phones it sits top right beside the logo, a 44 × 44 px target. On desktop it is last in the row. Arrow keys, Home, End and Escape work, and focus returns to the button.
+- **Charts:** chart markup is unchanged, so light renders stay byte-identical and the candlestick baseline test still passes. In dark mode, CSS re-maps the chart's exact light colours (SVG fill and stroke attributes, inline styles and the few chart-only hex classes) to a dark pane, grid, axis and text. Candle green `#089981` and red `#f23645` are unchanged and read clearly on the dark pane.
+
+| Dimension | Round 3 | Now | Notes |
+|---|---|---|---|
+| Accessibility | 4/4 | 4/4 | Text contrast is checked in both themes: 0 failures on all 76 routes at 390 and 1280 px, plus the open dropdown, path picker, Browse popup, pattern dialog and the desk walkthrough in dark. The sweep also caught 5 light-mode spots on routes outside the main 12, all fixed (`4aaa0f2`, `9e2b096`). |
+| Performance | 3/4 | 3/4 | Unchanged. The theme adds a 10-line inline script and no network request. |
+| Theming / tokens | 3/4 | 4/4 | A full token system with a working dark mode, a three-way toggle that follows the device, and no flash. |
+| Responsive | 4/4 | 4/4 | The toggle fits the 390 px header with 44 px targets and no overflow. |
+| Implementation integrity | 4/4 | 4/4 | The detector still reports 0 findings. Dropdowns, dialogs and popovers keep their layers in dark (e2e checks the top element at each one's centre). |
+| **Total** | **18/20** | **19/20** | Band: Excellent. |
+
+### Left for Weng
+
+- **Performance, 1 point:** the first download is still about 1.09 MB gzip, as described in round 3. Weng has put this off for now.
+
+### Commits
+
+`0deaf3c`, `33a86b5` (theme setting and no-flash script), `109a35b`, `2b3c535`, `ced0b4d`, `ab9ef87` (tokens and fills), `2af68e8`, `583eaf4` (toggle), `c90dedf`, `9e2b096` (charts), `e8a8838`, `9222d8a`, `fddc58e`, `edf2645`, `4aaa0f2` (contrast fixes), `fab5958` (e2e).
+
 ## Critique (Nielsen heuristics, 0–4)
 
 | Heuristic | Score | Evidence |
@@ -94,7 +123,7 @@ Questions skipped: there was no channel to ask Weng mid-run; the design context 
 ## Detector
 
 - Before: 2 findings, `border-accent-on-rounded` (NavTabsMenu) and `side-tab` (Simulation.tsx).
-- After: **0 findings**. It was re-run after the follow-up fixes and again after the round 3 fixes, and still reports 0 findings.
+- After: **0 findings**. It was re-run after the follow-up fixes, the round 3 fixes and dark mode, and still reports 0 findings.
 
 ## Checks
 
