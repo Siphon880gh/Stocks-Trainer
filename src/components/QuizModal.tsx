@@ -438,7 +438,7 @@ export default function QuizModal({
                 onClick={handleSubmit}
                 disabled={!selectedOption}
                 className={cn(
-                  "flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-all",
+                  "flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-colors",
                   !selectedOption && "opacity-50 cursor-not-allowed"
                 )}
               >
@@ -498,7 +498,7 @@ function QuizOptionButton({
       title={asChart ? `Chart ${option.label}` : option.description}
       aria-label={asChart ? `Chart ${option.label}` : undefined}
       className={cn(
-        "group relative flex flex-col transition-all text-left w-full h-full",
+        "group relative flex flex-col transition-colors text-left w-full h-full",
         asChart ? "items-center p-2 rounded-lg" : "items-start p-6 rounded-lg",
         showCorrect && "bg-primary/20 border-2 border-primary",
         showIncorrect && "bg-accent-red/10 border-2 border-accent-red",
@@ -558,7 +558,7 @@ function QuizOptionButton({
           </p>
           <div
             className={cn(
-              "absolute bottom-4 right-4 transition-all",
+              "absolute bottom-4 right-4 transition-opacity",
               selected ? "text-primary" : "text-primary opacity-20 group-hover:opacity-100"
             )}
           >

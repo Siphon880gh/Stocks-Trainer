@@ -80,7 +80,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                           <button
                             type="button"
                             onClick={() => onPracticeQuestion?.(i, group.id as QuizGroupId)}
-                            className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group"
+                            className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer group"
                           >
                             <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
                               <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>
@@ -155,7 +155,7 @@ export default function AnswerSheetModal({ isOpen, onClose, onPracticeQuestion, 
                   <button
                     type="button"
                     onClick={() => onPracticeQuestion?.(i, groupId)}
-                    className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-all cursor-pointer group"
+                    className="w-full text-left border border-line rounded-xl overflow-hidden bg-canvas hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer group"
                   >
                     <div className="flex items-center justify-between px-4 py-2 border-b border-line bg-surface group-hover:bg-primary/10">
                       <span className="text-xs font-mono text-primary/70">Q{i + 1} · {q.id}</span>

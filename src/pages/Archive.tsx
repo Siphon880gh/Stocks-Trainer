@@ -409,7 +409,7 @@ export default function Archive() {
             <div
               key={pattern.id}
               data-pattern-id={pattern.id}
-              className="relative rounded-xl border border-line bg-surface p-4 hover:border-primary transition-all"
+              className="relative rounded-xl border border-line bg-surface p-4 hover:border-primary transition-colors"
             >
             <button
               type="button"
@@ -493,7 +493,7 @@ export default function Archive() {
             : filteredOverlays.map((overlay) => (
             <div
               key={overlay.id}
-              className="relative rounded-xl border border-line bg-surface p-4 hover:border-primary transition-all"
+              className="relative rounded-xl border border-line bg-surface p-4 hover:border-primary transition-colors"
             >
             <button
               type="button"

@@ -431,8 +431,8 @@ export default function Market() {
                         checked={controls[key]}
                         onChange={() => toggleControl(key)}
                       />
-                      <div className="w-10 h-5 bg-canvas border border-line rounded-full peer-checked:bg-primary/20 transition-all"></div>
-                      <div className="absolute left-1 top-1 w-3 h-3 bg-muted rounded-full transition-all peer-checked:translate-x-5 peer-checked:bg-primary"></div>
+                      <div className="w-10 h-5 bg-canvas border border-line rounded-full peer-checked:bg-primary/20 transition-colors"></div>
+                      <div className="absolute left-1 top-1 w-3 h-3 bg-muted rounded-full transition-[transform,background-color] peer-checked:translate-x-5 peer-checked:bg-primary"></div>
                     </div>
                     <span className="text-sm font-medium group-hover:text-primary transition-colors capitalize">{key}</span>
                   </label>

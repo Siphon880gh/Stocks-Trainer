@@ -207,7 +207,7 @@ export default function Training() {
                   <span key={g.id} className="group/yt inline-flex items-center gap-1">
                     <button
                       onClick={() => setSelectedGroup(g.id)}
-                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${
+                      className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                         selectedGroup === g.id
                           ? "bg-primary text-white"
                           : isFeatured

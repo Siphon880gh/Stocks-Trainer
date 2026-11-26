@@ -63,7 +63,7 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
                 type="button"
                 aria-label={`Card ${i + 1}`}
                 onClick={() => setCard(i)}
-                className={cn("h-2 rounded-full transition-all", i === card ? "w-6 bg-primary" : "w-2 bg-line")}
+                className={cn("h-2 rounded-full transition-[width,background-color]", i === card ? "w-6 bg-primary" : "w-2 bg-line")}
               />
             ))}
             <span className="text-xs text-muted ml-2">
