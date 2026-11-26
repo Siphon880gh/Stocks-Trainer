@@ -1,4 +1,4 @@
-import { lazy, type ComponentType } from "react";
+import { Component, lazy, type ComponentType, type ReactNode } from "react";
 
 type Loader<P> = () => Promise<{ default: ComponentType<P> }>;
 const loaders: Array<() => Promise<unknown>> = [];
@@ -11,10 +11,16 @@ export function lazyPage<P extends object>(load: Loader<P>): ComponentType<P> {
   let Loaded: ComponentType<P> | null = null;
   let pending: Promise<{ default: ComponentType<P> }> | null = null;
   const preload = () =>
-    (pending ??= load().then((m) => {
-      Loaded = m.default;
-      return m;
-    }));
+    (pending ??= load().then(
+      (m) => {
+        Loaded = m.default;
+        return m;
+      },
+      (err: unknown) => {
+        pending = null; // let a retry fetch the chunk again
+        throw err;
+      },
+    ));
   const Lazy = lazy(preload) as unknown as ComponentType<P>;
   function Page(props: P) {
     const Comp = Loaded ?? Lazy;
@@ -34,4 +40,37 @@ export function PageLoading() {
       Loading…
     </div>
   );
+}
+
+/**
+ * Catches a page that fails to load or render (for example a chunk that no longer exists after a deploy, or a dropped
+ * connection) and offers a reload instead of a blank screen. Give it `key={pathname}` so moving to another page resets it.
+ */
+type BoundaryProps = { children: ReactNode; key?: string };
+export class PageErrorBoundary extends Component<BoundaryProps, { failed: boolean }> {
+  declare props: BoundaryProps;
+  declare state: { failed: boolean };
+  constructor(props: BoundaryProps) {
+    super(props);
+    this.state = { failed: false };
+  }
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    if (!this.state.failed) return this.props.children;
+    return (
+      <div role="alert" className="mx-auto max-w-md flex-1 space-y-3 p-8 text-sm" data-testid="page-error">
+        <p className="font-semibold text-ink">This page didn't load.</p>
+        <p className="text-muted">Check your connection, then reload. Your progress is saved in this browser.</p>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dim"
+        >
+          Reload the page
+        </button>
+      </div>
+    );
+  }
 }
