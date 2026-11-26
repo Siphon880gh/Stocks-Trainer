@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { THEME_PREFS, useTheme, type ThemePref } from "../lib/theme";
 import { cn } from "../lib/utils";
+import { Z } from "../lib/zLayers";
 
 const LABEL: Record<ThemePref, string> = { light: "Light", dark: "Dark", system: "System" };
 const ICON: Record<ThemePref, string> = { light: "light_mode", dark: "dark_mode", system: "contrast" };
@@ -68,7 +69,8 @@ export default function ThemeMenu({ className }: { className?: string }) {
           aria-label="Theme"
           data-testid="theme-menu"
           onKeyDown={onMenuKey}
-          className="absolute right-0 top-full z-[60] mt-1 w-44 rounded-lg border border-line bg-surface p-1 shadow-lg"
+          style={{ zIndex: Z.popover }}
+          className="absolute right-0 top-full mt-1 w-44 rounded-lg border border-line bg-surface p-1 shadow-lg"
         >
           {THEME_PREFS.map((p, i) => (
             <button

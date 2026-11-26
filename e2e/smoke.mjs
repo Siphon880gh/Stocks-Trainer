@@ -55,6 +55,75 @@ async function page(width) {
 }
 // Mobile emulation widens innerWidth to the content, so measure against the visual viewport.
 const overflow = (p) => p.evaluate(() => document.documentElement.scrollWidth - (window.visualViewport?.width ?? innerWidth));
+/**
+ * Text under WCAG AA on the page: every visible text node is composited over its real (possibly translucent)
+ * background chain and checked at 4.5:1 (3:1 for large text). Chart SVG labels, the AI helper, disabled controls
+ * and faded (opacity < 0.75) content are skipped. Returns "ratio colour-on-background 'text'" strings.
+ */
+const contrastFailures = (p) =>
+  p.evaluate(() => {
+    const cv = document.createElement("canvas");
+    cv.width = cv.height = 1;
+    const cx = cv.getContext("2d", { willReadFrequently: true });
+    const alphaOf = (c) => {
+      const m = c.match(/\/\s*([\d.]+%?)\s*\)|rgba\([^)]*,\s*([\d.]+)\)/);
+      if (!m) return 1;
+      const v = m[1] ?? m[2];
+      return v.endsWith("%") ? parseFloat(v) / 100 : +v;
+    };
+    const paint = (layers) => {
+      cx.fillStyle = "#fff";
+      cx.fillRect(0, 0, 1, 1);
+      for (const c of layers) {
+        cx.fillStyle = c;
+        cx.fillRect(0, 0, 1, 1);
+      }
+      const d = cx.getImageData(0, 0, 1, 1).data;
+      return [d[0], d[1], d[2]];
+    };
+    const lum = ([r, g, b]) => {
+      const f = (v) => ((v /= 255) <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+      return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b);
+    };
+    const bgLayers = (el) => {
+      const layers = [];
+      for (let e = el; e; e = e.parentElement) {
+        const c = getComputedStyle(e).backgroundColor;
+        const a = c && c !== "transparent" ? alphaOf(c) : 0;
+        if (a === 0) continue;
+        layers.unshift(c);
+        if (a >= 0.99) break;
+      }
+      return layers;
+    };
+    const faded = (el) => {
+      let o = 1;
+      for (let e = el; e; e = e.parentElement) o *= +getComputedStyle(e).opacity;
+      return o < 0.75;
+    };
+    const out = new Map();
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    while (walker.nextNode()) {
+      const t = walker.currentNode;
+      const text = t.textContent.trim();
+      if (!text) continue;
+      const el = t.parentElement;
+      if (!el || el.closest("svg,.hai-float,[data-harness],[hidden],[aria-hidden=true],button[disabled],[aria-disabled=true],input[disabled],select[disabled]")) continue;
+      const s = getComputedStyle(el);
+      const r = el.getBoundingClientRect();
+      if (r.width < 2 || r.height < 2 || s.visibility === "hidden" || s.display === "none" || faded(el)) continue;
+      const layers = bgLayers(el);
+      const bg = paint(layers);
+      const fg = paint([...layers, s.color]);
+      const [a, b] = [lum(fg), lum(bg)].sort((x, y) => y - x);
+      const ratio = (a + 0.05) / (b + 0.05);
+      const fs = parseFloat(s.fontSize);
+      const need = fs >= 24 || (fs >= 18.66 && +s.fontWeight >= 700) ? 3 : 4.5;
+      if (ratio < need - 0.01) out.set(`${s.color}|${layers.at(-1) ?? "none"}`, `${ratio.toFixed(2)} ${s.color} on ${layers.at(-1) ?? "page"} '${text.slice(0, 40)}'`);
+    }
+    return [...out.values()];
+  });
+const CONTRAST_PAGES = ["/", "/browse", "/training", "/academy", "/practice/levels", "/paper/desk", "/archive", "/map", "/cases", "/coach", "/macro", "/playbooks"];
 
 const flows = {
   async "ORB context deep links: Learn questions, glossary and sourced playbook"(p, w) {
@@ -1256,6 +1325,27 @@ const flows = {
       check(true, `page error @${w}: reload recovers`);
     } finally {
       await ctx.close();
+    }
+  },
+  async "Contrast: the 12 main pages meet WCAG AA text contrast in light and dark mode"(_p, w) {
+    for (const theme of ["light", "dark"]) {
+      const ctx = await browser.newContext({ viewport: { width: w, height: 900 }, isMobile: w < 600, hasTouch: w < 600 });
+      await ctx.addInitScript((t) => {
+        localStorage.setItem("analysis_core_theme_v1", t);
+        localStorage.setItem("analysis_core_track_v1", JSON.stringify({ id: "charts-patterns", at: "2026-11-25T00:00:00.000Z" }));
+      }, theme);
+      const p = await ctx.newPage();
+      try {
+        for (const path of CONTRAST_PAGES) {
+          await p.goto(base + path, { waitUntil: "networkidle" });
+          await p.waitForTimeout(200);
+          check((await p.evaluate(() => document.documentElement.classList.contains("dark"))) === (theme === "dark"), `contrast ${theme} ${path} @${w}: html class`);
+          const bad = await contrastFailures(p);
+          check(bad.length === 0, `contrast ${theme} ${path} @${w}: ${bad.length} under AA: ${bad.slice(0, 4).join(" | ")}`);
+        }
+      } finally {
+        await ctx.close();
+      }
     }
   },
 };
