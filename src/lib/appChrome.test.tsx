@@ -3,7 +3,7 @@ import { describe, it } from "node:test";
 import { MemoryRouter } from "react-router-dom";
 import AppChrome from "../components/AppChrome.tsx";
 import { MISC_PRACTICE_ITEMS } from "./miscPractices.ts";
-import { TOOL_LESSONS } from "./toolTraining/index.ts";
+import { HEADER_NAV, PRACTICE_FAMILIES } from "./appNav.ts";
 import { hrefs, renderHtml } from "./macro/renderHarness.ts";
 
 describe("AppChrome header nav", () => {
@@ -16,49 +16,36 @@ describe("AppChrome header nav", () => {
   );
   const nav = html.slice(html.indexOf('data-testid="app-nav"'), html.indexOf("</nav>"));
   const links = hrefs(nav);
+  const between = (from: string, to: string) => nav.slice(nav.indexOf(`data-testid="${from}"`), nav.indexOf(`data-testid="${to}"`));
 
-  it("follows the Learn page through Practice, then Deep Study and Other factors", () => {
+  it("shows six top-level destinations in order: Home, Learn, Practice, Trade, Map, Browse everything", () => {
+    assert.deepEqual(HEADER_NAV.map((i) => i.label), ["Home", "Learn", "Practice", "Trade", "Map", "Browse everything"]);
     const at = (href: string) => links.indexOf(href);
-    assert.ok(at("/") < at("/map"));
-    assert.ok(at("/map") < at("/training"));
-    assert.ok(at("/training") < at("/academy"));
-    assert.ok(at("/academy") < at("/training#concepts"));
-    assert.ok(at("/training#concepts") < at("/training#patterns"));
-    const patternMenu = nav.slice(nav.indexOf('data-testid="pattern-menu"'));
-    assert.deepEqual(hrefs(patternMenu).slice(0, 3), ["/practice/candle-basics", "/training#patterns", "/archive"]);
-    assert.ok(at("/archive") < at("/training#practice"));
-    assert.ok(at("/archive") < at("/training#practice"));
-    assert.ok(at("/training#practice") < at("/cases"));
-    assert.deepEqual(links.slice(at("/cases"), at("/cases") + 3), ["/cases", "/coach", "/playbooks"]);
-    assert.ok(at("/playbooks") < at("/paper"));
-    assert.ok(at("/paper") < at("/paper/challenges"));
-    assert.ok(at("/paper/challenges") < at("/training#financials"));
-    assert.ok(at("/training#financials") < at("/training#macro"));
-    assert.ok(at("/training#macro") < at("/market"));
-    assert.ok(at("/market") < at("/training#buy-or-sell"));
+    assert.equal(links[0], "/");
+    assert.ok(at("/academy") < at("/training#practice"));
+    assert.ok(at("/training#practice") < at("/paper"));
+    assert.ok(at("/paper") < at("/map"));
+    assert.ok(at("/map") < links.lastIndexOf("/browse"), "the Browse everything link follows Map");
+    assert.match(nav, /data-testid="nav-browse"/);
+    assert.match(nav, /data-testid="track-chip"/);
   });
 
-  it("includes map destinations that are not their own top-level names", () => {
-    for (const href of ["/paper", "/paper/challenges", "/academy/options", "/archive", "/macro", "/macro/play", "/practice/statements", "/practice/read-the-print", "/practice/mark-the-band"]) {
+  it("keeps every old destination reachable from the header menus", () => {
+    for (const href of ["/training", "/training#patterns", "/training#concepts", "/practice/candle-basics", "/archive", "/academy/options", "/tools", "/macro", "/macro/play", "/practice/statements", "/practice/read-the-print", "/practice/mark-the-band", "/cases", "/coach", "/playbooks", "/paper", "/paper/desk", "/paper/challenges", "/market", "/training#buy-or-sell", "/training#financials", "/training#macro"]) {
       assert.ok(links.includes(href), href);
     }
     for (const item of MISC_PRACTICE_ITEMS) assert.ok(links.includes(item.to), item.title);
-    assert.ok(links.indexOf("/practice/japanese-candles") < links.indexOf("/practice/futures-vs-options"));
-    assert.ok(links.indexOf("/practice/futures-vs-options") < links.indexOf("/academy/options"));
-    assert.ok(links.indexOf("/academy/options") < links.indexOf("/practice/wheel-strategy"));
-    assert.ok(links.indexOf("/practice/wheel-strategy") < links.indexOf("/practice/crypto-candles"));
-    assert.ok(links.indexOf("/practice/crypto-candles") < links.indexOf("/practice/vix-trading"));
-    assert.ok(links.indexOf("/practice/vix-trading") < links.indexOf("/practice/algo-trading"));
   });
 
-  it("puts Tool Training after Practice and before Deep Study, with every lesson and the charting-apps comparison", () => {
-    const menu = nav.slice(nav.indexOf('data-testid="tool-training-menu"'));
-    const toolLinks = hrefs(menu.slice(0, menu.indexOf('data-testid="deep-study-menu"')));
-    assert.equal(toolLinks[0], "/tools");
-    for (const t of TOOL_LESSONS) assert.ok(toolLinks.includes(t.route), t.route);
-    assert.equal(toolLinks[toolLinks.length - 1], "/practice/charting-apps");
-    assert.ok(links.indexOf("/training#practice") < links.indexOf("/tools"));
-    assert.ok(links.indexOf("/tools") < links.indexOf("/cases"));
+  it("groups Practice into labelled families and ends every menu with Browse everything", () => {
+    const practice = between("practice-menu", "trade-menu");
+    for (const f of PRACTICE_FAMILIES) assert.ok(practice.includes(`aria-label="${f.title}"`), f.title);
+    assert.ok(hrefs(practice).includes("/practice/opening-range"));
+    for (const id of ["learn-menu", "practice-menu", "trade-menu"]) {
+      const m = nav.slice(nav.indexOf(`data-testid="${id}"`));
+      const items = hrefs(m.slice(0, m.indexOf("Browse everything") + 1));
+      assert.equal(items[items.length - 1], "/browse", id);
+    }
   });
 
   it("keeps those links under the mounted path", () => {
@@ -71,27 +58,21 @@ describe("AppChrome header nav", () => {
       </MemoryRouter>,
     );
     const mountedNav = underBase.slice(underBase.indexOf('data-testid="app-nav"'), underBase.indexOf("</nav>"));
-    for (const href of ["/playbooks", "/training#patterns", "/archive", "/paper", "/practice/candle-basics"]) {
+    for (const href of ["/playbooks", "/training#patterns", "/archive", "/paper", "/practice/candle-basics", "/browse", "/map"]) {
       assert.ok(mountedNav.includes(`href="${mounted}${href}"`), href);
     }
     assert.doesNotMatch(mountedNav, /href="\/training#/);
   });
 
-  it("puts Map in the Dashboard menu and names Learn as ToC", () => {
-    assert.match(nav, />Dashboard</);
-    assert.match(nav, />school<\/span>Lessons/);
-    assert.match(nav, />lightbulb<\/span>Quiz \(Concepts\)/);
-    assert.match(nav, />candlestick_chart<\/span>Candlestick Basics/);
-    assert.match(nav, />quiz<\/span>Quiz \(Patterns\)/);
-    assert.match(nav, />menu_book<\/span>Library/);
+  it("names the menu items with their icons", () => {
+    assert.match(nav, />school<\/span>Academy lessons/);
+    assert.match(nav, />toc<\/span>Table of Contents/);
+    assert.match(nav, />menu_book<\/span>Library and glossary/);
     assert.match(nav, />cases<\/span>Cases/);
     assert.match(nav, />psychology<\/span>Coach/);
-    assert.match(nav, />auto_stories<\/span>Playbooks/);
     assert.match(nav, />account_balance_wallet<\/span>Paper trading/);
     assert.match(nav, />emoji_events<\/span>Challenges/);
-    assert.match(nav, />Quick Decisions</);
-    assert.ok(links.includes("/map"));
-    assert.ok(html.indexOf('data-testid="app-nav"') < html.indexOf('href="/map"'));
+    assert.match(nav, />Pick a path</);
   });
 
   it("gives the links a wrapping full-width row below md, so the menu stays on a phone screen", () => {
@@ -100,5 +81,6 @@ describe("AppChrome header nav", () => {
     assert.match(navTag, /\bmd:w-auto\b/);
     assert.match(navTag, /\bmd:flex-nowrap\b/);
     assert.match(html, /flex-wrap md:flex-nowrap/);
+    assert.match(nav, /max-sm:fixed max-sm:inset-x-2/);
   });
 });

@@ -84,6 +84,7 @@ export interface NavItem {
 
 /** Lessons, quizzes and reference. */
 export const LEARN_MENU: readonly NavItem[] = [
+  { label: "Table of Contents", to: "/training", icon: "toc" },
   { label: "Academy lessons", to: "/academy", icon: "school" },
   { label: "Candlestick Basics", to: "/practice/candle-basics", icon: "candlestick_chart" },
   { label: "Quiz (Patterns)", to: "/training#patterns", icon: "quiz" },
