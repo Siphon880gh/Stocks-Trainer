@@ -127,7 +127,7 @@ export default function Archive() {
               }, { replace: true });
             }}
             className={`flex h-9 shrink-0 items-center gap-2 rounded-lg px-4 font-bold text-sm transition-colors ${
-              tab === "patterns" ? "bg-primary text-white" : "bg-primary/10 text-primary hover:bg-primary/20"
+              tab === "patterns" ? "bg-primary-fill text-white" : "bg-primary/10 text-primary hover:bg-primary/20"
             }`}
           >
             <span className="material-symbols-outlined text-lg">candlestick_chart</span>
@@ -140,7 +140,7 @@ export default function Archive() {
               setSearchParams({ tab: "indicators" }, { replace: true });
             }}
             className={`flex h-9 shrink-0 items-center gap-2 rounded-lg px-4 font-bold text-sm transition-colors ${
-              tab === "indicators" ? "bg-primary text-white" : "bg-primary/10 text-primary hover:bg-primary/20"
+              tab === "indicators" ? "bg-primary-fill text-white" : "bg-primary/10 text-primary hover:bg-primary/20"
             }`}
           >
             <span className="material-symbols-outlined text-lg">show_chart</span>
@@ -153,7 +153,7 @@ export default function Archive() {
               setSearchParams({ tab: "literacy" }, { replace: true });
             }}
             className={`flex h-9 shrink-0 items-center gap-2 rounded-lg px-4 font-bold text-sm transition-colors ${
-              tab === "literacy" ? "bg-primary text-white" : "bg-primary/10 text-primary hover:bg-primary/20"
+              tab === "literacy" ? "bg-primary-fill text-white" : "bg-primary/10 text-primary hover:bg-primary/20"
             }`}
           >
             <span className="material-symbols-outlined text-lg">menu_book</span>
@@ -169,7 +169,7 @@ export default function Archive() {
               onClick={() => setFilter(f)}
               className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded px-4 cursor-pointer transition-colors ${
                 filter === f
-                  ? "bg-primary text-white"
+                  ? "bg-primary-fill text-white"
                   : "bg-primary/10 border border-line text-primary hover:bg-primary/20"
               }`}
             >
@@ -186,7 +186,7 @@ export default function Archive() {
               onClick={() => setIndicatorFilter(f)}
               className={`flex h-8 shrink-0 items-center justify-center gap-x-2 rounded px-4 cursor-pointer transition-colors ${
                 indicatorFilter === f
-                  ? "bg-primary text-white"
+                  ? "bg-primary-fill text-white"
                   : "bg-primary/10 border border-line text-primary hover:bg-primary/20"
               }`}
             >

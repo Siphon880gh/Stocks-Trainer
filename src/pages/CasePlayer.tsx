@@ -81,7 +81,7 @@ export default function CasePlayer() {
         <div className="flex flex-wrap gap-3">
           <Link
             to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
-            className="inline-flex rounded-lg bg-primary px-3 py-2 text-sm font-bold text-white"
+            className="inline-flex rounded-lg bg-primary-fill px-3 py-2 text-sm font-bold text-white"
           >
             Take Indicators quiz
           </Link>
@@ -194,7 +194,7 @@ export default function CasePlayer() {
                 onClick={() => !submitted && setSelected(a.id)}
                 className={`py-3 rounded font-bold font-mono text-sm border transition-colors ${
                   selected === a.id
-                    ? "bg-primary text-white border-primary"
+                    ? "bg-primary-fill text-white border-primary"
                     : "border-line text-primary hover:bg-primary/10"
                 }`}
               >
@@ -207,7 +207,7 @@ export default function CasePlayer() {
               type="button"
               disabled={!selected}
               onClick={onSubmit}
-              className="w-full bg-primary text-white font-bold py-3 rounded disabled:opacity-40"
+              className="w-full bg-primary-fill text-white font-bold py-3 rounded disabled:opacity-40"
             >
               Lock in and see what happened
             </button>

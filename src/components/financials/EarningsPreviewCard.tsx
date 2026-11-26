@@ -39,7 +39,7 @@ function RangeBar({ range, ticks }: { range: GuidanceRange; ticks: { value: numb
   const hi = Math.max(...values);
   const pad = (hi - lo) * 0.15 || hi * 0.01;
   const pos = (v: number) => `${(((v - (lo - pad)) / (hi + pad - (lo - pad))) * 100).toFixed(1)}%`;
-  const toneClass = { muted: "bg-muted", ink: "bg-ink", up: "bg-up", red: "bg-accent-red" };
+  const toneClass = { muted: "bg-muted", ink: "bg-ink", up: "bg-up-fill", red: "bg-accent-red-fill" };
   return (
     <div className="relative h-9 mt-1" aria-hidden="true">
       <div className="absolute top-3 left-0 right-0 h-1 rounded bg-line" />

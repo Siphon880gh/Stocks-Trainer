@@ -36,7 +36,7 @@ export default function AppSectionNav() {
             className={({ isActive }) =>
               cn(
                 "px-2.5 py-1 rounded-full border text-[13px] whitespace-nowrap",
-                isActive ? "border-primary bg-primary text-white font-semibold" : "border-line bg-surface text-muted hover:text-ink",
+                isActive ? "border-primary bg-primary-fill text-white font-semibold" : "border-line bg-surface text-muted hover:text-ink",
               )
             }
           >

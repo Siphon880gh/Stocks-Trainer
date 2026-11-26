@@ -82,7 +82,7 @@ export default function AcademyTestOut({ storage, preset }: { storage?: KVStorag
               awardTestOut(lv, storage);
             }
           }}
-          className="px-4 py-2 rounded-md bg-primary text-white text-[13px] font-semibold disabled:opacity-40"
+          className="px-4 py-2 rounded-md bg-primary-fill text-white text-[13px] font-semibold disabled:opacity-40"
           data-testid="submit-test-out"
         >
           Check my answers

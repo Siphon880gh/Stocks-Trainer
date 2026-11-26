@@ -95,7 +95,7 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
       </div>
       <div className="grid grid-cols-2 gap-1.5" role="group" aria-label="Side">
         {(["buy", "sell"] as const).map((s) => (
-          <button key={s} type="button" onClick={() => set({ side: s, type: s === "buy" && f.type === "trailing-stop" ? "market" : f.type })} aria-pressed={f.side === s} className={cn("py-1.5 rounded-md text-[13px] font-semibold border", f.side === s ? (s === "buy" ? "bg-up text-white border-up" : "bg-accent-red text-white border-accent-red") : "border-line")}>
+          <button key={s} type="button" onClick={() => set({ side: s, type: s === "buy" && f.type === "trailing-stop" ? "market" : f.type })} aria-pressed={f.side === s} className={cn("py-1.5 rounded-md text-[13px] font-semibold border", f.side === s ? (s === "buy" ? "bg-up-fill text-white border-up" : "bg-accent-red-fill text-white border-accent-red") : "border-line")}>
             {s === "buy" ? "Buy" : "Sell"}
           </button>
         ))}
@@ -222,7 +222,7 @@ export default function OrderTicket({ state, symbol, allowedTypes = ORDER_TYPES,
           </ul>
         ) : null}
       </div>
-      <button type="submit" disabled={!v.ok || disabled || !biasOk} className="w-full py-2 rounded-md bg-sim hover:bg-sim-dim text-white text-[13px] font-semibold disabled:opacity-40" data-testid="ticket-submit">
+      <button type="submit" disabled={!v.ok || disabled || !biasOk} className="w-full py-2 rounded-md bg-sim-fill hover:bg-sim-dim text-white text-[13px] font-semibold disabled:opacity-40" data-testid="ticket-submit">
         Place simulated order
       </button>
     </form>

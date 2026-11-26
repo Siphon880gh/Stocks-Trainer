@@ -143,7 +143,7 @@ export default function Cases() {
               {!gateDone ? (
                 <Link
                   to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
-                  className="inline-flex items-center gap-1 rounded-lg bg-primary px-3 py-2 text-sm font-bold text-white"
+                  className="inline-flex items-center gap-1 rounded-lg bg-primary-fill px-3 py-2 text-sm font-bold text-white"
                 >
                   Take Indicators quiz
                 </Link>

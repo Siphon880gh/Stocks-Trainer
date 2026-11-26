@@ -234,7 +234,7 @@ export default function Dashboard() {
         </p>
         <div className="h-1.5 w-full bg-canvas rounded-full overflow-hidden">
           <div
-            className="h-full bg-primary rounded-full"
+            className="h-full bg-primary-fill rounded-full"
             style={{
               width: `${Math.round(
                 (completedCount / Math.max(pathDefs.length, 1)) * 100

@@ -35,7 +35,7 @@ export default function MacroDesk() {
             {MACRO_ROUNDS.length} rounds across six market regimes. {prog.completed > 0 ? `You have played ${prog.completed} of ${prog.of} (${prog.correct}/${prog.total} best calls).` : "Start with any round."}
           </p>
         </div>
-        <Link to="/macro/play" className="bg-primary hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg inline-flex items-center gap-2">
+        <Link to="/macro/play" className="bg-primary-fill hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg inline-flex items-center gap-2">
           <span className="material-symbols-outlined" aria-hidden>
             play_arrow
           </span>

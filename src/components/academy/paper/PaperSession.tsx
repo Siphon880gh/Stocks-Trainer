@@ -83,7 +83,7 @@ export default function PaperSession({ log, onLog, allowedTypes, lastBar, toolba
           Bar {log.bar + 1} of {end + 1}
         </span>
         <div className="flex-1" />
-        <button type="button" disabled={atEnd} onClick={() => step(1)} className="px-3 py-1.5 rounded-md bg-primary text-white text-[13px] font-semibold disabled:opacity-40" data-testid="step-1">
+        <button type="button" disabled={atEnd} onClick={() => step(1)} className="px-3 py-1.5 rounded-md bg-primary-fill text-white text-[13px] font-semibold disabled:opacity-40" data-testid="step-1">
           Next bar
         </button>
         <button type="button" disabled={atEnd} onClick={() => step(5)} className="px-3 py-1.5 rounded-md border border-line text-[13px] disabled:opacity-40" data-testid="step-5">

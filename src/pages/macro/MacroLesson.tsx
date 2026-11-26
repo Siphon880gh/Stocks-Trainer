@@ -19,7 +19,7 @@ function Step({ n, title, children }: { n: number; title: string; children: Reac
   return (
     <section className="space-y-2" aria-label={title}>
       <h2 className="text-[15px] font-semibold flex items-center gap-2">
-        <span className="inline-flex w-6 h-6 rounded-full bg-primary text-white text-[12px] items-center justify-center">{n}</span>
+        <span className="inline-flex w-6 h-6 rounded-full bg-primary-fill text-white text-[12px] items-center justify-center">{n}</span>
         {title}
       </h2>
       {children}
@@ -56,7 +56,7 @@ export default function MacroLesson({ lessonIdOverride }: { lessonIdOverride?: s
     lesson.eventIds.length > 1 ? (
           <div className="flex flex-wrap gap-2">
             {lesson.eventIds.map((id) => (
-              <button key={id} type="button" aria-pressed={id === eventId} onClick={() => setEventId(id)} className={`px-3 py-1 rounded-lg border text-[13px] ${id === eventId ? "bg-primary text-white border-primary" : "border-line"}`}>
+              <button key={id} type="button" aria-pressed={id === eventId} onClick={() => setEventId(id)} className={`px-3 py-1 rounded-lg border text-[13px] ${id === eventId ? "bg-primary-fill text-white border-primary" : "border-line"}`}>
                 {getRelease(id)!.period}
               </button>
             ))}

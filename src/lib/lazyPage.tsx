@@ -66,7 +66,7 @@ export class PageErrorBoundary extends Component<BoundaryProps, { failed: boolea
         <button
           type="button"
           onClick={() => window.location.reload()}
-          className="rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dim"
+          className="rounded-md bg-primary-fill px-3 py-2 text-sm font-semibold text-white hover:bg-primary-dim"
         >
           Reload the page
         </button>

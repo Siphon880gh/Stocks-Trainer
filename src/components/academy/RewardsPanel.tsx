@@ -33,7 +33,7 @@ export default function RewardsPanel({ storage, now = new Date(), preview = read
         </p>
       </div>
       <div className="h-2 rounded-full bg-line overflow-hidden" aria-label={`Progress to the next rank ${Math.round(rank.progress * 100)}%`}>
-        <div className="h-full bg-sim" style={{ width: `${Math.round(rank.progress * 100)}%` }} />
+        <div className="h-full bg-sim-fill" style={{ width: `${Math.round(rank.progress * 100)}%` }} />
       </div>
       <p className="text-xs text-muted">
         {rank.next === null ? "Top rank reached." : `${rank.next - pts} points to the next rank.`} Units {by["unit-mastered"]} · test-outs {by["test-out"]} · challenges {by["challenge-passed"]} · daily {by["daily-goal"]} · options {by["options-level"]} · other {by["first-order"] + by["retro-credit"]}

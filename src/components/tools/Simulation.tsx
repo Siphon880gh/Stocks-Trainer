@@ -229,7 +229,7 @@ export function SimPanel({ sim, walk, onNext, onPrev, onReplay, onClose }: { sim
           <button type="button" onClick={onPrev} disabled={atStart(walk)} className="px-3 py-1.5 rounded border border-line text-[12px] disabled:opacity-40">
             ← Previous {unit}
           </button>
-          <button type="button" data-sim-next onClick={onNext} disabled={atEnd(walk)} className="px-3 py-1.5 rounded bg-sim text-white text-[12px] font-medium disabled:opacity-40">
+          <button type="button" data-sim-next onClick={onNext} disabled={atEnd(walk)} className="px-3 py-1.5 rounded bg-sim-fill text-white text-[12px] font-medium disabled:opacity-40">
             Next {unit} →
           </button>
           <button type="button" onClick={onReplay} className="px-3 py-1.5 rounded border border-line text-[12px]">

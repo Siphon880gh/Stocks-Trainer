@@ -134,7 +134,7 @@ export default function TrialReadoutPanel({ initialId, initialPhase = "setup" }:
               type="button"
               disabled={!sizePick}
               onClick={() => setPhase("reveal")}
-              className="px-3 py-1.5 rounded-lg bg-primary text-white text-[12px] disabled:opacity-40"
+              className="px-3 py-1.5 rounded-lg bg-primary-fill text-white text-[12px] disabled:opacity-40"
               data-testid="readout-reveal-button"
             >
               Reveal the readout

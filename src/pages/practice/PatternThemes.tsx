@@ -45,7 +45,7 @@ export default function PracticePatternThemes() {
               onClick={() => pick(t.id)}
               className={cn(
                 "rounded-full border px-3 py-1 text-[12px]",
-                t.id === selected ? "border-primary bg-primary text-white" : "border-line bg-surface hover:bg-primary/10",
+                t.id === selected ? "border-primary bg-primary-fill text-white" : "border-line bg-surface hover:bg-primary/10",
               )}
             >
               {t.n}. {t.short}

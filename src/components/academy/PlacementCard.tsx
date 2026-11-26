@@ -48,7 +48,7 @@ export default function PlacementCard({ variant = "hub", storage, initialPhase =
             Answer {PLACEMENT_ITEMS.length} quick questions and the Academy suggests a starting level. You can skip it and start from Orientation; nothing else in the app changes.
           </p>
           <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={() => setPhase("quiz")} className="px-3 py-1.5 rounded-md bg-primary text-white font-semibold text-[13px]" data-testid="placement-start">
+            <button type="button" onClick={() => setPhase("quiz")} className="px-3 py-1.5 rounded-md bg-primary-fill text-white font-semibold text-[13px]" data-testid="placement-start">
               Take the placement check
             </button>
             <button type="button" onClick={() => finish(skipPlacement())} className="px-3 py-1.5 rounded-md border border-line text-[13px]" data-testid="placement-skip">
@@ -95,11 +95,11 @@ export default function PlacementCard({ variant = "hub", storage, initialPhase =
               Back
             </button>
             {i < PLACEMENT_ITEMS.length - 1 ? (
-              <button type="button" disabled={!answers[q.id]} onClick={() => setI(i + 1)} className="px-3 py-1.5 rounded-md bg-primary text-white text-[13px] font-semibold disabled:opacity-40">
+              <button type="button" disabled={!answers[q.id]} onClick={() => setI(i + 1)} className="px-3 py-1.5 rounded-md bg-primary-fill text-white text-[13px] font-semibold disabled:opacity-40">
                 Next
               </button>
             ) : (
-              <button type="button" disabled={!answers[q.id]} onClick={() => finish(routePlacement(answers))} className="px-3 py-1.5 rounded-md bg-primary text-white text-[13px] font-semibold disabled:opacity-40" data-testid="placement-finish">
+              <button type="button" disabled={!answers[q.id]} onClick={() => finish(routePlacement(answers))} className="px-3 py-1.5 rounded-md bg-primary-fill text-white text-[13px] font-semibold disabled:opacity-40" data-testid="placement-finish">
                 See my starting level
               </button>
             )}
@@ -126,7 +126,7 @@ export default function PlacementCard({ variant = "hub", storage, initialPhase =
               ))}
             </p>
           ) : null}
-          <Link to="/academy" className="inline-block px-3 py-1.5 rounded-md bg-primary text-white text-[13px] font-semibold">
+          <Link to="/academy" className="inline-block px-3 py-1.5 rounded-md bg-primary-fill text-white text-[13px] font-semibold">
             Open the Academy
           </Link>
         </div>

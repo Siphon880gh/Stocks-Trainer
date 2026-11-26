@@ -85,7 +85,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
               {nextU.levelId} · about {estMinutes(nextU)} min · {nextU.objective}
             </p>
           </div>
-          <Link to={`/academy/${nextU.id}`} className="bg-primary hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg inline-flex items-center gap-2">
+          <Link to={`/academy/${nextU.id}`} className="bg-primary-fill hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg inline-flex items-center gap-2">
             <span className="material-symbols-outlined" aria-hidden>
               play_arrow
             </span>
@@ -132,7 +132,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                     <span className="text-xs text-muted">{Math.round(coursePct(state, c.id) * 100)}%</span>
                   </div>
                   <div className="h-1.5 rounded-full bg-line overflow-hidden" aria-hidden>
-                    <div className="h-full bg-up" style={{ width: `${Math.round(coursePct(state, c.id) * 100)}%` }} />
+                    <div className="h-full bg-up-fill" style={{ width: `${Math.round(coursePct(state, c.id) * 100)}%` }} />
                   </div>
                   <ul className="space-y-1">
                     {c.unitIds.map((id) => {

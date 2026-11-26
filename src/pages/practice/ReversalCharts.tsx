@@ -53,7 +53,7 @@ export default function PracticeReversalCharts() {
               onClick={() => setOpen(p.id)}
               className={cn(
                 "px-2 py-1 rounded border text-[12px]",
-                open === p.id ? "bg-primary text-white border-primary" : "border-line bg-primary/10 text-primary",
+                open === p.id ? "bg-primary-fill text-white border-primary" : "border-line bg-primary/10 text-primary",
               )}
             >
               {p.name}

@@ -146,7 +146,7 @@ export default function ReadThePrintGame({
         </p>
         <button
           type="button"
-          className="px-3 py-1.5 rounded-lg bg-primary text-white text-[13px]"
+          className="px-3 py-1.5 rounded-lg bg-primary-fill text-white text-[13px]"
           onClick={() => {
             setDone(false);
             setIndex(0);
@@ -207,7 +207,7 @@ export default function ReadThePrintGame({
       {!reveal ? <PriorQuarters round={round} /> : null}
 
       {phase === "read" ? (
-        <button type="button" className="px-4 py-2 rounded-lg bg-primary text-white text-[13px]" onClick={() => setPhase("answer")}>
+        <button type="button" className="px-4 py-2 rounded-lg bg-primary-fill text-white text-[13px]" onClick={() => setPhase("answer")}>
           I've read it: make the call
         </button>
       ) : null}
@@ -320,7 +320,7 @@ export default function ReadThePrintGame({
               ))}
             </p>
           ) : null}
-          <button type="button" className="px-4 py-2 rounded-lg bg-primary text-white text-[13px]" onClick={nextRound}>
+          <button type="button" className="px-4 py-2 rounded-lg bg-primary-fill text-white text-[13px]" onClick={nextRound}>
             {index + 1 >= rounds.length ? "Finish session" : "Next round →"}
           </button>
         </div>

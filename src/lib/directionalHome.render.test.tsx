@@ -62,6 +62,6 @@ test("directional Home: with a picked path, Next up is the only filled action an
   assert.doesNotMatch(fold!.slice(0, fold!.indexOf(">")), /\sopen/, "the fold starts closed");
   for (const id of ["today-card", "placement-card", "home-map-link"]) assert.match(fold!, new RegExp(`data-testid="${id}"`), `${id} sits in the fold`);
   const outside = html.replace(fold!, "");
-  const filled = (outside.match(/class="[^"]*\bbg-primary text-white\b[^"]*"/g) ?? []).length;
+  const filled = (outside.match(/class="[^"]*\bbg-primary-fill text-white\b[^"]*"/g) ?? []).length;
   assert.equal(filled, 1, `${filled} filled primary actions outside the fold`);
 });

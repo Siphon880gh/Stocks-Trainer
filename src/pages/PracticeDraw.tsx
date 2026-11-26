@@ -344,7 +344,7 @@ export default function PracticeDraw() {
                 type="button"
                 onClick={handleSubmit}
                 disabled={strokes.length === 0}
-                className="px-3 py-1.5 text-[13px] rounded-md bg-primary text-white font-semibold disabled:opacity-30 hover:bg-primary-dim"
+                className="px-3 py-1.5 text-[13px] rounded-md bg-primary-fill text-white font-semibold disabled:opacity-30 hover:bg-primary-dim"
               >
                 Submit
               </button>
@@ -418,7 +418,7 @@ export default function PracticeDraw() {
           </Link>
           <Link
             to="/training"
-            className="flex-1 p-3 rounded-lg bg-primary text-white font-semibold hover:bg-primary-dim text-center text-sm"
+            className="flex-1 p-3 rounded-lg bg-primary-fill text-white font-semibold hover:bg-primary-dim text-center text-sm"
           >
             Quizzes
           </Link>

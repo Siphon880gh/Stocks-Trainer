@@ -128,7 +128,7 @@ export default function PathMapPanel({
               {i > 0 ? (
                 <div
                   className={`mt-[0.85rem] h-px w-6 sm:w-10 shrink-0 ${
-                    prevComplete ? "bg-up" : "bg-line"
+                    prevComplete ? "bg-up-fill" : "bg-line"
                   }`}
                   aria-hidden
                 />

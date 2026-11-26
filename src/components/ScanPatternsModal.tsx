@@ -94,7 +94,7 @@ export default function ScanPatternsModal({
             <Link
               to="/training"
               onClick={onClose}
-              className="flex-1 bg-primary hover:bg-primary/90 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors"
+              className="flex-1 bg-primary-fill hover:bg-primary/90 text-white py-3 rounded-lg font-bold flex items-center justify-center gap-2 transition-colors"
             >
               <span className="material-symbols-outlined">quiz</span>
               Quiz

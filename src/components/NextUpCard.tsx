@@ -62,7 +62,7 @@ export default function NextUpCard({ track }: { track: Track }) {
                 data-testid="next-up-step"
                 className={
                   i === 0
-                    ? "flex items-center justify-between gap-3 rounded-lg bg-primary text-white px-4 py-2.5 text-sm font-semibold hover:bg-primary-dim"
+                    ? "flex items-center justify-between gap-3 rounded-lg bg-primary-fill text-white px-4 py-2.5 text-sm font-semibold hover:bg-primary-dim"
                     : "flex items-center justify-between gap-3 rounded-lg border border-line px-4 py-2 text-sm hover:bg-canvas"
                 }
               >

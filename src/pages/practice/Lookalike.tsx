@@ -72,7 +72,7 @@ export default function PracticeLookalike() {
         </div>
         <button
           type="button"
-          className="bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dim disabled:opacity-40"
+          className="bg-primary-fill text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-primary-dim disabled:opacity-40"
           disabled={pick == null}
           onClick={() => {
             if (pick == null) return;

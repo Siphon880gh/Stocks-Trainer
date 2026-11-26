@@ -438,7 +438,7 @@ export default function QuizModal({
                 onClick={handleSubmit}
                 disabled={!selectedOption}
                 className={cn(
-                  "flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-colors",
+                  "flex-1 bg-primary-fill hover:bg-primary/90 text-white font-bold py-4 rounded-lg flex items-center justify-center gap-2 transition-colors",
                   !selectedOption && "opacity-50 cursor-not-allowed"
                 )}
               >
@@ -448,7 +448,7 @@ export default function QuizModal({
             ) : (
               <button
                 onClick={handleNext}
-                className="flex-1 bg-primary hover:bg-primary-dim text-white font-semibold py-3.5 rounded-lg flex items-center justify-center gap-2"
+                className="flex-1 bg-primary-fill hover:bg-primary-dim text-white font-semibold py-3.5 rounded-lg flex items-center justify-center gap-2"
               >
                 {currentIndex < questions.length - 1 ? "Next question" : "Finish"}
                 <span className="material-symbols-outlined">arrow_forward</span>

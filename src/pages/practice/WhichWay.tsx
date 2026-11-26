@@ -98,7 +98,7 @@ export default function PracticeWhichWay() {
               onClick={() => setMode(m.id)}
               className={cn(
                 "rounded-full border px-3 py-1",
-                prog.mode === m.id ? "border-primary bg-primary text-white" : "border-line bg-surface hover:bg-primary/10",
+                prog.mode === m.id ? "border-primary bg-primary-fill text-white" : "border-line bg-surface hover:bg-primary/10",
               )}
             >
               {m.label} ({roundsFor(m.id).length})
@@ -163,7 +163,7 @@ export default function PracticeWhichWay() {
               <p data-testid="ww-why">{feedbackLine(round)}</p>
               <p data-testid="ww-confirm"><span className="font-medium">Confirmation to wait for:</span> {round.confirm}</p>
               <div className="flex flex-wrap items-center gap-3 pt-1">
-                <button type="button" onClick={nextRound} data-testid="ww-next" className="rounded-lg bg-primary text-white px-3 py-1.5 text-[13px]">
+                <button type="button" onClick={nextRound} data-testid="ww-next" className="rounded-lg bg-primary-fill text-white px-3 py-1.5 text-[13px]">
                   Next pattern (Enter)
                 </button>
                 <Link to={`/archive?open=${round.id}`} className="text-primary text-[12px] hover:underline">Open in the Archive</Link>

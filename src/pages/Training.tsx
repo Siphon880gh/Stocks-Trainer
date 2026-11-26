@@ -96,7 +96,7 @@ export default function Training() {
             <div className="hidden md:flex flex-col items-end">
               <span className="text-[12px] text-muted">Accuracy</span>
               <div className="w-40 h-1.5 bg-canvas rounded-full mt-1 overflow-hidden">
-                <div className="h-full bg-primary rounded-full" style={{ width: `${accuracy}%` }} />
+                <div className="h-full bg-primary-fill rounded-full" style={{ width: `${accuracy}%` }} />
               </div>
             </div>
             <div className="flex items-center gap-1.5 text-sm tabular-nums">
@@ -209,7 +209,7 @@ export default function Training() {
                       onClick={() => setSelectedGroup(g.id)}
                       className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
                         selectedGroup === g.id
-                          ? "bg-primary text-white"
+                          ? "bg-primary-fill text-white"
                           : isFeatured
                             ? "border border-line bg-primary/5 text-ink hover:bg-primary/10"
                             : "border border-line text-ink hover:bg-canvas"
@@ -328,7 +328,7 @@ export default function Training() {
                     setIsQuizOpen(true);
                   }}
                   disabled={groupLocked}
-                  className="bg-primary hover:bg-primary-dim text-white font-semibold px-4 py-2.5 rounded-lg inline-flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
+                  className="bg-primary-fill hover:bg-primary-dim text-white font-semibold px-4 py-2.5 rounded-lg inline-flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   <span className="material-symbols-outlined">play_arrow</span>
                   {groupLocked ? "Locked" : "Start quiz"}
@@ -472,7 +472,7 @@ export default function Training() {
                 setQuizStartIndex(undefined);
                 setIsQuizOpen(true);
               }}
-              className="bg-primary hover:bg-primary-dim text-white font-semibold px-4 py-2 rounded-lg inline-flex items-center gap-1"
+              className="bg-primary-fill hover:bg-primary-dim text-white font-semibold px-4 py-2 rounded-lg inline-flex items-center gap-1"
             >
               <span className="material-symbols-outlined">play_arrow</span>
               Start Buy or Sell?

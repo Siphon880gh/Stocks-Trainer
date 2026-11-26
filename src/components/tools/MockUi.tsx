@@ -27,7 +27,7 @@ export function MockFrame({ where, children }: { where: string; children: ReactN
 
 export function Marker({ n }: { n: number }) {
   return (
-    <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-white text-xs font-semibold" aria-hidden>
+    <span className="inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary-fill text-white text-xs font-semibold" aria-hidden>
       {n}
     </span>
   );
@@ -116,7 +116,7 @@ export function MockChips({ title, chips, active }: { title?: string; chips: str
       {title ? <p className="text-[12px] font-semibold mb-1">{title}</p> : null}
       <div className="flex flex-wrap gap-1.5">
         {chips.map((c, i) => (
-          <span key={c} className={cn("px-2 py-0.5 rounded-full border text-xs", i === active ? "border-primary bg-primary text-white" : "border-line text-muted")}>{c}</span>
+          <span key={c} className={cn("px-2 py-0.5 rounded-full border text-xs", i === active ? "border-primary bg-primary-fill text-white" : "border-line text-muted")}>{c}</span>
         ))}
       </div>
     </div>

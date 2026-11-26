@@ -21,7 +21,7 @@ export default function FedPricingCard({ month }: { month: number }) {
           <div key={o.moveBp} className="flex items-center gap-2 text-[13px]">
             <span className="w-24">{outcomeName(o.moveBp)}</span>
             <div className="flex-1 h-4 bg-canvas rounded">
-              <div className="h-4 bg-primary rounded" style={{ width: `${o.prob}%` }} />
+              <div className="h-4 bg-primary-fill rounded" style={{ width: `${o.prob}%` }} />
             </div>
             <span className="w-12 text-right tabular-nums" data-field="prob">
               {o.prob}%

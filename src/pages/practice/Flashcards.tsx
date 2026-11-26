@@ -62,7 +62,7 @@ export default function PracticeFlashcards() {
           </button>
           <button
             type="button"
-            className="flex-1 bg-primary text-white py-2.5 rounded-lg font-semibold hover:bg-primary-dim"
+            className="flex-1 bg-primary-fill text-white py-2.5 rounded-lg font-semibold hover:bg-primary-dim"
             onClick={advance}
           >
             Knew

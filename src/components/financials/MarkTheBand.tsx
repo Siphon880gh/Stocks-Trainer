@@ -117,15 +117,15 @@ export default function MarkTheBand({ initialRoundIndex = 0, initialPhase = "ban
         <PriceInput label="Band high" value={high} onChange={setHigh} disabled={phase !== "band"} testId="band-high" />
         {phase !== "band" ? <PriceInput label="Gap fill level" value={fill} onChange={setFill} disabled={phase === "reveal"} testId="fill-level" /> : null}
         {phase === "band" ? (
-          <button type="button" className="rounded-lg bg-primary text-white px-4 py-2 text-sm disabled:opacity-50" disabled={num(low) === null || num(high) === null} onClick={() => setPhase("fill")}>
+          <button type="button" className="rounded-lg bg-primary-fill text-white px-4 py-2 text-sm disabled:opacity-50" disabled={num(low) === null || num(high) === null} onClick={() => setPhase("fill")}>
             Lock the band
           </button>
         ) : phase === "fill" ? (
-          <button type="button" className="rounded-lg bg-primary text-white px-4 py-2 text-sm disabled:opacity-50" disabled={num(fill) === null} onClick={() => setPhase("reveal")}>
+          <button type="button" className="rounded-lg bg-primary-fill text-white px-4 py-2 text-sm disabled:opacity-50" disabled={num(fill) === null} onClick={() => setPhase("reveal")}>
             Reveal
           </button>
         ) : (
-          <button type="button" className="rounded-lg bg-primary text-white px-4 py-2 text-sm" onClick={next}>
+          <button type="button" className="rounded-lg bg-primary-fill text-white px-4 py-2 text-sm" onClick={next}>
             Next round →
           </button>
         )}

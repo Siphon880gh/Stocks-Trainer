@@ -43,7 +43,7 @@ function NextObjective({ model }: { model: MapModel }) {
           {unlocks.length ? ` Unlocks: ${unlocks.slice(0, 3).join(", ")}${unlocks.length > 3 ? "…" : ""}.` : ""}
         </p>
       </div>
-      <Link to={n.stage.to} data-testid="map-next-link" className="rounded-lg bg-primary text-white px-4 py-2 text-[13px] font-semibold hover:opacity-90">
+      <Link to={n.stage.to} data-testid="map-next-link" className="rounded-lg bg-primary-fill text-white px-4 py-2 text-[13px] font-semibold hover:opacity-90">
         {n.status === "in-progress" ? "Continue" : "Start"}
       </Link>
     </section>
@@ -267,7 +267,7 @@ export default function ProgressMap({ embedded = false }: { embedded?: boolean }
             aria-controls="map-panel"
             data-testid={`map-view-${v.id}`}
             onClick={() => setView(v.id)}
-            className={cn("inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[13px]", view === v.id ? "border-primary bg-primary text-white" : "border-line bg-surface hover:bg-primary/10")}
+            className={cn("inline-flex items-center gap-1 rounded-full border px-3 py-1 text-[13px]", view === v.id ? "border-primary bg-primary-fill text-white" : "border-line bg-surface hover:bg-primary/10")}
           >
             <span className="material-symbols-outlined text-[16px]" aria-hidden>{v.icon}</span>
             {v.label}

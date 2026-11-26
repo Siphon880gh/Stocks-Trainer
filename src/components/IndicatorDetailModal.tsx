@@ -84,7 +84,7 @@ export default function IndicatorDetailModal({ overlay, onClose, hidePracticeLin
               <Link
                 to="/training?group=indicators&start=1"
                 onClick={onClose}
-                className="flex-1 bg-primary hover:bg-primary/90 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
+                className="flex-1 bg-primary-fill hover:bg-primary/90 text-white font-bold py-3 rounded-lg flex items-center justify-center gap-2 transition-colors"
               >
                 <span className="material-symbols-outlined">quiz</span>
                 Practice in Quiz

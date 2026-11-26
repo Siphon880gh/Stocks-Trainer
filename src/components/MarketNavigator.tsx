@@ -98,7 +98,7 @@ export default function MarketNavigator({
             }}
             className={`px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors ${
               selected === cls
-                ? "bg-primary text-white"
+                ? "bg-primary-fill text-white"
                 : canBrowseAssetClass(cls)
                   ? "border border-line text-ink hover:bg-canvas"
                   : "border border-line text-muted hover:bg-canvas"
@@ -128,7 +128,7 @@ export default function MarketNavigator({
             to={marketCoachHref(selected)}
             className={
               onCoach
-                ? "px-3 py-2 rounded-md bg-primary text-white text-[13px] font-semibold hover:bg-primary-dim"
+                ? "px-3 py-2 rounded-md bg-primary-fill text-white text-[13px] font-semibold hover:bg-primary-dim"
                 : "px-3 py-2 rounded-md border border-line text-ink text-[13px] hover:bg-canvas"
             }
           >
@@ -159,7 +159,7 @@ export default function MarketNavigator({
               className={
                 onCoach
                   ? "px-3 py-2 rounded-md border border-line text-ink text-[13px] hover:bg-canvas"
-                  : "px-3 py-2 rounded-md bg-primary text-white text-[13px] font-semibold hover:bg-primary-dim"
+                  : "px-3 py-2 rounded-md bg-primary-fill text-white text-[13px] font-semibold hover:bg-primary-dim"
               }
             >
               Decide cases

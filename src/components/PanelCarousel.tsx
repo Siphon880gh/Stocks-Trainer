@@ -90,7 +90,7 @@ export default function PanelCarousel({ children, fallback }: { children: ReactN
               onClick={() => go(i)}
               className="grid place-items-center w-8 h-8"
             >
-              <span className={cn("block rounded-full", on ? "w-2.5 h-2.5 bg-primary" : "w-2 h-2 bg-line")} />
+              <span className={cn("block rounded-full", on ? "w-2.5 h-2.5 bg-primary-fill" : "w-2 h-2 bg-line")} />
             </button>
           );
         })}

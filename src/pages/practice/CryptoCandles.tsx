@@ -70,7 +70,7 @@ export default function PracticeCryptoCandles() {
               onClick={() => setFit(f)}
               className={cn(
                 "px-3 py-1 rounded border text-[12px]",
-                fit === f ? "bg-primary text-white border-primary" : "border-line bg-primary/10 text-primary",
+                fit === f ? "bg-primary-fill text-white border-primary" : "border-line bg-primary/10 text-primary",
               )}
             >
               {f === "all" ? `All (${all.length})` : `${CRYPTO_FIT_LABEL[f]} (${counts[f]})`}

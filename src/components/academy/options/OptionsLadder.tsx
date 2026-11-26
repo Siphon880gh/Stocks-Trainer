@@ -149,7 +149,7 @@ export default function OptionsLadder({ storage, now = () => new Date(), initial
                               setResult({ level: l, ...g });
                               if (g.passed) awardOptionsLevel(l, storage);
                             }}
-                            className="px-4 py-2 rounded-md bg-primary text-white text-[13px] font-semibold disabled:opacity-40"
+                            className="px-4 py-2 rounded-md bg-primary-fill text-white text-[13px] font-semibold disabled:opacity-40"
                             data-testid={`submit-check-${l}`}
                           >
                             Check my answers
@@ -183,7 +183,7 @@ export default function OptionsLadder({ storage, now = () => new Date(), initial
                         )}
                       </div>
                     ) : (
-                      <button type="button" disabled={!gate.ok} onClick={() => { setOpen(l); setAnswers({}); setResult(null); }} className="px-3 py-1.5 rounded-md bg-primary text-white text-[13px] font-semibold disabled:opacity-40" data-testid={`start-check-${l}`}>
+                      <button type="button" disabled={!gate.ok} onClick={() => { setOpen(l); setAnswers({}); setResult(null); }} className="px-3 py-1.5 rounded-md bg-primary-fill text-white text-[13px] font-semibold disabled:opacity-40" data-testid={`start-check-${l}`}>
                         Start the level {l} check
                       </button>
                     )}

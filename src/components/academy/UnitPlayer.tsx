@@ -63,7 +63,7 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
                 type="button"
                 aria-label={`Card ${i + 1}`}
                 onClick={() => setCard(i)}
-                className={cn("h-2 rounded-full transition-[width,background-color]", i === card ? "w-6 bg-primary" : "w-2 bg-line")}
+                className={cn("h-2 rounded-full transition-[width,background-color]", i === card ? "w-6 bg-primary-fill" : "w-2 bg-line")}
               />
             ))}
             <span className="text-xs text-muted ml-2">
@@ -90,11 +90,11 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
               Previous
             </button>
             {card < unit.cards.length - 1 ? (
-              <button type="button" onClick={() => setCard(card + 1)} className="px-3 py-1.5 rounded-md bg-primary text-white text-[13px] font-semibold">
+              <button type="button" onClick={() => setCard(card + 1)} className="px-3 py-1.5 rounded-md bg-primary-fill text-white text-[13px] font-semibold">
                 Next
               </button>
             ) : (
-              <button type="button" onClick={() => setPhase("quiz")} className="px-3 py-1.5 rounded-md bg-primary text-white text-[13px] font-semibold" data-testid="start-quiz">
+              <button type="button" onClick={() => setPhase("quiz")} className="px-3 py-1.5 rounded-md bg-primary-fill text-white text-[13px] font-semibold" data-testid="start-quiz">
                 Take the {items.length}-question check
               </button>
             )}
@@ -170,7 +170,7 @@ export default function UnitPlayer({ unit, attempt = 0, initialPhase = "cards", 
                   setSubmitted(true);
                   onFinish?.(scoreUnit(items, answers));
                 }}
-                className="px-4 py-2 rounded-md bg-primary text-white text-[13px] font-semibold disabled:opacity-40"
+                className="px-4 py-2 rounded-md bg-primary-fill text-white text-[13px] font-semibold disabled:opacity-40"
                 data-testid="submit-quiz"
               >
                 Check my answers

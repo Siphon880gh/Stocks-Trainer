@@ -57,7 +57,7 @@ export default function MacroDeskRound({ round, onComplete, onNext, initialPhase
         {e.kind === "fomc" && <FedPricingCard month={e.month} />}
         <ExpectationsPanel event={e} revealed />
         <ViewerForEvent event={e} />
-        <button type="button" onClick={() => setPhase("predict")} className="bg-primary hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg">
+        <button type="button" onClick={() => setPhase("predict")} className="bg-primary-fill hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg">
           Make my calls
         </button>
       </div>
@@ -82,7 +82,7 @@ export default function MacroDeskRound({ round, onComplete, onNext, initialPhase
                   type="button"
                   aria-pressed={answers[i] === c.d}
                   onClick={() => setAnswers((a) => ({ ...a, [i]: c.d }))}
-                  className={`px-3 py-1.5 rounded-lg border text-sm inline-flex items-center gap-1 ${answers[i] === c.d ? "bg-primary text-white border-primary" : "border-line hover:bg-canvas"}`}
+                  className={`px-3 py-1.5 rounded-lg border text-sm inline-flex items-center gap-1 ${answers[i] === c.d ? "bg-primary-fill text-white border-primary" : "border-line hover:bg-canvas"}`}
                 >
                   <span className="material-symbols-outlined text-[16px]" aria-hidden>
                     {c.icon}
@@ -104,7 +104,7 @@ export default function MacroDeskRound({ round, onComplete, onNext, initialPhase
                 onComplete?.(s.correct, s.total);
                 setPhase("reveal");
               }}
-              className="bg-primary hover:bg-primary-dim disabled:opacity-40 text-white font-semibold px-5 py-2 rounded-lg"
+              className="bg-primary-fill hover:bg-primary-dim disabled:opacity-40 text-white font-semibold px-5 py-2 rounded-lg"
             >
               Lock in and reveal
             </button>
@@ -149,7 +149,7 @@ export default function MacroDeskRound({ round, onComplete, onNext, initialPhase
         ))}
       </div>
       {onNext && (
-        <button type="button" onClick={onNext} className="bg-primary hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg">
+        <button type="button" onClick={onNext} className="bg-primary-fill hover:bg-primary-dim text-white font-semibold px-5 py-2.5 rounded-lg">
           Next round
         </button>
       )}

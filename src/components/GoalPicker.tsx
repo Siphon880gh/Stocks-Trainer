@@ -36,7 +36,7 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
             onClick={() => setSelectedId(t.id)}
             className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
               selectedId === t.id
-                ? "bg-primary text-white"
+                ? "bg-primary-fill text-white"
                 : "border border-line text-ink hover:bg-canvas"
             }`}
           >
@@ -96,7 +96,7 @@ export default function GoalPicker({ onConfirmed }: GoalPickerProps) {
           confirmPathSelection(selectedId);
           onConfirmed();
         }}
-        className="w-full bg-primary text-white font-semibold py-3 rounded-md hover:bg-primary-dim"
+        className="w-full bg-primary-fill text-white font-semibold py-3 rounded-md hover:bg-primary-dim"
       >
         Confirm path · {selected.title}
       </button>

@@ -51,7 +51,7 @@ test("test out of a unit: card 1 offers a secondary 'take the check' action; ?ch
   const first = renderHtml(wrap(<UnitPlayer unit={u} />));
   assert.ok(first.includes('data-testid="skip-to-check"'));
   assert.ok(renderText(wrap(<UnitPlayer unit={u} />)).includes("Know this already? Take the check"));
-  assert.ok(!/data-testid="skip-to-check"[^>]*bg-primary|bg-primary[^>]*data-testid="skip-to-check"/.test(first), "secondary style, not a second primary button");
+  assert.ok(!/data-testid="skip-to-check"[^>]*bg-primary-fill|bg-primary-fill[^>]*data-testid="skip-to-check"/.test(first), "secondary style, not a second primary button");
   assert.ok(!renderHtml(wrap(<UnitPlayer unit={u} initialCard={1} />)).includes('data-testid="skip-to-check"'), "only on card 1");
   assert.ok(!renderHtml(wrap(<UnitPlayer unit={u} initialPhase="quiz" />)).includes('data-testid="skip-to-check"'));
 

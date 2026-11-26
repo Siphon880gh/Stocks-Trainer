@@ -69,7 +69,7 @@ export default function PracticeTradeFramework() {
               onClick={() => setOpen(s.id)}
               className={cn(
                 "px-2 py-1 rounded border text-[12px]",
-                open === s.id ? "bg-primary text-white border-primary" : "border-line bg-primary/10 text-primary",
+                open === s.id ? "bg-primary-fill text-white border-primary" : "border-line bg-primary/10 text-primary",
               )}
             >
               {s.n} · {s.title}

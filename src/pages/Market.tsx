@@ -432,7 +432,7 @@ export default function Market() {
                         onChange={() => toggleControl(key)}
                       />
                       <div className="w-10 h-5 bg-canvas border border-line rounded-full peer-checked:bg-primary/20 transition-colors"></div>
-                      <div className="absolute left-1 top-1 w-3 h-3 bg-muted rounded-full transition-[transform,background-color] peer-checked:translate-x-5 peer-checked:bg-primary"></div>
+                      <div className="absolute left-1 top-1 w-3 h-3 bg-muted rounded-full transition-[transform,background-color] peer-checked:translate-x-5 peer-checked:bg-primary-fill"></div>
                     </div>
                     <span className="text-sm font-medium group-hover:text-primary transition-colors capitalize">{key}</span>
                   </label>
@@ -449,7 +449,7 @@ export default function Market() {
               </button>
               <button
                 onClick={() => setScanOpen(true)}
-                className="flex-1 md:flex-none bg-primary text-white px-6 py-2.5 rounded-md font-semibold hover:bg-primary-dim text-sm flex items-center justify-center gap-2"
+                className="flex-1 md:flex-none bg-primary-fill text-white px-6 py-2.5 rounded-md font-semibold hover:bg-primary-dim text-sm flex items-center justify-center gap-2"
               >
                 <span className="material-symbols-outlined">radar</span>
                 Scan patterns

@@ -186,7 +186,7 @@ export default function PaperDesk({ storage }: { storage?: KVStorage }) {
                 </select>
               </label>
             </div>
-            <button type="button" onClick={() => persist(newDeskLog(scenarioId, cash, options))} className="px-4 py-2 rounded-md bg-sim hover:bg-sim-dim text-white font-semibold text-[13px]" data-testid="desk-start">
+            <button type="button" onClick={() => persist(newDeskLog(scenarioId, cash, options))} className="px-4 py-2 rounded-md bg-sim-fill hover:bg-sim-dim text-white font-semibold text-[13px]" data-testid="desk-start">
               Open the desk
             </button>
           </div>

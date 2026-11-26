@@ -166,7 +166,7 @@ export default function Paper({ storage }: { storage?: KVStorage }) {
                 </label>
               </div>
             </div>
-            <button type="button" onClick={() => persist(newSessionLog(tapeId, cash, START_BAR, options))} className="px-4 py-2 rounded-md bg-sim hover:bg-sim-dim text-white font-semibold text-[13px]" data-testid="paper-start">
+            <button type="button" onClick={() => persist(newSessionLog(tapeId, cash, START_BAR, options))} className="px-4 py-2 rounded-md bg-sim-fill hover:bg-sim-dim text-white font-semibold text-[13px]" data-testid="paper-start">
               Start the session
             </button>
           </div>

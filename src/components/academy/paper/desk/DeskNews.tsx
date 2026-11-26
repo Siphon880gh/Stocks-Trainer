@@ -27,7 +27,7 @@ export default function DeskNews({ scenario, bar, active }: { scenario: DeskScen
               <span className="tabular-nums">{n.at < 0 ? dayLabel(n.date ?? "") : dayLabel(scenario.labels[n.at]!)}</span>
               {n.symbol ? <span className="font-semibold text-ink">{n.symbol}</span> : null}
               <span className="px-1 rounded border border-line">{KIND[n.kind]}</span>
-              {n.at === bar ? <span className="px-1 rounded bg-sim text-white font-semibold">New</span> : null}
+              {n.at === bar ? <span className="px-1 rounded bg-sim-fill text-white font-semibold">New</span> : null}
               {n.simulated ? <span className="text-sim font-semibold">SIMULATED</span> : null}
             </p>
             <p className="font-semibold leading-snug mt-0.5">{n.headline}</p>

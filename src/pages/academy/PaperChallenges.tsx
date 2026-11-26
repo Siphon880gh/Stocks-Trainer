@@ -201,7 +201,7 @@ export default function PaperChallenges({ storage, now = new Date() }: { storage
               Bar {pending.bar - c.startBar} of {c.bars} · {pending.actions.length} {pending.actions.length === 1 ? "move" : "moves"} saved on this device.
             </p>
             <div className="flex flex-wrap gap-2">
-              <button type="button" onClick={resume} className="px-4 py-2 min-h-11 rounded-md bg-primary text-white text-[13px] font-semibold" data-testid="challenge-resume-go">
+              <button type="button" onClick={resume} className="px-4 py-2 min-h-11 rounded-md bg-primary-fill text-white text-[13px] font-semibold" data-testid="challenge-resume-go">
                 Resume
               </button>
               <button type="button" onClick={restart} className="px-4 py-2 min-h-11 rounded-md border border-line text-[13px]" data-testid="challenge-restart">
