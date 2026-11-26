@@ -4,6 +4,8 @@ A list of every route, topic and deep link in the app, taken from the code at co
 
 Every row points to the file it came from. The counts come from the data modules themselves (`QUIZ_GROUPS`, `listSessions()`, `CASE_STUDIES`, `UNITS`, `DESK_SCENARIOS` and so on), not from hand counting. When content is added, update the matching section; `src/lib/navInventory.test.ts` fails if a route in `src/App.tsx` is missing from this file or has no menu, Table of Contents or progress map entry point.
 
+The plan for the guided navigation (tracks, Next up, Browse everything) is in [`docs/projects/navigation/DIRECTIONAL-NAV-PROPOSAL.md`](./projects/navigation/DIRECTIONAL-NAV-PROPOSAL.md).
+
 ## Contents
 1. [How to use this during the navigation change](#1-how-to-use-this-during-the-navigation-change)
 2. [Counts](#2-counts)
