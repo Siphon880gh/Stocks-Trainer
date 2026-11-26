@@ -8,6 +8,7 @@ AI-oriented codebase map for safe modification, feature tracing, and implementat
 - [`AGENTS_CODE_REFERENCE-charts.md`](./AGENTS_CODE_REFERENCE-charts.md) — chart rendering + indicator math
 - [`AGENTS_CODE_REFERENCE-training.md`](./AGENTS_CODE_REFERENCE-training.md) — quizzes, Archive, scoring
 - [`AGENTS_CODE_REFERENCE-data.md`](./AGENTS_CODE_REFERENCE-data.md) — OHLC packs, markets, patterns, financials, scan
+- [`docs/NAVIGATION-INVENTORY.md`](./docs/NAVIGATION-INVENTORY.md) — every route, topic, entry point and deep link; check it before and after any navigation change
 
 **Product planning (not runtime code):** [`EPIC_MAP.md`](./EPIC_MAP.md) · [`IMPLEMENTATION_STORIES.md`](./IMPLEMENTATION_STORIES.md) · [`.agents/state.json`](./.agents/state.json)
 
