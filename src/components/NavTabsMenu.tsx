@@ -265,7 +265,7 @@ export default function NavTabsMenu({
               onClick={() => choose(t.id)}
               onKeyDown={onTabKey}
               className={cn(
-                "shrink-0 whitespace-nowrap rounded-t-md border-b-2 px-2.5 py-1.5 text-[12px]",
+                "shrink-0 whitespace-nowrap border-b-2 px-2.5 py-2 text-[13px] focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary",
                 tab === t.id ? "border-primary text-primary font-semibold" : "border-transparent text-muted hover:text-ink",
               )}
             >
