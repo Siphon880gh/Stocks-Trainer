@@ -57,7 +57,7 @@ export default function PracticeRecordTraders() {
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h3 className="text-[15px] font-semibold">{c.name}</h3>
               <span
-                className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase ${c.strength === "strong" ? "bg-emerald-500/15 text-emerald-700" : "bg-amber-500/15 text-amber-700"}`}
+                className={`rounded-full px-2 py-0.5 text-xs font-semibold uppercase ${c.strength === "strong" ? "bg-emerald-500/15 text-emerald-700" : "bg-amber-500/15 text-amber-800"}`}
               >
                 {c.strength} verification
               </span>

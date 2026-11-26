@@ -21,7 +21,7 @@ const BLOCK_TEXT = {
 
 function RiskStatement() {
   return (
-    <p className="text-[12px] font-semibold text-accent-red border border-accent-red/40 bg-accent-red/5 rounded-md px-3 py-1.5" data-testid="options-risk">
+    <p className="text-[12px] font-semibold text-red-700 border border-accent-red/40 bg-accent-red/5 rounded-md px-3 py-1.5" data-testid="options-risk">
       {OPTIONS_RISK_STATEMENT}
     </p>
   );
