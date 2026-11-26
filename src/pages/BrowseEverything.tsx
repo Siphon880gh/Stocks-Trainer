@@ -1,18 +1,20 @@
 import { useMemo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { BROWSE_SECTIONS, searchBrowse } from "../lib/browseCatalog";
-import { loadBrowseNewTab, newTabProps, saveBrowseNewTab } from "../lib/browseNewTab";
+import { browseModalState, pageLocation, rememberBrowseTrigger } from "../lib/browseModal";
 
 /** Browse everything: the full catalog and search, for learners who want every door open. */
-export default function BrowseEverything({ initialNewTab }: { initialNewTab?: boolean } = {}) {
+export default function BrowseEverything() {
   const [query, setQuery] = useState("");
-  const [newTab, setNewTab] = useState(() => initialNewTab ?? loadBrowseNewTab());
-  const toggleNewTab = () => {
-    const next = !newTab;
-    setNewTab(next);
-    saveBrowseNewTab(next);
-  };
-  const tab = newTabProps(newTab);
+  const here = pageLocation(useLocation());
+  // Each link opens its page in a popup over Browse; "Open full page" in the popup leaves Browse.
+  const popup = (to: string, title: string) =>
+    to === "/browse"
+      ? {}
+      : {
+          state: browseModalState(here, title),
+          onClick: (e: { currentTarget: HTMLElement }) => rememberBrowseTrigger(e.currentTarget),
+        };
   const hits = useMemo(() => searchBrowse(query), [query]);
   const searching = query.trim().length > 0;
 
@@ -21,35 +23,14 @@ export default function BrowseEverything({ initialNewTab }: { initialNewTab?: bo
       <header className="space-y-2">
         <h1 className="text-xl font-semibold tracking-tight">Browse everything</h1>
         <p className="text-sm text-muted max-w-2xl">
-          Every lesson, lab, quiz and tool in one place. Your path on Home stays as it is; open anything here.
+          Every lesson, lab, quiz and tool in one place. Your path on Home stays as it is; anything here opens in a popup, with Open full page if you want to stay there.
         </p>
         <div className="flex flex-wrap gap-3 text-sm">
-          <Link to="/training" {...tab} className="text-primary underline" data-testid="browse-toc">Full Table of Contents</Link>
-          <Link to="/archive" {...tab} className="text-primary underline">Library and glossary</Link>
-          <Link to="/map" {...tab} className="text-primary underline">Progress map</Link>
+          <Link to="/training" {...popup("/training", "Full Table of Contents")} className="text-primary underline" data-testid="browse-toc">Full Table of Contents</Link>
+          <Link to="/archive" {...popup("/archive", "Library and glossary")} className="text-primary underline">Library and glossary</Link>
+          <Link to="/map" {...popup("/map", "Progress map")} className="text-primary underline">Progress map</Link>
         </div>
       </header>
-
-      <div className="flex items-center gap-3 text-sm">
-        <button
-          type="button"
-          role="switch"
-          id="browse-new-tab"
-          aria-checked={newTab}
-          aria-labelledby="browse-new-tab-label"
-          onClick={toggleNewTab}
-          data-testid="browse-new-tab"
-          className={`relative inline-flex h-6 w-11 shrink-0 items-center rounded-full border transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary ${newTab ? "bg-primary border-primary" : "bg-surface border-line"}`}
-        >
-          <span
-            aria-hidden="true"
-            className={`inline-block h-4 w-4 rounded-full shadow transition-transform ${newTab ? "translate-x-6 bg-white" : "translate-x-1 bg-muted"}`}
-          />
-        </button>
-        <label htmlFor="browse-new-tab" id="browse-new-tab-label" className="cursor-pointer select-none">
-          Open links in a new tab <span className="text-muted" aria-hidden="true">({newTab ? "on" : "off"})</span>
-        </label>
-      </div>
 
       <div className="max-w-xl">
         <label htmlFor="browse-search" className="text-sm font-medium">Search</label>
@@ -73,7 +54,7 @@ export default function BrowseEverything({ initialNewTab }: { initialNewTab?: bo
             <ul className="space-y-1.5">
               {hits.map((h) => (
                 <li key={h.to} className="flex flex-wrap items-baseline gap-x-2">
-                  <Link to={h.to} {...tab} className="text-primary underline">{h.label}</Link>
+                  <Link to={h.to} {...popup(h.to, h.label)} className="text-primary underline">{h.label}</Link>
                   <span className="text-xs text-muted">{h.kind}</span>
                 </li>
               ))}
@@ -90,7 +71,7 @@ export default function BrowseEverything({ initialNewTab }: { initialNewTab?: bo
             <ul className="flex flex-wrap gap-x-4 gap-y-1.5">
               {s.links.map((l) => (
                 <li key={`${s.id}-${l.to}`}>
-                  <Link to={l.to} {...tab} className="text-primary underline">{l.label}</Link>
+                  <Link to={l.to} {...popup(l.to, l.label)} className="text-primary underline">{l.label}</Link>
                 </li>
               ))}
             </ul>
