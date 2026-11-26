@@ -254,7 +254,6 @@ body.overlay-open .hai-panel {
 .dark .border-\[\#d1d4dc\] { border-color: var(--chart-border); }
 .dark .border-\[\#e0e3eb\] { border-color: var(--chart-grid); }
 .dark .text-\[\#131722\] { color: var(--chart-text); }
-.dark .text-\[\#787b86\] { color: var(--chart-muted); }
 
 .dark svg [fill="#ffffff"] { fill: var(--chart-bg); }
 .dark svg [stroke="#ffffff"] { stroke: var(--chart-bg); }
@@ -283,5 +282,8 @@ body.overlay-open .hai-panel {
 .dark :is([style*="background: rgb(255, 255, 255)"], [style*="background-color: rgb(255, 255, 255)"]) { background-color: var(--chart-bg) !important; }
 .dark [style*="border: 1px solid rgb(209, 212, 220)"] { border-color: var(--chart-border) !important; }
 .dark [style*="color: rgb(19, 23, 34)"]:not([style*="background-color: rgb(19, 23, 34)"]) { color: var(--chart-text) !important; }
-.dark [style*="color: rgb(120, 123, 134)"] { color: var(--chart-muted) !important; }
 .dark .recharts-default-tooltip { background-color: var(--chart-bg) !important; border-color: var(--chart-border) !important; color: var(--chart-text) !important; }
+
+/* Chart chrome text (legend, indicator labels) in the chart grey #787b86 sits under 4.5:1 on white; both themes use the muted token instead. SVG plot labels keep their own colours. */
+.text-\[\#787b86\],
+[style*="color: rgb(120, 123, 134)"]:not(svg *) { color: var(--color-muted) !important; }
