@@ -7,6 +7,7 @@ import { loadAcademy, loadRewards, saveAcademy, type KVStorage } from "../../lib
 import {
   actualPace, behind, categoryRecency, forecast, getRetention, goalMet, markDoneForToday, remainingUnits, setPace, staleCategories, todayCounts, weekly, UNIT_PATH,
   dueReviews,
+  reminderDelay, setReminder,
 } from "../../lib/academy/retention";
 
 const fmtDate = (k: string) => new Date(`${k}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
@@ -45,9 +46,58 @@ export default function PacePanel({ storage, now = () => new Date() }: { storage
   const [units, setUnits] = useState(String(r.pace.unitsPerDay));
   const [quizzes, setQuizzes] = useState(String(r.pace.quizzesPerDay));
   const [saved, setSaved] = useState<string | null>(null);
+  const [time, setTime] = useState(r.reminder.time);
+  const [remStatus, setRemStatus] = useState<string | null>(null);
+  const [banner, setBanner] = useState<string | null>(null);
+  const notifyOk = typeof window !== "undefined" && "Notification" in window;
+  // Reminders only fire while the app is open in a tab: one timer to the next reminder time, re-armed after it fires.
+  useEffect(() => {
+    if (!r.reminder.enabled) return;
+    const ms = reminderDelay(r.reminder.time, new Date(), r.reminder.lastNotifiedOn);
+    const id = window.setTimeout(() => {
+      const s = loadAcademy(storage).state;
+      if (goalMet(s, new Date())) return;
+      const text = nextU ? `Time for today's unit: ${nextU.title}.` : "Time for today's review.";
+      if (notifyOk && Notification.permission === "granted") {
+        try {
+          new Notification("Beginner Academy", { body: text });
+        } catch {
+          setBanner(text);
+        }
+      } else setBanner(text);
+      save(setReminder(s, { lastNotifiedOn: dayKey(new Date()) }));
+    }, Math.min(ms, 2_147_000_000));
+    return () => window.clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [r.reminder.enabled, r.reminder.time, r.reminder.lastNotifiedOn]);
+  /** Asks for notification permission only here, from the button click. Blocked or unsupported → in-app banner. */
+  const enableReminders = async () => {
+    let permission = notifyOk ? Notification.permission : "unsupported";
+    if (notifyOk && permission === "default") {
+      try {
+        permission = await Notification.requestPermission();
+      } catch {
+        permission = "denied";
+      }
+    }
+    save(setReminder(loadAcademy(storage).state, { enabled: true, time, permission }));
+    setRemStatus(permission === "granted" ? `Reminders are on at ${time}.` : `Reminders are on at ${time} as an in-app banner (notifications are blocked in this browser).`);
+  };
+  const disableReminders = () => {
+    save(setReminder(loadAcademy(storage).state, { enabled: false }));
+    setRemStatus("Reminders are off.");
+  };
 
   return (
     <section className="panel p-4 space-y-3" aria-labelledby="rt-pace-h" data-testid="pace-panel">
+      {banner ? (
+        <p className="rounded-lg border border-primary/40 bg-primary/10 px-3 py-2 text-[13px]" role="status" data-testid="reminder-banner">
+          {banner}{" "}
+          <button type="button" className="underline" onClick={() => setBanner(null)}>
+            Dismiss
+          </button>
+        </p>
+      ) : null}
       <h2 id="rt-pace-h" className="text-[15px] font-semibold">
         Your pace
       </h2>
@@ -114,7 +164,7 @@ export default function PacePanel({ storage, now = () => new Date() }: { storage
         </p>
       </div>
       <details id="rt-pace-settings" className="text-[13px]">
-        <summary className="cursor-pointer font-semibold">Pace</summary>
+        <summary className="cursor-pointer font-semibold">Pace and reminders</summary>
         <form
           className="mt-2 flex flex-wrap items-end gap-3"
           onSubmit={(e) => {
@@ -137,6 +187,25 @@ export default function PacePanel({ storage, now = () => new Date() }: { storage
           {saved ? <span role="status">{saved}</span> : null}
         </form>
         <p className="mt-2 text-muted">Freezes: every 7 active days in a row earns one freeze (you can bank one). It covers a single missed day automatically.</p>
+        <div className="mt-2 flex flex-wrap items-end gap-3">
+          <label className="flex flex-col gap-1">
+            Daily reminder at
+            <input id="rt-time" type="time" value={time} onChange={(e) => setTime(e.target.value || "09:00")} className="rounded border border-line bg-surface px-2 py-1" />
+          </label>
+          {r.reminder.enabled ? (
+            <button type="button" className="rounded border border-line px-3 py-1.5" onClick={disableReminders}>
+              Turn reminders off
+            </button>
+          ) : (
+            <button type="button" className="rounded border border-line px-3 py-1.5" data-rt-enable-reminders onClick={enableReminders}>
+              Enable reminders
+            </button>
+          )}
+        </div>
+        <p className="mt-1" role="status" data-rt-reminder-status>
+          {remStatus ?? (r.reminder.enabled ? `Reminders are on at ${r.reminder.time}.` : "Reminders are off.")}
+        </p>
+        <p className="text-muted">Reminders only fire while this app is open in a tab.</p>
       </details>
     </section>
   );
