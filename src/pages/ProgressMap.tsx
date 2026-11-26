@@ -59,7 +59,7 @@ function StageDot({ s, isNext }: { s: StageState; isNext: boolean }) {
       title={`${s.stage.title}: ${STATUS_LABEL[s.status]}`}
       aria-label={`${s.stage.title}: ${STATUS_LABEL[s.status]}${isNext ? " (next objective)" : ""}`}
       className={cn(
-        "relative grid place-items-center w-7 h-7 rounded-full border-2 shrink-0 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+        "relative grid place-items-center w-7 h-7 rounded-full border-2 shrink-0 after:absolute after:-inset-2 after:content-[''] focus:outline-none focus-visible:ring-2 focus-visible:ring-primary",
         STATUS_TONE[s.status],
         isNext && "ring-2 ring-primary ring-offset-1 ring-offset-surface",
       )}

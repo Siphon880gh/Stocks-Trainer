@@ -111,3 +111,17 @@ body.overlay-open .hai-panel {
     scroll-behavior: auto !important;
   }
 }
+
+/* Touch screens: buttons, selects, tabs, disclosure rows and text inputs get a 44 px target unless a component sets its own size. */
+@media (pointer: coarse) {
+  :where(button, select, summary, [role="tab"], input:not([type="checkbox"], [type="radio"], [type="range"], [type="hidden"], [type="color"])) {
+    min-height: 44px;
+  }
+  :where(button, select) {
+    min-width: 44px;
+  }
+  /* Links drawn as buttons (padded, rounded) get the same height. */
+  :where(a[class*="rounded"][class*="px-"][class*="py-"]) {
+    min-height: 44px;
+  }
+}
