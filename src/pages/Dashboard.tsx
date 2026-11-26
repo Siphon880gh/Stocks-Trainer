@@ -322,7 +322,7 @@ export default function Dashboard() {
       </details>
 
       <section className="border-t border-line pt-6 space-y-3">
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm">
+        <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm [&>a]:inline-flex [&>a]:min-h-6 [&>a]:items-center">
           <Link to={BROWSE_ROUTE} className="text-primary font-semibold hover:underline" data-testid="home-browse">Browse everything</Link>
           <Link to="/training" className="text-primary hover:underline">Table of Contents</Link>
           <Link to="/market?nav=1" className="text-primary hover:underline">Market navigator</Link>

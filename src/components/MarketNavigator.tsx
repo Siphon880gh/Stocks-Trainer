@@ -185,7 +185,7 @@ export default function MarketNavigator({
           {lock === "chart_gate" ? (
             <Link
               to={`/training?group=${CHART_GATE_TRAINING_GROUP}&start=1`}
-              className="inline-block text-[13px] text-primary hover:underline"
+              className="inline-flex min-h-6 items-center text-[13px] text-primary hover:underline"
             >
               Take Indicators quiz
             </Link>

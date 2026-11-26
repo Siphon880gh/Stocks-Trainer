@@ -118,7 +118,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                 {complete ? "Complete" : unlocked ? `${Math.round(levelPct(state, lv.id) * 100)}% done` : browseAll ? "Preview for this tab" : `Locked: finish ${lv.prerequisites.join(", ")} first (or test out)`}
               </span>
               {(TEST_OUT_LEVELS as string[]).includes(lv.id) && !complete ? (
-                <Link to={`/academy/test-out/${lv.id}`} className="text-[12px] text-primary underline" data-testid={`test-out-${lv.id}`}>
+                <Link to={`/academy/test-out/${lv.id}`} className="inline-flex min-h-6 items-center text-[12px] text-primary underline" data-testid={`test-out-${lv.id}`}>
                   Already know this? Test out
                 </Link>
               ) : null}
@@ -152,7 +152,7 @@ export default function AcademyHub({ storage, extra }: { storage?: KVStorage; ex
                             </span>
                           </Link>
                           {st !== "mastered" && st !== "tested_out" ? (
-                            <Link to={`/academy/${id}?check=1`} className="text-xs text-primary hover:underline shrink-0" data-test-out-unit={id} aria-label={`Test out of ${u.title}`}>
+                            <Link to={`/academy/${id}?check=1`} className="inline-flex min-h-6 items-center text-xs text-primary hover:underline shrink-0" data-test-out-unit={id} aria-label={`Test out of ${u.title}`}>
                               Test out
                             </Link>
                           ) : null}
