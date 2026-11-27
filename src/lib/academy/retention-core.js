@@ -7,6 +7,8 @@
  * Build v19: the days-ago tag on a badge or milestone tile sits at the tile's end (right in LTR, left in RTL), level with the name.
  * Build v20: every gallery tile is the same bordered box with the same edges; the days-ago tag sits outside it in a fixed
  *   right-hand gutter (left in RTL), so tags line up in one column and locked tiles keep an empty gutter.
+ * Build v21: every app publishes a pace/streak/badge summary for the Learning dashboard (C.hub), paceBalance (behind
+ *   or ahead in halves), and behind() keeps half credit (1.5, not 2).
  * The app owns storage: it passes a `retention` object and saves it after each change.
  *
  * Retention object (lives inside the app's own progress document):
@@ -333,8 +335,8 @@
       if (i < from || i > to) return;
       if (h.kind === 'quiz') Q += credit(h); else L += credit(h);
     });
-    res.lessons = Math.max(0, Math.round(r.pace.lessonsPerDay * n - L));
-    res.quizzes = Math.max(0, Math.round(r.pace.quizzesPerDay * n - Q));
+    res.lessons = Math.max(0, half(r.pace.lessonsPerDay * n - L));
+    res.quizzes = Math.max(0, half(r.pace.quizzesPerDay * n - Q));
     return res;
   }
 
@@ -1833,16 +1835,23 @@
     chrome = {
       stack: stack, place: place, open: openSheet, close: closeSheet, corner: function () { return corner; },
       openBadges: !badgeBtn ? null : badgeLink ? function () { global.location.href = getCfg().badgesHref; } : function () { openSheet('badges'); },
-      refresh: function () { if (hl) hl.mark(); label(); if (sheet) { var md = sheetMode; closeSheet(false); openSheet(md); } },
+      refresh: function () { if (hl) hl.mark(); label(); if (sheet) { var md = sheetMode; closeSheet(false); openSheet(md); } hubPublish(getCfg(), 400); },
       destroy: function () {
         closeSheet(false); stack.remove(); spacer.remove();
         timers.forEach(clearTimeout); if (mo) mo.disconnect(); clearTimeout(moT); stopHlWait(); if (hl) hl.destroy();
         doc.removeEventListener('pointerdown', onOutside, true); clearTimeout(openT);
         doc.removeEventListener('keydown', onKey); doc.removeEventListener('mousedown', onDown); doc.removeEventListener('touchstart', onDown);
         global.removeEventListener('resize', onResize); global.removeEventListener('scroll', onScroll);
+        global.removeEventListener('pagehide', onHide); doc.removeEventListener('visibilitychange', onVis);
         chrome = null; chromeCfg = null;
       }
     };
+    // Learning dashboard feed: publish now, after changes (refresh), and when the page is hidden.
+    function onHide() { hubPublish(getCfg()); }
+    function onVis() { if (doc.visibilityState === 'hidden') hubPublish(getCfg()); }
+    global.addEventListener('pagehide', onHide);
+    doc.addEventListener('visibilitychange', onVis);
+    hubPublish(cfg, 600);
     if (cfg.popover !== false) maybeWelcome(getCfg);
     return chrome;
   }
@@ -1981,6 +1990,170 @@
     return true;
   }
 
+  // ---- v21: learning dashboard feed -------------------------------------------------------------
+  /**
+   * Every app publishes a small summary of its retention state so one Learning dashboard can show pace, streak,
+   * badges and forecasts for all apps. The summary is written to this origin's localStorage under
+   * HUB_PREFIX + appId (the dashboard reads it directly when it is served from the same origin, as on
+   * wengindustries.com and under localhost:8888/weng/). When the app runs on another local port (php -S, vite),
+   * the summary is also posted to the dashboard's hub page in a hidden iframe on the same host (same site, so the
+   * browser does not partition its storage). Nothing leaves the browser; there is no server and no third party.
+   * Tracking is off for an app when the dashboard settings say so: the app then stops publishing.
+   */
+  var HUB_VERSION = 1;
+  var HUB_PREFIX = 'weng-learning-hub-v1:';
+  var HUB_SETTINGS = 'weng-learning-hub-settings-v1';
+  var HUB_PATH = '/weng/app/learning-dashboard/hub.html';
+  var HUB_LOCAL_PORT = '8888';
+  var HUB_HISTORY_CAP = 1500;
+  function isLocalHost(h) { return h === 'localhost' || h === '127.0.0.1' || h === '[::1]' || h === '::1'; }
+  function lsGet(k) { try { return global.localStorage ? global.localStorage.getItem(k) : null; } catch (e) { return null; } }
+  function lsSet(k, v) { try { if (global.localStorage) global.localStorage.setItem(k, v); return true; } catch (e) { return false; } }
+  function hubSettings() {
+    var s = null;
+    try { s = JSON.parse(lsGet(HUB_SETTINGS) || 'null'); } catch (e) { s = null; }
+    if (!isObj(s)) s = {};
+    if (!isObj(s.disabled)) s.disabled = {};
+    return s;
+  }
+  function hubEnabled(id) { return !hubSettings().disabled[id]; }
+  /** App identity: cfg.hub = { id, name, home } (home is a URL relative to the page, default the page's folder; id may come from <meta name="rt-hub-id">). */
+  function hubInfo(cfg) {
+    var h = isObj(cfg.hub) ? cfg.hub : {};
+    var loc = global.location || { pathname: '/', href: '' };
+    var path = String(loc.pathname || '/').replace(/[^/]*$/, '');
+    // Shared code in several apps (the series) names the app with <meta name="rt-hub-id" content="...">.
+    var meta = doc && doc.querySelector ? doc.querySelector('meta[name="rt-hub-id"]') : null;
+    var id = h.id || (meta && meta.getAttribute('content')) || path.replace(/^\/+|\/+$/g, '').replace(/^weng\//, '').replace(/\//g, '-') || 'app';
+    var home = '';
+    try { home = new URL(h.home || './', loc.href).href; } catch (e) { home = h.home || ''; }
+    return { id: String(id), name: String(h.name || cfg.title || id), home: home };
+  }
+  /** Where the hub page lives for this page, or null when the dashboard shares this origin (or none is set). */
+  function hubUrl(cfg) {
+    var h = isObj(cfg && cfg.hub) ? cfg.hub : {};
+    var u = h.url || global.RT_HUB_URL || null;
+    if (!u && doc && doc.querySelector) { var m = doc.querySelector('meta[name="rt-hub-url"]'); if (m) u = m.getAttribute('content'); }
+    var loc = global.location;
+    if (!loc || !loc.protocol || !/^https?:$/.test(loc.protocol)) return null;
+    if (!u) {
+      if (!isLocalHost(loc.hostname) || loc.port === HUB_LOCAL_PORT) return null;
+      u = loc.protocol + '//' + loc.hostname + ':' + HUB_LOCAL_PORT + HUB_PATH;
+    }
+    try { var x = new URL(u, loc.href); return x.origin === loc.origin ? null : x.href; } catch (e) { return null; }
+  }
+  /**
+   * Pace balance over the last (up to) 7 finished days plus today: { status, behind, ahead, idleDays }.
+   * status: not-started | no-pace | stalled (7+ idle days) | behind | ahead | on-pace. Amounts are rounded to halves;
+   * extra work today first pays off what is behind.
+   */
+  function paceBalance(r, now, opts) {
+    opts = opts || {};
+    var t = today(now), s = streak(r, now);
+    var lp = Math.max(0, r.pace.lessonsPerDay || 0), qp = opts.quizGoal === false ? 0 : Math.max(0, r.pace.quizzesPerDay || 0);
+    var res = { status: 'on-pace', behind: 0, ahead: 0, idleDays: s.lastActive ? dayDiff(s.lastActive, t) : null };
+    if (!r.history.length) { res.status = 'not-started'; return res; }
+    if (!(lp + qp > 0)) { res.status = 'no-pace'; return res; }
+    if (s.freshStart) { res.status = 'stalled'; return res; }
+    var since = r.pace.since || localDay(r.history[0].at);
+    var from = Math.max(dayIndex(since), dayIndex(t) - 7), to = dayIndex(t) - 1, n = Math.max(0, to - from + 1);
+    var L = 0, Q = 0;
+    r.history.forEach(function (h) {
+      var i = dayIndex(localDay(h.at));
+      if (i < from || i > to) return;
+      if (h.kind === 'quiz') Q += credit(h); else L += credit(h);
+    });
+    var c = countsOn(r, t);
+    var extra = (lp > 0 ? Math.max(0, c.lessons - lp) : 0) + (qp > 0 ? Math.max(0, c.quizzes - qp) : 0);
+    var debt = Math.max(0, lp * n - L) + Math.max(0, qp * n - Q);
+    var pay = Math.min(debt, extra); debt -= pay; extra -= pay;
+    var surplus = Math.max(0, L - lp * n) + (qp > 0 ? Math.max(0, Q - qp * n) : 0) + extra;
+    if (half(debt) >= 0.5) { res.status = 'behind'; res.behind = half(debt); }
+    else if (half(surplus) >= 0.5) { res.status = 'ahead'; res.ahead = half(surplus); }
+    return res;
+  }
+  /** The summary an app publishes for the dashboard. Pure: it does not change r. */
+  function hubSnapshot(cfg, now) {
+    now = now || new Date();
+    var r = cfg.get(), info = hubInfo(cfg), qOff = cfg.quizGoal === false;
+    var c = todayCounts(r, now), s = streak(r, now), pb = paceBalance(r, now, { quizGoal: !qOff });
+    var lp = r.pace.lessonsPerDay, qp = qOff ? 0 : r.pace.quizzesPerDay;
+    var mods = cfg.modules || [], whole = mods[0] || null;
+    var total = whole ? whole.total : null, remaining = whole ? whole.remaining : null;
+    var f = whole ? forecast(r, whole.remaining, now) : null;
+    var badges;
+    if (typeof cfg.hubBadges === 'function') badges = { kind: 'badges', items: cfg.hubBadges() || [] };
+    else if (cfg.badges) badges = { kind: 'badges', xp: r.badges.xp, level: r.badges.level, items: badgeList(r).map(function (b) { return { id: b.id, name: b.name, desc: b.desc, earnedAt: b.earnedAt }; }) };
+    else if (Array.isArray(cfg.milestoneList)) badges = { kind: 'milestones', items: cfg.milestoneList.map(msItem).map(function (x) { return { id: x.id || x.name, name: x.name, desc: x.desc || '', earnedAt: x.locked ? null : (x.at || null), reached: !x.locked }; }) };
+    else badges = { kind: 'none', items: [] };
+    var hist = r.history.slice(-HUB_HISTORY_CAP).map(function (h) { return [h.at, h.kind === 'quiz' ? 'q' : 'l', credit(h), h.first ? 1 : 0]; });
+    var rv = 0, t0 = today(now);
+    r.history.forEach(function (h) { if (h.review && localDay(h.at) === t0) rv++; });
+    return {
+      v: HUB_VERSION, core: 21, id: info.id, name: info.name, home: info.home, origin: global.location ? global.location.origin : '',
+      at: localIso(now), day: t0,
+      labels: words(cfg), pace: { lessonsPerDay: lp, quizzesPerDay: qp, since: r.pace.since || null },
+      today: { lessons: half(c.lessons), quizzes: half(c.quizzes), reviews: rv, goal: half(Math.max(0, lp) + Math.max(0, qp)), met: (lp + qp > 0) && c.lessons >= lp && c.quizzes >= qp },
+      status: pb.status, behind: pb.behind, ahead: pb.ahead, idleDays: pb.idleDays,
+      streak: { current: s.current, best: s.best, freezes: s.freezes, activeToday: s.activeToday, lastActive: s.lastActive, tone: streakTone(s.current) },
+      lastCompletedAt: r.lastCompletedAt || (r.history.length ? r.history[r.history.length - 1].at : null),
+      units: { done: total != null && remaining != null ? total - remaining : Object.keys(r.completions).length, total: total, title: whole ? whole.title : '' },
+      forecast: f ? { done: f.done, date: f.date, basis: f.basis } : null,
+      reviewsDue: typeof cfg.dueReviews === 'number' ? cfg.dueReviews : dueReviews(r, now).length,
+      badges: badges,
+      history: hist
+    };
+  }
+  var hubFrame = null, hubFrameReady = false, hubQueue = null, hubT = null, hubListening = false;
+  function hubPost(url, snap) {
+    if (!doc || !doc.body) return;
+    var origin = new URL(url).origin;
+    hubQueue = snap;
+    if (!hubListening) {
+      hubListening = true;
+      global.addEventListener('message', function (e) {
+        if (e.origin !== origin || !e.data || e.data.type !== 'rt-hub-ack') return;
+        // The dashboard said tracking is off for this app: remember it here so the app stops publishing.
+        if (e.data.disabled && e.data.id) { var s = hubSettings(); s.disabled[e.data.id] = true; lsSet(HUB_SETTINGS, JSON.stringify(s)); }
+        else if (e.data.id) { var s2 = hubSettings(); if (s2.disabled[e.data.id]) { delete s2.disabled[e.data.id]; lsSet(HUB_SETTINGS, JSON.stringify(s2)); } }
+      });
+    }
+    function send() { if (hubFrame && hubFrame.contentWindow && hubQueue) { hubFrame.contentWindow.postMessage({ type: 'rt-hub-snapshot', snap: hubQueue }, origin); hubQueue = null; } }
+    if (hubFrame) { if (hubFrameReady) send(); return; }
+    hubFrame = el('iframe', { src: url, title: 'Learning dashboard sync', 'aria-hidden': 'true', tabindex: '-1', 'data-rt-hub': '1' });
+    hubFrame.style.cssText = 'position:absolute;width:1px;height:1px;border:0;left:-9999px;top:-9999px;visibility:hidden';
+    hubFrame.addEventListener('load', function () { hubFrameReady = true; send(); });
+    doc.body.appendChild(hubFrame);
+  }
+  /**
+   * Publish this app's summary now (or after `delay` ms). Returns the snapshot, or null when tracking is off.
+   * Apps that set cfg.hub === false never publish.
+   */
+  function hubPublish(cfg, delay) {
+    if (!cfg || cfg.hub === false || typeof cfg.get !== 'function') return null;
+    if (delay) { clearTimeout(hubT); hubT = setTimeout(function () { hubPublish(cfg); }, delay); return null; }
+    var info = hubInfo(cfg);
+    var url = hubUrl(cfg);
+    if (!hubEnabled(info.id)) {
+      // Still tell a cross-origin hub we exist so turning tracking back on there reaches this app.
+      if (url) hubPost(url, { v: HUB_VERSION, id: info.id, ping: true });
+      return null;
+    }
+    var snap;
+    try { snap = hubSnapshot(cfg); } catch (e) { return null; }
+    lsSet(HUB_PREFIX + info.id, JSON.stringify(snap));
+    if (url) hubPost(url, snap);
+    return snap;
+  }
+  /** Rebuild a retention object from a published snapshot (the dashboard uses this to recompute pace for today). */
+  function fromSnapshot(snap) {
+    var r = defaults({ pace: { lessonsPerDay: snap.pace ? snap.pace.lessonsPerDay : 1, quizzesPerDay: snap.pace ? snap.pace.quizzesPerDay : 0 } });
+    r.pace.since = snap.pace ? snap.pace.since : null;
+    r.history = (snap.history || []).map(function (h) { return { unitId: '', at: h[0], kind: h[1] === 'q' ? 'quiz' : 'lesson', credit: h[2], review: h[2] < 1, first: !!h[3] }; });
+    r.streak.best = snap.streak ? snap.streak.best || 0 : 0;
+    return r;
+  }
+
   var api = {
     CORE_VERSION: CORE_VERSION, REVIEW_STEPS: REVIEW_STEPS, BADGES: BADGES,
     localDay: localDay, localIso: localIso, addDays: addDays, dayDiff: dayDiff, weekStart: weekStart, fullDate: fullDate,
@@ -1991,6 +2164,7 @@
     diary: diary, diaryCategories: diaryCategories, weekly: weekly, nextUnit: nextUnit,
     notificationSupport: notificationSupport, enableReminders: enableReminders, disableReminders: disableReminders,
     reminderDelay: reminderDelay,
+    paceBalance: paceBalance, hub: { PREFIX: HUB_PREFIX, SETTINGS: HUB_SETTINGS, VERSION: HUB_VERSION, PATH: HUB_PATH, info: hubInfo, url: hubUrl, snapshot: hubSnapshot, publish: hubPublish, settings: hubSettings, enabled: hubEnabled, fromSnapshot: fromSnapshot },
     popoverDue: popoverDue, markPopoverShown: markPopoverShown, setPopoverOnLoad: setPopoverOnLoad,
     activity: activity, nextMilestone: nextMilestone, milestoneProgress: milestoneProgress, pickCorner: pickCorner, isLongPage: isLongPage, nextHighlight: nextHighlight, streakTone: streakTone, reviewState: reviewState, reviewLabel: reviewLabel, credit: credit, half: half, fmtNum: fmtNum, plural: plural,
     ui: { injectStyles: injectStyles, agoBadge: agoBadge, catBadge: catBadge, decorate: decorate, banner: banner,
