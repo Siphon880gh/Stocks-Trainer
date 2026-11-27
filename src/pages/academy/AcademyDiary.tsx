@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { categoryRecency, daysAgo, diary } from "../../lib/academy/retention";
 import { loadAcademy, type KVStorage } from "../../lib/academy/storage";
 import { useAcademyChrome } from "../../lib/academy/retentionChrome";
+import BadgeGallery from "../../components/academy/BadgeGallery";
 
 /** /academy/diary — every completed unit, newest first, grouped by day, with days ago and its level > course. */
 export default function AcademyDiary({ storage, now = () => new Date() }: { storage?: KVStorage; now?: () => Date }) {
@@ -10,6 +11,10 @@ export default function AcademyDiary({ storage, now = () => new Date() }: { stor
   const state = loadAcademy(storage).state;
   const t = now();
   const [filter, setFilter] = useState("");
+  // The corner Badges button links to /academy/diary#badges: scroll there once the page has drawn.
+  useEffect(() => {
+    if (typeof window !== "undefined" && window.location.hash === "#badges") document.getElementById("badges")?.scrollIntoView();
+  }, []);
   const rec = categoryRecency(state, t);
   const cats = Object.keys(rec).filter((k) => rec[k]!.done > 0).sort();
   const entries = diary(state).filter((e) => !filter || e.path.join(" > ").startsWith(filter));
@@ -30,6 +35,7 @@ export default function AcademyDiary({ storage, now = () => new Date() }: { stor
       </p>
       <h1 className="text-2xl font-semibold tracking-tight">Diary</h1>
       <p className="text-[13px] text-muted">Every unit you have completed, newest first, with how many days ago and where it sits in the Academy.</p>
+      <BadgeGallery storage={storage} now={t} />
       {cats.length ? (
         <label className="flex flex-wrap items-center gap-2 text-[13px]">
           Filter by category
