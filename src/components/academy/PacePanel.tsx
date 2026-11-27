@@ -6,12 +6,12 @@ import { computeStreak, dayKey } from "../../lib/academy/rewards/streak";
 import { loadAcademy, loadRewards, saveAcademy, type KVStorage } from "../../lib/academy/storage";
 import {
   actualPace, behind, categoryRecency, forecast, getRetention, goalMet, markDoneForToday, remainingUnits, setPace, staleCategories, todayCounts, weekly, UNIT_PATH,
-  dueReviews,
+  dueReviews, fmtCount, pluralCount,
   reminderDelay, setReminder,
 } from "../../lib/academy/retention";
 
 const fmtDate = (k: string) => new Date(`${k}T12:00:00`).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" });
-const plural = (n: number, one: string, many: string) => `${n} ${n === 1 ? one : many}`;
+const plural = pluralCount;
 
 /**
  * Learning retention panel on the Academy hub (weng/.agents/skills/learning-retention): today against your pace,
@@ -103,7 +103,8 @@ export default function PacePanel({ storage, now = () => new Date() }: { storage
       </h2>
       <div aria-live="polite" className="space-y-1 text-[13px]">
         <p data-testid="pace-today">
-          {c.units} of {plural(r.pace.unitsPerDay, "unit", "units")} today
+          {fmtCount(c.units)} of {plural(r.pace.unitsPerDay, "unit", "units")} today
+          {c.reviews > 0 ? ` (with ${plural(c.reviews, "review", "reviews")} at half credit)` : ""}
           {r.pace.quizzesPerDay > 0 ? ` · ${c.quizzes} of ${plural(r.pace.quizzesPerDay, "review question", "review questions")}` : ""}
         </p>
         {met && !doneToday ? (

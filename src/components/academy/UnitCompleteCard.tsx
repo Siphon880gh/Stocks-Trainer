@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { coreState } from "../../lib/academy/retentionChrome";
-import type { KVStorage } from "../../lib/academy/storage";
+import { loadAcademy, type KVStorage } from "../../lib/academy/storage";
+import { unitReviewState } from "../../lib/academy/retention";
 
 /**
  * Unit completion control (learning-retention skill, section 3). A unit completes only by passing its
@@ -53,12 +54,22 @@ export default function UnitCompleteCard({ unitId, place, storage, tick, onTakeC
 }) {
   const long = useLongPage(tick);
   const c = (coreState(storage).completions as Record<string, { completedAt: string } | undefined>)[unitId];
+  // Passing the retake on a later day is a review: half a unit, once a day (learning-retention, Re-complete / Reviewed).
+  const rs = c ? unitReviewState(loadAcademy(storage).state, unitId) : "open";
+  const doneWord = rs === "reviewed-today" ? "Reviewed" : "Completed";
   if (place === "top") {
     if (!long) return null;
     return (
       <div className="rt-ui rt-topdone" data-rt-top-complete="1" data-rt-state={c ? "done" : "open"}>
         {c ? (
-          <span className="rt-top-chip"><Check /><span>Completed</span><AgoBadge iso={c.completedAt} /></span>
+          <>
+            <span className="rt-top-chip"><Check /><span>{doneWord}</span><AgoBadge iso={c.completedAt} /></span>
+            {rs === "reviewable" ? (
+              <button type="button" className="rt-ghost rt-top-btn" data-rt-mark-review-top={unitId} onClick={onTakeCheck}>
+                <Check /><span>Review: retake the check</span>
+              </button>
+            ) : null}
+          </>
         ) : (
           <button type="button" className="rt-ghost rt-top-btn" data-rt-mark-complete-top={unitId} onClick={onTakeCheck}>
             <Check /><span>Take the check</span>
@@ -68,22 +79,34 @@ export default function UnitCompleteCard({ unitId, place, storage, tick, onTakeC
     );
   }
   return (
-    <section className="rt-ui rt-done-card rt-complete" data-rt-complete-control="1" data-rt-state={c ? "done" : "open"} aria-label="Unit completion">
+    <section className="rt-ui rt-done-card rt-complete" data-rt-complete-control="1" data-rt-state={c ? "done" : "open"} data-rt-review={rs} aria-label="Unit completion">
       <div className="rt-dc-head">
         <span className={c ? "rt-dc-ic rt-dc-ic--done" : "rt-dc-ic"} aria-hidden="true"><Check /></span>
         <div>
           <p className="rt-dc-title" data-rt-status="1">
-            {c ? (<><span className="rt-done">Completed</span> <AgoBadge iso={c.completedAt} /></>) : "Finished this unit?"}
+            {c ? (<><span className="rt-done">{doneWord}</span> <AgoBadge iso={c.completedAt} /></>) : "Finished this unit?"}
           </p>
           <p className="rt-dc-sub">
-            {c ? "You passed this unit's check. Retake it any time to refresh it." : "A unit completes when you pass its check (80% or more). Reading the cards never counts."}
+            {rs === "reviewable"
+              ? "You passed this unit's check. Passing it again today counts as a review: half a unit toward today's pace."
+              : rs === "reviewed-today"
+                ? "Reviewed today, counted as half a unit. Retake it again tomorrow to review it again."
+                : rs === "done-today"
+                  ? "You passed this unit's check today. From tomorrow, passing a retake counts as a review (half a unit)."
+                  : "A unit completes when you pass its check (80% or more). Reading the cards never counts."}
           </p>
         </div>
       </div>
       <div className="rt-dc-act">
-        <button type="button" className={c ? "rt-ghost" : "rt-cta"} data-rt-mark-complete={unitId} onClick={onTakeCheck}>
-          {c ? "Retake the check" : "Take the check"}
-        </button>
+        {rs === "reviewed-today" ? (
+          <button type="button" className="rt-ghost" data-rt-reviewed="1" aria-disabled="true" title="Reviewed today. Review it again tomorrow.">
+            <Check />Reviewed
+          </button>
+        ) : (
+          <button type="button" className={c ? "rt-ghost" : "rt-cta"} data-rt-mark-complete={unitId} data-rt-mark-review={rs === "reviewable" ? unitId : undefined} onClick={onTakeCheck}>
+            {rs === "reviewable" ? "Review: retake the check" : c ? "Retake the check" : "Take the check"}
+          </button>
+        )}
       </div>
     </section>
   );
