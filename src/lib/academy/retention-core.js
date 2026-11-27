@@ -2,6 +2,8 @@
  * Learning retention core (weng/.agents/skills/learning-retention).
  * Pure helpers plus small DOM renderers. No dependencies, ES5, safe on iPad Safari.
  * Build v17: re-completing a done item is a review (half credit, once per item per day).
+ * Build v18: earned badges stay reviewable (and the corner sheet always fits above the stack): badgeList, a badge gallery (earned date, how to unlock),
+ *   a corner Badges button, the gallery on the diary page, and See badges on the earned toast.
  * The app owns storage: it passes a `retention` object and saves it after each change.
  *
  * Retention object (lives inside the app's own progress document):
@@ -391,10 +393,10 @@
   }
 
   var BADGES = [
-    { id: 'first-lesson', name: 'First lesson completed' },
-    { id: 'first-module', name: 'First module finished' },
-    { id: 'first-perfect', name: 'First perfect quiz' },
-    { id: 'streak-7', name: '7-day learning streak' }
+    { id: 'first-lesson', name: 'First lesson completed', desc: 'Complete your first lesson.' },
+    { id: 'first-module', name: 'First module finished', desc: 'Finish every lesson in one module.' },
+    { id: 'first-perfect', name: 'First perfect quiz', desc: 'Score 100% on a quiz.' },
+    { id: 'streak-7', name: '7-day learning streak', desc: 'Reach a 7-day streak. Freeze days count.' }
   ];
   /** ctx: { modulesFinished } . Returns newly earned badges. Badges are never revoked. */
   function updateBadges(r, ctx, now) {
@@ -419,6 +421,18 @@
     r.badges.xp = xp;
     r.badges.level = 1 + Math.floor(xp / 100);
     return fresh;
+  }
+
+  /** Every badge with its state: earned ones first (newest first) with earnedAt, then locked ones in catalog order. */
+  function badgeList(r) {
+    var earned = (r && r.badges && isObj(r.badges.earned)) ? r.badges.earned : {};
+    var all = BADGES.map(function (b, i) {
+      var at = earned[b.id] || null;
+      return { id: b.id, name: b.name, desc: b.desc, earned: !!at, earnedAt: at, order: i };
+    });
+    var t = function (b) { var d = toDate(b.earnedAt); return isNaN(d.getTime()) ? 0 : d.getTime(); };
+    var e = all.filter(function (b) { return b.earned; }).sort(function (a, b) { return (t(b) - t(a)) || (a.order - b.order); });
+    return e.concat(all.filter(function (b) { return !b.earned; }));
   }
 
   /** Days-ago label from the local calendar date of completedAt: 'today', '1d', '177d'. */
@@ -710,10 +724,10 @@
     (doc.head || doc.documentElement).appendChild(s);
   }
 
-  function agoBadge(iso, now) {
+  function agoBadge(iso, now, verb) {
     var a = daysAgo(iso, now);
     if (!a) return null;
-    return el('span', { class: 'rt-ago', title: 'Completed ' + a.date, 'aria-label': a.long + ' (' + a.date + ')', 'data-rt-ago': a.days, text: a.short });
+    return el('span', { class: 'rt-ago', title: (verb || 'Completed') + ' ' + a.date, 'aria-label': a.long + ' (' + a.date + ')', 'data-rt-ago': a.days, text: a.short });
   }
   function catBadge(row) {
     if (!row) return null;
@@ -742,12 +756,73 @@
     });
   }
 
-  function banner(text, actionLabel, actionHref) {
+  /** A small status toast. action may be a URL or a function. A "Badge earned" toast gets See badges by default. */
+  function banner(text, actionLabel, action) {
     if (!doc || doc.querySelector('.rt-banner')) return;
+    if (!action && /^Badge earned/.test(String(text)) && chrome && chrome.openBadges) { actionLabel = actionLabel || 'See badges'; action = chrome.openBadges; }
     var close = el('button', { type: 'button', class: 'rt-btn', text: 'Dismiss' });
-    var b = el('div', { class: 'rt-banner', role: 'status' }, [el('span', { text: text }), actionHref ? el('a', { class: 'rt-btn rt-btn--primary', href: actionHref, text: actionLabel || 'Open' }) : null, close]);
+    var act = null;
+    if (typeof action === 'function') {
+      act = el('button', { type: 'button', class: 'rt-btn rt-btn--primary', 'data-rt-banner-action': '1', text: actionLabel || 'Open' });
+      act.addEventListener('click', function () { b.remove(); action(); });
+    } else if (action) act = el('a', { class: 'rt-btn rt-btn--primary', href: action, text: actionLabel || 'Open' });
+    var b = el('div', { class: 'rt-banner', role: 'status' }, [el('span', { text: text }), act, close]);
     close.addEventListener('click', function () { b.remove(); });
     doc.body.appendChild(b);
+  }
+
+  /**
+   * Badge gallery section: every earned badge with its earned date and what it was for, then locked
+   * badges with what unlocks them. Apps without badges (cfg.badges false) show cfg.milestoneList instead.
+   * Returns null when the app has neither.
+   */
+  function badgeGallery(cfg, opts) {
+    opts = opts || {};
+    var r = cfg.get(), now = opts.now || new Date();
+    var hid = opts.headingId || 'rt-badges-h';
+    var sec = el('section', { class: 'rt-sec rt-gallery', 'data-rt-badges-gallery': '1', 'aria-labelledby': hid });
+    if (cfg.badges) {
+      var list = badgeList(r), n = list.filter(function (b) { return b.earned; }).length;
+      sec.appendChild(el(opts.h || 'h3', { class: 'rt-sec-h', id: hid }, ['Badges', el('span', { 'data-rt-badges-count': n + '/' + list.length, text: n + ' of ' + list.length + ' earned \u00b7 Level ' + r.badges.level + ', ' + r.badges.xp + ' XP' })]));
+      var ul = el('ul', { class: 'rt-badges rt-badges--gallery' });
+      list.forEach(function (b) {
+        var meta = b.earned
+          ? el('span', { class: 'rt-bd-meta', 'data-rt-badge-earned': localDay(b.earnedAt) }, ['Earned ' + fullDate(b.earnedAt), agoBadge(b.earnedAt, now, 'Earned')])
+          : el('span', { class: 'rt-bd-meta', text: 'Locked. ' + b.desc });
+        ul.appendChild(el('li', { 'data-earned': b.earned ? '1' : null, 'data-rt-badge': b.id }, [
+          icon(b.earned ? 'medal' : 'lock'),
+          el('div', { class: 'rt-bd' }, [el('b', { class: 'rt-bd-name', text: b.name }), b.earned ? el('span', { class: 'rt-bd-desc', text: b.desc }) : null, meta])
+        ]));
+      });
+      sec.appendChild(ul);
+      return sec;
+    }
+    if (Array.isArray(cfg.milestoneList)) {
+      var all = cfg.milestoneList.map(msItem), got = all.filter(function (x) { return !x.locked; });
+      sec.appendChild(el(opts.h || 'h3', { class: 'rt-sec-h', id: hid }, ['Milestones', el('span', { 'data-rt-badges-count': String(got.length), text: plural(got.length, 'reached', 'reached') })]));
+      if (!all.length) { sec.appendChild(el('p', { class: 'rt-muted', text: 'None yet. Your first milestone comes with your first finished lesson.' })); return sec; }
+      var ml = el('ul', { class: 'rt-badges rt-badges--gallery' });
+      got.concat(all.filter(function (x) { return x.locked; })).forEach(function (x) {
+        var meta = x.locked ? el('span', { class: 'rt-bd-meta', text: 'Locked. ' + (x.desc || '') })
+          : x.at ? el('span', { class: 'rt-bd-meta', 'data-rt-badge-earned': localDay(x.at) }, ['Reached ' + fullDate(x.at), agoBadge(x.at, now, 'Reached')]) : null;
+        ml.appendChild(el('li', { 'data-earned': x.locked ? null : '1', 'data-rt-badge': x.id || x.name }, [icon(x.locked ? 'lock' : 'check'), el('div', { class: 'rt-bd' }, [el('b', { class: 'rt-bd-name', text: x.name }), !x.locked && x.desc ? el('span', { class: 'rt-bd-desc', text: x.desc }) : null, meta])]));
+      });
+      sec.appendChild(ml);
+      return sec;
+    }
+    return null;
+  }
+  /** Milestone entries may be plain strings or { name, at, desc, locked }. */
+  function msItem(t) { return typeof t === 'string' ? { name: t } : (t && typeof t === 'object' ? t : { name: String(t) }); }
+  function msReached(list) { return (list || []).map(msItem).filter(function (x) { return !x.locked; }); }
+  /** Render the badge gallery on its own (a Badges page or a diary section). */
+  function renderBadges(container, cfg) {
+    if (!container) return;
+    injectStyles(); injectChromeStyles(cfg.theme);
+    container.innerHTML = '';
+    container.classList.add('rt-ui');
+    var g = badgeGallery(cfg, { h: 'h2', headingId: (container.id || 'rt') + '-badges-h' });
+    container.appendChild(g || el('p', { class: 'rt-muted', text: 'No badges in this app yet.' }));
   }
 
   /**
@@ -830,7 +905,7 @@
       container.appendChild(el('p', { class: 'rt-fc', 'data-rt-stale': x.key, text: 'You haven\u2019t touched ' + x.key + ' in ' + x.days + ' days.' }));
     });
     if (cfg.badges) container.appendChild(el('p', { class: 'rt-fc', 'data-rt-level': String(r.badges.level), text: 'Level ' + r.badges.level + ' with ' + r.badges.xp + ' XP.' }));
-    else if (cfg.milestoneList && cfg.milestoneList.length) container.appendChild(el('p', { class: 'rt-fc', 'data-rt-milestones': '1', text: 'Milestones reached: ' + cfg.milestoneList.join(', ') + '.' }));
+    else if (cfg.milestoneList && cfg.milestoneList.length) container.appendChild(el('p', { class: 'rt-fc', 'data-rt-milestones': '1', text: 'Milestones reached: ' + msReached(cfg.milestoneList).map(function (x) { return x.name; }).join(', ') + '.' }));
     var wk = weekly(r, now);
     var recap = el('div', { 'data-rt-weekly': '1', class: 'rt-sec' }, [el('h3', { class: 'rt-sec-h', text: 'This week' })]);
     if (!wk.active && r.history.length) recap.appendChild(el('p', { class: 'rt-fc', style: 'margin:0', text: 'Nothing yet this week. A fresh start is one ' + m.w.lesson + ' away.' }));
@@ -1034,6 +1109,17 @@
     var sel = el('select', { id: 'rt-diary-filter' }, [el('option', { value: '', text: 'All categories' })].concat(cats.map(function (k) { return el('option', { value: k, text: k }); })));
     var head = el('div', { class: 'rt-row' }, [el('label', { for: 'rt-diary-filter', text: 'Filter by category' }), sel]);
     var list = el('div', { 'aria-live': 'polite' });
+    var showBadges = cfg.badges !== undefined || cfg.milestoneList !== undefined
+      ? (cfg.badges || Array.isArray(cfg.milestoneList))
+      : (chromeCfg ? (chromeCfg().badges || Array.isArray(chromeCfg().milestoneList)) : Object.keys(r.badges.earned).length > 0);
+    if (showBadges) {
+      var bc = {}; Object.keys(cfg).forEach(function (k) { bc[k] = cfg[k]; });
+      if (cfg.badges === undefined && cfg.milestoneList === undefined) {
+        if (chromeCfg) { bc.badges = chromeCfg().badges; bc.milestoneList = chromeCfg().milestoneList; } else bc.badges = true;
+      }
+      var g = badgeGallery(bc, { headingId: 'rt-diary-badges-h' });
+      if (g) { g.id = 'rt-diary-badges'; container.appendChild(g); }
+    }
     container.appendChild(head);
     container.appendChild(list);
     function draw() {
@@ -1076,7 +1162,8 @@
     target: '<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/>',
     lock: '<rect x="5.5" y="10.5" width="13" height="9.5" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/>',
     glow: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/>',
-    glowoff: '<circle cx="12" cy="12" r="4" stroke-dasharray="2.5 2.5"/>'
+    glowoff: '<circle cx="12" cy="12" r="4" stroke-dasharray="2.5 2.5"/>',
+    medal: '<circle cx="12" cy="9" r="5.5"/><path d="M8.7 13.6 7.2 21l4.8-2.6 4.8 2.6-1.5-7.4"/>'
   };
   function icon(name, cls) {
     var s = doc.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -1245,6 +1332,14 @@
     '.rt-ui .rt-badges li .rt-i,.rt-badges.rt-ui li .rt-i{width:18px;height:18px}',
     '.rt-ui .rt-badges li[data-earned] .rt-i,.rt-badges.rt-ui li[data-earned] .rt-i{color:var(--rt-accent)}',
     '.rt-ui .rt-badges li:not([data-earned]),.rt-badges.rt-ui li:not([data-earned]){color:var(--rt-muted)}',
+    '.rt-ui .rt-badges--gallery li{align-items:flex-start}',
+    '.rt-ui .rt-badges--gallery li .rt-i{margin-top:1px;flex:0 0 auto}',
+    '.rt-ui .rt-bd{display:flex;flex-direction:column;gap:2px;min-width:0}',
+    '.rt-ui .rt-bd-name{font-weight:600;color:var(--rt-heading)}',
+    '.rt-ui .rt-badges li:not([data-earned]) .rt-bd-name{color:var(--rt-muted);font-weight:500}',
+    '.rt-ui .rt-bd-desc,.rt-ui .rt-bd-meta{font-size:12.5px;line-height:1.45;color:var(--rt-muted)}',
+    '.rt-ui .rt-bd-meta{display:inline-flex;flex-wrap:wrap;align-items:center;gap:6px}',
+    '.rt-ui.rt-diary .rt-gallery,.rt-diary.rt-ui .rt-gallery{margin:0 0 20px;padding:14px 16px;border:1px solid var(--rt-line);border-radius:var(--rt-radius,12px);background:var(--rt-surface)}',
     '.rt-ui .rt-list,.rt-list.rt-ui{list-style:none;margin:0;padding:0;display:grid;gap:6px;font-size:13.5px;color:var(--rt-muted)}',
     '.rt-ui .rt-list b,.rt-list.rt-ui b{color:var(--rt-ink);font-weight:600}',
     '.rt-ui .rt-link,.rt-link.rt-ui{color:var(--rt-accent);font-weight:600;text-decoration:underline;text-underline-offset:3px}',
@@ -1293,6 +1388,10 @@
     '.rt-diary.rt-ui li .rt-cat.rt-rev{justify-self:end;padding:1px 8px;border-radius:999px;background:var(--rt-accent-soft,rgba(127,127,127,.15));color:var(--rt-accent);font-weight:600}',
     '.rt-diary.rt-ui li .rt-crumb{grid-column:1;font-size:12.5px;color:var(--rt-muted);opacity:1}',
     '.rt-diary.rt-ui .rt-muted{color:var(--rt-muted);opacity:1}',
+    '.rt-diary.rt-ui .rt-gallery ul{display:grid;gap:10px;border:0;border-radius:0;background:none;overflow:visible}',
+    '.rt-diary.rt-ui .rt-gallery li{display:flex;align-items:flex-start;gap:10px;padding:0;border-bottom:0}',
+    '.rt-diary.rt-ui .rt-gallery li .rt-ago{margin:0}',
+    '.rt-diary.rt-ui .rt-gallery .rt-sec-h{margin-top:0}',
     '.rt-ui .rt-list li b{text-transform:none}',
     '@media (max-width:480px){.rt-pop{padding:22px 18px 14px}.rt-big b{font-size:30px}.rt-stats{gap:8px}.rt-stat{padding:12px}}',
     '@media (prefers-reduced-motion:no-preference){',
@@ -1454,13 +1553,15 @@
     return out;
   }
 
-  var chrome = null;
+  var chrome = null, chromeCfg = null;
   /**
    * Mount the fixed corner buttons (streak pill + diary), the progress panel and the welcome popover.
    * cfg (object or function returning it): the renderHome cfg (get, save, labels, continueHref, continueTitle,
    *   modules, dueReviews, reviewHref, diaryHref, badges, milestoneList, quizGoal, onChange, onReminder) plus
    *   title, theme { surface, ink, heading, muted, line, accent, accentInk, accentSoft, radius, font, warm }
    *   (values such as 'var(--panel)'), avoid (selector to keep clear of), order, corner, popover (default true).
+   *   A Badges corner button appears when badges is true or milestoneList is an array (it opens the badge
+   *   gallery sheet), or when badgesHref is set (a link to the app's own badge gallery; badgesSummary e.g. '3 of 24').
    */
   /** Browse-style highlight: none -> learned -> not yet learned -> none. */
   var HL_MODES = ['none', 'learned', 'unlearned'];
@@ -1519,8 +1620,18 @@
     var stack = el('div', { class: 'rt-ui rt-corner', 'data-rt-corner': '1', role: 'group', 'aria-label': 'Learning progress' });
     var diaryBtn = null;
     if (cfg.diaryHref) { diaryBtn = el('a', { class: 'rt-cbtn rt-xb', href: cfg.diaryHref, 'data-rt-diary-btn': '1', 'aria-label': 'Diary: every item you have completed' }, [el('span', { class: 'rt-ic', 'aria-hidden': 'true' }, [icon('book')]), el('span', { class: 'rt-lbl', 'aria-hidden': 'true', text: 'Diary' })]); stack.appendChild(diaryBtn); }
+    var badgeBtn = null, badgeLink = !!cfg.badgesHref;
+    if (badgeLink) {
+      // The app has its own badge gallery (its own catalog): the corner button links to it.
+      badgeBtn = el('a', { class: 'rt-cbtn rt-xb', href: cfg.badgesHref, 'data-rt-badges-btn': '1' });
+      stack.appendChild(badgeBtn);
+    } else if (cfg.badges || Array.isArray(cfg.milestoneList)) {
+      badgeBtn = el('button', { type: 'button', class: 'rt-cbtn rt-xb', 'data-rt-badges-btn': '1', 'aria-expanded': 'false', 'aria-controls': 'rt-sheet', 'aria-haspopup': 'dialog' });
+      stack.appendChild(badgeBtn);
+    }
     var prog = el('button', { type: 'button', class: 'rt-cbtn rt-xb', 'data-rt-progress-btn': '1', 'aria-expanded': 'false', 'aria-controls': 'rt-sheet', 'aria-haspopup': 'dialog' });
     stack.appendChild(prog);
+    chromeCfg = getCfg;
     var hl = null;
     var hlWait = null, hlWaitT = null;
     if (cfg.highlight && cfg.highlight.cards && doc.querySelector(cfg.highlight.cards)) hl = mountHighlight(stack, getCfg);
@@ -1556,7 +1667,7 @@
     }
     function onOutside(e) { if (!stack.contains(e.target)) { expand(null); Array.prototype.forEach.call(stack.querySelectorAll('[data-rt-was-open]'), function (o) { o.removeAttribute('data-rt-was-open'); }); } }
     doc.addEventListener('pointerdown', onOutside, true);
-    wire(diaryBtn); wire(prog); if (hl) wire(hl.btn);
+    wire(diaryBtn); wire(badgeBtn); wire(prog); if (hl) wire(hl.btn);
     // Cards drawn later (fetched lists): add the highlight button once the first card appears.
     function stopHlWait() { if (hlWait) hlWait.disconnect(); hlWait = null; clearTimeout(hlWaitT); }
     if (!hl && cfg.highlight && cfg.highlight.cards && global.MutationObserver) {
@@ -1589,6 +1700,27 @@
       if (s.current === 0) prog.setAttribute('data-rt-cold', '1'); else prog.removeAttribute('data-rt-cold');
       prog.setAttribute('aria-label', 'Streak ' + s.current + ' ' + days + '. Open pace, streak and milestones');
       prog.setAttribute('data-rt-streak', String(s.current));
+      if (badgeBtn) {
+        var bc = getCfg(), txt, aria;
+        if (badgeLink) {
+          txt = 'Badges' + (bc.badgesSummary ? ' ' + bc.badgesSummary : '');
+          aria = 'Badges' + (bc.badgesSummary ? ': ' + bc.badgesSummary + ' earned' : '') + '. Open every badge with the date you earned it';
+        } else if (bc.badges) {
+          var bl = badgeList(bc.get()), bn = bl.filter(function (b) { return b.earned; }).length;
+          txt = 'Badges ' + bn + ' of ' + bl.length;
+          aria = 'Badges: ' + bn + ' of ' + bl.length + ' earned. Open every badge with the date you earned it';
+          badgeBtn.setAttribute('data-rt-badges-earned', String(bn));
+        } else {
+          var mn = msReached(bc.milestoneList).length;
+          txt = 'Milestones ' + mn;
+          aria = 'Milestones: ' + plural(mn, 'milestone', 'milestones') + ' reached. Open the list';
+          badgeBtn.setAttribute('data-rt-badges-earned', String(mn));
+        }
+        badgeBtn.textContent = '';
+        badgeBtn.appendChild(el('span', { class: 'rt-ic', 'aria-hidden': 'true' }, [icon('medal')]));
+        badgeBtn.appendChild(el('span', { class: 'rt-lbl', 'aria-hidden': 'true', text: txt }));
+        badgeBtn.setAttribute('aria-label', aria);
+      }
     }
     function place() {
       var skip = function (n) { return stack.contains(n) || (sheet && sheet.contains(n)) || n.classList.contains('rt-banner') || n.classList.contains('rt-backdrop'); };
@@ -1609,6 +1741,8 @@
     function placeSheet() {
       var b = stack.getBoundingClientRect();
       sheet.style.bottom = Math.round(global.innerHeight - b.top + 10) + 'px';
+      // Keep the whole sheet on screen above the corner stack (a taller stack used to push its heading off the top).
+      sheet.style.maxHeight = Math.max(220, Math.round(b.top - 10 - 16)) + 'px';
       sheet.style.left = corner === 'bottom-left' ? 'max(18px, env(safe-area-inset-left))' : '';
       sheet.style.right = corner === 'bottom-right' ? 'max(18px, env(safe-area-inset-right))' : '';
     }
@@ -1625,22 +1759,30 @@
       if (dodge !== prev || dodge) apply();
     }
     function onScroll() { if (!ticking) { ticking = true; (global.requestAnimationFrame || setTimeout)(dodgeComplete); } }
+    var sheetMode = null;
+    function opener() { return sheetMode === 'badges' && badgeBtn && !badgeLink ? badgeBtn : prog; }
     function closeSheet(restore) {
       if (!sheet) return;
-      sheet.remove(); sheet = null;
+      var o = opener();
+      sheet.remove(); sheet = null; sheetMode = null;
       prog.setAttribute('aria-expanded', 'false');
-      if (restore !== false) prog.focus();
+      if (badgeBtn && !badgeLink) badgeBtn.setAttribute('aria-expanded', 'false');
+      if (restore !== false) o.focus();
     }
-    function openSheet() {
+    function openSheet(mode) {
+      if (sheet) closeSheet(false);
       var c = getCfg();
-      sheet = el('div', { id: 'rt-sheet', class: 'rt-ui rt-card rt-sheet', role: 'dialog', 'aria-modal': 'false', 'aria-labelledby': 'rt-sheet-h', 'data-rt-sheet': '1' });
-      renderProgress(sheet, c, function () { closeSheet(); }, function () { if (c.onChange) c.onChange(); label(); });
+      sheetMode = mode === 'badges' && badgeBtn && !badgeLink ? 'badges' : 'progress';
+      sheet = el('div', { id: 'rt-sheet', class: 'rt-ui rt-card rt-sheet', role: 'dialog', 'aria-modal': 'false', 'aria-labelledby': 'rt-sheet-h', 'data-rt-sheet': sheetMode });
+      if (sheetMode === 'badges') renderBadgeSheet(sheet, c, function () { closeSheet(); }, function () { openSheet('progress'); });
+      else renderProgress(sheet, c, function () { closeSheet(); }, function () { if (c.onChange) c.onChange(); label(); });
       doc.body.appendChild(sheet);
       placeSheet();
-      prog.setAttribute('aria-expanded', 'true');
+      opener().setAttribute('aria-expanded', 'true');
       var x = sheet.querySelector('.rt-x'); if (x) x.focus();
     }
-    prog.addEventListener('click', function () { if (sheet) closeSheet(); else openSheet(); });
+    prog.addEventListener('click', function () { if (sheet && sheetMode === 'progress') closeSheet(); else openSheet('progress'); });
+    if (badgeBtn && !badgeLink) badgeBtn.addEventListener('click', function () { if (sheet && sheetMode === 'badges') closeSheet(); else openSheet('badges'); });
     function onKey(e) {
       if (e.key !== 'Escape' && e.key !== 'Esc') return;
       if (doc.querySelector('.rt-backdrop')) return;
@@ -1666,18 +1808,37 @@
     }
     chrome = {
       stack: stack, place: place, open: openSheet, close: closeSheet, corner: function () { return corner; },
-      refresh: function () { if (hl) hl.mark(); label(); if (sheet) { closeSheet(false); openSheet(); } },
+      openBadges: !badgeBtn ? null : badgeLink ? function () { global.location.href = getCfg().badgesHref; } : function () { openSheet('badges'); },
+      refresh: function () { if (hl) hl.mark(); label(); if (sheet) { var md = sheetMode; closeSheet(false); openSheet(md); } },
       destroy: function () {
         closeSheet(false); stack.remove(); spacer.remove();
         timers.forEach(clearTimeout); if (mo) mo.disconnect(); clearTimeout(moT); stopHlWait(); if (hl) hl.destroy();
         doc.removeEventListener('pointerdown', onOutside, true); clearTimeout(openT);
         doc.removeEventListener('keydown', onKey); doc.removeEventListener('mousedown', onDown); doc.removeEventListener('touchstart', onDown);
         global.removeEventListener('resize', onResize); global.removeEventListener('scroll', onScroll);
-        chrome = null;
+        chrome = null; chromeCfg = null;
       }
     };
     if (cfg.popover !== false) maybeWelcome(getCfg);
     return chrome;
+  }
+
+  /** Badges sheet body (corner Badges button): the full gallery, with links to the progress panel and diary. */
+  function renderBadgeSheet(box, c, onClose, onProgress) {
+    box.innerHTML = '';
+    var x = el('button', { type: 'button', class: 'rt-x', 'aria-label': 'Close badges' }, [icon('x')]);
+    x.addEventListener('click', onClose);
+    box.appendChild(x);
+    box.appendChild(el('h2', { class: 'rt-h', id: 'rt-sheet-h', text: c.badges ? 'Your badges' : 'Your milestones' }));
+    box.appendChild(el('p', { class: 'rt-sub', text: c.badges ? 'Every badge you have earned, with the date, and what unlocks the rest.' : 'Every milestone you have reached so far.' }));
+    var g = badgeGallery(c, { headingId: 'rt-b-badges-h' });
+    if (g) box.appendChild(g);
+    var row = el('div', { class: 'rt-actions' });
+    var pb = el('button', { type: 'button', class: 'rt-ghost', 'data-rt-badges-progress': '1', text: 'Pace and streak' });
+    pb.addEventListener('click', onProgress);
+    row.appendChild(pb);
+    if (c.diaryHref) row.appendChild(el('a', { class: 'rt-ghost', href: c.diaryHref, text: 'Open diary' }));
+    box.appendChild(row);
   }
 
   /** Progress panel body (used inside the corner sheet). */
@@ -1700,14 +1861,9 @@
     [['active', 'Active'], ['frozen', 'Freeze'], ['missed', 'Rest day'], ['today', 'Today']].forEach(function (p) { lg.appendChild(el('span', {}, [el('i', { class: 'rt-dot rt-dot--' + p[0], 'aria-hidden': 'true' }), p[1]])); });
     box.appendChild(el('section', { class: 'rt-sec' }, [el('h3', { class: 'rt-sec-h' }, ['Last 30 days', el('span', { text: plural(active, 'active day', 'active days') })]), cal, lg]));
     // badges / milestones
-    if (c.badges) {
-      var ul = el('ul', { class: 'rt-badges' });
-      BADGES.forEach(function (b) { var e = !!m.r.badges.earned[b.id]; ul.appendChild(el('li', { 'data-earned': e ? '1' : null }, [icon(e ? 'check' : 'lock'), b.name])); });
-      box.appendChild(el('section', { class: 'rt-sec' }, [el('h3', { class: 'rt-sec-h' }, ['Badges', el('span', { text: 'Level ' + m.r.badges.level + ', ' + m.r.badges.xp + ' XP' })]), ul]));
-    } else if (c.milestoneList && c.milestoneList.length) {
-      var ml = el('ul', { class: 'rt-badges' });
-      c.milestoneList.forEach(function (t) { ml.appendChild(el('li', { 'data-earned': '1' }, [icon('check'), t])); });
-      box.appendChild(el('section', { class: 'rt-sec' }, [el('h3', { class: 'rt-sec-h', text: 'Milestones reached' }), ml]));
+    if (c.badges || (c.milestoneList && c.milestoneList.length)) {
+      var gal = badgeGallery(c, { now: now, headingId: 'rt-s-badges-h' });
+      if (gal) { gal.id = 'rt-s-badges'; box.appendChild(gal); }
     }
     // forecasts
     if (m.fcs.length) {
@@ -1807,15 +1963,15 @@
     defaults: defaults, normalize: normalize, complete: complete, importLegacy: importLegacy, isComplete: isComplete,
     countsOn: countsOn, todayCounts: todayCounts, goalMet: goalMet, streak: streak, behind: behind,
     actualPace: actualPace, forecast: forecast, recordAnswer: recordAnswer, dueReviews: dueReviews,
-    updateBadges: updateBadges, daysAgo: daysAgo, categoryRecency: categoryRecency, staleCategories: staleCategories,
+    updateBadges: updateBadges, badgeList: badgeList, daysAgo: daysAgo, categoryRecency: categoryRecency, staleCategories: staleCategories,
     diary: diary, diaryCategories: diaryCategories, weekly: weekly, nextUnit: nextUnit,
     notificationSupport: notificationSupport, enableReminders: enableReminders, disableReminders: disableReminders,
     reminderDelay: reminderDelay,
     popoverDue: popoverDue, markPopoverShown: markPopoverShown, setPopoverOnLoad: setPopoverOnLoad,
     activity: activity, nextMilestone: nextMilestone, milestoneProgress: milestoneProgress, pickCorner: pickCorner, isLongPage: isLongPage, nextHighlight: nextHighlight, streakTone: streakTone, reviewState: reviewState, reviewLabel: reviewLabel, credit: credit, half: half, fmtNum: fmtNum, plural: plural,
     ui: { injectStyles: injectStyles, agoBadge: agoBadge, catBadge: catBadge, decorate: decorate, banner: banner,
-      scheduleReminder: scheduleReminder, renderHome: renderHome, renderMarkComplete: renderMarkComplete, renderDiary: renderDiary,
-      renderProgress: renderProgress, mountChrome: mountChrome, welcome: maybeWelcome, occupiedRects: occupiedRects, refreshChrome: function () { if (chrome) chrome.refresh(); } }
+      scheduleReminder: scheduleReminder, renderHome: renderHome, renderMarkComplete: renderMarkComplete, renderDiary: renderDiary, renderBadges: renderBadges, badgeGallery: badgeGallery,
+      renderProgress: renderProgress, openBadges: function () { if (chrome && chrome.openBadges) chrome.openBadges(); }, mountChrome: mountChrome, welcome: maybeWelcome, occupiedRects: occupiedRects, refreshChrome: function () { if (chrome) chrome.refresh(); } }
   };
   global.RetentionCore = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
