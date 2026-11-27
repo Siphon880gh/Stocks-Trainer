@@ -15,6 +15,8 @@ test("badge gallery: every badge listed; earned ones first, newest first, with t
   assert.ok(html.includes('data-badge-earned="2026-11-20T18:00:00Z"'));
   assert.match(html, /Locked\. /);
   assert.match(html, /data-days-ago="6"/);
-  // The days-ago tag sits at the end of the tile (right in LTR), after the text block, not under the date.
-  assert.match(html, /<\/div><span class="ms-auto shrink-0[^"]*" data-days-ago="6">/);
+  // The days-ago tag sits outside the tile, in a gutter column every row has (empty on locked rows), so tiles share edges.
+  assert.match(html, /<\/div><\/div><span class="flex justify-end[^"]*"><span [^>]*data-days-ago="6">/);
+  assert.equal((html.match(/data-badge-tile/g) || []).length, BADGES.length);
+  assert.equal((html.match(/class="flex justify-end/g) || []).length, BADGES.length);
 });

@@ -2,6 +2,11 @@ import { BADGES } from "../../lib/academy/rewards/badges";
 import { daysAgo } from "../../lib/academy/retention";
 import { loadRewards, type KVStorage } from "../../lib/academy/storage";
 
+/** Each row: a bordered tile with the same edges as every other tile, then a fixed gutter outside it for the days-ago tag. */
+const ROW = "grid grid-cols-[minmax(0,1fr)_3.6rem] items-start gap-2";
+const TILE = "flex min-w-0 items-start gap-3 rounded-lg border p-2";
+const GUTTER = "flex justify-end pt-[9px]";
+
 const time = (iso?: string) => {
   const t = iso ? Date.parse(iso) : NaN;
   return Number.isFinite(t) ? t : 0;
@@ -30,35 +35,42 @@ export default function BadgeGallery({ storage, now = new Date(), id = "badges" 
           const at = earned[b.id]!;
           const ago = daysAgo(at, now);
           return (
-            <li key={b.id} className="flex items-start gap-3 rounded-lg border border-sim/40 bg-sim/5 p-2" data-badge={b.id} data-earned="true">
-              <span className="material-symbols-outlined text-sim" aria-hidden>
-                {b.icon}
-              </span>
-              <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-semibold leading-tight">{b.name}</p>
-                <p className="text-[12px] text-muted leading-snug">{b.hint}</p>
-                <p className="text-[12px] text-muted">
-                  Earned{" "}
-                  <time dateTime={at} data-badge-earned={at}>
-                    {new Date(at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}
-                  </time>
-                </p>
+            <li key={b.id} className={ROW} data-badge={b.id} data-earned="true">
+              <div className={`${TILE} border-sim/40 bg-sim/5`} data-badge-tile>
+                <span className="material-symbols-outlined text-sim" aria-hidden>
+                  {b.icon}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="text-[13px] font-semibold leading-tight">{b.name}</p>
+                  <p className="text-[12px] text-muted leading-snug">{b.hint}</p>
+                  <p className="text-[12px] text-muted">
+                    Earned{" "}
+                    <time dateTime={at} data-badge-earned={at}>
+                      {new Date(at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}
+                    </time>
+                  </p>
+                </div>
               </div>
-              <span className="ms-auto shrink-0 self-start rounded-full border border-line px-2 text-[11px] tabular-nums" data-days-ago={ago.days}>
-                {ago.label}
+              <span className={GUTTER}>
+                <span className="rounded-full border border-line px-2 text-[11px] tabular-nums whitespace-nowrap" data-days-ago={ago.days}>
+                  {ago.label}
+                </span>
               </span>
             </li>
           );
         })}
         {locked.map((b) => (
-          <li key={b.id} className="flex items-start gap-3 rounded-lg border border-line p-2" data-badge={b.id} data-earned="false">
-            <span className="material-symbols-outlined text-muted" aria-hidden>
-              lock
-            </span>
-            <div className="min-w-0">
-              <p className="text-[13px] font-medium leading-tight text-muted">{b.name}</p>
-              <p className="text-[12px] text-muted leading-snug">Locked. {b.hint}</p>
+          <li key={b.id} className={ROW} data-badge={b.id} data-earned="false">
+            <div className={`${TILE} border-line`} data-badge-tile>
+              <span className="material-symbols-outlined text-muted" aria-hidden>
+                lock
+              </span>
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-medium leading-tight text-muted">{b.name}</p>
+                <p className="text-[12px] text-muted leading-snug">Locked. {b.hint}</p>
+              </div>
             </div>
+            <span className={GUTTER} aria-hidden />
           </li>
         ))}
       </ul>
