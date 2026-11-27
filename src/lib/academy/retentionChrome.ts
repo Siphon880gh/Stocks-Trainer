@@ -11,7 +11,8 @@
 import { useEffect } from "react";
 import "./retention-core.js";
 import { diary } from "./retention";
-import { loadAcademy, type KVStorage } from "./storage";
+import { loadAcademy, loadRewards, type KVStorage } from "./storage";
+import { BADGES } from "./rewards/badges";
 import { UNIT_ORDER, getUnit } from "./content/levels";
 import { nextUnit, isUnitDone } from "./progress";
 import { dayKey } from "./rewards/streak";
@@ -78,6 +79,9 @@ export function academyHomeCfg(storage?: KVStorage) {
     dueReviews: 0,
     reviewHref: null,
     diaryHref: `${base}/academy/diary`,
+    // The Academy has its own badge catalog: the corner Badges button links to its gallery on the diary page.
+    badgesHref: `${base}/academy/diary#badges`,
+    badgesSummary: `${BADGES.filter((b) => loadRewards(storage).state.badges[b.id]).length} of ${BADGES.length}`,
     stale: [],
     theme: {
       surface: "var(--color-surface)", ink: "var(--color-ink)", heading: "var(--color-ink)", muted: "var(--color-muted)",

@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { ACADEMY_KEY, emptyAcademy, memoryStorage, saveAcademy } from "./storage";
+import { ACADEMY_KEY, REWARDS_KEY, emptyAcademy, emptyRewards, memoryStorage, saveAcademy } from "./storage";
 import { UNIT_ORDER } from "./content/levels";
 import { quizForUnit } from "./content/unitQuizzes";
 import { logUnitCheck } from "./retention";
@@ -59,4 +59,11 @@ test("chrome state: a later-day pass is a half-credit review; a same-day repeat 
   const r = coreState(st);
   assert.deepEqual(Object.keys(r.completions), [U0]);
   assert.deepEqual(r.history.map((h: { credit: number; review: boolean }) => [h.credit, h.review]), [[1, false], [0.5, true], [0, true]]);
+});
+
+test("chrome cfg: the Badges corner button links to the badge gallery on the diary page, with the earned count", () => {
+  const st = memoryStorage({ [REWARDS_KEY]: JSON.stringify({ ...emptyRewards(), badges: { "first-unit": "2026-11-20T18:00:00Z" } }) });
+  const cfg = academyHomeCfg(st);
+  assert.equal(cfg.badgesHref, "/academy/diary#badges");
+  assert.match(cfg.badgesSummary, /^1 of \d+$/);
 });
