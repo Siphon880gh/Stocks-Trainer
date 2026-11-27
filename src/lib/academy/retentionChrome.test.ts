@@ -67,3 +67,14 @@ test("chrome cfg: the Badges corner button links to the badge gallery on the dia
   assert.equal(cfg.badgesHref, "/academy/diary#badges");
   assert.match(cfg.badgesSummary, /^1 of \d+$/);
 });
+
+test("chrome cfg: the Learning dashboard feed names the app and lists every Academy badge with its earned date", () => {
+  const st = memoryStorage({ [REWARDS_KEY]: JSON.stringify({ ...emptyRewards(), badges: { "first-unit": "2026-11-20T18:00:00Z" } }) });
+  const cfg = academyHomeCfg(st);
+  assert.equal(cfg.hub.id, "stocks-trainer");
+  assert.equal(cfg.hub.name, "Learn Stocks");
+  const items = cfg.hubBadges();
+  assert.ok(items.length >= 20);
+  assert.equal(items.find((b) => b.id === "first-unit")?.earnedAt, "2026-11-20T18:00:00Z");
+  assert.ok(items.filter((b) => !b.earnedAt).every((b) => b.desc));
+});

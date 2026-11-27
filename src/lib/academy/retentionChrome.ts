@@ -82,6 +82,12 @@ export function academyHomeCfg(storage?: KVStorage) {
     // The Academy has its own badge catalog: the corner Badges button links to its gallery on the diary page.
     badgesHref: `${base}/academy/diary#badges`,
     badgesSummary: `${BADGES.filter((b) => loadRewards(storage).state.badges[b.id]).length} of ${BADGES.length}`,
+    // Learning dashboard feed (weng/app/learning-dashboard): the Academy's own 24 badges, with the dates earned.
+    hub: { id: "stocks-trainer", name: "Learn Stocks", home: `${base}/academy` },
+    hubBadges: () => {
+      const earned = loadRewards(storage).state.badges;
+      return BADGES.map((b) => ({ id: b.id, name: b.name, desc: b.hint, earnedAt: earned[b.id] ?? null }));
+    },
     stale: [],
     theme: {
       surface: "var(--color-surface)", ink: "var(--color-ink)", heading: "var(--color-ink)", muted: "var(--color-muted)",
