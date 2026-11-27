@@ -4,6 +4,7 @@
  * Build v17: re-completing a done item is a review (half credit, once per item per day).
  * Build v18: earned badges stay reviewable (and the corner sheet always fits above the stack): badgeList, a badge gallery (earned date, how to unlock),
  *   a corner Badges button, the gallery on the diary page, and See badges on the earned toast.
+ * Build v19: the days-ago tag on a badge or milestone tile sits at the tile's end (right in LTR, left in RTL), level with the name.
  * The app owns storage: it passes a `retention` object and saves it after each change.
  *
  * Retention object (lives inside the app's own progress document):
@@ -787,11 +788,12 @@
       var ul = el('ul', { class: 'rt-badges rt-badges--gallery' });
       list.forEach(function (b) {
         var meta = b.earned
-          ? el('span', { class: 'rt-bd-meta', 'data-rt-badge-earned': localDay(b.earnedAt) }, ['Earned ' + fullDate(b.earnedAt), agoBadge(b.earnedAt, now, 'Earned')])
+          ? el('span', { class: 'rt-bd-meta', 'data-rt-badge-earned': localDay(b.earnedAt) }, ['Earned ' + fullDate(b.earnedAt)])
           : el('span', { class: 'rt-bd-meta', text: 'Locked. ' + b.desc });
         ul.appendChild(el('li', { 'data-earned': b.earned ? '1' : null, 'data-rt-badge': b.id }, [
           icon(b.earned ? 'medal' : 'lock'),
-          el('div', { class: 'rt-bd' }, [el('b', { class: 'rt-bd-name', text: b.name }), b.earned ? el('span', { class: 'rt-bd-desc', text: b.desc }) : null, meta])
+          el('div', { class: 'rt-bd' }, [el('b', { class: 'rt-bd-name', text: b.name }), b.earned ? el('span', { class: 'rt-bd-desc', text: b.desc }) : null, meta]),
+          b.earned ? tileAgo(b.earnedAt, now, 'Earned') : null
         ]));
       });
       sec.appendChild(ul);
@@ -804,13 +806,19 @@
       var ml = el('ul', { class: 'rt-badges rt-badges--gallery' });
       got.concat(all.filter(function (x) { return x.locked; })).forEach(function (x) {
         var meta = x.locked ? el('span', { class: 'rt-bd-meta', text: 'Locked. ' + (x.desc || '') })
-          : x.at ? el('span', { class: 'rt-bd-meta', 'data-rt-badge-earned': localDay(x.at) }, ['Reached ' + fullDate(x.at), agoBadge(x.at, now, 'Reached')]) : null;
-        ml.appendChild(el('li', { 'data-earned': x.locked ? null : '1', 'data-rt-badge': x.id || x.name }, [icon(x.locked ? 'lock' : 'check'), el('div', { class: 'rt-bd' }, [el('b', { class: 'rt-bd-name', text: x.name }), !x.locked && x.desc ? el('span', { class: 'rt-bd-desc', text: x.desc }) : null, meta])]));
+          : x.at ? el('span', { class: 'rt-bd-meta', 'data-rt-badge-earned': localDay(x.at) }, ['Reached ' + fullDate(x.at)]) : null;
+        ml.appendChild(el('li', { 'data-earned': x.locked ? null : '1', 'data-rt-badge': x.id || x.name }, [icon(x.locked ? 'lock' : 'check'), el('div', { class: 'rt-bd' }, [el('b', { class: 'rt-bd-name', text: x.name }), !x.locked && x.desc ? el('span', { class: 'rt-bd-desc', text: x.desc }) : null, meta]), !x.locked && x.at ? tileAgo(x.at, now, 'Reached') : null]));
       });
       sec.appendChild(ml);
       return sec;
     }
     return null;
+  }
+  /** Days-ago tag for the end of a gallery tile (right in LTR): `1d`, `today`. */
+  function tileAgo(iso, now, verb) {
+    var t = agoBadge(iso, now, verb);
+    t.className += ' rt-bd-ago';
+    return t;
   }
   /** Milestone entries may be plain strings or { name, at, desc, locked }. */
   function msItem(t) { return typeof t === 'string' ? { name: t } : (t && typeof t === 'object' ? t : { name: String(t) }); }
@@ -1334,7 +1342,8 @@
     '.rt-ui .rt-badges li:not([data-earned]),.rt-badges.rt-ui li:not([data-earned]){color:var(--rt-muted)}',
     '.rt-ui .rt-badges--gallery li{align-items:flex-start}',
     '.rt-ui .rt-badges--gallery li .rt-i{margin-top:1px;flex:0 0 auto}',
-    '.rt-ui .rt-bd{display:flex;flex-direction:column;gap:2px;min-width:0}',
+    '.rt-ui .rt-bd{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 auto}',
+    '.rt-ui .rt-badges--gallery li>.rt-bd-ago{flex:0 0 auto;align-self:flex-start;margin:0;margin-inline-start:auto}',
     '.rt-ui .rt-bd-name{font-weight:600;color:var(--rt-heading)}',
     '.rt-ui .rt-badges li:not([data-earned]) .rt-bd-name{color:var(--rt-muted);font-weight:500}',
     '.rt-ui .rt-bd-desc,.rt-ui .rt-bd-meta{font-size:12.5px;line-height:1.45;color:var(--rt-muted)}',
@@ -1390,7 +1399,7 @@
     '.rt-diary.rt-ui .rt-muted{color:var(--rt-muted);opacity:1}',
     '.rt-diary.rt-ui .rt-gallery ul{display:grid;gap:10px;border:0;border-radius:0;background:none;overflow:visible}',
     '.rt-diary.rt-ui .rt-gallery li{display:flex;align-items:flex-start;gap:10px;padding:0;border-bottom:0}',
-    '.rt-diary.rt-ui .rt-gallery li .rt-ago{margin:0}',
+    '.rt-diary.rt-ui .rt-gallery li .rt-ago{margin:0;margin-inline-start:auto}',
     '.rt-diary.rt-ui .rt-gallery .rt-sec-h{margin-top:0}',
     '.rt-ui .rt-list li b{text-transform:none}',
     '@media (max-width:480px){.rt-pop{padding:22px 18px 14px}.rt-big b{font-size:30px}.rt-stats{gap:8px}.rt-stat{padding:12px}}',
