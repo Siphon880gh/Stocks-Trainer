@@ -6,9 +6,11 @@ import { recordActivity } from "../../lib/academy/rewards/streak";
 import { loadAcademy, loadRewards, saveAcademy, saveRewards, type KVStorage } from "../../lib/academy/storage";
 import type { AnswerLetter } from "../../lib/academy/types";
 import { cn } from "../../lib/utils";
+import { useAcademyChrome } from "../../lib/academy/retentionChrome";
 
 /** /academy/review — missed check questions that are due (1, 3, then 7 days after a miss). Each answer counts as a review question. */
 export default function AcademyReview({ storage, now = () => new Date() }: { storage?: KVStorage; now?: () => Date }) {
+  useAcademyChrome(storage);
   const [state, setState] = useState(() => loadAcademy(storage).state);
   const [result, setResult] = useState<{ qid: string; picked: AnswerLetter; correct: boolean } | null>(null);
   const due = dueReviews(state, now());

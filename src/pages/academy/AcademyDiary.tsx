@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { categoryRecency, daysAgo, diary } from "../../lib/academy/retention";
 import { loadAcademy, type KVStorage } from "../../lib/academy/storage";
+import { useAcademyChrome } from "../../lib/academy/retentionChrome";
 
 /** /academy/diary — every completed unit, newest first, grouped by day, with days ago and its level > course. */
 export default function AcademyDiary({ storage, now = () => new Date() }: { storage?: KVStorage; now?: () => Date }) {
+  useAcademyChrome(storage);
   const state = loadAcademy(storage).state;
   const t = now();
   const [filter, setFilter] = useState("");

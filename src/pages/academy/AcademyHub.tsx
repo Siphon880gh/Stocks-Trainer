@@ -14,6 +14,7 @@ import { categoryRecency, daysAgo, lastCompletedAt } from "../../lib/academy/ret
 import { VALUE_PROMISE } from "../../lib/academy/copy";
 import { cn } from "../../lib/utils";
 import AppSectionNav from "../../components/AppSectionNav";
+import { useAcademyChrome } from "../../lib/academy/retentionChrome";
 
 const STATUS: Record<UnitStatus | "preview", { label: string; icon: string; cls: string }> = {
   locked: { label: "Locked", icon: "lock", cls: "text-muted" },
@@ -34,6 +35,7 @@ function agoTitle(at: string, days: number) {
 
 /** /academy — Beginner Academy hub: placement, continue, the level map with courses and units. */
 export default function AcademyHub({ storage, extra }: { storage?: KVStorage; extra?: ReactNode }) {
+  useAcademyChrome(storage);
   const state = loadAcademy(storage).state;
   // the Today answer writes the rewards store; re-read it so points and the Day streak agree with the card
   const [rewardsTick, setRewardsTick] = useState(0);

@@ -7,9 +7,11 @@ import { loadAcademy, saveAcademy, type KVStorage } from "../../lib/academy/stor
 import { markTestedOut } from "../../lib/academy/progress";
 import { awardTestOut } from "../../lib/academy/rewards/award";
 import { cn } from "../../lib/utils";
+import { useAcademyChrome } from "../../lib/academy/retentionChrome";
 
 /** /academy/test-out/:levelId — BA3.M2: 7 questions from the level's units; 85% marks the level tested out. */
 export default function AcademyTestOut({ storage, preset }: { storage?: KVStorage; preset?: Record<string, AnswerLetter> }) {
+  useAcademyChrome(storage);
   const { levelId = "" } = useParams();
   const valid = (TEST_OUT_LEVELS as string[]).includes(levelId);
   const [answers, setAnswers] = useState<Record<string, AnswerLetter>>(preset ?? {});
