@@ -1,6 +1,7 @@
 /**
  * Learning retention core (weng/.agents/skills/learning-retention).
  * Pure helpers plus small DOM renderers. No dependencies, ES5, safe on iPad Safari.
+ * Build v17: re-completing a done item is a review (half credit, once per item per day).
  * The app owns storage: it passes a `retention` object and saves it after each change.
  *
  * Retention object (lives inside the app's own progress document):
@@ -167,6 +168,21 @@
     var title = String(unit.title || (prev && prev.title) || id);
     var score = typeof opts.score === 'number' ? opts.score : null;
     var perfect = opts.perfect === true;
+    // Re-completing a done item is a review: half credit, at most one credit per item per local day.
+    if (prev) {
+      if (touchedOn(r, id, localDay(now))) return { first: false, review: true, counted: false, at: at };
+      prev.completedAt = at;
+      prev.lastReviewedAt = at;
+      prev.reviews = (prev.reviews || 0) + 1;
+      prev.count = (prev.count || 1) + 1;
+      if (typeof score === 'number') prev.score = score;
+      if (perfect) prev.perfect = true;
+      r.history.push({ unitId: id, at: at, kind: kind, title: title, path: path, source: opts.source || 'button', score: score, perfect: perfect, first: false, review: true, credit: REVIEW_CREDIT });
+      if (r.history.length > HISTORY_CAP) r.history = r.history.slice(r.history.length - HISTORY_CAP);
+      r.lastCompletedAt = at;
+      r.lastUnitId = id;
+      return { first: false, review: true, counted: true, at: at };
+    }
     r.completions[id] = {
       completedAt: at,
       firstAt: prev && prev.firstAt ? prev.firstAt : (prev ? prev.completedAt : at),
@@ -183,7 +199,40 @@
     r.lastCompletedAt = at;
     r.lastUnitId = id;
     if (!r.pace.since) r.pace.since = localDay(now);
-    return { first: first, at: at };
+    return { first: first, review: false, counted: true, at: at };
+  }
+
+  /** Half credit for a review; a first completion (or an older entry without a credit) is 1. */
+  var REVIEW_CREDIT = 0.5;
+  function credit(h) { return typeof h.credit === 'number' ? h.credit : (h.review ? REVIEW_CREDIT : 1); }
+  /** Round to the nearest half so totals never show float noise. */
+  function half(n) { return Math.round((Number(n) || 0) * 2) / 2; }
+  /** '1.5', '1', '0.5' (never '1.50'). */
+  function fmtNum(n) { return String(half(n)); }
+  function touchedOn(r, id, day) {
+    for (var i = r.history.length - 1; i >= 0; i--) { var h = r.history[i]; if (h.unitId === id && localDay(h.at) === day) return true; }
+    return false;
+  }
+  /**
+   * Where a unit stands for its Complete control today:
+   * 'open' (never done), 'done-today' (first completed today), 'reviewed-today', or 'reviewable' (done on an earlier day).
+   */
+  /** Row-button wording for a reviewState: { text, disabled }. mark is the open label ('Mark done'). */
+  function reviewLabel(state, mark, doneToday) {
+    if (state === 'open') return { text: mark || 'Mark complete', disabled: false };
+    if (state === 'reviewable') return { text: 'Mark reviewed', disabled: false };
+    if (state === 'reviewed-today') return { text: 'Reviewed', disabled: true };
+    return { text: doneToday || 'Done today', disabled: true };
+  }
+  function reviewState(r, id, now) {
+    if (!r.completions[id]) return 'open';
+    var t = today(now), firstToday = false, reviewedToday = false;
+    for (var i = r.history.length - 1; i >= 0; i--) {
+      var h = r.history[i];
+      if (h.unitId !== id || localDay(h.at) !== t) continue;
+      if (h.review) reviewedToday = true; else firstToday = true;
+    }
+    return firstToday ? 'done-today' : reviewedToday ? 'reviewed-today' : 'reviewable';
   }
 
   /** Migrate a flag-only store: ids already done get a completion without inventing history days. */
@@ -203,8 +252,9 @@
     var c = { lessons: 0, quizzes: 0 };
     r.history.forEach(function (h) {
       if (localDay(h.at) !== day) return;
-      if (h.kind === 'quiz') c.quizzes++; else c.lessons++;
+      if (h.kind === 'quiz') c.quizzes += credit(h); else c.lessons += credit(h);
     });
+    c.lessons = half(c.lessons); c.quizzes = half(c.quizzes);
     return c;
   }
   function today(now) { return localDay(now || new Date()); }
@@ -276,7 +326,7 @@
     r.history.forEach(function (h) {
       var i = dayIndex(localDay(h.at));
       if (i < from || i > to) return;
-      if (h.kind === 'quiz') Q++; else L++;
+      if (h.kind === 'quiz') Q += credit(h); else L += credit(h);
     });
     res.lessons = Math.max(0, Math.round(r.pace.lessonsPerDay * n - L));
     res.quizzes = Math.max(0, Math.round(r.pace.quizzesPerDay * n - Q));
@@ -448,8 +498,9 @@
     r.history.forEach(function (h) {
       if (dayIndex(localDay(h.at)) < wi) return;
       res.active = true;
-      if (h.kind === 'quiz') res.quizzes++; else res.lessons++;
+      if (h.kind === 'quiz') res.quizzes += credit(h); else res.lessons += credit(h);
     });
+    res.lessons = half(res.lessons); res.quizzes = half(res.quizzes);
     var s = streak(r, now);
     res.freezesUsed = s.frozenDays.filter(function (d) { return dayIndex(d) >= wi; }).length;
     Object.keys(r.badges.earned).forEach(function (id) {
@@ -633,6 +684,9 @@
     '.rt-panel p{margin:.35rem 0}',
     '.rt-row{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.5rem 0}',
     '.rt-btn{font:inherit;min-height:44px;padding:.45rem .9rem;border-radius:var(--rt-radius,6px);border:1px solid currentColor;background:transparent;color:inherit;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}',
+    '.rt-btn--done{opacity:.8}',
+    '.rt-btn[data-rt-review=reviewable]{border-style:dashed;opacity:1}',
+    '.rt-btn[aria-disabled=true]{cursor:default;border-color:transparent;background:color-mix(in srgb,currentColor 10%,transparent)}',
     '.rt-btn--primary{background:var(--rt-accent,#2f6fa7);border-color:var(--rt-accent,#2f6fa7);color:var(--rt-accent-ink,#fff)}',
     '.rt-ago{display:inline-block;margin-left:.4rem;padding:0 .4rem;border:1px solid currentColor;border-radius:999px;font-size:.78em;line-height:1.5;opacity:.85;white-space:nowrap}',
     '.rt-cat{margin-left:.4rem;font-size:.8em;opacity:.85;white-space:nowrap}',
@@ -883,7 +937,13 @@
     top.innerHTML = '';
     top.setAttribute('data-rt-state', c ? 'done' : 'open');
     if (c) {
-      top.appendChild(el('span', { class: 'rt-top-chip' }, [icon('check'), el('span', { text: 'Completed' }), agoBadge(c.completedAt)]));
+      var trs = reviewState(cfg.get(), cfg.unit.id);
+      top.appendChild(el('span', { class: 'rt-top-chip' }, [icon('check'), el('span', { text: trs === 'reviewed-today' ? 'Reviewed' : 'Completed' }), agoBadge(c.completedAt)]));
+      if (trs === 'reviewable' && cfg.review !== false) {
+        var rb = el('button', { type: 'button', class: 'rt-ghost rt-top-btn', 'data-rt-mark-review-top': cfg.unit.id }, [icon('check'), el('span', { text: 'Mark reviewed' })]);
+        rb.addEventListener('click', function () { redraw(true); });
+        top.appendChild(rb);
+      }
       return;
     }
     var b = el('button', { type: 'button', class: 'rt-ghost rt-top-btn', 'data-rt-mark-complete-top': cfg.unit.id }, [icon('check'), el('span', { text: cfg.label || 'Mark complete' })]);
@@ -930,12 +990,24 @@
       if (chrome) chrome.refresh();
     }
     if (c) {
+      var rs = reviewState(r, cfg.unit.id);
+      var reviewable = cfg.review !== false;
       container.setAttribute('data-rt-state', 'done');
-      var head = el('div', { class: 'rt-dc-head' }, [el('span', { class: 'rt-dc-ic rt-dc-ic--done', 'aria-hidden': 'true' }, [icon('check')]), el('div', {}, [el('p', { class: 'rt-dc-title' }, [el('span', { class: 'rt-done', text: 'Completed' }), agoBadge(c.completedAt)]), status])]);
-      status.appendChild(doc.createTextNode('Reviewing it again counts toward today\u2019s pace.'));
-      var again = el('button', { type: 'button', class: 'rt-ghost', 'data-rt-mark-again': '1' }, [icon('check'), 'Mark complete again']);
-      again.addEventListener('click', function () { finish(again); });
+      container.setAttribute('data-rt-review', rs);
+      var reviewedToday = rs === 'reviewed-today';
+      var head = el('div', { class: 'rt-dc-head' }, [el('span', { class: 'rt-dc-ic rt-dc-ic--done', 'aria-hidden': 'true' }, [icon('check')]), el('div', {}, [el('p', { class: 'rt-dc-title' }, [el('span', { class: 'rt-done', text: reviewedToday ? 'Reviewed' : 'Completed' }), agoBadge(c.completedAt)]), status])]);
       container.appendChild(head);
+      if (!reviewable) { status.appendChild(doc.createTextNode('Done. It counts once.')); return; }
+      if (rs === 'reviewed-today') {
+        status.appendChild(doc.createTextNode('Reviewed today. A review counts as half a ' + (cfg.noun || 'lesson') + '. Review it again tomorrow.'));
+        var done = el('button', { type: 'button', class: 'rt-ghost', 'data-rt-reviewed': '1', 'aria-disabled': 'true', disabled: 'disabled' }, [icon('check'), 'Reviewed']);
+        container.appendChild(el('div', { class: 'rt-dc-act' }, [done]));
+        return;
+      }
+      if (rs === 'done-today') { status.appendChild(doc.createTextNode('Completed today. You can mark it reviewed from tomorrow; a review counts as half.')); return; }
+      status.appendChild(doc.createTextNode('Went over it again? Mark it reviewed. A review counts as half a ' + (cfg.noun || 'lesson') + ' toward today\u2019s pace.'));
+      var again = el('button', { type: 'button', class: 'rt-ghost', 'data-rt-mark-again': '1', 'data-rt-mark-review': cfg.unit.id }, [icon('check'), 'Mark reviewed']);
+      again.addEventListener('click', function () { finish(again); var rv = container.querySelector('[data-rt-reviewed]'); if (rv) { rv.setAttribute('tabindex', '-1'); rv.removeAttribute('disabled'); rv.focus(); rv.setAttribute('disabled', 'disabled'); } });
       container.appendChild(el('div', { class: 'rt-dc-act' }, [again]));
       return;
     }
@@ -969,12 +1041,19 @@
       var groups = diary(r, sel.value);
       if (!groups.length) { list.appendChild(el('p', { class: 'rt-muted', text: cfg.emptyText || 'Nothing completed yet. Use Mark complete at the end of a lesson.' })); return; }
       groups.forEach(function (g) {
-        list.appendChild(el('h3', { class: 'rt-diary-day' }, [fullDate(g.day + 'T12:00:00'), el('span', { text: plural(g.rows.length, 'completion', 'completions') })]));
+        var dw = words(cfg), dl = 0, dq = 0, dr = 0;
+        g.rows.forEach(function (h) { if (h.kind === 'quiz') dq += credit(h); else dl += credit(h); if (h.review) dr++; });
+        var dc = dl + dq, dbits = [];
+        if (dl) dbits.push(plural(dl, dw.lesson, dw.lessons));
+        if (dq) dbits.push(plural(dq, dw.quiz, dw.quizzes));
+        var dayTxt = dr ? dbits.join(' and ') + ' (' + plural(dr, 'review', 'reviews') + ' at half)' : plural(g.rows.length, 'completion', 'completions');
+        list.appendChild(el('h3', { class: 'rt-diary-day' }, [fullDate(g.day + 'T12:00:00'), el('span', { 'data-rt-day-credit': fmtNum(dc), text: dayTxt })]));
         var ul = el('ul');
         g.rows.forEach(function (h) {
           var href = cfg.hrefFor ? cfg.hrefFor(h.unitId, h) : null;
           var title = href ? el('a', { href: href, text: h.title || h.unitId }) : el('span', { text: h.title || h.unitId });
           var li = el('li', { 'data-rt-diary-row': h.unitId }, [title, agoBadge(h.at)]);
+          if (h.review) li.appendChild(el('span', { class: 'rt-cat rt-rev', 'data-rt-reviewed': '1', title: 'A review counts as half', text: 'Reviewed \u00b7 half' }));
           if (h.kind === 'quiz') li.appendChild(el('span', { class: 'rt-cat', text: h.score !== null && h.score !== undefined ? 'quiz \u00b7 ' + Math.round(h.score * 100) + '%' : 'quiz' }));
           if (h.path && h.path.length) li.appendChild(el('span', { class: 'rt-crumb', text: h.path.join(' > ') }));
           ul.appendChild(li);
@@ -1105,6 +1184,8 @@
     '.rt-ui .rt-freeze,.rt-freeze.rt-ui{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--rt-muted);margin:0}',
     '.rt-ui .rt-freeze .rt-i,.rt-freeze.rt-ui .rt-i{width:15px;height:15px}',
     '.rt-ui .rt-freeze[data-banked],.rt-freeze.rt-ui[data-banked]{color:var(--rt-ink)}',
+    '.rt-ui .rt-stat-note{margin:8px 0 0;font-size:12.5px;line-height:1.4;color:var(--rt-muted)}',
+    '.rt-ui .rt-stat-note b{color:var(--rt-ink);font-weight:600;font-variant-numeric:tabular-nums}',
     '.rt-ui .rt-week,.rt-week.rt-ui{display:flex;gap:5px;margin-top:10px}',
     '.rt-ui .rt-dot,.rt-dot.rt-ui{width:10px;height:10px;border-radius:999px;border:1.5px solid var(--rt-line);flex:none;list-style:none}',
     '.rt-ui .rt-dot--active,.rt-dot--active.rt-ui{background:var(--rt-accent);border-color:var(--rt-accent)}',
@@ -1209,6 +1290,7 @@
     '.rt-diary.rt-ui li>a:hover{color:var(--rt-accent);text-decoration:underline;text-underline-offset:3px}',
     '.rt-diary.rt-ui li .rt-ago{grid-column:2;grid-row:1;margin:0}',
     '.rt-diary.rt-ui li .rt-cat{grid-column:2;font-size:12px;color:var(--rt-muted);margin:0;opacity:1}',
+    '.rt-diary.rt-ui li .rt-cat.rt-rev{justify-self:end;padding:1px 8px;border-radius:999px;background:var(--rt-accent-soft,rgba(127,127,127,.15));color:var(--rt-accent);font-weight:600}',
     '.rt-diary.rt-ui li .rt-crumb{grid-column:1;font-size:12.5px;color:var(--rt-muted);opacity:1}',
     '.rt-diary.rt-ui .rt-muted{color:var(--rt-muted);opacity:1}',
     '.rt-ui .rt-list li b{text-transform:none}',
@@ -1233,7 +1315,7 @@
     applyTheme(theme);
   }
 
-  function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function plural(n, one, many) { var x = half(n); return fmtNum(x) + ' ' + (x === 1 ? one : many); }
   function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
   function bar(have, need) {
     var b = el('span', { class: 'rt-bar', 'aria-hidden': 'true' });
@@ -1242,7 +1324,7 @@
     return b;
   }
   function meter(label, have, need) {
-    return el('div', { class: 'rt-meter' }, [el('div', { class: 'rt-meter-row' }, [el('span', { text: label }), el('b', { text: have + ' of ' + need })]), bar(Math.min(have, need), need)]);
+    return el('div', { class: 'rt-meter' }, [el('div', { class: 'rt-meter-row' }, [el('span', { text: label }), el('b', { text: fmtNum(have) + ' of ' + fmtNum(need) })]), bar(Math.min(have, need), need)]);
   }
   function words(cfg) {
     var L = cfg.labels || {};
@@ -1254,7 +1336,7 @@
     var r = cfg.get(), w = words(cfg);
     var c = todayCounts(r, now), s = streak(r, now), b = behind(r, now);
     var lp = r.pace.lessonsPerDay, qp = cfg.quizGoal !== false ? r.pace.quizzesPerDay : 0;
-    var goal = Math.max(0, lp) + Math.max(0, qp), done = Math.min(c.lessons, lp > 0 ? lp : c.lessons) + Math.min(c.quizzes, qp > 0 ? qp : 0);
+    var goal = Math.max(0, lp) + Math.max(0, qp), done = half(Math.min(c.lessons, lp > 0 ? lp : c.lessons) + Math.min(c.quizzes, qp > 0 ? qp : 0));
     var fcs = (cfg.modules || []).map(function (m) {
       var f = forecast(r, m.remaining, now);
       return { title: m.title, remaining: m.remaining, done: f.done, date: f.date ? fullDate(f.date + 'T12:00:00') : null, basis: f.basis };
@@ -1266,7 +1348,9 @@
       if (Object.keys(r.badges.earned).length !== before && cfg.save) cfg.save(r);
     }
     var ms = milestoneProgress(r, now, { badges: !!cfg.badges, modules: (cfg.modules || []).map(function (m) { return { title: m.title, done: m.total - m.remaining, total: m.total }; }) });
-    return { r: r, w: w, c: c, s: s, b: b, lp: lp, qp: qp, goal: goal, done: done, met: goalMet(r, now), fcs: fcs, ms: ms, days: activity(r, now, 30) };
+    var t0 = today(now), rv = 0;
+    r.history.forEach(function (h) { if (h.review && localDay(h.at) === t0) rv++; });
+    return { rv: rv, r: r, w: w, c: c, s: s, b: b, lp: lp, qp: qp, goal: goal, done: done, met: goalMet(r, now), fcs: fcs, ms: ms, days: activity(r, now, 30) };
   }
   function headline(m, cfg) {
     if (m.met) return 'Today\u2019s pace is done';
@@ -1285,9 +1369,10 @@
   function statsBlock(m) {
     var today = el('div', { class: 'rt-stat', 'data-rt-today': m.done + '/' + m.goal });
     today.appendChild(el('p', { class: 'rt-stat-k', text: 'Today' }));
-    today.appendChild(el('div', { class: 'rt-big' }, [el('b', { text: String(m.done) }), el('span', { text: 'of ' + m.goal + ' done' })]));
+    today.appendChild(el('div', { class: 'rt-big' }, [el('b', { text: fmtNum(m.done) }), el('span', { text: 'of ' + fmtNum(m.goal) + ' done' })]));
     if (m.lp > 0) today.appendChild(meter(cap(m.w.lessons), m.c.lessons, m.lp));
     if (m.qp > 0) today.appendChild(meter(cap(m.w.quizzes), m.c.quizzes, m.qp));
+    if (m.rv > 0) today.appendChild(el('p', { class: 'rt-stat-note', 'data-rt-today-words': fmtNum(m.c.lessons) }, [el('b', { text: plural(m.c.lessons, m.w.lesson, m.w.lessons) }), ' today, with ' + plural(m.rv, 'review', 'reviews') + ' at half credit.']));
     var st = el('div', { class: 'rt-stat', 'data-rt-streak': String(m.s.current) });
     var k = el('p', { class: 'rt-stat-k' }, [icon('flame', 'rt-flame'), 'Streak']);
     k.firstChild.setAttribute('width', '15'); k.firstChild.setAttribute('height', '15');
@@ -1727,7 +1812,7 @@
     notificationSupport: notificationSupport, enableReminders: enableReminders, disableReminders: disableReminders,
     reminderDelay: reminderDelay,
     popoverDue: popoverDue, markPopoverShown: markPopoverShown, setPopoverOnLoad: setPopoverOnLoad,
-    activity: activity, nextMilestone: nextMilestone, milestoneProgress: milestoneProgress, pickCorner: pickCorner, isLongPage: isLongPage, nextHighlight: nextHighlight, streakTone: streakTone,
+    activity: activity, nextMilestone: nextMilestone, milestoneProgress: milestoneProgress, pickCorner: pickCorner, isLongPage: isLongPage, nextHighlight: nextHighlight, streakTone: streakTone, reviewState: reviewState, reviewLabel: reviewLabel, credit: credit, half: half, fmtNum: fmtNum, plural: plural,
     ui: { injectStyles: injectStyles, agoBadge: agoBadge, catBadge: catBadge, decorate: decorate, banner: banner,
       scheduleReminder: scheduleReminder, renderHome: renderHome, renderMarkComplete: renderMarkComplete, renderDiary: renderDiary,
       renderProgress: renderProgress, mountChrome: mountChrome, welcome: maybeWelcome, occupiedRects: occupiedRects, refreshChrome: function () { if (chrome) chrome.refresh(); } }
