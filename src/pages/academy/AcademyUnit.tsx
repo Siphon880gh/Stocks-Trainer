@@ -7,9 +7,12 @@ import { isAcademyPreview, readAcademyBrowseAll } from "../../lib/academy/browse
 import { recordUnitAttempt, unitStatus } from "../../lib/academy/progress";
 import { awardUnitMastery } from "../../lib/academy/rewards/award";
 import { logUnitCheck } from "../../lib/academy/retention";
+import { useAcademyChrome, refreshAcademyChrome } from "../../lib/academy/retentionChrome";
+import UnitCompleteCard from "../../components/academy/UnitCompleteCard";
 
 /** /academy/:unitId — one unit: cards, quiz, mastery; progress saved on the academy key. */
 export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
+  useAcademyChrome(storage);
   const { unitId = "" } = useParams();
   // ?check=1 (Academy hub "Test out"): open straight on the unit check; passing it records mastery as usual.
   const [params] = useSearchParams();
@@ -18,6 +21,16 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
   const [attempt, setAttempt] = useState(() => loadAcademy(storage).state.units[unitId]?.attempts ?? 0);
   const [key, setKey] = useState(0);
   const [toast, setToast] = useState<string | null>(null);
+  const [startCheck, setStartCheck] = useState(false);
+  const [doneTick, setDoneTick] = useState(0);
+  /** Complete control: a unit completes by passing its check, so the control opens (or scrolls to) the check. */
+  const takeCheck = () => {
+    const submit = document.querySelector<HTMLElement>('[data-testid="submit-quiz"]');
+    if (submit) { submit.scrollIntoView({ block: "center" }); return; }
+    setStartCheck(true);
+    setKey((k) => k + 1);
+    requestAnimationFrame(() => document.querySelector("[data-unit-player]")?.scrollIntoView({ block: "start" }));
+  };
   if (!unit) {
     return (
       <main className="flex-1 px-4 py-6 max-w-3xl mx-auto w-full space-y-3">
@@ -48,11 +61,12 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
           {toast}
         </p>
       ) : null}
-      <div key={key}>
+      <UnitCompleteCard unitId={unit.id} place="top" storage={storage} tick={`${key}-${doneTick}`} onTakeCheck={takeCheck} />
+      <div key={key} data-unit-player="1">
       <UnitPlayer
         unit={unit}
         attempt={attempt}
-        initialPhase={checkFirst ? "quiz" : "cards"}
+        initialPhase={checkFirst || startCheck ? "quiz" : "cards"}
         initialSim={params.get("sim")}
         onFinish={(score) => {
           if (isAcademyPreview(unitStatus(loadAcademy(storage).state, unit.id), readAcademyBrowseAll())) {
@@ -62,6 +76,8 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
           // Retention: a pass logs the unit as completed (scrolling the cards never does); misses go to the 1/3/7-day review.
           const s = logUnitCheck(recordUnitAttempt(loadAcademy(storage).state, unit.id, score.correct, score.total), unit.id, score);
           saveAcademy(s, storage);
+          refreshAcademyChrome();
+          setDoneTick((t) => t + 1);
           const r = awardUnitMastery(unit.id, score, storage);
           if (r.added || r.newBadges.length) setToast(`${r.added ? `+${r.added} practice points` : ""}${r.added && r.newBadges.length ? " · " : ""}${r.newBadges.length ? `new badge${r.newBadges.length > 1 ? "s" : ""} earned` : ""}. Points are virtual.`);
         }}
@@ -71,6 +87,7 @@ export default function AcademyUnit({ storage }: { storage?: KVStorage }) {
         }}
       />
       </div>
+      <UnitCompleteCard unitId={unit.id} place="bottom" storage={storage} tick={`${key}-${doneTick}`} onTakeCheck={takeCheck} />
     </main>
   );
 }
