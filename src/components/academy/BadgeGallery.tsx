@@ -34,19 +34,19 @@ export default function BadgeGallery({ storage, now = new Date(), id = "badges" 
               <span className="material-symbols-outlined text-sim" aria-hidden>
                 {b.icon}
               </span>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[13px] font-semibold leading-tight">{b.name}</p>
                 <p className="text-[12px] text-muted leading-snug">{b.hint}</p>
                 <p className="text-[12px] text-muted">
                   Earned{" "}
                   <time dateTime={at} data-badge-earned={at}>
                     {new Date(at).toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" })}
-                  </time>{" "}
-                  <span className="rounded-full border border-line px-2 text-[11px] tabular-nums" data-days-ago={ago.days}>
-                    {ago.label}
-                  </span>
+                  </time>
                 </p>
               </div>
+              <span className="ms-auto shrink-0 self-start rounded-full border border-line px-2 text-[11px] tabular-nums" data-days-ago={ago.days}>
+                {ago.label}
+              </span>
             </li>
           );
         })}

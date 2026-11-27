@@ -15,4 +15,6 @@ test("badge gallery: every badge listed; earned ones first, newest first, with t
   assert.ok(html.includes('data-badge-earned="2026-11-20T18:00:00Z"'));
   assert.match(html, /Locked\. /);
   assert.match(html, /data-days-ago="6"/);
+  // The days-ago tag sits at the end of the tile (right in LTR), after the text block, not under the date.
+  assert.match(html, /<\/div><span class="ms-auto shrink-0[^"]*" data-days-ago="6">/);
 });
