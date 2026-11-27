@@ -14,6 +14,7 @@ import { diary } from "./retention";
 import { loadAcademy, type KVStorage } from "./storage";
 import { UNIT_ORDER, getUnit } from "./content/levels";
 import { nextUnit, isUnitDone } from "./progress";
+import { dayKey } from "./rewards/streak";
 
 export const RT_UI_KEY = "analysis_core_academy_rt_ui_v1";
 
@@ -36,10 +37,16 @@ export function coreState(storage?: KVStorage) {
   const entries = diary(s).slice().reverse(); // oldest first, so the newest completion wins
   const completions: Record<string, unknown> = {};
   const history: unknown[] = [];
+  // A pass on a later day is a review: half credit, at most one per unit per local day (same rule as the core).
+  const credited = new Map<string, Set<string>>();
   for (const e of entries) {
     const prev = completions[e.unitId] as { firstAt?: string; completedAt?: string; count?: number } | undefined;
     completions[e.unitId] = { completedAt: e.at, firstAt: prev?.firstAt ?? prev?.completedAt ?? e.at, title: e.title, path: e.path, kind: "lesson", source: e.source, score: e.score ?? null, perfect: false, count: (prev?.count ?? 0) + 1 };
-    history.push({ unitId: e.unitId, at: e.at, kind: "lesson", title: e.title, path: e.path, source: e.source, score: e.score ?? null, perfect: false, first: !prev });
+    const day = dayKey(new Date(e.at));
+    const seen = credited.get(e.unitId);
+    const credit = !prev ? 1 : seen && seen.has(day) ? 0 : 0.5;
+    if (seen) seen.add(day); else credited.set(e.unitId, new Set([day]));
+    history.push({ unitId: e.unitId, at: e.at, kind: "lesson", title: e.title, path: e.path, source: e.source, score: e.score ?? null, perfect: false, first: !prev, review: !!prev, credit });
   }
   let ui: Record<string, unknown> = {};
   try { ui = JSON.parse((storage ?? globalThis.localStorage).getItem(RT_UI_KEY) || "{}") || {}; } catch { ui = {}; }

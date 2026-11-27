@@ -6,6 +6,7 @@ import { quizForUnit } from "./content/unitQuizzes";
 import { recordUnitAttempt } from "./progress";
 import {
   actualPace, behind, categoryRecency, daysAgo, diary, dueReviews, emptyRetention, forecast, getRetention, goalMet, logReviewAnswer, logUnitCheck,
+  fmtCount, logCredits, pluralCount, unitReviewState,
   markDoneForToday, migrateRetention, reminderDelay, remainingUnits, setPace, staleCategories, todayCounts, weekly, UNIT_PATH,
 } from "./retention";
 
@@ -32,7 +33,7 @@ test("retention survives migrateAcademy and a storage round trip; junk falls bac
 test("a passed check logs one lesson; a failed one logs none and schedules the misses for tomorrow", () => {
   const now = at("2026-11-26T17:00:00Z");
   const ok = logUnitCheck(emptyAcademy(), U0, pass(), now, TZ);
-  assert.deepEqual(todayCounts(ok, now, TZ), { units: 1, quizzes: 0 });
+  assert.deepEqual(todayCounts(ok, now, TZ), { units: 1, quizzes: 0, reviews: 0 });
   const miss = Object.fromEntries(qs.map((q, i) => [q.id, i !== 0]));
   miss[qs[1]!.id] = false;
   const bad = logUnitCheck(emptyAcademy(), U0, pass(miss), now, TZ);
@@ -104,4 +105,26 @@ test("weekly recap starts Monday; reminder delay targets the next 9:00", () => {
   const now = new Date(2026, 10, 26, 8, 0, 0);
   assert.equal(reminderDelay("09:00", now, null), 3600_000);
   assert.ok(reminderDelay("09:00", new Date(2026, 10, 26, 10, 0, 0), null) > 20 * 3600_000);
+});
+
+test("a passed retake on a later day is a review: half a unit, once per unit per day; first pass is 1", () => {
+  const d1 = at("2026-11-24T17:00:00Z"), d2 = at("2026-11-25T17:00:00Z"), d2b = at("2026-11-25T20:00:00Z");
+  let s = recordUnitAttempt(logUnitCheck(emptyAcademy(), U0, pass(), d1, TZ), U0, qs.length, qs.length, d1);
+  assert.equal(unitReviewState(s, U0, d1, TZ), "done-today");
+  assert.equal(unitReviewState(s, U0, d2, TZ), "reviewable");
+  s = logUnitCheck(s, U0, pass(), d2, TZ);
+  assert.equal(unitReviewState(s, U0, d2, TZ), "reviewed-today");
+  s = logUnitCheck(s, U0, pass(), d2b, TZ);
+  assert.deepEqual(logCredits(getRetention(s).log, TZ), [1, 0.5, 0]);
+  assert.deepEqual(todayCounts(s, d2, TZ), { units: 0.5, quizzes: 0, reviews: 1 });
+  assert.equal(remainingUnits(s), UNIT_ORDER.length - 1);
+  assert.equal(weekly(s, d2, TZ).units, 1.5);
+  assert.equal(unitReviewState(emptyAcademy(), U0, d2, TZ), "open");
+});
+
+test("counts print halves cleanly: 1.5 units, 1 unit, 0.5 units", () => {
+  assert.equal(pluralCount(1.5, "unit", "units"), "1.5 units");
+  assert.equal(pluralCount(1, "unit", "units"), "1 unit");
+  assert.equal(pluralCount(0.5, "unit", "units"), "0.5 units");
+  assert.equal(fmtCount(0.1 + 0.2 + 1.2), "1.5");
 });

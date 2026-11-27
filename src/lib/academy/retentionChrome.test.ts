@@ -49,3 +49,14 @@ test("collapsed streak count colour: 0-2 days red, 3-4 orange, 5+ green", () => 
   const C = (globalThis as unknown as { RetentionCore: { streakTone: (n: number) => string } }).RetentionCore;
   assert.deepEqual([0, 1, 2, 3, 4, 5, 9].map((n) => C.streakTone(n)), ["low", "low", "low", "mid", "mid", "high", "high"]);
 });
+
+test("chrome state: a later-day pass is a half-credit review; a same-day repeat earns nothing; one unique completion", () => {
+  const st = memoryStorage();
+  let s = logUnitCheck(emptyAcademy(), U0, pass, new Date("2026-11-24T18:00:00Z"), TZ);
+  s = logUnitCheck(s, U0, pass, new Date("2026-11-25T18:00:00Z"), TZ);
+  s = logUnitCheck(s, U0, pass, new Date("2026-11-25T19:00:00Z"), TZ);
+  saveAcademy(s, st);
+  const r = coreState(st);
+  assert.deepEqual(Object.keys(r.completions), [U0]);
+  assert.deepEqual(r.history.map((h: { credit: number; review: boolean }) => [h.credit, h.review]), [[1, false], [0.5, true], [0, true]]);
+});

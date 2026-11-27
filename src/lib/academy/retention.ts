@@ -149,17 +149,63 @@ export function dueReviews(s: AcademyState, now = new Date(), timeZone?: string)
 
 const localDay = (iso: string, timeZone?: string) => dayKey(new Date(iso), timeZone);
 
+/** A passed retake on a later day is a review: half a unit (learning-retention skill, Re-complete / Reviewed). */
+export const REVIEW_CREDIT = 0.5;
+/** Round to the nearest half so counts never show float noise. */
+export const half = (n: number) => Math.round((Number(n) || 0) * 2) / 2;
+/** "1.5", "1", "0.5" (never "1.50"). */
+export const fmtCount = (n: number) => String(half(n));
+/** "1.5 units", "1 unit", "0.5 units". */
+export const pluralCount = (n: number, one: string, many: string) => `${fmtCount(n)} ${half(n) === 1 ? one : many}`;
+
+/**
+ * Credit for each log entry, in log order: a unit's first pass is 1, a pass on a later day is a review worth 0.5,
+ * and only one review per unit per local day earns credit (a same-day repeat is 0). Review answers ("quiz") are 1.
+ */
+export function logCredits(log: readonly RetentionLogEntry[], timeZone?: string): number[] {
+  const days = new Map<string, Set<string>>();
+  return log.map((e) => {
+    if (e.kind !== "lesson") return 1;
+    const d = localDay(e.at, timeZone);
+    const seen = days.get(e.unitId);
+    if (!seen) { days.set(e.unitId, new Set([d])); return 1; }
+    if (seen.has(d)) return 0;
+    seen.add(d);
+    return REVIEW_CREDIT;
+  });
+}
+
+/** Where a unit stands for its completion control today: open, done-today, reviewable or reviewed-today. */
+export function unitReviewState(s: AcademyState, unitId: string, now = new Date(), timeZone?: string): "open" | "done-today" | "reviewable" | "reviewed-today" {
+  if (!isUnitDone(s, unitId)) return "open";
+  const today = dayKey(now, timeZone);
+  const log = getRetention(s).log;
+  const credits = logCredits(log, timeZone);
+  let first: string | null = null;
+  let reviewedToday = false;
+  log.forEach((e, i) => {
+    if (e.kind !== "lesson" || e.unitId !== unitId) return;
+    if (first === null) first = localDay(e.at, timeZone);
+    else if (localDay(e.at, timeZone) === today && credits[i] === REVIEW_CREDIT) reviewedToday = true;
+  });
+  if (reviewedToday) return "reviewed-today";
+  if (first === today) return "done-today";
+  return "reviewable";
+}
+
 export function todayCounts(s: AcademyState, now = new Date(), timeZone?: string) {
   const today = dayKey(now, timeZone);
   const r = getRetention(s);
+  const credits = logCredits(r.log, timeZone);
   let units = 0;
   let quizzes = 0;
-  for (const e of r.log) {
-    if (localDay(e.at, timeZone) !== today) continue;
-    if (e.kind === "lesson") units++;
+  let reviews = 0;
+  r.log.forEach((e, i) => {
+    if (localDay(e.at, timeZone) !== today) return;
+    if (e.kind === "lesson") { units += credits[i]!; if (credits[i] === REVIEW_CREDIT) reviews++; }
     else quizzes++;
-  }
-  return { units, quizzes };
+  });
+  return { units: half(units), quizzes, reviews };
 }
 
 export function goalMet(s: AcademyState, now = new Date(), timeZone?: string) {
@@ -176,8 +222,9 @@ export function behind(s: AcademyState, now = new Date(), timeZone?: string) {
   const days = Math.min(7, daysBetween(r.pace.since, today));
   if (days <= 0) return { owed: 0, days: 0 };
   const from = addDays(today, -days);
-  const done = r.log.filter((e) => e.kind === "lesson" && localDay(e.at, timeZone) >= from && localDay(e.at, timeZone) < today).length;
-  return { owed: Math.max(0, days * r.pace.unitsPerDay - done), days };
+  const credits = logCredits(r.log, timeZone);
+  const done = r.log.reduce((sum, e, i) => (e.kind === "lesson" && localDay(e.at, timeZone) >= from && localDay(e.at, timeZone) < today ? sum + credits[i]! : sum), 0);
+  return { owed: Math.max(0, half(days * r.pace.unitsPerDay - done)), days };
 }
 
 /** Units per active day over the trailing 14 days; null with fewer than 3 active days. Repeat passes are not counted. */
@@ -285,8 +332,10 @@ export function weekly(s: AcademyState, now = new Date(), timeZone?: string) {
   const dow = (new Date(`${today}T12:00:00Z`).getUTCDay() + 6) % 7;
   const monday = addDays(today, -dow);
   const r = getRetention(s);
+  const credits = logCredits(r.log, timeZone);
   const inWeek = r.log.filter((e) => localDay(e.at, timeZone) >= monday);
-  return { monday, units: inWeek.filter((e) => e.kind === "lesson").length, quizzes: inWeek.filter((e) => e.kind === "quiz").length, activeDays: new Set(inWeek.map((e) => localDay(e.at, timeZone))).size };
+  const units = half(r.log.reduce((sum, e, i) => (e.kind === "lesson" && localDay(e.at, timeZone) >= monday ? sum + credits[i]! : sum), 0));
+  return { monday, units, quizzes: inWeek.filter((e) => e.kind === "quiz").length, activeDays: new Set(inWeek.map((e) => localDay(e.at, timeZone))).size };
 }
 
 // ---- settings and reminders -------------------------------------------------------------------------------------------
