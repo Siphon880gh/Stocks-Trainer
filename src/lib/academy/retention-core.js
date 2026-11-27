@@ -5,6 +5,8 @@
  * Build v18: earned badges stay reviewable (and the corner sheet always fits above the stack): badgeList, a badge gallery (earned date, how to unlock),
  *   a corner Badges button, the gallery on the diary page, and See badges on the earned toast.
  * Build v19: the days-ago tag on a badge or milestone tile sits at the tile's end (right in LTR, left in RTL), level with the name.
+ * Build v20: every gallery tile is the same bordered box with the same edges; the days-ago tag sits outside it in a fixed
+ *   right-hand gutter (left in RTL), so tags line up in one column and locked tiles keep an empty gutter.
  * The app owns storage: it passes a `retention` object and saves it after each change.
  *
  * Retention object (lives inside the app's own progress document):
@@ -790,11 +792,9 @@
         var meta = b.earned
           ? el('span', { class: 'rt-bd-meta', 'data-rt-badge-earned': localDay(b.earnedAt) }, ['Earned ' + fullDate(b.earnedAt)])
           : el('span', { class: 'rt-bd-meta', text: 'Locked. ' + b.desc });
-        ul.appendChild(el('li', { 'data-earned': b.earned ? '1' : null, 'data-rt-badge': b.id }, [
-          icon(b.earned ? 'medal' : 'lock'),
-          el('div', { class: 'rt-bd' }, [el('b', { class: 'rt-bd-name', text: b.name }), b.earned ? el('span', { class: 'rt-bd-desc', text: b.desc }) : null, meta]),
-          b.earned ? tileAgo(b.earnedAt, now, 'Earned') : null
-        ]));
+        ul.appendChild(galleryRow(b.earned, b.id, icon(b.earned ? 'medal' : 'lock'),
+          [el('b', { class: 'rt-bd-name', text: b.name }), b.earned ? el('span', { class: 'rt-bd-desc', text: b.desc }) : null, meta],
+          b.earned ? tileAgo(b.earnedAt, now, 'Earned') : null));
       });
       sec.appendChild(ul);
       return sec;
@@ -807,14 +807,26 @@
       got.concat(all.filter(function (x) { return x.locked; })).forEach(function (x) {
         var meta = x.locked ? el('span', { class: 'rt-bd-meta', text: 'Locked. ' + (x.desc || '') })
           : x.at ? el('span', { class: 'rt-bd-meta', 'data-rt-badge-earned': localDay(x.at) }, ['Reached ' + fullDate(x.at)]) : null;
-        ml.appendChild(el('li', { 'data-earned': x.locked ? null : '1', 'data-rt-badge': x.id || x.name }, [icon(x.locked ? 'lock' : 'check'), el('div', { class: 'rt-bd' }, [el('b', { class: 'rt-bd-name', text: x.name }), !x.locked && x.desc ? el('span', { class: 'rt-bd-desc', text: x.desc }) : null, meta]), !x.locked && x.at ? tileAgo(x.at, now, 'Reached') : null]));
+        ml.appendChild(galleryRow(!x.locked, x.id || x.name, icon(x.locked ? 'lock' : 'check'),
+          [el('b', { class: 'rt-bd-name', text: x.name }), !x.locked && x.desc ? el('span', { class: 'rt-bd-desc', text: x.desc }) : null, meta],
+          !x.locked && x.at ? tileAgo(x.at, now, 'Reached') : null));
       });
       sec.appendChild(ml);
       return sec;
     }
     return null;
   }
-  /** Days-ago tag for the end of a gallery tile (right in LTR): `1d`, `today`. */
+  /**
+   * One gallery row: a bordered tile (icon and text) plus a fixed-width gutter outside it for the days-ago tag.
+   * Every row has the gutter, empty on locked rows, so all tiles share the same edges and the tags form one column.
+   */
+  function galleryRow(earned, id, ic, text, tag) {
+    return el('li', { 'data-earned': earned ? '1' : null, 'data-rt-badge': id }, [
+      el('div', { class: 'rt-bd-tile' }, [ic, el('div', { class: 'rt-bd' }, text)]),
+      el('span', { class: 'rt-bd-gutter' }, tag ? [tag] : [])
+    ]);
+  }
+  /** Days-ago tag for the gallery gutter (right of the tile in LTR): `1d`, `today`. */
   function tileAgo(iso, now, verb) {
     var t = agoBadge(iso, now, verb);
     t.className += ' rt-bd-ago';
@@ -1343,7 +1355,12 @@
     '.rt-ui .rt-badges--gallery li{align-items:flex-start}',
     '.rt-ui .rt-badges--gallery li .rt-i{margin-top:1px;flex:0 0 auto}',
     '.rt-ui .rt-bd{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 auto}',
-    '.rt-ui .rt-badges--gallery li>.rt-bd-ago{flex:0 0 auto;align-self:flex-start;margin:0;margin-inline-start:auto}',
+    '.rt-ui .rt-badges--gallery{gap:8px}',
+    '.rt-ui .rt-badges--gallery li,.rt-diary.rt-ui .rt-gallery li{display:grid;grid-template-columns:minmax(0,1fr) 3.6rem;column-gap:8px;align-items:start;padding:0;border:0}',
+    '.rt-ui .rt-bd-tile{display:flex;align-items:flex-start;gap:10px;min-width:0;padding:8px 10px;border:1px solid var(--rt-line);border-radius:10px;background:var(--rt-surface)}',
+    '.rt-ui .rt-badges--gallery li[data-earned] .rt-bd-tile{border-color:color-mix(in srgb,var(--rt-accent) 40%,var(--rt-line));background:color-mix(in srgb,var(--rt-accent) 6%,var(--rt-surface))}',
+    '.rt-ui .rt-bd-gutter{display:flex;justify-content:flex-end;padding-top:9px;min-width:0}',
+    '.rt-ui .rt-bd-gutter .rt-ago,.rt-diary.rt-ui .rt-gallery li .rt-bd-gutter .rt-ago{margin:0;grid-column:auto;grid-row:auto}',
     '.rt-ui .rt-bd-name{font-weight:600;color:var(--rt-heading)}',
     '.rt-ui .rt-badges li:not([data-earned]) .rt-bd-name{color:var(--rt-muted);font-weight:500}',
     '.rt-ui .rt-bd-desc,.rt-ui .rt-bd-meta{font-size:12.5px;line-height:1.45;color:var(--rt-muted)}',
@@ -1398,8 +1415,6 @@
     '.rt-diary.rt-ui li .rt-crumb{grid-column:1;font-size:12.5px;color:var(--rt-muted);opacity:1}',
     '.rt-diary.rt-ui .rt-muted{color:var(--rt-muted);opacity:1}',
     '.rt-diary.rt-ui .rt-gallery ul{display:grid;gap:10px;border:0;border-radius:0;background:none;overflow:visible}',
-    '.rt-diary.rt-ui .rt-gallery li{display:flex;align-items:flex-start;gap:10px;padding:0;border-bottom:0}',
-    '.rt-diary.rt-ui .rt-gallery li .rt-ago{margin:0;margin-inline-start:auto}',
     '.rt-diary.rt-ui .rt-gallery .rt-sec-h{margin-top:0}',
     '.rt-ui .rt-list li b{text-transform:none}',
     '@media (max-width:480px){.rt-pop{padding:22px 18px 14px}.rt-big b{font-size:30px}.rt-stats{gap:8px}.rt-stat{padding:12px}}',
