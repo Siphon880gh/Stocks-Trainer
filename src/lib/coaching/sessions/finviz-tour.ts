@@ -6,7 +6,7 @@ export const finvizTourSession: CoachingSession = {
     slug: "finviz-tour",
     title: "Screen with Finviz, then check",
     summary:
-      "Use Finviz's screener and snapshot the careful way: filter for size and volume, treat signals as lists, read the time stamp, and check insider and analyst rows against the filings.",
+      "Use Finviz's screener and snapshot the careful way: filter for size and volume, treat RSI and moving-average columns on Top Gainers as stretch readings, treat signals as lists, read the time stamp, and check insider and analyst rows against the filings.",
     topic: "Tool training",
     tags: ["sample", "tools", "research-tools"],
   },
@@ -18,7 +18,7 @@ export const finvizTourSession: CoachingSession = {
           "SAMPLE. On Nov 12, 2026, a Finviz screen for Industry = Gold returned 56 stocks, from $90 billion miners to a company worth about $10 million with zero volume.\n\nWhat do you do with the list?",
         outcome: "continue",
         choices: [
-          { label: "Add Market Cap. and Average Volume filters, then research what remains", next: "signal" },
+          { label: "Add Market Cap. and Average Volume filters, then research what remains", next: "gainers" },
           { label: "Sort by Change % and buy the top row", next: "wrong_start" },
         ],
       },
@@ -28,6 +28,22 @@ export const finvizTourSession: CoachingSession = {
         outcome: "wrong",
         choices: [],
         rewind_to: "start",
+      },
+      gainers: {
+        message:
+          "SAMPLE. The Top Gainers list, Technical view, shows a name up about 43% with RSI 87.32 and SMA20 +177.60%. SMA200 is still −7.60%.\n\nHow do you read those columns?",
+        outcome: "continue",
+        choices: [
+          { label: "As stretch and distance on names that already jumped — not a breakout confirmation", next: "signal" },
+          { label: "As RSI and moving averages confirming the buy", next: "wrong_gainers" },
+        ],
+      },
+      wrong_gainers: {
+        message:
+          "Finviz prints SMA columns as percent distance from the average. High RSI on a gainer list is what a vertical day looks like. A still-negative SMA200 can mean a short bounce inside a longer decline.\n\nTry again.",
+        outcome: "wrong",
+        choices: [],
+        rewind_to: "gainers",
       },
       signal: {
         message:
@@ -79,7 +95,7 @@ export const finvizTourSession: CoachingSession = {
       },
       success: {
         message:
-          "Session complete. Filter for size and volume, treat signals as lists, read the time stamp, and confirm insider and analyst claims in the filings. Finviz is credited, not endorsed; tickers named are examples.\n\nNext: Tool Training → Finviz, its Learn quiz, and Cases → Market-wide news.",
+          "Session complete. Filter for size and volume, treat RSI and SMA on Top Gainers as stretch readings, treat signals as lists, read the time stamp, and confirm insider and analyst claims in the filings. Finviz is credited, not endorsed; tickers named are examples.\n\nNext: Tool Training → Finviz, its Learn quiz, and Cases → Market-wide news.",
         outcome: "success",
         choices: [],
       },

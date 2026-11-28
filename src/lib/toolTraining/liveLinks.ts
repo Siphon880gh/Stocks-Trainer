@@ -4,7 +4,7 @@
  * checked on Nov 12, 2026. Market Forces has no public host yet, so it points at the local copy Weng serves.
  */
 
-export type LiveTool = "StockAnalysis" | "Finviz" | "Yahoo Finance" | "Market Forces" | "SEC EDGAR" | "JPMorganChase IR";
+export type LiveTool = "StockAnalysis" | "Finviz" | "Yahoo Finance" | "Market Forces" | "SEC EDGAR" | "JPMorganChase IR" | "StockTwits";
 
 export interface LiveLink {
   tool: LiveTool;
@@ -24,6 +24,7 @@ export const LIVE_TOOL_ORIGINS: Record<LiveTool, string> = {
   "Market Forces": MARKET_FORCES_URL,
   "SEC EDGAR": "https://www.sec.gov/",
   "JPMorganChase IR": "https://www.jpmorganchase.com/",
+  StockTwits: "https://stocktwits.com/",
 };
 
 const lower = (symbol: string) => encodeURIComponent(symbol.trim().toLowerCase());
@@ -51,14 +52,20 @@ export function finvizQuote(symbol: string, label: string): LiveLink {
  * finviz.com/screener.ashx with filter codes (e.g. "ind_gold") and a view (111 = Overview). Commas join filters,
  * the way Finviz writes them in its own address bar.
  */
-export function finvizScreener(filters: string[], label: string, view = "111"): LiveLink {
+export function finvizScreener(filters: string[], label: string, view = "111", signal?: string): LiveLink {
   const f = filters.map((x) => encodeURIComponent(x)).join(",");
-  return { tool: "Finviz", label, url: `https://finviz.com/screener.ashx?v=${encodeURIComponent(view)}${f ? `&f=${f}` : ""}` };
+  const s = signal ? `&s=${encodeURIComponent(signal)}` : "";
+  return { tool: "Finviz", label, url: `https://finviz.com/screener.ashx?v=${encodeURIComponent(view)}${f ? `&f=${f}` : ""}${s}` };
 }
 
 /** finviz.com/elite: the plan comparison. */
 export function finvizPlans(label: string): LiveLink {
   return { tool: "Finviz", label, url: "https://finviz.com/elite" };
+}
+
+/** stocktwits.com/symbol/<SYM>: ticker page (Watchers in the header; Message Volume on Sentiment). */
+export function stockTwitsSymbol(symbol: string, label: string): LiveLink {
+  return { tool: "StockTwits", label, url: `https://stocktwits.com/symbol/${upper(symbol)}` };
 }
 
 export type YahooTab = "" | "key-statistics" | "history" | "financials" | "analysis" | "insider-transactions" | "holders";

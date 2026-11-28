@@ -6,7 +6,7 @@ export const marketForcesTourSession: CoachingSession = {
     slug: "market-forces-tour",
     title: "Tour Market Forces",
     summary:
-      "Use Weng's ticker directory the way it was built: read the theme's connection line, read each exposure badge, walk a stock's five research-link groups (financials and filings before news, valuation and sentiment), and check snapshot dates on index weights.",
+      "Use Weng's ticker directory the way it was built: read the theme's connection line, read each exposure badge, walk a stock's five research-link groups (financials and filings before news, valuation and sentiment), read Stocktwits Message Volume as a 0–100 chatter score, and check snapshot dates on index weights.",
     topic: "Tool training",
     tags: ["sample", "tools", "research-tools"],
   },
@@ -50,7 +50,7 @@ export const marketForcesTourSession: CoachingSession = {
           "You select NEM, a stock. The panel has five groups: Overview & analysis, Financials & primary sources, Valuation & distributions, News & the next catalyst, and Sentiment & investor discussions.\n\nWhich order makes sense?",
         outcome: "continue",
         choices: [
-          { label: "Financials and SEC filings first, then news and valuation, then sentiment, cross-checked against the filings", next: "weights" },
+          { label: "Financials and SEC filings first, then news and valuation, then sentiment, cross-checked against the filings", next: "volume" },
           { label: "Sentiment first; if people are excited, buy", next: "wrong_links" },
         ],
       },
@@ -60,6 +60,22 @@ export const marketForcesTourSession: CoachingSession = {
         outcome: "wrong",
         choices: [],
         rewind_to: "links",
+      },
+      volume: {
+        message:
+          "You open the Stocktwits link. Message Volume last reads 62 (Normal) versus 41 a day ago (Low). Watchers shows tens of thousands. A post says everyone is in.\n\nWhat is Message Volume?",
+        outcome: "continue",
+        choices: [
+          { label: "A 0–100 score of last-24-hour chatter versus this ticker's usual activity — not a raw post count or a vote", next: "weights" },
+          { label: "Proof that 62,000 shares traded and that the crowd is right", next: "wrong_volume" },
+        ],
+      },
+      wrong_volume: {
+        message:
+          "Stocktwits' help: Message Volume is relative chatter, 0–100. Watchers is a Watchlist count. Neither is a filing. SEC Investor.gov warns that social media can give a false impression of consensus.\n\nTry again.",
+        outcome: "wrong",
+        choices: [],
+        rewind_to: "volume",
       },
       weights: {
         message:

@@ -261,7 +261,15 @@ export const MACRO_TERMS: LiteracyTerm[] = [
     category: "markets",
     summary: "Futures contracts whose prices imply the market's expected path of the federal funds rate.",
     detail:
-      "Tools turn these prices into probabilities for each meeting outcome. A decision that matches a high probability is 'priced in'; the surprise is the gap between the decision and pricing.",
+      "Tools such as CME FedWatch turn these prices into probabilities for each meeting's target-rate outcomes. A decision that matches a high probability is 'priced in'; the surprise is the gap between the decision and pricing.",
+  },
+  {
+    id: "cme-fedwatch",
+    name: "CME FedWatch",
+    category: "markets",
+    summary: "CME Group's board of FOMC target-rate probabilities implied by 30-Day Fed Funds futures.",
+    detail:
+      "Each tab is a scheduled meeting, nearest on the left. The Current table lists probabilities for each possible target-rate band now, one day ago, one week ago and one month ago. CME asks media to attribute those probabilities to “CME FedWatch.” This app shows a SIMULATED look-alike; the live tool is the source for real numbers.",
   },
   {
     id: "treasury-yield",

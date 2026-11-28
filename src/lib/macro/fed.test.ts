@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import * as C from "./consistency";
-import { dotsFor, expectedMoveBp, meetingByMonth, priorSepMedianSameYear, pricingFor, statementFor } from "./fed";
+import { dotsFor, expectedMoveBp, meetingByMonth, priorSepMedianSameYear, pricingFor, pricingHistoryFor, statementFor } from "./fed";
 import { WORLD } from "./world";
 
 test("pricing sums to 100 and expected = Σ p × move", () => {
@@ -30,6 +30,18 @@ test("dots: 19 per column, median is the 10th sorted, 1/8 steps", () => {
     }
   }
   assert.equal(dotsFor(meetingByMonth(0)!), undefined);
+});
+
+test("FedWatch history snapshots keep integer probabilities that sum to 100", () => {
+  for (const m of WORLD.meetings) {
+    const h = pricingHistoryFor(m);
+    for (const key of ["current", "dayAgo", "weekAgo", "monthAgo"] as const) {
+      const p = h[key];
+      assert.equal(p.reduce((a, o) => a + o.prob, 0), 100, `${m.label} ${key}`);
+      assert.deepEqual(C.checkProbabilities(`${m.label} ${key}`, p.map((o) => o.prob)), []);
+    }
+    assert.deepEqual(h.current, pricingFor(m));
+  }
 });
 
 test("teaching meetings carry the intended surprise", () => {

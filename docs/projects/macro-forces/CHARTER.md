@@ -43,7 +43,7 @@ For each major macro release, a learner can:
 | Labor | Employment Situation (payrolls, unemployment rate, average hourly earnings, revisions); weekly jobless claims; JOLTS | BLS, DOL, FRED `PAYEMS` / `UNRATE` / `ICSA` / `JTSJOL` |
 | Inflation | CPI (headline, core), PPI, PCE price index | BLS, BEA, FRED `CPIAUCSL` / `CPILFESL` / `PCEPILFE` |
 | Growth / activity | GDP (advance), retail sales, ISM manufacturing and services PMI, consumer sentiment / confidence | BEA, Census, ISM, UMich, Conference Board, FRED `GDPC1` / `RSAFS` / `UMCSENT` |
-| Policy | FOMC statement and target range, implementation note, Summary of Economic Projections (dot plot), market-implied rate probabilities | federalreserve.gov, CME FedWatch (link only), FRED `FEDFUNDS` / `DFF` |
+| Policy | FOMC statement and target range, implementation note, Summary of Economic Projections (dot plot), market-implied rate probabilities | federalreserve.gov, CME FedWatch (SIMULATED look-alike + live link), FRED `FEDFUNDS` / `DFF` |
 | Rates and curve | 2-year and 10-year Treasury yields, 2s10s spread, breakevens, dollar index | Treasury, FRED `DGS2` / `DGS10` / `T10Y2Y` / `T10YIE` / `DTWEXBGS` |
 | Housing | 30-year / 15-year mortgage rate (PMMS), housing starts and permits | Freddie Mac, Census, FRED `MORTGAGE30US` / `HOUST` |
 

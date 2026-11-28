@@ -23,6 +23,16 @@ export const FV_NEM = {
 export const FV_GOLD_SCREEN = { total: 56, pages: 3, rowsPerPage: 20 } as const;
 /** Finviz Elite page, read Nov 12, 2026 (promotions aside). */
 export const FV_ELITE = { monthly: "$39.50", annual: "$299.50", freeStatements: 3, eliteStatements: 8 } as const;
+/** Finviz Top Gainers, Technical view (v=171, s=ta_topgainers), read Nov 28, 2026. SMA columns are % distance from the average. */
+export const FV_GAINERS_READ_ON = "2026-11-28";
+export const FV_GAINERS = [
+  { ticker: "POM", sma20: "83.88%", sma50: "43.59%", sma200: "-62.32%", rsi: "69.45", price: "3.12", change: "93.79%" },
+  { ticker: "AEHL", sma20: "42.56%", sma50: "40.14%", sma200: "-26.35%", rsi: "61.88", price: "12.90", change: "80.67%" },
+  { ticker: "RETO", sma20: "18.64%", sma50: "-45.49%", sma200: "-98.28%", rsi: "41.52", price: "5.48", change: "43.46%" },
+  { ticker: "MPU", sma20: "177.60%", sma50: "185.50%", sma200: "-7.60%", rsi: "87.32", price: "7.18", change: "42.74%" },
+] as const;
+const FV_MPU = FV_GAINERS[3];
+const FV_POM = FV_GAINERS[0];
 
 const TERMS: LiteracyTerm[] = [
   { id: "stock-screener", name: "Stock screener", category: "process", summary: "A tool that filters a whole market down to the stocks matching criteria you choose, such as industry, size or valuation.", detail: `A screen is a list to research, not a list to buy. Finviz's Industry = Gold screen returned ${FV_GOLD_SCREEN.total} stocks on Nov 12, 2026, from large miners to companies worth about $10 million with almost no volume. Educational, not advice.` },
@@ -35,6 +45,7 @@ const TERMS: LiteracyTerm[] = [
 const T1 = seededTape({ seed: 10301, start: 0.78, preDrift: 0.01, postDrift: -0.02, vol: 0.06, gap: 0.4 });
 const T2 = seededTape({ seed: 10302, start: 42.6, preDrift: -0.006, postDrift: -0.002, vol: 0.022, gap: -0.03 });
 const T3 = seededTape({ seed: 10303, start: 120.8, preDrift: 0.001, postDrift: 0.0005, vol: 0.014, gap: -0.015 });
+const T4 = seededTape({ seed: 10304, start: 6.4, preDrift: 0.012, postDrift: -0.018, vol: 0.055, gap: 0.22 });
 
 const CASES: CaseStudy[] = [
   {
@@ -95,6 +106,26 @@ const CASES: CaseStudy[] = [
       process: "Form 144 gives notice of a proposed sale; Form 4 reports the completed trade, so they often appear as two rows for one sale. SEC Investor.gov notes insiders sell for many reasons, including liquidity and diversification. One officer's sale, small against their holdings, does not change a plan.",
       whyMarketMoved: "The post drew attention, but no new company information came out.",
       evidence: "SAMPLE: the stock moved sideways over the next four sessions.",
+    },
+  },
+  {
+    id: "case-fv-gainer-rsi-sma",
+    title: "Finviz: RSI and moving averages on Top Gainers",
+    contextType: "news",
+    thinkingMode: "tool_finviz",
+    packId: "macro-news",
+    difficulty: "beginner",
+    allowShort: false,
+    brief: `SAMPLE hypothetical. Finviz's Top Gainers list, Technical view, shows a name up about 43% with RSI ${FV_MPU.rsi} and SMA20 ${FV_MPU.sma20} (price that far above the 20-day average). SMA200 is still ${FV_MPU.sma200}. A friend says the RSI and moving averages confirm the breakout. Buy = buy because the Technical columns look strong. Sell = nothing to sell. Hold = no trade: RSI and SMA on a gainer list measure stretch and distance, not a reason; open news, size and average volume, then the filings.`,
+    newsHeadline: "Thin name leads the day's gainers; social posts call it a confirmed breakout.",
+    preOhlc: T4.pre,
+    postOhlc: T4.full,
+    correctActions: ["hold"],
+    acceptablePartial: [],
+    debrief: {
+      process: "The Technical view of Top Gainers prints RSI and percent distance from SMA20/50/200 for names that already jumped. High RSI and a large positive SMA20 are what a vertical day looks like, not independent confirmation. A still-negative SMA200 means the bounce can sit inside a longer decline. Filter for size and volume, then read why it moved.",
+      whyMarketMoved: "A thin session let a few orders print a large percent change, which is what the Top Gainers sort ranks.",
+      evidence: "SAMPLE: the stock gave back a large part of the jump over the next four sessions.",
     },
   },
 ];
@@ -191,13 +222,13 @@ export const FINVIZ_LESSON: ToolLesson = {
   menuLabel: "Finviz",
   icon: "filter_alt",
   title: "Finviz: screen, then check the snapshot",
-  blurb: "The screener's filters, views and signals, the quote page's snapshot table, insider and analyst rows, and free vs Elite.",
+  blurb: "The screener's filters, views and signals, RSI and moving-average columns on Top Gainers, the quote page's snapshot table, insider and analyst rows, and free vs Elite.",
   credit: { name: "Finviz (finviz.com)", url: "https://finviz.com/", note: "A stock screener and market data site with a free tier and a paid Elite tier. Credited here as a research tool, not endorsed." },
   asOf: FV_READ_ON,
-  quiz: { name: "Tool: Finviz", description: "Screener filters, views and signals, the snapshot table, insider rows, delays and free vs Elite.", icon: "filter_alt" },
+  quiz: { name: "Tool: Finviz", description: "Screener filters, views and signals, RSI and SMA columns on Top Gainers, the snapshot table, insider rows, delays and free vs Elite.", icon: "filter_alt" },
   intro: [
     "Finviz is screener first: it filters thousands of U.S.-listed stocks down to a list, then shows each one's snapshot on a dense quote page. Market Forces links to that quote page for every ticker.",
-    `Values here were read from public Finviz pages on Nov 12, 2026, before the 9:30 AM ET open (the Industry = Gold screen and Newmont's quote page). Free quotes were delayed, and several fields were Elite-only.`,
+    `Values here were read from public Finviz pages on Nov 12, 2026, before the 9:30 AM ET open (the Industry = Gold screen and Newmont's quote page). Free quotes were delayed, and several fields were Elite-only. The Top Gainers Technical view (RSI and SMA20/50/200) was read Nov 28, 2026.`,
     "Charting features (indicators, layouts, intraday charts) are compared in Charting apps compared; this lesson covers the screener, the snapshot and the account limits instead.",
   ],
   screens: [
@@ -221,6 +252,27 @@ export const FINVIZ_LESSON: ToolLesson = {
         { n: 3, block: 2, text: "Views change the columns, not the list. Valuation and Ownership are quick second looks." },
         { n: 4, block: 3, text: ["Finviz files gold miners under Basic Materials, its own sector scheme, not GICS Materials. ", { text: "A $10 million company with no P/E", sim: "fv-sim-illiquid" }, " sits beside $90 billion ones."] },
         { n: 5, block: 4, text: "Free data is delayed. Read the time before quoting a price." },
+      ],
+    },
+    {
+      id: "fv-gainers-technical",
+      live: [finvizScreener([], "Top Gainers, Technical view", "171", "ta_topgainers")],
+      title: "Top Gainers: RSI and moving-average levels",
+      where: "Screener · Signals · Top Gainers · Technical view",
+      alt: `Simulated Finviz Technical view of Top Gainers. Columns include SMA20, SMA50, SMA200 as percent distance from each average, RSI, Price and Change. ${FV_POM.ticker} is up ${FV_POM.change} with SMA20 ${FV_POM.sma20} and SMA200 ${FV_POM.sma200}, RSI ${FV_POM.rsi}. ${FV_MPU.ticker} is up ${FV_MPU.change} with SMA20 ${FV_MPU.sma20} and RSI ${FV_MPU.rsi}.`,
+      caption: `Rows read from the free Top Gainers Technical view on Nov 28, 2026. SMA columns are percent distance from the average, not the average itself. Live names and numbers move.`,
+      blocks: [
+        { kind: "chips", title: "Views", chips: ["Overview", "Valuation", "Financial", "Ownership", "Performance", "Technical", "Charts"], active: 5 },
+        { kind: "filters", filters: [{ label: "Signal", value: "Top Gainers" }, { label: "Market Cap.", value: "Any" }, { label: "Average Volume", value: "Any" }] },
+        { kind: "table", title: "Top Gainers · Technical", columns: ["Ticker", "SMA20", "SMA50", "SMA200", "RSI", "Price", "Change"], rows: FV_GAINERS.map((r) => [r.ticker, r.sma20, r.sma50, r.sma200, r.rsi, r.price, r.change]) },
+        { kind: "note", text: "Finviz's SMA columns are how far the price sits from the 20-, 50- or 200-day average, in percent. RSI on this view is the same stretch oscillator as the Oversold signal (RSI(14)). A gainer list is already sorted by Change %; these columns describe how extended the names already are." },
+      ],
+      callouts: [
+        { n: 1, block: 0, text: "Technical is a column set for the same list. Switching to it does not change who made Top Gainers; it adds RSI and the SMA distances." },
+        { n: 2, block: 1, text: ["The Top Gainers signal is a sort, not a quality filter. ", { text: "Market Cap.", term: "market-cap" }, " and ", { text: "Average Volume", term: "average-volume" }, " are still off, so tiny names rise to the top."] },
+        { n: 3, block: 2, text: [{ text: "SMA20 / SMA50 / SMA200", term: "sma-distance" }, " are percent distances. ", `${FV_POM.ticker} at SMA20 ${FV_POM.sma20} and SMA200 ${FV_POM.sma200} is a short bounce inside a longer decline.`] },
+        { n: 4, block: 2, text: [{ text: "RSI", term: "finviz-rsi" }, ` ${FV_MPU.rsi} on ${FV_MPU.ticker} is stretch after a ${FV_MPU.change} day, not independent confirmation of a breakout.`] },
+        { n: 5, block: 3, text: "Read the columns as a warning that the move already happened. News, size and average volume still come before any trade." },
       ],
     },
     {
@@ -301,6 +353,16 @@ export const FINVIZ_LESSON: ToolLesson = {
         "Perf and SMA200: where the price sits versus its own recent history.",
       ],
     },
+    {
+      title: "Read RSI and moving averages on Top Gainers",
+      steps: [
+        "Open the screener's Top Gainers signal, then switch the view to Technical. The list stays the same; the columns change.",
+        ["Read ", { text: "SMA20, SMA50 and SMA200", term: "sma-distance" }, " as percent distance from each average, not as the average itself."],
+        [`A row such as ${FV_POM.ticker} (SMA20 ${FV_POM.sma20}, SMA200 ${FV_POM.sma200}) can be a short bounce inside a longer decline.`],
+        ["Read ", { text: "RSI", term: "finviz-rsi" }, ` next: ${FV_MPU.rsi} after a ${FV_MPU.change} day is stretch. It does not confirm a breakout.`],
+        "Add Market Cap. and Average Volume before treating any row as researchable, then open news and filings for why it moved.",
+      ],
+    },
   ],
   simulations: FV_SIMULATIONS,
   tasks: [
@@ -315,11 +377,12 @@ export const FINVIZ_LESSON: ToolLesson = {
     { id: "fv-d3", prompt: "A price stamped 8:25 AM ET with a different Prev Close is…", options: ["Yesterday's close", "A pre-market price", "The 52-week high", "An analyst target"], answer: 1, why: "Regular trading opens at 9:30 AM ET." },
     { id: "fv-d4", prompt: "An insider table shows Proposed Sale and Sale for the same shares and date. That is…", options: ["Two separate sales", "A Form 144 notice and the Form 4 for one sale", "A data error", "A purchase"], answer: 1, why: "Form 144 gives notice; Form 4 reports the completed trade." },
     { id: "fv-d5", prompt: "Finviz's Recom of 1.72 means…", options: ["Analysts' average leans toward buy on a 1–5 scale", "The stock rose 1.72%", "1.72 analysts cover it", "A guaranteed target"], answer: 0, why: "1 is strong buy and 5 strong sell; it averages opinions." },
+    { id: "fv-d6", prompt: `On Top Gainers, Technical view, SMA20 of ${FV_POM.sma20} means…`, options: ["The 20-day average is that many dollars", "The price is that far above the 20-day average", "The stock will rise that much next", "RSI is 20"], answer: 1, why: "Finviz prints SMA columns as percent distance from the average, not the average itself." },
   ],
   scenarios: [
     { id: "fv-s1", prompt: "Your Finviz screen for low P/E returns 40 names, half of them banks and insurers. You wanted to compare manufacturers. Next step…", options: ["Keep all 40", "Add a Sector or Industry filter so like is compared with like", "Sort by price", "Switch to the Charts view"], answer: 1, why: "P/E norms differ a lot by industry. Filtering the sector keeps the comparison meaningful." },
     { id: "fv-s2", prompt: "At 8:40 AM ET a Finviz quote is up 6% on a headline. You want to know if it holds. Sensible step…", options: ["Treat it as today's close", "Note it as pre-market, and check again after the 9:30 AM ET open with volume", "Assume it will double", "Ignore all pre-market moves"], answer: 1, why: "Pre-market trading is thin and can reverse. The regular session, with volume, shows whether the move holds." },
-    { id: "fv-s3", prompt: "The Finviz insider table shows a CEO sale on the same day as a 10b5-1 note in the filing. How do you read it?", options: ["A sign the CEO expects bad news", "A pre-planned sale; read it with the plan and the CEO's remaining holdings, not as a signal alone", "A purchase", "A data error"], answer: 1, why: "Plan sales are scheduled in advance. What is left after the sale and any cluster of other insiders matter more than one plan trade." },
+    { id: "fv-s3", prompt: `Top Gainers, Technical view: a name is up ${FV_MPU.change} with RSI ${FV_MPU.rsi} and SMA20 ${FV_MPU.sma20}. A friend calls it a confirmed breakout. You…`, options: ["Buy because RSI and SMA agree", "Treat RSI and SMA as stretch readings on names that already jumped; check news, size and average volume first", "Short because RSI is high", "Ignore the Technical view forever"], answer: 1, why: "Those columns describe how extended a gainer already is. They are not a second vote for the same move." },
   ],
   caveats: [
     { title: "Delayed and early", text: "Free quotes are delayed, and before the open the snapshot mixes pre-market prices with yesterday's statistics. Read the time stamp." },
@@ -330,6 +393,7 @@ export const FINVIZ_LESSON: ToolLesson = {
   sources: [
     { label: "Finviz: Newmont (NEM) quote page", url: "https://finviz.com/quote.ashx?t=NEM", supports: "Snapshot fields, header time stamp and previous close, analyst and insider tables (read Nov 12, 2026)" },
     { label: "Finviz: Stock screener, Industry = Gold", url: "https://finviz.com/screener.ashx?v=111&f=ind_gold", supports: "Filter tabs, views, 56 results on 3 pages, Elite-only filters, Analyst Recom. scale from Strong Buy (1) to Strong Sell (5), delay footer (read Nov 12, 2026)" },
+    { label: "Finviz: Top Gainers, Technical view", url: "https://finviz.com/screener.ashx?v=171&s=ta_topgainers", supports: "SMA20/SMA50/SMA200 as percent distance from each average, RSI, Price and Change on the Top Gainers list (read Nov 28, 2026)" },
     { label: "Finviz: Screener help", url: "https://finviz.com/help/screener.ashx", supports: "Definitions of filters, P/E (trailing twelve months), forward P/E, relative volume and signals" },
     { label: "Finviz Elite: plans and FAQ", url: "https://finviz.com/elite", supports: "Free vs Elite limits, prices, data delays and extended-hours access" },
     { label: "SEC Investor.gov: Insider transactions and Forms 3, 4 and 5", url: "https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-69", supports: "Form 4 within two business days; insiders sell for many reasons" },
@@ -363,6 +427,9 @@ export const FINVIZ_LESSON: ToolLesson = {
     mc("FV-12", "SEC Investor.gov says insider sales…", "D", "Can happen for many reasons, including liquidity and diversification", ["Always predict a fall", "Are illegal", "Are never reported"], "Read size and context before drawing conclusions.", "form-4-insider-sale"),
     mc("FV-13", `Free accounts got ${FV_ELITE.freeStatements} years of financial statements; Elite got…`, "B", `${FV_ELITE.eliteStatements} years`, ["1 year", "Unlimited", "None"], "Finviz's plan comparison, Nov 12, 2026.", "delayed-quote"),
     mc("FV-14", "Finviz files gold miners under Basic Materials. A GICS sector fund files them under…", "A", "Materials", ["Energy", "Financials", "Industrials"], "Classification schemes differ; compare like with like.", "stock-screener"),
+    mc("FV-15", `On Top Gainers, Technical view, ${FV_POM.ticker} showed SMA20 ${FV_POM.sma20}. That means…`, "B", "The price is that far above the 20-day average", ["The 20-day average equals that many dollars", "The stock will rise that much next", "RSI is 20"], "Finviz prints SMA columns as percent distance from the average.", "sma-distance"),
+    mc("FV-16", `The same list showed ${FV_MPU.ticker} up ${FV_MPU.change} with RSI ${FV_MPU.rsi}. The process read is…`, "C", "Stretch after a jump, not a buy button", ["A confirmed breakout", "A guaranteed reversal today", "Proof the 200-day trend turned"], "High RSI on a gainer list is what a vertical day looks like on the oscillator.", "finviz-rsi"),
+    mc("FV-17", `${FV_POM.ticker} sat ${FV_POM.sma20} above SMA20 and ${FV_POM.sma200} versus SMA200. That combination is…`, "D", "A short bounce that can still sit inside a longer decline", ["Proof both trends agree", "A 200-day breakout", "A reason to ignore size and volume"], "SMA20 and SMA200 can disagree. The 200-day distance is the longer trend; a gainer sort does not change it.", "sma-distance"),
   ],
   terms: TERMS,
   cases: CASES,

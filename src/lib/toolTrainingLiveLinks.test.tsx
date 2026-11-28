@@ -17,7 +17,7 @@ import {
 
 /** Which tools a lesson's live links may open: one per tool lesson; the capstones span several. */
 const LESSON_TOOLS: Record<ToolTrainingQuizGroupId, LiveTool[]> = {
-  "tool-market-forces": ["Market Forces"],
+  "tool-market-forces": ["Market Forces", "StockTwits"],
   "tool-stockanalysis": ["StockAnalysis"],
   "tool-finviz": ["Finviz"],
   "tool-yahoo-finance": ["Yahoo Finance"],

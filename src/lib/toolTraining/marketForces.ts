@@ -8,7 +8,7 @@ import type { CaseStudy } from "../caseStudies";
 import type { LiteracyTerm } from "../literacyTerms";
 import { mc, seededTape } from "../marketThemes/helpers";
 import type { ToolLesson, ToolSimulation } from "./types";
-import { marketForcesView } from "./liveLinks";
+import { marketForcesView, stockTwitsSymbol } from "./liveLinks";
 import { simBar } from "./simWalk";
 
 /** Counts from Market Forces' data/catalog.json (updated 2026-11-12). */
@@ -30,6 +30,20 @@ const TERMS: LiteracyTerm[] = [
   { id: "next-catalyst", name: "Next catalyst", category: "process", summary: "An announced event that can move a ticker, such as earnings or a scheduled report, as opposed to a rumor.", detail: "Market Forces' News & the next catalyst group opens a Google News search and a Google search for official press releases. The in-app checklist, \"Before you trade,\" says to separate an announced event from speculation. Educational, not advice." },
   { id: "valuation-distributions", name: "Valuation and distributions", category: "markets", summary: "The stock-only link group for multiples and past payouts, because a good story can already be priced in.", detail: "Valuation & ratios opens Stock Analysis statistics (multiples and key metrics). Dividend history is past payouts, if any, not a promise of future payouts. Market Forces does not compute a fair price. Educational, not advice." },
 ];
+
+/** SAMPLE Stocktwits Sentiment-tab scores for teaching Message Volume; live numbers move. Layout from Stocktwits help, Nov 28, 2026. */
+export const ST_SAMPLE = {
+  symbol: "NEM",
+  watchers: "48,210",
+  volumeLast: 62,
+  volumeDayAgo: 41,
+  volumeLabel: "Normal",
+  volumeDayAgoLabel: "Low",
+  sentimentLast: 54,
+  sentimentDayAgo: 49,
+  participationLast: 71,
+  participationDayAgo: 68,
+} as const;
 
 const T1 = seededTape({ seed: 10101, start: 48.2, preDrift: 0.004, postDrift: -0.002, vol: 0.021, gap: 0.035 });
 const T2 = seededTape({ seed: 10102, start: 76.5, preDrift: 0.002, postDrift: -0.003, vol: 0.019, gap: 0.02 });
@@ -162,14 +176,14 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
   menuLabel: "Market Forces",
   icon: "explore",
   title: "Market Forces: start with what moves the market",
-  blurb: "Weng's ticker directory: themes, exposure labels, the five stock research-link groups, fund documents, notes and index-weight snapshots.",
+  blurb: "Weng's ticker directory: themes, exposure labels, the five stock research-link groups, Stocktwits Message Volume, fund documents, notes and index-weight snapshots.",
   credit: { name: "Market Forces by Weng Fei Fung", url: "https://github.com/Siphon880gh/tickers", note: "A beginner's directory of common U.S.-listed stocks and funds. No live prices; research opens in other sites." },
   asOf: "2026-11-12",
-  quiz: { name: "Tool: Market Forces", description: "Themes, exposure labels, the five stock research-link groups, fund documents, notes and index weights in Weng's ticker directory.", icon: "explore" },
+  quiz: { name: "Tool: Market Forces", description: "Themes, exposure labels, the five stock research-link groups, Stocktwits Message Volume, fund documents, notes and index weights in Weng's ticker directory.", icon: "explore" },
   intro: [
     `Market Forces groups ${MF_FACTS.tickers} common tickers (${MF_FACTS.stocks} stocks, ${MF_FACTS.funds} funds) into ${MF_FACTS.themes} themes under four headings: Assets (${MF_FACTS.assets}), Industries (${MF_FACTS.industries}), Markets (${MF_FACTS.markets}) and Economic forces (${MF_FACTS.forces}). Counts are from its catalog file dated Nov 12, 2026.`,
     "It is a starting point, not a data source. It shows no live prices and makes no picks; every research link opens another site, and some of those need a sign-in or subscription.",
-    "This lesson walks the layout: pick a theme, read its connection line, read each ticker's exposure badge, then — for a stock — walk all five research-link groups (overview, financials, valuation, news, sentiment), keep notes, and use Index weights to see where a company sits in the big indexes.",
+    "This lesson walks the layout: pick a theme, read its connection line, read each ticker's exposure badge, then — for a stock — walk all five research-link groups (overview, financials, valuation, news, sentiment), read Stocktwits Watchers and Message Volume, keep notes, and use Index weights to see where a company sits in the big indexes.",
   ],
   screens: [
     {
@@ -287,6 +301,27 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
       ],
     },
     {
+      id: "mf-stocktwits-volume",
+      live: [stockTwitsSymbol("NEM", "NEM ticker page"), marketForcesView({ theme: "gold", ticker: "NEM" }, "NEM research links")],
+      title: "Stocktwits: Watchers and Message Volume",
+      where: "Stocktwits ticker page · Sentiment tab (what Market Forces' Stocktwits link opens)",
+      alt: `Simulated Stocktwits ticker page for Newmont. The header shows Watchers ${ST_SAMPLE.watchers}. The Sentiment tab lists Message Volume last ${ST_SAMPLE.volumeLast} (${ST_SAMPLE.volumeLabel}) versus ${ST_SAMPLE.volumeDayAgo} a day ago (${ST_SAMPLE.volumeDayAgoLabel}), Sentiment last ${ST_SAMPLE.sentimentLast} versus ${ST_SAMPLE.sentimentDayAgo}, and Participation Ratio last ${ST_SAMPLE.participationLast} versus ${ST_SAMPLE.participationDayAgo}.`,
+      caption: "SAMPLE scores for teaching the layout. Stocktwits' help (Nov 28, 2026) defines Message Volume as a 0–100 score of last-24-hour chatter relative to that ticker's usual activity, not a raw post count. Live numbers move.",
+      blocks: [
+        { kind: "quote", symbol: ST_SAMPLE.symbol, name: "Newmont Corporation", price: "SAMPLE", change: "not a live quote", up: true, meta: "Stocktwits ticker header · simulated" },
+        { kind: "stats", title: "Header", rows: [{ label: "Watchers", value: ST_SAMPLE.watchers }] },
+        { kind: "tabs", tabs: ["Stream", "Sentiment", "News", "Earnings"], active: 1 },
+        { kind: "table", title: "Sentiment tab · Last vs 1 day ago", columns: ["", "Last", "1 day ago"], rows: [["Message Volume", `${ST_SAMPLE.volumeLast} · ${ST_SAMPLE.volumeLabel}`, `${ST_SAMPLE.volumeDayAgo} · ${ST_SAMPLE.volumeDayAgoLabel}`], ["Sentiment", String(ST_SAMPLE.sentimentLast), String(ST_SAMPLE.sentimentDayAgo)], ["Participation Ratio", String(ST_SAMPLE.participationLast), String(ST_SAMPLE.participationDayAgo)]] },
+        { kind: "note", text: "Message Volume is 0–100 versus that ticker's typical chatter. Watchers is how many users listed the symbol. Neither is a trade, a filing, or a poll of every shareholder. Edge history beyond one day is paid; this lesson stays on the free Last vs 1 day ago rows." },
+      ],
+      callouts: [
+        { n: 1, block: 1, text: [{ text: "Watchers", term: "stocktwits-watchers" }, " is a Watchlist count. A jump in watchers is often more telling than the level; large names still have the most."] },
+        { n: 2, block: 2, text: "Sentiment sits next to the stream. Market Forces links here last, after financials, news and valuation." },
+        { n: 3, block: 3, text: [{ text: "Message Volume", term: "stocktwits-message-volume" }, ` last ${ST_SAMPLE.volumeLast} versus ${ST_SAMPLE.volumeDayAgo} a day ago says chatter picked up relative to this ticker's own baseline, not that 62 posts arrived.`] },
+        { n: 4, block: 4, text: ["High volume with a sentiment shift is still crowd talk. ", { text: "Check the filing before treating a post as a fact", sim: "mf-sim-sentiment-filing" }, "."] },
+      ],
+    },
+    {
       id: "mf-fund-links",
       live: [marketForcesView({ theme: "gold", ticker: "GLD" }, "GLD research links")],
       title: "Research links for a fund",
@@ -334,7 +369,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
         [{ text: "Read every exposure badge in the list", sim: "mf-sim-exposure" }, ". Decide whether you mean the asset, a basket of businesses or one business."],
         "Select one ticker. For a stock, walk all five groups: overview, financials and SEC filings, valuation and distributions, news (the next catalyst), then sentiment. For a fund, open the issuer, holdings and fees.",
         "On a stock, treat Find investor relations and Earnings & guidance as Google searches when the catalog has no stored official URL; confirm you reached the company's own site. When two sites disagree, open SEC filings.",
-        ["Open news for announced events, then valuation (", { text: "a good story can already be priced in", sim: "mf-sim-priced-in" }, "), then sentiment. ", { text: "Note anything a post claims that a filing does not show", sim: "mf-sim-sentiment-filing" }, "."],
+        ["Open news for announced events, then valuation (", { text: "a good story can already be priced in", sim: "mf-sim-priced-in" }, "), then sentiment. On Stocktwits, read ", { text: "Message Volume", term: "stocktwits-message-volume" }, " (0–100 vs that ticker's usual chatter) and Watchers, then ", { text: "note anything a post claims that a filing does not show", sim: "mf-sim-sentiment-filing" }, "."],
         "Add a note with what you found and the date, so the next visit starts where you left off.",
       ],
     },
@@ -363,6 +398,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     { id: "mf-d6", prompt: "Which stock-only group covers multiples and past payouts?", options: ["Sentiment & investor discussions", "News & the next catalyst", "Valuation & distributions", "Fund holdings & documents"], answer: 2, why: "Valuation & distributions appears only on a stock panel: Valuation & ratios, and Dividend history (past payouts, if any)." },
     { id: "mf-d7", prompt: "For NEM, Find investor relations opens…", options: ["A stored Newmont IR URL", "A Google search, because the catalog has no official URL", "The SEC company search", "Yahoo Finance"], answer: 1, why: "Market Forces only uses a stored Investor relations URL when the catalog has one. For NEM the field is empty." },
     { id: "mf-d8", prompt: "Analyst views is labeled…", options: ["Audited results", "Official guidance", "Estimates & opinion", "Index weights"], answer: 2, why: "The app's own Opens line says Estimates & opinion: targets are not facts." },
+    { id: "mf-d9", prompt: "Stocktwits Message Volume is…", options: ["The raw count of posts today", "A 0–100 score of last-24-hour chatter versus that ticker's usual activity", "How many shares traded", "Official company guidance"], answer: 1, why: "Stocktwits' help: Message Volume is a 0–100 score relative to that ticker's typical activity, shown on the Sentiment tab." },
   ],
   scenarios: [
     { id: "mf-s1", prompt: "You open Market Forces to research a gold miner and see GDX listed next to NEM. A friend says GDX is \"basically gold\". What do you check next?", options: ["Buy GDX because it is in the Gold theme", "Open GDX's fund page and read its holdings: it holds miners, not bullion", "Skip gold entirely", "Ask which one went up more today"], answer: 1, why: "GDX holds mining companies, so it carries company risk and leverage to the gold price. Reading the holdings tells you what you actually own." },
@@ -381,6 +417,8 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     { label: "FINRA: Futures and commodities", url: "https://www.finra.org/investors/investing/investment-products/futures-and-commodities", supports: "Futures-based funds can differ from spot prices" },
     { label: "SEC: Beginners' guide to financial statements", url: "https://www.sec.gov/about/reports-publications/beginners-guide-financial-statements", supports: "What the income statement, balance sheet and cash flow statement show" },
     { label: "SEC Investor.gov: Social media and investment fraud — Investor Alert", url: "https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-alerts/social-media-and-investment-fraud-investor-alert", supports: "Social media can give a false impression of consensus; verify against company filings" },
+    { label: "Stocktwits Help: Understanding Message Volume", url: "https://help.stocktwits.com/c/faqs/faqs/message-volume", supports: "Message Volume is a 0–100 score of last-24-hour chatter relative to that ticker's typical activity (read Nov 28, 2026)" },
+    { label: "Stocktwits Help: Understanding Watchers", url: "https://help.stocktwits.com/c/faqs/faqs/watchers", supports: "Watchers is the Watchlist count on the ticker header; change in watchers is often more telling than the level (read Nov 28, 2026)" },
   ],
   links: [
     { label: "Learn → Tool: Market Forces", to: "/training?group=tool-market-forces" },
@@ -415,6 +453,7 @@ export const MARKET_FORCES_LESSON: ToolLesson = {
     mc("MF-17", "Analyst views is labeled Estimates & opinion because…", "A", "Targets and forecasts are not facts, and they often disagree", ["They are audited results", "They always match the SEC filing", "Market Forces computes the targets"], "The app's own Opens line says Estimates & opinion.", "research-starting-point"),
     mc("MF-18", "The group News & the next catalyst is for…", "D", "Headlines and announced events, kept separate from sentiment", ["Official audited financials", "Index membership weights", "A poll of every shareholder"], "The in-app checklist: look for the next catalyst, and separate an announced event from speculation. Sentiment is a later, separate group.", "next-catalyst"),
     mc("MF-19", "Dividend history under Valuation & distributions shows…", "B", "Past payouts, if any, not a promise of future payouts", ["The dividend the company will pay next year", "Only cash still on the balance sheet", "A buy or sell rating"], "The app's own Opens line is Past payouts, if any.", "valuation-distributions"),
+    mc("MF-20", `Stocktwits Message Volume last ${ST_SAMPLE.volumeLast} versus ${ST_SAMPLE.volumeDayAgo} a day ago means…`, "A", "Chatter over the last 24 hours is higher than usual for this ticker, on a 0–100 score", ["Exactly 62 posts arrived", "62,000 shares traded", "Official guidance was released"], "Stocktwits' help: Message Volume is relative to that ticker's typical activity, not a raw post count. Compare Last with 1 day ago.", "stocktwits-message-volume"),
   ],
   terms: TERMS,
   cases: CASES,

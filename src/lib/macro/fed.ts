@@ -31,6 +31,34 @@ export function pricingFor(m: FedMeeting): PricedOutcome[] {
 
 export const expectedMoveBp = (p: PricedOutcome[]) => round2(p.reduce((a, o) => a + (o.moveBp * o.prob) / 100, 0));
 
+/** Target-range band after a move of `moveBp` from the range in force before the meeting. */
+export function targetBandForMove(m: FedMeeting, moveBp: number): string {
+  const lower = round2(m.lowerBefore + moveBp / 100);
+  return `${lower.toFixed(2)}–${(lower + 0.25).toFixed(2)}%`;
+}
+
+export type PricingAge = "current" | "dayAgo" | "weekAgo" | "monthAgo";
+
+/**
+ * SAMPLE FedWatch-style snapshots: Current matches `pricingFor`; older columns pull probability off the favorite
+ * so the table can teach “what changed since last week” without live CME data.
+ */
+export function pricingHistoryFor(m: FedMeeting): Record<PricingAge, PricedOutcome[]> {
+  const current = pricingFor(m);
+  const shift = (pull: number): PricedOutcome[] => {
+    const fav = [...current].sort((a, b) => b.prob - a.prob || a.moveBp - b.moveBp)[0]!;
+    const alt = current.find((r) => r.moveBp !== fav.moveBp);
+    if (!alt) return current;
+    const take = Math.min(pull, Math.max(0, fav.prob - 5));
+    return current.map((r) => {
+      if (r.moveBp === fav.moveBp) return { moveBp: r.moveBp, prob: r.prob - take };
+      if (r.moveBp === alt.moveBp) return { moveBp: r.moveBp, prob: r.prob + take };
+      return r;
+    });
+  };
+  return { current, dayAgo: shift(5), weekAgo: shift(12), monthAgo: shift(20) };
+}
+
 /** SEP median paths (midpoint of target range at year end): [this year, next year, year after, longer run]. */
 const SEP_MEDIANS: Record<number, [number, number, number, number]> = {
   2: [5.375, 4.875, 3.875, 2.75],
